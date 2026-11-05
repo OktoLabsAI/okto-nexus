@@ -88,7 +88,8 @@
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
-        "plans/agent_ops/evidence/pr03-connector-reconnect.md"
+        "plans/agent_ops/evidence/pr03-connector-reconnect.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md"
       ]
     },
     "PR-04": {
@@ -1646,17 +1647,20 @@
         "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
+        "../okto-nexus-connector/tests/regressoes/test_connector_audit.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_cli_presentation.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
+        "../okto-nexus-connector/tests/unit/test_connect_project_review.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
         "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
@@ -1734,6 +1738,12 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -1786,7 +1796,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -1798,7 +1808,8 @@
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
         "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
-        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open."
+        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1847,7 +1858,9 @@
         "remote_preset_preserves_later_policy_and_grants": "VERIFIED",
         "connector_saved_project_resolution": "VERIFIED",
         "connector_reconnect_current_identity_and_binding": "VERIFIED",
-        "connector_reconnect_preserves_state_and_revocation": "VERIFIED"
+        "connector_reconnect_preserves_state_and_revocation": "VERIFIED",
+        "connector_passive_installation_recommendation": "VERIFIED",
+        "connector_default_single_project_review": "VERIFIED"
       }
     },
     "DX-16": {
@@ -1871,15 +1884,18 @@
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect_reuse.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/main.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/login_start.py",
+        "../okto-nexus-connector/tests/regressoes/test_connector_audit.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_cli_presentation.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
+        "../okto-nexus-connector/tests/unit/test_connect_project_review.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
         "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
@@ -1940,6 +1956,12 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -1984,7 +2006,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -1995,7 +2017,8 @@
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
-        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open."
+        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -2033,7 +2056,9 @@
         "connector_later_disablement_preserved": "VERIFIED",
         "connector_saved_project_resolution": "VERIFIED",
         "connector_reconnect_current_identity_and_binding": "VERIFIED",
-        "connector_reconnect_preserves_state_and_revocation": "VERIFIED"
+        "connector_reconnect_preserves_state_and_revocation": "VERIFIED",
+        "connector_passive_installation_recommendation": "VERIFIED",
+        "connector_default_single_project_review": "VERIFIED"
       }
     },
     "DX-17": {
@@ -2061,11 +2086,13 @@
         "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
+        "../okto-nexus-connector/tests/regressoes/test_connector_audit.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_cli_presentation.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
+        "../okto-nexus-connector/tests/unit/test_connect_project_review.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
         "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "../okto-nexus-connector/tests/unit/test_connection_config.py",
@@ -2074,6 +2101,7 @@
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
@@ -2153,6 +2181,12 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -2208,7 +2242,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2220,7 +2254,8 @@
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
         "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
-        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open."
+        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -2272,7 +2307,9 @@
         "remote_preset_preserves_later_policy_and_grants": "VERIFIED",
         "connector_saved_project_resolution": "VERIFIED",
         "connector_reconnect_current_identity_and_binding": "VERIFIED",
-        "connector_reconnect_preserves_state_and_revocation": "VERIFIED"
+        "connector_reconnect_preserves_state_and_revocation": "VERIFIED",
+        "connector_passive_installation_recommendation": "VERIFIED",
+        "connector_default_single_project_review": "VERIFIED"
       }
     },
     "DX-05": {
@@ -2764,11 +2801,14 @@
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect_reuse.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/main.py",
+        "../okto-nexus-connector/tests/regressoes/test_connector_audit.py",
         "../okto-nexus-connector/tests/unit/test_cli_presentation.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
+        "../okto-nexus-connector/tests/unit/test_connect_project_review.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
         "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "docs/terminal-operator.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "src/okto_nexus/adapters/inbound/cli/main.py",
@@ -2782,6 +2822,12 @@
         "vendor/ci/manifest.json"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -2796,11 +2842,12 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
-        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open."
+        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
       ],
       "subscopes": {
         "remote_operator_proposal_approval": "VERIFIED",
@@ -2808,7 +2855,9 @@
         "binding_approval_loss_recovery_without_repost": "VERIFIED",
         "connector_saved_project_resolution": "VERIFIED",
         "connector_reconnect_current_identity_and_binding": "VERIFIED",
-        "connector_reconnect_preserves_state_and_revocation": "VERIFIED"
+        "connector_reconnect_preserves_state_and_revocation": "VERIFIED",
+        "connector_passive_installation_recommendation": "VERIFIED",
+        "connector_default_single_project_review": "VERIFIED"
       }
     },
     "DX-18": {
@@ -2821,16 +2870,24 @@
         "PR-02"
       ],
       "files": [
+        "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/cli-reference.md",
         "../okto-nexus-connector/docs/connection-configuration.md",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/main.py",
         "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
+        "../okto-nexus-connector/tests/regressoes/test_connector_audit.py",
         "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
+        "../okto-nexus-connector/tests/unit/test_connect_project_review.py",
+        "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "docs/terminal-connect.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
@@ -2880,6 +2937,12 @@
         "vendor/ci/manifest.json"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
@@ -2902,7 +2965,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -2911,7 +2974,8 @@
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
         "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified."
+        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -2935,7 +2999,9 @@
         "remote_project_preset_operator_review": "VERIFIED",
         "remote_policy_atomic_finish": "VERIFIED",
         "connector_postcommit_policy_recovery": "VERIFIED",
-        "remote_preset_preserves_later_policy_and_grants": "VERIFIED"
+        "remote_preset_preserves_later_policy_and_grants": "VERIFIED",
+        "connector_passive_installation_recommendation": "VERIFIED",
+        "connector_default_single_project_review": "VERIFIED"
       }
     },
     "DX-19": {
@@ -2949,6 +3015,7 @@
       ],
       "files": [
         "../okto-nexus-connector/README.md",
+        "../okto-nexus-connector/docs/cli-reference.md",
         "../okto-nexus-connector/docs/connection-configuration.md",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
@@ -2960,17 +3027,21 @@
         "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
+        "../okto-nexus-connector/tests/regressoes/test_connector_audit.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
+        "../okto-nexus-connector/tests/unit/test_connect_project_review.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
+        "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "../okto-nexus-connector/tests/unit/test_connection_config.py",
         "docs/connection-setup.md",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
@@ -3044,6 +3115,12 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-login-start-existing.xml",
         "plans/agent_ops/evidence/pr03-login-start-identity.xml",
         "plans/agent_ops/evidence/pr03-login-start-installed-initial.xml",
@@ -3086,7 +3163,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -3098,7 +3175,8 @@
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
-        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified."
+        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -3142,7 +3220,9 @@
         "remote_project_preset_operator_review": "VERIFIED",
         "remote_policy_atomic_finish": "VERIFIED",
         "connector_postcommit_policy_recovery": "VERIFIED",
-        "remote_preset_preserves_later_policy_and_grants": "VERIFIED"
+        "remote_preset_preserves_later_policy_and_grants": "VERIFIED",
+        "connector_passive_installation_recommendation": "VERIFIED",
+        "connector_default_single_project_review": "VERIFIED"
       }
     },
     "DX-20": {
@@ -3300,17 +3380,20 @@
         "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
         "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
         "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
+        "../okto-nexus-connector/tests/regressoes/test_connector_audit.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_cli_presentation.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
+        "../okto-nexus-connector/tests/unit/test_connect_project_review.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
         "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
@@ -3378,6 +3461,12 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -3426,7 +3515,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -3438,7 +3527,8 @@
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
         "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
-        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open."
+        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -3480,7 +3570,9 @@
         "remote_preset_preserves_later_policy_and_grants": "VERIFIED",
         "connector_saved_project_resolution": "VERIFIED",
         "connector_reconnect_current_identity_and_binding": "VERIFIED",
-        "connector_reconnect_preserves_state_and_revocation": "VERIFIED"
+        "connector_reconnect_preserves_state_and_revocation": "VERIFIED",
+        "connector_passive_installation_recommendation": "VERIFIED",
+        "connector_default_single_project_review": "VERIFIED"
       }
     },
     "ATN-01": {
@@ -4302,22 +4394,36 @@
       "requirement": "Projeto e Ãºnico harness detectado levam a recomendaÃ§Ã£o concreta sem escolha tÃ©cnica MCP/runtime inicial.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity.md"
       ],
-      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T30": {
       "requirement": "VÃ¡rios harnesses vÃ¡lidos pedem somente escolha necessÃ¡ria; PATH nÃ£o comprova login ou qualificaÃ§Ã£o.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md"
       ],
-      "result": "Existing-identity local setup subset implemented/tested; native provider qualification and full R3 scenario acceptance remain open."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T31": {
       "requirement": "Caminho normal gerenciado termina no terminal, com browser opcional e setup transacional reutilizado.",
@@ -4329,6 +4435,13 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -4359,7 +4472,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T32": {
       "requirement": "AprovaÃ§Ã£o remota pendente preserva ID e identidade do decisor; terminal participante nÃ£o a aprova por assentimento local.",
@@ -4389,6 +4502,13 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -4422,7 +4542,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T34": {
       "requirement": "Login de provedor ausente produz instruÃ§Ã£o concreta e nÃ£o deixa daemon bloqueado em prompt invisÃ­vel.",
@@ -4444,12 +4564,19 @@
       "requirement": "ConexÃ£o nÃ£o envia tarefa/smoke pago automaticamente; a tarefa solicitada usa os serviÃ§os canÃ´nicos.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T37": {
       "requirement": "Início no login pode ser escolhido na revisão inicial; recusar essa opção mantém o uso sob demanda funcional.",
@@ -4477,13 +4604,20 @@
       "requirement": "InstalaÃ§Ã£o nova com harness/provedor prontos propÃµe identidade, workspace e perfil Ãºteis no mesmo resumo; aceitar os efeitos cria apenas os objetos autorizados e nÃ£o exige definir persona ou visitar o painel.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "The project review initializes Server-wide native-decision/HITL policy only when unset. Canonical Finish commits the setting with its existing receipt; recovery refreshes current stored policy without regranting or re-enabling later revocations. Explicit CLI/env default values remain pinned; service contexts preserve provenance and legacy stored-override behavior. 267 tests passed on coordinated installed wheels, including new/legacy real service restart and synthetic native decision delivery. Grant renewal and real productive local/Connector M1 acceptance remain open. Full real-provider scenario acceptance is not established."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T39": {
       "requirement": "Pacote instalado, rota local padrÃ£o: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissÃ£o, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem ediÃ§Ã£o manual de configuraÃ§Ã£o.",
@@ -4519,6 +4653,13 @@
       "requirement": "Reconnect e repetiÃ§Ã£o do setup preservam `agent_id`, modelo, papel, configuraÃ§Ã£o, grants e personalizaÃ§Ãµes; nÃ£o recriam agente nem reaplicam defaults.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -4547,7 +4688,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T42": {
       "requirement": "Nome de agente/projeto igual nÃ£o associa outra identidade; vÃ­nculos ausentes ou ambÃ­guos exigem resoluÃ§Ã£o autorizada, inclusive quando duas conexÃµes iniciais concorrem.",
@@ -4570,8 +4711,17 @@
     },
     "DX-T43": {
       "requirement": "O harness iniciado pelo serviÃ§o usa instruÃ§Ãµes, modelo, ferramentas e limites efetivos revisados; configuraÃ§Ã£o disponÃ­vel apenas no shell nÃ£o Ã© presumida nem substituÃ­da silenciosamente.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md"
+      ],
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T44": {
       "requirement": "Direitos padrÃ£o permitem coordenaÃ§Ã£o Ãºtil no workspace autorizado; nÃ£o permitem ler inbox alheia, cruzar escopo nÃ£o concedido, administrar globalmente ou mudar polÃ­ticas.",
@@ -4658,6 +4808,13 @@
       "requirement": "Perfil de execuÃ§Ã£o do resumo admite somente trabalho elegÃ­vel e autorizado pelas regras atuais; daemon online, mensagem recebida ou grant revogado nÃ£o bastam para iniciar sessÃ£o.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-second.xml",
@@ -4673,7 +4830,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
     },
     "DX-T49": {
       "requirement": "Abrir o dashboard depois do uso pelo terminal mostra o mesmo agente e configuraÃ§Ã£o; personalizar nome/papel mantÃ©m identidade, histÃ³rico e vÃ­nculos canÃ´nicos.",
@@ -5488,6 +5645,20 @@
         "plans/agent_ops/evidence/pr03-connector-reconnect-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 Connector minimal project review",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
+        "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+        "plans/agent_ops/evidence/pr03-connector-project-review-cli.json"
       ]
     }
   ]

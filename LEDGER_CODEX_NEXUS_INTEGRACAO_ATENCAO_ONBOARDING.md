@@ -259,3 +259,13 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **67 testes do Connector e 8 do Nexus passaram nos fontes; 37 focados passaram após os ajustes finais. Nos pacotes instalados, passaram 180 do Connector e 75 do Nexus.** As rodadas se sobrepõem. Os 431/117/130 arquivos Python correspondem aos fontes; pin/hash do Connector atualizados.
 - Connector commit/push: `09eb5f30`. Nexus produção e Core não mudaram. Nova identidade remota, M1 produtivo e demais frentes permanecem pendentes; plano fixo preservado.
 - Evidência: [pr03-connector-reconnect.md](plans/agent_ops/evidence/pr03-connector-reconnect.md).
+
+## 2026-11-05 — PR-03, décima terceira fatia: recomendação e revisão mínima no Connector
+
+- `connect` recomenda a instalação única e pergunta somente quando há ambiguidade. Mantém o candidato completo do Core, inclusive Node/script do Pi, raízes e observações salvas; flags explícitas filtram o inventário local.
+- Descoberta não executa o candidato. O probe fica no checkpoint após Finish; mudança de inventário exige nova revisão. Pasta atual, diretório do provedor e defaults aparecem com caminhos completos antes dos efeitos.
+- Preferências avançadas são opcionais com `--customize`, pelo mesmo wizard e configuração. O resumo informa modelo, overrides, contexto, aprovação de ferramentas e limites de 60 minutos/20 ações. Cancelar não registra host, executa probe nem inicia daemon. A aprovação canônica continua no cliente do operador.
+- **90 testes de fonte passaram, mais 2 casos do entrypoint. No pacote instalado, passaram 201 testes do Connector, 2 casos adicionais do entrypoint e 22 do Nexus**, sem skips. As rodadas têm sobreposição; wheel idêntico nas duas rodadas do Connector, com 431/117/130 payloads Python auditados.
+- Connector commit/push: `b3167707`. Pin/hash coordenados no Nexus; produção Nexus e Core inalterados. Ruff dos fontes e unitários alterados, whitespace e ledger verificados; os 12 avisos F preexistentes no arquivo de auditoria legado são registrados na evidência.
+- Nova identidade remota continua pendente. Foi solicitada preferência entre pareamento revisado e provisionamento prévio pelo operador; não houve resposta até este registro. M1 produtivo, campanha nativa e demais frentes continuam abertos; plano fixo preservado.
+- Evidência: [pr03-connector-project-review.md](plans/agent_ops/evidence/pr03-connector-project-review.md).
