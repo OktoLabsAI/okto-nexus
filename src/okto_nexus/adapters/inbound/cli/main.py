@@ -11,6 +11,7 @@ import sys
 _HELP = """okto-nexus - local agent coordination bus
 
 Usage:
+  okto-nexus connect [options] Review and connect a local project
   okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
   okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
   okto-nexus tail [options]    Stream the event log as NDJSON
@@ -28,6 +29,9 @@ def main(argv: list[str] | None = None) -> int:
         print(_HELP)
         return 0
     command, rest = args[0], args[1:]
+    if command == 'connect':
+        from .connect import run_connect
+        return run_connect(rest)
     if command == "serve":
         from .serve import run_serve
         return run_serve(rest)

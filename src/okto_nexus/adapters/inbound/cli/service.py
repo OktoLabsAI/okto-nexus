@@ -64,36 +64,7 @@ def run_service(argv: list[str]) -> int:
                                            host=host, port=port)
             service = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep)
             return _show_logs(service, args)
-        saved = config.home_dir.resolve() / CONTEXT_NAME
-        environment = os.environ
-        previous = None
-        if saved.exists():
-            previous = read_json(saved)
-            if previous.get('upgrade_pending'):
-                from ....service_upgrade import UpgradeError
-                if args.action not in {'upgrade-apply', 'status'}:
-                    raise UpgradeError('SERVICE_UPGRADE_PENDING',
-                        'Resume upgrade-apply with plan revision ' + str(previous['upgrade_pending']))
-                previous = previous['upgrade_plan']['source_context']
-            previous = validate_context(previous, require_paths=args.action not in {'status', 'disable', 'recover-start', 'upgrade-plan', 'upgrade-apply'})
-            environment = previous['environment']
-            port, host, project_root, log_level, rest = _split_serve_args(
-                previous['arguments'] + remaining, environment)
-            discovery, rest = split_discovery_args(rest)
-            config = load_config(environment, rest)
-        context = execution_context(config, host=host, port=port, project_root=project_root,
-                                    log_level=log_level, discovery=discovery, env=environment)
-        if previous is not None:
-            # A caller from another environment must not silently rebind the
-            # persisted service executable. Upgrade is an explicit operation.
-            context.update(executable=previous['executable'], environment_prefix=previous['environment_prefix'],
-                           revision=previous['revision'])
-            for key in ('package_version', 'core_version', 'environment_fingerprint'):
-                if key in previous:
-                    context[key] = previous[key]
-        adapter = LocalServerLifecycle(home=config.home_dir, database=config.db_path,
-                                       host=host, port=port, context=context)
-        service = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep)
+        service = resolve_local_service(remaining, action=args.action)
         method = {'status': 'inspect', 'install': 'install_user_service',
                   'enable': 'enable_user_service', 'disable': 'disable_user_service',
                   'uninstall': 'uninstall_user_service'}.get(args.action, args.action)
@@ -168,3 +139,41 @@ def _show_logs(service, args):
     except KeyboardInterrupt:
         return 130  # end observation only; no stop/cancel operation
     return 0
+
+
+def resolve_local_service(remaining, *, action="connect"):
+    """Resolve the same saved context for service controls and onboarding."""
+    port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
+    discovery, rest = split_discovery_args(rest)
+    config = load_config(os.environ, rest)
+    saved = config.home_dir.resolve() / CONTEXT_NAME
+    environment = os.environ
+    previous = None
+    if saved.exists():
+        previous = read_json(saved)
+        if previous.get('upgrade_pending'):
+            from ....service_upgrade import UpgradeError
+            if action not in {'upgrade-apply', 'status'}:
+                raise UpgradeError('SERVICE_UPGRADE_PENDING',
+                    'Resume upgrade-apply with plan revision ' + str(previous['upgrade_pending']))
+            previous = previous['upgrade_plan']['source_context']
+        previous = validate_context(previous, require_paths=action not in {'status', 'disable', 'recover-start', 'upgrade-plan', 'upgrade-apply'})
+        environment = previous['environment']
+        port, host, project_root, log_level, rest = _split_serve_args(
+            previous['arguments'] + remaining, environment)
+        discovery, rest = split_discovery_args(rest)
+        config = load_config(environment, rest)
+    context = execution_context(config, host=host, port=port, project_root=project_root,
+                                log_level=log_level, discovery=discovery, env=environment)
+    if previous is not None:
+        # A caller from another environment must not silently rebind the
+        # persisted service executable. Upgrade is an explicit operation.
+        context.update(executable=previous['executable'], environment_prefix=previous['environment_prefix'],
+                       revision=previous['revision'])
+        for key in ('package_version', 'core_version', 'environment_fingerprint'):
+            if key in previous:
+                context[key] = previous[key]
+    adapter = LocalServerLifecycle(home=config.home_dir, database=config.db_path,
+                                   host=host, port=port, context=context)
+    service = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep)
+    return service

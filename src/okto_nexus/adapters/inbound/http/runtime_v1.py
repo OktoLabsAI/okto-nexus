@@ -72,6 +72,7 @@ class ConnectionSetupRequest(BaseModel):
     configuration: dict
     mcp_preset: SetupMCPPreset | None = None
     broadcast_handoff_auto_claim: bool | None = None
+    project_preset: dict | None = None
 
 
 class LocalInstallationCheckRequest(BaseModel):
@@ -929,6 +930,13 @@ def build_router() -> APIRouter:
         # Omission preserves policy for older clients; explicit null inherits.
         if 'broadcast_handoff_auto_claim' not in body.model_fields_set:
             result.pop('broadcast_handoff_auto_claim', None)
+        if result.get('project_preset') is None:
+            result.pop('project_preset', None)
+        else:
+            from ....application.project_preset import ORIGIN
+            if (result['project_preset'] != ORIGIN or
+                    type(result['project_preset'].get('revision')) is not int):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown project preset revision.', {})
         try:
             from ....application.connection_authorization import normalize_authorization
             result['configuration'] = normalize_authorization(parse_connection_configuration(normalize_authorization(result['configuration'])))

@@ -929,6 +929,7 @@ The other flags gate live behavior.
 | Command | Purpose |
 |---|---|
 | `okto-nexus serve` | Start MCP HTTP, REST, SSE, and dashboard |
+| `okto-nexus connect` | [Review and configure a local project for an existing agent](docs/terminal-connect.md) |
 | `okto-nexus` | Show CLI help |
 | `okto-nexus tail` | Operator NDJSON follower over the event service |
 | `okto-nexus admin prune` | Enforce retention, optionally vacuum |

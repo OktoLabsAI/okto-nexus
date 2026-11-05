@@ -233,3 +233,25 @@ This increment does not complete M1 or PR-03. The main Nexus connect/preset,
 unified identity creation, terminal work and decisions, actual restart and
 productive provider campaigns remain open. Tests simulated the provider turn
 and cache loss; no real inference, credentials or native task mutation was used.
+
+## PR-03 second increment — initial local Nexus connect facade
+
+Nexus now has a terminal connect entry for an existing authorized agent. It
+reuses SVC context/start, records a review and checkpoints under a local profile,
+resolves the initial runtime preset to ordinary configuration, and invokes the
+canonical HTTP Test/Finish/recovery workflow. Preset provenance stays in the
+existing commit receipt. Reconnect reads the current binding without resetting
+later settings or granting access again. A unique approved project binding is
+reused only after the operator explicitly selects its canonical agent.
+
+Source campaigns passed 18 terminal/transport, 58 service, and 34 setup/process
+regression tests. The final installed campaign passed 112 tests with no skips,
+including an actual disposable CLI/service/HTTP start-reuse-drain case. All 419
+Nexus Python wheel payloads match source bytes; unchanged Connector/Core wheels
+are recorded alongside it. See `evidence/pr03-terminal-connect.md`.
+
+The full project preset and M1 are still incomplete: unified identity creation,
+coordination permission defaults, login-start review, remote/participant paths,
+terminal productive work/questions/decisions/results and native provider
+qualification remain required. The synthetic setup tests do not establish real
+provider readiness or productive task completion.

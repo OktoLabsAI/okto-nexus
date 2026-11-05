@@ -123,6 +123,12 @@ def load_setup(deps, context, agent_id, binding_id=None):
                 'AND l.realization_ref=b.realization_ref WHERE b.binding_id=? AND e.agent_id=?',
                 (binding_id, agent_id)).fetchone()
             if row:
+                origin = uow.connection.execute('SELECT result_json FROM connection_setup_commits '
+                    "WHERE json_extract(result_json,'$.binding.binding_id')=? "
+                    "AND json_type(result_json,'$.project_preset')='object' ORDER BY created_at DESC LIMIT 1",
+                    (binding_id,)).fetchone()
+                if origin:
+                    result['project_preset'] = json.loads(origin['result_json'])['project_preset']
                 result['mcp_preset'] = runtime_mcp_presets.snapshot(uow.connection, row['endpoint_id'])
                 if row['local_record_json']:
                     record = json.loads(row['local_record_json'])
@@ -176,6 +182,12 @@ def finish_setup(deps, context, owner, fresh, request, *, verified):
                 expected_revision=request['baseline']['execution_revision'],
                 execution_location=configuration['execution_location'], local_adapter_id=configuration['adapter_id'] or None)
         result = {'saved': True, 'agent_id': agent_id}
+        if request.get('project_preset') is not None:
+            from .project_preset import ORIGIN
+            if (request['project_preset'] != ORIGIN or
+                    type(request['project_preset'].get('revision')) is not int):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown project preset revision.', {})
+            result['project_preset'] = dict(ORIGIN)
         binding = None
         if active and configuration['execution_location'] != 'remote':
             if not verified:

@@ -118,7 +118,7 @@ Preparado [roteiro revisável de tarefas temporárias](plans/agent_ops/campaigns
 
 ## Próxima dependência
 
-Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.
+Avançar em PR-03/M1 com criação autorizada de identidade na mesma revisão e interação de trabalho, perguntas e decisões pelo terminal. As lacunas de PR-01/02 e a campanha de BASE-06 continuam rastreadas; os critérios de trabalho real local/remoto permanecem intactos.
 
 ## Aceites externos ainda não executados
 
@@ -163,3 +163,12 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **9 testes focados do Nexus, 32 do Connector e 65 com os wheels instalados fora dos checkouts passaram**, sem skips na rodada instalada. Integração usa cliente HTTP, handlers, autenticação e transação reais, com transporte e turno do harness simulados para injetar perda de resposta. Não houve inferência real.
 - Os 415/114/130 arquivos Python dos wheels Nexus/Connector/Core correspondem byte a byte aos fontes. Wheel CI e manifest atualizados; Core permaneceu inalterado nesta fatia. Commit/push do Connector: `e365e9a`.
 - [Evidências e limites](plans/agent_ops/evidence/pr03-setup-recovery.md). DX-17/19 e PR-03 estão em progresso; o `okto-nexus connect`, preset, criação unificada de identidade, interação de trabalho pelo terminal e campanhas produtivas continuam pendentes. Perda do cache foi injetada; restart real não foi qualificado nesta fatia. O plano R3 e M1 continuam incompletos.
+
+## 2026-11-05 — PR-03, segunda fatia: entrada local pelo terminal
+
+- `okto-nexus connect` usa a mesma resolução de contexto e fachada SVC para iniciar/reutilizar o Server local. `--plan` é passivo em relação ao serviço; a revisão e os checkpoints não secretos ficam em perfil local com gravação atômica e exclusão entre CLIs.
+- Preset inicial resolve configuração runtime comum, decisões nativas e limites de 60 minutos/20 ações. Origem/revisão ficam no recibo de Finish existente. Aprovação exata precede verificação de instalação e teste com modelo; nenhum trabalho de projeto é enviado.
+- Retomada consulta o mesmo setup; reconexão lê a configuração atual sem reaplicar defaults ou grants. Um vínculo canônico único do agente explicitamente escolhido pode ser reutilizado após conferir host/projeto. Edições posteriores de configuração e grants permanecem preservadas.
+- **18 testes focados, 58 de serviço, 34 de regressão e 112 nos pacotes finais instalados passaram**. A campanha real do CLI iniciou/reutilizou a mesma geração de Server em home descartável e terminou em `DRAINED` após stop explícito. Setup/versionamento/modelo foram simulados nos testes de integração; não há aceite de provedor produtivo.
+- Wheel Nexus: 419 arquivos Python idênticos aos fontes. Connector e Core permaneceram inalterados; hashes coordenados nas [evidências](plans/agent_ops/evidence/pr03-terminal-connect.md).
+- DX-15…19/21 continuam em progresso. Criação unificada de identidade, preset completo de coordenação, início no login na revisão, participante/remote, trabalho/perguntas/decisões/resultados e campanhas produtivas ainda faltam. O plano integral e M1 não estão concluídos.
