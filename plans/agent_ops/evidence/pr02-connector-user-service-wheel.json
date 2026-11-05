@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-05",
+  "version": "0.0.12",
+  "path": "vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl",
+  "sha256": "9dc50f22d53469f2ea498215a415de33fc5bf92eb65210f0ef97e98e7e930193",
+  "python_payloads": 109,
+  "all_python_payloads_match_source": true,
+  "missing_python_payloads": [],
+  "extra_python_payloads": [],
+  "core_version": "0.0.14",
+  "same_core_wheel_in_both_consumers": true,
+  "core_sha256": "1169d898a32cbc10e12c47dc88b12e0594d74c7f6d76ebcc8b3da07123a5942d",
+  "windows_runtime_dependency": "pywin32; sys_platform == \"win32\"",
+  "qualification": "Scoped Windows disposable-process and clean-venv tests; native installed-service campaigns NOT_RUN.",
+  "source_commit": "fc90370"
+}

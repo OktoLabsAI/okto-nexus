@@ -84,6 +84,16 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - A regressão também corrigiu leitura de metadata durante startup e liberação antecipada do lock pelo encerramento ASGI. O wheel final contém **411 arquivos Python idênticos ao fonte**.
 - Validação nativa usou somente `TASK_VALIDATE_ONLY`; nenhuma tarefa pessoal foi instalada. Campanha efetiva de login/serviço, Connector, logs e os demais aceites continuam abertos. [Evidências e limites](plans/agent_ops/evidence/pr02-nexus-user-service.md).
 
+## 2026-11-05 — PR-02, quarta fatia: supervisor e lançamento do Connector
+
+- Recuperada novamente `origin/main` nos três repos; as branches de trabalho já contêm todas as bases remotas. Mudanças locais preservadas.
+- Connector passou a serializar o lançamento entre CLIs e adquirir ownership antes de construir estado/vault/runtime. Contexto estável preserva referências; valores de proxy são resolvidos no lançamento sem serem gravados.
+- Integração Windows por instância usa a definição compartilhada, recibos e revisão nativa. Start respeita o supervisor instalado; stop registra supressão antes do drain; uninstall preserva dados. Definições alheias/alteradas e respostas perdidas não autorizam sobrescrita ou novo daemon.
+- **72 testes específicos**, **90 de regressão** e **2 de instalação isolada** passaram. Os 109 arquivos Python do wheel final correspondem ao fonte. Dependência Windows `pywin32` incluída no pacote; manifest do Nexus coordenado.
+- Um teste inicial expôs lifetime incorreto de COM apesar do resumo positivo do pytest. A execução foi descartada; o adapter corrigido foi verificado em thread de trabalho com validação nativa sem registro.
+- SVC-11 e PR-02 continuam em progresso. Controles restantes, recuperação/upgrade, campanhas reais e qualificação POSIX permanecem abertos. [Evidências e limites](plans/agent_ops/evidence/pr02-connector-user-service.md).
+- Commit/push do Connector: `fc90370` em `feature/v0.0.12`.
+
 ## Próxima dependência
 
 Concluir as lacunas de PR-01 junto ao supervisor e ao Connector em PR-02 / SVC-05…12. A pendência de campanha de BASE-06 continua explícita; os critérios de trabalho real local/remoto e decisão pelo terminal de M1 permanecem intactos.

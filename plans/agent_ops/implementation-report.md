@@ -150,3 +150,27 @@ final source. See `evidence/pr02-nexus-user-service.md` for exact scope, failure
 commands and evidence. Native task syntax was validated without registration;
 actual service/login/credential campaigns remain open, as do Connector supervisor
 integration, logs and the remaining fixed R3 requirements.
+
+## PR-02 fourth increment — Connector Windows host and launch handoff
+
+Connector now serializes detached launches before the child exists and owns its
+instance lock before constructing state/vault/runtime services. Saved context
+retains resolved references; existing proxy values resolve ephemerally at launch.
+Windows host operations use the shared Core definition, scoped ownership and
+native-export fingerprints, route installed start through Task Scheduler and
+persist stop suppression before canonical drain. Uninstall preserves data;
+foreign/edited definitions and uncertain effects remain explicit.
+
+72 focused tests, 90 runtime regressions and 2 clean-venv package/lifecycle tests
+passed. The final wheel's 109 Python files match source, with Windows-only
+pywin32 metadata and the unchanged Core 0.0.14 pin. An initial COM lifetime defect
+caused access violations despite pytest's success summary; that run was rejected
+and the corrected thread-scoped adapter passed subsequent native validate-only
+checks. See `evidence/pr02-connector-user-service.md` and its XML/wheel record.
+
+All three remote mains were fetched again and are already ancestors of the
+feature branches. No personal task was installed. Full SVC acceptance remains
+open for the remaining controls/reconciliation/upgrade/diagnostics, native
+service/login/crash/credential campaigns, productive remote work and POSIX
+qualification. There is no schema or NXL migration; rollback preserves existing
+data and must respect the selected supervisor's drain/ownership receipts.
