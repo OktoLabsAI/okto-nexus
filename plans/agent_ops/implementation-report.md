@@ -1,6 +1,7 @@
 # Agent operations R3 — implementation report
 
-Status: preparation and PR-00 in progress. M1–M4 are not accepted.
+Status: preparation and baseline implementation delivered; PR-01 in progress.
+BASE-06 provider timing and M1–M4 acceptance remain open.
 
 The immutable scope is the repository-root R3 plan. Progress and limitations are
 recorded in `ledger.json` and the root ledger. No scenario is qualified merely
@@ -63,3 +64,16 @@ it is not replaced by HTTP timing. PR-00's implementation map is delivered,
 while its campaign subacceptance remains open. Next dependency is PR-01.
 Rollback: revert the documentation/UI guidance while keeping coordinated
 package/inventory pins; no production database downgrade is involved.
+
+## PR-01 first increment — exclusion
+
+Server now holds OS exclusion for both canonical home and DB before bootstrap
+or migrations. Diagnostic PID/heartbeat metadata no longer permits stealing a
+live process's instance. Real concurrent processes and abrupt-owner-exit tests
+exercise the OS primitive; existing foreground shutdown tests remain green.
+See `evidence/pr01-locks.md` and XML for exact scopes and remaining lifecycle
+work. No new schema, NXL contract or authority was introduced.
+
+The packaged HTML was regenerated after defining LF newlines at its source;
+this resolves the earlier build artifact's whitespace check failure. Provider,
+service-manager and cross-platform qualification remain pending.

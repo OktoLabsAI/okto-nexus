@@ -4,8 +4,8 @@ Fail-closed bootstrap order (FR1):
 
 1. parse serve flags (``--port``/``--host``/``--project-root``); remaining
    flags go through the standard fail-closed ``load_config`` parser
-2. ``bootstrap`` (config -> home dir -> connections -> migrations -> repos)
-3. single-server lock (decision D4) - BEFORE anything else can mutate state
+2. resolve configuration and acquire OS exclusion for the canonical home/database
+3. ``bootstrap`` (connections -> migrations -> repos), while retaining exclusion
 4. remote dashboard uses a separately configured human operator account
 5. uvicorn serves /mcp + /api/v1 + the dashboard root
 
@@ -426,7 +426,7 @@ def _warm_embeddings(deps: "object", done_event: "object") -> None:
 
 def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
     """Console entry for the ``serve`` subcommand. Returns an exit code."""
-    env = env if env is not None else os.environ
+    env = dict(env if env is not None else os.environ)
 
     if any(token in ("-h", "--help") for token in args):
         print(SERVE_USAGE)
@@ -459,8 +459,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         _configure_logging(log_level)
         from ....bootstrap.local_discovery import split_discovery_args
         discovery, rest = split_discovery_args(rest)
-        deps = bootstrap(env, rest)
-        deps.local_discovery = discovery
+        from ....config import load_config
+        config = load_config(env, rest)
     except OktoNexusError as exc:
         print(
             f"[okto-nexus] serve bootstrap failed: {exc.code}: {exc.message}",
@@ -468,14 +468,23 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         )
         return 1
 
-    lock = ServeLock(deps.config.home_dir)
+    lock = ServeLock(config.home_dir, db_path=config.db_path)
     try:
         lock.acquire()
     except OktoNexusError as exc:
         print(f"[okto-nexus] {exc.message}", file=sys.stderr)
         return 1
+    except OSError as exc:
+        print(f"[okto-nexus] Cannot acquire Server instance exclusion: {exc}", file=sys.stderr)
+        return 1
 
     try:
+        try:
+            deps = bootstrap(env, rest)
+            deps.local_discovery = discovery
+        except OktoNexusError as exc:
+            print(f"[okto-nexus] serve bootstrap failed: {exc.code}: {exc.message}", file=sys.stderr)
+            return 1
         maybe_auto_prune(deps)
 
         local_open = host in ("127.0.0.1", "localhost", "::1")

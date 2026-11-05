@@ -1,0 +1,3 @@
+# Vite preserves source HTML newlines in the packaged entrypoint.
+frontend/index.html text eol=lf
+src/okto_nexus/adapters/inbound/http/static/index.html text eol=lf

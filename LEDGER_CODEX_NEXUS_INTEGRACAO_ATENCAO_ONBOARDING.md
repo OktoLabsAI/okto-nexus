@@ -26,6 +26,15 @@ Relatório: [implementation-report.md](plans/agent_ops/implementation-report.md)
 - Runner frontend existente exposto por `npm test` e incluído na CI. Build do dashboard atualizado.
 - **216 testes de baseline passaram**, além dos 34 da preparação. Startup descartável medido: HTTP disponível em 7,811s; shutdown canônico chegou a `DRAINED`. Sem inferência real.
 - BASE-01…05 verificados no escopo de inventário/documentação/rastreabilidade. BASE-06 tem mapa e medição de processo implementados; tempo até sessão/resultado real permanece não executado. PR-00 entrega o mapa para PR-01, sem declarar aceite funcional de M1.
+- Commit/push do baseline: Nexus `3df2e95`.
+
+## 2026-11-05 — PR-01, primeira fatia: exclusão do Server
+
+- Server adquire locks do SO para home e banco canônicos **antes** de bootstrap/migrações. Homes distintos que usam o mesmo banco também ficam protegidos.
+- Heartbeat antigo não transfere ownership. Metadata possui geração; PID legado incerto/reutilizado não autoriza takeover nem recebe sinal.
+- Testes incluem dois processos reais concorrentes, saída abrupta do dono, recuperação e preservação do shutdown canônico. Evidências: [pr01-locks.md](plans/agent_ops/evidence/pr01-locks.md).
+- SVC-02 segue em progresso no contrato completo de instância; a camada de exclusão do Server está implementada/testada. Fachada, start/reuse, prontidão, supervisor e integração Connector continuam pendentes conforme o plano.
+- Corrigida a normalização de newlines da entrada HTML e regenerado o artefato pelo build, após o check de whitespace detectar CRLF duplicado.
 
 ## Próxima dependência
 

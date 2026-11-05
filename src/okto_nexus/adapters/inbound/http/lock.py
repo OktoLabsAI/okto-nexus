@@ -1,118 +1,122 @@
-"""Single-server lock for `okto-nexus serve` (spec S1, decision D4).
+"""One foreground/background Server per canonical home and database.
 
-At most ONE serve process per nexus home: two would duplicate the reaper,
-retention sweeps and SSE pollers. The lock is a file created with
-``O_CREAT | O_EXCL`` containing the owner PID; liveness is the file mtime,
-refreshed by the owner (heartbeat). A second serve fails closed with a
-message citing the active PID. A recorded same-host process that the OS
-confirms has exited can be recovered immediately; older locks retain the
-``stale_after_seconds`` heartbeat fallback. stdio clients never touch this lock - WAL
-concurrency between stdio and serve is unaffected by design.
+OS-held locks survive slow heartbeats and are released by process exit. The JSON
+sidecar is diagnostic/generation metadata, never authority to kill a PID. Legacy
+metadata is recovered only after a same-host process is confirmed dead; a stale
+timestamp or a reused/unknown PID cannot authorize takeover of an older Server.
 """
-
 from __future__ import annotations
 
 import json
 import os
-import time
-import socket
 from pathlib import Path
+import secrets
+import socket
+import tempfile
+import time
 
 from ....errors import ErrorCode, OktoNexusError
+from ...outbound.process_liveness import process_exited
+from ...outbound.service_manager.locking import ExclusiveFileLock, LockBusy
 
-LOCK_FILENAME = "nexus.serve.lock"
-
-#: Heartbeat refresh cadence expected from the owner (TR6: <=10s).
+LOCK_FILENAME = 'nexus.serve.lock'
 HEARTBEAT_INTERVAL_SECONDS = 10.0
-
-#: A lock whose mtime is older than this is considered abandoned (TR6: >60s).
-DEFAULT_STALE_AFTER_SECONDS = 60.0
+DEFAULT_STALE_AFTER_SECONDS = 60.0  # retained API compatibility; not takeover authority
 
 
 class ServeLock:
-    """Filesystem lock with PID payload and mtime heartbeat."""
-
-    def __init__(
-        self,
-        home_dir: Path,
-        *,
-        stale_after_seconds: float = DEFAULT_STALE_AFTER_SECONDS,
-    ) -> None:
-        self.path = Path(home_dir) / LOCK_FILENAME
-        self._stale_after = float(stale_after_seconds)
+    def __init__(self, home_dir: Path, *, db_path: Path | None = None,
+                 stale_after_seconds: float = DEFAULT_STALE_AFTER_SECONDS) -> None:
+        self.home_dir = Path(home_dir).resolve()
+        self.db_path = Path(db_path).resolve() if db_path is not None else self.home_dir / 'nexus.db'
+        self.path = self.home_dir / LOCK_FILENAME
+        self._guards: list[ExclusiveFileLock] = []
         self._owned = False
+        self.generation: str | None = None
 
-    # ------------------------------------------------------------------ #
+    def _payload(self) -> dict:
+        try:
+            value = json.loads(self.path.read_text(encoding='utf-8'))
+            return value if isinstance(value, dict) else {}
+        except (OSError, ValueError):
+            return {}
+
+    def _conflict(self, reason: str) -> OktoNexusError:
+        pid, age = self._holder()
+        return OktoNexusError(ErrorCode.CONFIG_ERROR,
+            'Another Server owns this home or database, or its ownership cannot be '
+            f'safely resolved (PID {pid if pid is not None else "unknown"}). '
+            'Stop the existing instance before starting another.',
+            {'lock_path': str(self.path), 'holder_pid': pid,
+             'heartbeat_age_seconds': age, 'reason': reason})
+
     def acquire(self, *, pid: int | None = None) -> None:
-        """Take the lock or raise ``CONFIG_ERROR`` citing the active PID.
-
-        Take over a confirmed dead local owner or a stale legacy heartbeat.
-        A live or uncertain fresh owner still aborts before database access.
-        """
-        pid = os.getpid() if pid is None else pid
-        for attempt in (1, 2):
-            try:
-                fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-            except FileExistsError:
-                holder_pid, age = self._holder()
-                from ...outbound.process_liveness import process_exited
+        if self._owned:
+            raise self._conflict('already_owned')
+        self.home_dir.mkdir(parents=True, exist_ok=True)
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        guard_paths = {self.home_dir / 'nexus.serve.guard',
+                       self.db_path.with_name(self.db_path.name + '.serve.guard')}
+        try:
+            for path in sorted(guard_paths):
+                guard = ExclusiveFileLock(path)
                 try:
-                    same_host = json.loads(self.path.read_text(encoding='utf-8')).get('host') == socket.gethostname()
-                except (OSError, ValueError, AttributeError):
-                    same_host = False
-                dead = same_host and process_exited(holder_pid) is True
-                if attempt == 1 and (dead or (age is not None and age > self._stale_after)):
-                    # Abandoned lock (crashed serve): take it over, loudly.
-                    try:
-                        self.path.unlink()
-                    except OSError:
-                        pass
-                    continue
-                raise OktoNexusError(
-                    ErrorCode.CONFIG_ERROR,
-                    "Another `okto-nexus serve` is already running for this "
-                    f"home (PID {holder_pid if holder_pid is not None else 'unknown'}; "
-                    f"lock {self.path}). Stop it first, or pass a different "
-                    "--home. stdio clients are unaffected.",
-                    {
-                        "lock_path": str(self.path),
-                        "holder_pid": holder_pid,
-                        "heartbeat_age_seconds": age,
-                    },
-                )
-            else:
-                with os.fdopen(fd, "w", encoding="utf-8") as handle:
-                    json.dump({"pid": pid, "host": socket.gethostname()}, handle)
-                self._owned = True
-                return
+                    guard.acquire()
+                except LockBusy:
+                    raise self._conflict('os_lock_held') from None
+                self._guards.append(guard)
+            # Older Servers do not hold these guards: require positive legacy
+            # death proof instead of interpreting a stale heartbeat as permission.
+            if self.path.exists():
+                previous = self._payload()
+                if previous.get('lock_version') != 2:
+                    if (previous.get('host') != socket.gethostname()
+                            or process_exited(previous.get('pid')) is not True):
+                        raise self._conflict('legacy_owner_unconfirmed')
+            self.generation = secrets.token_hex(16)
+            payload = {'lock_version': 2, 'pid': os.getpid() if pid is None else pid,
+                       'host': socket.gethostname(), 'generation': self.generation,
+                       'started_at_epoch': time.time()}
+            fd, name = tempfile.mkstemp(prefix='.serve-', dir=self.home_dir)
+            try:
+                with os.fdopen(fd, 'w', encoding='utf-8') as stream:
+                    json.dump(payload, stream)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                os.replace(name, self.path)
+            finally:
+                Path(name).unlink(missing_ok=True)
+            self._owned = True
+        except BaseException:
+            self._release_guards()
+            self.generation = None
+            raise
 
     def heartbeat(self) -> None:
-        """Refresh the liveness mtime (owner only; call every <=10s)."""
-        if self._owned:
+        if self._owned and self._payload().get('generation') == self.generation:
             try:
                 os.utime(self.path, None)
-            except OSError:  # pragma: no cover - best-effort liveness
-                pass
+            except OSError:
+                pass  # diagnostic only; never drops OS exclusion
+
+    def _release_guards(self) -> None:
+        guards, self._guards = self._guards, []
+        for guard in reversed(guards):
+            guard.release()
 
     def release(self) -> None:
-        """Remove the lock if this instance owns it (idempotent)."""
-        if self._owned:
-            self._owned = False
-            try:
-                self.path.unlink()
-            except OSError:  # pragma: no cover - already gone
-                pass
-
-    # ------------------------------------------------------------------ #
-    def _holder(self) -> tuple[int | None, float | None]:
-        """Return ``(holder_pid, heartbeat_age_seconds)`` for the existing lock."""
-        pid: int | None = None
-        age: float | None = None
         try:
-            payload = json.loads(self.path.read_text(encoding="utf-8") or "{}")
-            raw = payload.get("pid")
-            pid = int(raw) if raw is not None else None
-        except (OSError, ValueError, TypeError):
+            if self._owned:
+                self._owned = False
+                if self._payload().get('generation') == self.generation:
+                    self.path.unlink(missing_ok=True)
+        finally:
+            self.generation = None
+            self._release_guards()
+
+    def _holder(self) -> tuple[int | None, float | None]:
+        pid = self._payload().get('pid')
+        if type(pid) is not int or pid <= 0:
             pid = None
         try:
             age = max(0.0, time.time() - self.path.stat().st_mtime)
@@ -120,7 +124,7 @@ class ServeLock:
             age = None
         return pid, age
 
-    def __enter__(self) -> "ServeLock":
+    def __enter__(self) -> ServeLock:
         self.acquire()
         return self
 

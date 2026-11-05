@@ -43,11 +43,13 @@
       ]
     },
     "PR-01": {
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "dependencies": [
         "PR-00"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr01-locks.md"
+      ]
     },
     "PR-02": {
       "status": "NOT_STARTED",
@@ -265,19 +267,33 @@
     },
     "SVC-02": {
       "title": "propriedade e exclusão mútua",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-01"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/adapters/inbound/http/lock.py",
+        "src/okto_nexus/adapters/inbound/cli/serve.py",
+        "src/okto_nexus/adapters/outbound/service_manager/locking.py",
+        "tests/test_serve_lock.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr01-locks.xml",
+        "plans/agent_ops/evidence/pr01-foreground-shutdown.xml"
+      ],
+      "result": "Server OS exclusion before bootstrap implemented and exercised with actual Windows child processes.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Full instance identity/topology/readiness and Connector integration pending; POSIX not exercised."
+      ],
+      "subscopes": {
+        "server_os_exclusion": "VERIFIED",
+        "startup_before_migration": "VERIFIED",
+        "full_lifecycle_instance_contract": "NOT_STARTED"
+      }
     },
     "SVC-03": {
       "title": "iniciar ou reutilizar",
@@ -2068,6 +2084,14 @@
       "result": "Baseline/ADR delivered; 216 tests passed; UI guidance and runtime pin corrected. BASE-06 real-provider measurement pending.",
       "evidence": [
         "plans/agent_ops/evidence/pr00-validation.md"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-01/SVC-02 first increment",
+      "result": "Canonical home/DB OS exclusion; no heartbeat takeover; real contention/death tests and foreground shutdown regression. PR-01 remains open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr01-locks.md"
       ]
     }
   ]
