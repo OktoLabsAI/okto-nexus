@@ -137,10 +137,20 @@ available for explicit later changes. Native login qualification remains pending
 The versioned preset origin is retained in the canonical Finish receipt and
 exposed by setup reads. Dashboard and terminal still use the same binding,
 runtime policy and harness configuration. Participant initialization,
-unified remote Connector onboarding and real provider
+new remote identity bootstrap and real provider
 qualification remain in progress. Reconnect and repeated Finish do not re-enable a policy
 disabled after setup. A recorded decision whose native delivery is refused is
 shown explicitly. New service contexts retain which configuration values were
 explicit; frozen launch arguments do not pin defaults. Older contexts without
 that provenance keep their previous stored-override behavior, but cannot
 automatically initialize a policy whose original source is unknown.
+
+For an existing remote agent, the default Connector wizard requests this same
+preset origin. The operator's binding proposal includes the configuration, grant
+and native-decision policy effect in one review. Finish commits them together;
+policy changes before the decision or application require a new proposal.
+An explicitly disabled Server policy is preserved. Imported configurations and
+older saved requests do not implicitly initialize native decisions.
+The Connector keeps its participant credential; the operator decides from their
+authenticated Nexus terminal. Replaying the original binding apply after a lost
+response recovers the receipt and current policy without restoring revoked grants.

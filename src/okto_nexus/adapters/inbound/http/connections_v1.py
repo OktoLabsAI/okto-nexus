@@ -59,6 +59,7 @@ class BindingPrepareRequest(BaseModel):
     replace_binding_id: _Id | None = None
     adopt_endpoint_id: _Id | None = None
     connection_configuration: dict | None = None
+    project_preset: dict | None = None
     executor_id: _Id
     adapter_id: _Id
     candidate_ref: Annotated[str, Field(
@@ -96,6 +97,11 @@ def build_router() -> APIRouter:
         return JSONResponse(reach_info(), headers={'Cache-Control': 'no-store'})
 
     def binding_error(error, stage):
+        if (error.details or {}).get('reason') == 'SETUP_ACTIVATION_PENDING':
+            return JSONResponse({'error': dict(code='OUTCOME_UNKNOWN', stage=stage,
+                message=error.message, possible_effect=True, retry_safe=True, operation_id=None,
+                action='Resume the same binding apply intent to recover its committed result and current Server policy.')},
+                status_code=409, headers={'Cache-Control': 'no-store'})
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
                   ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,
                   'RECONCILIATION_REQUIRED': 409, 'APPROVAL_REQUIRED': 403}.get(error.code, 500)
@@ -213,6 +219,7 @@ def build_router() -> APIRouter:
             return prepare_execution_binding(
                 factory, actor_agent_id=agent.agent_id,
                 approvals=request.app.state.deps.approvals,
+                settings=request.app.state.settings_service,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
                 context=runtime_request_context(),
@@ -237,6 +244,7 @@ def build_router() -> APIRouter:
             return apply_execution_binding(
                 factory, actor_agent_id=agent.agent_id,
                 setup_deps=request.app.state.deps,
+                settings=request.app.state.settings_service,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
                 context=runtime_request_context(),

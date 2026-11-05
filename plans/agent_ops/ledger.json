@@ -86,7 +86,8 @@
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
-        "plans/agent_ops/evidence/pr03-connector-login-start.md"
+        "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/pr03-remote-preset.md"
       ]
     },
     "PR-04": {
@@ -1638,7 +1639,11 @@
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/main.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/login_start.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
+        "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
@@ -1648,12 +1653,14 @@
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/contratos/http-target.schema.json",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
@@ -1667,6 +1674,7 @@
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
         "src/okto_nexus/adapters/inbound/http/operator_auth.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
@@ -1682,6 +1690,8 @@
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/execution_binding_approvals.py",
+        "src/okto_nexus/application/execution_binding_proposals.py",
+        "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
@@ -1697,6 +1707,7 @@
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
@@ -1728,6 +1739,10 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -1756,17 +1771,18 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open.",
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
-        "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Operator sessions, existing-binding reuse, remote preset/policy and login-start review contracts are verified with synthetic peers. New remote identity bootstrap, participant init, real provider qualification, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
-        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open."
+        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
+        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -1808,7 +1824,11 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "remote_project_preset_operator_review": "VERIFIED",
+        "remote_policy_atomic_finish": "VERIFIED",
+        "connector_postcommit_policy_recovery": "VERIFIED",
+        "remote_preset_preserves_later_policy_and_grants": "VERIFIED"
       }
     },
     "DX-16": {
@@ -1996,7 +2016,11 @@
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connection_config.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/main.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/login_start.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
+        "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
@@ -2008,6 +2032,7 @@
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
@@ -2015,6 +2040,7 @@
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/contratos/http-target.schema.json",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
@@ -2028,6 +2054,7 @@
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
         "src/okto_nexus/adapters/inbound/http/operator_auth.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
@@ -2043,6 +2070,8 @@
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/execution_binding_approvals.py",
+        "src/okto_nexus/application/execution_binding_proposals.py",
+        "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
@@ -2059,6 +2088,7 @@
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
@@ -2090,6 +2120,10 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
         "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-nexus-final.xml",
@@ -2121,17 +2155,18 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open.",
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
-        "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Operator sessions, existing-binding reuse, remote preset/policy and login-start review contracts are verified with synthetic peers. New remote identity bootstrap, participant init, real provider qualification, preset evolution and dashboard introduction remain open.",
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
-        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open."
+        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
+        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -2176,7 +2211,11 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "remote_project_preset_operator_review": "VERIFIED",
+        "remote_policy_atomic_finish": "VERIFIED",
+        "connector_postcommit_policy_recovery": "VERIFIED",
+        "remote_preset_preserves_later_policy_and_grants": "VERIFIED"
       }
     },
     "DX-05": {
@@ -2703,12 +2742,22 @@
         "PR-02"
       ],
       "files": [
+        "../okto-nexus-connector/docs/connection-configuration.md",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
+        "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
+        "plans/contratos/http-target.schema.json",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
@@ -2716,6 +2765,8 @@
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
         "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
+        "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
@@ -2725,6 +2776,9 @@
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
+        "src/okto_nexus/application/execution_binding_proposals.py",
+        "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/settings.py",
@@ -2734,16 +2788,23 @@
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
+        "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
         "tests/test_service_start.py",
         "tests/test_settings_api.py",
         "tests/test_terminal_connect_process.py",
-        "tests/test_terminal_http.py"
+        "tests/test_terminal_http.py",
+        "vendor/ci/manifest.json"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -2762,7 +2823,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Explicit local work authorize reviews exact expiry, budget and project actions, then uses the canonical grant issuer with an atomic actor/request receipt. Concurrent requests, stale reviews, late rollback and unknown replies preserve one issuance; later revocation and project drift do not cause replay. Existing grants and leases stay unchanged; fresh openings prefer productive remaining authority and old sessions are not silently rebound. 247 installed regression tests passed on the initial candidate; 30 focused tests passed on the final wheel after uncertain-error/display refinements. Remote operator/Connector renewal and real productive local/remote M1 acceptance remain open.",
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -2770,7 +2831,8 @@
         "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open.",
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
         "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
-        "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed."
+        "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
+        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -2790,7 +2852,11 @@
         "local_terminal_grant_renewal": "VERIFIED",
         "local_grant_receipt_recovery_and_concurrency": "VERIFIED",
         "renewal_preserves_existing_leases_and_revocations": "VERIFIED",
-        "remote_terminal_grant_renewal": "NOT_RUN"
+        "remote_terminal_grant_renewal": "NOT_RUN",
+        "remote_project_preset_operator_review": "VERIFIED",
+        "remote_policy_atomic_finish": "VERIFIED",
+        "connector_postcommit_policy_recovery": "VERIFIED",
+        "remote_preset_preserves_later_policy_and_grants": "VERIFIED"
       }
     },
     "DX-19": {
@@ -2812,7 +2878,11 @@
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connection_config.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/main.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/login_start.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
+        "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
@@ -2824,12 +2894,14 @@
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
+        "plans/contratos/http-target.schema.json",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
@@ -2842,6 +2914,7 @@
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
         "src/okto_nexus/adapters/inbound/http/operator_auth.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
@@ -2857,6 +2930,8 @@
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/execution_binding_approvals.py",
+        "src/okto_nexus/application/execution_binding_proposals.py",
+        "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/service_lifecycle.py",
@@ -2872,6 +2947,7 @@
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
@@ -2901,6 +2977,10 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
         "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-nexus-final.xml",
@@ -2927,18 +3007,19 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open.",
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
         "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
         "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open.",
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
-        "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Operator sessions, existing-binding reuse, remote preset/policy and login-start review contracts are verified with synthetic peers. New remote identity bootstrap, participant init, real provider qualification, preset evolution and dashboard introduction remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
-        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open."
+        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
+        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -2978,7 +3059,11 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "remote_project_preset_operator_review": "VERIFIED",
+        "remote_policy_atomic_finish": "VERIFIED",
+        "connector_postcommit_policy_recovery": "VERIFIED",
+        "remote_preset_preserves_later_policy_and_grants": "VERIFIED"
       }
     },
     "DX-20": {
@@ -3129,7 +3214,12 @@
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect.py",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/main.py",
         "../okto-nexus-connector/src/okto_nexus_connector/platform/login_start.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/services/binding_onboarding.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/storage/state_store.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/transport/https_client.py",
         "../okto-nexus-connector/tests/unit/test_background_onboarding.py",
+        "../okto-nexus-connector/tests/unit/test_binding_onboarding.py",
+        "../okto-nexus-connector/tests/unit/test_configure.py",
         "../okto-nexus-connector/tests/unit/test_configure_login_start.py",
         "../okto-nexus-connector/tests/unit/test_connect_r4.py",
         "docs/terminal-connect.md",
@@ -3138,10 +3228,12 @@
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
+        "plans/contratos/http-target.schema.json",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
@@ -3153,6 +3245,7 @@
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
         "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
         "src/okto_nexus/adapters/inbound/http/operator_auth.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
@@ -3166,6 +3259,9 @@
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/connection_test.py",
+        "src/okto_nexus/application/execution_binding_approvals.py",
+        "src/okto_nexus/application/execution_binding_proposals.py",
+        "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/service_lifecycle.py",
@@ -3178,7 +3274,9 @@
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
+        "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
@@ -3206,6 +3304,10 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -3230,17 +3332,18 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open.",
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
         "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
         "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and dashboard introduction remain open.",
         "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
-        "Human operator-session CLI authentication and existing-binding reuse are verified with a synthetic peer. Unified remote Connector setup, participant init, start-at-login review, preset evolution and dashboard introduction remain open.",
+        "Operator sessions, existing-binding reuse, remote preset/policy and login-start review contracts are verified with synthetic peers. New remote identity bootstrap, participant init, real provider qualification, preset evolution and dashboard introduction remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open."
+        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
+        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -3275,7 +3378,11 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "remote_project_preset_operator_review": "VERIFIED",
+        "remote_policy_atomic_finish": "VERIFIED",
+        "connector_postcommit_policy_recovery": "VERIFIED",
+        "remote_preset_preserves_later_policy_and_grants": "VERIFIED"
       }
     },
     "ATN-01": {
@@ -4050,11 +4157,16 @@
       "requirement": "Setup gerenciado continua transacional; alteraÃ§Ã£o concorrente nÃ£o amplia grants.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity.md"
       ],
-      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T27": {
       "requirement": "ConfiguraÃ§Ã£o remota usa diretÃ³rio/credencial do host correto.",
@@ -4106,6 +4218,11 @@
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-login-start.md",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
@@ -4113,12 +4230,17 @@
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T32": {
       "requirement": "AprovaÃ§Ã£o remota pendente preserva ID e identidade do decisor; terminal participante nÃ£o a aprova por assentimento local.",
       "status": "VERIFIED",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
@@ -4126,7 +4248,7 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-binding.md"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T33": {
       "requirement": "connect reutilizado apÃ³s resposta perdida retoma o mesmo setup sem novo agente, binding ou grant.",
@@ -4147,6 +4269,11 @@
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-login-start.md",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
@@ -4157,7 +4284,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T34": {
       "requirement": "Login de provedor ausente produz instruÃ§Ã£o concreta e nÃ£o deixa daemon bloqueado em prompt invisÃ­vel.",
@@ -4235,6 +4362,11 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
@@ -4243,7 +4375,7 @@
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T41": {
       "requirement": "Reconnect e repetiÃ§Ã£o do setup preservam `agent_id`, modelo, papel, configuraÃ§Ã£o, grants e personalizaÃ§Ãµes; nÃ£o recriam agente nem reaplicam defaults.",
@@ -4252,6 +4384,11 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
@@ -4263,7 +4400,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The full real-provider/Connector scenario is not claimed."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T42": {
       "requirement": "Nome de agente/projeto igual nÃ£o associa outra identidade; vÃ­nculos ausentes ou ambÃ­guos exigem resoluÃ§Ã£o autorizada, inclusive quando duas conexÃµes iniciais concorrem.",
@@ -4297,6 +4434,11 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
@@ -4308,7 +4450,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T46": {
       "requirement": "Perda da resposta de submissÃ£o ou decisÃ£o em M1 recupera a mesma requisiÃ§Ã£o/resultado, inclusive apÃ³s restart; nÃ£o cria operaÃ§Ã£o, pedido ou handoff duplicado.",
@@ -4317,6 +4459,11 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
@@ -4331,7 +4478,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
     },
     "DX-T47": {
       "requirement": "Fechar e reabrir o CLI reencontra trabalho e identidade; retoma a conversa somente com suporte comprovado, ou oferece nova sessÃ£o explicitamente, sem replay nem contexto fictÃ­cio.",
@@ -5139,6 +5286,18 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-login-start-cli.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 remote project preset and native policy review",
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-preset.md",
+        "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-preset-wheels.json"
       ]
     }
   ]

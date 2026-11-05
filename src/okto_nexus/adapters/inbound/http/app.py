@@ -504,6 +504,12 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     )
     with deps.connection_factory.unit_of_work() as uow:
         settings_service.apply_overrides(uow)
+    # Binding approval and Finish validate the same effective policy/pins.
+    from ....application.execution_binding_approvals import BINDING_APPROVAL_ACTION, ExecutionBindingApprovals
+    from ....bootstrap.execution_authority import build_execution_access
+    binding_decisions = ExecutionBindingApprovals(access=build_execution_access(deps), settings=settings_service)
+    deps.approvals.register_transactional_decision(
+        BINDING_APPROVAL_ACTION, binding_decisions.decide, detail=binding_decisions.detail)
     # Re-resolve the embedding capability from the NOW-effective mode so a
     # stored embedding_mode (off/stub/local) actually takes effect. Cheap: the
     # real model is lazy-loaded (serve warms it separately). Skip when the

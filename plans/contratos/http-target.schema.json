@@ -1307,6 +1307,16 @@
             "null"
           ],
           "description": "Portable version 2 connection preferences and finite execution limits included in the immutable approval diff. Validated by Core; no identity, credentials or destination paths."
+        },
+        "project_preset": {
+          "type": ["object", "null"],
+          "properties": {
+            "id": {"const": "project-generalist"},
+            "revision": {"type": "integer", "const": 1}
+          },
+          "required": ["id", "revision"],
+          "additionalProperties": false,
+          "description": "Optional project preset origin. Its native-decision policy effect joins the immutable operator review and canonical Finish; explicit Server policy is preserved."
         }
       },
       "required": [

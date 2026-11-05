@@ -117,7 +117,8 @@ def test_review_confirmation_and_participant_authority_are_not_substitutable(ope
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-def test_connector_resumes_original_intent_after_human_terminal_decision(operator, tmp_path, capsys):
+@pytest.mark.parametrize('project', [False, True])
+def test_connector_resumes_original_intent_after_human_terminal_decision(operator, tmp_path, capsys, project, monkeypatch):
     from okto_nexus_connector.storage.state_store import StateStore, IdentityRecord, ServerProfileRecord, ExecutionExecutorRecord
     from okto_nexus_connector.services.binding_onboarding import BindingOnboarding
     from okto_nexus_connector.services.background_onboarding import continue_pending_bindings
@@ -148,7 +149,8 @@ def test_connector_resumes_original_intent_after_human_terminal_decision(operato
             bindings = BindingOnboarding(store, vault, http_factory=factory)
             prepared = await bindings.prepare(identity_alias='subject', realization_ref=local.realization_ref,
                 alias='assistant', client_intent_id='terminal_prepare',
-                connection_configuration=connection_preferences(r.prepare))
+                connection_configuration=connection_preferences(r.prepare),
+                **({'project_preset': {'id': 'project-generalist', 'revision': 1}} if project else {}))
             proposal = prepared['proposal']
             approval_id = next(a for a in proposal['required_approvals'] if a.startswith('apr_'))
             with pytest.raises(ConnectorError) as waiting:
@@ -157,13 +159,28 @@ def test_connector_resumes_original_intent_after_human_terminal_decision(operato
             assert waiting.value.code == 'APPROVAL_REQUIRED'
             assert command(r, approval_id) == 0
             review = json.loads(capsys.readouterr().out)
+            if project:
+                assert 'Enable Server-wide human review' in review['proposal']['diff']['summary']
             assert command(r, approval_id, '--decision', 'approve', '--confirm', review['review_revision']) == 0
             capsys.readouterr()
             # Reopen persisted Connector state, as after CLI exit/daemon restart.
             reopened = StateStore(tmp_path / 'connector-state.json')
+            if project:
+                service = r.client.app.state.settings_service
+                refresh = service.refresh_native_decisions
+                def unavailable(factory):
+                    raise OSError('injected postcommit cache failure')
+                monkeypatch.setattr(service, 'refresh_native_decisions', unavailable)
+                await continue_pending_bindings(reopened, vault, server_id=local.server_id,
+                    executor_id=local.executor_id, http_factory=factory)
+                assert reopened.load().binding_intents[0].status == 'APPLY_PENDING'
+                assert r.deps.config.feature_hitl is False
+                monkeypatch.setattr(service, 'refresh_native_decisions', refresh)
             await continue_pending_bindings(reopened, vault, server_id=local.server_id,
                 executor_id=local.executor_id, http_factory=factory)
             state = reopened.load()
+            assert state.binding_intents[0].project_preset == ({'id': 'project-generalist', 'revision': 1} if project else None)
+            assert r.deps.config.feature_hitl is project
             assert state.binding_intents[0].status == 'APPLIED'
             assert state.binding_intents[0].apply_client_intent_id == 'terminal_apply'
             assert state.execution_bindings[0].binding_id == proposal['binding_id']

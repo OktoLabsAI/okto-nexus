@@ -8,7 +8,6 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import secrets
-import time
 from typing import Any, Mapping
 
 from nexus_connector_core.protocol import canonical_json
@@ -120,14 +119,14 @@ def _binding_alias_conflicts(conn, *, server_id, subject_agent_id, executor_id,
 def prepare_execution_binding(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
-    context=None, access=None, approvals=None,
+    context=None, access=None, approvals=None, settings=None,
 ) -> dict[str, Any]:
     """Resolve a published local claim into a reviewable proposal, no spawn."""
     required = {
         "client_intent_id", "executor_id", "adapter_id", "candidate_ref",
         "inventory_revision", "realization_ref", "workspace_id", "alias",
     }
-    allowed = required | {"agent_id_hint", "replace_binding_id", "adopt_endpoint_id", "connection_configuration"}
+    allowed = required | {"agent_id_hint", "replace_binding_id", "adopt_endpoint_id", "connection_configuration", "project_preset"}
     if (not isinstance(request, Mapping) or not required <= set(request) or
             not set(request) <= allowed):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -273,7 +272,7 @@ def prepare_execution_binding(
         if previous_machines and machine_policy == 'deny':
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                 'Another machine is already authorized for this agent. The remote machine policy denies replacement.', {})
-        if previous_machines and machine_policy == 'auto_replace' and not operator:
+        if previous_machines and machine_policy == 'auto_replace' and not operator and request.get('project_preset') is None:
             automatic_machine = automatic_source(conn, previous_machines, agent_id=subject_agent_id,
                 adapter_id=request['adapter_id'], configuration=configuration)
 
@@ -330,6 +329,11 @@ def prepare_execution_binding(
             expected["replacement"] = replacement
         if configuration is not None:
             expected["connection_configuration"] = configuration
+        from .execution_binding_setup import prepare_project_review
+        project_review = prepare_project_review(uow, request, configuration, settings)
+        if project_review and not (operator or request_operator_proof):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The project preset requires an operator review.', {})
+        expected.update(project_review)
         if previous_machines:
             expected['previous_machines'] = previous_machines
             expected['remote_machine_policy'] = machine_policy
@@ -386,6 +390,11 @@ def prepare_execution_binding(
                         f"Nexus tool access: {configuration['tool_access']}; "
                         f"session policy: {configuration['session_policy'] or 'inherit'}. "
                         f"Harness settings: {json.dumps(configuration['harness_settings'], sort_keys=True)}.")
+        if project_review:
+            summary += ' Project preset: project-generalist revision 1.'
+            summary += (' Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.'
+                        if project_review['native_decision_policy']['initialize'] else
+                        ' Preserve the enabled Server native-decision policy; no decision is approved automatically.')
         proposal = {
             "proposal_id": proposal_id, "proposal_revision": 1,
             "expires_at": expires_at, "server_id": server_id,
@@ -415,6 +424,8 @@ def prepare_execution_binding(
         }
         if configuration is not None:
             proposal['diff']['fields_changed'] += ['runtime_policy', 'harness_settings', 'tool_access', 'execution_grant']
+        if project_review:
+            proposal['diff']['fields_changed'] += ['project_preset', 'native_decision_policy']
         conn.execute(
             "INSERT INTO execution_proposals(proposal_id,server_id,"
             "client_intent_id,actor_agent_id,subject_agent_id,executor_id,"
@@ -444,7 +455,19 @@ def prepare_execution_binding(
 def apply_execution_binding(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
-    context=None, access=None, setup_deps=None,
+    context=None, access=None, setup_deps=None, settings=None,
+) -> dict[str, Any]:
+    result = _apply_execution_binding(factory, actor_agent_id=actor_agent_id, request=request,
+        fresh_publications=fresh_publications, context=context, access=access, setup_deps=setup_deps, settings=settings)
+    from .execution_binding_setup import refresh_applied_project
+    refresh_applied_project(factory, actor_agent_id=actor_agent_id, request=request, settings=settings)
+    return result
+
+
+def _apply_execution_binding(
+    factory: ConnectionFactory, *, actor_agent_id: str,
+    request: Mapping[str, Any], fresh_publications: Mapping,
+    context=None, access=None, setup_deps=None, settings=None,
 ) -> dict[str, Any]:
     """CAS a reviewed proposal into one canonical binding, without effect."""
     required = {"client_intent_id", "proposal_id", "proposal_revision",
@@ -695,7 +718,7 @@ def apply_execution_binding(
         if expected.get('connection_configuration') is not None and not expected.get('automatic_machine_replacement'):
             from .execution_binding_setup import finish_approved_configuration
             finish_approved_configuration(setup_deps, uow, row=row, expected=expected,
-                                          proposal=proposal, context=context, operator=operator)
+                                          proposal=proposal, context=context, operator=operator, settings=settings)
         view = {
             "binding_id": proposal["binding_id"], "server_id": server_id,
             "executor_id": proposal["executor_id"],

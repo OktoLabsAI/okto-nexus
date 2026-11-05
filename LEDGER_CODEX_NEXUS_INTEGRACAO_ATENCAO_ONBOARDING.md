@@ -240,3 +240,12 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **74 testes passaram nos fontes; 152 do Connector e 104 do Nexus passaram nos artefatos instalados.** Os relatórios têm sobreposição; os 431/116/130 arquivos Python correspondem aos fontes. Pin e hash do Connector atualizados no Nexus; Core não mudou.
 - **DX-T37 verificado no contrato de revisão/recusa em Windows, com efeitos nativos injetados.** Login/logout/crash/cofre reais, M1 produtivo e o restante do plano continuam abertos. Escopo R3 preservado.
 - Evidência: [pr03-connector-login-start.md](plans/agent_ops/evidence/pr03-connector-login-start.md).
+
+## 2026-11-05 — PR-03, décima primeira fatia: preset e política na aprovação remota
+
+- Recuperadas as três referências `origin/main`; já estão contidas nas branches de trabalho. Versões permanecem `0.3.3`, `0.0.12` e `0.0.14`.
+- O wizard padrão do Connector salva a origem do preset separada do JSON portátil. A revisão do operador inclui configuração, grant e o efeito global de decisões nativas. Política explícita desabilitada e mudanças concorrentes são preservadas; participante não autoriza esse efeito.
+- Finish grava origem, configuração, grant, política e recibo na mesma transação. Atualização em memória ocorre após o commit. Falha nessa etapa produz resultado incerto recuperável pelo mesmo ID; o background do Connector retoma sem restaurar política desabilitada ou grant revogado posteriormente.
+- **22 testes do Nexus e 37 do Connector passaram nos fontes; 127 do Nexus e 285 do Connector passaram nos wheels instalados.** Rodadas se sobrepõem. Os 431/116/130 arquivos Python correspondem byte a byte aos fontes; pin/hash do Connector atualizados. Core não mudou.
+- Connector commit/push: `143ae449`. Contratos usam HTTP/SQLite reais com transporte, cofre e inventário sintéticos. Nova identidade remota, M1 produtivo, campanha nativa e demais frentes continuam pendentes. Plano fixo preservado.
+- Evidência: [pr03-remote-preset.md](plans/agent_ops/evidence/pr03-remote-preset.md).

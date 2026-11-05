@@ -10,8 +10,8 @@ BINDING_APPROVAL_ACTION = "execution.binding.authorize"
 
 
 class ExecutionBindingApprovals:
-    def __init__(self, *, access):
-        self.access = access
+    def __init__(self, *, access, settings=None):
+        self.access, self.settings = access, settings
 
     def detail(self, uow, approval):
         """Expose the immutable reviewed scope, never host secrets or proof context."""
@@ -74,6 +74,8 @@ class ExecutionBindingApprovals:
                                   "The binding proposal expired or its policy changed.", {})
         _require_binding_method(conn, subject_agent_id=row["subject_agent_id"],
                                 adapter_id=proposal["adapter_id"])
+        from .execution_binding_setup import validate_project_review
+        validate_project_review(uow, expected, self.settings)
         proof = {"approval_id": approval.approval_id,
                  "proposal_id": row["proposal_id"],
                  "proposal_revision": row["proposal_revision"],
