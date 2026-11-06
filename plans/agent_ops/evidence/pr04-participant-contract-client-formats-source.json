@@ -1,0 +1,65 @@
+{
+  "scope": "real_client_configuration_read_only",
+  "cases": [
+    {
+      "client": "claude",
+      "version": "2.1.317",
+      "version_command": {
+        "args": [
+          "--version"
+        ],
+        "exit_code": 0,
+        "stdout": "2.1.317 (Claude Code)\n",
+        "stderr": ""
+      },
+      "read_command": {
+        "args": [
+          "mcp",
+          "get",
+          "nexus-campaign"
+        ],
+        "exit_code": 0,
+        "stdout": "nexus-campaign:\n  Scope: Project config (shared via .mcp.json)\n  Status: ⏸ Pending approval (run `claude` to approve)\n  Type: http\n  URL: http://127.0.0.1:59690/mcp\n  Headers:\n    Authorization: Bearer ${NEXUS_PARTICIPANT_TOKEN_CAMPAIGN}\n\nTo remove this server, run: claude mcp remove nexus-campaign -s project\n",
+        "stderr": ""
+      },
+      "config_unchanged": true,
+      "backup_matches": true,
+      "generated_config_sha256": "5a3d6e4c714c6783c6020a76feee9aa4e3405e7f1f3c1e52b64e222eb0f87311",
+      "credential_resolution": "NOT_PROVEN",
+      "reload_or_project_approval_required": true
+    },
+    {
+      "client": "codex",
+      "version": "0.166.0",
+      "version_command": {
+        "args": [
+          "--version"
+        ],
+        "exit_code": 0,
+        "stdout": "codex-cli 0.166.0\n",
+        "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\\" (codex_home: AbsolutePathBuf(\"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-participant-contract-sf2mkjgx\\\\formats-source\\\\codex\\\\codex\"))\n"
+      },
+      "read_command": {
+        "args": [
+          "mcp",
+          "get",
+          "nexus-campaign",
+          "--json"
+        ],
+        "exit_code": 0,
+        "stdout": "{\n  \"name\": \"nexus-campaign\",\n  \"enabled\": true,\n  \"disabled_reason\": null,\n  \"transport\": {\n    \"type\": \"streamable_http\",\n    \"url\": \"http://127.0.0.1:59690/mcp\",\n    \"bearer_token_env_var\": \"NEXUS_PARTICIPANT_TOKEN_CAMPAIGN\",\n    \"http_headers\": null,\n    \"env_http_headers\": null,\n    \"http_headers_helper\": null\n  },\n  \"enabled_tools\": null,\n  \"disabled_tools\": null,\n  \"startup_timeout_sec\": null,\n  \"tool_timeout_sec\": null\n}\n",
+        "stderr": "WARNING: proceeding, even though we could not create PATH aliases: Refusing to create helper binaries under temporary dir \"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\\" (codex_home: AbsolutePathBuf(\"C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-participant-contract-sf2mkjgx\\\\formats-source\\\\codex\\\\codex\"))\n"
+      },
+      "config_unchanged": true,
+      "backup_matches": true,
+      "generated_config_sha256": "f10da326067c92b27052e7419543194bbbeb95df92002f65648a807a5fac3b3d",
+      "credential_resolution": "NOT_PROVEN",
+      "reload_or_project_approval_required": true
+    }
+  ],
+  "model_turns": 0,
+  "real_credentials": false,
+  "mcp_negotiated": false,
+  "participant_session_proven": false,
+  "mcp_http_requests": 0
+}

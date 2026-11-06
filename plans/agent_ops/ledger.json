@@ -116,12 +116,24 @@
       ]
     },
     "PR-04": {
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "dependencies": [
         "PR-00",
         "PR-03"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ]
     },
     "PR-05": {
       "status": "NOT_STARTED",
@@ -1618,7 +1630,7 @@
     },
     "DX-01": {
       "title": "modelo declarativo prÃ³prio",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-04"
       ],
@@ -1626,16 +1638,53 @@
         "PR-00",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_document.py",
+        "../okto-nexus-connector-core/tests/test_participant_config.py",
+        "../okto-nexus-connector-core/docs/participant-config.md",
+        "../okto-nexus-connector-core/docs/api.md",
+        "../okto-nexus-connector-core/README.md",
+        "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "vendor/ci/manifest.json",
+        "scripts/qualify_participant_formats.py",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Real binary campaign is configuration parsing only; it does not initialize MCP, resolve a real credential or prove participation.",
+        "Host connect/init, durable reviewed-stage recovery, protected backup ACL checks and credential/launcher integration remain pending.",
+        "TOML editing preserves unrelated bytes and refuses ambiguous/customized owned spans. Noncooperating writers can still race the final filesystem compare/replace.",
+        "Only the declared Windows client builds were exercised; other versions/platforms are not qualified."
+      ],
+      "subscopes": {
+        "pure_participant_reference_contract": "VERIFIED",
+        "managed_capability_and_format_boundary": "VERIFIED",
+        "selected_json_toml_owned_entry_cas": "VERIFIED",
+        "installed_claude_codex_config_parsing": "VERIFIED",
+        "actual_client_credential_resolution": "NOT_RUN",
+        "authenticated_mcp_participation": "NOT_RUN"
+      }
     },
     "DX-02": {
       "title": "matriz de formatos",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-04"
       ],
@@ -1643,16 +1692,53 @@
         "PR-00",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_document.py",
+        "../okto-nexus-connector-core/tests/test_participant_config.py",
+        "../okto-nexus-connector-core/docs/participant-config.md",
+        "../okto-nexus-connector-core/docs/api.md",
+        "../okto-nexus-connector-core/README.md",
+        "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "vendor/ci/manifest.json",
+        "scripts/qualify_participant_formats.py",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Real binary campaign is configuration parsing only; it does not initialize MCP, resolve a real credential or prove participation.",
+        "Host connect/init, durable reviewed-stage recovery, protected backup ACL checks and credential/launcher integration remain pending.",
+        "TOML editing preserves unrelated bytes and refuses ambiguous/customized owned spans. Noncooperating writers can still race the final filesystem compare/replace.",
+        "Only the declared Windows client builds were exercised; other versions/platforms are not qualified."
+      ],
+      "subscopes": {
+        "pure_participant_reference_contract": "VERIFIED",
+        "managed_capability_and_format_boundary": "VERIFIED",
+        "selected_json_toml_owned_entry_cas": "VERIFIED",
+        "installed_claude_codex_config_parsing": "VERIFIED",
+        "actual_client_credential_resolution": "NOT_RUN",
+        "authenticated_mcp_participation": "NOT_RUN"
+      }
     },
     "DX-03": {
       "title": "plan/apply",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-04"
       ],
@@ -1660,12 +1746,49 @@
         "PR-00",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_document.py",
+        "../okto-nexus-connector-core/tests/test_participant_config.py",
+        "../okto-nexus-connector-core/docs/participant-config.md",
+        "../okto-nexus-connector-core/docs/api.md",
+        "../okto-nexus-connector-core/README.md",
+        "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "vendor/ci/manifest.json",
+        "scripts/qualify_participant_formats.py",
+        "plans/agent_ops/adr.md",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Real binary campaign is configuration parsing only; it does not initialize MCP, resolve a real credential or prove participation.",
+        "Host connect/init, durable reviewed-stage recovery, protected backup ACL checks and credential/launcher integration remain pending.",
+        "TOML editing preserves unrelated bytes and refuses ambiguous/customized owned spans. Noncooperating writers can still race the final filesystem compare/replace.",
+        "Only the declared Windows client builds were exercised; other versions/platforms are not qualified."
+      ],
+      "subscopes": {
+        "pure_participant_reference_contract": "VERIFIED",
+        "managed_capability_and_format_boundary": "VERIFIED",
+        "selected_json_toml_owned_entry_cas": "VERIFIED",
+        "installed_claude_codex_config_parsing": "VERIFIED",
+        "actual_client_credential_resolution": "NOT_RUN",
+        "authenticated_mcp_participation": "NOT_RUN"
+      }
     },
     "DX-04": {
       "title": "credenciais",
@@ -4518,33 +4641,129 @@
     },
     "DX-T04": {
       "requirement": "Plan nÃ£o muda configuraÃ§Ã£o; apply sÃ³ altera entrada revisada.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "DX-T05": {
       "requirement": "Arquivo editado apÃ³s plan causa conflito, sem sobrescrever mudanÃ§a concorrente.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "DX-T06": {
       "requirement": "Arquivo com outros MCPs e preferÃªncias conserva conteÃºdo alheio.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "DX-T07": {
       "requirement": "Round-trip JSON/TOML, espaÃ§os, Unicode, formatos invÃ¡lidos e duplicatas.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "DX-T08": {
       "requirement": "InterrupÃ§Ã£o durante escrita/backup deixa original ou substituto Ã­ntegro e recuperaÃ§Ã£o explÃ­cita.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "DX-T09": {
       "requirement": "Segredos ausentes de argv, URL, logs, JSON de resultado, arquivos portÃ¡veis e browser.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "DX-T10": {
       "requirement": "VariÃ¡vel referenciada mas indisponÃ­vel ao harness produz diagnÃ³stico, nÃ£o sucesso.",
@@ -5473,8 +5692,24 @@
     },
     "RG-06": {
       "requirement": "Core importado sem sockets/processos/credenciais; dependÃªncias entre aplicaÃ§Ãµes continuam proibidas.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "RG-07": {
       "requirement": "Cliente antigo + Server novo e cliente novo + Server antigo tÃªm comportamento documentado.",
@@ -5483,8 +5718,24 @@
     },
     "RG-08": {
       "requirement": "Pacotes finais contÃªm UI, schemas, migraÃ§Ãµes e recursos necessÃ¡rios, sem depender de checkout irmÃ£o.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ],
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "subscopes": {
+        "shared_participant_contract_and_editor": "VERIFIED"
+      }
     },
     "RG-09": {
       "requirement": "Campanha usa homes/workspaces temporÃ¡rios e nÃ£o modifica contas/configuraÃ§Ãµes pessoais.",
@@ -6134,6 +6385,24 @@
         "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
         "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
         "plans/agent_ops/evidence/pr03-preset-evolution.md"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-04 shared participant configuration contract",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-import-audit.py",
+        "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-contract.md"
       ]
     }
   ]

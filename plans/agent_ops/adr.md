@@ -33,6 +33,14 @@ pretend a permanent agent key is `mcp-cap:` or relax native qualification.
 Effects on Server, local credential store and client files are separate recorded
 steps, not a distributed transaction. Managed configuration reuses Finish.
 
+PR-04 places the reference-only participant description in Core's separate
+`participant_config` module for reuse by both hosts. It records client/version,
+format revision, selected file scope and approved origin. JSON/TOML planning
+shares structural editors with managed configuration; managed capability and
+native qualification checks remain intact. Generic export is a manual
+instruction, and real-client config parsing is separate from secret resolution,
+MCP negotiation, session participation and productive work.
+
 Human prompts use canonical native operations; inter-agent work uses handoffs.
 CLI saves request identity before transport, inspects the same ID after response
 loss, and uses existing receipts where their scope proves deduplication. Generic

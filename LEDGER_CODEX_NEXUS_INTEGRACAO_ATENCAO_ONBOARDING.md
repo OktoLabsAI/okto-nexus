@@ -299,3 +299,13 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **148 testes passaram nos wheels instalados; oito casos de navegador foram ignorados por campanha desabilitada.** Follow-ups de cleanup (**4**) e reconnect/recibo antigo (**3**) passaram e se sobrepõem à rodada ampla. **Cinco casos do CLI executável** passaram. As falhas iniciais corrigidas e os relatórios separados estão preservados.
 - Nexus: **436 arquivos Python e sete assets** correspondem aos fontes; Connector/Core mantêm seus pins e payloads. A recomendação publicada no código continua na revisão 1; revisões futuras 2/3 foram simuladas nos testes.
 - [Evidências e limites](plans/agent_ops/evidence/pr03-preset-evolution.md). DX-T51 está verificado no contrato instalado declarado; DX-21/PR-03, M1 produtivo e o plano integral continuam em progresso. Campanhas reais de provedor, dois hosts, cofre/TLS e serviços nativos permanecem pendentes.
+
+## 2026-11-05 — PR-04, primeira fatia: contrato de participante e formatos
+
+- Core recebeu contrato puro separado do template gerenciado: cliente/versão, formato/revisão, origem aprovada, escopo de arquivo e referência de ambiente. Não aceita chave de agente como capacidade gerenciada nem altera os gates de qualificação nativa.
+- JSON do Claude e TOML do Codex reutilizam editores com propriedade exata, CAS, backup e escrita atômica. Configuração alheia é preservada; remoção afeta só a entrada ainda pertencente à operação. Exportação genérica exige configuração manual; Pi não recebe adaptador HTTP inventado.
+- **100 testes Core na fonte passaram. Nos pacotes instalados: 97 Core, 74 Connector e nove Nexus passaram.** Cinco casos Nexus inicialmente falharam na preparação do fixture por falta de SQL; passaram após copiar as migrações do wheel, sem mudar produção. Relatórios separados preservados.
+- **Claude Code 2.1.317 e Codex CLI 0.166.0** leram os arquivos gerados em homes descartáveis; zero requisições MCP. O Claude manteve aprovação pendente. Leitura do formato não comprova credencial disponível, MCP negociado ou participação.
+- Mesmo wheel Core com **131 arquivos Python conferidos** nos dois consumidores; Nexus/Connector mantêm seus payloads. Auditoria do import instalado não observou sockets, processos, threads ou leitura de arquivos fora do código. Pins continuam 0.0.14; nenhum pacote publicado.
+- [Evidências e limites](plans/agent_ops/evidence/pr04-participant-contract.md). DX-01 verificado no contrato puro; DX-02/03 e PR-04 em progresso. `init`, integração de credencial/launcher, retomada local e cooperação autenticada seguem pendentes. O plano integral e M1 produtivo continuam incompletos.
+- Commit/push coordenado: Core `7a58bd3`; Connector `7b2c3bf`.
