@@ -88,6 +88,7 @@ class Approval:
     decided_at: str | None
     archived_at: str | None = None
     archived_by: str | None = None
+    decision_revision: int = 0
 
 
 def is_reserved_agent_id(raw: Any) -> bool:

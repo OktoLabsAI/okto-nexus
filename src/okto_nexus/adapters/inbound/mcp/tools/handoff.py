@@ -261,6 +261,7 @@ def build_service(deps: Any, *, register_approval_executor: bool = True) -> Hand
         runtime_notifications=SqliteHandoffNotificationRepository(),
         runtime_schedule=SqliteHandoffScheduleRepository(),
         execution_claims=SqliteExecutionClaimRepository(),
+        coordination_requests=repos.coordination_requests,
         tag_catalog=repos.tag_catalog,
         capability_catalog=repos.capability_catalog,
         governance=governance,
@@ -325,6 +326,7 @@ def register(server: Any, deps: Any) -> None:
         session_secret: Annotated[str | None, Field(description="Optional session proof for creator affinity; never persisted. Without proof session_id is attribution only.")] = None,
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
         workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
+        client_request_id: Annotated[str | None, Field(description="Optional durable request ID: 30-day deduplication with metadata references. Recover via coordination_request_get; details in tool docs.")] = None,
     ) -> dict[str, Any]:
         """Create an OPEN handoff (validates target/visibility); emit handoff.created. After creating, poll handoff_get for status/result. Full docs: okto-nexus://reference/tool-docs/handoff."""
         require_json_object_param("target", target, required=True)
@@ -341,6 +343,7 @@ def register(server: Any, deps: Any) -> None:
             depends_on=depends_on,
             session_id=session_id,
             session_secret=session_secret,
+            client_request_id=client_request_id,
         )
 
     @server.tool()

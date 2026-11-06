@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="9.913" timestamp="2026-11-06T09:49:10.701370-03:00" hostname="Alienware_m15"><testcase classname="tests.test_coordination_creation" name="test_same_request_concurrent_retry_recovers_one_canonical_object[message_create-False]" time="6.033"><failure message="okto_nexus.errors.OktoNexusError: VALIDATION_ERROR: window is required for limit_kind=max_count and must be one of ['1h', '24h'].">runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10350/test_sam...t', [], 'REDACTED_SYNTHETIC_FIXTURE_KEY', 'REDACTED_SYNTHETIC_FIXTURE_KEY')
+operation = 'message_create'
+
+    @pytest.mark.parametrize('operation', ['message_create', 'handoff_create'])
+    def test_same_request_concurrent_retry_recovers_one_canonical_object(runtime, operation):
+        args = prepare(runtime, operation)
+        # A second actual send would exceed the canonical quota.
+&gt;       _attach(runtime[0], 'caller', governance=[_rule(operation, 'max_count', limit_value=1, window='hour')])
+
+tests\test_coordination_creation.py:58:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_hitl.py:143: in _attach
+    ???
+src\okto_nexus\domain\policy.py:429: in validate_agent_bindings
+    normalised = validate_binding_form(binding)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\domain\policy.py:356: in validate_binding_form
+    body = validate_policy_version_form(
+src\okto_nexus\domain\policy.py:262: in validate_policy_version_form
+    rules = [validate_policy_rule_form(rule) for rule in rules_in]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\domain\policy.py:222: in validate_policy_rule_form
+    fields = governance.validate_policy_form(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+subject_kind = 'star', subject_value = None, action = 'message_create'
+limit_kind = 'max_count', limit_value = 1, window = 'hour'
+
+    def validate_policy_form(
+        *,
+        subject_kind: Any,
+        subject_value: Any = None,
+        action: Any,
+        limit_kind: Any,
+        limit_value: Any = None,
+        window: Any = None,
+    ) -&gt; dict[str, Any]:
+        """Validate + normalise a policy's FORM; return the storable field dict.
+
+        Fail-closed: any value outside the closed vocabularies, a missing/extra
+        ``window``, a non-positive ``limit_value`` or a malformed ``subject_value``
+        raises ``VALIDATION_ERROR``. Existence checks that need IO (registered
+        agent, capability in the catalogue) belong to the application layer.
+        """
+        kind = _norm_token(subject_kind)
+        if kind not in SUBJECT_KINDS:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"Unknown subject_kind: {subject_kind!r}.",
+                {"subject_kind": subject_kind, "supported": sorted(SUBJECT_KINDS)},
+            )
+
+        if kind == SUBJECT_STAR:
+            value: str | None = "*"
+        else:
+            value = str(subject_value).strip() if subject_value is not None else ""
+            if not value:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"subject_value is required for subject_kind={kind!r}.",
+                    {"subject_kind": kind, "subject_value": subject_value},
+                )
+
+        act = _norm_token(action)
+        if act not in ACTIONS:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"Unknown action: {action!r}.",
+                {"action": action, "supported": sorted(ACTIONS)},
+            )
+
+        limit = _norm_token(limit_kind)
+        if limit not in LIMIT_KINDS:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"Unknown limit_kind: {limit_kind!r}.",
+                {"limit_kind": limit_kind, "supported": sorted(LIMIT_KINDS)},
+            )
+
+        if limit == LIMIT_MAX_COUNT:
+            win = _norm_token(window)
+            if win not in WINDOWS:
+&gt;               raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "window is required for limit_kind=max_count and must be one of "
+                    f"{sorted(WINDOWS)}.",
+                    {"window": window, "supported": sorted(WINDOWS)},
+                )
+E               okto_nexus.errors.OktoNexusError: VALIDATION_ERROR: window is required for limit_kind=max_count and must be one of ['1h', '24h'].
+
+src\okto_nexus\domain\governance.py:272: OktoNexusError</failure></testcase></testsuite></testsuites>

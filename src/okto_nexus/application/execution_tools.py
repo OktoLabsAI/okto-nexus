@@ -17,7 +17,7 @@ MANAGED_TOOLS = frozenset({
     'handoff_claim', 'handoff_complete', 'handoff_verify', 'handoff_cancel',
     'event_get', 'event_cursor', 'event_wait',
     'runtime_input_list', 'runtime_input_respond',
-    'message_create',
+    'message_create', 'coordination_request_get',
     'inbox_count', 'inbox_peek', 'inbox_history', 'message_status',
 })
 

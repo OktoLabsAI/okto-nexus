@@ -46,6 +46,12 @@ BASELINE: dict[str, int] = {
 #: so gratuitous description bloat stays caught. The BASELINE above remains
 #: frozen (BR8) - this ledger is additive and auditable per spec.
 APPROVED_GROWTH: dict[str, int] = {
+    # Fixed R3 plan DX-10, SURFACE_REVISION 66: coordination_request_get
+    # (151 description + 156 params = 307), two client_request_id params
+    # (135 each), and message_create description 193 -> 158 (-35).
+    # Live default surface: 35658 -> 36200 chars, net 542. Deep retention
+    # and recovery guidance lives in versioned resources, not resident text.
+    "coordination_requests_dx10": 542,
     # Native runtime questions added after the frozen coordination baseline.
     # Core is mandatory in 0.2.2, so both tools are on the default surface:
     # runtime_input_list (168 description + 94 params), runtime_input_respond

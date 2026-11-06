@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="23" time="117.470" timestamp="2026-11-06T10:31:26.999860-03:00" hostname="Alienware_m15"><testcase classname="tests.test_coordination_creation" name="test_same_request_concurrent_retry_recovers_one_canonical_object[message_create-False]" time="7.024" /><testcase classname="tests.test_coordination_creation" name="test_same_request_concurrent_retry_recovers_one_canonical_object[handoff_create-False]" time="4.058" /><testcase classname="tests.test_coordination_creation" name="test_pending_approval_reuses_original_and_commits_result_atomically[message_create-False]" time="4.381" /><testcase classname="tests.test_coordination_creation" name="test_pending_approval_reuses_original_and_commits_result_atomically[handoff_create-False]" time="3.495" /><testcase classname="tests.test_coordination_creation" name="test_commit_cuts_leave_no_partial_creation[event-message_create-False]" time="3.490" /><testcase classname="tests.test_coordination_creation" name="test_commit_cuts_leave_no_partial_creation[event-handoff_create-False]" time="3.421" /><testcase classname="tests.test_coordination_creation" name="test_commit_cuts_leave_no_partial_creation[receipt-message_create-False]" time="3.855" /><testcase classname="tests.test_coordination_creation" name="test_commit_cuts_leave_no_partial_creation[receipt-handoff_create-False]" time="4.208" /><testcase classname="tests.test_coordination_creation" name="test_commit_cuts_leave_no_partial_creation[approval_result-message_create-False]" time="4.698" /><testcase classname="tests.test_coordination_creation" name="test_commit_cuts_leave_no_partial_creation[approval_result-handoff_create-False]" time="5.005" /><testcase classname="tests.test_coordination_creation" name="test_actor_forgery_permission_revocation_and_metadata_only_lookup[message_create-False]" time="5.659" /><testcase classname="tests.test_coordination_creation" name="test_actor_forgery_permission_revocation_and_metadata_only_lookup[handoff_create-False]" time="4.846" /><testcase classname="tests.test_coordination_creation" name="test_approval_rechecks_original_key_and_rejects_revocation[message_create-False]" time="4.304" /><testcase classname="tests.test_coordination_creation" name="test_approval_rechecks_original_key_and_rejects_revocation[handoff_create-False]" time="3.946" /><testcase classname="tests.test_coordination_creation" name="test_real_process_exit_during_approval_resumes_original_request[before_execution-message_create-False]" time="5.967" /><testcase classname="tests.test_coordination_creation" name="test_real_process_exit_during_approval_resumes_original_request[before_execution-handoff_create-False]" time="5.572" /><testcase classname="tests.test_coordination_creation" name="test_real_process_exit_during_approval_resumes_original_request[after_creation-message_create-False]" time="5.160" /><testcase classname="tests.test_coordination_creation" name="test_real_process_exit_during_approval_resumes_original_request[after_creation-handoff_create-False]" time="5.488" /><testcase classname="tests.test_coordination_creation" name="test_receipt_tombstone_expiry_and_capability_discovery[False]" time="4.707" /><testcase classname="tests.test_coordination_creation" name="test_pending_receipt_failure_rolls_back_approval_and_event[message_create-False]" time="5.833" /><testcase classname="tests.test_coordination_creation" name="test_pending_receipt_failure_rolls_back_approval_and_event[handoff_create-False]" time="3.121" /><testcase classname="tests.test_coordination_creation" name="test_concurrent_approval_and_lost_postcommit_result_preserve_one_effect[message_create-False]" time="3.055" /><testcase classname="tests.test_coordination_creation" name="test_concurrent_approval_and_lost_postcommit_result_preserve_one_effect[handoff_create-False]" time="2.726"><failure message="httpx.ReadError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto">..\validation\Lib\site-packages\httpx\_transports\default.py:101: in map_httpcore_exceptions
+    yield
+..\validation\Lib\site-packages\httpx\_transports\default.py:250: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\validation\Lib\site-packages\httpcore\_sync\connection_pool.py:256: in handle_request
+    raise exc from None
+..\validation\Lib\site-packages\httpcore\_sync\connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+..\validation\Lib\site-packages\httpcore\_sync\connection.py:103: in handle_request
+    return self._connection.handle_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\validation\Lib\site-packages\httpcore\_sync\http11.py:136: in handle_request
+    raise exc
+..\validation\Lib\site-packages\httpcore\_sync\http11.py:106: in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\validation\Lib\site-packages\httpcore\_sync\http11.py:177: in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\validation\Lib\site-packages\httpcore\_sync\http11.py:217: in _receive_event
+    data = self._network_stream.read(
+..\validation\Lib\site-packages\httpcore\_backends\sync.py:126: in read
+    with map_exceptions(exc_map):
+         ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+..\validation\Lib\site-packages\httpcore\_exceptions.py:14: in map_exceptions
+    raise to_exc(exc) from exc
+E   httpcore.ReadError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto
+
+The above exception was the direct cause of the following exception:
+tests\test_coordination_creation.py:288: in test_concurrent_approval_and_lost_postcommit_result_preserve_one_effect
+    assert recover(runtime, operation, args)['data']['status'] == 'created'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_coordination_creation.py:37: in recover
+    return tool(runtime[1], key or runtime[5], 'coordination_request_get', dict(
+tests\test_pr34_remediation.py:132: in tool
+    result = mcp_call(client, key, "tools/call", {"name": name, "arguments": arguments})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr34_remediation.py:118: in mcp_call
+    response = client.post("/mcp/", headers={"x-api-key": key,
+..\validation\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+..\validation\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\validation\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+..\validation\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+..\validation\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\validation\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\validation\Lib\site-packages\httpx\_transports\default.py:249: in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+..\validation\Lib\site-packages\httpx\_transports\default.py:118: in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+E   httpx.ReadError: [WinError 10054] Foi forçado o cancelamento de uma conexão existente pelo host remoto</failure></testcase></testsuite></testsuites>

@@ -261,6 +261,37 @@ class ApprovalService:
         return envelope
 
     # ------------------------------------------------------------------ #
+    # Coordination decisions retain the original authority and transaction.
+    # ------------------------------------------------------------------ #
+    def require_coordination_execution(self, uow, *, metadata, decision_revision):
+        """Internal replay is bound to the exact persisted request and decision."""
+        from ..domain.coordination_requests import conflict
+        row = self._approvals.get(uow, metadata.get('approval_id'))
+        if row is None or row.status != STATUS_APPROVED or row.archived_at:
+            raise conflict('CLIENT_REQUEST_APPROVAL_NOT_APPROVED')
+        if type(decision_revision) is not int or decision_revision != row.decision_revision:
+            raise conflict('CLIENT_REQUEST_APPROVAL_DECISION_CHANGED')
+        try:
+            recorded = json.loads(row.request_payload)['kwargs']['_coordination']
+        except (KeyError, TypeError, ValueError):
+            raise conflict('CLIENT_REQUEST_APPROVAL_REFERENCE_MISSING') from None
+        if recorded != metadata:
+            raise conflict('CLIENT_REQUEST_APPROVAL_REFERENCE_MISSING')
+        return row
+
+    def complete_coordination(self, uow, *, metadata, decision_revision, result):
+        """Result + granted event commit with the canonical object and receipt."""
+        row = self.require_coordination_execution(uow, metadata=metadata, decision_revision=decision_revision)
+        if row.executed_result is not None:
+            if json.loads(row.executed_result) != result:
+                from ..domain.coordination_requests import conflict
+                raise conflict('CLIENT_REQUEST_REFERENCE_CONFLICT')
+            return
+        self._approvals.set_executed_result(uow, approval_id=row.approval_id,
+            executed_result=json.dumps(result, ensure_ascii=False))
+        self._emit_decision(uow, row, event_type=EVENT_APPROVAL_GRANTED, decided_by=row.decided_by)
+
+    # ------------------------------------------------------------------ #
     # Decision (FR4/FR5; works with the flag OFF - BR6)
     # ------------------------------------------------------------------ #
     def decide(
@@ -294,6 +325,11 @@ class ApprovalService:
         carrying the justification (fallback: the domain's default) - the
         notification failing never unwinds the rejection; the response's
         ``notified`` flag reports it honestly.
+
+        Coordination requests carrying their canonical receipt additionally
+        finalize result + granted event in UoW 2 with the created object. A
+        matching repeated decision can resume an approved/null-result request;
+        the original creation receipt fences concurrent/crash recovery.
         """
         normalized = validate_decision(decision)
         just_raw = "" if justification is None else str(justification).strip()
@@ -311,6 +347,13 @@ class ApprovalService:
                 raise self._not_found(aid)
             if row.archived_at:
                 raise OktoNexusError(ErrorCode.CONFLICT, "This approval has been archived.", {"approval_id": aid})
+            try:
+                payload = json.loads(row.request_payload)
+            except (TypeError, ValueError):
+                payload = {}
+            kwargs = dict(payload.get('kwargs') or {})
+            coordination = (row.action in {'message_create', 'broadcast', 'handoff_create'}
+                            and isinstance(kwargs.get('_coordination'), dict))
             transactional = self._transactional_decisions.get(row.action)
             if transactional is not None:
                 result = transactional(
@@ -363,32 +406,28 @@ class ApprovalService:
                 decided_at=now,
             )
             if not flipped:
-                if (row.action in self._idempotent_decisions and row.status == target_status and
+                matching = (row.status == target_status and row.decided_by == decider and row.justification == just)
+                if coordination and matching and approving and row.executed_result is None:
+                    pass  # Resume the same approved intent through its canonical receipt.
+                elif ((coordination or row.action in self._idempotent_decisions) and row.status == target_status and
                         row.decided_by == decider and row.justification == just):
                     return {"approval_id": aid, "status": row.status, "decided_by": row.decided_by,
                             "decided_at": row.decided_at, "reused": True,
                             "executed_result": json.loads(row.executed_result) if row.executed_result else None}
-                raise OktoNexusError(
-                    ErrorCode.CONFLICT,
-                    f"Approval {aid!r} was already decided "
-                    f"({row.status} by {row.decided_by}).",
-                    {
-                        "approval_id": aid,
-                        "status": row.status,
-                        "decided_by": row.decided_by,
-                        "decided_at": row.decided_at,
-                    },
-                )
+                else:
+                    raise OktoNexusError(
+                        ErrorCode.CONFLICT,
+                        f"Approval {aid!r} was already decided "
+                        f"({row.status} by {row.decided_by}).",
+                        {"approval_id": aid, "status": row.status,
+                         "decided_by": row.decided_by, "decided_at": row.decided_at},
+                    )
+            if coordination:
+                decision_revision = self._approvals.get(uow, aid).decision_revision
             if not approving:
                 self._emit_decision(
                     uow, row, event_type=EVENT_APPROVAL_DENIED, decided_by=decider
                 )
-
-        try:
-            payload = json.loads(row.request_payload)
-        except (TypeError, ValueError):  # pragma: no cover - we always store JSON
-            payload = {}
-        kwargs = dict(payload.get("kwargs") or {})
 
         if not approving:
             self._wake_decision_listener(row.action)
@@ -411,22 +450,30 @@ class ApprovalService:
         # (approved must only ever describe a consumed execution - BR3).
         executor = self._executors[row.action]
         try:
-            result = executor(kwargs)
+            result = executor({**kwargs, '_coordination_decision_revision': decision_revision} if coordination else kwargs)
         except BaseException:
             with self._cf.unit_of_work() as uow:
-                self._approvals.revert_to_pending(uow, approval_id=aid)
+                if coordination:
+                    self._approvals.revert_to_pending(uow, approval_id=aid,
+                        expected_decision_revision=decision_revision)
+                else:
+                    self._approvals.revert_to_pending(uow, approval_id=aid)
             raise
 
         # UoW 3: persist the receipt + announce the grant (metadata only).
         with self._cf.unit_of_work() as uow:
-            self._approvals.set_executed_result(
-                uow,
-                approval_id=aid,
-                executed_result=json.dumps(result, ensure_ascii=False, default=str),
-            )
-            self._emit_decision(
-                uow, row, event_type=EVENT_APPROVAL_GRANTED, decided_by=decider
-            )
+            if coordination:
+                current = self._approvals.get(uow, aid)
+                if current is None or current.executed_result is None:
+                    raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
+                        'The coordination result was not committed with its canonical object.', {})
+                result = json.loads(current.executed_result)
+                now = current.decided_at
+            else:
+                self._approvals.set_executed_result(
+                    uow, approval_id=aid,
+                    executed_result=json.dumps(result, ensure_ascii=False, default=str))
+                self._emit_decision(uow, row, event_type=EVENT_APPROVAL_GRANTED, decided_by=decider)
         self._wake_decision_listener(row.action)
         return {
             "approval_id": aid,

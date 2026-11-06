@@ -24,7 +24,7 @@ class SqliteApprovalRepo:
     _COLUMNS = (
         "approval_id, workspace_id, agent_id, action, policy_id, "
         "request_payload, status, decided_by, justification, executed_result, "
-        "trace_id, created_at, decided_at, archived_at, archived_by"
+        "trace_id, created_at, decided_at, archived_at, archived_by, decision_revision"
     )
 
     def add(
@@ -123,7 +123,7 @@ class SqliteApprovalRepo:
                 """
                 UPDATE approvals
                    SET status = ?, decided_by = ?, justification = ?,
-                       decided_at = ?
+                       decided_at = ?, decision_revision = decision_revision + 1
                  WHERE approval_id = ? AND status = ? AND archived_at IS NULL
                 """,
                 (
@@ -157,17 +157,20 @@ class SqliteApprovalRepo:
         except sqlite3.Error as exc:
             raise db_error_from_exception("recording approval result", exc) from exc
 
-    def revert_to_pending(self, uow: UnitOfWork, *, approval_id: str) -> None:
+    def revert_to_pending(self, uow: UnitOfWork, *, approval_id: str,
+                          expected_decision_revision: int | None = None) -> None:
         """Honest rollback (BR3): clear the decision, keep the row auditable."""
         try:
+            fence = (" AND status='approved' AND archived_at IS NULL AND executed_result IS NULL AND decision_revision=?"
+                     if expected_decision_revision is not None else '')
             uow.connection.execute(
                 """
                 UPDATE approvals
                    SET status = ?, decided_by = NULL, justification = NULL,
-                       decided_at = NULL
+                       decided_at = NULL, decision_revision = decision_revision + 1
                  WHERE approval_id = ?
-                """,
-                (STATUS_PENDING, approval_id),
+                """ + fence,
+                (STATUS_PENDING, approval_id) + ((expected_decision_revision,) if expected_decision_revision is not None else ()),
             )
         except sqlite3.Error as exc:
             raise db_error_from_exception("reverting approval", exc) from exc
@@ -190,4 +193,5 @@ class SqliteApprovalRepo:
             decided_at=row["decided_at"],
             archived_at=row["archived_at"],
             archived_by=row["archived_by"],
+            decision_revision=row["decision_revision"],
         )

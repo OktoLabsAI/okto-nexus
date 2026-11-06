@@ -347,29 +347,59 @@ def test_same_client_id_is_independent_for_actor_workspace_and_operation(store):
     assert counts(store)["coordination_requests"] == 4
 
 
-def test_upgrade_from_158_preserves_canonical_rows(conn_factory, tmp_config, tmp_path):
-    before_dir = tmp_path / "before159"
+@pytest.mark.parametrize("previous_version", [158, 159])
+def test_upgrade_to_160_preserves_canonical_rows(conn_factory, tmp_config, tmp_path, previous_version):
+    before_dir = tmp_path / f"schema{previous_version}"
     before_dir.mkdir()
     for path in _default_migrations_dir().glob("*.sql"):
-        if int(path.name.split("_", 1)[0]) <= 158:
+        if int(path.name.split("_", 1)[0]) <= previous_version:
             shutil.copyfile(path, before_dir / path.name)
-    assert MigrationRunner(conn_factory, migrations_dir=before_dir).apply()[-1] == 158
+    assert MigrationRunner(conn_factory, migrations_dir=before_dir).apply()[-1] == previous_version
     installation = ensure_execution_installation(conn_factory)
     repos, _ = build_repos(FakeClock(iso=NOW), tmp_config)
     with conn_factory.unit_of_work() as uow:
         repos.agents.upsert(uow, agent_id="sender")
         repos.workspaces.upsert(uow, workspace_id="workspace", root_realpath=str(tmp_path))
         repos.messages.create(uow, message_id="existing-message", workspace_id="workspace", from_agent_id="sender")
-        repos.approvals.add(uow, approval_id="existing-approval", workspace_id="workspace", agent_id="sender",
-            action="message_create", policy_id="policy", request_payload="{}", trace_id=None, created_at=NOW)
+        # Seed the historical schema directly: today's repository reads the
+        # decision_revision column that these databases do not have yet.
+        assert "decision_revision" not in {
+            row["name"] for row in uow.connection.execute("PRAGMA table_info(approvals)")
+        }
+        uow.connection.executemany(
+            "INSERT INTO approvals (approval_id,workspace_id,agent_id,action,policy_id,request_payload,"
+            "status,created_at,decided_by,decided_at,justification,executed_result) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            [
+                ("existing-approval", "workspace", "sender", "message_create", "policy",
+                 json.dumps({"kwargs": MESSAGE}), "pending", NOW, None, None, None, None),
+                ("executed-approval", "workspace", "sender", "message_create", "policy",
+                 json.dumps({"kwargs": MESSAGE}), "approved", NOW, "operator", NOW,
+                 "Previously approved", json.dumps({"message_id": "existing-message"})),
+            ],
+        )
+        tables = ["messages", "approvals", "execution_installation"]
+        if previous_version == 159:
+            key = repos.coordination_requests.key(uow, actor_agent_id="sender", workspace_id="workspace",
+                operation="message_create", client_request_id="existing-request")
+            repos.coordination_requests.record(uow, key, request_hash=DIGEST, now=NOW,
+                resource_id="existing-message")
+            repos.coordination_requests.record(uow, replace(key, client_request_id="pending-request"),
+                request_hash=DIGEST, now=NOW, approval_id="existing-approval")
+            tables.append("coordination_requests")
         before = {table: [dict(row) for row in uow.connection.execute("SELECT * FROM " + table)]
-                  for table in ("messages", "approvals", "execution_installation")}
-    assert MigrationRunner(conn_factory).apply() == [159]
+                  for table in tables}
+    assert MigrationRunner(conn_factory).apply() == list(range(previous_version + 1, 161))
     assert MigrationRunner(conn_factory).apply() == []
     with conn_factory.unit_of_work(write=False) as uow:
         for table, rows in before.items():
-            assert [dict(row) for row in uow.connection.execute("SELECT * FROM " + table)] == rows
-        assert uow.connection.execute("SELECT COUNT(*) FROM coordination_requests").fetchone()[0] == 0
+            expected = [{**row, "decision_revision": 0} for row in rows] if table == "approvals" else rows
+            assert [dict(row) for row in uow.connection.execute("SELECT * FROM " + table)] == expected
+        for approval_id in ("existing-approval", "executed-approval"):
+            assert repos.approvals.get(uow, approval_id).decision_revision == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM coordination_requests").fetchone()[0] == (
+            2 if previous_version == 159 else 0
+        )
         key = repos.coordination_requests.key(uow, actor_agent_id="sender", workspace_id="workspace",
             operation="message_create", client_request_id="new-request")
         assert key.server_id == installation.server_id

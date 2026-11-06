@@ -382,7 +382,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 58 = authenticated external attach work v1 and separate Nexus acknowledgement/completion facts.
 # R4 tool schemas: document runtime guards and retain compact descriptions.
 # 65 removes legacy connection issuance/configuration and documents local UI ownership.
-SURFACE_REVISION = 65
+# 66 adds bounded coordination request receipts and authenticated metadata recovery.
+SURFACE_REVISION = 66
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
@@ -526,6 +527,9 @@ def register_meta_tools(server: Any, deps: Deps) -> None:
             "package_version": _package_version(),
             "schema_version": _schema_version(deps.connection_factory),
             "surface_revision": SURFACE_REVISION,
+            "coordination_requests": {"revision": 1, "retention_days": 30,
+                "operations": ["message_create", "handoff_create"],
+                "recovery_tool": "coordination_request_get", "response": "references"},
             "resource_versions": resource_versions(),
             # Effective (post-precedence) values read from the LIVE config at
             # call time - a PATCH that flips a flag shows up without restart.

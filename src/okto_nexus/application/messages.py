@@ -132,6 +132,7 @@ class MessageService:
         runtime_context_provider=None,
         runtime_results=None,
         runtime_wake=None,
+        coordination_requests=None,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
@@ -182,6 +183,7 @@ class MessageService:
         self._runtime_context_provider = runtime_context_provider
         self._runtime_results = runtime_results
         self._runtime_wake = runtime_wake
+        self._coordination_requests = coordination_requests
 
     @contextmanager
     def _send_uow(
@@ -257,12 +259,15 @@ class MessageService:
         trace_id: Any = None,
         session_secret: Any = None,
         no_reply: Any = False,
+        client_request_id: Any = None,
         _approved_execution: bool = False,
         _runtime_context=None,
         _runtime_result_id=None,
         _nonexecuting_notification=False,
         _managed_message_binding=None,
         _source_session_key=None,
+        _coordination=None,
+        _coordination_decision_revision=None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
 
@@ -301,6 +306,13 @@ class MessageService:
         an existing workspace).
         """
         from ..domain.execution_principal import current_execution_principal
+        from ..domain.coordination_requests import message_request_hash
+        from .coordination_requests import CoordinationCreation, require_internal
+        require_internal(_coordination, approved=_approved_execution, client_request_id=client_request_id,
+                         decision_revision=_coordination_decision_revision)
+        if client_request_id is not None and (_runtime_result_id or _nonexecuting_notification):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                'Internal result/notification publication uses its existing canonical receipt.', {})
         principal = current_execution_principal.get()
         if _source_session_key is not None and not _approved_execution:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Session provenance is internal to approval replay.', {})
@@ -327,6 +339,8 @@ class MessageService:
             runtime_context = self._runtime_context_provider()
         runtime_operations = []
         runtime_rejections = []
+        coordination = None
+        coordination_response = None
 
         # Pure, write-free validation first (no row / event on rejection).
         # A runtime result keeps its subject: it must equal the authorized one.
@@ -383,6 +397,20 @@ class MessageService:
                 runtime_context = RuntimeRequestContext(actor_agent_id=from_agent_id,
                     authentication_source='session_capability', workspace_id=workspace_id,
                     credential_binding=managed_binding)
+            authority_binding = None
+            if client_request_id is not None:
+                if _coordination is not None:
+                    authority_binding = _coordination.get('authority_binding')
+                    if not valid_actor_binding(uow, self._agents.get(uow, from_agent_id), authority_binding,
+                            capabilities=capabilities, workspace_id=workspace_id):
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Original request authority is no longer valid.', {})
+                else:
+                    from .runtime_actor_authority import authenticated_message_context
+                    authenticated = authenticated_message_context(uow, runtime_context, self._agents,
+                        capabilities=capabilities, workspace_id=workspace_id)
+                    if authenticated is None or authenticated.actor_agent_id != from_agent_id:
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Use the authenticated request actor.', {})
+                    authority_binding = authenticated.credential_binding
             if _runtime_result_id:
                 if self._runtime_results is None or from_session_id or session_secret:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid runtime result publication context.", {})
@@ -407,6 +435,11 @@ class MessageService:
                     session_id=from_session_id,
                     session_secret=session_secret,
                 )
+                if client_request_id is not None and _is_nonempty_str(session_secret):
+                    verified = self._sessions.get(uow, from_session_id)
+                    if verified is None or verified.workspace_id != workspace_id:
+                        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                            'The sender session belongs to another workspace.', {})
                 # A verified send proves the sender's session is alive now:
                 # advance its heartbeat so presence tracks activity (no extra
                 # heartbeat call). Best-effort, inside this uow - rolls back
@@ -435,6 +468,20 @@ class MessageService:
                 perms.require("messages", "send_direct")
             else:
                 perms.require("messages", "send_broadcast")
+            if client_request_id is not None:
+                explicit_trace = (_coordination['explicit_trace_id'] if _coordination is not None else trace_id) if feature_trace_on else None
+                coordination = CoordinationCreation(repo=self._coordination_requests, approvals=self._approvals,
+                    uow=uow, actor_id=from_agent_id, workspace_id=workspace_id, operation='message_create',
+                    client_request_id=client_request_id, authority_binding=authority_binding,
+                    explicit_trace_id=explicit_trace, metadata=_coordination, now=now,
+                    decision_revision=_coordination_decision_revision,
+                    request_hash=message_request_hash(subject=subject, body=body, target=target_echo,
+                        channel_id=channel, artifacts=artifact_refs, parent_message_id=parent,
+                        trace_id=explicit_trace, session_id=from_session_id if _is_nonempty_str(from_session_id) else None,
+                        source_session_key=source_session_key, no_reply=no_reply))
+                recovered = coordination.replay()
+                if recovered is not None:
+                    return recovered
             rate = perms.limit("messages_per_minute")
             if rate > 0:
                 sent = self._messages.count_since(
@@ -548,8 +595,10 @@ class MessageService:
                     # (BR1) and the pending envelope early-returns - no
                     # message row, no deliveries, no message.created. Session
                     # credentials are deliberately NOT persisted.
+                    coordination_context = coordination.approval_context() if coordination is not None else None
                     response = self._approvals.intercept(
                         uow,
+                        approval_id=coordination_context['approval_id'] if coordination_context else None,
                         workspace_id=workspace_id,
                         agent_id=approval_actor,
                         action=message_action_for(target_echo, channel),
@@ -569,11 +618,15 @@ class MessageService:
                             **({"_runtime_result_id": _runtime_result_id} if _runtime_result_id else {}),
                             **({'_managed_message_binding': managed_binding} if managed_binding else {}),
                             **({'_source_session_key': source_session_key} if source_session_key else {}),
+                            **({'client_request_id': client_request_id, '_coordination': coordination_context,
+                                'from_session_id': from_session_id} if coordination_context else {}),
                         },
                         trace_id=resolved_trace,
                     )
                     if _runtime_result_id:
                         self._runtime_results.finish(uow, result_id=_runtime_result_id, response=response)
+                    if coordination is not None:
+                        return coordination.pending()
                     return response
             if _runtime_result_id:
                 self._runtime_results.commit_artifact(uow, result_id=_runtime_result_id,
@@ -694,6 +747,8 @@ class MessageService:
                 data["workspace_created"] = True
             if _runtime_result_id:
                 self._runtime_results.finish(uow, result_id=_runtime_result_id, response=data)
+            if coordination is not None:
+                coordination_response = coordination.created(message.message_id)
 
         if runtime_operations and self._runtime_wake:
             # Notifications are hints. The intent already committed with inbox.
@@ -716,7 +771,7 @@ class MessageService:
         # _maybe_notify_inbox_subscribers's own docstring for why this runs
         # here (post-commit) and never inside the write uow.
         self._maybe_notify_inbox_subscribers(recipients=recipients, data=data)
-        return data
+        return coordination_response if coordination_response is not None else data
 
     # ------------------------------------------------------------------ #
     # Transport revalidation reuses canonical policy without a second quota.

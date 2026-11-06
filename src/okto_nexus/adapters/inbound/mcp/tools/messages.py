@@ -273,6 +273,7 @@ def build_service(deps: Any, *, register_approval_executor=True) -> MessageServi
             artifacts=build_artifact_service(deps), owner_provider=lambda: getattr(deps, "runtime_dispatcher", None),
             work_validator=lambda uow, **kwargs: validate_runtime_work(deps, uow, **kwargs)),
         runtime_wake=lambda: wake_runtime(deps),
+        coordination_requests=repos.coordination_requests,
     )
 
     # Approved re-execution (BR2): one executor per intercepted action key.
@@ -312,8 +313,9 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
         no_reply: Annotated[bool, Field(description=_P_NO_REPLY)] = False,
+        client_request_id: Annotated[str | None, Field(description="Optional durable request ID: 30-day deduplication with metadata references. Recover via coordination_request_get; details in tool docs.")] = None,
     ) -> dict[str, Any]:
-        """Persist a message and fan it out to recipient inboxes; emit message.created. The response confirms delivery (recipients + delivered_count). Full docs: okto-nexus://reference/tool-docs/messages."""
+        """Send a message. Returns recipients + delivered_count, or creation/approval references with client_request_id. Docs: okto-nexus://reference/tool-docs/messages."""
         require_json_object_param("target", target)
         return service.create_message(
             project_root=project_root,
@@ -329,6 +331,7 @@ def register(server: Any, deps: Any) -> None:
             trace_id=trace_id,
             session_secret=session_secret,
             no_reply=no_reply,
+            client_request_id=client_request_id,
         )
 
     @server.tool()

@@ -1096,7 +1096,8 @@ class ApprovalRepo(Protocol):
         """Dismiss an approval without executing it; retain the original decision."""
         ...
 
-    def revert_to_pending(self, uow: UnitOfWork, *, approval_id: str) -> None:
+    def revert_to_pending(self, uow: UnitOfWork, *, approval_id: str,
+                          expected_decision_revision: int | None = None) -> None:
         """Honest rollback (BR3): ``approved`` -> ``pending``, clearing the
         decision columns, after the re-execution failed a gate."""
         ...

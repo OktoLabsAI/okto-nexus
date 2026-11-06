@@ -1,0 +1,230 @@
+{
+  "metrics": {
+    "instructions": 5465,
+    "docstrings": 8370,
+    "params": 22365,
+    "cuttable": 36200,
+    "total": 54600,
+    "cuttable_tokens": 9050,
+    "total_tokens": 13650
+  },
+  "tools": {
+    "artifact_put": {
+      "description": 125,
+      "params": 541
+    },
+    "artifact_get": {
+      "description": 193,
+      "params": 97
+    },
+    "coordination_request_get": {
+      "description": 151,
+      "params": 156
+    },
+    "event_get": {
+      "description": 189,
+      "params": 724
+    },
+    "event_cursor": {
+      "description": 166,
+      "params": 293
+    },
+    "event_wait": {
+      "description": 189,
+      "params": 908
+    },
+    "handoff_create": {
+      "description": 180,
+      "params": 2736
+    },
+    "handoff_list_available": {
+      "description": 123,
+      "params": 603
+    },
+    "handoff_claim": {
+      "description": 179,
+      "params": 921
+    },
+    "handoff_complete": {
+      "description": 179,
+      "params": 763
+    },
+    "handoff_verify": {
+      "description": 172,
+      "params": 939
+    },
+    "handoff_reject": {
+      "description": 130,
+      "params": 681
+    },
+    "handoff_cancel": {
+      "description": 173,
+      "params": 529
+    },
+    "handoff_get": {
+      "description": 200,
+      "params": 278
+    },
+    "harness_list": {
+      "description": 170,
+      "params": 702
+    },
+    "harness_open": {
+      "description": 194,
+      "params": 1385
+    },
+    "harness_send": {
+      "description": 153,
+      "params": 527
+    },
+    "harness_steer": {
+      "description": 194,
+      "params": 527
+    },
+    "harness_interrupt": {
+      "description": 173,
+      "params": 378
+    },
+    "harness_close": {
+      "description": 111,
+      "params": 195
+    },
+    "harness_get": {
+      "description": 165,
+      "params": 151
+    },
+    "harness_event_list": {
+      "description": 189,
+      "params": 360
+    },
+    "coordination_health": {
+      "description": 154,
+      "params": 214
+    },
+    "workspace_resolve": {
+      "description": 71,
+      "params": 148
+    },
+    "agent_register": {
+      "description": 196,
+      "params": 587
+    },
+    "agent_whoami": {
+      "description": 194,
+      "params": 0
+    },
+    "session_open": {
+      "description": 186,
+      "params": 222
+    },
+    "session_heartbeat": {
+      "description": 143,
+      "params": 136
+    },
+    "session_close": {
+      "description": 68,
+      "params": 136
+    },
+    "workspace_list": {
+      "description": 157,
+      "params": 277
+    },
+    "agent_list": {
+      "description": 172,
+      "params": 0
+    },
+    "agent_get": {
+      "description": 180,
+      "params": 34
+    },
+    "capability_list": {
+      "description": 191,
+      "params": 0
+    },
+    "inbox_pull": {
+      "description": 183,
+      "params": 634
+    },
+    "inbox_ack": {
+      "description": 128,
+      "params": 440
+    },
+    "inbox_extend": {
+      "description": 189,
+      "params": 550
+    },
+    "inbox_peek": {
+      "description": 166,
+      "params": 535
+    },
+    "inbox_count": {
+      "description": 174,
+      "params": 99
+    },
+    "inbox_history": {
+      "description": 131,
+      "params": 394
+    },
+    "message_status": {
+      "description": 137,
+      "params": 99
+    },
+    "message_create": {
+      "description": 158,
+      "params": 2217
+    },
+    "channel_create": {
+      "description": 121,
+      "params": 186
+    },
+    "channel_list": {
+      "description": 65,
+      "params": 59
+    },
+    "message_get": {
+      "description": 132,
+      "params": 0
+    },
+    "message_list": {
+      "description": 137,
+      "params": 0
+    },
+    "message_wait": {
+      "description": 128,
+      "params": 0
+    },
+    "poll_token_issue": {
+      "description": 173,
+      "params": 96
+    },
+    "poll_token_renew": {
+      "description": 126,
+      "params": 96
+    },
+    "poll_token_revoke": {
+      "description": 56,
+      "params": 96
+    },
+    "runtime_input_list": {
+      "description": 168,
+      "params": 94
+    },
+    "runtime_input_respond": {
+      "description": 196,
+      "params": 235
+    },
+    "shared_md_render": {
+      "description": 69,
+      "params": 387
+    },
+    "tag_list": {
+      "description": 139,
+      "params": 0
+    },
+    "nexus_info": {
+      "description": 184,
+      "params": 0
+    }
+  },
+  "reduction": 0.4012982329606924
+}

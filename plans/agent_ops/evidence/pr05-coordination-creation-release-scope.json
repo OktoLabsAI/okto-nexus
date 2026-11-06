@@ -1,0 +1,14 @@
+{
+  "behavior_wheel_sha256": "14b67ff6694862c9db10451334d0c8306b7d7a43f33c328c3444d154d51ac00c",
+  "release_wheel_sha256": "8ca715e5c998cae137dfebc4731e5d207d44d0f949a6331dae0c77aa6cbe7569",
+  "package_payloads": 623,
+  "changed_payloads": [
+    "okto_nexus/adapters/inbound/mcp/surface_metrics.py",
+    "okto_nexus/adapters/inbound/mcp/tools/coordination_requests.py",
+    "okto_nexus/adapters/inbound/mcp/tools/handoff.py",
+    "okto_nexus/adapters/inbound/mcp/tools/messages.py"
+  ],
+  "application_and_domain_payloads_identical": true,
+  "all_release_payloads_match_source": true,
+  "change": "Compact tool descriptions and parameter descriptions; record their exact authorized DX-10 surface cost."
+}

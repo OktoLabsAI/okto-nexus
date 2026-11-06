@@ -185,6 +185,12 @@ def test_nexus_info_reports_versions(surface):
         "surface_revision",
         "resource_versions",
         "features",
+        "coordination_requests",
+    }
+    assert data['coordination_requests'] == {
+        'revision': 1, 'retention_days': 30,
+        'operations': ['message_create', 'handoff_create'],
+        'recovery_tool': 'coordination_request_get', 'response': 'references',
     }
 
     assert isinstance(data["package_version"], str) and data["package_version"]

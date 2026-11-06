@@ -205,6 +205,7 @@ class HandoffService:
         runtime_notifications: Any = None,
         runtime_schedule: Any = None,
         execution_claims: Any = None,
+        coordination_requests=None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -245,6 +246,7 @@ class HandoffService:
         self._claim_trust_guard = claim_trust_guard
         self._workspaces = workspaces
         self._sessions, self._origins, self._capabilities = sessions, origins, capabilities
+        self._coordination_requests = coordination_requests
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
         self._waiter = (
@@ -300,9 +302,12 @@ class HandoffService:
         depends_on: Any = None,
         session_id: Any = None,
         session_secret: Any = None,
+        client_request_id: Any = None,
         _approved_execution: bool = False,
         _creator_binding: str | None = None,
         _source_session_key: str | None = None,
+        _coordination=None,
+        _coordination_decision_revision=None,
     ) -> dict[str, Any]:
         """Create an ``OPEN`` handoff and emit ``handoff.created`` atomically.
 
@@ -330,6 +335,10 @@ class HandoffService:
         invalid target/visibility, and ``CONTENT_TOO_LARGE`` for an oversized
         inline payload.
         """
+        from ..domain.coordination_requests import handoff_request_hash
+        from .coordination_requests import CoordinationCreation, require_internal
+        require_internal(_coordination, approved=_approved_execution, client_request_id=client_request_id,
+                         decision_revision=_coordination_decision_revision)
         if _source_session_key is not None and not _approved_execution:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Handoff provenance is internal to approval replay.', {})
         logical_workspace = workspace_id is not None
@@ -439,6 +448,8 @@ class HandoffService:
         now = self._clock.now_iso()
         handoff_id = new_id("hof")
         extras: dict[str, Any] = {}
+        coordination = None
+        coordination_response = None
 
         guardrail_fields: dict[str, Any] = {
             "payload": payload_text,
@@ -477,6 +488,20 @@ class HandoffService:
             permission_set_for(self._agents, uow, from_agent_id).require(
                 "handoffs", "create"
             )
+            if client_request_id is not None:
+                explicit_trace = (_coordination['explicit_trace_id'] if _coordination is not None else trace_id) if getattr(self._config, 'feature_trace', False) else None
+                coordination = CoordinationCreation(repo=self._coordination_requests, approvals=self._approvals,
+                    uow=uow, actor_id=from_agent_id, workspace_id=workspace_id, operation='handoff_create',
+                    client_request_id=client_request_id, authority_binding=creator_binding,
+                    explicit_trace_id=explicit_trace, metadata=_coordination, now=now,
+                    decision_revision=_coordination_decision_revision,
+                    request_hash=handoff_request_hash(target=normalized_target, visibility=normalized_visibility,
+                        payload=payload, trace_id=explicit_trace, acceptance_criteria=criteria_list,
+                        verify_by=verify_by_descriptor, depends_on=depends_list, session_id=session_id,
+                        source_session_key=origin.source_session_key))
+                recovered = coordination.replay()
+                if recovered is not None:
+                    return recovered
             # A project path may be used before any agent connection or message
             # registered its workspace. The notification and authorization rows
             # need that FK parent in this same transaction. Managed workspace
@@ -610,8 +635,13 @@ class HandoffService:
                         # failed while the approval sat pending refuses the
                         # re-execution instead of persisting a dead edge.
                         approval_kwargs["depends_on"] = depends_list
-                    return self._approvals.intercept(
+                    coordination_context = coordination.approval_context() if coordination is not None else None
+                    if coordination_context:
+                        approval_kwargs.update(client_request_id=client_request_id,
+                            _coordination=coordination_context, session_id=session_id)
+                    response = self._approvals.intercept(
                         uow,
+                        approval_id=coordination_context['approval_id'] if coordination_context else None,
                         workspace_id=workspace_id,
                         agent_id=from_agent_id,
                         action=ACTION_HANDOFF_CREATE,
@@ -619,6 +649,7 @@ class HandoffService:
                         kwargs=approval_kwargs,
                         trace_id=resolved_trace,
                     )
+                    return coordination.pending() if coordination is not None else response
             handoff = self._handoffs.create(
                 uow,
                 handoff_id=handoff_id,
@@ -707,6 +738,10 @@ class HandoffService:
                     extras["notified"] = [named]
             elif strategy == 'broadcast' or getattr(self._config, 'feature_harness_integrations', False):
                 self._notify_runtime_pool(uow, handoff=handoff, now=now, blocked=born_blocked)
+            if coordination is not None:
+                coordination_response = coordination.created(handoff.handoff_id)
+        if coordination_response is not None:
+            return coordination_response
         response = {
             "handoff_id": handoff.handoff_id,
             "workspace_id": handoff.workspace_id,
@@ -2284,7 +2319,7 @@ class HandoffService:
         another agent. Internal approval execution separately revalidates the
         captured creator binding and all canonical creation policies.
         """
-        from ..domain.execution_principal import current_execution_principal, current_execution_tool
+        from ..domain.execution_principal import current_execution_principal
         from .execution_tools import ExecutionToolConnectionFactory, denied, execution_actions
         principal = current_execution_principal.get()
         if principal is not None:

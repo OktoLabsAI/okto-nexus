@@ -125,7 +125,7 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="6",
+    version="7",
     body="""\
 # message_create
 Select either ``project_root`` or ``workspace_id``. An explicit ``workspace_id``
@@ -161,6 +161,37 @@ See okto-nexus://reference/communication for the normative decision policy.
 Set ``no_reply=true`` on a final message (for example an acknowledgement). The
 message reaches the recipient inbox, but the hub starts no runtime turn for it,
 so no reply is expected. The default is false.
+
+# Durable creation and recovery (message_create and handoff_create)
+Optionally persist a unique ``client_request_id`` before transmission, then pass
+it to create. IDs are 1..128 ASCII letters/digits/dot/colon/underscore/hyphen,
+starting with a letter or digit. The key is Server installation + authenticated
+actor + workspace + operation + ID. The normalized target, content and explicit
+context must remain identical: a changed request conflicts. Authentication and
+current permissions still apply. No ID preserves the original response shape.
+
+With an ID, create returns metadata only: ``status``, ``workspace_id``,
+``request_receipt``, ``reused`` and the original ``message_id``/``handoff_id`` or
+``approval_id``. ``status=created`` proves canonical creation, not delivery,
+execution or handoff completion. Use message_status or handoff_get for those
+facts. Pending approval retries reuse the same approval; approval execution
+preserves original authority and request identity. Internal approval fields are
+never public parameters. Credentials are not stored in the request receipt.
+
+After a lost response, call ``coordination_request_get(workspace_id, operation,
+client_request_id)`` with the same authenticated actor. It reads references only,
+without heartbeat or work. A managed session needs this explicit tool action in
+its capability and must use its bound workspace. Reads never grant new authority.
+References distinguish created, pending_approval, approved_awaiting_execution,
+rejected, approval_archived, approval_removed, resource_removed and expired.
+
+The guaranteed window is 30 days from the original receipt, never extended by
+retry or approval. Resource deletion leaves a reference/tombstone within it.
+After expiry, refuse automatic replay and request human review. Expired receipts
+are pruned: NOT_FOUND does not prove that an old request never committed. Never
+automatically generate a fresh ID after a timeout. Check nexus_info's
+``coordination_requests`` capability first; older Servers cannot promise this
+recovery contract. This is not exactly-once execution of external effects.
 
 # channel_create
 Create a channel by name (idempotent). Channels are organizational LABELS, not
@@ -293,7 +324,7 @@ add_resource(
     slug="tool-docs/handoff",
     name="Tool docs - handoff",
     description="Full reference for the handoff lifecycle (create/list_available/claim/complete/verify/reject/cancel/get), including the opt-in VERIFYING cycle and DAG dependencies.",
-    version="5",
+    version="6",
     body="""\
 All handoff operations accept exactly one project_root or existing workspace_id.
 Use workspace_id for a logical or remote workspace without a Server-local path.
@@ -301,6 +332,15 @@ A workspace created in the dashboard has an ID that starts with wsr_. A project_
 path does not resolve to that ID. Always pass workspace_id (wsr_...) for such a workspace.
 Managed sessions must use their bound workspace; the selector does not change
 actor, claim, visibility, approval or execution-grant authorization.
+
+handoff_create optionally accepts ``client_request_id`` for 30-day deduplication
+of the same normalized request, including pending approval. With an ID its
+response is metadata references with status=created/pending_approval, not the
+handoff's live lifecycle status. Recover a lost response using the same ID with
+coordination_request_get; follow the returned handoff_id with handoff_get.
+Persist the ID before sending, preserve verified session context, and refuse
+automatic replay outside the original window. Full response/expiry contract:
+okto-nexus://reference/tool-docs/messages, "Durable creation and recovery".
 
 Handoffs are the CANONICAL mechanism for inter-agent task delegation. Every
 request that expects another agent to execute work or produce a deliverable
