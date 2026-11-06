@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { api, type ApprovalDetail } from "../api";
 import { runtimeApi, type NativeDecisionRequest, type NativeDecisionView } from "../runtimeApi";
 import { NativeApprovalInput } from "./NativeApprovalInput";
+import { useAgentModalChanges } from './AgentActionModal';
+import { afterConfirmedModalChange } from '../modalChanges';
 
 type Proposal = Omit<NativeDecisionRequest, "client_intent_id" | "decision" | "response"> & {
   expires_at: string; display: unknown; recipient_agent_id?: string | null;
 };
 
 export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDetail; onChanged: () => void}) {
+  const changes = useAgentModalChanges();
   const proposal = detail.request_payload?.kwargs as Proposal | undefined;
   const alive = useRef(true);
   const locked = useRef(false);
@@ -28,12 +31,12 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
     }
   };
   const recover = async (signal?: AbortSignal) => {
-    const latest = await api.approvalDetail(detail.approval_id);
+    const latest = await api.approvalDetail(detail.approval_id, signal);
     const decision = latest.executed_result as NativeDecisionView | undefined;
     if (decision?.decision_id) {
       const result = await runtimeApi.nativeDecision(decision.decision_id, signal);
       checkIdentity(result);
-      if (alive.current && !signal?.aborted) setView(result);
+      if (alive.current && !signal?.aborted) {setView(result);changes?.reset();}
     }
   };
   useEffect(() => {
@@ -95,8 +98,11 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
       sessionStorage.setItem(key, JSON.stringify(metadata));
       setSaved(metadata);
       attemptedAnswer.current = encodedAnswer;
-      const result = await runtimeApi.decideNative({...metadata, ...(response ? {response} : {})});
-      checkIdentity(result);
+      const result = await afterConfirmedModalChange(changes, async () => {
+        const result = await runtimeApi.decideNative({...metadata, ...(response ? {response} : {})});
+        checkIdentity(result);
+        return result;
+      });
       if (alive.current) { setView(result); onChanged(); }
     } catch (failure) { if (alive.current) setError(String(failure)); }
     finally { locked.current = false; if (alive.current) setBusy(false); }
@@ -116,13 +122,13 @@ export function CanonicalNativeDecision({detail, onChanged}: {detail: ApprovalDe
       <p>A recorded decision does not prove application by the provider.</p>
       {view.possible_effect && <p>The response may have reached the provider.</p>}
       {view.native_stage === "OUTCOME_UNKNOWN" && <p>Delivery is uncertain. Reconcile the session before attempting further work.</p>}
-    </div> : <>
+    </div> : <fieldset disabled={busy} className="space-y-3">
       <NativeApprovalInput detail={formDetail} busy={busy} canonicalPermission={proposal?.approval_key.kind === "native_approval"}
         onApprove={response => void decide("approve", response)} />
       {saved && <p role="status">A decision request was sent. Check its result before retrying the same choice. Answers are not saved in browser storage; re-enter the same answer if needed.</p>}
       <button className="btn btn-secondary" disabled={busy || !key || !valid || !canAnswer || expired || (!!saved && saved.decision !== "deny") || detail.status !== "pending"}
         onClick={() => void decide("deny")}>{saved?.decision === "deny" ? "Retry the same denial" : "Deny runtime request"}</button>
-    </>}
+    </fieldset>}
     <button className="btn btn-secondary" disabled={busy} onClick={() => {
       setError(""); void recover().catch(failure => { if (alive.current) setError(String(failure)); });
     }}>Check native decision</button>

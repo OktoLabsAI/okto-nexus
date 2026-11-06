@@ -2,8 +2,8 @@
 
 The attention API projects canonical Nexus facts into `action_required` and
 `watch` groups. It uses no model inference. Version 1 contains the twelve
-initial classifiers plus generic pending approvals. The dashboard page and global badge are a separate PR-07
-delivery; this document describes the backend contract.
+initial classifiers plus generic pending approvals. The dashboard's Attention
+page and navigation badge consume this same versioned projection.
 
 Generic approval controls use the canonical decision registry and current
 recipient. A control means that an existing decision form can be opened;
@@ -13,8 +13,7 @@ archived requests retain inspection only. Legacy native approvals without a
 correlated current native request never gain a generic execution action.
 
 Global policy changes have durable generations, so a later blocking episode
-does not inherit viewing preferences from an earlier resolved one. Client
-reconciliation and browser acceptance remain open in PR-07.
+does not inherit viewing preferences from an earlier resolved one.
 
 `feature_attention` defaults to `true` and can be changed through existing
 settings or `OKTO_NEXUS_FEATURE_ATTENTION` / `--feature-attention`. It is
@@ -24,6 +23,40 @@ to operate. The two time thresholds are `attention_unclaimed_seconds` and
 `attention_disconnected_seconds`, both defaulting to 300 seconds. They accept
 integers from 0 to 86400; zero disables that temporal escalation. Their CLI and
 environment names follow the existing settings convention.
+
+## Dashboard
+
+Open **Attention** to review **Needs action** and **Watch**. The navigation badge
+counts active items in the selected workspace scope. Filters inside the page
+affect its own list and counts; they do not change that workspace badge. Graph,
+Meta-harness, Approvals and Handoffs keep their existing entry points.
+
+Cards show the agent, workspace, source reference, age, priority and freshness.
+Their main action opens the exact canonical approval, handoff, delivery,
+execution or cleanup record. Opening a card does not send a decision or repeat
+work. Native permission/question forms and verification controls are shared
+with the existing pages. They retain confirmation and canonical revision or
+claim fences. A conflict reloads the record and requires another review.
+
+**Mark seen** and **Snooze** only change viewing preferences. Snooze offers
+15 minutes, one hour or one day; select **Viewing state → Snoozed** to inspect
+hidden items and choose **Show again**. This automatically selects **All
+states**, because active attention excludes snoozed records. Preferences are
+shared across this installation's operator sessions.
+
+The page batches invalidations and reconciles through bounded refreshes, even
+without SSE. Reconnection reads a current snapshot rather than replaying old
+notifications. A failed read preserves the last authorized snapshot with an
+out-of-date notice. Authorization loss or a disabled feature clears protected
+cards, badge and inspection. Uncertain preference writes are reconciled by
+reading their current state, never automatically replayed.
+
+Canonical forms preserve drafts during an ordinary refresh. A transient detail
+read failure retains the draft but disables decision controls until the record
+can be revalidated. A confirmed new review revision invalidates the old draft;
+a successful canonical decision clears its unsaved-change guard. Closing a
+changed form otherwise asks before discarding it. Keyboard focus returns to the
+source control, another remaining card or the page heading when necessary.
 
 ## Reads and viewing preferences
 

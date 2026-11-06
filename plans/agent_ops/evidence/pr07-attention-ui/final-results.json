@@ -1,0 +1,112 @@
+{
+  "observed_at": "2026-11-06T23:51:57.743102+00:00",
+  "base_url": "http://127.0.0.1:49263",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr07-attention-browser-final-h80m0x4u\\home",
+  "server_pid": 51888,
+  "browser_session": "attention-native-final",
+  "lifecycle": {
+    "server": "DRAINED",
+    "server_process_exit": 0,
+    "browser_session_closed": true
+  },
+  "environment": {
+    "browser_version": "156.0.8078.79",
+    "node_version": "v24.15.0",
+    "browser": "Chrome",
+    "javascript": "index-uYo_RvIi.js",
+    "stylesheet": "index-C1ejzFJK.css"
+  },
+  "results": [
+    {
+      "case": "native_question_blue_confirmed_close_without_discard",
+      "status": "PASS",
+      "request_id": "r4request_dc25e868868eb35234b83f73349d64e82bd12139776f4d7d213c6b2db2f375f0",
+      "session_id": "ses_ff32b1cde34f8ad50e2f0a254ae13b90",
+      "decisions": [
+        {
+          "decision_id": "r4decision_95687435c5ee3df5052b555ebcfc8c30",
+          "canonical_state": "CONFIRMED",
+          "native_operation_id": "r4op_e799d1721cbb5faaf0c1b14b674208df"
+        }
+      ],
+      "native_reply_count": 1
+    },
+    {
+      "case": "handoff_fail_draft_back_pass_confirm_close_without_discard",
+      "status": "PASS",
+      "source": {
+        "handoff_id": "hof_7d7dde4fc8894d2bbafdd26d6d5f033c",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "case": "handoff_503_preserves_draft_disabled_then_recovers_editable",
+      "status": "PASS",
+      "injection": "Browser route for the exact canonical handoff GET returned HTTP503; removed before refresh and verification."
+    },
+    {
+      "case": "approval_503_preserves_draft_disabled_then_reject_close_without_discard",
+      "status": "PASS",
+      "source": {
+        "approval_id": "apr_8939dee27e034907bfe65d8c8fbb2dfb",
+        "status": "rejected",
+        "decision_revision": 1
+      },
+      "fieldset_disabled_observed": true,
+      "injection": "Browser route for the exact canonical approval detail GET returned HTTP503; removed before refresh and decision.",
+      "rejected_message_was_not_executed": true
+    }
+  ],
+  "prior_evidence": "output/playwright/pr07-native/results.json",
+  "prior_coverage_not_repeated": [
+    "permission approve",
+    "permission deny",
+    "real120second expiry fence"
+  ],
+  "limits": [
+    "This final browser run targets the changed draft/close behavior; prior semantic native coverage is retained separately.",
+    "HTTP503 was a deliberate browser response interception; production sources and canonical mutation endpoints were unchanged.",
+    "Console errors are the expected injected HTTP503 responses, not suppressed application exceptions."
+  ],
+  "injected_console_503_errors": 9,
+  "ui_only_decisions": true,
+  "database_access_readonly": true,
+  "no_personal_provider_credentials": true,
+  "canonical_native_ttl_unchanged": true,
+  "wheel": {
+    "directory": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr07-attention-wheel-final-d02inxq5",
+    "artifact_sha256": "0beddc66e957af5dcddaeb5fc0a6e13a03e5903ef845a8d1b4734b01d19849d0",
+    "payload_guard_sha256": "ec22fb9740bb47da76649c72d623dc407257524057f2bd5cdb0c3a9c62af769d",
+    "payload_counts": {
+      "python": 478,
+      "migrations": 163,
+      "static": 7
+    },
+    "exact_sets_and_bytes_source_wheel_installed": true,
+    "source_payload_unchanged_after_validation": true,
+    "backend_test_counts": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "http_smoke": "PASS",
+    "http_smoke_server_stopped": true
+  },
+  "artifacts": {
+    "approval-503-draft.png": "0a24f18c519947061c231fdc0a52a604bd1bbd2613845a79bb28a7553cbb4430",
+    "approval-503-draft.yml": "d62812f83f2eeacd7d9f78aaf3f601539c90783f621c1fa254ec74ae3a4bae9a",
+    "approval-close-no-discard.yml": "8d107ff9374ddd5471510eac8aa0b51b2ca2b86035c9b2a21714af1d87e078f3",
+    "approval-recovered-draft.yml": "54cd122cce761153ea2c1a85c8be5f625c8b114f49e1d79647990e187c39576b",
+    "final-closed-modals.png": "1a8190c8cdade1fd81b537fec2715d05fc4b9b4e4658d7ad6a98d10cc9683da7",
+    "handoff-503-draft.png": "d88113d424494c72f81cf60ebac0ea44ad9683de6628264b1b660d395cc99f4a",
+    "handoff-503-draft.yml": "1fd6ac056a5ee96707692efbb1ffcd3cfe013ee6d9562021b04a38d10239d64f",
+    "handoff-close-no-discard.yml": "b0ddc96dd15448eea352be82e41678d722a34ee232075b5b3ed7631fa5b20df4",
+    "handoff-pass-confirmed.yml": "815828c0b242f5f45d108f5697cb4b8974603150a8adb8f65f5d8d85bba959fa",
+    "handoff-recovered-draft.yml": "10a951692669925a042a51cf0cd0e182bf8dcbf189c9849ea77a6907549a21e4",
+    "initial.yml": "d9263c598bbf98e79150432c126a8fe2db0f2e25e0acb7423a85bbd6e10502fe",
+    "question-attention.yml": "a80d3ef29774aebe75dfb8bec05b74bbb3db6ff18d149c11513d7a9861cd631d",
+    "question-close-no-discard.yml": "4c9ad0512a3ff24120602cf8c1f59b31fd25b70d33a96a459b496e257484e9b9",
+    "shutdown.json": "9dfb35744679a5d04109bba94c6f73509fc9e2058c95b46a60ecc8d4f3a00c67"
+  }
+}

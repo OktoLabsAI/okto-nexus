@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="all canonical kinds have distinct human labels, without echoing unknown codes" time="0.005820" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="primary action opens only an allowed canonical control" time="0.001373" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="history descriptions follow source resolution, never seen or snooze preferences" time="0.000733" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="expired, resolved or stale sources prefer inspection instead of decision controls" time="0.001458" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="source names are plain known labels, including prototype-like unknown values" time="0.000563" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="protected or differently scoped snapshots are never presented" time="0.000643" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="matching page retains its own filtered counts and never substitutes global summary" time="0.000458" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="selecting snoozed includes inactive occurrences and keeps the current scope" time="0.000661" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="age handles timezone offsets, future timestamps and invalid dates without negative ages" time="0.000740" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="snooze presets emit bounded UTC deadlines without a source mutation" time="0.001778" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="focus stays on its record or moves to the next surviving row, then the previous row or heading" time="0.000528" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<!-- tests 11 -->
+	<!-- suites 0 -->
+	<!-- pass 11 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 977.3799 -->
+</testsuites>

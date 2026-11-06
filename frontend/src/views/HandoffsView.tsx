@@ -15,9 +15,12 @@
 // progress. Same self-gating: cards without the fields render unchanged
 // (BR11) and the flag is never consulted.
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Ban, CheckCircle2, CircleAlert, ShieldCheck, UserCheck, X } from "lucide-react";
-import { api, type AgentRow, type GraphHandoff } from "../api";
+import { api, ApiError, type AgentRow, type GraphHandoff } from "../api";
+import { readAttentionReference } from '../attentionNavigation';
+import { afterConfirmedModalChange } from '../modalChanges';
+import { useAgentModalChanges } from '../components/AgentActionModal';
 import { useConfirm } from "../components/Confirm";
 import {
   TargetDescriptor,
@@ -105,18 +108,18 @@ function outcomePreview(value: string): string {
 
 function HandoffDetailModal({
   handoff,
-  onClose,
+  onClose, inline = false, children,
 }: {
   handoff: GraphHandoff;
-  onClose: () => void;
+  onClose: () => void; inline?: boolean; children?: ReactNode;
 }) {
   const workspaceName = useWorkspaceName(handoff.workspace_id);
   return (
-    <div className="modal-overlay">
+    <div className={inline ? "min-w-0" : "modal-overlay"}>
       <div
-        className="modal-content w-[720px] max-w-[94vw] max-h-[86vh] flex flex-col"
-        role="dialog"
-        aria-modal="true"
+        className={inline ? "min-w-0 flex flex-col" : "modal-content w-[720px] max-w-[94vw] max-h-[86vh] flex flex-col"}
+        role={inline ? undefined : "dialog"}
+        aria-modal={inline ? undefined : true}
         data-testid={`handoff-detail-${handoff.handoff_id}`}
       >
         <div className="px-5 py-4 border-b border-surface-200/60 dark:border-surface-700/50 flex items-start gap-3">
@@ -135,14 +138,14 @@ function HandoffDetailModal({
               {handoffLabel(handoff)}
             </h3>
           </div>
-          <button
+{!inline && (          <button
             className="ml-auto p-1.5 rounded-lg text-surface-400 hover:text-surface-700 hover:bg-surface-100 dark:hover:text-surface-200 dark:hover:bg-white/10"
             onClick={onClose}
             title="Close"
             data-testid="close-handoff-detail"
           >
             <X size={16} />
-          </button>
+          </button>)}
         </div>
 
         <div className="px-5 py-4 overflow-auto space-y-4 text-xs text-surface-600 dark:text-surface-300">
@@ -266,6 +269,7 @@ function HandoffDetailModal({
               </pre>
             </section>
           )}
+          {children}
         </div>
       </div>
     </div>
@@ -323,6 +327,177 @@ function LeaseRemaining({ value, now }: { value: string | null | undefined; now:
   );
 }
 
+
+export function canVerifyHandoff(h: GraphHandoff, capabilities: Set<string>): boolean {
+  const verifier = h.verify_by;
+  if (!verifier || h.claimed_by === 'operator') return false;
+  if (verifier.kind === 'agent') return verifier.agent_id === 'operator';
+  if (verifier.kind === 'capability') return capabilities.has(verifier.capability ?? '');
+  return h.from_agent_id === 'operator';
+}
+
+function HandoffVerification({handoff: h, canVerify, onChanged}: {
+  handoff: GraphHandoff; canVerify: boolean; onChanged: () => void | Promise<void>;
+}) {
+  const {confirm, dialog} = useConfirm({agentModal: true});
+  const changes = useAgentModalChanges();
+  const canDecide = useRef(false);
+  canDecide.current = canVerify;
+  const [failFor, setFailFor] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const decide = async (reviewed: GraphHandoff, verdict: 'pass' | 'fail', text?: string) => {
+    if (!canDecide.current || busy) return;
+    setBusy(true);setError('');
+    try {
+      await afterConfirmedModalChange(changes, async () => {
+        const result = await api.verifyHandoff(reviewed.handoff_id, reviewed.workspace_id, verdict, text || undefined, reviewed.claim_epoch);
+        if (result.handoff_id !== reviewed.handoff_id || result.status !== (verdict === 'pass' ? 'COMPLETED' : 'CLAIMED'))
+          throw new Error('The verification result does not match the reviewed handoff. Refresh its canonical record.');
+      });
+      setFailFor(null);setFeedback('');
+    } catch (failure) {setError((failure as Error).message);}
+    finally {setBusy(false);await onChanged();}
+  };
+  return <>{dialog}{error && <p role="alert" className="text-xs">{error} The record is refreshed before another decision.</p>}
+{h.status === "VERIFYING" && (
+                        <div className="mt-2 space-y-1.5">
+                          {failFor === h.handoff_id ? (
+                            <div className="space-y-1.5">
+                              <textarea
+                                aria-label="Rework feedback"
+                                disabled={busy}
+                                className="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40"
+                                rows={2}
+                                maxLength={2000}
+                                placeholder="Rework feedback for the claimant (optional)"
+                                value={feedback}
+                                onChange={(e) => setFeedback(e.target.value)}
+                              />
+                              <div className="flex gap-1.5">
+                                <button
+                                  className="btn btn-secondary !py-1 !text-xs text-red-500"
+                                  disabled={busy}
+                                  onClick={() => decide(h, "fail", feedback)}
+                                >
+                                  Fail handoff
+                                </button>
+                                <button
+                                  className="btn btn-secondary !py-1 !text-xs"
+                                  disabled={busy}
+                                  onClick={() => {
+                                    setFailFor(null);
+                                    setFeedback("");
+                                  }}
+                                >
+                                  Back
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex gap-1.5">
+                              <button
+                                className="btn btn-secondary !py-1 !text-xs text-emerald-600"
+                                disabled={!canVerify || busy}
+                                title={
+                                  canVerify
+                                    ? "Approve the delivery: handoff completes"
+                                    : `Only the contracted verifier may decide (verify: ${verifierLabel(h)})`
+                                }
+                                onClick={() =>
+                                  confirm({
+                                    title: "Pass verification?",
+                                    body: (
+                                      <span>
+                                        Handoff <code>{handoffLabel(h)}</code> will be
+                                        marked COMPLETED, verified by the operator.
+                                      </span>
+                                    ),
+                                    onConfirm: () => decide(h, "pass"),
+                                  })
+                                }
+                              >
+                                Pass
+                              </button>
+                              <button
+                                className="btn btn-secondary !py-1 !text-xs text-red-500"
+                                disabled={!canVerify || busy}
+                                title={
+                                  canVerify
+                                    ? "Send back to the claimant for rework"
+                                    : `Only the contracted verifier may decide (verify: ${verifierLabel(h)})`
+                                }
+                                onClick={() => {
+                                  setFailFor(h.handoff_id);
+                                  setFeedback("");
+                                }}
+                              >
+                                Fail…
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}</>;
+}
+
+export function HandoffInspection({handoffId, workspace, allowVerify, onChanged, refreshKey}: {
+  handoffId: string; workspace: string; allowVerify: boolean; onChanged: () => void; refreshKey?: string;
+}) {
+  const changes = useAgentModalChanges();
+  const [handoff, setHandoff] = useState<GraphHandoff | null>(null);
+  const [readCurrent, setReadCurrent] = useState(false);
+  const [capabilities, setCapabilities] = useState<Set<string>>(new Set());
+  const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const sequence = useRef(0);
+  const reviewed = useRef<string | null>(null);
+  const request = useRef<AbortController | null>(null);
+  const reload = useCallback(async () => {
+    const current = ++sequence.current;
+    request.current?.abort();const controller = new AbortController();request.current = controller;
+    try {
+      const response = await readAttentionReference(api, {kind: 'handoff', id: handoffId, workspace, verify: false}, controller.signal);
+      if (current !== sequence.current) return;
+      if (response.kind !== 'handoff') return;
+      const value = response.record;
+      const review = JSON.stringify([value.handoff_id, value.claim_epoch, value.status]);
+      if (reviewed.current !== null && reviewed.current !== review) {
+        setNotice('The handoff changed. Review its current claim and result before deciding.');
+        if (allowVerify) changes?.reset();
+      }
+      reviewed.current = review;
+      setHandoff(value);
+      setReadCurrent(true);
+      setError('');
+    } catch (failure) {if (current === sequence.current) {
+      setReadCurrent(false);
+      if (failure instanceof ApiError && [401, 403, 404].includes(failure.status)) setHandoff(null);
+      setError((failure as Error).message);
+    }}
+  }, [handoffId, workspace, allowVerify, changes]);
+  useEffect(() => {reviewed.current = null;setHandoff(null);setReadCurrent(false);setError('');setNotice('');}, [handoffId, workspace]);
+  useEffect(() => {void reload();return () => {sequence.current++;request.current?.abort();};}, [reload, refreshKey]);
+  useEffect(() => {
+    let current = true;
+    api.agents().then(value => {if (current) setCapabilities(new Set(Object.keys(value.items.find(a => a.agent_id === 'operator')?.capabilities ?? {})));})
+      .catch(() => {if (current) setCapabilities(new Set());});
+    return () => {current = false;};
+  }, []);
+  return <section className="space-y-3" aria-label="Canonical handoff">
+    <button className="btn btn-secondary" onClick={() => {setError('');void reload();}}>Refresh record</button>
+    {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    {!handoff && !error && <p role="status">Loading handoff…</p>}
+    {handoff && !readCurrent && <p role="status">The last authorized record and your draft are retained. Refresh the record before verifying.</p>}
+    {handoff && <HandoffDetailModal handoff={handoff} inline onClose={() => {}}>
+      <fieldset disabled={!readCurrent}>
+      {allowVerify && <HandoffVerification key={`${handoff.handoff_id}:${handoff.claim_epoch}:${handoff.status}`}
+        handoff={handoff} canVerify={readCurrent && canVerifyHandoff(handoff, capabilities)} onChanged={async () => {setReadCurrent(false);await reload();onChanged();}} />}
+      </fieldset>
+    </HandoffDetailModal>}
+  </section>;
+}
+
 export function HandoffsView({
   workspace,
   refreshTick,
@@ -346,9 +521,6 @@ export function HandoffsView({
   // capability-kind eligibility check of the Pass/Fail gating.
   const [operatorCaps, setOperatorCaps] = useState<Set<string>>(new Set());
   // Handoff whose Fail feedback box is open, and its draft text.
-  const [failFor, setFailFor] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState("");
-  const [busy, setBusy] = useState(false);
   const [detail, setDetail] = useState<GraphHandoff | null>(null);
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [since, setSince] = useState("");
@@ -395,29 +567,6 @@ export function HandoffsView({
   // handoffs the operator created, or a capability the operator announces)
   // and never for its own deliveries (anti-self-verification, BR3). Pure
   // data - the backend re-applies the same domain rule anyway.
-  const operatorCanVerify = (h: GraphHandoff): boolean => {
-    const vb = h.verify_by;
-    if (!vb || h.claimed_by === "operator") return false;
-    if (vb.kind === "agent") return vb.agent_id === "operator";
-    if (vb.kind === "capability") return operatorCaps.has(vb.capability ?? "");
-    return h.from_agent_id === "operator";
-  };
-
-  const decide = async (h: GraphHandoff, verdict: "pass" | "fail", text?: string) => {
-    setBusy(true);
-    try {
-      await api.verifyHandoff(h.handoff_id, h.workspace_id, verdict, text || undefined, h.claim_epoch);
-      setFailFor(null);
-      setFeedback("");
-      setError(null);
-      await reload();
-      onChanged();
-    } catch (exc) {
-      setError((exc as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  };
 
   return (
     <div className="h-full min-h-0 flex flex-col p-4 gap-3">
@@ -494,7 +643,7 @@ export function HandoffsView({
               <div className="space-y-2">
                 {column.map((h) => {
                   const capabilityNames = targetCapabilityNames(h.target);
-                  const canVerify = operatorCanVerify(h);
+                  const canVerify = canVerifyHandoff(h, operatorCaps);
                   return (
                     <div
                       key={h.handoff_id}
@@ -683,82 +832,8 @@ export function HandoffsView({
                         </div>
                       )}
 
-                      {status === "VERIFYING" && (
-                        <div className="mt-2 space-y-1.5">
-                          {failFor === h.handoff_id ? (
-                            <div className="space-y-1.5">
-                              <textarea
-                                className="w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40"
-                                rows={2}
-                                maxLength={2000}
-                                placeholder="Rework feedback for the claimant (optional)"
-                                value={feedback}
-                                onChange={(e) => setFeedback(e.target.value)}
-                              />
-                              <div className="flex gap-1.5">
-                                <button
-                                  className="btn btn-secondary !py-1 !text-xs text-red-500"
-                                  disabled={busy}
-                                  onClick={() => decide(h, "fail", feedback)}
-                                >
-                                  Fail handoff
-                                </button>
-                                <button
-                                  className="btn btn-secondary !py-1 !text-xs"
-                                  disabled={busy}
-                                  onClick={() => {
-                                    setFailFor(null);
-                                    setFeedback("");
-                                  }}
-                                >
-                                  Back
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="flex gap-1.5">
-                              <button
-                                className="btn btn-secondary !py-1 !text-xs text-emerald-600"
-                                disabled={!canVerify || busy}
-                                title={
-                                  canVerify
-                                    ? "Approve the delivery: handoff completes"
-                                    : `Only the contracted verifier may decide (verify: ${verifierLabel(h)})`
-                                }
-                                onClick={() =>
-                                  confirm({
-                                    title: "Pass verification?",
-                                    body: (
-                                      <span>
-                                        Handoff <code>{handoffLabel(h)}</code> will be
-                                        marked COMPLETED, verified by the operator.
-                                      </span>
-                                    ),
-                                    onConfirm: () => decide(h, "pass"),
-                                  })
-                                }
-                              >
-                                Pass
-                              </button>
-                              <button
-                                className="btn btn-secondary !py-1 !text-xs text-red-500"
-                                disabled={!canVerify || busy}
-                                title={
-                                  canVerify
-                                    ? "Send back to the claimant for rework"
-                                    : `Only the contracted verifier may decide (verify: ${verifierLabel(h)})`
-                                }
-                                onClick={() => {
-                                  setFailFor(h.handoff_id);
-                                  setFeedback("");
-                                }}
-                              >
-                                Fail…
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                      <HandoffVerification key={`${h.handoff_id}:${h.claim_epoch}:${h.status}`} handoff={h} canVerify={canVerify}
+                        onChanged={async () => {await reload();onChanged();}} />
 
                       {(status === "OPEN" || status === "CLAIMED") && (
                         <button

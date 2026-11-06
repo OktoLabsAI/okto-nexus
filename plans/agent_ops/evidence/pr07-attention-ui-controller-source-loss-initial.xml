@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="source_unavailable immediately marks a pending preference snapshot stale without replay" time="0.007976" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionController.test.mjs" failure="Expected values to be strictly equal:&#10;&#10;'ready' !== 'stale'&#10;">
+		<failure type="testCodeFailure" message="Expected values to be strictly equal:&#10;&#10;'ready' !== 'stale'">
+[Error [ERR_TEST_FAILURE]: Expected values to be strictly equal:
+
+'ready' !== 'stale'
+] {
+  code: 'ERR_TEST_FAILURE',
+  failureType: 'testCodeFailure',
+  cause: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'ready' !== 'stale'
+  
+      at TestContext.&lt;anonymous> (file:///D:/Projetos/Techridy/okto_labs_okto_nexus/frontend/tests/attentionController.test.mjs:397:12)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ready',
+    expected: 'stale',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+}
+		</failure>
+	</testcase>
+	<testcase name="transport_error immediately marks a pending preference snapshot stale without replay" time="0.001944" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionController.test.mjs" failure="Expected values to be strictly equal:&#10;&#10;'ready' !== 'stale'&#10;">
+		<failure type="testCodeFailure" message="Expected values to be strictly equal:&#10;&#10;'ready' !== 'stale'">
+[Error [ERR_TEST_FAILURE]: Expected values to be strictly equal:
+
+'ready' !== 'stale'
+] {
+  code: 'ERR_TEST_FAILURE',
+  failureType: 'testCodeFailure',
+  cause: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'ready' !== 'stale'
+  
+      at TestContext.&lt;anonymous> (file:///D:/Projetos/Techridy/okto_labs_okto_nexus/frontend/tests/attentionController.test.mjs:397:12)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ready',
+    expected: 'stale',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+}
+		</failure>
+	</testcase>
+	<!-- tests 2 -->
+	<!-- suites 0 -->
+	<!-- pass 0 -->
+	<!-- fail 2 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 1108.4922 -->
+</testsuites>

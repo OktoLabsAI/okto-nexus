@@ -1,0 +1,12 @@
+{
+  "base_url":"http://127.0.0.1:49262",
+  "pid":47924,
+  "instance_id":"svc_3595877971db0bb717c476d52f9b552d8311e7f2afb7d534672861ebf4995cbd",
+  "generation":"cec16b57303ca784d11918dbf6f9c2be",
+  "stop":"POST /api/v1/service/stop with freshly observed instance_id and generation",
+  "shutdown":{"state":"DRAINED","resources":[],"error_codes":[]},
+  "process_absent_after_stop":true,
+  "browser_session_closed":"attention-r3",
+  "installed_user_service":false,
+  "personal_provider_credentials_used":false
+}

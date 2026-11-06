@@ -3,6 +3,10 @@
 // issued AGENT keys are never stored by the dashboard.
 
 import type { OperatorUnread } from "./operatorUnread";
+import type {
+  AttentionFilters, AttentionPage, AttentionPageQuery, AttentionPreferenceResponse,
+  AttentionSeenRequest, AttentionSnoozeRequest, AttentionSummary,
+} from './attentionTypes';
 
 export interface Envelope<T> {
   ok: boolean;
@@ -44,6 +48,19 @@ export interface RuntimeOperationRow {
   reconciliation_id: string | null;
   handoff?: { handoff_id: string; claim_epoch: number } | null;
   reconciliation: { action: string; reason: string; created_at: string } | null;
+}
+
+export interface RuntimeMaintenanceInspection {
+  maintenance: {
+    maintenance_id: string; result_id: string | null; action: string; status: string;
+    created_at: string; updated_at: string | null; idempotency_key: string; reason: string;
+    artifact_generation: number | null; workspace_id: string | null; agent_id: string | null;
+    attention_failure_at: string | null; attention_failure_code: string | null;
+  };
+  quota_bytes: number; agent_quota_bytes: number; workspace_quota_bytes: number;
+  reserved_bytes: number; event_artifact_reserved_bytes: number;
+  results: Array<Record<string, unknown>>;
+  pending_maintenance: Array<Record<string, unknown>>;
 }
 
 export interface GraphNode {
@@ -557,6 +574,7 @@ export type ApprovalStatus = "pending" | "approved" | "rejected" | "archived";
 
 export interface ApprovalRow {
   approval_id: string;
+  decision_revision: number;
   action: string;
   agent_id: string;
   policy_id: string;
@@ -1040,12 +1058,15 @@ async function call<T>(
   headers.set("x-nexus-ui", "1");
   if (init.body) headers.set("content-type", "application/json");
   const response = await fetch(path, { ...init, headers });
+  // A response from an abandoned scope must not expire a newer UI session.
+  if (init.signal?.aborted) throw new DOMException('Request aborted.', 'AbortError');
   // Never assume JSON: a crashed handler or a proxy can answer plain text,
   // and "Unexpected token ..." hides the actual error from the operator.
   if (response.status === 401 && !path.startsWith("/api/v1/operator-auth/")) {
     window.dispatchEvent(new Event("nexus-auth-expired"));
   }
   const raw = await response.text();
+  if (init.signal?.aborted) throw new DOMException('Request aborted.', 'AbortError');
   let body: Envelope<T> | null = null;
   try {
     body = JSON.parse(raw) as Envelope<T>;
@@ -1181,7 +1202,31 @@ export type RuntimePolicy = {
   effective?: {broadcast_handoff_auto_claim: boolean; inherit_global_mcps: boolean; runtime_enabled: boolean; session_policy: SessionPolicy};
 };
 
+function attentionQuery(query: AttentionPageQuery): string {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value !== undefined && value !== '') params.set(key, String(value));
+  }
+  return params.size ? `?${params}` : '';
+}
+
 export const api = {
+  attention: (query: AttentionPageQuery = {}, signal?: AbortSignal) =>
+    call<AttentionPage>(`/api/v1/attention${attentionQuery(query)}`, {signal, cache: 'no-store'}),
+  attentionSummary: (filters: AttentionFilters = {}, signal?: AbortSignal) =>
+    call<AttentionSummary>(`/api/v1/attention/summary${attentionQuery(filters)}`, {signal, cache: 'no-store'}),
+  attentionSeen: (id: string, body: AttentionSeenRequest, signal?: AbortSignal) =>
+    call<AttentionPreferenceResponse>(`/api/v1/attention/${encodeURIComponent(id)}/seen`,
+      {method: 'POST', body: JSON.stringify(body), signal}),
+  attentionSnooze: (id: string, body: AttentionSnoozeRequest, signal?: AbortSignal) =>
+    call<AttentionPreferenceResponse>(`/api/v1/attention/${encodeURIComponent(id)}/snooze`,
+      {method: 'POST', body: JSON.stringify(body), signal}),
+  inspectRuntimeMaintenance: (maintenanceId: string, signal?: AbortSignal) =>
+    call<RuntimeMaintenanceInspection>('/api/v1/harness/artifacts',
+      {method: 'POST', body: JSON.stringify({action: 'inspect', maintenance_id: maintenanceId}), signal}),
+  runtimeOperationInspection: (operationId: string, signal?: AbortSignal) =>
+    call<{items: Array<RuntimeOperationRow & Record<string, unknown>>; has_more: boolean; next_operation_id: string | null}>(
+      `/api/v1/harness/outbox?operation_id=${encodeURIComponent(operationId)}`, {signal}),
   metaHarnessSessions: (workspace: string, agent: string, page: number, signal?: AbortSignal) => {
     const params = new URLSearchParams({page: String(page)});
     if (workspace && workspace !== 'all') params.set('workspace', workspace);
@@ -1247,8 +1292,8 @@ export const api = {
     call<{ items: MessageRow[]; page: number; page_size: number; total: number }>(
       `/api/v1/messages?${new URLSearchParams(params)}`,
     ),
-  message: (messageId: string) =>
-    call<MessageRow>(`/api/v1/messages/${encodeURIComponent(messageId)}`),
+  message: (messageId: string, signal?: AbortSignal) =>
+    call<MessageRow>(`/api/v1/messages/${encodeURIComponent(messageId)}`, {signal}),
   // Unread messages addressed to the operator (badge, toast, divider).
   // `since` keeps only deliveries created after that timestamp.
   operatorUnread: (since?: string | null) =>
@@ -1266,12 +1311,13 @@ export const api = {
     call<MessageSearchResult>(
       `/api/v1/messages/search?q=${encodeURIComponent(q)}&k=${k}`,
     ),
-  handoffs: (workspace?: string, filters: Record<string, string> = {}) => {
+  handoffs: (workspace?: string, filters: Record<string, string> = {}, signal?: AbortSignal) => {
     const params = new URLSearchParams(filters);
     if (workspace) params.set("workspace", workspace);
     const query = params.toString();
     return call<{ items: GraphHandoff[] }>(
       `/api/v1/handoffs${query ? `?${query}` : ""}`,
+      {signal},
     );
   },
   sessions: (workspace?: string) =>
@@ -1749,9 +1795,10 @@ export const api = {
         (status ? `&status=${encodeURIComponent(status)}` : "") + `&limit=100&offset=${offset}`
       }`,
     ),
-  approvalDetail: (approvalId: string) =>
+  approvalDetail: (approvalId: string, signal?: AbortSignal) =>
     call<ApprovalDetail>(
       `/api/v1/approvals/${encodeURIComponent(approvalId)}`,
+      {signal},
     ),
   // 409 CONFLICT when already decided (the first decision survives; its
   // details ride ApiError.details).
@@ -1762,13 +1809,15 @@ export const api = {
     decision: "approve" | "reject",
     justification?: string,
     response?: Record<string, unknown>,
+    expectedDecisionRevision?: number,
   ) =>
     call<ApprovalDecision>(
       `/api/v1/approvals/${encodeURIComponent(approvalId)}/decision`,
       {
         method: "POST",
         body: JSON.stringify(
-          { decision, ...(justification ? { justification } : {}), ...(response !== undefined ? { response } : {}) },
+          { decision, ...(justification ? { justification } : {}), ...(response !== undefined ? { response } : {}),
+            ...(expectedDecisionRevision !== undefined ? {expected_decision_revision: expectedDecisionRevision} : {}) },
         ),
       },
     ),

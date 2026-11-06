@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="all thirteen actions resolve exact existing canonical records" time="0.003269" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="manual and mirrored handoff results keep handoff and execution references distinct" time="0.000393" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="disconnected work uses its emitted execution_operation, not its internal executor episode anchor" time="0.002667" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="runtime recovery opens its original message without requiring an execution or session" time="0.000488" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="minimal references emitted by every other collector retain their canonical navigation" time="0.000671" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="missing scope and unavailable actions never select a first session or another record" time="0.000373" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="opening every target only invokes canonical inspection methods, including cleanup inspect" time="0.000806" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="empty, duplicate or out-of-scope handoff and delivery responses fail closed" time="0.001916" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="all execution scope fields and maintenance receipt references are revalidated" time="0.001119" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="original approval and message scope are checked, and unavailable target performs no API call" time="0.000895" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="historical execution is read by exact operation without enumerating current sessions" time="0.000366" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="authorization failures propagate without fallback, retry or retaining another record" time="0.000404" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="each canonical inspection forwards its cancellation signal" time="0.000439" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="generic decisions send the reviewed revision and never retry a conflict" time="0.000420" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="missing or invalid approval revision cannot submit a decision" time="0.000532" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="same revision preserves native draft identity; native revision, digest and CAS changes reset it" time="0.021930" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<!-- tests 16 -->
+	<!-- suites 0 -->
+	<!-- pass 16 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 712.7732 -->
+</testsuites>

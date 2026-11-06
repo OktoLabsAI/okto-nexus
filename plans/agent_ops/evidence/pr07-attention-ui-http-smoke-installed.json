@@ -1,0 +1,58 @@
+{
+  "module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr07-attention-wheel-final-d02inxq5\\validation\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr07-attention-wheel-final-d02inxq5\\http-smoke-home",
+  "base_url": "http://127.0.0.1:51499",
+  "assets": [
+    {
+      "path": "assets/index-C1ejzFJK.css",
+      "sha256": "fb5bbec53610c308ad79a43b89a5be15a0c387ddea6b5fbfc792f8daca7af63d",
+      "content_type": "text/css; charset=utf-8"
+    },
+    {
+      "path": "assets/index-uYo_RvIi.js",
+      "sha256": "26432e93f129f9c9a2e25ffd16d8dc7e4e3692bf74ebadf63683d7269a8bcfb0",
+      "content_type": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "index.html",
+      "sha256": "72d35cc53d4a3871a6afa70034dc17a4411e1731846e42b6e3ce4b262f82e743",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "logos/nexus-icon.svg",
+      "sha256": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06",
+      "content_type": "image/svg+xml"
+    },
+    {
+      "path": "logos/nexus-wordmark-dark.svg",
+      "sha256": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef",
+      "content_type": "image/svg+xml"
+    },
+    {
+      "path": "logos/nexus-wordmark-light.svg",
+      "sha256": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242",
+      "content_type": "image/svg+xml"
+    },
+    {
+      "path": "logos/oktolabs-icon.svg",
+      "sha256": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820",
+      "content_type": "image/svg+xml"
+    }
+  ],
+  "api_page_summary": true,
+  "no_store": true,
+  "sse_initial_control": {
+    "version": 1,
+    "event_cursor": 0,
+    "reason": "snapshot_required",
+    "clear": false
+  },
+  "settings_feature_roundtrip": true,
+  "shutdown": {
+    "state": "DRAINED",
+    "deadline_monotonic": 501957.471394,
+    "resources": [],
+    "error_codes": []
+  },
+  "server_stopped": true
+}

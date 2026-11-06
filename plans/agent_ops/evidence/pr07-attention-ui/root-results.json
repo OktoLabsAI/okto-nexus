@@ -1,0 +1,32 @@
+{
+  "scope": "Real Chrome against disposable Uvicorn/SQLite Server; synthetic canonical work only",
+  "base_url": "http://127.0.0.1:49262",
+  "browser_session": "attention-r3",
+  "javascript": "index-DJ-noK7O.js",
+  "stylesheet": "index-C1ejzFJK.css",
+  "cases": [
+    {"name":"mixed_groups_and_badge","result":"PASS","observed":{"total":4,"action_required":3,"watch":1}},
+    {"name":"seen_does_not_resolve_work","result":"PASS","observed":{"before":4,"after":3,"focus_after_removal":"remaining approval li","persisted_after_reload":true}},
+    {"name":"snooze_filter_and_unsnooze","result":"PASS","observed":{"snoozed_total":1,"state_filter":"all","viewing_filter":"snoozed","show_again_restored":true}},
+    {"name":"preference_isolation","result":"PASS","evidence":"Temp before-preferences.json / after-preferences.json / preference-diff.json","observed":"All 32 canonical approval/message/delivery/handoff/operation/result tables compared unchanged; two preference rows added. Runtime heartbeat/inventory/lease tables changed independently."},
+    {"name":"generic_concurrent_decision","result":"PASS","script":"pr07-generic-conflict.js","observed":{"other_canonical_decision_status":200,"stale_ui_decision_status":409,"final_source_status":"rejected","conflict_visible":true,"obsolete_approval_executed":false},"note":"First harness invocation used a relative APIRequestContext URL and failed before making a request; corrected invocation passed."},
+    {"name":"inspection_focus_after_source_removal","result":"PASS","observed":{"key":"Escape","open_dialogs":0,"focus":"attention-heading"}},
+    {"name":"handoff_draft_and_guard","result":"PASS","observed":{"canonical_detail_reads":7,"draft_preserved":true,"focus_preserved":"TEXTAREA","escape_requested_discard":true}},
+    {"name":"handoff_verification","result":"PASS","script":"pr07-handoff-pass.js","observed":{"confirmation_required":true,"post_status":200,"verdict":"pass","claim_epoch":1,"canonical_status":"COMPLETED"}},
+    {"name":"delivery_exact_reference","result":"PASS","observed":"Parked delivery opens its original message with parked recipient, content and exact message ID; no submission on opening."},
+    {"name":"read_failure_and_forbidden","result":"PASS","script":"pr07-fault-states.js","injection":"Browser response faults, backend unchanged","observed":{"cards_before":2,"cards_retained_on_503":2,"false_empty_state":false,"cards_after_403":0,"badge_after_403":0,"recovered":true}},
+    {"name":"feature_off_closes_inspection","result":"PASS","script":"pr07-feature-toggle.js","injection":"None; real canonical settings PATCH","observed":{"off_status":200,"cards":0,"badge":0,"inspection":0,"on_status":200,"recovered":true}},
+    {"name":"network_offline_and_reconnect","result":"PASS","script":"pr07-network-reconnect.js","observed":{"two_episode_ids_unchanged":true,"stale_snapshot_retained":true,"live_stream_restored":true}},
+    {"name":"bounded_periodic_refresh","result":"PASS","observed":"Performance entries showed one summary/list pair per 15 seconds; summary 69-154ms and list 108-182ms in the observed window. Focus triggers an additional refresh. No per-agent requests for rendering cards."},
+    {"name":"light_dark_and_narrow_layout","result":"PASS","observed":{"desktop_width":1280,"mobile_width":390,"mobile_document_scroll_width":390,"mobile_main_scroll_width":390}},
+    {"name":"long_external_text_literal","result":"PASS","script":"pr07-long-text.js","injection":"Render-only browser response, no canonical mutation","observed":{"literal_text":true,"injected_image_elements":0,"script_executed":false,"main_width":390,"main_scroll_width":390}}
+  ],
+  "known_issue": {"name":"sticky_unsaved_guard_after_success","observed":"Handoff Pass succeeded but Escape still requested discard after an earlier discarded feedback draft.","disposition":"Reported for explicit confirmed-change reset; final-build regression recorded separately."},
+  "limits": [
+    "This browser campaign used a synthetic native peer, not a real provider or client qualification.",
+    "Accessibility evidence covers keyboard behavior, semantic accessibility snapshots, theme and layout; no named screen-reader product was operated.",
+    "Unknown-outcome, cleanup and executor source matrices are covered by backend/navigation tests; not every classifier was separately seeded in this root browser instance.",
+    "503 and 403 rendering were injected at the browser response boundary. Real backend auth/revocation contracts are covered separately by installed tests.",
+    "Initial screenshot with fullPage did not expand the dashboard's scroll container; viewport screenshots were used for visual inspection."
+  ]
+}

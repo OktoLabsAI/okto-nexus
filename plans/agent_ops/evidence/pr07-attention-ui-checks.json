@@ -1,0 +1,22 @@
+{
+  "plan_hash_unchanged": true,
+  "fixed_scope": {"tasks":59,"scenarios":132,"invariants":28,"completion_criteria":17},
+  "ledger_checker": "PASS",
+  "frontend_final": {"tests":100,"failures":0,"errors":0,"skipped":0},
+  "installed_contracts_final": {"tests":10,"failures":0,"errors":0,"skipped":0},
+  "typescript_and_vite_build": "PASS",
+  "vite_warning": "Existing large-chunk warning; final JavaScript approximately 1.31 MB uncompressed",
+  "raw_source_wheel_installed_payloads": "EXACT",
+  "staged_generated_javascript_css_html": "EXACT_FINAL_WHEEL_BYTES",
+  "staged_retained_artifact_hashes": {"matched":61,"mismatched":0},
+  "authored_whitespace_check": "PASS; excludes immutable tool reports and generated dependency JavaScript",
+  "retained_whitespace_diagnostics": [
+    "One dependency shader string in generated JS has the same trailing space as the previous committed bundle.",
+    "Imported diagnostic reports preserve raw CRLF and blank-line whitespace so their hashes remain exact."
+  ],
+  "unchanged_logo_newlines": "oktolabs-icon.svg working tree CRLF versus Git-index LF; normalized bytes equal, other assets raw-equal",
+  "disposable_server_shutdowns": "DRAINED",
+  "personal_provider_credentials_used": false,
+  "real_provider_client_or_user_service_acceptance": "NOT_CLAIMED",
+  "full_r3": "IN_PROGRESS"
+}

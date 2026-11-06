@@ -305,7 +305,7 @@
       "result": "Generic participant message/handoff creation, request inspection and correlated wait now use a reusable facade and direct canonical MCP. Durable private checkpoints precede transmission, preserve original actor/workspace/session provenance and both 30-day deadlines, recover the same request after response loss/process death and refuse replay after expiry, backward clocks, missing confirmed receipts or incompatible Server discovery. Passive cursor/snapshot/long-poll rechecks current authority without presence or lease mutation; fresh HTTP authentication also bypasses the positive cache. CLI output preserves confirmed creation IDs if subsequent observation fails; timeout/Ctrl+C never cancel or resubmit work. 614 distinct installed cases passed across overlapping campaigns, with one optional tokenizer measurement skipped. The final 457-Python-file wheel, seven static assets and 160 migrations match source bytes; only the CLI profile-directory guard differs from the broad-qualified wheel. Initial failures and six synthetic fixture-key redactions are recorded. Both initial installed revocation failures were old HTTP-200 expectations; strict HTTP-401 and independent stale-context transaction checks passed afterward. Core/Connector are unchanged. Synthetic native peers do not qualify real productive M1/M2 or two-client cooperation; PR-05 and full R3 remain in progress."
     },
     "PR-06": {
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "dependencies": [
         "PR-00"
       ],
@@ -368,15 +368,34 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ]
     },
     "PR-07": {
-      "status": "NOT_STARTED",
+      "status": "IMPLEMENTED",
       "dependencies": [
         "PR-06"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+      ]
     },
     "PR-08": {
       "status": "NOT_STARTED",
@@ -4964,12 +4983,12 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md"
       ],
-      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-07 now supplies implemented client reconciliation and verified browser subcontracts; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
         "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
@@ -5049,12 +5068,12 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md"
       ],
-      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-07 now supplies implemented client reconciliation and verified browser subcontracts; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
         "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
@@ -5131,12 +5150,12 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md"
       ],
-      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-07 now supplies implemented client reconciliation and verified browser subcontracts; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
         "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
@@ -5212,12 +5231,12 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md"
       ],
-      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-07 now supplies implemented client reconciliation and verified browser subcontracts; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
         "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
@@ -5231,7 +5250,7 @@
     },
     "ATN-05": {
       "title": "SSE e reconciliaÃ§Ã£o da visÃ£o",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "milestones": [
         "PR-06"
       ],
@@ -5273,7 +5292,11 @@
         "src/okto_nexus/application/server_effective_policy.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/adapters/outbound/sqlite/connection.py",
-        "src/okto_nexus/migrations/163_server_effective_policy.sql"
+        "src/okto_nexus/migrations/163_server_effective_policy.sql",
+        "frontend/src/attentionController.ts",
+        "frontend/src/hooks/useAttention.ts",
+        "frontend/src/attentionTypes.ts",
+        "frontend/src/api.ts"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -5293,70 +5316,160 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
-      "platform": "Windows-11-10.0.26300-SP0",
+      "result": "Attention dashboard and workspace badge now consume the canonical versioned projection. A single client queue batches SSE invalidations, handles opaque cursors/CAS and bounded time refresh, preserves stale authorized snapshots, and clears protected content on forbidden/disabled states. Exact references reuse approval/question, handoff, message, execution and cleanup controls. Canonical revision/claim fences, confirmation, draft preservation on transient reads, explicit invalidation and post-success modal guard reset are implemented. 100 final frontend tests and 10 installed backend contracts passed with zero failures/errors/skips; overlapping reports are not summed. Real Chrome/HTTP/SQLite campaigns exercised preferences, concurrent approval conflict, verification, synthetic native permission/question/denial/120-second expiry, reconnection, feature toggle, stale/403 rendering, keyboard focus and light/dark/narrow/escaped-text presentation. The final 478-Python/163-migration/7-asset wheel matches source and installed bytes. These synthetic-peer campaigns do not qualify real providers, external clients, native user services or full R3.",
+      "platform": "Windows-11-10.0.26300-SP0 / Chrome",
       "limitations": [
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
-        "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
-        "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
-        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
-        "A preexisting SQLite file-replacement test cannot unlink the open database on Windows (WinError32); the previous installed wheel reproduces it. This is not counted as passing coverage."
+        "Chrome and disposable Windows Server fixtures used synthetic native peers; no real provider/client/user-service or M1/M2 acceptance is inferred.",
+        "Accessibility qualification covers keyboard focus, semantic accessibility snapshots and layout, not operation of a named screen-reader product.",
+        "Browser 503/403 failures were injected at the response boundary; installed backend tests separately cover actual authorization/revocation contracts.",
+        "Every real source/action mapping is tested; not every classifier was separately seeded in a browser."
       ],
       "subscopes": {
         "tcp_sse_metadata_batching_gap_revocation": "VERIFIED",
         "bounded_refresh_contract": "VERIFIED",
-        "browser_reconciliation_and_stale_rendering": "NOT_RUN"
+        "browser_reconciliation_and_stale_rendering": "VERIFIED",
+        "controller_queue_gap_timers_auth_and_cursor": "VERIFIED"
       }
     },
     "ATN-06": {
       "title": "UI integrada",
-      "status": "NOT_STARTED",
+      "status": "IMPLEMENTED",
       "milestones": [
         "PR-07"
       ],
       "dependencies": [
         "PR-06"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/views/AttentionView.tsx",
+        "frontend/src/attentionPresentation.ts",
+        "frontend/src/attentionNavigation.ts",
+        "frontend/src/components/AttentionInspection.tsx",
+        "frontend/src/components/AgentRuntimeAdministration.tsx",
+        "docs/attention.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+      ],
+      "result": "Attention dashboard and workspace badge now consume the canonical versioned projection. A single client queue batches SSE invalidations, handles opaque cursors/CAS and bounded time refresh, preserves stale authorized snapshots, and clears protected content on forbidden/disabled states. Exact references reuse approval/question, handoff, message, execution and cleanup controls. Canonical revision/claim fences, confirmation, draft preservation on transient reads, explicit invalidation and post-success modal guard reset are implemented. 100 final frontend tests and 10 installed backend contracts passed with zero failures/errors/skips; overlapping reports are not summed. Real Chrome/HTTP/SQLite campaigns exercised preferences, concurrent approval conflict, verification, synthetic native permission/question/denial/120-second expiry, reconnection, feature toggle, stale/403 rendering, keyboard focus and light/dark/narrow/escaped-text presentation. The final 478-Python/163-migration/7-asset wheel matches source and installed bytes. These synthetic-peer campaigns do not qualify real providers, external clients, native user services or full R3.",
+      "platform": "Windows-11-10.0.26300-SP0 / Chrome",
+      "limitations": [
+        "Chrome and disposable Windows Server fixtures used synthetic native peers; no real provider/client/user-service or M1/M2 acceptance is inferred.",
+        "Accessibility qualification covers keyboard focus, semantic accessibility snapshots and layout, not operation of a named screen-reader product.",
+        "Browser 503/403 failures were injected at the response boundary; installed backend tests separately cover actual authorization/revocation contracts.",
+        "Every real source/action mapping is tested; not every classifier was separately seeded in a browser."
+      ],
+      "subscopes": {
+        "menu_badge_filters_and_exact_navigation": "VERIFIED",
+        "shared_canonical_controls": "VERIFIED"
+      }
     },
     "ATN-07": {
       "title": "interaÃ§Ã£o segura",
-      "status": "NOT_STARTED",
+      "status": "IMPLEMENTED",
       "milestones": [
         "PR-07"
       ],
       "dependencies": [
         "PR-06"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "frontend/src/views/ApprovalsView.tsx",
+        "frontend/src/views/HandoffsView.tsx",
+        "frontend/src/components/CanonicalNativeDecision.tsx",
+        "frontend/src/components/AgentActionModal.tsx",
+        "frontend/src/modalChanges.ts",
+        "frontend/src/attentionNavigation.ts",
+        "frontend/src/attentionController.ts",
+        "docs/attention.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+      ],
+      "result": "Attention dashboard and workspace badge now consume the canonical versioned projection. A single client queue batches SSE invalidations, handles opaque cursors/CAS and bounded time refresh, preserves stale authorized snapshots, and clears protected content on forbidden/disabled states. Exact references reuse approval/question, handoff, message, execution and cleanup controls. Canonical revision/claim fences, confirmation, draft preservation on transient reads, explicit invalidation and post-success modal guard reset are implemented. 100 final frontend tests and 10 installed backend contracts passed with zero failures/errors/skips; overlapping reports are not summed. Real Chrome/HTTP/SQLite campaigns exercised preferences, concurrent approval conflict, verification, synthetic native permission/question/denial/120-second expiry, reconnection, feature toggle, stale/403 rendering, keyboard focus and light/dark/narrow/escaped-text presentation. The final 478-Python/163-migration/7-asset wheel matches source and installed bytes. These synthetic-peer campaigns do not qualify real providers, external clients, native user services or full R3.",
+      "platform": "Windows-11-10.0.26300-SP0 / Chrome",
+      "limitations": [
+        "Chrome and disposable Windows Server fixtures used synthetic native peers; no real provider/client/user-service or M1/M2 acceptance is inferred.",
+        "Accessibility qualification covers keyboard focus, semantic accessibility snapshots and layout, not operation of a named screen-reader product.",
+        "Browser 503/403 failures were injected at the response boundary; installed backend tests separately cover actual authorization/revocation contracts.",
+        "Every real source/action mapping is tested; not every classifier was separately seeded in a browser."
+      ],
+      "subscopes": {
+        "preference_isolation": "VERIFIED",
+        "canonical_conflict_reload": "VERIFIED",
+        "native_question_permission_and_expiry": "VERIFIED",
+        "draft_and_modal_guard": "VERIFIED"
+      }
     },
     "ATN-08": {
       "title": "acessibilidade",
-      "status": "NOT_STARTED",
+      "status": "IMPLEMENTED",
       "milestones": [
         "PR-07"
       ],
       "dependencies": [
         "PR-06"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "frontend/src/views/AttentionView.tsx",
+        "frontend/src/attentionPresentation.ts",
+        "frontend/src/components/AttentionInspection.tsx",
+        "frontend/src/components/AgentActionModal.tsx",
+        "frontend/src/App.tsx",
+        "docs/attention.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+      ],
+      "result": "Attention dashboard and workspace badge now consume the canonical versioned projection. A single client queue batches SSE invalidations, handles opaque cursors/CAS and bounded time refresh, preserves stale authorized snapshots, and clears protected content on forbidden/disabled states. Exact references reuse approval/question, handoff, message, execution and cleanup controls. Canonical revision/claim fences, confirmation, draft preservation on transient reads, explicit invalidation and post-success modal guard reset are implemented. 100 final frontend tests and 10 installed backend contracts passed with zero failures/errors/skips; overlapping reports are not summed. Real Chrome/HTTP/SQLite campaigns exercised preferences, concurrent approval conflict, verification, synthetic native permission/question/denial/120-second expiry, reconnection, feature toggle, stale/403 rendering, keyboard focus and light/dark/narrow/escaped-text presentation. The final 478-Python/163-migration/7-asset wheel matches source and installed bytes. These synthetic-peer campaigns do not qualify real providers, external clients, native user services or full R3.",
+      "platform": "Windows-11-10.0.26300-SP0 / Chrome",
+      "limitations": [
+        "Chrome and disposable Windows Server fixtures used synthetic native peers; no real provider/client/user-service or M1/M2 acceptance is inferred.",
+        "Accessibility qualification covers keyboard focus, semantic accessibility snapshots and layout, not operation of a named screen-reader product.",
+        "Browser 503/403 failures were injected at the response boundary; installed backend tests separately cover actual authorization/revocation contracts.",
+        "Every real source/action mapping is tested; not every classifier was separately seeded in a browser."
+      ],
+      "subscopes": {
+        "keyboard_focus_and_accessible_structure": "VERIFIED",
+        "themes_and_narrow_layout": "VERIFIED",
+        "external_text_rendered_literally": "VERIFIED"
+      }
     },
     "OBS-01": {
       "title": "vÃ­nculo explÃ­cito",
@@ -7446,9 +7559,18 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Installed operator API projects canonical native and generic pending approvals, with actual registry/recipient and scoped receipt/proposal correlation. PR-07 rendering remains separate."
+      "result": "Canonical pending native/generic approvals are projected and open their existing operator controls. Real browser evidence with synthetic native peers complements installed authorization tests."
     },
     "AT-02": {
       "requirement": "AprovaÃ§Ã£o expirada perde aÃ§Ã£o e preserva referÃªncia histÃ³rica adequada.",
@@ -7497,9 +7619,18 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Known expired native, coordination, proposal and retained legacy approvals lose decision controls and preserve inspection/history. Governance records gain no invented TTL. Installed backend evidence; UI pending in PR-07."
+      "result": "Real 120-second native expiry disables the open decision controls and retains the historical reference, with no decision or native wire reply. Backend expiry/archive variants remain qualified."
     },
     "AT-03": {
       "requirement": "Pergunta destinada ao agente A nÃ£o vira pergunta respondÃ­vel pelo operador como A.",
@@ -7543,7 +7674,9 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
@@ -7589,7 +7722,9 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
@@ -7635,7 +7770,9 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
@@ -7681,7 +7818,9 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
@@ -7732,13 +7871,22 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
+      "result": "Browser seen/snooze changed two preference rows while 32 compared canonical approval/message/delivery/handoff/operation/result tables remained byte-hash identical; independent runtime heartbeat/inventory/lease changes are recorded separately."
     },
     "AT-08": {
       "requirement": "Mesmo episÃ³dio resiste a refresh/reconnect; episÃ³dio posterior do mesmo objeto volta a aparecer.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -7791,13 +7939,22 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Backend episode recurrence now includes durable effective-policy generations, same-clock changes, preference isolation, rollback, no-op/restart stability and coherent read snapshots. Browser reconnect qualification remains pending in PR-07."
+      "result": "Backend policy/claim recurrence and preference isolation remain qualified. Browser refresh/reload and actual offline/online SSE reconnection preserved episode IDs and seen state."
     },
     "AT-09": {
       "requirement": "AÃ§Ã£o com revisÃ£o antiga conflita e recarrega o fato; nÃ£o decide pedido novo.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -7842,9 +7999,18 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Installed source/preference CAS and strict optional canonical decision_revision fence stale forms after failed execution/re-pending. UI conflict reload remains pending in PR-07."
+      "result": "A real concurrent canonical generic rejection advanced the reviewed fact; the UI old-revision decision received 409 and reloaded the rejected source. Preference/source CAS and native/claim fencing retain installed and frontend coverage."
     },
     "AT-10": {
       "requirement": "Lista, total e filtros respeitam a mesma autorizaÃ§Ã£o e paginaÃ§Ã£o.",
@@ -7893,13 +8059,22 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
+      "result": "Exact filtered relation/cursor authorization remains qualified. UI groups use page counts and workspace badge uses its stated base scope; snoozed filter selects all states, and old scoped/pagination responses are discarded."
     },
     "AT-11": {
       "requirement": "Falha de leitura mostra dado stale; 403/revogaÃ§Ã£o remove conteÃºdo protegido.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -7939,13 +8114,22 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "HTTP failure and live SSE clear/stale controls are verified; browser rendering/clearing remains pending."
+      "result": "Browser 503 injection and actual offline reads retain stale snapshots; injected403 removes protected cards/badge. Real feature-off also closes the protected inspection. Installed tests cover actual authorization/revocation; cached canonical drafts are disabled during transient detail failures."
     },
     "AT-12": {
       "requirement": "SSE perdido/gap resulta em resnapshot, sem sumir com pendÃªncias ou duplicar toasts.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -7985,13 +8169,22 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "TCP retention/reconnect/reset and burst contracts are verified; client resnapshot/toast acceptance remains pending."
+      "result": "Installed TCP and controller tests cover reset/gap/bursts and no history notification path; real browser offline/online resnapshot kept both episode IDs and restored live updates."
     },
     "AT-13": {
       "requirement": "Limiares temporais mudam a visÃ£o sem exigir novo evento de domÃ­nio.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -8031,9 +8224,18 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ],
-      "result": "Explicit time changes and refresh deadlines are verified; actual client timer reconciliation remains pending."
+      "result": "Controller deadlines/latency/time-only reconciliation passed deterministic tests. Browser periodic reads were observed every 15 seconds; native 120-second expiry removed decision actions without manual reload."
     },
     "AT-14": {
       "requirement": "Sucesso produtivo com limpeza pendente nÃ£o vira tarefa fracassada.",
@@ -8082,14 +8284,27 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
     "AT-15": {
       "requirement": "UI teclado/foco/leitores de tela/light-dark e textos longos sem execuÃ§Ã£o de HTML.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+      ],
+      "result": "Keyboard/card-removal/modal focus, labelled semantic snapshots, light/dark screenshots and 390 px layout passed. Injected long markup rendered literally with zero image nodes/script execution or horizontal main overflow. No named screen-reader campaign is claimed."
     },
     "AT-16": {
       "requirement": "Consulta em lote nÃ£o cresce em N+1 por ocorrÃªncia/agente.",
@@ -8138,7 +8353,9 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json"
       ],
       "result": "Installed whole-engine queries remain constant across one versus forty distinct agents/profiles/endpoints with 120 mixed occurrences; filtered exact counts, kind-family pruning and cooperative Python-budget failure/recovery are verified. This is bounded batching, not unlimited-scale performance."
     },
@@ -8642,8 +8859,19 @@
     },
     "AC-04": {
       "requirement": "A central oferece aÃ§Ãµes reais e autorizadas, sem virar fonte paralela de lifecycle.",
-      "status": "NOT_VERIFIED",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+      ],
+      "result": "Real canonical operator decisions and verification are reached through shared controls; attention preferences and reads create no parallel productive lifecycle. Native transport qualification uses synthetic peers."
     },
     "AC-05": {
       "requirement": "RepetiÃ§Ã£o/timeout/restart preservam IDs e nÃ£o duplicam mensagens, aprovaÃ§Ãµes ou handoffs dentro do contrato de idempotÃªncia.",
@@ -9364,6 +9592,22 @@
         "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "scope": "PR-07 integrated operator attention",
+      "result": "Attention dashboard and workspace badge now consume the canonical versioned projection. A single client queue batches SSE invalidations, handles opaque cursors/CAS and bounded time refresh, preserves stale authorized snapshots, and clears protected content on forbidden/disabled states. Exact references reuse approval/question, handoff, message, execution and cleanup controls. Canonical revision/claim fences, confirmation, draft preservation on transient reads, explicit invalidation and post-success modal guard reset are implemented. 100 final frontend tests and 10 installed backend contracts passed with zero failures/errors/skips; overlapping reports are not summed. Real Chrome/HTTP/SQLite campaigns exercised preferences, concurrent approval conflict, verification, synthetic native permission/question/denial/120-second expiry, reconnection, feature toggle, stale/403 rendering, keyboard focus and light/dark/narrow/escaped-text presentation. The final 478-Python/163-migration/7-asset wheel matches source and installed bytes. These synthetic-peer campaigns do not qualify real providers, external clients, native user services or full R3.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
       ]
     }
   ]

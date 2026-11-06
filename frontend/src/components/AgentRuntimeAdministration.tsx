@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { RefreshCw, Square, Eye } from 'lucide-react';
-import { api, type AgentRuntimeOverview } from '../api';
+import { api, ApiError, type AgentRuntimeOverview } from '../api';
 import { runtimeApi, type RuntimeSession, type RuntimeOperation } from '../runtimeApi';
 import { SessionClosures, sessionReleased } from '../connectionSessions';
 import { AgentActionModal, AgentModalFooter } from './AgentActionModal';
@@ -10,6 +10,7 @@ import { RuntimeFinalOutput } from './RuntimeTerminal';
 import { useConfirm } from './Confirm';
 import './AgentRuntimeAdministration.css';
 import { HandoffRuntimeProgress } from './HandoffRuntimeProgress';
+import {readAttentionReference} from '../attentionNavigation';
 
 const short = (id: string) => id.length > 22 ? `${id.slice(0,12)}…${id.slice(-6)}` : id;
 const key = (s: RuntimeSession) => `${s.scope.executor_id}:${s.scope.session_id}`;
@@ -19,7 +20,10 @@ const capacityLabels: Record<string,string> = {IDLE_OBSERVED:'Session observed i
   IN_USE:'Capacity in use', RELEASE_PENDING:'Waiting for confirmed release',
   WAITING_CAPACITY:'Waiting for capacity', UNKNOWN:'Availability unknown'};
 
-export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string; onClose: () => void}) {
+export function AgentRuntimeAdministration({agentId, onClose, initialInspection, embedded = false, refreshKey}: {
+  agentId: string; onClose: () => void; embedded?: boolean; refreshKey?: string;
+  initialInspection?: {executorId: string; operationId: string; sessionId?: string | null; workspaceId?: string | null};
+}) {
   const [view, setView] = useState<AgentRuntimeOverview | null>(null);
   const [readAt, setReadAt] = useState(0);
   const [observationClock, setObservationClock] = useState(0);
@@ -37,9 +41,45 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
   const [closeError, setCloseError] = useState('');
   const closures = useRef(new SessionClosures());
   const inspection = useRef<AbortController | null>(null);
+  const inspectedReference = useRef('');
   const live = useRef(true);
   const {confirm, dialog} = useConfirm({agentModal:true});
   useEffect(() => {live.current=true;return () => {live.current=false;inspection.current?.abort();};}, []);
+  useEffect(() => {
+    if (!initialInspection) return;
+    const {executorId, operationId, sessionId, workspaceId} = initialInspection;
+    const reference = JSON.stringify([agentId, executorId, operationId, sessionId, workspaceId]);
+    const changed = reference !== inspectedReference.current;
+    inspectedReference.current = reference;
+    inspection.current?.abort();const controller = new AbortController();inspection.current = controller;
+    if (changed) {setSelected(null);setOperation(null);setTab('history');}
+    setLoading(true);setInspectionError('');
+    void (async () => {
+      let recordLoaded = false;
+      try {
+        const response = await readAttentionReference(api, {kind: 'execution', agent: agentId, operation: operationId,
+          executor: executorId, session: sessionId ?? null, workspace: workspaceId ?? null}, controller.signal);
+        if (controller.signal.aborted) return;
+        if (response.kind !== 'execution') return;
+        const result = response.record;
+        setOperation(result);
+        recordLoaded = true;
+        const session = await runtimeApi.session(result.scope.session_id, controller.signal, executorId);
+        if (controller.signal.aborted) return;
+        if (session.scope.agent_id !== agentId || session.scope.executor_id !== executorId ||
+            session.scope.session_id !== result.scope.session_id || session.scope.workspace_id !== result.scope.workspace_id)
+          throw new Error('The session no longer matches the execution.');
+        setSelected(session);
+      } catch (failure) {
+        if (!controller.signal.aborted) {
+          setSelected(null);
+          if (!recordLoaded || failure instanceof ApiError && [401, 403].includes(failure.status)) setOperation(null);
+          setInspectionError((failure as Error).message);
+        }
+      } finally {if (!controller.signal.aborted) setLoading(false);}
+    })();
+    return () => controller.abort();
+  }, [agentId, initialInspection?.executorId, initialInspection?.operationId, initialInspection?.sessionId, initialInspection?.workspaceId, refreshKey]);
   useEffect(() => {
     const controller = new AbortController(); let timer: number | undefined;
     const load = async () => {
@@ -123,7 +163,7 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
       if (live.current) {setCloseError('');if (result) setClosing(old => ({...old,[key(session)]:result.operation_id}));setReload(n => n+1);}
     }});
   const observationElapsed = Math.max(0, Math.max(observationClock, performance.now()) - readAt);
-  return <AgentActionModal title={`Runtime administration · ${agentId}`} wide guardChanges={false} onClose={onClose}>
+  const content = <>
     {dialog}
     <div className={`runtime-admin ${selected ? 'runtime-admin-has-selection' : ''}`}>
       <div className="runtime-admin-list space-y-5">
@@ -186,16 +226,18 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
         {selected && <button className="btn btn-secondary runtime-admin-back" onClick={() => {setSelected(null);setOperation(null);setInspectionError('');}}>← Instances and executions</button>}
         {loading && <p role="status">Loading session…</p>}
         {inspectionError && <p role="alert" className="text-xs">{inspectionError}</p>}
-        {!selected && !loading && <p className="text-sm text-surface-500">Select an instance or a completed execution to inspect its session.</p>}
+        {!selected && !loading && !initialInspection && <p className="text-sm text-surface-500">Select an instance or a completed execution to inspect its session.</p>}
+        {operation && <details open className="text-xs space-y-2"><summary className="cursor-pointer font-semibold">Execution record · {operation.executor_stage || operation.admission_state}</summary>
+          <p className="break-all">{operation.operation_id}</p>
+          <p>{operation.possible_effect ? 'The operation may have reached the runtime.' : 'No possible effect is reported.'}</p>
+          {operation.error && <p role="alert">{operation.error.code}: {operation.error.message}</p>}
+          <RuntimeFinalOutput text={(operation.result?.output_text || 'No final output recorded.')+(operation.result?.output_truncated ? '\n[Output truncated]' : '')}/>
+        </details>}
         {selected && <>
           <header className="space-y-2"><h3 className="font-semibold text-sm">Session inspector</h3><p className="text-xs break-all">{selected.scope.session_id}</p>
             <p className="text-xs text-surface-500">{selected.lifecycle_state} · Lease {selected.lease_state} · Workspace {selected.scope.workspace_id}</p>
             {selected.durable_release_pending && <p role="status" className="text-xs">Waiting for runtime confirmation of closure.</p>}
           </header>
-          {operation && <details open className="text-xs space-y-2"><summary className="cursor-pointer font-semibold">Execution result · {operation.executor_stage || operation.admission_state}</summary>
-            {operation.error && <p role="alert">{operation.error.code}: {operation.error.message}</p>}
-            <RuntimeFinalOutput text={(operation.result?.output_text || 'No final output recorded.')+(operation.result?.output_truncated ? '\n[Output truncated]' : '')}/>
-          </details>}
           <div className="flex gap-2" role="group" aria-label="Session inspection mode">
             <button className="btn btn-secondary" aria-pressed={tab==='tail'} onClick={() => setTab('tail')}>Live tail</button>
             <button className="btn btn-secondary" aria-pressed={tab==='history'} onClick={() => setTab('history')}>History</button>
@@ -204,6 +246,9 @@ export function AgentRuntimeAdministration({agentId, onClose}: {agentId: string;
         </>}
       </div>
     </div>
-    <AgentModalFooter><button className="btn btn-secondary" onClick={onClose}>Close</button></AgentModalFooter>
-  </AgentActionModal>;
+  </>;
+  return embedded ? <section aria-label={`Runtime administration for ${agentId}`}>{content}</section> :
+    <AgentActionModal title={`Runtime administration · ${agentId}`} wide guardChanges={false} onClose={onClose}>
+      {content}<AgentModalFooter><button className="btn btn-secondary" onClick={onClose}>Close</button></AgentModalFooter>
+    </AgentActionModal>;
 }

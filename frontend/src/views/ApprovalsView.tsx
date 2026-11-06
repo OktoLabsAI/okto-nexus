@@ -14,11 +14,15 @@ import {
   RefreshCw,
   ShieldOff,
 } from "lucide-react";
-import { api, type ApprovalDetail, type ApprovalRow } from "../api";
+import { api, ApiError, type ApprovalDetail, type ApprovalRow } from "../api";
 import { PageContainer } from "../components/PageContainer";
 import { useWorkspaceName } from "../components/WorkspaceNames";
 import { NativeApprovalInput } from "../components/NativeApprovalInput";
 import { CanonicalNativeDecision } from "../components/CanonicalNativeDecision";
+import { useConfirm } from '../components/Confirm';
+import { approvalReviewKey, decideReviewedApproval, readAttentionReference } from '../attentionNavigation';
+import { afterConfirmedModalChange } from '../modalChanges';
+import { useAgentModalChanges } from '../components/AgentActionModal';
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -67,10 +71,11 @@ function actionChip(action: string): string {
     : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300";
 }
 
-function DetailPanel({ detail, busy = false, onApprove, onChanged = () => {} }: {
+function DetailPanel({ detail, busy = false, onApprove, onChanged = () => {}, allowDecision = true }: {
   detail: ApprovalDetail | null; busy?: boolean;
   onApprove?: (response?: Record<string, unknown>) => void;
   onChanged?: () => void;
+  allowDecision?: boolean;
 }) {
   const workspaceName = useWorkspaceName(detail?.workspace_id);
   if (detail === null) {
@@ -99,9 +104,9 @@ function DetailPanel({ detail, busy = false, onApprove, onChanged = () => {} }: 
         )}
       </div>
       {detail.status === "archived" && <p role="status">Archived by {detail.archived_by}. Previous status: {detail.original_status}. Archiving does not send a decision to the runtime.</p>}
-      {detail.status !== "archived" && detail.action === "runtime_native_approval" && <NativeApprovalInput key={detail.approval_id}
+      {allowDecision && detail.status !== "archived" && detail.action === "runtime_native_approval" && <NativeApprovalInput key={approvalReviewKey(detail)}
         detail={detail} busy={busy} onApprove={onApprove ?? (() => {})} />}
-      {detail.status !== "archived" && detail.action === "execution.native.respond" && <CanonicalNativeDecision key={detail.approval_id}
+      {allowDecision && detail.status !== "archived" && detail.action === "execution.native.respond" && <CanonicalNativeDecision key={approvalReviewKey(detail)}
         detail={detail} onChanged={onChanged} />}
       <div>
         <div className="text-[11px] uppercase tracking-wide text-surface-400 dark:text-surface-500 mb-1">
@@ -123,6 +128,113 @@ function DetailPanel({ detail, busy = false, onApprove, onChanged = () => {} }: 
       )}
     </div>
   );
+}
+
+function ApprovalDecisionControls({row, busy, onReview, onDecide}: {
+  row: ApprovalRow; busy: boolean; onReview: () => void;
+  onDecide: (decision: 'approve' | 'reject', justification?: string) => Promise<void>;
+}) {
+  const [rejecting, setRejecting] = useState(false);
+  const [justification, setJustification] = useState('');
+  const {confirm, dialog} = useConfirm({agentModal: true});
+  if (row.status !== 'pending') return null;
+  if (row.action === 'execution.native.respond') return <button className="btn btn-secondary"
+    onClick={onReview} data-testid={`approve-${row.approval_id}`}>Review request</button>;
+  return <>{dialog}{rejecting ? <span className="inline-flex flex-wrap gap-1">
+    <input autoFocus aria-label="Rejection justification" className={inputCls} placeholder="Justification (sent to the agent)"
+      value={justification} disabled={busy} onChange={e => setJustification(e.target.value)}
+      onKeyDown={e => {if (e.key === 'Enter' && !busy) void onDecide('reject', justification);}}
+      data-testid={`justification-${row.approval_id}`} />
+    <button className="btn btn-danger" disabled={busy} onClick={() => void onDecide('reject', justification)}
+      data-testid={`confirm-reject-${row.approval_id}`}>Confirm reject</button>
+    <button className="btn btn-secondary" disabled={busy} onClick={() => {setRejecting(false);setJustification('');}}>Cancel</button>
+  </span> : <>
+    <button className="btn btn-secondary" disabled={busy} data-testid={`approve-${row.approval_id}`}
+      onClick={() => row.action === 'runtime_native_approval' ? onReview() : confirm({title: 'Approve this request?',
+        body: <p>The reviewed {row.action} request will be executed with its current canonical authority.</p>,
+        onConfirm: () => onDecide('approve')})}>{row.action === 'runtime_native_approval' ? 'Review request' : 'Approve'}</button>
+    <button className="btn btn-secondary ml-1" disabled={busy} data-testid={`reject-${row.approval_id}`}
+      onClick={() => {setRejecting(true);setJustification('');}}>Reject</button>
+  </>}</>;
+}
+
+export function ApprovalInspection({approvalId, workspace, allowDecision, onChanged, refreshKey}: {
+  approvalId: string; workspace: string | null; allowDecision: boolean; onChanged: () => void; refreshKey?: string;
+}) {
+  const changes = useAgentModalChanges();
+  const [detail, setDetail] = useState<ApprovalDetail | null>(null);
+  const [readCurrent, setReadCurrent] = useState(false);
+  const [error, setError] = useState('');
+  const [readError, setReadError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const canDecide = useRef(false);
+  canDecide.current = readCurrent && allowDecision && !busy;
+  const [notice, setNotice] = useState('');
+  const sequence = useRef(0);
+  const reviewed = useRef<string | null>(null);
+  const request = useRef<AbortController | null>(null);
+  const reload = useCallback(async () => {
+    const current = ++sequence.current;
+    request.current?.abort();const controller = new AbortController();request.current = controller;
+    try {
+      const response = await readAttentionReference(api, {kind: 'approval', id: approvalId, workspace, decide: false}, controller.signal);
+      if (current !== sequence.current) return;
+      if (response.kind !== 'approval') return;
+      const value = response.record;
+      const review = approvalReviewKey(value);
+      if (reviewed.current !== null && reviewed.current !== review) {
+        setNotice('The canonical approval changed. Review the updated record before making a new decision.');
+        if (allowDecision) changes?.reset();
+      }
+      reviewed.current = review;
+      setDetail(value);
+      setReadCurrent(true);
+      setReadError('');
+    } catch (failure) {
+      if (current === sequence.current) {
+        setReadCurrent(false);
+        if (failure instanceof ApiError && [401, 403, 404].includes(failure.status)) setDetail(null);
+        setReadError((failure as Error).message);
+      }
+    }
+  }, [approvalId, workspace, allowDecision, changes]);
+  useEffect(() => {reviewed.current = null;setDetail(null);setReadCurrent(false);setError('');setReadError('');setNotice('');}, [approvalId, workspace]);
+  useEffect(() => {void reload();return () => {sequence.current++;request.current?.abort();};}, [reload, refreshKey]);
+  const decide = async (choice: 'approve' | 'reject', justification?: string, response?: Record<string, unknown>) => {
+    if (!detail || !canDecide.current) return;
+    setBusy(true);setError('');
+    try {
+      await afterConfirmedModalChange(changes, async () => {
+        const result = await decideReviewedApproval(api, detail, choice, justification?.trim() || undefined, response) as
+          {approval_id: string; status: string};
+        if (result.approval_id !== detail.approval_id || result.status !== (choice === 'approve' ? 'approved' : 'rejected'))
+          throw new Error('The decision result does not match the reviewed approval. Refresh its canonical record.');
+      });
+    }
+    catch (failure) {
+      setError(failure instanceof ApiError && failure.status === 409
+        ? 'The approval changed. Its current record has been reloaded; review it before deciding again.' : (failure as Error).message);
+    } finally {setBusy(false);setReadCurrent(false);await reload();onChanged();}
+  };
+  return <section className="space-y-3" aria-label="Canonical approval">
+    <div className="flex flex-wrap items-center gap-2"><p className="break-all text-sm">{approvalId}</p>
+      <button className="btn btn-secondary" disabled={busy} onClick={() => {setError('');void reload();}}>Refresh record</button></div>
+    {error && <p role="alert" className="text-sm">{error}</p>}
+    {readError && <p role="alert" className="text-sm">{readError}</p>}
+    {notice && <p role="status" className="text-sm">{notice}</p>}
+    {!detail && !error && !readError && <p role="status">Loading approval…</p>}
+    {detail && <>
+      <p className="text-sm">{detail.status} · {detail.action} · Requested by {detail.agent_id}</p>
+      {!readCurrent && <p role="status" className="text-sm">The last authorized record and your draft are retained. Refresh the record before deciding.</p>}
+      <fieldset disabled={!readCurrent} className="space-y-3">
+      <DetailPanel detail={detail} busy={busy} allowDecision={allowDecision}
+        onApprove={response => void decide('approve', undefined, response)} onChanged={() => {void reload();onChanged();}} />
+      {allowDecision && detail.action !== 'execution.native.respond' && <ApprovalDecisionControls key={approvalReviewKey(detail)} row={detail} busy={busy}
+        onReview={() => {}} onDecide={decide} />}
+      </fieldset>
+      {!allowDecision && <p className="text-xs text-surface-500">Inspection only. Decision controls are available from a current actionable occurrence.</p>}
+    </>}
+  </section>;
 }
 
 export function ApprovalsView({
@@ -163,8 +275,6 @@ export function ApprovalsView({
   const [interceptionOn, setInterceptionOn] = useState<boolean | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
-  const [rejecting, setRejecting] = useState<string | null>(null);
-  const [justification, setJustification] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
   const [detail, setDetail] = useState<ApprovalDetail | null>(null);
@@ -249,12 +359,12 @@ export function ApprovalsView({
   ) => {
     setBusy(approvalId);
     try {
-      await api.decideApproval(approvalId, decision, just?.trim() || undefined, response);
+      const reviewed = detail?.approval_id === approvalId ? detail : rows.find(row => row.approval_id === approvalId);
+      if (!reviewed) throw new Error('Refresh the canonical approval before deciding.');
+      await decideReviewedApproval(api, reviewed, decision, just?.trim() || undefined, response);
       detailRequest.current += 1;
       setDetailOpen(null);
       setDetail(null);
-      setRejecting(null);
-      setJustification("");
       setActionError(null);
     } catch (exc) {
       // Includes CONFLICT (409): someone decided first — the reload below
@@ -272,7 +382,7 @@ export function ApprovalsView({
     try {
       await api.archiveApproval(approvalId);
       detailRequest.current += 1;
-      setDetailOpen(null); setDetail(null); setRejecting(null); setActionError(null);
+      setDetailOpen(null); setDetail(null); setActionError(null);
     } catch (exc) {
       setActionError((exc as Error).message);
     } finally {
@@ -348,7 +458,7 @@ export function ApprovalsView({
             <button key={value} role="tab" aria-selected={status === value}
               className={`rounded-lg px-3 py-2 text-xs font-medium ${status === value
                 ? "bg-accent-600 text-white" : "bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300"}`}
-              onClick={() => { setStatus(value); setDetailOpen(null); setRejecting(null); }}>
+              onClick={() => { setStatus(value); setDetailOpen(null); }}>
               {value === "all" ? "All" : value[0].toUpperCase() + value.slice(1)}
               {" "}
               <span className="ml-2 opacity-75">{filtered.filter(row => value === "all" || row.status === value).length}</span>
@@ -457,67 +567,9 @@ export function ApprovalsView({
                         {row.policy_id.slice(0, 12)}…
                       </td>
                       <td className="py-2 pr-0 text-right whitespace-nowrap">
-                        {row.action === "execution.native.respond" ? <button className="btn btn-secondary"
-                          onClick={() => detailOpen !== row.approval_id && openDetail(row.approval_id)}
-                          data-testid={`approve-${row.approval_id}`}>Review request</button> : rejecting === row.approval_id ? (
-                          <span className="inline-flex items-center gap-1">
-                            <input
-                              autoFocus
-                              className={`${inputCls} !border-red-300 dark:!border-red-500/40 w-48`}
-                              placeholder="Justification (sent to the agent)"
-                              value={justification}
-                              onChange={(e) => setJustification(e.target.value)}
-                              onKeyDown={(e) =>
-                                e.key === "Enter" &&
-                                decide(row.approval_id, "reject", justification)
-                              }
-                              data-testid={`justification-${row.approval_id}`}
-                            />
-                            <button
-                              className="text-[11px] px-2 py-1 rounded-lg bg-red-600 text-white font-medium disabled:opacity-50"
-                              disabled={busy === row.approval_id}
-                              onClick={() =>
-                                decide(row.approval_id, "reject", justification)
-                              }
-                              data-testid={`confirm-reject-${row.approval_id}`}
-                            >
-                              Confirm reject
-                            </button>
-                            <button
-                              className="text-[11px] px-2 py-1 rounded-lg border border-surface-200 dark:border-surface-700 text-surface-500"
-                              onClick={() => {
-                                setRejecting(null);
-                                setJustification("");
-                              }}
-                            >
-                              Cancel
-                            </button>
-                          </span>
-                        ) : (
-                          <>
-                            <button
-                              className="text-[11px] px-2 py-1 rounded-lg bg-emerald-600 text-white font-medium mr-1 disabled:opacity-50"
-                              disabled={busy === row.approval_id}
-                              onClick={() => row.action === "runtime_native_approval"
-                                ? (detailOpen !== row.approval_id && openDetail(row.approval_id))
-                                : decide(row.approval_id, "approve")}
-                              data-testid={`approve-${row.approval_id}`}
-                            >
-                              {row.action === "runtime_native_approval" ? "Review request" : "Approve"}
-                            </button>
-                            <button
-                              className="text-[11px] px-2 py-1 rounded-lg border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 disabled:opacity-50"
-                              disabled={busy === row.approval_id}
-                              onClick={() => {
-                                setRejecting(row.approval_id);
-                                setJustification("");
-                              }}
-                              data-testid={`reject-${row.approval_id}`}
-                            >
-                              Reject
-                            </button>
-                          </>
-                        )}
+                        <ApprovalDecisionControls key={`${row.approval_id}:${row.decision_revision}`} row={row}
+                          busy={busy === row.approval_id} onReview={() => detailOpen !== row.approval_id && openDetail(row.approval_id)}
+                          onDecide={(choice, justification) => decide(row.approval_id, choice, justification)} />
                         {archiveButton(row)}
                       </td>
                     </tr>

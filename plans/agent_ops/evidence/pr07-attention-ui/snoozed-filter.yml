@@ -1,0 +1,160 @@
+- generic [ref=f1e3]:
+  - banner [ref=f1e4]:
+    - button "Collapse menu" [ref=f1e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=f1e9]
+    - generic [ref=f1e10]: / Attention
+    - generic [ref=f1e11]:
+      - combobox "Workspace scope" [ref=f1e12]:
+        - option "All workspaces" [selected]
+        - option "Workspace 1"
+      - generic [ref=f1e13]: ● Live
+      - button "Refresh Attention" [ref=f1e165] [cursor=pointer]
+      - button [ref=f1e19] [cursor=pointer]
+  - generic [ref=f1e23]:
+    - complementary [ref=f1e24]:
+      - navigation [ref=f1e26]:
+        - heading "Observability" [level=3] [ref=f1e27]
+        - list [ref=f1e28]:
+          - listitem [ref=f1e29]:
+            - button "Attention 2 need action, 0 to watch, out of date" [ref=f1e381] [cursor=pointer]:
+              - generic [ref=f1e34]: Attention
+              - generic "2 need action, 0 to watch, out of date" [ref=f1e382]: 2*
+          - listitem [ref=f1e35]:
+            - button "Graph" [ref=f1e36] [cursor=pointer]
+          - listitem [ref=f1e45]:
+            - button "Messages 2" [ref=f1e168] [cursor=pointer]:
+              - generic [ref=f1e50]: Messages
+              - generic "Unread messages addressed to the operator" [ref=f1e169]: "2"
+          - listitem [ref=f1e51]:
+            - button "Handoffs" [ref=f1e52] [cursor=pointer]
+          - listitem [ref=f1e56]:
+            - button "Meta-harness 2" [ref=f1e170] [cursor=pointer]:
+              - generic [ref=f1e61]: Meta-harness
+              - generic "Unread messages addressed to the operator" [ref=f1e171]: "2"
+          - listitem [ref=f1e62]:
+            - button "Events" [ref=f1e63] [cursor=pointer]
+          - listitem [ref=f1e67]:
+            - button "Artifacts" [ref=f1e68] [cursor=pointer]
+          - listitem [ref=f1e74]:
+            - button "Workspaces" [ref=f1e75] [cursor=pointer]
+          - listitem [ref=f1e79]:
+            - button "Agents" [ref=f1e80] [cursor=pointer]
+          - listitem [ref=f1e87]:
+            - button "Registry" [ref=f1e88] [cursor=pointer]
+          - listitem [ref=f1e94]:
+            - button "Policies" [ref=f1e95] [cursor=pointer]
+          - listitem [ref=f1e99]:
+            - button "Guardrails" [ref=f1e100] [cursor=pointer]
+          - listitem [ref=f1e104]:
+            - button "Communication" [ref=f1e105] [cursor=pointer]
+          - listitem [ref=f1e109]:
+            - button "Approvals 2" [ref=f1e172] [cursor=pointer]:
+              - generic [ref=f1e114]: Approvals
+              - generic [ref=f1e173]: "2"
+          - listitem [ref=f1e115]:
+            - button "Runtimes" [ref=f1e116] [cursor=pointer]
+          - listitem [ref=f1e121]:
+            - button "Execution log" [ref=f1e122] [cursor=pointer]
+    - main [ref=f1e126]:
+      - generic [ref=f1e176]:
+        - generic [ref=f1e177]:
+          - generic [ref=f1e178]:
+            - heading "Attention" [active] [level=1] [ref=f1e179]
+            - paragraph [ref=f1e183]: Review pending decisions, blocked work and results.
+          - button "Refresh attention" [disabled] [ref=f1e184]: Refreshing…
+        - group "Filter attention" [ref=f1e190]:
+          - generic [ref=f1e192]:
+            - text: Agent ID
+            - textbox "Agent ID" [ref=f1e193]:
+              - /placeholder: All agents
+          - generic [ref=f1e194]:
+            - text: Category
+            - combobox "Category" [ref=f1e195]:
+              - option "All categories" [selected]
+              - option "Needs action"
+              - option "Watch"
+          - generic [ref=f1e196]:
+            - text: Kind
+            - combobox "Kind" [ref=f1e197]:
+              - option "All kinds" [selected]
+              - option "Approval awaiting review"
+              - option "Runtime permission requested"
+              - option "Runtime question for the operator"
+              - option "Question waiting for an agent"
+              - option "Handoff awaiting verification"
+              - option "Execution outcome unknown"
+              - option "Delivery needs attention"
+              - option "Runtime recovery needs attention"
+              - option "Execution authorization changed"
+              - option "Execution host disconnected"
+              - option "Handoff still unclaimed"
+              - option "Result ready to inspect"
+              - option "Cleanup needs inspection"
+          - generic [ref=f1e198]:
+            - text: State
+            - combobox "State" [ref=f1e199]:
+              - option "Active attention"
+              - option "Open at source"
+              - option "Resolved at source"
+              - option "Expired"
+              - option "All states" [selected]
+          - generic [ref=f1e200]:
+            - text: Priority
+            - combobox "Priority" [ref=f1e201]:
+              - option "All priorities" [selected]
+              - option "High"
+              - option "Medium"
+              - option "Standard"
+          - generic [ref=f1e202]:
+            - text: Viewing state
+            - combobox "Viewing state" [ref=f1e203]:
+              - option "Seen and unseen"
+              - option "Unseen"
+              - option "Seen"
+              - option "Snoozed" [selected]
+        - paragraph [ref=f1e204]: Seen only records that you reviewed an item. Snooze hides attention temporarily; it does not approve, pause or resolve work.
+        - paragraph [ref=f1e387]: This snapshot may be out of date. Refresh to check the current state. Viewing preferences are unavailable until it refreshes.
+        - generic [ref=f1e388]:
+          - paragraph [ref=f1e389]:
+            - strong [ref=f1e390]: "1"
+            - text: matching item · 1 shown
+          - paragraph [ref=f1e391]:
+            - time [ref=f1e392]: Snapshot just now
+            - text: · Live updates
+        - region [ref=f1e393]:
+          - heading "Needs action 1 matching items" [level=2] [ref=f1e394]:
+            - text: Needs action
+            - generic "1 matching items" [ref=f1e395]: "1"
+          - list [ref=f1e396]:
+            - listitem [ref=f1e397]:
+              - article [ref=f1e398]:
+                - generic [ref=f1e399]:
+                  - generic [ref=f1e400]:
+                    - generic [ref=f1e401]:
+                      - generic [ref=f1e402]: Medium priority
+                      - generic [aria-hidden] [ref=f1e403]: ·
+                      - generic [ref=f1e404]: Current source
+                      - generic [ref=f1e405]: Snoozed
+                    - heading "Approval awaiting review" [level=3] [ref=f1e409]
+                    - paragraph [ref=f1e410]: A canonical approval needs review by its authorized recipient.
+                  - time [ref=f1e411]: 7m ago
+                - generic [ref=f1e412]:
+                  - generic [ref=f1e413]:
+                    - term [ref=f1e414]: Agent
+                    - definition [ref=f1e415]: browser-approval-author
+                  - generic [ref=f1e416]:
+                    - term [ref=f1e417]: Workspace
+                    - definition [ref=f1e418]:
+                      - text: Workspace 1
+                      - generic [ref=f1e419]: 65b974ab51ab6372d8b5acc650ee65172ac1328aa1429e4a759331ab3f426442
+                  - generic [ref=f1e420]:
+                    - term [ref=f1e421]: Approval
+                    - definition [ref=f1e422]: apr_b5b4a70d6f144aaf995eddaa66bd7514
+                - paragraph [ref=f1e423]:
+                  - text: Hidden from active attention until
+                  - time [ref=f1e424]: 06/11/2026, 21:18:17
+                  - text: .
+                - generic [ref=f1e425]:
+                  - button "Review approval" [ref=f1e426] [cursor=pointer]
+                  - 'button "Mark seen: Approval awaiting review, apr_b5b4a70d6f144aaf995eddaa66bd7514" [disabled] [ref=f1e430]': Mark seen
+                  - button "Show again" [disabled] [ref=f1e434]

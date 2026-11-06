@@ -416,3 +416,14 @@ O wheel de entrega remove apenas uma linha vazia final; equivalência sintática
 - **403 casos instalados distintos passaram**, sem skips. Um teste preexistente de exclusão de SQLite aberto falha no Windows também no wheel anterior; foi registrado e desmarcado na suíte instalada, sem contar como aprovação.
 - Migração 163 aditiva; 161/162 intactas. ATN-01 implementado, recorrência backend verificada; AT-08/PR-06 seguem com reconciliação/browser pendentes. PR-07/UI e demais campanhas R3 continuam abertos.
 - Evidência: [política efetiva](plans/agent_ops/evidence/pr06-attention-effective-policy.md). Core e Connector não mudaram neste marco.
+
+## 2026-11-06 — PR-07: central de atenção integrada
+
+- Menu, badge por workspace, filtros e grupos Needs action/Watch ligados à projeção canônica. Visto/adiado permanecem preferências; inspeções abrem os controles existentes.
+- Cliente serializa leituras/escritas, agrupa SSE e reconcilia por prazo, reconnect e conflitos. Falhas retêm snapshot desatualizado; negação/desativação limpa cards, contadores e inspeção.
+- Confirmação e fences de revisão/claim preservados; rascunhos sobrevivem a refresh e falha transitória. Sucesso confirmado limpa o guard de mudanças; revisões novas exigem nova revisão do formulário.
+- **100 testes frontend e 10 contratos do wheel instalado passaram**, sem falhas/erros/skips. Relatórios dirigidos repetem casos e não são somados. Build passou com aviso já conhecido de chunk grande.
+- Chrome com Server/SQLite reais e peers sintéticos validou visto/adiado, conflito concorrente 409, verificação claim_epoch, pergunta/permissão/recusa/expiração de 120 segundos, rede/reconnect, desativação, foco, temas e largura de 390 px. Injeções 503/403 e HTML de teste estão distinguidas dos fluxos canônicos reais.
+- Wheel final: 478 Python, 163 migrações, 7 assets com conjuntos/bytes idênticos ao fonte/instalado; HTTP serviu os mesmos assets. Instâncias descartáveis encerradas pelo drain canônico.
+- PR-06/07 e ATN-05…08 IMPLEMENTED, com subcontratos verificados; AC-04 verificado. OBS, campanhas reais pendentes e aceite integral R3 continuam abertos. Core/Connector não mudaram neste marco.
+- Evidências e limites: [pr07-attention-ui.md](plans/agent_ops/evidence/pr07-attention-ui.md).

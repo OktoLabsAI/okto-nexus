@@ -2,8 +2,15 @@ import { createContext, useContext, useEffect, useId, useRef, useState, type Rea
 import { createPortal } from 'react-dom';
 import { Maximize2, Minimize2, X } from 'lucide-react';
 import './AgentActionModal.css';
+import {CapturedModalChanges, type ModalChangeReceipt} from '../modalChanges';
 
-const ModalContext = createContext<{footer: HTMLDivElement | null; dismiss: () => void; guard: (dirty: boolean, busy: boolean) => void} | null>(null);
+const ModalContext = createContext<{footer: HTMLDivElement | null; dismiss: () => void; guard: (dirty: boolean, busy: boolean) => void;
+  changes: ModalChangeReceipt} | null>(null);
+
+/** Confirm captured edits only after canonical success or a confirmed new revision. */
+export function useAgentModalChanges(): ModalChangeReceipt | null {
+  return useContext(ModalContext)?.changes ?? null;
+}
 
 export function useAgentModalGuard(dirty: boolean, busy = false) {
   const modal = useContext(ModalContext);
@@ -27,13 +34,17 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
   const [expanded, setExpanded] = useState(false);
   const [discard, setDiscard] = useState(false);
   const [footer, setFooter] = useState<HTMLDivElement | null>(null);
-  const changed = useRef(false);
+  const changed = useRef(new CapturedModalChanges());
+  const changes = useRef<ModalChangeReceipt>({
+    checkpoint: () => changed.current.checkpoint(),
+    reset: checkpoint => {changed.current.reset(checkpoint);if (!changed.current.dirty) setDiscard(false);},
+  }).current;
   const explicit = useRef({dirty: false, busy: false});
   const guard = useRef((dirty: boolean, busy: boolean) => {explicit.current = {dirty, busy};}).current;
   const close = useRef(onClose); close.current = onClose;
   const dismiss = () => {
     if (busy || explicit.current.busy) return;
-    if (guardChanges && (dirty || changed.current || explicit.current.dirty)) setDiscard(true);
+    if (guardChanges && (dirty || changed.current.dirty || explicit.current.dirty)) setDiscard(true);
     else close.current();
   };
   useEffect(() => {
@@ -45,7 +56,7 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
   return createPortal(<dialog ref={dialog} aria-labelledby={titleId} aria-modal="true" data-testid={testId}
     className={`agent-action-modal ${wide ? 'agent-action-modal-wide' : ''} ${compact === 'tall' ? 'agent-action-modal-compact-tall' : compact ? 'agent-action-modal-compact' : ''} ${expanded ? 'agent-action-modal-expanded' : ''}`}
     onCancel={event => {event.preventDefault(); event.stopPropagation(); dismiss();}}>
-    <ModalContext.Provider value={{footer, dismiss, guard}}>
+    <ModalContext.Provider value={{footer, dismiss, guard, changes}}>
       <header className="agent-modal-header">
         <h2 id={titleId}>{title}</h2>
         <button type="button" aria-label={expanded ? 'Restore modal' : 'Expand modal'} title={expanded ? 'Restore' : 'Expand'} onClick={() => setExpanded(v => !v)}>
@@ -58,7 +69,7 @@ export function AgentActionModal({title, children, onClose, wide = false, compac
         <button className="btn btn-secondary" autoFocus onClick={() => setDiscard(false)}>Keep editing</button>
         <button className="btn btn-danger" onClick={() => close.current()}>Discard changes</button>
       </div>}
-      <div className="agent-modal-body" onChangeCapture={() => {changed.current = true;}}>{children}</div>
+      <div className="agent-modal-body" onChangeCapture={() => changed.current.capture()}>{children}</div>
       <div className="agent-modal-footer" ref={setFooter} />
     </ModalContext.Provider>
   </dialog>, document.body);

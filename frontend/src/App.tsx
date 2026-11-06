@@ -7,6 +7,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
+  Bell,
   Bot,
   Brain,
   ChartColumn,
@@ -82,6 +83,10 @@ import { ApprovalsView } from "./views/ApprovalsView";
 import { RuntimesView } from "./views/RuntimesView";
 import { ExecutionLogView } from "./views/ExecutionLogView";
 import { SettingsView } from "./views/SettingsView";
+import { AttentionView } from './views/AttentionView';
+import { AttentionInspection } from './components/AttentionInspection';
+import { useAttention } from './hooks/useAttention';
+import type { AttentionAction, AttentionOccurrence } from './attentionTypes';
 import {
   WorkspaceNamesProvider,
   workspaceDisplayName,
@@ -89,6 +94,7 @@ import {
 import type { WorkspaceListItem } from "./api";
 
 const VIEWS = [
+  { name: "Attention", icon: Bell },
   { name: "Graph", icon: Waypoints },
   { name: "Messages", icon: MessagesSquare },
   { name: "Handoffs", icon: KanbanSquare },
@@ -229,6 +235,45 @@ function Dashboard({
   const [workspace, setWorkspace] = useState<string>(
     () => localStorage.getItem("okto-nexus-workspace") ?? "all",
   );
+  const attention = useAttention({workspace, visible: view === 'Attention',
+    enabled: info?.features?.feature_attention !== false});
+  const [attentionInspection, setAttentionInspection] = useState<{
+    item: AttentionOccurrence; action: AttentionAction;
+  } | null>(null);
+  const [attentionNavigationNotice, setAttentionNavigationNotice] = useState<string | null>(null);
+  const attentionFocusReturn = useRef<HTMLElement | null>(null);
+  const closeAttentionInspection = useCallback(() => {
+    setAttentionInspection(null);
+    window.requestAnimationFrame(() => {
+      const previous = attentionFocusReturn.current;
+      if (previous?.isConnected) previous.focus();
+      else document.querySelector<HTMLElement>('[data-testid="attention-heading"]')?.focus();
+    });
+  }, []);
+  const openAttention = useCallback((item: AttentionOccurrence, action: AttentionAction) => {
+    if (!item.allowed_actions.includes(action)) return;
+    attentionFocusReturn.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setAttentionNavigationNotice(null);
+    setAttentionInspection({item, action});
+  }, []);
+  const currentAttentionItem = attentionInspection && attention.state.page?.items.find(
+    item => item.attention_id === attentionInspection.item.attention_id);
+  useEffect(() => {
+    if (attention.state.status === 'forbidden' || attention.state.status === 'disabled') {
+      setAttentionInspection(null);
+      setAttentionNavigationNotice(null);
+    } else if (attentionInspection && currentAttentionItem &&
+        !currentAttentionItem.allowed_actions.includes(attentionInspection.action)) {
+      closeAttentionInspection();
+      setAttentionNavigationNotice('This action changed. Review the current record before continuing.');
+    }
+    // Absence from a limited page does not prove that the source was removed.
+  }, [attention.state.status, attentionInspection, currentAttentionItem, closeAttentionInspection]);
+  useEffect(() => {
+    setAttentionInspection(null);
+    setAttentionNavigationNotice(null);
+  }, [workspace, view]);
+  const attentionSummary = ['forbidden', 'disabled'].includes(attention.state.status) ? null : attention.state.summary;
   const pickWorkspace = (id: string) => {
     localStorage.setItem("okto-nexus-workspace", id);
     setWorkspace(id);
@@ -243,6 +288,9 @@ function Dashboard({
     setView("Events");
   }, []);
   const [refreshTick, setRefreshTick] = useState(0);
+  useEffect(() => {
+    if (refreshTick) attention.refresh();
+  }, [refreshTick, attention.refresh]);
   // Monotonic counter bumped on every SSE event — drives the side panel's
   // live update while it is open (eventLog itself saturates at 500).
   const [liveTick, setLiveTick] = useState(0);
@@ -609,7 +657,13 @@ function Dashboard({
           {!localOpen && (
             <button
               className="btn btn-secondary !px-2"
-              onClick={() => {if (mayLeaveSettings()) onLock();}}
+              onClick={() => {
+                if (mayLeaveSettings()) {
+                  attention.clear();
+                  setAttentionInspection(null);
+                  onLock();
+                }
+              }}
               title="Sign out" aria-label="Sign out"
             >
               <Lock size={14} />
@@ -783,6 +837,19 @@ function Dashboard({
                         {pendingApprovals}
                       </span>
                     )}
+                    {name === 'Attention' && (Boolean(attentionSummary?.total) ||
+                        attention.state.status === 'stale' || attention.state.status === 'error') && (
+                      <span data-testid="attention-badge"
+                        aria-label={attentionSummary
+                          ? `${attentionSummary.counts.action_required} need action, ${attentionSummary.counts.watch} to watch${attention.state.status === 'stale' ? ', out of date' : ''}`
+                          : 'Attention could not be read'}
+                        title={attentionSummary
+                          ? `${attentionSummary.counts.action_required} need action; ${attentionSummary.counts.watch} to watch. ${workspace === 'all' ? 'All workspaces.' : 'Selected workspace.'}${attention.state.status === 'stale' ? ' Last known counts; refresh is pending.' : ''}`
+                          : 'Attention could not be read'}
+                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-accent-600 text-white text-[10px] font-semibold text-center leading-none">
+                        {attentionSummary ? `${attentionSummary.total}${attention.state.status === 'stale' ? '*' : ''}` : '!'}
+                      </span>
+                    )}
                   </button>
                 </li>
               ))}
@@ -792,6 +859,12 @@ function Dashboard({
       </aside>
 
       <main className="flex-1 min-w-0 overflow-hidden">
+          {view === 'Attention' && <AttentionView
+            state={{...attention.state, notice: attention.state.notice ?? attentionNavigationNotice}}
+            filters={attention.filters} onFiltersChange={attention.setFilters}
+            onRefresh={attention.refresh} onLoadMore={attention.loadMore}
+            onSeen={attention.markSeen} onSnooze={attention.snooze} onOpen={openAttention}
+          />}
           {view === "Graph" && (
             <GraphView
               graph={graph}
@@ -867,6 +940,10 @@ function Dashboard({
           {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} onPendingChange={onSettingsPending} />}
       </main>
       </div>
+      {attentionInspection && attention.state.status !== 'forbidden' && attention.state.status !== 'disabled' &&
+        <AttentionInspection item={currentAttentionItem || attentionInspection.item} action={attentionInspection.action}
+          refreshKey={attention.state.page?.observed_at ?? attention.state.summary?.observed_at}
+          onClose={closeAttentionInspection} onChanged={attention.refresh} />}
       {toasts.length > 0 && (
         <div
           className="fixed bottom-4 right-4 z-50 flex w-80 flex-col gap-2"

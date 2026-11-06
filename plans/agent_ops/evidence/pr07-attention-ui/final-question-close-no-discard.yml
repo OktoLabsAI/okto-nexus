@@ -1,0 +1,305 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Attention
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+        - option "Workspace 1"
+      - generic [ref=e13]: ● Live
+      - button "Refresh Attention" [ref=e345] [cursor=pointer]
+      - button [ref=e19] [cursor=pointer]
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - heading "Observability" [level=3] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - button "Attention 3 need action, 2 to watch" [ref=e651] [cursor=pointer]:
+              - generic [ref=e34]: Attention
+              - generic "3 need action, 2 to watch" [ref=e652]: "5"
+          - listitem [ref=e35]:
+            - button "Graph" [ref=e36] [cursor=pointer]
+          - listitem [ref=e45]:
+            - button "Messages 2" [ref=e260] [cursor=pointer]:
+              - generic [ref=e50]: Messages
+              - generic "Unread messages addressed to the operator" [ref=e261]: "2"
+          - listitem [ref=e51]:
+            - button "Handoffs" [ref=e52] [cursor=pointer]
+          - listitem [ref=e56]:
+            - button "Meta-harness 2" [ref=e262] [cursor=pointer]:
+              - generic [ref=e61]: Meta-harness
+              - generic "Unread messages addressed to the operator" [ref=e263]: "2"
+          - listitem [ref=e62]:
+            - button "Events" [ref=e63] [cursor=pointer]
+          - listitem [ref=e67]:
+            - button "Artifacts" [ref=e68] [cursor=pointer]
+          - listitem [ref=e74]:
+            - button "Workspaces" [ref=e75] [cursor=pointer]
+          - listitem [ref=e79]:
+            - button "Agents" [ref=e80] [cursor=pointer]
+          - listitem [ref=e87]:
+            - button "Registry" [ref=e88] [cursor=pointer]
+          - listitem [ref=e94]:
+            - button "Policies" [ref=e95] [cursor=pointer]
+          - listitem [ref=e99]:
+            - button "Guardrails" [ref=e100] [cursor=pointer]
+          - listitem [ref=e104]:
+            - button "Communication" [ref=e105] [cursor=pointer]
+          - listitem [ref=e109]:
+            - button "Approvals 1" [ref=e653] [cursor=pointer]:
+              - generic [ref=e114]: Approvals
+              - generic [ref=e265]: "1"
+          - listitem [ref=e115]:
+            - button "Runtimes" [ref=e116] [cursor=pointer]
+          - listitem [ref=e121]:
+            - button "Execution log" [ref=e122] [cursor=pointer]
+    - main [ref=e126]:
+      - generic [ref=e348]:
+        - generic [ref=e349]:
+          - generic [ref=e350]:
+            - heading "Attention" [active] [level=1] [ref=e351]
+            - paragraph [ref=e355]: Review pending decisions, blocked work and results.
+          - button "Refresh attention" [ref=e356] [cursor=pointer]: Refresh
+        - group "Filter attention" [ref=e362]:
+          - generic [ref=e364]:
+            - text: Agent ID
+            - textbox "Agent ID" [ref=e365]:
+              - /placeholder: All agents
+          - generic [ref=e366]:
+            - text: Category
+            - combobox "Category" [ref=e367]:
+              - option "All categories" [selected]
+              - option "Needs action"
+              - option "Watch"
+          - generic [ref=e368]:
+            - text: Kind
+            - combobox "Kind" [ref=e369]:
+              - option "All kinds" [selected]
+              - option "Approval awaiting review"
+              - option "Runtime permission requested"
+              - option "Runtime question for the operator"
+              - option "Question waiting for an agent"
+              - option "Handoff awaiting verification"
+              - option "Execution outcome unknown"
+              - option "Delivery needs attention"
+              - option "Runtime recovery needs attention"
+              - option "Execution authorization changed"
+              - option "Execution host disconnected"
+              - option "Handoff still unclaimed"
+              - option "Result ready to inspect"
+              - option "Cleanup needs inspection"
+          - generic [ref=e370]:
+            - text: State
+            - combobox "State" [ref=e371]:
+              - option "Active attention" [selected]
+              - option "Open at source"
+              - option "Resolved at source"
+              - option "Expired"
+              - option "All states"
+          - generic [ref=e372]:
+            - text: Priority
+            - combobox "Priority" [ref=e373]:
+              - option "All priorities" [selected]
+              - option "High"
+              - option "Medium"
+              - option "Standard"
+          - generic [ref=e374]:
+            - text: Viewing state
+            - combobox "Viewing state" [ref=e375]:
+              - option "Seen and unseen" [selected]
+              - option "Unseen"
+              - option "Seen"
+              - option "Snoozed"
+        - paragraph [ref=e376]: Seen only records that you reviewed an item. Snooze hides attention temporarily; it does not approve, pause or resolve work.
+        - generic [ref=e377]:
+          - paragraph [ref=e378]:
+            - strong [ref=e379]: "5"
+            - text: matching items · 5 shown
+          - paragraph [ref=e380]:
+            - time [ref=e381]: Snapshot just now
+            - text: · Live updates
+        - region [ref=e654]:
+          - heading "Needs action 3 matching items" [level=2] [ref=e655]:
+            - text: Needs action
+            - generic "3 matching items" [ref=e656]: "3"
+          - list [ref=e385]:
+            - listitem [ref=e386]:
+              - article [ref=e387]:
+                - generic [ref=e388]:
+                  - generic [ref=e389]:
+                    - generic [ref=e390]:
+                      - generic [ref=e391]: High priority
+                      - generic [aria-hidden] [ref=e392]: ·
+                      - generic [ref=e393]: Current source
+                    - heading "Handoff awaiting verification" [level=3] [ref=e394]
+                    - paragraph [ref=e395]: Submitted work is waiting for its canonical verification.
+                  - time [ref=e396]: 3m ago
+                - generic [ref=e397]:
+                  - generic [ref=e398]:
+                    - term [ref=e399]: Agent
+                    - definition [ref=e400]: browser-worker
+                  - generic [ref=e401]:
+                    - term [ref=e402]: Workspace
+                    - definition [ref=e403]:
+                      - text: Workspace 1
+                      - generic [ref=e404]: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                  - generic [ref=e405]:
+                    - term [ref=e406]: Handoff
+                    - definition [ref=e407]: hof_7d7dde4fc8894d2bbafdd26d6d5f033c
+                - generic [ref=e408]:
+                  - button "Review verification" [ref=e409] [cursor=pointer]
+                  - 'button "Mark seen: Handoff awaiting verification, hof_7d7dde4fc8894d2bbafdd26d6d5f033c" [ref=e413] [cursor=pointer]': Mark seen
+                  - generic [ref=e417]:
+                    - generic [ref=e418]: Snooze duration for Handoff awaiting verification, hof_7d7dde4fc8894d2bbafdd26d6d5f033c
+                    - combobox "Snooze duration for Handoff awaiting verification, hof_7d7dde4fc8894d2bbafdd26d6d5f033c" [ref=e419]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: Handoff awaiting verification, hof_7d7dde4fc8894d2bbafdd26d6d5f033c" [ref=e420] [cursor=pointer]': Snooze
+            - listitem [ref=e424]:
+              - article [ref=e425]:
+                - generic [ref=e426]:
+                  - generic [ref=e427]:
+                    - generic [ref=e428]:
+                      - generic [ref=e429]: Medium priority
+                      - generic [aria-hidden] [ref=e430]: ·
+                      - generic [ref=e431]: Current source
+                    - heading "Delivery needs attention" [level=3] [ref=e432]
+                    - paragraph [ref=e433]: This delivery is parked and needs inspection of its delivery record.
+                  - time [ref=e434]: 3m ago
+                - generic [ref=e435]:
+                  - generic [ref=e436]:
+                    - term [ref=e437]: Agent
+                    - definition [ref=e438]: browser-worker
+                  - generic [ref=e439]:
+                    - term [ref=e440]: Workspace
+                    - definition [ref=e441]:
+                      - text: Workspace 1
+                      - generic [ref=e442]: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                  - generic [ref=e443]:
+                    - term [ref=e444]: Message delivery
+                    - definition [ref=e445]: del_0d43a4cca72b4f89974f92918f925847
+                - generic [ref=e446]:
+                  - button "Inspect delivery" [ref=e447] [cursor=pointer]
+                  - 'button "Mark seen: Delivery needs attention, del_0d43a4cca72b4f89974f92918f925847" [ref=e451] [cursor=pointer]': Mark seen
+                  - generic [ref=e455]:
+                    - generic [ref=e456]: Snooze duration for Delivery needs attention, del_0d43a4cca72b4f89974f92918f925847
+                    - combobox "Snooze duration for Delivery needs attention, del_0d43a4cca72b4f89974f92918f925847" [ref=e457]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: Delivery needs attention, del_0d43a4cca72b4f89974f92918f925847" [ref=e458] [cursor=pointer]': Snooze
+            - listitem [ref=e462]:
+              - article [ref=e463]:
+                - generic [ref=e464]:
+                  - generic [ref=e465]:
+                    - generic [ref=e466]:
+                      - generic [ref=e467]: Medium priority
+                      - generic [aria-hidden] [ref=e468]: ·
+                      - generic [ref=e469]: Current source
+                    - heading "Approval awaiting review" [level=3] [ref=e470]
+                    - paragraph [ref=e471]: A canonical approval needs review by its authorized recipient.
+                  - time [ref=e472]: 3m ago
+                - generic [ref=e473]:
+                  - generic [ref=e474]:
+                    - term [ref=e475]: Agent
+                    - definition [ref=e476]: browser-approval-author
+                  - generic [ref=e477]:
+                    - term [ref=e478]: Workspace
+                    - definition [ref=e479]:
+                      - text: Workspace 1
+                      - generic [ref=e480]: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                  - generic [ref=e481]:
+                    - term [ref=e482]: Approval
+                    - definition [ref=e483]: apr_8939dee27e034907bfe65d8c8fbb2dfb
+                - generic [ref=e484]:
+                  - button "Review approval" [ref=e485] [cursor=pointer]
+                  - 'button "Mark seen: Approval awaiting review, apr_8939dee27e034907bfe65d8c8fbb2dfb" [ref=e489] [cursor=pointer]': Mark seen
+                  - generic [ref=e493]:
+                    - generic [ref=e494]: Snooze duration for Approval awaiting review, apr_8939dee27e034907bfe65d8c8fbb2dfb
+                    - combobox "Snooze duration for Approval awaiting review, apr_8939dee27e034907bfe65d8c8fbb2dfb" [ref=e495]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: Approval awaiting review, apr_8939dee27e034907bfe65d8c8fbb2dfb" [ref=e496] [cursor=pointer]': Snooze
+        - region [ref=e657]:
+          - heading "Watch 2 matching items" [level=2] [ref=e658]:
+            - text: Watch
+            - generic "2 matching items" [ref=e659]: "2"
+          - list [ref=e503]:
+            - listitem [ref=e504]:
+              - article [ref=e505]:
+                - generic [ref=e506]:
+                  - generic [ref=e507]:
+                    - generic [ref=e508]:
+                      - generic [ref=e509]: Standard priority
+                      - generic [aria-hidden] [ref=e510]: ·
+                      - generic [ref=e511]: Current source
+                      - generic [ref=e512]: Resolved at source
+                    - heading "Result ready to inspect" [level=3] [ref=e513]
+                    - paragraph [ref=e514]: A canonical result is available for inspection.
+                  - time [ref=e515]: 3m ago
+                - generic [ref=e516]:
+                  - generic [ref=e517]:
+                    - term [ref=e518]: Agent
+                    - definition [ref=e519]: browser-worker
+                  - generic [ref=e520]:
+                    - term [ref=e521]: Workspace
+                    - definition [ref=e522]:
+                      - text: Workspace 1
+                      - generic [ref=e523]: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                  - generic [ref=e524]:
+                    - term [ref=e525]: Source record
+                    - definition [ref=e526]: hof_ed05dba0929f4b28b22f910deedc82b3
+                - generic [ref=e527]:
+                  - button "Open handoff" [ref=e528] [cursor=pointer]
+                  - 'button "Mark seen: Result ready to inspect, hof_ed05dba0929f4b28b22f910deedc82b3" [ref=e532] [cursor=pointer]': Mark seen
+                  - generic [ref=e536]:
+                    - generic [ref=e537]: Snooze duration for Result ready to inspect, hof_ed05dba0929f4b28b22f910deedc82b3
+                    - combobox "Snooze duration for Result ready to inspect, hof_ed05dba0929f4b28b22f910deedc82b3" [ref=e538]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: Result ready to inspect, hof_ed05dba0929f4b28b22f910deedc82b3" [ref=e539] [cursor=pointer]': Snooze
+            - listitem [ref=e660]:
+              - article [ref=e661]:
+                - generic [ref=e662]:
+                  - generic [ref=e663]:
+                    - generic [ref=e664]:
+                      - generic [ref=e665]: Standard priority
+                      - generic [aria-hidden] [ref=e666]: ·
+                      - generic [ref=e667]: Current source
+                      - generic [ref=e668]: Resolved at source
+                    - heading "Result ready to inspect" [level=3] [ref=e669]
+                    - paragraph [ref=e670]: A canonical result is available for inspection.
+                  - time [ref=e671]: Just now
+                - generic [ref=e672]:
+                  - generic [ref=e673]:
+                    - term [ref=e674]: Agent
+                    - definition [ref=e675]: browser-native
+                  - generic [ref=e676]:
+                    - term [ref=e677]: Workspace
+                    - definition [ref=e678]:
+                      - text: Workspace 1
+                      - generic [ref=e679]: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                  - generic [ref=e680]:
+                    - term [ref=e681]: Execution result
+                    - definition [ref=e682]: op_7f91d370696d83c4843c1e6f5ff9c4a4
+                  - generic [ref=e683]:
+                    - term [ref=e684]: Session
+                    - definition [ref=e685]: ses_ff32b1cde34f8ad50e2f0a254ae13b90
+                  - generic [ref=e686]:
+                    - term [ref=e687]: Execution host
+                    - definition [ref=e688]: exe_ebb4316f8312a67a0a0a305692709364
+                - generic [ref=e689]:
+                  - button "Inspect result" [ref=e690] [cursor=pointer]
+                  - 'button "Mark seen: Result ready to inspect, op_7f91d370696d83c4843c1e6f5ff9c4a4" [ref=e694] [cursor=pointer]': Mark seen
+                  - generic [ref=e698]:
+                    - generic [ref=e699]: Snooze duration for Result ready to inspect, op_7f91d370696d83c4843c1e6f5ff9c4a4
+                    - combobox "Snooze duration for Result ready to inspect, op_7f91d370696d83c4843c1e6f5ff9c4a4" [ref=e700]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: Result ready to inspect, op_7f91d370696d83c4843c1e6f5ff9c4a4" [ref=e701] [cursor=pointer]': Snooze

@@ -3,3 +3,7 @@ frontend/index.html text eol=lf
 src/okto_nexus/adapters/inbound/http/static/index.html text eol=lf
 # Retained qualification hashes describe exact report bytes on every platform.
 plans/agent_ops/evidence/pr06-attention-*.xml text eol=lf
+# PR-07 artifact manifests retain raw browser and test report byte hashes.
+plans/agent_ops/evidence/pr07-attention-ui*.xml -text
+plans/agent_ops/evidence/pr07-attention-ui*.json -text
+plans/agent_ops/evidence/pr07-attention-ui/** -text

@@ -1,0 +1,345 @@
+- generic:
+  - generic:
+    - generic:
+      - banner:
+        - button
+        - generic: / Attention
+        - generic:
+          - combobox
+          - generic: ● Live
+          - button
+          - generic:
+            - button
+      - generic:
+        - complementary:
+          - generic:
+            - navigation:
+              - heading [level=3]: Observability
+              - list:
+                - listitem:
+                  - button:
+                    - generic: Attention
+                    - generic: "5"
+                - listitem:
+                  - button:
+                    - generic: Graph
+                - listitem:
+                  - button:
+                    - generic: Messages
+                    - generic: "2"
+                - listitem:
+                  - button:
+                    - generic: Handoffs
+                - listitem:
+                  - button:
+                    - generic: Meta-harness
+                    - generic: "2"
+                - listitem:
+                  - button:
+                    - generic: Events
+                - listitem:
+                  - button:
+                    - generic: Artifacts
+                - listitem:
+                  - button:
+                    - generic: Workspaces
+                - listitem:
+                  - button:
+                    - generic: Agents
+                - listitem:
+                  - button:
+                    - generic: Registry
+                - listitem:
+                  - button:
+                    - generic: Policies
+                - listitem:
+                  - button:
+                    - generic: Guardrails
+                - listitem:
+                  - button:
+                    - generic: Communication
+                - listitem:
+                  - button:
+                    - generic: Approvals
+                    - generic: "1"
+                - listitem:
+                  - button:
+                    - generic: Runtimes
+                - listitem:
+                  - button:
+                    - generic: Execution log
+        - main:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - heading [level=1]: Attention
+                    - paragraph: Review pending decisions, blocked work and results.
+                  - button: Refresh
+                - group:
+                  - generic: Filter attention
+                  - generic:
+                    - text: Agent ID
+                    - textbox:
+                      - /placeholder: All agents
+                  - generic:
+                    - text: Category
+                    - combobox
+                  - generic:
+                    - text: Kind
+                    - combobox
+                  - generic:
+                    - text: State
+                    - combobox
+                  - generic:
+                    - text: Priority
+                    - combobox
+                  - generic:
+                    - text: Viewing state
+                    - combobox
+                - paragraph: Seen only records that you reviewed an item. Snooze hides attention temporarily; it does not approve, pause or resolve work.
+                - generic:
+                  - paragraph:
+                    - strong: "5"
+                    - text: matching items · 5 shown
+                  - paragraph:
+                    - time: Snapshot just now
+                    - text: · Live updates
+                - region:
+                  - heading [level=2]:
+                    - text: Needs action
+                    - generic: "3"
+                  - list:
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: High priority
+                              - generic [aria-hidden]: ·
+                              - generic: Current source
+                            - heading [level=3]: Handoff awaiting verification
+                            - paragraph: Submitted work is waiting for its canonical verification.
+                          - time: 6m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: browser-worker
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 1
+                              - generic: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                          - generic:
+                            - term: Handoff
+                            - definition: hof_7d7dde4fc8894d2bbafdd26d6d5f033c
+                        - generic:
+                          - button: Review verification
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for Handoff awaiting verification, hof_7d7dde4fc8894d2bbafdd26d6d5f033c
+                            - combobox
+                            - button: Snooze
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Medium priority
+                              - generic [aria-hidden]: ·
+                              - generic: Current source
+                            - heading [level=3]: Delivery needs attention
+                            - paragraph: This delivery is parked and needs inspection of its delivery record.
+                          - time: 6m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: browser-worker
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 1
+                              - generic: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                          - generic:
+                            - term: Message delivery
+                            - definition: del_0d43a4cca72b4f89974f92918f925847
+                        - generic:
+                          - button: Inspect delivery
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for Delivery needs attention, del_0d43a4cca72b4f89974f92918f925847
+                            - combobox
+                            - button: Snooze
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Medium priority
+                              - generic [aria-hidden]: ·
+                              - generic: Current source
+                            - heading [level=3]: Approval awaiting review
+                            - paragraph: A canonical approval needs review by its authorized recipient.
+                          - time: 6m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: browser-approval-author
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 1
+                              - generic: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                          - generic:
+                            - term: Approval
+                            - definition: apr_8939dee27e034907bfe65d8c8fbb2dfb
+                        - generic:
+                          - button: Review approval
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for Approval awaiting review, apr_8939dee27e034907bfe65d8c8fbb2dfb
+                            - combobox
+                            - button: Snooze
+                - region:
+                  - heading [level=2]:
+                    - text: Watch
+                    - generic: "2"
+                  - list:
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Standard priority
+                              - generic [aria-hidden]: ·
+                              - generic: Current source
+                              - generic: Resolved at source
+                            - heading [level=3]: Result ready to inspect
+                            - paragraph: A canonical result is available for inspection.
+                          - time: 6m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: browser-worker
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 1
+                              - generic: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                          - generic:
+                            - term: Source record
+                            - definition: hof_ed05dba0929f4b28b22f910deedc82b3
+                        - generic:
+                          - button: Open handoff
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for Result ready to inspect, hof_ed05dba0929f4b28b22f910deedc82b3
+                            - combobox
+                            - button: Snooze
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Standard priority
+                              - generic [aria-hidden]: ·
+                              - generic: Current source
+                              - generic: Resolved at source
+                            - heading [level=3]: Result ready to inspect
+                            - paragraph: A canonical result is available for inspection.
+                          - time: 3m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: browser-native
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 1
+                              - generic: d57ae714bcdc804f77a90ccaf0b9eee8b3cfb3b24a5fca354ac1e5fbcf14f409
+                          - generic:
+                            - term: Execution result
+                            - definition: op_7f91d370696d83c4843c1e6f5ff9c4a4
+                          - generic:
+                            - term: Session
+                            - definition: ses_ff32b1cde34f8ad50e2f0a254ae13b90
+                          - generic:
+                            - term: Execution host
+                            - definition: exe_ebb4316f8312a67a0a0a305692709364
+                        - generic:
+                          - button: Inspect result
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for Result ready to inspect, op_7f91d370696d83c4843c1e6f5ff9c4a4
+                            - combobox
+                            - button: Snooze
+  - dialog [ref=e705]:
+    - banner [ref=e706]:
+      - heading "Attention · original record" [level=2] [ref=e707]
+      - button "Expand modal" [ref=e708] [cursor=pointer]
+      - button "Close modal" [ref=e714] [cursor=pointer]
+    - generic [ref=e719]:
+      - paragraph [ref=e720]: handoff · hof_7d7dde4fc8894d2bbafdd26d6d5f033c
+      - region "Canonical handoff" [ref=e721]:
+        - button "Refresh record" [active] [ref=e722] [cursor=pointer]
+        - generic [ref=e724]:
+          - generic [ref=e726]:
+            - generic [ref=e727]: VERIFYING
+            - heading "hof_7d7dde4fc8894d2bbafdd26d6d5f033c" [level=3] [ref=e729]
+          - generic [ref=e730]:
+            - generic [ref=e731]:
+              - generic [ref=e732]:
+                - generic [ref=e733]: workspace
+                - generic [ref=e734]: Workspace 1
+              - generic [ref=e735]:
+                - generic [ref=e736]: created
+                - generic "2026-11-06T23:40:00.316349Z" [ref=e737]: Nov 06, 08:40 PM
+              - generic [ref=e738]:
+                - generic [ref=e739]: updated
+                - generic "2026-11-06T23:40:00.337819Z" [ref=e740]: Nov 06, 08:40 PM
+              - generic [ref=e741]:
+                - generic [ref=e742]: from
+                - generic [ref=e743]: operator
+              - generic [ref=e744]:
+                - generic [ref=e745]: claimed by
+                - generic [ref=e746]: browser-worker
+              - generic [ref=e747]:
+                - generic [ref=e748]: visibility
+                - generic [ref=e749]: public
+              - generic [ref=e750]:
+                - generic [ref=e751]: lease expires
+                - generic "2026-11-07T00:40:00.333387Z" [ref=e752]: Nov 06, 09:40 PM
+              - generic [ref=e753]:
+                - generic [ref=e754]: verifier
+                - generic [ref=e755]: operator
+              - generic [ref=e756]:
+                - generic [ref=e757]: verify kind
+                - generic [ref=e758]: creator
+            - generic [ref=e759]:
+              - heading "Target" [level=4] [ref=e760]
+              - generic [ref=e762]:
+                - generic [ref=e763]: Direct
+                - generic [ref=e765]:
+                  - generic [ref=e766]: agent
+                  - generic [ref=e767]: browser-worker
+            - generic [ref=e768]:
+              - heading "Acceptance criteria" [level=4] [ref=e769]
+              - list [ref=e770]:
+                - listitem [ref=e771]:
+                  - generic [ref=e772]: •
+                  - generic [ref=e773]: Synthetic result is present
+            - generic [ref=e774]:
+              - heading "Agent response" [level=4] [ref=e775]
+              - generic [ref=e776]: Synthetic completed work; no provider execution.
+            - generic [ref=e777]:
+              - heading "Original request (payload)" [level=4] [ref=e778]
+              - generic [ref=e779]: "null"
+            - group [ref=e780]:
+              - generic [ref=e782]:
+                - textbox "Rework feedback" [ref=e785]:
+                  - /placeholder: Rework feedback for the claimant (optional)
+                  - text: Final handoff draft retained across read failure
+                - generic [ref=e786]:
+                  - button "Fail handoff" [ref=e787] [cursor=pointer]
+                  - button "Back" [ref=e788] [cursor=pointer]
