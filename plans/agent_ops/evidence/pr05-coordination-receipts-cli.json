@@ -1,0 +1,54 @@
+{
+  "command": "installed okto-nexus admin prune --dry-run",
+  "returncode": 0,
+  "schema_version": 159,
+  "report": {
+    "dry_run": true,
+    "now": "2026-11-06T12:18:41.939078Z",
+    "windows_days": {
+      "events": 30,
+      "read_deliveries": 14,
+      "closed_sessions": 7,
+      "messages": 30,
+      "coordination_requests": 30
+    },
+    "cutoffs": {
+      "events": "2026-10-07T12:18:41.939078Z",
+      "read_deliveries": "2026-10-23T12:18:41.939078Z",
+      "closed_sessions": "2026-10-30T12:18:41.939078Z",
+      "messages": "2026-10-07T12:18:41.939078Z",
+      "coordination_requests_expires_at": "2026-11-06T12:18:41.939078Z"
+    },
+    "tables": {
+      "events": {
+        "deleted": 0,
+        "complete": true
+      },
+      "message_deliveries": {
+        "deleted": 0,
+        "complete": true
+      },
+      "sessions": {
+        "deleted": 0,
+        "complete": true
+      },
+      "messages": {
+        "deleted": 0,
+        "complete": true
+      },
+      "coordination_requests": {
+        "deleted": 0,
+        "complete": true
+      }
+    },
+    "total_deleted": 0,
+    "protected": "unread/delivered/parked deliveries and active/stale sessions are never pruned; all handoffs/tasks/channels/agents/workspaces/artifacts are never pruned. Messages ARE pruned by age (>= 7-day window), except runtime evidence and causal fences; taking unprotected deliveries and embeddings with them. Coordination references survive resource deletion until their fixed 30-day expiry; expired references are pruned in bounded batches",
+    "vacuum": {
+      "requested": false,
+      "ran": false,
+      "skipped_reason": null
+    }
+  },
+  "isolated_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-coordination-receipts-hny1f969\\cli-home",
+  "stderr": ""
+}

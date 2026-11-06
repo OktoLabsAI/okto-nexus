@@ -1,5 +1,6 @@
 """Remote preset authorization, atomic Finish and current-policy recovery."""
 import json
+import sqlite3
 
 import pytest
 
@@ -113,14 +114,15 @@ def test_late_binding_failure_rolls_back_policy_and_receipt(onboarding):
 
 
 @pytest.mark.parametrize('later_disable', [False, True])
-def test_committed_cache_failure_recovers_same_intent_without_regrant(onboarding, monkeypatch, later_disable):
+@pytest.mark.parametrize('error_type', [OSError, sqlite3.OperationalError, RuntimeError])
+def test_committed_cache_failure_recovers_same_intent_without_regrant(onboarding, monkeypatch, later_disable, error_type):
     deps, client, headers, _ = onboarding
     _, request, approval = pending(onboarding)
     assert decide_binding(client, headers, approval).status_code == 200
     service = client.app.state.settings_service
     refresh = service.refresh_native_decisions
     def unavailable(factory):
-        raise OSError('injected cache failure')
+        raise error_type('injected cache failure')
     monkeypatch.setattr(service, 'refresh_native_decisions', unavailable)
     uncertain = apply(client, headers, request)
     assert uncertain.status_code == 409, uncertain.text

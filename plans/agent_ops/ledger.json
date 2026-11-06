@@ -171,13 +171,22 @@
       ]
     },
     "PR-05": {
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "dependencies": [
         "PR-00",
         "PR-03",
         "PR-04"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
+      ]
     },
     "PR-06": {
       "status": "NOT_STARTED",
@@ -3198,6 +3207,7 @@
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
@@ -3210,25 +3220,35 @@
         "src/okto_nexus/adapters/inbound/http/operator_auth.py",
         "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
         "src/okto_nexus/adapters/outbound/operator_client.py",
+        "src/okto_nexus/adapters/outbound/sqlite/coordination_requests.py",
         "src/okto_nexus/adapters/outbound/terminal_http.py",
         "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
         "src/okto_nexus/application/execution_binding_approvals.py",
+        "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/ports.py",
+        "src/okto_nexus/application/retention.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
         "src/okto_nexus/application/terminal_work.py",
         "src/okto_nexus/bootstrap/dependencies.py",
+        "src/okto_nexus/domain/coordination_requests.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "src/okto_nexus/migrations/159_coordination_requests.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_work.py",
+        "tests/test_coordination_requests.py",
+        "tests/test_import_boundary.py",
+        "tests/test_retention.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py",
         "tests/test_terminal_native_input.py"
@@ -3253,9 +3273,16 @@
         "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
+        "plans/agent_ops/evidence/pr03-terminal-work-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open. Internal coordination receipts now have a Server/actor/workspace/operation/request key, explicit secret-free semantic hash inputs, canonical resource/approval references and a fixed 30-day window. The caller-owned write transaction, approval correlation/deadline, tombstones after message pruning, expiry and bounded retention are tested with real SQLite; eight independent connections and process exits before/after commit preserve one object. Schema 158-to-159 upgrade preserves canonical rows. 73 source tests and 104 installed tests passed, plus an actual isolated installed admin-prune invocation. An existing application sqlite3 import was removed from post-commit binding refresh, with cache-failure recovery/no-regrant tests; the architecture check now scans the imported package. Initial failed reports are retained. The 451-file Python wheel, seven assets and 159 SQL resources match source bytes. Public message/handoff/approval integration, current-authentication and visibility replay gates, canonical outbox/accounting integration, CLI request checkpoint/recovery, expiry refusal, correlated wait and cooperation remain open. These persistence tests do not certify public safe retry.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -3264,7 +3291,8 @@
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
+        "This increment verifies internal persistence primitives with a test-only repository composition driver. Canonical message/handoff use cases and approval execution do not yet consume these receipts; public safe replay, authorization/visibility, runtime outbox/accounting and CLI behavior remain unqualified."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -3287,7 +3315,13 @@
         "remote_connector_productive_work": "NOT_RUN",
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
-        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+        "binding_approval_loss_recovery_without_repost": "VERIFIED",
+        "coordination_receipt_sqlite_atomicity_concurrency_and_process_crash": "VERIFIED",
+        "coordination_receipt_scope_hash_and_approval_reference": "VERIFIED",
+        "coordination_receipt_retention_tombstone_and_schema_upgrade": "VERIFIED",
+        "public_coordination_creation_and_approval_receipt_integration": "NOT_STARTED",
+        "public_coordination_retry_authorization_visibility_and_accounting": "NOT_RUN",
+        "coordination_cli_checkpoint_recovery_and_expiry_refusal": "NOT_STARTED"
       }
     },
     "DX-11": {
@@ -5489,8 +5523,18 @@
     },
     "DX-T15": {
       "requirement": "Duas requisiÃ§Ãµes simultÃ¢neas com mesmo ID/hash criam um Ãºnico recurso/recibo.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
+      ],
+      "result": "Internal coordination receipts now have a Server/actor/workspace/operation/request key, explicit secret-free semantic hash inputs, canonical resource/approval references and a fixed 30-day window. The caller-owned write transaction, approval correlation/deadline, tombstones after message pruning, expiry and bounded retention are tested with real SQLite; eight independent connections and process exits before/after commit preserve one object. Schema 158-to-159 upgrade preserves canonical rows. 73 source tests and 104 installed tests passed, plus an actual isolated installed admin-prune invocation. An existing application sqlite3 import was removed from post-commit binding refresh, with cache-failure recovery/no-regrant tests; the architecture check now scans the imported package. Initial failed reports are retained. The 451-file Python wheel, seven assets and 159 SQL resources match source bytes. Public message/handoff/approval integration, current-authentication and visibility replay gates, canonical outbox/accounting integration, CLI request checkpoint/recovery, expiry refusal, correlated wait and cooperation remain open. These persistence tests do not certify public safe retry."
     },
     "DX-T16": {
       "requirement": "Mesmo ID com payload/target/contexto diferente conflita.",
@@ -5504,28 +5548,64 @@
         "plans/agent_ops/evidence/pr03-connector-reconnect-server-source.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-source.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-wheels.json",
-        "plans/agent_ops/evidence/pr03-connector-reconnect.md"
+        "plans/agent_ops/evidence/pr03-connector-reconnect.md",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open."
+      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open. Internal coordination receipts now have a Server/actor/workspace/operation/request key, explicit secret-free semantic hash inputs, canonical resource/approval references and a fixed 30-day window. The caller-owned write transaction, approval correlation/deadline, tombstones after message pruning, expiry and bounded retention are tested with real SQLite; eight independent connections and process exits before/after commit preserve one object. Schema 158-to-159 upgrade preserves canonical rows. 73 source tests and 104 installed tests passed, plus an actual isolated installed admin-prune invocation. An existing application sqlite3 import was removed from post-commit binding refresh, with cache-failure recovery/no-regrant tests; the architecture check now scans the imported package. Initial failed reports are retained. The 451-file Python wheel, seven assets and 159 SQL resources match source bytes. Public message/handoff/approval integration, current-authentication and visibility replay gates, canonical outbox/accounting integration, CLI request checkpoint/recovery, expiry refusal, correlated wait and cooperation remain open. These persistence tests do not certify public safe retry."
     },
     "DX-T17": {
       "requirement": "Falha entre evento, inbox/outbox e recibo reverte toda transaÃ§Ã£o nova.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
+      ],
+      "result": "Internal coordination receipts now have a Server/actor/workspace/operation/request key, explicit secret-free semantic hash inputs, canonical resource/approval references and a fixed 30-day window. The caller-owned write transaction, approval correlation/deadline, tombstones after message pruning, expiry and bounded retention are tested with real SQLite; eight independent connections and process exits before/after commit preserve one object. Schema 158-to-159 upgrade preserves canonical rows. 73 source tests and 104 installed tests passed, plus an actual isolated installed admin-prune invocation. An existing application sqlite3 import was removed from post-commit binding refresh, with cache-failure recovery/no-regrant tests; the architecture check now scans the imported package. Initial failed reports are retained. The 451-file Python wheel, seven assets and 159 SQL resources match source bytes. Public message/handoff/approval integration, current-authentication and visibility replay gates, canonical outbox/accounting integration, CLI request checkpoint/recovery, expiry refusal, correlated wait and cooperation remain open. These persistence tests do not certify public safe retry."
     },
     "DX-T18": {
       "requirement": "Resposta perdida apÃ³s commit e restart recuperam objeto original sem reenvio produtivo.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
-        "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml"
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
       ],
-      "result": "Existing Server-hosted setup receipt and injected cache-loss subset verified; full Nexus connect and actual restart/work campaign remain open."
+      "result": "Existing Server-hosted setup receipt and injected cache-loss subset verified; full Nexus connect and actual restart/work campaign remain open. Internal coordination receipts now have a Server/actor/workspace/operation/request key, explicit secret-free semantic hash inputs, canonical resource/approval references and a fixed 30-day window. The caller-owned write transaction, approval correlation/deadline, tombstones after message pruning, expiry and bounded retention are tested with real SQLite; eight independent connections and process exits before/after commit preserve one object. Schema 158-to-159 upgrade preserves canonical rows. 73 source tests and 104 installed tests passed, plus an actual isolated installed admin-prune invocation. An existing application sqlite3 import was removed from post-commit binding refresh, with cache-failure recovery/no-regrant tests; the architecture check now scans the imported package. Initial failed reports are retained. The 451-file Python wheel, seven assets and 159 SQL resources match source bytes. Public message/handoff/approval integration, current-authentication and visibility replay gates, canonical outbox/accounting integration, CLI request checkpoint/recovery, expiry refusal, correlated wait and cooperation remain open. These persistence tests do not certify public safe retry."
     },
     "DX-T19": {
       "requirement": "Pending approval repetido mantÃ©m uma aprovaÃ§Ã£o; decisÃ£o posterior preserva correlaÃ§Ã£o.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
+      ],
+      "result": "Internal coordination receipts now have a Server/actor/workspace/operation/request key, explicit secret-free semantic hash inputs, canonical resource/approval references and a fixed 30-day window. The caller-owned write transaction, approval correlation/deadline, tombstones after message pruning, expiry and bounded retention are tested with real SQLite; eight independent connections and process exits before/after commit preserve one object. Schema 158-to-159 upgrade preserves canonical rows. 73 source tests and 104 installed tests passed, plus an actual isolated installed admin-prune invocation. An existing application sqlite3 import was removed from post-commit binding refresh, with cache-failure recovery/no-regrant tests; the architecture check now scans the imported package. Initial failed reports are retained. The 451-file Python wheel, seven assets and 159 SQL resources match source bytes. Public message/handoff/approval integration, current-authentication and visibility replay gates, canonical outbox/accounting integration, CLI request checkpoint/recovery, expiry refusal, correlated wait and cooperation remain open. These persistence tests do not certify public safe retry."
     },
     "DX-T20": {
       "requirement": "Credencial revogada nÃ£o recupera conteÃºdo protegido por dedupe.",
@@ -5566,7 +5646,17 @@
     "DX-T25": {
       "requirement": "RequisiÃ§Ã£o fora da janela de dedupe nÃ£o Ã© repetida automaticamente.",
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
+      ],
+      "result": "Receipt expiry and tombstones are verified at the SQLite primitive; automatic replay refusal by the coordination CLI is not implemented or exercised. Scenario remains NOT_RUN."
     },
     "DX-T26": {
       "requirement": "Setup gerenciado continua transacional; alteraÃ§Ã£o concorrente nÃ£o amplia grants.",
@@ -7186,6 +7276,21 @@
         "plans/agent_ops/evidence/pr04-participant-removal-vault-source.xml",
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "scope": "PR-05 internal coordination receipt persistence",
+      "result": "Internal coordination receipts now have a Server/actor/workspace/operation/request key, explicit secret-free semantic hash inputs, canonical resource/approval references and a fixed 30-day window. The caller-owned write transaction, approval correlation/deadline, tombstones after message pruning, expiry and bounded retention are tested with real SQLite; eight independent connections and process exits before/after commit preserve one object. Schema 158-to-159 upgrade preserves canonical rows. 73 source tests and 104 installed tests passed, plus an actual isolated installed admin-prune invocation. An existing application sqlite3 import was removed from post-commit binding refresh, with cache-failure recovery/no-regrant tests; the architecture check now scans the imported package. Initial failed reports are retained. The 451-file Python wheel, seven assets and 159 SQL resources match source bytes. Public message/handoff/approval integration, current-authentication and visibility replay gates, canonical outbox/accounting integration, CLI request checkpoint/recovery, expiry refusal, correlated wait and cooperation remain open. These persistence tests do not certify public safe retry.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr05-coordination-receipts-cli.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source-initial.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-source.xml",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel-initial.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-receipts.md"
       ]
     }
   ]

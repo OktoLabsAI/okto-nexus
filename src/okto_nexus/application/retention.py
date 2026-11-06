@@ -11,12 +11,15 @@ that aged past their configured window, under hard SAFETY INVARIANTS:
   ``active``/``stale`` sessions are NEVER deleted regardless of age (the lane
   predicates are baked into the adapters' SQL, so the protection is
   structural, not a runtime check).
-* MESSAGES are the ONE exception (spec D-EMB-6, by owner directive): they
+* MESSAGES are an exception (spec D-EMB-6, by owner directive): they
   expire by PURE AGE (``created_at``), independent of delivery status, with a
   HARD minimum window of 7 days (fail-closed). The reaper deletes a message's
   ``message_deliveries`` and its embedding (the latter via ``ON DELETE
   CASCADE``) alongside it. This deliberately relaxes the historical "Nexus
   never deletes an undelivered message" invariant.
+* Coordination request references expire after a fixed 30-day window,
+  including pending approvals. They survive resource deletion before expiry.
+  Expiring a reference never changes the underlying resource or approval.
 * Handoffs, tasks, channels, agents, workspaces and artifacts are
   never touched - in particular a non-terminal handoff (OPEN/CLAIMED) can
   never be pruned because NO handoff delete path exists at all.
@@ -46,8 +49,9 @@ from typing import Any, Protocol, runtime_checkable
 
 from ..config import MIN_RETENTION_MESSAGES_KEEP_DAYS, NexusConfig
 from ..domain.base import iso_plus
+from ..domain.coordination_requests import RETENTION_DAYS
 from ..errors import ErrorCode, OktoNexusError
-from .ports import Clock, ConnectionFactory, UnitOfWork
+from .ports import Clock, ConnectionFactory, CoordinationRequestRepo, UnitOfWork
 
 #: Rows deleted per write transaction. Small enough that one batch holds the
 #: WAL writer lock only briefly; large enough that a full prune of a busy
@@ -181,6 +185,7 @@ class RetentionService:
         deliveries: PrunableDeliveryRepo,
         sessions: PrunableSessionRepo,
         messages: PrunableMessageRepo,
+        coordination_requests: CoordinationRequestRepo | None = None,
         batch_size: int = DEFAULT_PRUNE_BATCH_SIZE,
     ) -> None:
         self._cf = connection_factory
@@ -190,6 +195,7 @@ class RetentionService:
         self._deliveries = deliveries
         self._sessions = sessions
         self._messages = messages
+        self._coordination_requests = coordination_requests
         self._batch_size = max(1, int(batch_size))
 
     @classmethod
@@ -210,6 +216,7 @@ class RetentionService:
             deliveries=repos.deliveries,
             sessions=repos.sessions,
             messages=repos.messages,
+            coordination_requests=repos.coordination_requests,
         )
 
     # ------------------------------------------------------------------ #
@@ -325,6 +332,18 @@ class RetentionService:
             ),
         }
 
+        if self._coordination_requests is not None:
+            # This protocol window is fixed, not shortened by admin overrides.
+            # Unlike age-based cutoffs, this cutoff compares expires_at <= now.
+            # Pending approvals also expire: integrating use cases must find
+            # the original receipt in-window before admitting execution.
+            windows["coordination_requests"] = RETENTION_DAYS
+            cutoffs["coordination_requests_expires_at"] = now
+            tables["coordination_requests"] = self._run_table(
+                now, count=self._coordination_requests.count_expired,
+                delete=self._coordination_requests.prune_expired,
+                dry_run=dry_run, budget=budget)
+
         vacuum_report = self._maybe_vacuum(requested=vacuum, dry_run=dry_run)
 
         return {
@@ -339,7 +358,8 @@ class RetentionService:
                 "are never pruned; all handoffs/tasks/channels/agents/"
                 "workspaces/artifacts are never pruned. Messages ARE pruned by "
                 "age (>= 7-day window), except runtime evidence and causal fences; taking unprotected deliveries and "
-                "embeddings with them"
+                "embeddings with them. Coordination references survive resource deletion "
+                "until their fixed 30-day expiry; expired references are pruned in bounded batches"
             ),
             "vacuum": vacuum_report,
         }

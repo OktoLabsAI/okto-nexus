@@ -10,10 +10,10 @@ from __future__ import annotations
 
 import ast
 from pathlib import Path
+import okto_nexus
 
-# Repo root = parent of the tests/ directory.
-_REPO_ROOT = Path(__file__).resolve().parents[1]
-_PKG_ROOT = _REPO_ROOT / "src" / "okto_nexus"
+# Inspect the code actually under test, including a wheel outside the checkout.
+_PKG_ROOT = Path(okto_nexus.__file__).resolve().parent
 
 INNER_PACKAGES = ("domain", "application")
 FORBIDDEN_ROOTS = ("sqlite3", "mcp")

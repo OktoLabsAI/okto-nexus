@@ -125,6 +125,7 @@ def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]
 
     Returns the populated :class:`Repos` registry and the shared emitter.
     """
+    from ..adapters.outbound.sqlite.coordination_requests import SqliteCoordinationRequestRepo
     events_repo = SqliteEventRepo(clock)
     repos = Repos(
         workspaces=SqliteWorkspaceRepo(clock),
@@ -133,6 +134,7 @@ def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]
         events=events_repo,
         channels=SqliteChannelRepo(clock),
         messages=SqliteMessageRepo(clock),
+        coordination_requests=SqliteCoordinationRequestRepo(),
         deliveries=SqliteMessageDeliveryRepo(clock),
         tasks=SqliteTaskRepo(clock),
         handoffs=SqliteHandoffRepo(clock),

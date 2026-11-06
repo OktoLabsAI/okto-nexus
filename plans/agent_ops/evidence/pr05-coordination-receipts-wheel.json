@@ -1,0 +1,17 @@
+{
+  "artifact": "okto_nexus-0.3.3-py3-none-any.whl",
+  "sha256": "8f63b5d594d8359611eccede133e293fb55a7e3b12bcfa988bcb0e5b5c91e372",
+  "python_payloads": 451,
+  "static_payloads": 7,
+  "migrations": 159,
+  "raw_bytes_match": true,
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-coordination-receipts-hny1f969\\final\\validation\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "dependencies": {
+    "mcp": "1.30.0",
+    "httpx": "0.28.1",
+    "anyio": "4.16.0",
+    "okto-nexus-connector-core": "0.0.14",
+    "okto-nexus-connector": "0.0.12"
+  }
+}

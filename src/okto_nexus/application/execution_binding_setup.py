@@ -1,6 +1,5 @@
 """Apply only the connection configuration covered by a binding approval."""
 import json
-import sqlite3
 
 from nexus_connector_core import CoreError
 from nexus_connector_core.connection_configuration import (
@@ -66,7 +65,10 @@ def refresh_applied_project(factory, *, actor_agent_id, request, settings):
             expected = json.loads(row['expected_revisions_json']) if row else {}
         if expected.get('native_decision_policy', {}).get('initialize'):
             settings.refresh_native_decisions(factory)
-    except (OktoNexusError, OSError, sqlite3.Error) as error:
+    except Exception as error:
+        # Apply already committed. Any failure in this post-commit cache
+        # refresh must report that fact, including adapter and decode errors.
+        # Preserve the cause; recovery reuses the intent instead of regranting.
         raise OktoNexusError(ErrorCode.CONFLICT,
             'Binding setup is committed; Server policy refresh is pending. Resume this same apply intent.',
             {'reason': 'SETUP_ACTIVATION_PENDING'}) from error

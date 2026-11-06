@@ -515,6 +515,7 @@ def test_admin_prune_cli_deletes_and_prints_report(tmp_path):
     assert report["tables"]["events"] == {"deleted": 1, "complete": True}
     assert report["windows_days"] == {
         "events": 30, "read_deliveries": 14, "closed_sessions": 7, "messages": 30,
+        "coordination_requests": 30,
     }
     assert count_rows(factory, "events") == 1  # only the fresh event remains
 

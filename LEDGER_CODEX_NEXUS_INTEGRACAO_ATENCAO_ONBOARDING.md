@@ -346,3 +346,13 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - Credential Manager foi exercitado com chaves de fixture em namespaces temporários; remoção e ausência posterior foram confirmadas. Nenhuma credencial pessoal foi lida, substituída ou rotacionada. Testes de outros backends foram injetados.
 - Wheel final: 449 arquivos Python e sete assets comparados byte a byte. Connector/Core não mudaram neste marco. [Evidências e limites](plans/agent_ops/evidence/pr04-participant-removal.md).
 - DX-03/04/05/06/07 e PR-04 seguem em progresso no aceite integral. Cooperação canônica, cadeia completa cofre/cliente interativo, GUI/TUI, outras plataformas, campanhas nativas de serviço e M1/M2 produtivos permanecem pendentes. Plano fixo preservado.
+
+## 2026-11-06 — PR-05: base interna de recibos de coordenação
+
+- Recuperadas novamente as três `origin/main`; todas já estão contidas nas branches versionadas. Connector/Core não mudaram neste marco.
+- Schema 159 e porta de persistência guardam chave por instalação/ator/workspace/operação/request ID, hash semântico sem credenciais e referências mínimas de recurso/aprovação. A transação pertence ao caso de uso; não há commit separado nem lock apenas em memória.
+- A referência de aprovação e seu prazo são preservados na resolução. Janela fixa de 30 dias, tombstone após remoção da mensagem e limpeza em lotes pelo retention/admin prune existentes. Expiração não decide nem apaga a aprovação original.
+- **73 testes de fonte e 104 testes instalados passaram**, incluindo oito conexões concorrentes, encerramento de processos antes/depois do commit, rollback, upgrade 158→159, retenção e recuperação de cache sem regrant. Uma invocação real do CLI instalado confirmou schema/janela em home temporário.
+- A checagem de arquitetura encontrou um import preexistente de SQLite na aplicação; a correção mantém o resultado de setup já confirmado quando a atualização do cache falha. O teste agora examina o pacote importado também fora do checkout. Relatórios iniciais preservados.
+- Wheel final: 451 arquivos Python, sete assets e 159 SQLs conferidos byte a byte. [Evidências e limites](plans/agent_ops/evidence/pr05-coordination-receipts.md).
+- **Este marco não habilita retry público.** As composições de teste exercitam os repositórios; integração dos casos de uso de mensagem/handoff/aprovação, autenticação e visibilidade atuais, outbox/contabilização, checkpoint/recovery da CLI, recusa fora da janela, espera e cooperação seguem pendentes. DX-10, PR-05 e o plano integral permanecem em progresso; os alvos fixos não mudaram.

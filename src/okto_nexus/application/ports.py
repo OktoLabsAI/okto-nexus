@@ -30,6 +30,7 @@ from ..domain.approvals import Approval
 from ..domain.handoff_origin import HandoffOrigin
 from ..domain.artifacts import StoredArtifactPayload
 from ..domain.comm_preset import CommPresetRecord, CommPresetVersion
+from ..domain.coordination_requests import CoordinationReceipt, CoordinationRequestKey
 from ..domain.governance import Policy
 from ..domain.harness import HarnessCapabilities, HarnessCommand, HarnessEvent, HarnessSession
 from ..domain.guardrails import (
@@ -2882,6 +2883,33 @@ class HandoffOriginRepo(Protocol):
                      message_id: str) -> None: ...
 
 
+@runtime_checkable
+class CoordinationRequestRepo(Protocol):
+    """Scoped references; callers own current authorization and the transaction."""
+
+    def key(self, uow: UnitOfWork, *, actor_agent_id: str, workspace_id: str,
+            operation: str, client_request_id: str) -> CoordinationRequestKey: ...
+
+    def get(self, uow: UnitOfWork, key: CoordinationRequestKey) -> CoordinationReceipt | None: ...
+
+    def lookup(self, uow: UnitOfWork, key: CoordinationRequestKey, *, request_hash: str,
+               now: str) -> CoordinationReceipt | None: ...
+
+    def record(self, uow: UnitOfWork, key: CoordinationRequestKey, *, request_hash: str,
+               now: str, resource_id: str | None = None,
+               approval_id: str | None = None) -> CoordinationReceipt: ...
+
+    def resolve_approval(self, uow: UnitOfWork, key: CoordinationRequestKey, *,
+                         request_hash: str, approval_id: str, resource_id: str,
+                         now: str) -> CoordinationReceipt: ...
+
+    def reference(self, uow: UnitOfWork, receipt: CoordinationReceipt, *, now: str) -> dict: ...
+
+    def count_expired(self, uow: UnitOfWork, *, cutoff: str) -> int: ...
+
+    def prune_expired(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int: ...
+
+
 @dataclass
 class Repos:
     """Aggregate of all repository ports, injected via :class:`Deps`.
@@ -2897,6 +2925,7 @@ class Repos:
     events: EventRepo | None = None
     channels: ChannelRepo | None = None
     messages: MessageRepo | None = None
+    coordination_requests: CoordinationRequestRepo | None = None
     deliveries: MessageDeliveryRepo | None = None
     tasks: TaskRepo | None = None
     handoffs: HandoffRepo | None = None
