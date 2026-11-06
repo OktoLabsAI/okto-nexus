@@ -1,0 +1,219 @@
+{
+  "platform": "Windows 10.0.26300 x86_64",
+  "script": "plans/agent_ops/campaigns/participant-environment.py",
+  "script_sha256": "d850d4e5c7d4a0f24ee7d31b924b8e01d2e73a132f29dbecee3cea40dd0fa49a",
+  "installed_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\validation\\Scripts\\python.exe",
+  "cases": [
+    {
+      "client": "claude",
+      "credential_available": true,
+      "binary_sha256": "26b01ec22df2c17ac7f5703aa547d36706e8d58412136ced0344a8ced4d86038",
+      "argv": [
+        "C:\\Users\\jpamb\\.local\\bin\\claude.exe",
+        "--bare",
+        "--strict-mcp-config",
+        "--mcp-config",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\final-native\\claude-present-1b000660\\project\\.mcp.json",
+        "-p",
+        "--input-format",
+        "stream-json",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--no-session-persistence"
+      ],
+      "events": [
+        {
+          "path": "/mcp",
+          "method": "server/discover",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "initialize",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "notifications/initialized",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "tools/list",
+          "auth_matched": true
+        }
+      ],
+      "exit_code": 0,
+      "terminated": false,
+      "secret_files": [],
+      "inference_requested": false,
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\final-native\\claude-present-1b000660",
+      "authenticated_initialize": true,
+      "client_status": [
+        {
+          "name": "nexus",
+          "status": "pending"
+        }
+      ],
+      "version": "2.1.317",
+      "context": "isolated_stream_json_control",
+      "project_trust": "explicit_selected_fixture_config",
+      "turn_submitted": false
+    },
+    {
+      "client": "claude",
+      "credential_available": false,
+      "binary_sha256": "26b01ec22df2c17ac7f5703aa547d36706e8d58412136ced0344a8ced4d86038",
+      "argv": [
+        "C:\\Users\\jpamb\\.local\\bin\\claude.exe",
+        "--bare",
+        "--strict-mcp-config",
+        "--mcp-config",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\final-native\\claude-missing-209beb6e\\project\\.mcp.json",
+        "-p",
+        "--input-format",
+        "stream-json",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--no-session-persistence"
+      ],
+      "events": [
+        {
+          "path": "/mcp",
+          "method": "server/discover",
+          "auth_matched": false
+        },
+        {
+          "path": "/mcp",
+          "method": "initialize",
+          "auth_matched": false
+        }
+      ],
+      "exit_code": 0,
+      "terminated": false,
+      "secret_files": [],
+      "inference_requested": false,
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\final-native\\claude-missing-209beb6e",
+      "authenticated_initialize": false,
+      "client_status": [
+        {
+          "name": "nexus",
+          "status": "pending"
+        }
+      ],
+      "version": "2.1.317",
+      "context": "isolated_stream_json_control",
+      "project_trust": "explicit_selected_fixture_config",
+      "turn_submitted": false
+    },
+    {
+      "client": "codex",
+      "credential_available": true,
+      "binary_sha256": "9d563ee4e0441ff9d59d612013e0460ddf8e5709735c2d9f6b98b7ef8ca4eb42",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+        "--no-daemon",
+        "app-server",
+        "--listen",
+        "stdio://"
+      ],
+      "events": [
+        {
+          "path": "/mcp",
+          "method": "initialize",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "notifications/initialized",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "tools/list",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "initialize",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "notifications/initialized",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "tools/list",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "resources/list",
+          "auth_matched": true
+        },
+        {
+          "path": "/mcp",
+          "method": "resources/templates/list",
+          "auth_matched": true
+        }
+      ],
+      "exit_code": 0,
+      "terminated": false,
+      "secret_files": [],
+      "inference_requested": false,
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\final-native\\codex-present-7f19b156",
+      "authenticated_initialize": true,
+      "client_status": [
+        {
+          "name": "nexus",
+          "auth_status": "bearerToken",
+          "tools_error_present": false
+        }
+      ],
+      "version": "0.166.0",
+      "context": "isolated_ephemeral_app_server_thread",
+      "project_trust": "trusted_temporary_project",
+      "turn_submitted": false
+    },
+    {
+      "client": "codex",
+      "credential_available": false,
+      "binary_sha256": "9d563ee4e0441ff9d59d612013e0460ddf8e5709735c2d9f6b98b7ef8ca4eb42",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+        "--no-daemon",
+        "app-server",
+        "--listen",
+        "stdio://"
+      ],
+      "events": [],
+      "exit_code": 0,
+      "terminated": false,
+      "secret_files": [],
+      "inference_requested": false,
+      "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\final-native\\codex-missing-02510c83",
+      "authenticated_initialize": false,
+      "client_status": [
+        {
+          "name": "nexus",
+          "auth_status": "bearerToken",
+          "tools_error_present": true
+        }
+      ],
+      "version": "0.166.0",
+      "context": "isolated_ephemeral_app_server_thread",
+      "project_trust": "trusted_temporary_project",
+      "turn_submitted": false
+    }
+  ],
+  "limitations": [
+    "Synthetic MCP HTTP responder and random credential; no real Server identity or OS vault used in native-client qualification.",
+    "No user messages, turn/start, tools/call or provider inference requested. Isolated client homes and dummy provider credentials.",
+    "Native protocol modes exercise product environment/configuration helpers; full interactive TUI/GUI, existing daemons, other builds and platforms remain unqualified.",
+    "Secret scan covers campaign-owned homes only. Ordinary client settings/hooks/plugins are not exhaustively qualified."
+  ]
+}

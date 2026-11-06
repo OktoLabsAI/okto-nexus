@@ -60,8 +60,8 @@ for recovery; automated cleanup/removal is not part of this increment.
 **Configuration applied is not client ready.** Output separates authenticated
 identity, entry present, credential in the client context, client reload, MCP
 negotiation and work submitted. Vault storage does not make the variable
-available to a launcher or GUI. The latter levels remain unknown. A dedicated
-participant launcher and cooperation smoke are pending. Use
+available to a launcher or GUI. Use the foreground launcher below for secure
+delivery to a new terminal process. Cooperation smoke remains pending. Use
 `doctor --mode participant` to inspect this profile; managed doctor selects
 managed profiles. The external client still needs secure environment delivery,
 project trust/reload and reconnect before its readiness can be verified.
@@ -74,6 +74,53 @@ operator decision.
 The proposed `entry` is reference-only manual guidance. The complete JSON
 response/profile contains host paths and identity context; it is a local
 receipt, **not a portable template**.
+
+## Foreground client launch
+
+```sh
+okto-nexus participant launch --profile reviewer --plan
+okto-nexus participant launch --profile reviewer --approve LAUNCH_REVIEW_REVISION
+```
+
+Launch uses the completed participant profile and its existing protected vault
+entry. The first review authenticates a preparation GET and passively selects
+the sole discovered Claude/Codex native executable. If discovery is ambiguous,
+select `--executable PATH`. Windows shell wrappers are not launched. The review
+shows the executable, project, configuration, environment reference and effects;
+it does not execute the client. Displaying a saved `--plan` performs no vault or
+network access. In an interactive terminal, omit `--plan` to review and confirm
+in one command. Automation approves the exact launch revision.
+
+Apply rechecks the Server/identity, binary bytes, physical project directory,
+file bytes/access policy and client home selectors before starting. It delivers
+the key only in a new child's environment and removes other participant token
+references from that child. It does not modify the calling shell or publish an
+export command. The client keeps its ordinary provider login, native policies,
+settings, other MCP servers, hooks and plugins; review those through the client.
+Nexus sends no prompt or work. The foreground client owns terminal input/output;
+`--json` formats Nexus review/receipt messages, not the intervening client output.
+
+Codex is launched with `--no-daemon` so an older shared daemon cannot discard the
+new environment. A version that does not support this flag fails without a
+fallback. Supported Codex file locations are the selected project's
+`.codex/config.toml` and the actual user `config.toml` in its existing Codex home;
+an arbitrary selected file is refused. Project trust remains required. Claude
+uses its project `.mcp.json`, or `--mcp-config` for an explicitly selected other
+file, with its ordinary trust/approval flow. Existing GUIs and other running
+clients do not inherit this environment.
+
+The private `<profile>.launch.json` receipt records `review`, `starting`,
+`started`, and `exited`. The intent is saved before spawn. Repeating the same
+approval returns the retained attempt, including uncertain attempts, without
+starting another process. A PID is only a historical hint; Nexus does not kill
+or adopt it. If the launcher is interrupted, inspect the client before using
+`--new` to explicitly review another launch, which may overlap the old one.
+Use `--new` also after a completed launch or changed review. The latest receipt
+retains the previous revision/state and process hints, not a complete history.
+
+Successful spawn proves that Nexus supplied the environment to that owned
+process. It does not prove client reload, MCP authentication, participation or
+work, and a zero exit code is not readiness. Those levels remain independent.
 
 ## Independent participant checks
 

@@ -119,4 +119,4 @@ class TerminalParticipant:
             proof=dict(identity='PASS' if context else 'UNKNOWN',
                 client_entry='PASS' if complete and review['file'] else 'UNKNOWN',
                 credential_in_client='UNKNOWN', client_reload='UNKNOWN', mcp='UNKNOWN', work='NOT_SUBMITTED'),
-            next_action='The client must receive the named environment reference in its own launch context, trust/reload its project configuration, and reconnect. Vault storage alone does not make the external client ready.')
+            next_action='Use participant launch with this profile to review protected credential delivery to a new terminal client. The client still needs project trust/reload and MCP verification. Vault storage alone does not make it ready.')

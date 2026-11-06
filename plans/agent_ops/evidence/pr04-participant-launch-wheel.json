@@ -1,0 +1,16 @@
+{
+  "artifact": "okto_nexus-0.3.3-py3-none-any.whl",
+  "sha256": "cc2003c1a9277e523521399c2d9c31720648849e9700760771fa2cb2f6eed4af",
+  "python_payloads": 447,
+  "static_payloads": 7,
+  "raw_bytes_match": true,
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\validation\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "dependencies": {
+    "mcp": "1.30.0",
+    "httpx": "0.28.1",
+    "anyio": "4.16.0",
+    "okto-nexus-connector-core": "0.0.14",
+    "okto-nexus-connector": "0.0.12"
+  }
+}

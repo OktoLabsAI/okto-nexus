@@ -1,0 +1,19 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\validation\\Scripts\\okto-nexus.exe",
+    "participant",
+    "launch",
+    "--profile",
+    "absent",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-launch-a9q7pljl\\missing-console-profile",
+    "--json"
+  ],
+  "exit_code": 3,
+  "output": {
+    "state": "unconfirmed",
+    "code": "PARTICIPANT_PROFILE_ABSENT",
+    "message": "Complete init --mode participant for this profile first."
+  },
+  "home_created": false
+}

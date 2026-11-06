@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="27.600" timestamp="2026-11-06T07:42:19.550890-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_participant_launch" name="test_review_launch_replay_has_scoped_environment_and_no_server_mutation" time="5.688" /><testcase classname="tests.execution_r4.test_participant_launch" name="test_drift_refuses_before_process_effect[config]" time="4.032" /><testcase classname="tests.execution_r4.test_participant_launch" name="test_drift_refuses_before_process_effect[context]" time="3.991" /><testcase classname="tests.execution_r4.test_participant_launch" name="test_drift_refuses_before_process_effect[project]" time="3.836" /><testcase classname="tests.execution_r4.test_participant_launch" name="test_drift_refuses_before_process_effect[binary]" time="4.031" /><testcase classname="tests.execution_r4.test_participant_launch" name="test_drift_refuses_before_process_effect[policy]" time="3.758"><failure message="Failed: DID NOT RAISE ConnectionError">launch = namespace(s=namespace(flow=&lt;okto_nexus.application.terminal_participant.TerminalParticipant object at 0x00000213B4CFB8...rocess_effect[policy] (setup)'}, executable='D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000213BA2FF650&gt;
+change = 'policy'
+
+    @pytest.mark.parametrize('change', ['config', 'context', 'project', 'binary', 'policy', 'approval'])
+    def test_drift_refuses_before_process_effect(launch, monkeypatch, change):
+        t = launch
+        intent = t.flow.review(t.saved, t.executable, environment=t.env)
+        approval = intent['review_revision']
+        if change == 'config':
+            path = Path(t.s.selection['config_file'])
+            path.write_bytes(path.read_bytes() + b'\n')
+        elif change == 'context':
+            t.env['CLAUDE_CONFIG_DIR'] = str(t.s.root / 'other-home')
+        elif change in ('project', 'binary'):
+            original = participant_process.launch_context
+            def changed(*args, **kwargs):
+                value = original(*args, **kwargs)
+                value[change] = {'changed': True}
+                return value
+            monkeypatch.setattr(participant_process, 'launch_context', changed)
+        elif change == 'policy':
+            with t.s.deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute("UPDATE agent_connection_methods SET enabled=0 WHERE agent_id='subject' AND method='mcp'")
+        else:
+            approval = 'wrong'
+&gt;       with pytest.raises(ConnectionError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+tests\execution_r4\test_participant_launch.py:86: Failed</failure></testcase></testsuite></testsuites>

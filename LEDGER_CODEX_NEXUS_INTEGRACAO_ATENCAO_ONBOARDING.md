@@ -328,3 +328,12 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - Campanha TCP com Server real preservou sessões de agente, bindings, grants e runtime. **32 testes de fonte e 55 instalados passaram.** Uma falha inicial com resposta já carregada em memória foi corrigida; relatório inicial preservado. CLI instalado confirmou perfil ausente sem criar diretório.
 - Wheel Nexus com 444 arquivos Python e sete assets comparados byte a byte. Core/Connector inalterados neste marco. [Evidências](plans/agent_ops/evidence/pr04-participant-doctor.md).
 - DX-04/07 e PR-04 continuam em progresso. Credencial no processo real do harness, comportamento MCP desse cliente, cofre real, cooperação, compensação e o plano integral permanecem pendentes.
+
+## 2026-11-06 — PR-04: launcher de participante e ambiente dos clientes reais
+
+- As três `origin/main` foram recuperadas e continuam contidas nas branches versionadas; Connector/Core não mudaram neste marco.
+- `participant launch` revisa perfil autenticado, executável, projeto e configuração antes de iniciar o cliente no terminal. A chave do cofre vai somente no ambiente do filho; o shell pai permanece intacto. Codex exige `--no-daemon`; confiança do projeto e políticas nativas permanecem.
+- Checkpoints anteriores ao spawn e recibos de término impedem relançamento automático após resposta incerta. `--new` solicita outra revisão explicitamente; PID e código de saída não comprovam prontidão.
+- **19 testes de fonte e 74 testes instalados passaram.** A identificação inicial do adaptador Claude e o fixture de mudança de política foram corrigidos; o relatório da falha do fixture está preservado. Uma invocação instalada inicial apontou para nomes de testes inexistentes, corrigidos antes da suíte de 74 casos.
+- **Quatro casos com Claude Code 2.1.317 e Codex 0.166.0**, em homes temporários e modos de protocolo, verificaram referência presente/ausente usando os helpers instalados. Somente a referência presente autenticou MCP no responder sintético. Mesmo sem credencial, o processo retornou zero; o produto mantém a prova de MCP separada. Nenhum prompt, turno de modelo ou chamada de ferramenta foi enviado.
+- Wheel Nexus com 447 arquivos Python e sete assets conferidos byte a byte. [Evidências e limites](plans/agent_ops/evidence/pr04-participant-launch.md). DX-04/05/06/07 e PR-04 seguem em progresso; cofre real integrado ao cliente, GUI/TUI interativo, cooperação canônica, compensação, serviços nativos e M1 produtivo continuam pendentes. Plano fixo preservado.
