@@ -320,3 +320,11 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - [Evidências](plans/agent_ops/evidence/pr04-participant-init.md). DX-03/04/05/06 e PR-04 continuam em progresso. Credencial no launcher/GUI real, doctor de participante, MCP, cooperação, compensação/limpeza e M1 produtivo ainda não foram concluídos. O plano fixo permanece intacto.
 - Core enviado em `5d31784`; candidato coordenado do Connector enviado em `7bdd0f5`.
 - Finalização da entrega Nexus em 2026-11-06; evidências de validação mantêm a data original de 2026-11-05.
+
+## 2026-11-06 — PR-04: doctor de participante e negociação MCP explícita
+
+- `doctor --mode participant` inspeciona perfil/arquivo sem credencial, HTTP, processo ou escrita por padrão. Checks ativos são explícitos; ambiente ausente não recebe fallback silencioso para o cofre.
+- `--check-server` autentica a identidade existente; `--check-mcp` inicializa o transporte e lista ferramentas com limites de origem, bytes, tempo e requisições. Não chama ferramentas, abre sessão de agente ou envia trabalho. Provas do doctor não são atribuídas ao harness externo.
+- Campanha TCP com Server real preservou sessões de agente, bindings, grants e runtime. **32 testes de fonte e 55 instalados passaram.** Uma falha inicial com resposta já carregada em memória foi corrigida; relatório inicial preservado. CLI instalado confirmou perfil ausente sem criar diretório.
+- Wheel Nexus com 444 arquivos Python e sete assets comparados byte a byte. Core/Connector inalterados neste marco. [Evidências](plans/agent_ops/evidence/pr04-participant-doctor.md).
+- DX-04/07 e PR-04 continuam em progresso. Credencial no processo real do harness, comportamento MCP desse cliente, cofre real, cooperação, compensação e o plano integral permanecem pendentes.

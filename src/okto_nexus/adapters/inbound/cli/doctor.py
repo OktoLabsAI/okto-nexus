@@ -31,8 +31,15 @@ def _profile(path):
 
 
 def run_doctor(argv):
+    modes = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+    modes.add_argument('--mode', choices=('managed', 'participant'), default='managed')
+    mode, argv = modes.parse_known_args(argv)
+    if mode.mode == 'participant':
+        from .participant_doctor import run_participant_doctor
+        return run_participant_doctor(argv)
     parser = argparse.ArgumentParser(prog='okto-nexus doctor', description=
         'Inspect independent proof levels. Never start services/harnesses, apply setup, issue grants or submit work.')
+    parser.add_argument('--mode', choices=('managed', 'participant'), default='managed', help='select the saved profile type')
     parser.add_argument('--profile', help='existing project profile; default is the current project')
     parser.add_argument('--project', type=Path)
     parser.add_argument('--operator-profile', help='existing human operator profile for a remote Server')

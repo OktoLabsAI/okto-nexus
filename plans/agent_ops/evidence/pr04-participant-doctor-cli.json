@@ -1,0 +1,131 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-doctor-u3q8_ghs\\validation\\Scripts\\okto-nexus.exe",
+    "doctor",
+    "--mode",
+    "participant",
+    "--profile",
+    "missing",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-doctor-u3q8_ghs\\absent-cli-evidence",
+    "--json"
+  ],
+  "exit_code": 0,
+  "output": {
+    "format_version": 1,
+    "profile": "missing",
+    "topology": "external_participant",
+    "state": "incomplete",
+    "checks": [
+      {
+        "id": "participant_profile",
+        "status": "UNKNOWN",
+        "code": "PROFILE_ABSENT",
+        "reason": "No saved participant profile exists for this selection.",
+        "next_action": "Use init --mode participant to review setup. Doctor creates no files."
+      },
+      {
+        "id": "local_service",
+        "status": "NOT_APPLICABLE",
+        "code": "EXTERNAL_PARTICIPANT",
+        "reason": "This profile selects an external client and Server origin, not local service ownership.",
+        "next_action": "Use service status on the service host when service lifecycle evidence is needed."
+      },
+      {
+        "id": "server_reachability",
+        "status": "UNKNOWN",
+        "code": "NOT_CHECKED",
+        "reason": "This level has not been observed.",
+        "next_action": "Inspect the preceding checks."
+      },
+      {
+        "id": "participant_authentication",
+        "status": "UNKNOWN",
+        "code": "NOT_CHECKED",
+        "reason": "This level has not been observed.",
+        "next_action": "Inspect the preceding checks."
+      },
+      {
+        "id": "client_configuration",
+        "status": "UNKNOWN",
+        "code": "NOT_CHECKED",
+        "reason": "This level has not been observed.",
+        "next_action": "Inspect the preceding checks."
+      },
+      {
+        "id": "credential_store",
+        "status": "UNKNOWN",
+        "code": "NOT_CHECKED",
+        "reason": "This level has not been observed.",
+        "next_action": "Inspect the preceding checks."
+      },
+      {
+        "id": "credential_environment",
+        "status": "UNKNOWN",
+        "code": "CLIENT_CONTEXT_NOT_OBSERVED",
+        "reason": "Vault storage and this doctor process do not prove the external client inherited the credential.",
+        "next_action": "Verify how the intended client receives the named reference in its own process."
+      },
+      {
+        "id": "client_reload",
+        "status": "UNKNOWN",
+        "code": "CLIENT_RELOAD_NOT_OBSERVED",
+        "reason": "A valid file does not prove that the external client loaded it.",
+        "next_action": "Restart/reconnect the intended client with the selected project/configuration."
+      },
+      {
+        "id": "mcp_negotiation",
+        "status": "UNKNOWN",
+        "code": "NOT_CHECKED",
+        "reason": "This level has not been observed.",
+        "next_action": "Inspect the preceding checks."
+      },
+      {
+        "id": "mcp_surface",
+        "status": "UNKNOWN",
+        "code": "NOT_CHECKED",
+        "reason": "This level has not been observed.",
+        "next_action": "Inspect the preceding checks."
+      },
+      {
+        "id": "coordination_participation",
+        "status": "UNKNOWN",
+        "code": "NOT_OBSERVED",
+        "reason": "This check does not create or inspect productive work.",
+        "next_action": "Run an explicitly consented directed exchange; negotiation alone is not participation."
+      },
+      {
+        "id": "handoff_test",
+        "status": "UNKNOWN",
+        "code": "NOT_OBSERVED",
+        "reason": "This check does not create or inspect productive work.",
+        "next_action": "Inspect a separately consented canonical handoff claim and result."
+      },
+      {
+        "id": "work_result",
+        "status": "UNKNOWN",
+        "code": "NOT_OBSERVED",
+        "reason": "This check does not create or inspect productive work.",
+        "next_action": "Inspect the canonical result of separately submitted work."
+      }
+    ],
+    "counts": {
+      "PASS": 0,
+      "FAIL": 0,
+      "UNKNOWN": 12,
+      "NOT_APPLICABLE": 1
+    },
+    "effects": {
+      "service_started": false,
+      "configuration_applied": false,
+      "harness_started": false,
+      "work_submitted": false,
+      "grants_issued": false,
+      "credential_read": false,
+      "mcp_checked": false,
+      "tools_called": false,
+      "agent_session_opened": false
+    }
+  },
+  "home_created": false
+}

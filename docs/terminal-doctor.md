@@ -1,5 +1,8 @@
 # Project diagnostics
 
+For external MCP profiles, use [doctor --mode participant](terminal-participant.md#independent-participant-checks).
+The commands below select managed project profiles.
+
 Inspect the current project without starting a service, opening a harness or
 requesting work:
 

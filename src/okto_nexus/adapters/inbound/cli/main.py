@@ -13,7 +13,7 @@ _HELP = """okto-nexus - local agent coordination bus
 Usage:
   okto-nexus connect [options] Review and connect a local project
   okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
-  okto-nexus doctor [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
   okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
   okto-nexus operator login|status|logout --profile NAME [options]

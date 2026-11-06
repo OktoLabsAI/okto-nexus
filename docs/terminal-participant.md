@@ -61,9 +61,9 @@ for recovery; automated cleanup/removal is not part of this increment.
 identity, entry present, credential in the client context, client reload, MCP
 negotiation and work submitted. Vault storage does not make the variable
 available to a launcher or GUI. The latter levels remain unknown. A dedicated
-participant launcher, participant doctor and cooperation smoke are pending;
-managed `doctor` does not inspect these profiles. Do not start a model to resolve
-that uncertainty. The external client still needs secure environment delivery,
+participant launcher and cooperation smoke are pending. Use
+`doctor --mode participant` to inspect this profile; managed doctor selects
+managed profiles. The external client still needs secure environment delivery,
 project trust/reload and reconnect before its readiness can be verified.
 
 One identity has one logical delivery: an additional client is not guaranteed to
@@ -74,3 +74,43 @@ operator decision.
 The proposed `entry` is reference-only manual guidance. The complete JSON
 response/profile contains host paths and identity context; it is a local
 receipt, **not a portable template**.
+
+## Independent participant checks
+
+```sh
+okto-nexus doctor --mode participant --profile reviewer --json
+okto-nexus doctor --mode participant --profile reviewer --check-server --json
+okto-nexus doctor --mode participant --profile reviewer --check-mcp --json
+```
+
+Default inspection reads only the retained profile and selected client file.
+It does not read the vault/environment secret, use HTTP, start the client or
+service, repair a file, create a profile, or advance setup checkpoints. Missing
+profiles and unobserved levels are unknown; a confirmed changed entry is a
+separate failure that does not hide other useful evidence.
+
+`--check-server` explicitly reads the existing protected key and authenticates
+the selected identity/workspace through the preparation GET. `--check-mcp`
+includes that check, then initializes MCP and lists its tools. It checks the
+required names/basic input fields, not the success or authorization of tool
+calls. No tool, model, agent session, message or handoff is invoked. The temporary
+MCP transport session is closed separately from Nexus agent participation.
+
+The MCP stage has a time limit, at most 16 HTTP requests, four tool-list pages,
+512 advertised tools and one MiB per response stream. It accepts only the exact
+same-origin `/mcp` to `/mcp/` mount redirect; other redirects and compressed
+payloads are refused. Raw SDK remote payload diagnostics are suppressed for
+this check, so credentials/session identifiers cannot be echoed by those logs.
+`--timeout` is the budget per active stage, up to 30 seconds.
+
+`--check-environment` inspects only the named reference in **this doctor
+process**. Missing or malformed values fail that check. With `--check-server`
+or `--check-mcp`, that exact value is authenticated instead of reading the vault.
+There is no fallback from a missing environment variable to the vault. A pass
+is labeled `doctor_process`; it does not prove that a different terminal,
+already-running daemon or GUI inherited anything. Do not print the key or add
+it to shell arguments to obtain this evidence.
+
+MCP success is labeled `participant_doctor`. Client reload, actual harness
+environment, participation, handoff and work remain separate unknown levels.
+No single aggregate state is a promise that the external client is ready.
