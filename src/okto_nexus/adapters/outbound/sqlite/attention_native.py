@@ -1,4 +1,5 @@
 """One relational facts query for canonical native attention; no per-item I/O."""
+import json
 
 
 def _object(alias, fields):
@@ -200,9 +201,14 @@ def build_policy(uow, *, config, access, context, now):
     from nexus_connector_core import get_runtime_catalog
     operator = access.authenticate(context, uow=uow, require_feature=False)
     defaults = dict(uow.connection.execute(
-        'SELECT runtime_enabled,session_policy FROM runtime_policy_defaults WHERE singleton=1').fetchone())
-    return dict(feature_harness_integrations=bool(config.feature_harness_integrations),
-        feature_hitl=bool(config.feature_hitl), admission_closed=bool(access.admission_fence and access.admission_fence.closed),
+        "SELECT runtime_enabled,session_policy,(SELECT json_group_object(key,json_object("
+        "'value',value,'generation',generation,'changed_at',changed_at)) FROM server_effective_policy) AS effective_policy "
+        'FROM runtime_policy_defaults WHERE singleton=1').fetchone())
+    effective_policy = json.loads(defaults.pop('effective_policy'))
+    values = {key: bool(effective_policy[key]['value']) if key in effective_policy else bool(getattr(config, key))
+        for key in ('feature_harness_integrations', 'feature_hitl')}
+    return dict(**values, effective_policy=effective_policy,
+        admission_closed=bool(access.admission_fence and access.admission_fence.closed),
         viewer_is_operator=operator, viewer_actor=context.actor_agent_id or 'operator', runtime_defaults=defaults,
         catalog={item.adapter_id: dict(connection_mode=item.connection_mode, native_kind=item.native_kind)
             for item in get_runtime_catalog().runtimes})

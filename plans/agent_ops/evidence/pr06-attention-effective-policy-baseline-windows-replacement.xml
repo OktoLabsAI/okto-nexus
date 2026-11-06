@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.317" timestamp="2026-11-06T18:58:28.072338-03:00" hostname="Alienware_m15"><testcase classname="tests.test_sqlite_connection_reuse" name="test_replaced_database_file_is_not_served_by_the_old_connection" time="0.055"><failure message="PermissionError: [WinError 32] O arquivo já está sendo usado por outro processo: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10518\\test_replaced_database_file_is0\\nexus.db'">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10518/test_replaced_database_file_is0')
+
+    def test_replaced_database_file_is_not_served_by_the_old_connection(tmp_path):
+        factory = ConnectionFactory(NexusConfig(home_dir=tmp_path))
+        with factory.unit_of_work() as uow:
+            uow.connection.execute("CREATE TABLE items(value TEXT)")
+            uow.connection.execute("INSERT INTO items VALUES('old')")
+        used = connection_of(factory)
+        path = factory.config.db_path
+        for suffix in ("", "-wal", "-shm"):
+&gt;           path.with_name(path.name + suffix).unlink(missing_ok=True)
+
+tests\test_sqlite_connection_reuse.py:139:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10518/test_replaced_database_file_is0/nexus.db')
+missing_ok = True
+
+    def unlink(self, missing_ok=False):
+        """
+        Remove this file or link.
+        If the path is a directory, use rmdir() instead.
+        """
+        try:
+&gt;           os.unlink(self)
+E           PermissionError: [WinError 32] O arquivo já está sendo usado por outro processo: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10518\\test_replaced_database_file_is0\\nexus.db'
+
+C:\Python313\Lib\pathlib\_local.py:746: PermissionError</failure></testcase></testsuite></testsuites>

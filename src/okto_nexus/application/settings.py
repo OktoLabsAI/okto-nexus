@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 import hashlib
 from dataclasses import dataclass, replace
-from typing import Any
+from typing import Any, Callable
 
 from ..config import (
     EMBEDDING_MODES,
@@ -485,10 +485,50 @@ class SettingsService:
         config: NexusConfig,
         clock: Clock,
         pinned: frozenset[str] = frozenset(),
+        *,
+        effective_policy_owner: Callable[[], bool] | None = None,
     ) -> None:
         self._config = config
         self._clock = clock
         self._pinned = pinned
+        self._effective_policy_owner = effective_policy_owner
+        self._server_policy_active = False
+
+    def _require_policy_owner(self) -> None:
+        if self._effective_policy_owner is None or not self._effective_policy_owner():
+            raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+                "The Server no longer owns this effective policy.", {})
+
+    def start_server_policy(self, uow: UnitOfWork) -> None:
+        """Publish resolved policy only from the lock-owning Server lifespan."""
+        if self._effective_policy_owner is None:
+            return
+        self._require_policy_owner()
+        from .server_effective_policy import publish_effective_policy
+        publish_effective_policy(uow, values={
+            key: getattr(self._config, key)
+            for key in ('feature_harness_integrations', 'feature_hitl')
+        }, now=self._clock.now_iso())
+        uow.after_commit(lambda: setattr(self, '_server_policy_active', True))
+
+    def stop_server_policy(self) -> None:
+        self._server_policy_active = False
+
+    def _stage_live(self, uow: UnitOfWork, changes: dict[str, Any]) -> None:
+        if self._server_policy_active:
+            self._require_policy_owner()
+            from .server_effective_policy import publish_effective_policy
+            policy = {key: value for key, value in changes.items()
+                if key in ('feature_harness_integrations', 'feature_hitl')}
+            if policy:
+                publish_effective_policy(uow, values=policy, now=self._clock.now_iso())
+        if 'feature_harness_integrations' in changes:
+            self._sync_runtime_writer_mode(uow, changes['feature_harness_integrations'])
+        committed = dict(changes)
+        def apply_committed():
+            for key, value in committed.items():
+                setattr(self._config, key, value)
+        uow.after_commit(apply_committed)
 
     # ------------------------------------------------------------------ #
     def load_overrides(self, uow: UnitOfWork) -> dict[str, Any]:
@@ -549,7 +589,7 @@ class SettingsService:
         return items
 
     def update(self, uow: UnitOfWork, changes: dict[str, Any], *, apply_live: bool = True) -> dict[str, Any]:
-        """Validate, persist and apply ``changes``; returns what was applied.
+        """Validate and persist changes, applying live values after commit.
 
         Unknown keys and attempts to change CLI/env-pinned values fail
         loudly (CONFIG_ERROR) - silent partial writes would be worse.
@@ -580,10 +620,8 @@ class SettingsService:
                 "updated_at = excluded.updated_at",
                 (key, json.dumps(value), now),
             )
-            if apply_live:
-                setattr(self._config, key, value)
-            if key == "feature_harness_integrations":
-                self._sync_runtime_writer_mode(uow, value)
+        if apply_live:
+            self._stage_live(uow, validated)
         return validated
 
     def native_decision_review(self, uow: UnitOfWork) -> dict[str, Any]:
@@ -594,6 +632,11 @@ class SettingsService:
         legacy = getattr(self._config, '_legacy_settings_provenance', False)
         source = 'cli/env' if pinned else 'stored' if row is not None else 'legacy-context' if legacy else 'default'
         value = self._config.feature_hitl
+        if self._server_policy_active:
+            from .server_effective_policy import read_effective_policy
+            published = read_effective_policy(uow).get(key)
+            if published is not None:
+                value = published['value']
         state = dict(value=value, source=source, stored=dict(row) if row is not None else None)
         revision = hashlib.sha256(json.dumps(state, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
         return dict(value=value, source=source, editable=not pinned, revision=revision,
@@ -622,24 +665,26 @@ class SettingsService:
         # their latest committed value rather than replaying the setup's value.
         with factory.unit_of_work() as uow:
             if 'feature_hitl' not in self._pinned:
-                self._config.feature_hitl = self.load_overrides(uow).get('feature_hitl', NexusConfig().feature_hitl)
+                self._stage_live(uow, {'feature_hitl': self.load_overrides(uow).get(
+                    'feature_hitl', NexusConfig().feature_hitl)})
 
     def reset(self, uow: UnitOfWork, keys: list[str] | None = None) -> list[str]:
         """Drop stored overrides (all, or the given keys) and restore defaults."""
         defaults = NexusConfig()
         targets = keys if keys is not None else [s.key for s in SETTING_SPECS]
-        cleared: list[str] = []
         for key in targets:
             if key not in _SPEC_BY_KEY:
                 raise OktoNexusError(
                     ErrorCode.CONFIG_ERROR, f"Unknown setting: {key!r}.", {"key": key}
                 )
+        cleared: list[str] = []
+        changes: dict[str, Any] = {}
+        for key in targets:
             uow.connection.execute("DELETE FROM settings WHERE key = ?", (key,))
             if key not in self._pinned:
-                setattr(self._config, key, getattr(defaults, key))
-                if key == "feature_harness_integrations":
-                    self._sync_runtime_writer_mode(uow, defaults.feature_harness_integrations)
+                changes[key] = getattr(defaults, key)
             cleared.append(key)
+        self._stage_live(uow, changes)
         return cleared
 
     def _sync_runtime_writer_mode(self, uow, enabled):

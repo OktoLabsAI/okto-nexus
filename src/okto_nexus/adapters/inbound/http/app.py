@@ -537,8 +537,15 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # bootstrap resolved from the un-overridden config. Without this ordering a
     # dashboard-set embedding_mode stayed inert across restarts (the capability
     # was resolved before its override was applied).
+    policy_owner_generation = lock.generation if lock is not None else None
+    def owns_effective_policy():
+        return bool(lock is not None and lock.owned and policy_owner_generation
+            and lock.generation == policy_owner_generation
+            and lock.home_dir == deps.config.home_dir.resolve()
+            and lock.db_path == deps.config.db_path.resolve())
     settings_service = SettingsService(
-        deps.config, deps.clock, detect_pinned_fields(deps.config)
+        deps.config, deps.clock, detect_pinned_fields(deps.config),
+        effective_policy_owner=owns_effective_policy if lock is not None else None,
     )
     with deps.connection_factory.unit_of_work() as uow:
         settings_service.apply_overrides(uow)
@@ -603,6 +610,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
 
     @contextlib.asynccontextmanager
     async def lifespan(app: FastAPI):
+        # Incidental bootstrap/build_app/MCP construction never advances an
+        # episode. Only this resolved Server, holding both OS locks, publishes.
+        with deps.connection_factory.unit_of_work() as uow:
+            settings_service.start_server_policy(uow)
         from ....application.execution_revocation import repair_revoked_sessions
         from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
         await anyio.to_thread.run_sync(
@@ -750,6 +761,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             close_connections = getattr(deps.connection_factory, "close", None)
             if close_connections is not None:
                 close_connections()
+            settings_service.stop_server_policy()
             if lock is not None and release_lock:
                 lock.release()
             if embedded_shutdown_error is not None:

@@ -38,6 +38,31 @@ def _profile(raw):
     return dict(raw, config=_json(raw['config'])) if raw else None
 
 
+def _policy_value(policy, key, *, required=True):
+    """Defer a policy-only refusal while authority examines independent gates.
+
+    Ordinary native projection remains strict. Authority supplies a private
+    collector and emits these refusals only if the other predicates authorize.
+    This never grants permission to a command or mutates the supplied snapshot.
+    """
+    value = bool(policy[key])
+    denials = policy.get('_policy_denials')
+    if denials is not None and value != required:
+        denials.add(key)
+        return required
+    return value
+
+
+def _profile_hitl(policy, profile, descriptor):
+    from .runtime_requirements import native_requirement_schema
+    if profile and descriptor and profile['config'].get('required_native_requests'):
+        schema = native_requirement_schema(descriptor.native_kind,
+            'stream' if descriptor.native_kind == 'claude_code' else None)
+        if schema.get('requires_feature_hitl'):
+            return _policy_value(policy, 'feature_hitl')
+    return policy['feature_hitl']
+
+
 def _runtime_grant(runtime, actor_data, *, action, grant_id, scope, now, policy, check_budget=False):
     if policy['admission_closed']:
         fail('Runtime shutdown is in progress; new work is not accepted.', details={'reason': 'RUNTIME_DRAINING'})
@@ -48,7 +73,7 @@ def _runtime_grant(runtime, actor_data, *, action, grant_id, scope, now, policy,
     represented = _agent(subject_data)
     descriptor_data = policy['catalog'].get(endpoint['adapter_id'])
     descriptor = SimpleNamespace(**descriptor_data) if descriptor_data else None
-    enabled = descriptor is not None and policy['feature_harness_integrations'] and descriptor.connection_mode != 'attach'
+    enabled = descriptor is not None and _policy_value(policy, 'feature_harness_integrations') and descriptor.connection_mode != 'attach'
     if len(runtime['binding_executors']) != 1:
         fail('Runtime action is not authorized.', ErrorCode.PERMISSION_DENIED)
     selected_policy = (subject_data['execution_policy'] or [dict(execution_location='local', local_adapter_id=None)])[0]
@@ -59,7 +84,7 @@ def _runtime_grant(runtime, actor_data, *, action, grant_id, scope, now, policy,
     method = next((row for row in subject_data['methods'] if row['method'] == endpoint['adapter_id']), None)
     enabled = native_runtime_enabled(enabled=enabled, endpoint=endpoint, represented=represented,
         method_enabled=method is None or bool(method['enabled']), profile=profile,
-        descriptor=descriptor, hitl_enabled=policy['feature_hitl'], action=action)
+        descriptor=descriptor, hitl_enabled=_profile_hitl(policy, profile, descriptor), action=action)
     context = RuntimeRequestContext(actor.agent_id if actor else None, 'agent_key',
         credential_binding=actor.api_key_hash if actor else None, execution_grant_id=grant_id)
     if enabled and runtime_operator(context, actor) and not grant_id:
@@ -93,7 +118,7 @@ def _recorded_operator(facts, policy, now):
     if context is None:
         return
     is_operator = authenticate_runtime_facts(context, current,
-        feature_enabled=policy['feature_harness_integrations'])
+        feature_enabled=_policy_value(policy, 'feature_harness_integrations'))
     if proof is not None and not is_operator and proof['action'] == 'turn.submit' and proof['binding_id']:
         runtime = facts['delegated_runtime']
         if not runtime or runtime['recipient_binding_count'] != 1:
@@ -120,6 +145,8 @@ def _recorded_operator(facts, policy, now):
 
 def require_live(facts, now, policy):
     """Pure equivalent of the full canonical native liveness dependency chain."""
+    if not _policy_value(policy, 'feature_hitl'):
+        fail('Native decision dispatch is disabled.', ErrorCode.PERMISSION_DENIED)
     request, authority = facts['request'], facts['authority']
     scope = request['scope']
     if facts['contained']:

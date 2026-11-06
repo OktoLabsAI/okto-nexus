@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="6" time="37.813" timestamp="2026-11-06T18:55:48.511620-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_authority" name="test_effective_policy_same_clock_recurrence_does_not_inherit_seen_or_snooze[feature_harness_integrations]" time="7.987"><failure message="StopIteration">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10516/test_eff...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'Sx9T_y-tSGl6wylOSHMhwijZkh55RRNHazmPGtP9cgM', ...})
+key = 'feature_harness_integrations'
+
+    @pytest.mark.parametrize('key', ['feature_harness_integrations', 'feature_hitl'])
+    def test_effective_policy_same_clock_recurrence_does_not_inherit_seen_or_snooze(decision_state, key):
+        deps, _, _ = decision_state
+        now = deps.clock.now_iso()
+        publish_policy(deps, dict(feature_harness_integrations=True, feature_hitl=True), now)
+        service = attention_service(deps, now)
+        context = RuntimeRequestContext('operator', 'http_loopback', trusted_local_operator=True)
+        def observed():
+            return service.read(context=context, filters=dict(kind='execution_authority_blocking'))['items']
+        assert observed() == []
+        first_policy = publish_policy(deps, {key: False}, now)
+        first = observed()
+        assert first and all(stamp(item['first_detected_at']) == stamp(now) for item in first)
+        item = first[0]
+        marked = service.mark_seen(context=context, attention_id=item['attention_id'],
+            source_revision=item['source_revision'], preference_revision=0)['item']
+        service.snooze(context=context, attention_id=item['attention_id'], source_revision=item['source_revision'],
+            preference_revision=marked['seen_state']['revision'], until=(stamp(now) + timedelta(hours=1)).isoformat())
+&gt;       retained = next(row for row in observed() if row['attention_id'] == item['attention_id'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests\test_attention_authority.py:172: StopIteration</failure></testcase><testcase classname="tests.test_attention_authority" name="test_effective_policy_same_clock_recurrence_does_not_inherit_seen_or_snooze[feature_hitl]" time="5.710"><failure message="StopIteration">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10516/test_eff...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'P5pPPrD-zdtvUiNz5SgfW-bwkrZp67qWBvMHeRInl3Y', ...})
+key = 'feature_hitl'
+
+    @pytest.mark.parametrize('key', ['feature_harness_integrations', 'feature_hitl'])
+    def test_effective_policy_same_clock_recurrence_does_not_inherit_seen_or_snooze(decision_state, key):
+        deps, _, _ = decision_state
+        now = deps.clock.now_iso()
+        publish_policy(deps, dict(feature_harness_integrations=True, feature_hitl=True), now)
+        service = attention_service(deps, now)
+        context = RuntimeRequestContext('operator', 'http_loopback', trusted_local_operator=True)
+        def observed():
+            return service.read(context=context, filters=dict(kind='execution_authority_blocking'))['items']
+        assert observed() == []
+        first_policy = publish_policy(deps, {key: False}, now)
+        first = observed()
+        assert first and all(stamp(item['first_detected_at']) == stamp(now) for item in first)
+        item = first[0]
+        marked = service.mark_seen(context=context, attention_id=item['attention_id'],
+            source_revision=item['source_revision'], preference_revision=0)['item']
+        service.snooze(context=context, attention_id=item['attention_id'], source_revision=item['source_revision'],
+            preference_revision=marked['seen_state']['revision'], until=(stamp(now) + timedelta(hours=1)).isoformat())
+&gt;       retained = next(row for row in observed() if row['attention_id'] == item['attention_id'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+tests\test_attention_authority.py:172: StopIteration</failure></testcase><testcase classname="tests.test_attention_authority" name="test_effective_policy_toggle_does_not_renew_independent_grant_revocation[feature_harness_integrations]" time="5.551" /><testcase classname="tests.test_attention_authority" name="test_effective_policy_toggle_does_not_renew_independent_grant_revocation[feature_hitl]" time="4.447" /><testcase classname="tests.test_attention_authority" name="test_effective_policy_wal_snapshot_keeps_values_and_generations_together" time="6.107" /><testcase classname="tests.test_attention_authority" name="test_effective_hitl_policy_blocks_pending_native_dispatch_and_native_actions" time="3.827" /></testsuite></testsuites>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="16.217" timestamp="2026-11-06T19:17:13.175929-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_effective_policy_http" name="test_http_policy_same_clock_recurrence_has_new_ids_without_inherited_preferences[feature_harness_integrations]" time="9.345" /><testcase classname="tests.test_attention_effective_policy_http" name="test_http_policy_same_clock_recurrence_has_new_ids_without_inherited_preferences[feature_hitl]" time="4.184"><failure message="AssertionError: assert {'execution_native_request'} == {'execution_n...on_operation'}&#10;  &#10;  Extra items in the right set:&#10;  'execution_operation'&#10;  Use -v to get more diff">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10526/test_htt...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'EN9vQiCzT75d5Zf0jjVOyEO16As72PL3U9f8N7cWWMA', ...})
+key = 'feature_hitl'
+
+    @pytest.mark.parametrize('key', KEYS)
+    def test_http_policy_same_clock_recurrence_has_new_ids_without_inherited_preferences(decision_state, key):
+        deps, app, _ = decision_state
+        assert app.state.policy_test_lock.owned
+        fixed = app.state.policy_test_now
+        # opening owns the live lifespan. This client only sends requests into the
+        # same app; entering another TestClient lifespan would start a second owner.
+        client = TestClient(app, client=('127.0.0.1', 50000))
+        headers = {'x-api-key': app.state.test_agent_keys['operator']}
+        filters = {'kind': 'execution_authority_blocking', 'state': 'all'}
+&#32;&#32;&#32;&#32;
+        def patch(value):
+            result = payload(client.patch('/api/v1/settings', headers=headers, json=value))
+            assert result['applied'] == value
+&#32;&#32;&#32;&#32;
+        def observed(state='all'):
+            response = payload(client.get('/api/v1/attention', headers=headers, params={**filters, 'state': state}))
+            assert instant(response['observed_at']) == instant(fixed)
+            assert response['total'] == len(response['items'])
+            assert response['counts']['action_required'] == len(response['items'])
+            return response
+&#32;&#32;&#32;&#32;
+        patch(dict.fromkeys(KEYS, True))
+        assert observed()['items'] == []
+        canonical = native_fixtures.snapshot(decision_state)
+        initial_policy = policy_rows(deps)
+&#32;&#32;&#32;&#32;
+        patch({key: False})
+        first_policy = policy_rows(deps)
+        assert first_policy[key]['generation'] == initial_policy[key]['generation'] + 1
+        first = observed()['items']
+        assert first
+&gt;       assert {row['source_type'] for row in first} == {'execution_operation', 'execution_native_request'}
+E       AssertionError: assert {'execution_native_request'} == {'execution_n...on_operation'}
+E&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+E         Extra items in the right set:
+E         'execution_operation'
+E         Use -v to get more diff
+
+tests\test_attention_effective_policy_http.py:109: AssertionError</failure></testcase></testsuite></testsuites>

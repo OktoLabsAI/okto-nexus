@@ -61,6 +61,7 @@ class SqliteUnitOfWork:
         self._writer_gate = writer_gate if write else None
         self._busy_timeout_ms = busy_timeout_ms
         self._gate_acquired = False
+        self._after_commit = []
 
     def __enter__(self) -> "SqliteUnitOfWork":
         statement = "BEGIN IMMEDIATE" if self._write else "BEGIN"
@@ -116,10 +117,26 @@ class SqliteUnitOfWork:
 
     def commit(self) -> None:
         if self._active:
-            self.connection.execute("COMMIT")
+            try:
+                self.connection.execute("COMMIT")
+            except BaseException:
+                self._after_commit.clear()
+                raise
             self._active = False
+            callbacks, self._after_commit = self._after_commit, []
+            # Keep writer admission until the committed in-memory cache is
+            # applied. Another writer must not replay an older value later.
+            for callback in callbacks:
+                callback()
+
+    def after_commit(self, callback) -> None:
+        """Stage an infallible, nonblocking cache update, with no database I/O."""
+        if not self._active or not self._write:
+            raise RuntimeError("Commit callbacks require an active write transaction.")
+        self._after_commit.append(callback)
 
     def rollback(self) -> None:
+        self._after_commit.clear()
         if self._active:
             self.connection.execute("ROLLBACK")
             self._active = False

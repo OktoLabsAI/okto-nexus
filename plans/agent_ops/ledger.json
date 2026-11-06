@@ -360,7 +360,15 @@
         "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-checks.json"
+        "plans/agent_ops/evidence/pr06-attention-completion-checks.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ]
     },
     "PR-07": {
@@ -4894,7 +4902,7 @@
     },
     "ATN-01": {
       "title": "serviÃ§o de projeÃ§Ã£o",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "milestones": [
         "PR-06"
       ],
@@ -4932,7 +4940,11 @@
         "src/okto_nexus/adapters/inbound/http/app.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
-        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql",
+        "src/okto_nexus/application/server_effective_policy.py",
+        "src/okto_nexus/application/settings.py",
+        "src/okto_nexus/adapters/outbound/sqlite/connection.py",
+        "src/okto_nexus/migrations/163_server_effective_policy.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -4944,16 +4956,24 @@
         "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ],
-      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
         "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
-        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
+        "A preexisting SQLite file-replacement test cannot unlink the open database on Windows (WinError32); the previous installed wheel reproduces it. This is not counted as passing coverage."
       ],
       "subscopes": {
         "twelve_initial_kinds": "VERIFIED",
@@ -4962,7 +4982,7 @@
         "pending_message_native_authority": "VERIFIED",
         "general_approval_coverage": "VERIFIED",
         "manual_native_result_identity": "VERIFIED",
-        "global_effective_policy_recurrence": "IN_PROGRESS"
+        "global_effective_policy_recurrence": "VERIFIED"
       }
     },
     "ATN-02": {
@@ -5005,7 +5025,11 @@
         "src/okto_nexus/adapters/inbound/http/app.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
-        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql",
+        "src/okto_nexus/application/server_effective_policy.py",
+        "src/okto_nexus/application/settings.py",
+        "src/okto_nexus/adapters/outbound/sqlite/connection.py",
+        "src/okto_nexus/migrations/163_server_effective_policy.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -5017,16 +5041,24 @@
         "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ],
-      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
         "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
-        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
+        "A preexisting SQLite file-replacement test cannot unlink the open database on Windows (WinError32); the previous installed wheel reproduces it. This is not counted as passing coverage."
       ],
       "subscopes": {
         "shared_operator_preferences": "VERIFIED",
@@ -5075,7 +5107,11 @@
         "src/okto_nexus/adapters/inbound/http/app.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
-        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql",
+        "src/okto_nexus/application/server_effective_policy.py",
+        "src/okto_nexus/application/settings.py",
+        "src/okto_nexus/adapters/outbound/sqlite/connection.py",
+        "src/okto_nexus/migrations/163_server_effective_policy.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -5087,20 +5123,29 @@
         "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ],
-      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
         "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
-        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
+        "A preexisting SQLite file-replacement test cannot unlink the open database on Windows (WinError32); the previous installed wheel reproduces it. This is not counted as passing coverage."
       ],
       "subscopes": {
         "read_projection_passivity": "VERIFIED",
-        "canonical_auth_audit_preserved": "VERIFIED"
+        "canonical_auth_audit_preserved": "VERIFIED",
+        "effective_policy_commit_and_snapshot": "VERIFIED"
       }
     },
     "ATN-04": {
@@ -5143,7 +5188,11 @@
         "src/okto_nexus/adapters/inbound/http/app.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
-        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql",
+        "src/okto_nexus/application/server_effective_policy.py",
+        "src/okto_nexus/application/settings.py",
+        "src/okto_nexus/adapters/outbound/sqlite/connection.py",
+        "src/okto_nexus/migrations/163_server_effective_policy.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -5155,16 +5204,24 @@
         "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ],
-      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
         "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
-        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
+        "A preexisting SQLite file-replacement test cannot unlink the open database on Windows (WinError32); the previous installed wheel reproduces it. This is not counted as passing coverage."
       ],
       "subscopes": {
         "operator_api_cas_filters_pages": "VERIFIED",
@@ -5212,7 +5269,11 @@
         "src/okto_nexus/adapters/inbound/http/app.py",
         "src/okto_nexus/adapters/inbound/http/routes.py",
         "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
-        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql",
+        "src/okto_nexus/application/server_effective_policy.py",
+        "src/okto_nexus/application/settings.py",
+        "src/okto_nexus/adapters/outbound/sqlite/connection.py",
+        "src/okto_nexus/migrations/163_server_effective_policy.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -5224,16 +5285,24 @@
         "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
         "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ],
-      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
         "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
         "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
         "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
-        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3.",
+        "A preexisting SQLite file-replacement test cannot unlink the open database on Windows (WinError32); the previous installed wheel reproduces it. This is not counted as passing coverage."
       ],
       "subscopes": {
         "tcp_sse_metadata_batching_gap_revocation": "VERIFIED",
@@ -7714,9 +7783,17 @@
         "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
         "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
         "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ],
-      "result": "Persisted source episodes, rollback/reentry, result seen retention and 161-to-162 preference migration are qualified. Global effective feature off/on/off without persisted generation still reuses the episode; its passing observation is explicitly not acceptance. Browser reconnect remains pending."
+      "result": "Backend episode recurrence now includes durable effective-policy generations, same-clock changes, preference isolation, rollback, no-op/restart stability and coherent read snapshots. Browser reconnect qualification remains pending in PR-07."
     },
     "AT-09": {
       "requirement": "AÃ§Ã£o com revisÃ£o antiga conflita e recarrega o fato; nÃ£o decide pedido novo.",
@@ -9272,6 +9349,21 @@
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
         "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "scope": "PR-06 effective Server policy episodes",
+      "result": "Effective Server policy now has durable generations for harness integrations and HITL. Only the owning Server lifespan and committed settings activation publish effective values; CLI/env pins, equal-value writes, restarts, rollback and resets preserve their intended semantics. Attention reads policy values and generations in one snapshot and uses them only for responsible denial gates; same-clock recurrence does not inherit seen/snooze, and irrelevant toggles preserve independently revoked-grant episodes. 403 distinct installed cases passed on Windows with zero skipped. The Windows open-SQLite-file unlink test also fails on the previous installed wheel; it remains a recorded limitation and is explicitly deselected in the installed policy group, never counted as passed. Migration 163 is additive, and migrations 161/162 remain unchanged. PR-06 client reconciliation and PR-07 UI/browser acceptance remain open; no real-provider/client/native-service or full R3 acceptance is claimed.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr06-attention-effective-policy.md",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml"
       ]
     }
   ]

@@ -24,7 +24,7 @@ import boundary test). The concrete connection type is referenced as ``Any``.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Iterable, Mapping, Protocol, Sequence, runtime_checkable
+from typing import Any, Callable, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
 from ..domain.approvals import Approval
 from ..domain.handoff_origin import HandoffOrigin
@@ -148,6 +148,13 @@ class UnitOfWork(Protocol):
 
     def rollback(self) -> None:
         """Roll back the active transaction."""
+        ...
+
+    def after_commit(self, callback: Callable[[], None]) -> None:
+        """Apply a nonblocking cache update only after a successful commit.
+
+        Callbacks must not perform I/O or raise; rollback discards them.
+        """
         ...
 
 

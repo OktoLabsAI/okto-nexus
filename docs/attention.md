@@ -12,11 +12,9 @@ can remain available when approval would fail those rules. Known expired or
 archived requests retain inspection only. Legacy native approvals without a
 correlated current native request never gain a generic execution action.
 
-PR-06 remains in progress. One known episode gap is a global execution-feature
-toggle off/on/off without a persisted source change: the blocking occurrence
-reuses its ID and viewing preference. This behavior is tested as a limitation,
-not as acceptance of episode recurrence. Client reconciliation and browser
-acceptance also remain open in PR-07.
+Global policy changes have durable generations, so a later blocking episode
+does not inherit viewing preferences from an earlier resolved one. Client
+reconciliation and browser acceptance remain open in PR-07.
 
 `feature_attention` defaults to `true` and can be changed through existing
 settings or `OKTO_NEXUS_FEATURE_ATTENTION` / `--feature-attention`. It is
@@ -167,7 +165,7 @@ with a successful zero count. The PR-07 client must implement these behaviors.
 
 ## Persistence and rollback
 
-Migrations 161 and 162 are additive. `attention_preferences` stores only viewing state
+Migrations 161 through 163 are additive. `attention_preferences` stores only viewing state
 under the existing operator principal. `attention_operation_epochs` stores a
 current source reference, state, counter and stable transition timestamps for
 deliveries, runtime recovery, dispatch and executor connection state. Triggers
@@ -184,6 +182,20 @@ configuration values or credentials being compared. A deleted configuration
 can retain a metadata tombstone while pending canonical work still references
 it. Explicit history reset removes those obsolete tombstones and preserves
 counters for configuration that survives the reset.
+
+Migration 163 adds `server_effective_policy`: the effective values of
+`feature_harness_integrations` and `feature_hitl`, their generations and stable
+change timestamps. It does not infer initial values from stored overrides.
+The first publication records the first durable observation of that policy;
+it does not claim a historical transition time before this schema existed.
+Only the Server lifespan holding the matching home/database locks publishes
+the resolved CLI/env/override policy, followed by its committed settings changes.
+Incidental MCP bootstrap, reads, heartbeats and equal-value writes do not advance
+these generations. A rollback changes neither the published policy nor the live
+configuration; committed cache updates run before another writer is admitted.
+Both reset modes retain policy generations. Attention reads values and generations
+in the same SQLite snapshot and uses a generation only for a policy gate causing
+the block. An unrelated policy toggle does not renew a separately revoked grant.
 
 Handoff result timestamps are anchored to the first and latest known canonical
 result in that claim epoch. They survive partial execution-result retention.
@@ -209,6 +221,6 @@ receipt and reports the uncertainty without automatically repeating cleanup.
 
 GET performs no lifecycle or preference writes. Existing authentication/audit
 side effects remain governed by their own contract. Disable `feature_attention`
-for operational rollback while retaining migration 162 and its metadata. An
-older binary that does not recognize schema 162 refuses startup; do not delete
+for operational rollback while retaining migration 163 and its metadata. An
+older binary that does not recognize schema 163 refuses startup; do not delete
 migration records or downgrade a live database to bypass that protection.

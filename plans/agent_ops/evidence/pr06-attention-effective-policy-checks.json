@@ -1,0 +1,133 @@
+{
+  "parent_commit": "8b83766649597aed1a8d39dee61fa5825bc808ff",
+  "changed_python_files": [
+    "src/okto_nexus/adapters/inbound/http/app.py",
+    "src/okto_nexus/adapters/outbound/sqlite/attention_native.py",
+    "src/okto_nexus/adapters/outbound/sqlite/connection.py",
+    "src/okto_nexus/application/attention_authority.py",
+    "src/okto_nexus/application/attention_native.py",
+    "src/okto_nexus/application/database_reset.py",
+    "src/okto_nexus/application/ports.py",
+    "src/okto_nexus/application/server_effective_policy.py",
+    "src/okto_nexus/application/settings.py",
+    "tests/test_attention_authority.py",
+    "tests/test_attention_effective_policy_http.py",
+    "tests/test_attention_results_upgrade.py",
+    "tests/test_attention_storage.py",
+    "tests/test_server_effective_policy.py",
+    "tests/test_server_effective_policy_http.py",
+    "tests/test_settings_transactions.py"
+  ],
+  "ruff": "All checks passed!",
+  "ledger": "59 tasks, 132 scenarios, 28 invariants, 17 completion_criteria\nScope coverage valid. This check is not implementation or campaign acceptance.",
+  "whitespace_check": "passed",
+  "previous_attention_evidence_unchanged": true,
+  "migrations_161_162_unchanged": true,
+  "xml_artifacts": [
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-storage-source.xml",
+      "sha256": "9afae8de7b1c1e6ffdc002fa334760548a02d4d796fb3d8bbbca9d174617aee0",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-http-source.xml",
+      "sha256": "0ac645e9132be200ad6a796c7a0de9e5548bd1411aa53199728b087c2d2613bc",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-ownership-source.xml",
+      "sha256": "b61fa1911c2e467267cdacd657e9fe5dd94924a157ad7223e4229785b33dc095",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-transactions-source.xml",
+      "sha256": "857682dda09a6b24fd3d662c150335a950e5c47b6e5ee2c8f88f0f302193efb7",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-settings-source-initial.xml",
+      "sha256": "ebcc96b29e02ea51997fc1422ffde279b873820d35f4ef21d172ff5e68b7ac0b",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-baseline-windows-replacement.xml",
+      "sha256": "5e418b781cfac7d1b328981300b325c2685f71295762384830f7a5eacd2356f2",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-authority-source-initial.xml",
+      "sha256": "116d0002f44b227c6f16135b6083ebd26c8572c52e20cb19c39e887cfa468831",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-authority-source-directed.xml",
+      "sha256": "0eb3fa6d734421598d479a77ca07bf9378c522457a6abeef590861908997c545",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-required-native-source.xml",
+      "sha256": "d2f072c290665d884889ccec671bdb0505a2640adcbca0617065194e2309f26a",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-authority-native-source-initial.xml",
+      "sha256": "fbad701913390380f496ff28324e1ada86863a1514eb46a5f6a892a69f57b37e",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-authority-source-final.xml",
+      "sha256": "c3d66bfd99de7fd9b6dececa874d8df1dc36dd0527b6f611a0c3fec5d8ed99fc",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-native-source-final.xml",
+      "sha256": "f2ebe1fe6ce987062fa89a3073c9bd5fb2a6de70390fa0e5c223dd4c1e913165",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-source-initial.xml",
+      "sha256": "c6d086315b00bc4912fd6e8da29b4db66dac7a5c30fad65760071972576a1013",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-hitl-source-final.xml",
+      "sha256": "27555a7a38ba828c76872740cf84ecba52a7696ccdfe52f7a6f6c649477f4799",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-attention-installed.xml",
+      "sha256": "0cc18b35826a7957ab1a01b7889b73c77c25f1a14026d7f103580c25c4d02d65",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-policy-installed.xml",
+      "sha256": "f0acf2ea5f3a6d563e0ae70e1cdd08459dc15aa049d9ef784213fc233192d72a",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-setup-installed.xml",
+      "sha256": "b3d725187aa9b893a13ac38e8083a63caed20ff89cf27541ae38687448a72b5e",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-integration-installed.xml",
+      "sha256": "5aa41742e0fd055e935bca556f8cd0d0253310d78ddab678e6e43e842ce39fe6",
+      "staged_bytes_equal": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-effective-policy-upgrade-installed-final.xml",
+      "sha256": "50ee2b5d9f54133f53076882eddec5363e23a804c6f0d5beaa129ca0c2f1b826",
+      "staged_bytes_equal": true
+    }
+  ],
+  "xml_count": 19,
+  "final_test_input_sha256": {
+    "tests/test_attention_authority.py": "25c574abca73d901e77024569e775cec09e1bf8031a2cb442329c134ff985b70",
+    "tests/test_attention_effective_policy_http.py": "336fd4245fdbeab7d0bb7b3512b510027eb6cec2720bb47018980b408e1c9d0c",
+    "tests/test_attention_results_upgrade.py": "cbdf084fc29c8424ed17a5302e9c57407d65dd1c6d83c121fc1ac82806fd1b6b",
+    "tests/test_attention_storage.py": "3801e6e5c9908174f325be9123a85e09192eeadc9dacb26d3e676c4785a78f72",
+    "tests/test_server_effective_policy.py": "1876c06fbeda2649fba61e95376ac104ebe97b2c73c6a82a0999a5f40ca8c5cf",
+    "tests/test_server_effective_policy_http.py": "db0c5e1c7ad9d6b8b7defb56e394595df82f05e5f13142ae381e04c2550d9fa8",
+    "tests/test_settings_transactions.py": "1a2edf08173b8c8f28f66027c675a10f7e19655138bccad2503335426bef18cf"
+  }
+}

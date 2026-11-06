@@ -407,3 +407,12 @@ O wheel de entrega remove apenas uma linha vazia final; equivalência sintática
 - AT-01/02/16 verificados no backend. PR-06/ATN-01/AT-08 continuam em progresso: off→on→off somente da flag global ainda reutiliza episódio/visto/adiado; falta geração persistida da política efetivamente aplicada. O teste que documenta isso não conta como aceite de recorrência.
 - PR-07/UI/browser, campanhas reais de cliente/provedor/serviço e aceite integral R3 seguem pendentes. Connector/Core permanecem nas branches preparadas, sem alterações neste marco.
 - Evidências e limites: [pr06-attention-completion.md](plans/agent_ops/evidence/pr06-attention-completion.md). Plano e conjuntos fixos de IDs preservados.
+
+## 2026-11-06 — PR-06: episódios da política efetiva
+
+- Política global efetiva de harness/HITL tem geração durável, publicada pelo Server com lock válido após resolução de CLI/env/overrides.
+- Alterações em memória só se aplicam após commit. Rollback, no-op, restart sem mudança e reset preservam as regras de geração; GET/MCP bootstrap não publicam.
+- Recorrência na mesma hora recebe outro episódio, sem herdar visto/adiado. Mudança irrelevante não renova bloqueio independente de grant.
+- **403 casos instalados distintos passaram**, sem skips. Um teste preexistente de exclusão de SQLite aberto falha no Windows também no wheel anterior; foi registrado e desmarcado na suíte instalada, sem contar como aprovação.
+- Migração 163 aditiva; 161/162 intactas. ATN-01 implementado, recorrência backend verificada; AT-08/PR-06 seguem com reconciliação/browser pendentes. PR-07/UI e demais campanhas R3 continuam abertos.
+- Evidência: [política efetiva](plans/agent_ops/evidence/pr06-attention-effective-policy.md). Core e Connector não mudaram neste marco.

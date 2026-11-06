@@ -1,5 +1,6 @@
 """Authority attention reads real admitted work without sending or mutating it."""
 from copy import deepcopy
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 import json
 from pathlib import Path
@@ -53,16 +54,40 @@ def items(uow, deps, **kwargs):
     return [item for row in facts for item in project(row, now, policy)]
 
 
+def publish_policy(deps, values, now):
+    """Canonical persisted fixture; HTTP ownership/publication has its own suite."""
+    from okto_nexus.application.server_effective_policy import publish_effective_policy
+    with deps.connection_factory.unit_of_work() as uow:
+        snapshot = publish_effective_policy(uow, values=values, now=now)
+    for key, value in values.items():
+        setattr(deps.config, key, value)
+    return snapshot
+
+
+def attention_service(deps, now):
+    from fake_clock import FakeClock
+    from okto_nexus.application.attention import AttentionService
+    from okto_nexus.adapters.outbound.sqlite.attention import SqliteAttentionQueries
+    return AttentionService(factory=deps.connection_factory, access=build_execution_access(deps),
+        queries=SqliteAttentionQueries(), clock=FakeClock(iso=now), config=deps.config)
+
+
 @pytest.fixture
 def queued_message(tmp_path, monkeypatch, request):
     from test_ns09 import setup_authority, negotiate
     from test_mcp_session_capabilities import rpc, envelope
     handoff_mode = getattr(request, 'param', None) == 'handoff'
     notice_mode = getattr(request, 'param', None) == 'notice'
+    required_native = getattr(request, 'param', None) == 'required_native'
     state = setup_authority(tmp_path, monkeypatch, max_executions=10)
     deps, app, _, _, _, _, info, revisions, link, lane, server, executor = state
+    if required_native:
+        deps.config.feature_hitl = True
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy=?", ('none' if handoff_mode else 'conversation',))
+        if required_native:
+            uow.connection.execute("UPDATE runtime_profiles SET config=?", (json.dumps(
+                dict(required_native_requests=['item/commandExecution/requestApproval'])),))
     from okto_nexus.adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
     from okto_nexus.adapters.outbound.sqlite.execution_tickets import issue_execution_ticket
     _, revisions, _ = current_agent_revisions(deps.connection_factory, agent_id='subject')
@@ -132,18 +157,142 @@ def test_revoked_grant_blocks_pending_turn_and_native_request_without_leaking_co
         assert before == list(uow.connection.iterdump())
 
 
-def test_global_feature_toggle_has_no_persisted_episode_generation(decision_state):
-    """Document the volatile flag boundary without inventing a GET-time epoch."""
+@pytest.mark.parametrize('key', ['feature_harness_integrations', 'feature_hitl'])
+def test_effective_policy_same_clock_recurrence_does_not_inherit_seen_or_snooze(decision_state, key):
     deps, _, _ = decision_state
+    now = deps.clock.now_iso()
+    publish_policy(deps, dict(feature_harness_integrations=True, feature_hitl=True), now)
+    service = attention_service(deps, now)
+    context = RuntimeRequestContext('operator', 'http_loopback', trusted_local_operator=True)
+    def observed():
+        return service.read(context=context, filters=dict(kind='execution_authority_blocking', state='all'))['items']
+    assert observed() == []
+    first_policy = publish_policy(deps, {key: False}, now)
+    first = observed()
+    assert first and all(stamp(item['first_detected_at']) == stamp(now) for item in first)
+    item = first[0]
+    marked = service.mark_seen(context=context, attention_id=item['attention_id'],
+        source_revision=item['source_revision'], preference_revision=0)['item']
+    service.snooze(context=context, attention_id=item['attention_id'], source_revision=item['source_revision'],
+        preference_revision=marked['seen_state']['revision'], until=(stamp(now) + timedelta(hours=1)).isoformat())
+    retained = next(row for row in observed() if row['attention_id'] == item['attention_id'])
+    assert retained['seen_state']['seen'] and retained['seen_state']['snoozed']
+    publish_policy(deps, {key: True}, now)
+    assert observed() == []
+    final_policy = publish_policy(deps, {key: False}, now)
+    final = observed()
+    assert final_policy[key]['generation'] == first_policy[key]['generation'] + 2
+    assert final_policy[key]['changed_at'] == first_policy[key]['changed_at']
+    assert {row['attention_id'] for row in first}.isdisjoint(row['attention_id'] for row in final)
+    assert {row['source_revision'] for row in first}.isdisjoint(row['source_revision'] for row in final)
+    assert all(row['seen_state'] == dict(seen=False, seen_at=None, snoozed=False, snoozed_until=None, revision=0) for row in final)
+    assert all(stamp(row['first_detected_at']) == stamp(now) for row in final)
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        facts, policy, now = read(uow, deps)
         before = list(uow.connection.iterdump())
-        disabled = dict(policy, feature_harness_integrations=False)
-        first = [item for row in facts for item in project(row, now, disabled)]
-        assert first and all(item['kind'] == 'execution_authority_blocking' for item in first)
-        assert [item for row in facts for item in project(row, now, policy)] == []
-        assert [item for row in facts for item in project(row, now, disabled)] == first
+        facts, policy, now = read(uow, deps)
+        [project(row, now, policy) for row in facts]
         assert before == list(uow.connection.iterdump())
+    assert publish_policy(deps, {key: False}, now) == final_policy
+    assert observed() == final
+
+
+@pytest.mark.parametrize('key', ['feature_harness_integrations', 'feature_hitl'])
+def test_effective_policy_toggle_does_not_renew_independent_grant_revocation(decision_state, key):
+    deps, _, _ = decision_state
+    now = deps.clock.now_iso()
+    publish_policy(deps, dict(feature_harness_integrations=True, feature_hitl=True), now)
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute('UPDATE runtime_execution_grants SET revoked_at=?', (now,))
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        first = items(uow, deps, now=now)
+    assert len(first) == 2
+    for value in (False, True, False):
+        publish_policy(deps, {key: value}, now)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert items(uow, deps, now=now) == first
+
+
+def test_effective_policy_wal_snapshot_keeps_values_and_generations_together(decision_state):
+    deps, _, _ = decision_state
+    now = deps.clock.now_iso()
+    publish_policy(deps, dict(feature_harness_integrations=True, feature_hitl=True), now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        facts, initial, _ = read(uow, deps, now=now)
+        assert [item for row in facts for item in project(row, now, initial)] == []
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            changed = pool.submit(publish_policy, deps, dict(feature_harness_integrations=False, feature_hitl=False), now).result(timeout=10)
+        assert deps.config.feature_harness_integrations is False and deps.config.feature_hitl is False
+        before = list(uow.connection.iterdump())
+        facts, policy, _ = read(uow, deps, now=now)
+        assert policy['effective_policy'] == initial['effective_policy']
+        assert policy['feature_harness_integrations'] is True and policy['feature_hitl'] is True
+        assert [item for row in facts for item in project(row, now, policy)] == []
+        assert before == list(uow.connection.iterdump())
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        facts, policy, _ = read(uow, deps, now=now)
+        assert policy['feature_harness_integrations'] is False and policy['feature_hitl'] is False
+        assert all(policy['effective_policy'][key]['generation'] == value['generation'] for key, value in changed.items())
+        assert len([item for row in facts for item in project(row, now, policy)]) == 2
+
+
+def test_effective_hitl_policy_blocks_pending_native_dispatch_and_native_actions(decision_state):
+    from okto_nexus.application.attention_native import project as native_project
+    from okto_nexus.application.execution_native_decisions import validate_native_dispatch
+    deps, _, _ = decision_state
+    now = deps.clock.now_iso()
+    publish_policy(deps, dict(feature_harness_integrations=True, feature_hitl=True), now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        facts, policy, _ = read(uow, deps, now=now)
+        native = next(row['native'] for row in facts if row['family'] == 'native')
+        initial, = native_project(native, now, policy)
+        assert 'decide_native' in initial['allowed_actions']
+    publish_policy(deps, {'feature_hitl': False}, now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        _, policy, _ = read(uow, deps, now=now)
+        disabled, = native_project(native, now, policy)
+        assert disabled['allowed_actions'] == ['inspect_approval']
+        assert disabled['category'] == 'watch'
+    publish_policy(deps, {'feature_hitl': True}, now)
+    accepted = native_fixtures.post(decision_state)
+    assert accepted.status_code == 202, accepted.text
+    publish_policy(deps, {'feature_hitl': False}, now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        result, = items(uow, deps, now=now)
+        operation = uow.connection.execute("SELECT * FROM execution_operations WHERE action='approval.decide'").fetchone()
+        assert result['operation_id'] == operation['operation_id']
+        with pytest.raises(OktoNexusError, match='Native decision dispatch is disabled'):
+            validate_native_dispatch(uow, operation=operation, semantic=json.loads(operation['semantic_payload']), access=build_execution_access(deps))
+
+
+@pytest.mark.parametrize('queued_message,key', [('message', 'feature_harness_integrations'),
+    ('required_native', 'feature_hitl'), ('handoff', 'feature_harness_integrations'),
+    ('handoff', 'feature_hitl')], indirect=['queued_message'])
+def test_effective_policy_delivery_and_handoff_recurrence(queued_message, key):
+    from okto_nexus.adapters.inbound.mcp.tools.handoff import build_service
+    deps, _ = queued_message
+    now = deps.clock.now_iso()
+    baseline = {name: getattr(deps.config, name) for name in ('feature_harness_integrations', 'feature_hitl')}
+    publish_policy(deps, baseline, now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert items(uow, deps, now=now) == []
+    publish_policy(deps, {key: not baseline[key]}, now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        first = items(uow, deps, now=now)
+        assert first and all(stamp(item['first_detected_at']) == stamp(now) for item in first)
+        if uow.connection.execute('SELECT 1 FROM runtime_handoff_bindings').fetchone():
+            work = dict(uow.connection.execute('SELECT * FROM delivery_outbox').fetchone())
+            service = build_service(deps, register_approval_executor=False)
+            with pytest.raises(OktoNexusError):
+                service.runtime_work.revalidate(uow, operation=work)
+    publish_policy(deps, {key: baseline[key]}, now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert items(uow, deps, now=now) == []
+    publish_policy(deps, {key: not baseline[key]}, now)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        final = items(uow, deps, now=now)
+        assert len(final) == len(first)
+        assert {item['attention_id'] for item in first}.isdisjoint(item['attention_id'] for item in final)
+        assert all(stamp(item['first_detected_at']) == stamp(now) for item in final)
 
 
 def test_native_authority_mutations_match_canonical_live_predicates(decision_state):
@@ -376,7 +525,7 @@ def test_migration_161_to_162_backfills_metadata_only_and_never_changes_161(conn
     MigrationRunner(conn_factory, previous).apply()
     with conn_factory.unit_of_work() as uow:
         uow.connection.execute("INSERT INTO agents(agent_id,api_key_hash,metadata,created_at) VALUES('retained','private-key-digest','{\"private\":true}','2026-01-01T00:00:00Z')")
-    assert MigrationRunner(conn_factory).apply() == [162]
+    assert MigrationRunner(conn_factory).apply() == [162, 163]
     with conn_factory.unit_of_work(write=False) as uow:
         anchor = dict(uow.connection.execute("SELECT * FROM attention_operation_epochs WHERE source_type='authority_agents'").fetchone())
         assert anchor['episode'] == 1 and anchor['state'] == 'present'
@@ -410,6 +559,12 @@ def test_handoff_current_authority_budget_and_legacy_preference_identity(queued_
             service.runtime_work.revalidate(uow, operation=work)
         conn.execute("UPDATE delivery_outbox SET updated_at='2099-01-01',attempt_count=attempt_count+1")
         assert items(uow, deps) == [first]
+        from okto_nexus.application.server_effective_policy import publish_effective_policy
+        # Legacy grant revocation is still the cause. Global toggles must not
+        # replace its v161 identity or alter viewing CAS material.
+        for value in (True, False, True):
+            publish_effective_policy(uow, values=dict(feature_harness_integrations=value, feature_hitl=value), now=deps.clock.now_iso())
+            assert items(uow, deps) == [first]
 
 
 @pytest.mark.parametrize('change', ['responder_key', 'opening_grant', 'opening_initiator'])

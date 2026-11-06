@@ -3,7 +3,7 @@
 # These are installation invariants, not execution history. Migration seeds
 # are not re-run when schema_migrations is preserved by a database reset.
 INSTALLATION_TABLES = frozenset({
-    'schema_migrations', 'settings', 'execution_installation',
+    'schema_migrations', 'settings', 'execution_installation', 'server_effective_policy',
     'runtime_policy_defaults', 'runtime_artifact_settings',
     'runtime_writer_contract', 'runtime_dispatcher_owner', 'runtime_journal_checkpoint',
     'runtime_reset_generation', 'execution_embedded_store_bindings',

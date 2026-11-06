@@ -22,7 +22,7 @@ from ..domain.routing import RoutingAgent, can_agent_see_event, is_agent_eligibl
 from ..domain.runtime_context import RuntimeRequestContext
 from ..domain.tag_selector import reachable
 from ..errors import OktoNexusError
-from .attention_native import _agent, _guard, _profile, _recorded_operator, _runtime_grant
+from .attention_native import _agent, _guard, _policy_value, _profile, _profile_hitl, _recorded_operator, _runtime_grant
 from .execution_native_facts import effective_lease_facts, grant_candidate_authorized, grant_candidate_matches, runtime_guard_facts, stamp
 from .runtime_delivery_facts import require_delivery_facts
 
@@ -128,8 +128,9 @@ def prepare_graph(rows, check_budget=None):
 
 
 class AuthorityDenied(Exception):
-    def __init__(self, reason, refs=(), deadline=None):
+    def __init__(self, reason, refs=(), deadline=None, *, policy_keys=()):
         self.reason, self.refs, self.deadline = reason, list(refs), deadline
+        self.policy_keys = tuple(sorted(policy_keys))
 
 
 def ref(table, *identity):
@@ -396,7 +397,7 @@ def _relay(graph, result_id, recipient_id, now, policy):
         origin = _agent(graph['agent_facts'].get(message['from_agent_id'])) if message else None
         endpoint = runtime['endpoint'] if runtime else None
         profile = runtime['profile'] if runtime else None
-        if (not policy['feature_harness_integrations'] or source['reconciliation_id'] or not endpoint or not endpoint['enabled']
+        if (not _policy_value(policy, 'feature_harness_integrations') or source['reconciliation_id'] or not endpoint or not endpoint['enabled']
                 or endpoint['response_policy'] != 'conversation' or endpoint['revision'] != source['endpoint_revision']
                 or not sender or not sender.is_active or not origin or not origin.is_active
                 or not _binding(graph, source, now, policy)
@@ -464,8 +465,10 @@ def _handoff(graph, work, binding, now, policy):
     if not creator or not creator.is_active or not worker or not worker.is_active or not reachable(creator, worker):
         raise AuthorityDenied('handoff_audience_changed', refs)
     creator_revision = graph['governance'][creator.agent_id]
-    if (not receipt or receipt['creator_policy_revision'] != creator_revision or receipt['hitl_enabled'] != int(policy['feature_hitl'])
+    if (not receipt or receipt['creator_policy_revision'] != creator_revision
             or work['authorization_revision'] != creator_revision + ':' + graph['governance'][worker.agent_id]):
+        raise AuthorityDenied('handoff_policy_changed', refs)
+    if receipt['hitl_enabled'] != int(_policy_value(policy, 'feature_hitl', required=bool(receipt['hitl_enabled']))):
         raise AuthorityDenied('handoff_policy_changed', refs)
     view = RoutingAgent(agent_id=worker.agent_id, workspace_id=handoff['workspace_id'], role=worker.role,
         capabilities=json.loads(worker.capabilities) if isinstance(worker.capabilities, str) else worker.capabilities, tags=worker.tags)
@@ -496,15 +499,19 @@ def _delivery(graph, work, now, policy):
     admission = json.loads(work['admission_binding']) if work['admission_binding'] else None
     original = graph['runtimes'].get(admission['endpoint_id']) if admission else None
     descriptor = policy['catalog'].get(endpoint['adapter_id']) if endpoint else None
+    descriptor = SimpleNamespace(**descriptor) if descriptor else None
+    profile = _profile(runtime['profile']) if runtime else None
+    delivery_policy = dict(policy, feature_harness_integrations=_policy_value(policy, 'feature_harness_integrations'),
+        feature_hitl=_profile_hitl(policy, profile, descriptor))
     refs = _agent_refs(graph, work['actor_agent_id']) + _runtime_refs(graph, runtime) + _runtime_refs(graph, original) + [ref('agent_endpoints', work['endpoint_id'])]
     _check('delivery_authority_changed', refs, lambda: require_delivery_facts(operation=work,
-        config=SimpleNamespace(**policy), actor=_agent(actor), recipient=_agent(subject), endpoint=endpoint,
-        profile=_profile(runtime['profile']) if runtime else None,
+        config=SimpleNamespace(**delivery_policy), actor=_agent(actor), recipient=_agent(subject), endpoint=endpoint,
+        profile=profile,
         original=original['endpoint'] if original else None,
         original_profile=_profile(graph['runtime_profiles'].get((admission['profile_id'],))) if admission else None,
         actor_binding_valid=_binding(graph, work, now, policy), method_enabled=_method(subject, endpoint['adapter_id'], policy) if endpoint else False,
         session_profile_revision=graph['harness_sessions'].get((work['runtime_session_id'],), {}).get('runtime_profile_revision'),
-        descriptor=SimpleNamespace(**descriptor) if descriptor else None))
+        descriptor=descriptor))
     _message_policy(graph, work, now, policy)
     _grant(graph, runtime, subject, action='send', grant_id=None,
         scope=dict(agent_id=work['recipient_agent_id'], workspace_id=work['workspace_id']), now=now, policy=policy, budget=True)
@@ -579,7 +586,7 @@ def _control_grant(graph, runtime, scope, command, now, policy):
         credential_binding=actor.api_key_hash if actor else None, execution_grant_id=lease['grant_id'])
     selected = graph['runtime_execution_grants'].get((lease['grant_id'],))
     refs = _runtime_refs(graph, runtime) + [ref('runtime_execution_grants', lease['grant_id'])]
-    if (policy['feature_harness_integrations'] and actor and actor.is_active and actor.api_key_hash and endpoint
+    if (_policy_value(policy, 'feature_harness_integrations') and actor and actor.is_active and actor.api_key_hash and endpoint
             and endpoint['adapter_id'] in policy['catalog'] and selected and not selected['revoked_at']):
         selected = dict(selected, actions=json.loads(selected['actions']))
         if (grant_candidate_matches(selected, context=context, actor=actor, action=action,
@@ -599,7 +606,7 @@ def _control_grant(graph, runtime, scope, command, now, policy):
 def _decision(graph, work, scope, runtime, now, policy):
     decision = graph['execution_decisions'].get((work['operation_id'],))
     refs = _agent_refs(graph, work['actor_agent_id']) + _runtime_refs(graph, runtime)
-    if not policy['feature_hitl'] or not decision or not decision['source_valid'] or decision['actor_agent_id'] != work['actor_agent_id']:
+    if not _policy_value(policy, 'feature_hitl') or not decision or not decision['source_valid'] or decision['actor_agent_id'] != work['actor_agent_id']:
         raise AuthorityDenied('native_decision_authority_changed', refs)
     if stamp(decision['expires_at']) <= stamp(now):
         raise AuthorityDenied('native_decision_expired', refs, decision['expires_at'])
@@ -630,6 +637,8 @@ def _native(graph, facts, now, policy):
     if not authority:
         # Source absence alone cannot identify which authority gate blocked it.
         return
+    if not _policy_value(policy, 'feature_hitl'):
+        raise AuthorityDenied('native_decisions_disabled')
     runtime = _scope_authority(graph, scope, source_guard=authority['source_guard_digest'], policy=policy)
     _check('initiator_authority_changed', _agent_refs(graph, authority['actor_agent_id']),
         lambda: _recorded_operator(facts, policy, now))
@@ -691,6 +700,7 @@ def _domain_pending(graph, work):
 
 
 def project(facts, now, policy):
+    policy = dict(policy, _policy_denials=set())
     graph = policy['graph']
     family = facts['family']
     if family == 'native':
@@ -716,17 +726,25 @@ def project(facts, now, policy):
             _dispatch(graph, facts, now, policy)
         else:
             _native(graph, facts['native'], now, policy)
+        if policy['_policy_denials']:
+            raise AuthorityDenied('server_effective_policy_changed', policy_keys=policy['_policy_denials'])
     except AuthorityDenied as denial:
         anchors = [graph['anchors'][key] for key in sorted(set(denial.refs)) if key in graph['anchors']]
         transitions = [work['created_at']] + [row['last_changed_at'] for row in anchors]
         if denial.deadline:
             transitions.append(denial.deadline)
+        effective = policy.get('effective_policy', {})
+        policy_rows = [(key, effective[key]) for key in denial.policy_keys if key in effective]
+        transitions += [row['changed_at'] for _, row in policy_rows]
         changed = max(transitions, key=stamp)
         revision = dict(reason=denial.reason, anchors=[(row['source_type'], row['source_id'], row['episode']) for row in anchors],
             deadline=denial.deadline)
+        if denial.policy_keys:
+            revision['effective_policy'] = [(key, bool(policy[key]), effective.get(key, {}).get('generation'))
+                for key in denial.policy_keys]
         episode = revision
         detected = changed
-        legacy = _legacy_handoff_episode(graph, work, now) if family == 'delivery' else None
+        legacy = _legacy_handoff_episode(graph, work, now) if family == 'delivery' and not denial.policy_keys else None
         if legacy:
             episode, detected, legacy_revision = legacy
             changed = max((changed, detected), key=stamp)

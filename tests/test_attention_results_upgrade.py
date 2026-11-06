@@ -1,4 +1,4 @@
-"""161→162 preserves viewing state across native/handoff identity unification."""
+"""Upgrade from 161 preserves result preferences through schema 163."""
 import json
 import shutil
 import sqlite3
@@ -67,7 +67,14 @@ def snapshot(factory, *, canonical=False):
             "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")]
         return {name: sorted((tuple(row) for row in uow.connection.execute('SELECT * FROM "' + name + '"')), key=repr)
                 for name in names if not canonical or name not in
-                {'schema_migrations', 'attention_preferences', 'attention_operation_epochs'}}
+                {'schema_migrations', 'attention_preferences', 'attention_operation_epochs', 'server_effective_policy'}}
+
+
+def upgrade(factory):
+    versions = MigrationRunner(factory).apply()
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT * FROM server_effective_policy').fetchall() == []
+    return versions
 
 
 def preference(factory, identity=OLD_ID, *, seen=None, snooze=None, revision=1, updated=NOW):
@@ -82,7 +89,7 @@ def test_nullable_handoff_update_time_preserves_canonical_data_and_result(legacy
     """The schema permits terminal handoffs without an update timestamp."""
     factory, attention = legacy
     if path != 'upgrade':
-        assert MigrationRunner(factory).apply() == [162]
+        assert upgrade(factory) == [162, 163]
     with factory.unit_of_work() as uow:
         uow.connection.execute(
             "INSERT INTO handoffs(handoff_id,workspace_id,from_agent_id,target,visibility,"
@@ -98,7 +105,7 @@ def test_nullable_handoff_update_time_preserves_canonical_data_and_result(legacy
             uow.connection.execute("UPDATE handoffs SET status=? WHERE handoff_id='nullable-terminal'", (status,))
     canonical = snapshot(factory, canonical=True)
     if path == 'upgrade':
-        assert MigrationRunner(factory).apply() == [162]
+        assert upgrade(factory) == [162, 163]
         assert snapshot(factory, canonical=True) == canonical
     before_read = snapshot(factory)
     with factory.unit_of_work(write=False) as uow:
@@ -129,7 +136,7 @@ def test_upgrade_preserves_seen_or_snooze_across_projection_and_retention(legacy
     preference(factory, seen=NOW if mode == 'seen' else None,
                snooze='2026-11-06T11:00:00.000001-03:00' if mode == 'snoozed' else None, revision=3)
     before = snapshot(factory, canonical=True)
-    assert MigrationRunner(factory).apply() == [162]
+    assert upgrade(factory) == [162, 163]
     assert snapshot(factory, canonical=True) == before
     assert attention.read(context=OPERATOR, filters={'kind': 'result_unseen'})['total'] == 0
     item, = attention.read(context=OPERATOR, filters={'kind': 'result_unseen', 'state': 'all'})['items']
@@ -166,7 +173,7 @@ def test_multiple_native_turn_preferences_merge_conservatively_with_existing_cla
     preference(factory, second_id, seen='2026-11-06T09:00:00.000001-03:00',
                snooze='2026-11-06T11:00:00.000001-03:00', revision=5, updated='2026-11-06T12:30:00Z')
     preference(factory, NEW_ID, snooze='2026-11-06T13:30:00Z', revision=4, updated=LATER)
-    assert MigrationRunner(factory).apply() == [162]
+    assert upgrade(factory) == [162, 163]
     item, = attention.read(context=OPERATOR, filters={'kind': 'result_unseen', 'state': 'all'})['items']
     assert item['seen_state'] == dict(seen=True, seen_at='2026-11-06T09:00:00.000001-03:00',
         snoozed=True, snoozed_until='2026-11-06T11:00:00.000001-03:00', revision=9)
@@ -180,7 +187,7 @@ def test_upgrade_does_not_transfer_a_cross_workspace_unproven_link(legacy):
     with factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE execution_operations SET workspace_id='other' WHERE operation_id='op'")
     preference(factory, seen=NOW)
-    assert MigrationRunner(factory).apply() == [162]
+    assert upgrade(factory) == [162, 163]
     item, = attention.read(context=OPERATOR, filters={'kind': 'result_unseen', 'state': 'all'})['items']
     assert item['attention_id'] == OLD_ID and item['seen_state']['seen']
     with factory.unit_of_work(write=False) as uow:
@@ -205,7 +212,7 @@ def test_upgrade_preference_merge_and_anchors_roll_back_together_and_udfs_are_re
     finally:
         conn.close()
     assert snapshot(factory) == before
-    assert MigrationRunner(factory).apply() == [162]
+    assert upgrade(factory) == [162, 163]
 
 
 def test_frozen_migration_identity_matches_v1_unicode_and_does_not_import_future_version(monkeypatch):
