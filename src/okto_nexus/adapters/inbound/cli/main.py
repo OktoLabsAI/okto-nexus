@@ -13,6 +13,7 @@ _HELP = """okto-nexus - local agent coordination bus
 Usage:
   okto-nexus connect [options] Review and connect a local project
   okto-nexus doctor [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
   okto-nexus operator login|status|logout --profile NAME [options]
   okto-nexus operator approval APPROVAL_ID --profile NAME [options]
@@ -39,6 +40,9 @@ def main(argv: list[str] | None = None) -> int:
     if command == 'doctor':
         from .doctor import run_doctor
         return run_doctor(rest)
+    if command == 'preset':
+        from .preset import run_preset
+        return run_preset(rest)
     if command == 'work':
         from .work import run_work
         return run_work(rest)

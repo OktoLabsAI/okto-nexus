@@ -81,6 +81,16 @@
         "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-project-dashboard-browser.json",
         "plans/agent_ops/evidence/pr03-project-dashboard-installed.xml",
         "plans/agent_ops/evidence/pr03-project-dashboard-source.xml",
@@ -2151,11 +2161,13 @@
         "docs/terminal-connect.md",
         "docs/terminal-doctor.md",
         "docs/terminal-operator.md",
+        "docs/terminal-preset.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
         "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
@@ -2173,6 +2185,7 @@
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
         "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
+        "src/okto_nexus/adapters/inbound/cli/preset.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -2201,20 +2214,24 @@
         "src/okto_nexus/application/execution_intents.py",
         "src/okto_nexus/application/project_diagnostics.py",
         "src/okto_nexus/application/project_preset.py",
+        "src/okto_nexus/application/project_preset_update.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
+        "src/okto_nexus/application/terminal_preset.py",
         "src/okto_nexus/application/terminal_work.py",
         "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
+        "tests/execution_r4/test_connection_test.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_diagnostics.py",
+        "tests/execution_r4/test_project_preset_update.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -2222,8 +2239,10 @@
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
+        "tests/execution_r4/test_terminal_preset.py",
         "tests/execution_r4/test_terminal_work.py",
         "tests/test_project_doctor_cli.py",
+        "tests/test_project_preset_merge.py",
         "tests/test_service_start.py",
         "tests/test_settings_api.py",
         "tests/test_terminal_connect_process.py",
@@ -2259,6 +2278,16 @@
         "plans/agent_ops/evidence/pr03-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
         "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
@@ -2306,7 +2335,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2320,7 +2349,8 @@
         "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
         "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
         "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open.",
-        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
+        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1.",
+        "Optional preset evolution is verified with synthetic future revisions and native effects; current shipped recommendation is revision 1. No real provider, OS vault/TLS or productive M1 acceptance is claimed."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -2376,7 +2406,12 @@
         "connector_passive_installation_recommendation": "VERIFIED",
         "connector_default_single_project_review": "VERIFIED",
         "passive_project_diagnostics_installed": "VERIFIED",
-        "canonical_work_diagnostics_without_replay": "VERIFIED"
+        "canonical_work_diagnostics_without_replay": "VERIFIED",
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
       }
     },
     "DX-05": {
@@ -2503,7 +2538,9 @@
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
+        "docs/terminal-preset.md",
         "docs/terminal-work.md",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
@@ -2514,6 +2551,7 @@
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
         "src/okto_nexus/adapters/inbound/cli/operator_approval.py",
+        "src/okto_nexus/adapters/inbound/cli/preset.py",
         "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/cli/work.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
@@ -2525,26 +2563,44 @@
         "src/okto_nexus/application/approvals.py",
         "src/okto_nexus/application/connection_authorization.py",
         "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/project_preset.py",
+        "src/okto_nexus/application/project_preset_update.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_binding_approval.py",
         "src/okto_nexus/application/terminal_connection.py",
+        "src/okto_nexus/application/terminal_preset.py",
         "src/okto_nexus/application/terminal_work.py",
         "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/test_connection_test.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
+        "tests/execution_r4/test_project_preset_update.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
+        "tests/execution_r4/test_terminal_preset.py",
         "tests/execution_r4/test_terminal_work.py",
+        "tests/test_project_preset_merge.py",
         "tests/test_terminal_connect_process.py",
         "tests/test_terminal_http.py",
         "tests/test_terminal_native_input.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -2566,7 +2622,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2575,7 +2631,8 @@
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
+        "Optional preset evolution is verified with synthetic future revisions and native effects; current shipped recommendation is revision 1. No real provider, OS vault/TLS or productive M1 acceptance is claimed."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -2598,7 +2655,12 @@
         "remote_connector_productive_work": "NOT_RUN",
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
-        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+        "binding_approval_loss_recovery_without_repost": "VERIFIED",
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
       }
     },
     "DX-10": {
@@ -3569,6 +3631,7 @@
         "../okto-nexus-connector/tests/unit/test_connect_reuse.py",
         "docs/terminal-connect.md",
         "docs/terminal-operator.md",
+        "docs/terminal-preset.md",
         "docs/terminal-work.md",
         "frontend/src/App.tsx",
         "frontend/src/components/AgentConnectionsPanel.tsx",
@@ -3582,6 +3645,7 @@
         "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-login-start.md",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-project-dashboard.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
@@ -3594,6 +3658,7 @@
         "src/okto_nexus/adapters/inbound/cli/connect_login.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
+        "src/okto_nexus/adapters/inbound/cli/preset.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -3619,17 +3684,21 @@
         "src/okto_nexus/application/execution_binding_proposals.py",
         "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/project_preset.py",
+        "src/okto_nexus/application/project_preset_update.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
         "src/okto_nexus/application/terminal_connection.py",
+        "src/okto_nexus/application/terminal_preset.py",
         "src/okto_nexus/application/terminal_work.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_connect_login_start.py",
+        "tests/execution_r4/test_connection_test.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_dashboard.py",
+        "tests/execution_r4/test_project_preset_update.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -3637,6 +3706,8 @@
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
+        "tests/execution_r4/test_terminal_preset.py",
+        "tests/test_project_preset_merge.py",
         "tests/test_service_start.py",
         "tests/test_settings_api.py",
         "tests/test_terminal_connect_process.py",
@@ -3672,6 +3743,16 @@
         "plans/agent_ops/evidence/pr03-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-project-dashboard-browser.json",
         "plans/agent_ops/evidence/pr03-project-dashboard-installed.xml",
         "plans/agent_ops/evidence/pr03-project-dashboard-source.xml",
@@ -3709,21 +3790,14 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml",
         "tests/execution_r4/test_project_dashboard.py"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Project introduction reads the canonical preset and suppresses automatic onboarding for existing identities, including setup from the terminal. Connections displays stored origin/current configuration; display name and role edits preserve the canonical identity, metadata, history, bindings and grants. 40 frontend, 32 source integration and 76 installed integration tests passed (overlapping suites). Real Chromium interaction against installed FastAPI/SQLite backends verified first/existing use, personalization, focus, themes/mobile and retry; native checks were synthetic. Productive M1, participant setup and preset evolution remain open.",
+      "result": "Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution. Previous dashboard personalization and Connector reconnect contracts remain verified in their recorded scopes. Full DX-21/PR-03 and productive M1 remain in progress.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
-        "Harness qualification/version command/model response were simulated in setup integration; real provider context/coordination acceptance remains open.",
-        "Start-at-login review, remote topology, participant init, operator-session CLI authentication, preset evolution and remaining participant/dashboard evolution remain open.",
-        "Reviewed initialization of previously unset native-decision policy is verified with a synthetic native peer. Explicit disabled policy and ambiguous legacy sources remain preserved; local terminal grant renewal is now verified with synthetic peers; remote renewal and real provider qualification remain open.",
-        "Operator sessions, existing-binding reuse, remote preset/policy and login-start review contracts are verified with synthetic peers. New remote identity bootstrap, participant init, real provider qualification, preset evolution and remaining participant/dashboard evolution remain open.",
-        "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
-        "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
-        "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
-        "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
-        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open.",
-        "UI campaign uses a real installed backend and synthetic harness; productive M1 and complete participant/preset evolution are not qualified."
+        "Future preset revisions are simulated; the shipped recommendation remains project-generalist revision 1. No published historical-version upgrade campaign is claimed.",
+        "Version checks, harness/model turns and native effects are synthetic; real local/remote productive M1, provider context and coordination remain unqualified.",
+        "Remote operator tests use adapted HTTP transport and memory vault; real OS-vault accessibility, TLS and two-host execution remain unqualified.",
+        "Initial remote identity bootstrap and participant setup remain open; this update requires an existing saved connection.",
+        "Native Windows login/logout/crash and personal credential/service qualification remain pending under the existing campaign plan."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -3770,7 +3844,12 @@
         "connector_default_single_project_review": "VERIFIED",
         "project_intro_reads_canonical_preset": "VERIFIED",
         "existing_identity_does_not_restart_intro": "VERIFIED",
-        "browser_personalization_preserves_identity_configuration_history": "VERIFIED"
+        "browser_personalization_preserves_identity_configuration_history": "VERIFIED",
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
       }
     },
     "ATN-01": {
@@ -4914,6 +4993,16 @@
         "plans/agent_ops/evidence/pr03-connector-reconnect-source.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
@@ -4933,7 +5022,14 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.",
+      "subscopes": {
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
+      }
     },
     "DX-T42": {
       "requirement": "Nome de agente/projeto igual nÃ£o associa outra identidade; vÃ­nculos ausentes ou ambÃ­guos exigem resoluÃ§Ã£o autorizada, inclusive quando duas conexÃµes iniciais concorrem.",
@@ -5007,6 +5103,16 @@
       "requirement": "Perda da resposta de submissÃ£o ou decisÃ£o em M1 recupera a mesma requisiÃ§Ã£o/resultado, inclusive apÃ³s restart; nÃ£o cria operaÃ§Ã£o, pedido ou handoff duplicado.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
@@ -5029,7 +5135,14 @@
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open."
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.",
+      "subscopes": {
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
+      }
     },
     "DX-T47": {
       "requirement": "Fechar e reabrir o CLI reencontra trabalho e identidade; retoma a conversa somente com suporte comprovado, ou oferece nova sessÃ£o explicitamente, sem replay nem contexto fictÃ­cio.",
@@ -5111,8 +5224,27 @@
     },
     "DX-T51": {
       "requirement": "Nova revisÃ£o do preset apresenta efeitos por diff e respeita mudanÃ§as concorrentes; upgrade/reconnect nÃ£o amplia permissÃµes ou sobrescreve escolhas existentes.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md"
+      ],
+      "subscopes": {
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
+      },
+      "result": "Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution. Verified for the installed canonical HTTP/CLI contract on the declared Windows platform; future revisions are test inputs."
     },
     "AT-01": {
       "requirement": "AprovaÃ§Ã£o pendente aparece para operador autorizado.",
@@ -5532,7 +5664,25 @@
     "INV-26": {
       "requirement": "O preset preenche a configuraÃ§Ã£o comum do produto. Generalista Ã© um perfil reutilizÃ¡vel, nÃ£o uma identidade global compartilhada; reconnect nÃ£o recria agente nem reaplica defaults sobre escolhas do usuÃ¡rio.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md"
+      ],
+      "subscopes": {
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
+      }
     },
     "INV-27": {
       "requirement": "O preset preserva instruÃ§Ãµes, modelo, ferramentas e limites efetivos do harness quando suportados e verificÃ¡veis. IntegraÃ§Ã£o com Nexus nÃ£o remove sandbox, nÃ£o desabilita perguntas nativas nem concede administraÃ§Ã£o global.",
@@ -5967,6 +6117,23 @@
         "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
         "plans/agent_ops/evidence/pr03-project-doctor-cli.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 optional preset evolution",
+      "result": "Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-cli.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution-final-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
+        "plans/agent_ops/evidence/pr03-preset-evolution.md"
       ]
     }
   ]

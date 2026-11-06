@@ -54,6 +54,8 @@ class ConnectionTests:
     def start(self, context, owner, request, *, settings=None):
         creation_request = request if request.get('agent_creation') is not None else None
         self.authorize(context, request['agent_id'], creation_request=creation_request)
+        from .project_preset_update import validate_origin, validate_preset_update
+        validate_origin(request)
         require_provider_home(request['configuration'])
         build_execution_access(self.deps).require_admission('open')
         if self.closed or owner is None:
@@ -78,6 +80,7 @@ class ConnectionTests:
         with self.deps.connection_factory.unit_of_work(write=False) as uow:
             if baseline(uow, request['agent_id'], request.get('binding_id')) != request['baseline']:
                 raise conflict('The active configuration changed. Reopen Connections to review it.')
+            validate_preset_update(self.deps, context, uow, request)
             validate_native_policy(uow, request, settings)
             _require_binding_method(uow.connection, subject_agent_id=request['agent_id'], adapter_id=c['adapter_id'])
             setup_mcp_preset(uow, request)
@@ -100,7 +103,10 @@ class ConnectionTests:
         return self.public(entry)
 
     def public(self, entry):
-        return {name: entry[name] for name in ('test_id','status','stage','details')}
+        result = {name: entry[name] for name in ('test_id','status','stage','details')}
+        result['retryable_failure'] = bool(entry['status'] == 'failed' and entry['task'].done()
+            and entry.get('cleanup_confirmed'))
+        return result
 
     def get(self, context, test_id):
         entry = self.tests.get((context.actor_agent_id, test_id))
@@ -219,6 +225,7 @@ class ConnectionTests:
                     entry['stage'] = 'Test session closed. Run a new test.'
             if journal:
                 journal.close()
+            entry['cleanup_confirmed'] = True
 
     async def shutdown(self):
         self.closed = True

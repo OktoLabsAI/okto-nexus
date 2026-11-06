@@ -1,0 +1,38 @@
+{
+  "platform": "Windows-11-10.0.26300-SP0",
+  "installed_packages": {
+    "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-preset-evolution-evx8hpgi\\validation\\Lib\\site-packages\\okto_nexus\\__init__.py",
+    "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-preset-evolution-evx8hpgi\\validation\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+    "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-preset-evolution-evx8hpgi\\validation\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+  },
+  "cases": [
+    {
+      "case": "installed_help",
+      "exit_code": 0,
+      "absent_home_preserved": true
+    },
+    {
+      "case": "missing_profile_plan",
+      "exit_code": 3,
+      "absent_home_preserved": true
+    },
+    {
+      "case": "missing_profile_default",
+      "exit_code": 3,
+      "absent_home_preserved": true
+    },
+    {
+      "case": "conflicting_approval_flags",
+      "exit_code": 2,
+      "absent_home_preserved": true
+    },
+    {
+      "case": "invalid_timeout",
+      "exit_code": 2,
+      "absent_home_preserved": true
+    }
+  ],
+  "provider_calls": false,
+  "user_services_registered": false,
+  "real_credentials_used": false
+}

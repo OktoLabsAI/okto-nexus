@@ -177,12 +177,10 @@ def load_setup(deps, context, agent_id, binding_id=None, *, new_agent_draft=Fals
                 'AND l.realization_ref=b.realization_ref WHERE b.binding_id=? AND e.agent_id=?',
                 (binding_id, agent_id)).fetchone()
             if row:
-                origin = uow.connection.execute('SELECT result_json FROM connection_setup_commits '
-                    "WHERE json_extract(result_json,'$.binding.binding_id')=? "
-                    "AND json_type(result_json,'$.project_preset')='object' ORDER BY created_at DESC LIMIT 1",
-                    (binding_id,)).fetchone()
+                from .project_preset_update import stored_preset
+                origin = stored_preset(uow.connection, binding_id)
                 if origin:
-                    result['project_preset'] = json.loads(origin['result_json'])['project_preset']
+                    result['project_preset'] = origin['project_preset']
                 result['mcp_preset'] = runtime_mcp_presets.snapshot(uow.connection, row['endpoint_id'])
                 if row['local_record_json']:
                     record = json.loads(row['local_record_json'])
@@ -233,6 +231,9 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
             return json.loads(prior['result_json'])
         if baseline(uow, agent_id, request.get('binding_id')) != request['baseline']:
             raise conflict('The active configuration changed while you were editing. Reopen Connections to review it.')
+        from .project_preset_update import validate_preset_update, validate_origin
+        validate_origin(request)
+        preset_update = validate_preset_update(deps, context, uow, request)
         validate_native_policy(uow, request, settings)
         identity = validate_agent_creation(deps, uow, request)
         if identity is not None:
@@ -253,7 +254,7 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
         if 'broadcast_handoff_auto_claim' in request:
             policy_changes['broadcast_handoff_auto_claim'] = request['broadcast_handoff_auto_claim']
         runtime_policy.save_policy(scoped, context, agent_id=agent_id, changes=policy_changes)
-        if active or configuration['adapter_id']:
+        if not preset_update and (active or configuration['adapter_id']):
             agent_execution_policy.save_policy(scoped, context, agent_id,
                 expected_revision=request['baseline']['execution_revision'],
                 execution_location=configuration['execution_location'], local_adapter_id=configuration['adapter_id'] or None)
@@ -261,11 +262,12 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
         if identity is not None:
             result['agent_created'] = True
         if request.get('project_preset') is not None:
-            from .project_preset import ORIGIN
+            from .project_preset import ORIGIN, configuration_defaults
             if (request['project_preset'] != ORIGIN or
                     type(request['project_preset'].get('revision')) is not int):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown project preset revision.', {})
             result['project_preset'] = dict(ORIGIN)
+            result['project_preset_defaults'] = configuration_defaults()
         binding = None
         if active and configuration['execution_location'] != 'remote':
             if not verified:
@@ -303,6 +305,13 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
             if not row or row['agent_id'] != agent_id or row['adapter_id'] != configuration['adapter_id'] or not row['enabled'] or row['activation_state'] != 'approved':
                 raise conflict('Select an approved remote connection for this agent and harness.')
             binding = dict(row)
+        elif preset_update:
+            # Keep the approved association while preserving a disabled runtime.
+            # Settings may evolve, but this branch cannot issue execution authority.
+            row = uow.connection.execute('SELECT b.*,e.agent_id,e.workspace_id,e.adapter_id '
+                'FROM execution_bindings b JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id '
+                'WHERE b.binding_id=? AND e.agent_id=?', (request['binding_id'], agent_id)).fetchone()
+            binding = dict(row)
         if binding:
             endpoints = build_endpoint_service(scoped)
             endpoint_id = binding['endpoint_id']
@@ -317,13 +326,14 @@ def _finish_setup(deps, context, owner, fresh, request, *, verified, settings):
                                    (endpoints.conversation_policy, {'enabled': True})]:
                 current = method(context, endpoint_id=endpoint_id)
                 method(context, endpoint_id=endpoint_id, changes={'expected_revision': current['revision'], **values})
-            limits = configuration['authorization']
-            expiry = None if limits['minutes'] is None else (
-                datetime.now(timezone.utc) + timedelta(minutes=limits['minutes'])).isoformat()
-            from .connection_authorization import project_actions
-            actions = project_actions(uow.connection, agent_id)
-            access.issue(context, actor_agent_id=agent_id, endpoint_id=endpoint_id,
-                actions=actions, expires_at=expiry, max_executions=limits['actions'])
+            if active:
+                limits = configuration['authorization']
+                expiry = None if limits['minutes'] is None else (
+                    datetime.now(timezone.utc) + timedelta(minutes=limits['minutes'])).isoformat()
+                from .connection_authorization import project_actions
+                actions = project_actions(uow.connection, agent_id)
+                access.issue(context, actor_agent_id=agent_id, endpoint_id=endpoint_id,
+                    actions=actions, expires_at=expiry, max_executions=limits['actions'])
             result['binding'] = binding
         if request.get('native_decision_policy') is not None:
             settings.stage_native_decisions(uow, request['native_decision_policy'])

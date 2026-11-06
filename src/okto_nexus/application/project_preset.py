@@ -4,9 +4,21 @@ from nexus_connector_core.protocol import canonical_json
 import hashlib
 
 from ..domain.permissions import PERMISSION_REGISTRY
+from copy import deepcopy
 
 ORIGIN = {'id': 'project-generalist', 'revision': 1}
 CLIENTS = {'codex': 'codex_app_server', 'claude': 'claude_stream', 'pi': 'pi_rpc'}
+
+# Historical base for receipts written before defaults were recorded. Keep this
+# revision immutable when the current recommendation evolves.
+REVISION_1_DEFAULTS = dict(runtime_enabled=True, session_policy='per_sender',
+    harness_settings={}, tool_access='ask', authorization=dict(minutes=60, actions=20))
+
+
+def configuration_defaults():
+    from .connection_authorization import normalize_authorization
+    current = normalize_authorization(configuration(adapter_id=CLIENTS['codex'], project='', label='Project'))
+    return {key: deepcopy(current[key]) for key in REVISION_1_DEFAULTS}
 
 
 def identity_defaults():

@@ -88,6 +88,11 @@ class AuthorizationIssueRequest(BaseModel):
     max_executions: Annotated[int, Field(ge=1, le=1000)]
 
 
+class SetupPresetUpdate(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    review_revision: _Digest
+
+
 class ConnectionSetupRequest(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     client_intent_id: Annotated[str, Field(min_length=1, max_length=100)]
@@ -102,6 +107,7 @@ class ConnectionSetupRequest(BaseModel):
     mcp_preset: SetupMCPPreset | None = None
     broadcast_handoff_auto_claim: bool | None = None
     project_preset: dict | None = None
+    preset_update: SetupPresetUpdate | None = None
     agent_creation: SetupAgentCreation | None = None
     native_decision_policy: SetupNativeDecisionPolicy | None = None
 
@@ -971,6 +977,16 @@ def build_router() -> APIRouter:
         except OktoNexusError as error:
             return runtime_error(error, 'connection.setup')
 
+    @router.get('/connections/setup/{agent_id}/preset-update')
+    async def project_preset_update_read(agent_id: str, binding_id: str, request: Request):
+        from ....application.project_preset_update import prepare_preset_update
+        try:
+            result = await anyio.to_thread.run_sync(lambda: prepare_preset_update(
+                request.app.state.deps, runtime_request_context(), agent_id, binding_id))
+            return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return runtime_error(error, 'connection.preset_update')
+
     @router.get('/connections/workspaces')
     async def connection_workspaces(request: Request, limit: int = 100, after_workspace_id: str | None = None):
         from ....application.connection_workspaces import list_connection_workspaces
@@ -1003,12 +1019,14 @@ def build_router() -> APIRouter:
             result.pop('agent_creation', None)
         if result.get('native_decision_policy') is None:
             result.pop('native_decision_policy', None)
+        if result.get('preset_update') is None:
+            result.pop('preset_update', None)
         if result.get('project_preset') is None:
             result.pop('project_preset', None)
         else:
-            from ....application.project_preset import ORIGIN
-            if (result['project_preset'] != ORIGIN or
-                    type(result['project_preset'].get('revision')) is not int):
+            origin = result['project_preset']
+            if (set(origin) != {'id', 'revision'} or origin['id'] != 'project-generalist' or
+                    type(origin['revision']) is not int or origin['revision'] < 1):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unknown project preset revision.', {})
         try:
             from ....application.connection_authorization import normalize_authorization

@@ -159,3 +159,9 @@ For independent diagnostics, use `okto-nexus doctor --profile NAME`. Add
 `--check-server` to inspect current operator authority, binding and saved work
 through bounded GET requests. [Doctor](terminal-doctor.md) never starts the
 service, applies setup or submits work; UNKNOWN is distinct from failure.
+
+Reconnect preserves the saved configuration even when the recommended preset
+changes. To review optional adoption or a newer revision, use
+[`okto-nexus preset --plan --profile NAME`](terminal-preset.md). Its explicit diff
+includes configuration changes, preserved choices, grant/boot invalidation and
+any new authorization or model-test effects before approval.

@@ -178,14 +178,11 @@ class TerminalConnection:
                 'setup_run_id': document.get('request', {}).get('client_intent_id'),
                 'session_state': 'not_checked', 'work_state': 'not_submitted'}
 
-    def apply(self, document, *, approval=None, timeout=300):
-        if self.api('GET', '/connections/me')['server_id'] != document['server_id']:
-            raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.')
-        if document['state'] == 'done':
-            return self.observe(document)
+    def approve_review(self, document, approval):
         review = {key: document[key] for key in ('server_id', 'selection', 'version_check_required', 'effects')}
-        if 'identity_creation' in document:
-            review['identity_creation'] = document['identity_creation']
+        for key in ('identity_creation', 'preset_review'):
+            if key in document:
+                review[key] = document[key]
         review['request'] = document['review_request']
         original = document['review_request']
         if (document_revision(review) != document['review_revision'] or
@@ -196,7 +193,14 @@ class TerminalConnection:
                 raise ConnectionError('REVIEW_REQUIRED', 'Approve the displayed review revision before applying setup.')
             document['state'] = 'approved'
             self.save(document)
-        request = document['request']
+        return document['request']
+
+    def apply(self, document, *, approval=None, timeout=300):
+        if self.api('GET', '/connections/me')['server_id'] != document['server_id']:
+            raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.')
+        if document['state'] == 'done':
+            return self.observe(document)
+        request = self.approve_review(document, approval)
         if document['state'] in ('test_submitted', 'finish'):
             try:
                 receipt = self.api('POST', '/connections/setup:recover', request)
