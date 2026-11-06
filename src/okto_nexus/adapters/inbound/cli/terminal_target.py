@@ -25,7 +25,8 @@ class RemoteTarget:
         return self.inspect()  # Remote unavailability never starts a local component.
 
 
-def resolve_terminal_target(service_args, profile, operator_profile, local_resolver):
+def terminal_target_selection(service_args, profile, operator_profile):
+    """Read topology before opening a vault, HTTP client or local lifecycle."""
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('--home', type=Path)
     args, remaining = parser.parse_known_args(service_args)
@@ -36,8 +37,13 @@ def resolve_terminal_target(service_args, profile, operator_profile, local_resol
     if saved and operator_profile is not None and operator_profile != previous:
         raise ConnectionError('PROFILE_CONFLICT', 'The project profile belongs to another operator topology. Choose a new project profile.')
     selected = operator_profile or previous
+    if selected and remaining:
+        raise ConnectionError('REMOTE_OPTIONS_INVALID', 'Local service options cannot configure a remote Server. Use its saved operator profile.')
+    return home, selected
+
+
+def resolve_terminal_target(service_args, profile, operator_profile, local_resolver):
+    home, selected = terminal_target_selection(service_args, profile, operator_profile)
     if selected:
-        if remaining:
-            raise ConnectionError('REMOTE_OPTIONS_INVALID', 'Local service options cannot configure a remote Server. Use its saved operator profile.')
         return RemoteTarget(home, selected)
     return local_resolver(service_args)

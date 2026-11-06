@@ -154,3 +154,8 @@ older saved requests do not implicitly initialize native decisions.
 The Connector keeps its participant credential; the operator decides from their
 authenticated Nexus terminal. Replaying the original binding apply after a lost
 response recovers the receipt and current policy without restoring revoked grants.
+
+For independent diagnostics, use `okto-nexus doctor --profile NAME`. Add
+`--check-server` to inspect current operator authority, binding and saved work
+through bounded GET requests. [Doctor](terminal-doctor.md) never starts the
+service, applies setup or submits work; UNKNOWN is distinct from failure.

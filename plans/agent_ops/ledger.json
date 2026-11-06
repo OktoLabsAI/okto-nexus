@@ -86,6 +86,14 @@
         "plans/agent_ops/evidence/pr03-project-dashboard-source.xml",
         "plans/agent_ops/evidence/pr03-project-dashboard-wheels.json",
         "plans/agent_ops/evidence/pr03-project-dashboard.md",
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
@@ -302,15 +310,20 @@
         "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
+        "docs/terminal-doctor.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+        "src/okto_nexus/adapters/inbound/cli/doctor.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
         "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+        "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
         "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
         "src/okto_nexus/adapters/outbound/service_manager/identity.py",
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
@@ -318,8 +331,11 @@
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
         "src/okto_nexus/adapters/outbound/service_manager/logs.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
+        "src/okto_nexus/application/project_diagnostics.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "src/okto_nexus/domain/service_lifecycle.py",
+        "tests/execution_r4/test_project_diagnostics.py",
+        "tests/test_project_doctor_cli.py",
         "tests/test_service_inspection.py",
         "tests/test_service_logs.py",
         "tests/test_service_process.py",
@@ -342,14 +358,23 @@
         "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
-        "plans/agent_ops/evidence/pr02-nexus-user-service.xml"
+        "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
       ],
-      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout.",
+      "result": "Nexus Windows task host integration implemented; isolated host contracts, native validate-only preflight and concurrent real detached process regression passed. See scoped evidence; no registered service qualification. Connector host/launch subscopes now have scoped validation in pr02-connector-user-service.md; full task acceptance remains open. Passive Server logs and final 412-file wheel now verified by 12 log tests and 13 clean-venv tests outside checkout. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
         "Remaining controls and passive diagnostics beyond service logs, enable/disable/reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
-        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted."
+        "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted.",
+        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
       ],
       "subscopes": {
         "server_readiness_projection": "VERIFIED",
@@ -357,7 +382,9 @@
         "local_application_facade": "VERIFIED",
         "server_install_uninstall_facade_isolated": "VERIFIED",
         "connector_lifecycle_facade": "IMPLEMENTED",
-        "server_passive_logs_facade": "VERIFIED"
+        "server_passive_logs_facade": "VERIFIED",
+        "passive_project_diagnostics_installed": "VERIFIED",
+        "canonical_work_diagnostics_without_replay": "VERIFIED"
       }
     },
     "SVC-02": {
@@ -1474,6 +1501,7 @@
         "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
         "docs/service-lifecycle.md",
         "docs/terminal-connect.md",
+        "docs/terminal-doctor.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-enablement.md",
         "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
@@ -1482,10 +1510,14 @@
         "plans/agent_ops/evidence/pr03-login-start.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/connect_login.py",
+        "src/okto_nexus/adapters/inbound/cli/doctor.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+        "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
         "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/outbound/operator_client.py",
         "src/okto_nexus/adapters/outbound/service_manager/context.py",
         "src/okto_nexus/adapters/outbound/service_manager/identity.py",
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
@@ -1494,8 +1526,11 @@
         "src/okto_nexus/adapters/outbound/service_manager/login_start.py",
         "src/okto_nexus/adapters/outbound/service_manager/logs.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
+        "src/okto_nexus/application/project_diagnostics.py",
         "src/okto_nexus/application/service_lifecycle.py",
         "tests/execution_r4/test_connect_login_start.py",
+        "tests/execution_r4/test_project_diagnostics.py",
+        "tests/test_project_doctor_cli.py",
         "tests/test_service_inspection.py",
         "tests/test_service_logs.py",
         "tests/test_service_process.py",
@@ -1532,15 +1567,24 @@
         "plans/agent_ops/evidence/pr03-login-start-metadata.xml",
         "plans/agent_ops/evidence/pr03-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
-        "plans/agent_ops/evidence/pr03-login-start-wheels.json"
+        "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open.",
+      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
         "Remaining controls and passive diagnostics beyond service logs, general definition reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
         "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted.",
-        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open."
+        "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
+        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
       ],
       "subscopes": {
         "server_wheel_python_payloads": "VERIFIED",
@@ -1557,7 +1601,9 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "passive_project_diagnostics_installed": "VERIFIED",
+        "canonical_work_diagnostics_without_replay": "VERIFIED"
       }
     },
     "DX-01": {
@@ -2103,6 +2149,7 @@
         "../okto-nexus-connector/tests/unit/test_connection_config.py",
         "docs/connection-setup.md",
         "docs/terminal-connect.md",
+        "docs/terminal-doctor.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
@@ -2121,6 +2168,7 @@
         "plans/contratos/http-target.schema.json",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/connect_login.py",
+        "src/okto_nexus/adapters/inbound/cli/doctor.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
@@ -2151,6 +2199,7 @@
         "src/okto_nexus/application/execution_binding_proposals.py",
         "src/okto_nexus/application/execution_binding_setup.py",
         "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/project_diagnostics.py",
         "src/okto_nexus/application/project_preset.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/service_lifecycle.py",
@@ -2165,6 +2214,7 @@
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
+        "tests/execution_r4/test_project_diagnostics.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_remote_project_policy.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -2173,6 +2223,7 @@
         "tests/execution_r4/test_terminal_identity.py",
         "tests/execution_r4/test_terminal_policy.py",
         "tests/execution_r4/test_terminal_work.py",
+        "tests/test_project_doctor_cli.py",
         "tests/test_service_start.py",
         "tests/test_settings_api.py",
         "tests/test_terminal_connect_process.py",
@@ -2208,6 +2259,14 @@
         "plans/agent_ops/evidence/pr03-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-login-start-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -2247,7 +2306,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2260,7 +2319,8 @@
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
         "Remote preset/policy tests use synthetic inventory, adapted HTTP transport and memory vault; real two-host provider work and new identity bootstrap are not qualified.",
         "Saved Connector reuse is verified with real HTTP/persistence and injected daemon effects; initial new remote identity provisioning and real two-host provider work remain open.",
-        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open."
+        "Project review verified with injected host/provider effects; new remote identity bootstrap and real productive M1 remain open.",
+        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -2314,7 +2374,9 @@
         "connector_reconnect_current_identity_and_binding": "VERIFIED",
         "connector_reconnect_preserves_state_and_revocation": "VERIFIED",
         "connector_passive_installation_recommendation": "VERIFIED",
-        "connector_default_single_project_review": "VERIFIED"
+        "connector_default_single_project_review": "VERIFIED",
+        "passive_project_diagnostics_installed": "VERIFIED",
+        "canonical_work_diagnostics_without_replay": "VERIFIED"
       }
     },
     "DX-05": {
@@ -2357,7 +2419,7 @@
     },
     "DX-07": {
       "title": "doctor estruturado",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03",
         "PR-04"
@@ -2367,12 +2429,40 @@
         "PR-02",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/terminal-doctor.md",
+        "src/okto_nexus/adapters/inbound/cli/doctor.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
+        "src/okto_nexus/adapters/outbound/operator_client.py",
+        "src/okto_nexus/application/project_diagnostics.py",
+        "tests/execution_r4/test_project_diagnostics.py",
+        "tests/test_project_doctor_cli.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
+      ],
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
+      ],
+      "subscopes": {
+        "passive_project_diagnostics_installed": "VERIFIED",
+        "canonical_work_diagnostics_without_replay": "VERIFIED",
+        "remote_metadata_without_vault_or_network": "VERIFIED",
+        "explicit_bounded_operator_get_checks": "VERIFIED",
+        "participant_client_validation": "NOT_STARTED",
+        "participant_mcp_and_cooperation_checks": "NOT_STARTED",
+        "cross_host_diagnostic_contract": "IN_PROGRESS"
+      }
     },
     "DX-08": {
       "title": "smoke de cooperaÃ§Ã£o",
@@ -3312,6 +3402,7 @@
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
         "docs/terminal-connect.md",
+        "docs/terminal-doctor.md",
         "docs/terminal-operator.md",
         "docs/terminal-work.md",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
@@ -3320,6 +3411,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/doctor.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/native_input.py",
         "src/okto_nexus/adapters/inbound/cli/operator.py",
@@ -3343,6 +3435,7 @@
         "src/okto_nexus/application/connection_test.py",
         "src/okto_nexus/application/execution_binding_approvals.py",
         "src/okto_nexus/application/execution_intents.py",
+        "src/okto_nexus/application/project_diagnostics.py",
         "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/settings.py",
         "src/okto_nexus/application/terminal_authorization.py",
@@ -3353,12 +3446,14 @@
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "tests/execution_r4/test_handoff_notice_migration.py",
+        "tests/execution_r4/test_project_diagnostics.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
         "tests/execution_r4/test_terminal_policy.py",
         "tests/execution_r4/test_terminal_work.py",
+        "tests/test_project_doctor_cli.py",
         "tests/test_service_start.py",
         "tests/test_settings_api.py",
         "tests/test_terminal_connect_process.py",
@@ -3366,6 +3461,14 @@
         "tests/test_terminal_native_input.py"
       ],
       "tests": [
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
         "plans/agent_ops/evidence/pr03-remote-operator-decisions.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -3390,7 +3493,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -3399,7 +3502,8 @@
         "Generic message/handoff creation deduplication and wait are not covered by this native-operation subset; service restart and provider session restoration remain unqualified.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
-        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open."
+        "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
+        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -3425,7 +3529,9 @@
         "remote_connector_productive_work": "NOT_RUN",
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
-        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+        "binding_approval_loss_recovery_without_repost": "VERIFIED",
+        "passive_project_diagnostics_installed": "VERIFIED",
+        "canonical_work_diagnostics_without_replay": "VERIFIED"
       }
     },
     "DX-21": {
@@ -4103,13 +4209,23 @@
         "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
         "plans/agent_ops/evidence/pr02-nexus-service-logs-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-service-logs.md",
-        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml"
+        "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
       ],
       "subscopes": {
         "server_logs_no_bootstrap_or_start": "VERIFIED",
         "full_doctor_and_consumers": "IN_PROGRESS",
-        "connector_passive_diagnostics_no_initialization": "VERIFIED"
-      }
+        "connector_passive_diagnostics_no_initialization": "VERIFIED",
+        "nexus_project_doctor_installed_contract": "VERIFIED"
+      },
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open."
     },
     "SVC-T11": {
       "requirement": "Endpoint acessÃ­vel de instÃ¢ncia/versÃ£o errada nÃ£o vira prontidÃ£o vÃ¡lida.",
@@ -4363,8 +4479,21 @@
     },
     "DX-T12": {
       "requirement": "Doctor padrÃ£o nÃ£o inicia turnos/probes nativos nem muda configuraÃ§Ãµes.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
+      ],
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "subscopes": {
+        "nexus_project_doctor_installed_contract": "VERIFIED"
+      }
     },
     "DX-T13": {
       "requirement": "MCP conectado sem chamada de ferramenta nÃ£o Ã© participaÃ§Ã£o comprovada.",
@@ -4479,8 +4608,21 @@
     },
     "DX-T28": {
       "requirement": "SaÃ­da JSON e cÃ³digos de saÃ­da possuem testes de contrato.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
+      ],
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "subscopes": {
+        "nexus_project_doctor_installed_contract": "VERIFIED"
+      }
     },
     "DX-T29": {
       "requirement": "Projeto e Ãºnico harness detectado levam a recomendaÃ§Ã£o concreta sem escolha tÃ©cnica MCP/runtime inicial.",
@@ -4645,12 +4787,23 @@
       "requirement": "ServiÃ§o pronto, MCP negociado, sessÃ£o pronta e handoff concluÃ­do aparecem como nÃ­veis distintos.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Local terminal work reuses canonical HTTP intents, admission, sessions, events, native decisions and results. Same-ID recovery, request-specific initial-turn correlation, continued conversation, explicit decisions and observer exit are tested with a synthetic native peer. Installed broad suite: 99 passed and three missing schema-fixture failures; final wheel after EOF correction and copying the schema: 35 passed, including all three failed cases. Full R3 and productive local/remote M1 acceptance remain incomplete. Real provider, restart and full scenario acceptance remain open."
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "subscopes": {
+        "nexus_project_doctor_installed_contract": "VERIFIED"
+      }
     },
     "DX-T36": {
       "requirement": "ConexÃ£o nÃ£o envia tarefa/smoke pago automaticamente; a tarefa solicitada usa os serviÃ§os canÃ´nicos.",
@@ -5333,12 +5486,36 @@
     "INV-22": {
       "requirement": "Estado do processo, prontidÃ£o do serviÃ§o, conexÃ£o do harness e sucesso de uma tarefa sÃ£o provas diferentes.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
+      ],
+      "subscopes": {
+        "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
+      }
     },
     "INV-23": {
       "requirement": "Consultas de status, logs e doctor padrÃ£o nÃ£o iniciam o serviÃ§o nem inferÃªncia. A inicializaÃ§Ã£o automÃ¡tica pertence a comandos de aÃ§Ã£o documentados.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor.md"
+      ],
+      "subscopes": {
+        "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
+      }
     },
     "INV-24": {
       "requirement": "Sobreviver ao terminal, reiniciar apÃ³s falha, iniciar no login e operar sem login exigem evidÃªncias separadas; nÃ£o prometer sobrevivÃªncia do processo a reboot.",
@@ -5775,6 +5952,21 @@
         "plans/agent_ops/evidence/pr03-project-dashboard-installed.xml",
         "plans/agent_ops/evidence/pr03-project-dashboard-wheels.json",
         "plans/agent_ops/evidence/pr03-project-dashboard-browser.json"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-03 passive project diagnostics",
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
+        "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-final.xml",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
+        "plans/agent_ops/evidence/pr03-project-doctor-cli.json"
       ]
     }
   ]

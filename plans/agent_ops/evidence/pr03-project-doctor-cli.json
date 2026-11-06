@@ -1,0 +1,221 @@
+{
+  "platform": "Windows-11-10.0.26300-SP0",
+  "installed_packages": {
+    "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-project-doctor-2dopgiag\\final\\validation\\Lib\\site-packages\\okto_nexus\\__init__.py",
+    "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-project-doctor-2dopgiag\\final\\validation\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+    "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-project-doctor-2dopgiag\\final\\validation\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+  },
+  "cases": [
+    {
+      "case": "absent_default",
+      "exit_code": 3,
+      "state": "failed_checks",
+      "topology": "local_server",
+      "seconds": 3.074,
+      "checks": {
+        "project_profile": {
+          "status": "UNKNOWN",
+          "code": "PROFILE_ABSENT"
+        },
+        "local_service": {
+          "status": "FAIL",
+          "code": "NO_SERVICE_OWNER"
+        },
+        "server_reachability": {
+          "status": "UNKNOWN",
+          "code": "SERVER_CHECK_NOT_REQUESTED"
+        },
+        "operator_authentication": {
+          "status": "UNKNOWN",
+          "code": "AUTHENTICATION_NOT_CHECKED"
+        },
+        "project_identity": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "managed_connection": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "runtime_eligibility": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "provider_login": {
+          "status": "UNKNOWN",
+          "code": "PROVIDER_LOGIN_NOT_CHECKED"
+        },
+        "client_configuration": {
+          "status": "UNKNOWN",
+          "code": "CLIENT_CONFIGURATION_NOT_CHECKED"
+        },
+        "participant_authentication": {
+          "status": "UNKNOWN",
+          "code": "PARTICIPANT_NOT_AUTHENTICATED"
+        },
+        "mcp_negotiation": {
+          "status": "UNKNOWN",
+          "code": "MCP_NEGOTIATION_NOT_OBSERVED"
+        },
+        "coordination_participation": {
+          "status": "UNKNOWN",
+          "code": "PARTICIPATION_NOT_OBSERVED"
+        },
+        "handoff_test": {
+          "status": "UNKNOWN",
+          "code": "HANDOFF_TEST_NOT_OBSERVED"
+        },
+        "managed_session": {
+          "status": "UNKNOWN",
+          "code": "SESSION_NOT_CHECKED"
+        },
+        "work_result": {
+          "status": "UNKNOWN",
+          "code": "WORK_NOT_CHECKED"
+        }
+      }
+    },
+    {
+      "case": "absent_check_server",
+      "exit_code": 3,
+      "state": "failed_checks",
+      "topology": "local_server",
+      "seconds": 1.601,
+      "checks": {
+        "project_profile": {
+          "status": "UNKNOWN",
+          "code": "PROFILE_ABSENT"
+        },
+        "local_service": {
+          "status": "FAIL",
+          "code": "NO_SERVICE_OWNER"
+        },
+        "server_reachability": {
+          "status": "UNKNOWN",
+          "code": "SERVER_CHECK_NOT_REQUESTED"
+        },
+        "operator_authentication": {
+          "status": "UNKNOWN",
+          "code": "AUTHENTICATION_NOT_CHECKED"
+        },
+        "project_identity": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "managed_connection": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "runtime_eligibility": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "provider_login": {
+          "status": "UNKNOWN",
+          "code": "PROVIDER_LOGIN_NOT_CHECKED"
+        },
+        "client_configuration": {
+          "status": "UNKNOWN",
+          "code": "CLIENT_CONFIGURATION_NOT_CHECKED"
+        },
+        "participant_authentication": {
+          "status": "UNKNOWN",
+          "code": "PARTICIPANT_NOT_AUTHENTICATED"
+        },
+        "mcp_negotiation": {
+          "status": "UNKNOWN",
+          "code": "MCP_NEGOTIATION_NOT_OBSERVED"
+        },
+        "coordination_participation": {
+          "status": "UNKNOWN",
+          "code": "PARTICIPATION_NOT_OBSERVED"
+        },
+        "handoff_test": {
+          "status": "UNKNOWN",
+          "code": "HANDOFF_TEST_NOT_OBSERVED"
+        },
+        "managed_session": {
+          "status": "UNKNOWN",
+          "code": "SESSION_NOT_CHECKED"
+        },
+        "work_result": {
+          "status": "UNKNOWN",
+          "code": "WORK_NOT_CHECKED"
+        }
+      }
+    },
+    {
+      "case": "remote_offline_metadata",
+      "exit_code": 0,
+      "state": "incomplete",
+      "topology": "remote_operator",
+      "seconds": 1.506,
+      "checks": {
+        "project_profile": {
+          "status": "PASS",
+          "code": "PROFILE_READ"
+        },
+        "local_service": {
+          "status": "NOT_APPLICABLE",
+          "code": "REMOTE_TOPOLOGY"
+        },
+        "server_reachability": {
+          "status": "UNKNOWN",
+          "code": "SERVER_CHECK_NOT_REQUESTED"
+        },
+        "operator_authentication": {
+          "status": "UNKNOWN",
+          "code": "AUTHENTICATION_NOT_CHECKED"
+        },
+        "project_identity": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "managed_connection": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "runtime_eligibility": {
+          "status": "UNKNOWN",
+          "code": "NOT_CHECKED"
+        },
+        "provider_login": {
+          "status": "UNKNOWN",
+          "code": "PROVIDER_LOGIN_NOT_CHECKED"
+        },
+        "client_configuration": {
+          "status": "UNKNOWN",
+          "code": "CLIENT_CONFIGURATION_NOT_CHECKED"
+        },
+        "participant_authentication": {
+          "status": "UNKNOWN",
+          "code": "PARTICIPANT_NOT_AUTHENTICATED"
+        },
+        "mcp_negotiation": {
+          "status": "UNKNOWN",
+          "code": "MCP_NEGOTIATION_NOT_OBSERVED"
+        },
+        "coordination_participation": {
+          "status": "UNKNOWN",
+          "code": "PARTICIPATION_NOT_OBSERVED"
+        },
+        "handoff_test": {
+          "status": "UNKNOWN",
+          "code": "HANDOFF_TEST_NOT_OBSERVED"
+        },
+        "managed_session": {
+          "status": "UNKNOWN",
+          "code": "SESSION_NOT_CHECKED"
+        },
+        "work_result": {
+          "status": "UNKNOWN",
+          "code": "WORK_NOT_CHECKED"
+        }
+      }
+    }
+  ],
+  "absent_home_not_created": true,
+  "remote_metadata_unchanged": true,
+  "personal_services_used": false,
+  "provider_calls": false
+}

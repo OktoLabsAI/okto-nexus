@@ -280,3 +280,12 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - O primeiro teste HTTP revelou a rota de dashboard ausente, corrigida antes das suítes finais. A campanha de histórico foi ajustada para preservar todas as linhas anteriores permitindo notificações novas; produto e wheel permaneceram iguais.
 - DX-12/18/19/21 e DX-T49 permanecem em progresso no aceite completo. RG-10 verificado para esta campanha. M1 produtivo, campanha nativa, participante, evolução do preset, identidade remota inicial, ATN e OBS continuam abertos; plano fixo preservado.
 - Evidência: [pr03-project-dashboard.md](plans/agent_ops/evidence/pr03-project-dashboard.md).
+
+## 2026-11-05 — PR-03, décima quinta fatia: diagnóstico passivo do projeto
+
+- Recuperadas novamente as três `origin/main`; todas já estão contidas nas branches feature versionadas. Nexus permanece em `feature/v0.3.3`; Connector/Core não mudaram nesta fatia.
+- `okto-nexus doctor` separa serviço, alcance do Server, autoridade atual do operador, identidade, binding, elegibilidade de abertura, sessão e resultado produtivo. Cada nível tem estado, motivo e próxima ação; login do provedor, cliente participante, MCP e cooperação não são inferidos.
+- O padrão remoto lê somente metadados. `--check-server` permite GETs autenticados com limites explícitos; não inicia serviço/harness, executa probes, aplica configuração, emite grant ou envia trabalho. Falha anterior à criação do cliente HTTP não comprova resposta do Server.
+- Criação de identidade pendente, inventário não observado e envio incerto permanecem desconhecidos. Grant revogado continua recusado. Resultado usa o recibo da solicitação salva; sessão pronta não vira conclusão produtiva, e diagnóstico não retoma nem reenvia operações.
+- **52 testes de fonte e 82 testes instalados passaram. O wheel final passou 45 testes focados e três invocações reais da CLI fora do checkout.** As suítes se sobrepõem. O teste adicional de abertura foi corrigido para o contrato SUBMITTED com controle disponível; a falha original ficou preservada. Os 433/117/130 arquivos Python e sete assets do Nexus correspondem aos fontes.
+- [Evidências e limites](plans/agent_ops/evidence/pr03-project-doctor.md). HTTP, autorização, persistência e recibos reais; peer nativo, ponte remota e cofre simulados. DX-07 e os cenários amplos permanecem em progresso; configuração participante, MCP/smoke, provedor real, serviço nativo e M1 completo continuam pendentes. O plano fixo não mudou.

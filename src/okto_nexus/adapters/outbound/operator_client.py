@@ -153,13 +153,14 @@ class RemoteOperatorHTTP(LocalOperatorHTTP):
                 raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'The operator session expired or was revoked. Sign in again on this operator client.', stage=error.stage) from None
             raise
 
-    def verify(self):
-        status = self('GET', '/api/v1/operator-auth/status')['data']
+    def verify(self, *, call=None):
+        request = call or self
+        status = request('GET', '/api/v1/operator-auth/status')['data']
         if not status.get('session_required_header'):
             raise ConnectionError('SERVER_UPGRADE_REQUIRED', 'Upgrade the Server to support explicit operator-session-only requests.')
         if not status.get('authenticated') or status.get('username') != self.username or not self.username:
             raise ConnectionError('OPERATOR_LOGIN_REQUIRED', 'Sign in to this Server with a human operator account.')
-        me = self('GET', PREFIX + '/connections/me')
+        me = request('GET', PREFIX + '/connections/me')
         if self.server_id is not None and me['server_id'] != self.server_id:
             raise ConnectionError('SERVER_ID_MISMATCH', 'The operator profile belongs to another Server installation.')
         return me
