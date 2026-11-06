@@ -56,6 +56,16 @@ def inspect_participant(report, home, saved, *, check_server=False, check_mcp=Fa
     report.set('participant_profile', 'PASS', 'PROFILE_READ',
         'The existing participant checkpoint was validated without modification.',
         'Resume the same init profile if setup is incomplete.', setup_run_id=review['setup_run_id'], state=saved['state'])
+    removal = saved.get('removal')
+    if removal and removal['stage'] != 'review':
+        report.set('participant_profile', 'NOT_APPLICABLE', 'PARTICIPANT_PROFILE_RETIRED',
+            'Local removal was approved; this profile cannot be used for init or launch.',
+            'Inspect participant remove --plan and resume its checkpoints if incomplete.',
+            setup_run_id=review['setup_run_id'], removal_stage=removal['stage'])
+        report.set('client_configuration', 'UNKNOWN', 'REMOVAL_RECEIPT_ONLY',
+            'The removal receipt is historical evidence, not a current client observation.',
+            'Close or reconfigure existing clients explicitly; local cleanup does not revoke their environment or the Server key.')
+        return
     if review['file'] is None:
         report.set('client_configuration', 'UNKNOWN', 'MANUAL_CLIENT_CONFIGURATION',
             'This profile exports manual instructions and has no installed client file to inspect.',

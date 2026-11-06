@@ -55,7 +55,7 @@ still-owned entry.
 authentication is then unknown. `--refresh --plan` replaces only an unapproved
 review. Approved uncertain operations retain their checkpoints. Local failure
 never deletes the Server identity. Vault entries and protected backups remain
-for recovery; automated cleanup/removal is not part of this increment.
+for recovery until explicitly removed through the local removal flow below.
 
 **Configuration applied is not client ready.** Output separates authenticated
 identity, entry present, credential in the client context, client reload, MCP
@@ -121,6 +121,54 @@ retains the previous revision/state and process hints, not a complete history.
 Successful spawn proves that Nexus supplied the environment to that owned
 process. It does not prove client reload, MCP authentication, participation or
 work, and a zero exit code is not readiness. Those levels remain independent.
+
+## Local removal and partial-setup compensation
+
+```sh
+okto-nexus participant remove --profile reviewer --plan
+okto-nexus participant remove --profile reviewer --approve REMOVAL_REVIEW_REVISION
+```
+
+Removal is local and works even when the Server is unreachable or the agent key
+has been revoked. Its review performs no network requests, secret reads or file
+edits. It saves a nonsecret removal plan with the exact source/postimage hashes
+and fields of the owned entry. Apply removes only that entry using Core's CAS,
+protected backup and atomic file replacement, then removes the isolated vault
+entry for this setup. Other client entries/preferences, other vault entries,
+Server identity/key validity, runtime, bindings and grants are preserved.
+Whole backups are never restored. TOML bytes outside the owned table remain,
+including a separator blank line; JSON retains unrelated values.
+
+The existing private profile records removal stages `review`, `file_pending`,
+`vault_pending` and `done`. Approval retires the profile before either effect;
+init, connect and launch then refuse to reactivate it. If only the vault stage
+remains, later file edits are preserved while it resumes. A lost file reply is
+recovered only from the exact reviewed postimage and access policy; intervening
+edits stop recovery for inspection. A locked/inaccessible vault remains pending,
+and is never treated as confirmed absence. Rerun `participant remove` to resume
+the same approved intent. Replay of a finished removal is a historical receipt,
+not a new assertion that no one subsequently changed the file or vault.
+
+Incomplete setup is compensated only for stages that could have taken effect.
+An unconfirmed file write must match its original or exact postimage before
+ownership is established. The unapproved removal review can be replaced with
+`--refresh --plan`, including when init advanced after that review. An approved
+removal keeps its original checkpoints and cannot be replaced by refresh.
+
+If the entry is absent, modified, manual, or its file cannot safely be removed,
+inspect it first. `--keep-config --plan` explicitly proposes leaving all client
+files untouched while retiring the profile and deleting its own vault entry.
+Use `--refresh --keep-config --plan` to change an unapproved removal choice.
+The same option can compensate a setup whose local file became unavailable.
+This does not certify that a manual configuration was removed.
+
+Existing clients may retain the credential in memory, and removing a local key
+does not revoke it on the Server. Close or reconfigure those clients explicitly.
+Nexus does not kill a process based on a historical PID. Protected backups,
+nonsecret setup/removal/launch receipts and directories remain for inspection;
+there is no recursive cleanup. Doctor of a retired profile reports its removal
+state and performs no active credential/MCP checks. A new connection uses a new
+profile and an explicitly reviewed init.
 
 ## Independent participant checks
 

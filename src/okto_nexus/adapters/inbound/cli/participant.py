@@ -123,6 +123,8 @@ def run_participant(argv):
         saved = read_json(target) if target.exists() else None
         if saved:
             flow.validate(saved)
+            if not args.plan or args.refresh:
+                flow.ensure_active(saved)
         selection = _selection(args, project, saved)
         if args.refresh and saved and saved['state'] != 'review':
             raise ConnectionError('SETUP_ALREADY_APPROVED', 'This setup may have local effects. Resume its retained checkpoints before starting another review.')

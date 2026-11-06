@@ -14,6 +14,7 @@ class ParticipantLaunch:
         self.setup = TerminalParticipant(home, profile, lambda _: None)
 
     def _setup(self, saved):
+        self.setup.ensure_active(saved)
         review, config = self.setup.validate(saved)
         if saved['state'] != 'done':
             raise ConnectionError('PARTICIPANT_SETUP_INCOMPLETE', 'Complete the retained participant init before launching its client.')

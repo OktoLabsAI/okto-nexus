@@ -1,0 +1,31 @@
+[
+  {
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-removal-2yx9vvjq\\validation\\Scripts\\okto-nexus.exe",
+      "participant",
+      "--help"
+    ],
+    "exit_code": 0,
+    "output": "Usage: okto-nexus participant launch|remove [options]\nUse launch --help or remove --help for the selected action.\n",
+    "home_created": false
+  },
+  {
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-removal-2yx9vvjq\\validation\\Scripts\\okto-nexus.exe",
+      "participant",
+      "remove",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-participant-removal-2yx9vvjq\\absent-console-profile",
+      "--profile",
+      "missing",
+      "--json"
+    ],
+    "exit_code": 3,
+    "output": {
+      "state": "unconfirmed",
+      "code": "PARTICIPANT_PROFILE_ABSENT",
+      "message": "No participant setup exists for this selection; no files were created."
+    },
+    "home_created": false
+  }
+]

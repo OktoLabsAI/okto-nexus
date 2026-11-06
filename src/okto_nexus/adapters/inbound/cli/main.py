@@ -14,6 +14,7 @@ Usage:
   okto-nexus connect [options] Review and connect a local project
   okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
   okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
   okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
   okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
@@ -46,6 +47,12 @@ def main(argv: list[str] | None = None) -> int:
         from .doctor import run_doctor
         return run_doctor(rest)
     if command == 'participant':
+        if not rest or rest[0] in ('-h', '--help', 'help'):
+            print('Usage: okto-nexus participant launch|remove [options]\nUse launch --help or remove --help for the selected action.')
+            return 0
+        if rest[0] == 'remove':
+            from .participant_remove import run_participant_remove
+            return run_participant_remove(rest[1:])
         from .participant_launch import run_participant_launch
         return run_participant_launch(rest)
     if command == 'preset':

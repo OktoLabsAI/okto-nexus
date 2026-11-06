@@ -35,6 +35,14 @@ class TerminalParticipant:
                 require(review['file']['path'] == selection['config_file'])
             if saved['state'] != 'review':
                 require(saved['approval'] == saved['review_revision'])
+            removal = saved.get('removal')
+            if removal is not None:
+                require(removal['revision'] == 1)
+                require(removal['stage'] in ('review', 'file_pending', 'vault_pending', 'done'))
+                require(removal['review_revision'] == document_revision(removal['review']))
+                require(removal['review']['setup_revision'] == saved['review_revision'])
+                if removal['stage'] != 'review':
+                    require(removal['approval'] == removal['review_revision'])
             return review, config
         except (KeyError, TypeError, ValueError):
             raise ConnectionError('PARTICIPANT_PROFILE_INVALID', 'The saved participant review is invalid. Preserve it for inspection; do not apply it.') from None
@@ -42,7 +50,14 @@ class TerminalParticipant:
     def vault(self, review):
         return ParticipantVault(self.home, self.profile, review)
 
+    def ensure_active(self, saved):
+        self.validate(saved)
+        if saved.get('removal', {}).get('stage', 'review') != 'review':
+            raise ConnectionError('PARTICIPANT_PROFILE_RETIRED',
+                'Local removal has been approved for this profile. Resume participant remove or inspect its receipt; init and launch cannot restore it.')
+
     def key(self, saved, supplied):
+        self.ensure_active(saved)
         if supplied is not None:
             return supplied
         review, _ = self.validate(saved)
@@ -75,6 +90,7 @@ class TerminalParticipant:
         return saved
 
     def apply(self, saved, key, approval):
+        self.ensure_active(saved)
         review, config = self.validate(saved)
         if approval != saved['review_revision']:
             raise ConnectionError('REVIEW_REQUIRED', 'Approve the exact participant review revision before storing credentials or editing configuration.')
@@ -110,6 +126,15 @@ class TerminalParticipant:
     def result(self, saved, context=None):
         review, config = self.validate(saved)
         complete = saved['state'] == 'done'
+        removal = saved.get('removal')
+        if removal and removal['stage'] != 'review':
+            return dict(mode='participant', profile=self.profile, state='removed' if removal['stage'] == 'done' else 'removal_in_progress',
+                setup_run_id=review['setup_run_id'], review_revision=saved['review_revision'],
+                origin=review['origin'], context=review['context'], project=review['selection']['project'],
+                file=review['file'], entry_name=config.entry_name, entry=config.entry(), effects=[],
+                removal=removal, proof=dict(identity='UNKNOWN', client_entry='UNKNOWN',
+                    credential_in_client='UNKNOWN', client_reload='UNKNOWN', mcp='UNKNOWN', work='NOT_SUBMITTED'),
+                next_action='Inspect participant remove --plan for this retired profile. Existing clients may retain the credential; close or reconfigure them explicitly.')
         return dict(mode='participant', profile=self.profile, setup_run_id=review['setup_run_id'],
             state=('configuration_applied' if review['file'] else 'manual_configuration_required') if complete else saved['state'],
             review_revision=saved['review_revision'], origin=review['origin'],

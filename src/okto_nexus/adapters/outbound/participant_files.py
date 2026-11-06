@@ -4,8 +4,9 @@ import os
 from pathlib import Path
 import stat
 
+from nexus_connector_core import CoreError
 from nexus_connector_core.config_persistence import _read_document, apply_json_plan_file, apply_toml_plan_file
-from nexus_connector_core.participant_config import plan_participant_config
+from nexus_connector_core.participant_config import plan_participant_config, plan_participant_removal
 
 from ...application.terminal_connection import ConnectionError
 
@@ -140,6 +141,10 @@ def apply_file(review, config):
         return dict(recovered=True, backup_path=None)
     raw, _ = _read_document(path)
     plan = plan_participant_config(raw, config)
+    return _apply_plan(review, config, path, plan)
+
+
+def _apply_plan(review, config, path, plan):
     if digest(plan._replacement) != review['replacement_sha256']:
         raise ConnectionError('CONFIG_PLAN_CHANGED', 'The participant renderer changed; review the file again.')
     original_security = None
@@ -157,13 +162,48 @@ def apply_file(review, config):
             inheritance = api.PROTECTED_DACL_SECURITY_INFORMATION if control & 0x1000 else api.UNPROTECTED_DACL_SECURITY_INFORMATION
             # SetNamedSecurityInfo merges inherited parent ACEs into an
             # unprotected DACL. Preserve the exact reviewed descriptor instead.
-            api.SetFileSecurity(str(created), api.DACL_SECURITY_INFORMATION | inheritance, original_security)
+            if control & 0x1000 and control & 0x0400:
+                # SetFileSecurity clears AUTO_INHERITED on a protected DACL.
+                # The named API preserves that flag without adding parent ACEs
+                # when PROTECTED is explicit. Unprotected ACLs still use the
+                # descriptor API above to avoid inherited-ACE merging.
+                api.SetNamedSecurityInfo(str(created), api.SE_FILE_OBJECT,
+                    api.DACL_SECURITY_INFORMATION | inheritance, None, None,
+                    original_security.GetSecurityDescriptorDacl(), None)
+            else:
+                api.SetFileSecurity(str(created), api.DACL_SECURITY_INFORMATION | inheritance, original_security)
             if access_revision(created) != review['access_revision']:
                 raise ConnectionError('CONFIG_ACCESS_CHANGED', 'The reviewed file access policy cannot be preserved; original remains unchanged.')
     path.parent.mkdir(parents=True, exist_ok=True)
     apply = apply_toml_plan_file if config.client == 'codex' else apply_json_plan_file
     result = apply(plan, path, prepare_file=prepare_file)
     return dict(recovered=False, backup_path=str(result.backup_path) if result.backup_path else None)
+
+
+def removal_plan(review, config, *, setup_state):
+    if review is None or setup_state not in ('file_pending', 'done'):
+        return None  # The setup never reached its file-effect intent.
+    path = _validate_path(review)
+    if setup_state == 'file_pending' and inspect_file(review, config) == 'original':
+        return None  # No uncertain file effect is being claimed as owned.
+    raw, _ = _read_document(path)
+    try:
+        plan = plan_participant_removal(raw, config, previously_owned=config.entry())
+    except CoreError:
+        raise ConnectionError('PARTICIPANT_ENTRY_NOT_OWNED',
+            'The client entry is absent, changed or cannot be safely removed. Inspect it, then use --keep-config to retire only this profile and its credential if appropriate.') from None
+    return dict(path=str(path), anchor=review['anchor'], expected_sha256=plan.expected_sha256,
+        replacement_sha256=digest(plan._replacement), access_revision=access_revision(path),
+        changed=plan.changed, changed_fields=list(plan.changed_fields))
+
+
+def apply_removal(review, config):
+    path = _validate_path(review)
+    if inspect_file(review, config) == 'applied':
+        return dict(recovered=True, backup_path=None)
+    raw, _ = _read_document(path)
+    plan = plan_participant_removal(raw, config, previously_owned=config.entry())
+    return _apply_plan(review, config, path, plan)
 
 
 def current_owned_entry(review, config):

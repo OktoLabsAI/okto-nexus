@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="13.508" timestamp="2026-11-06T08:09:10.701368-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_participant_removal" name="test_remove_only_owned_entry_preserves_other_values_and_server[claude]" time="6.754" /><testcase classname="tests.execution_r4.test_participant_removal" name="test_remove_only_owned_entry_preserves_other_values_and_server[codex]" time="3.897"><failure message="assert b'# preserved...-execute&quot;\n\n' == b'# preserved...er-execute&quot;\n'&#10;  &#10;  Use -v to get more diff">removal = namespace(s=namespace(flow=&lt;okto_nexus.application.terminal_participant.TerminalParticipant object at 0x000001CC8AE9D3...450&gt;, calls=[('okto-nexus/participant/dfe77292398a74a0be3a3a55fcbb3bd7d825eb90dee9fa044d12ec60c762b041', 'agent-key')])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CC887BDBA0&gt;
+client = 'codex'
+
+    @pytest.mark.parametrize('client', ['claude', 'codex'])
+    def test_remove_only_owned_entry_preserves_other_values_and_server(removal, monkeypatch, client):
+        t = removal
+        saved, path, original = complete(t, client)
+        configured = path.read_bytes()
+        acl = participant_files.access_revision(path)
+        t.s.vault.values['unrelated', 'agent-key'] = 'must-preserve'
+        def no_http(*args, **kwargs):
+            raise AssertionError('Local removal cannot use HTTP')
+        monkeypatch.setattr(participant_client, 'build_opener', no_http)
+        planned = t.flow.review(saved)
+        assert path.read_bytes() == configured and not t.calls
+        assert 'other-private-value' not in json.dumps(planned['removal'])
+        assert t.s.key not in json.dumps(planned)
+        result = t.flow.apply(planned, planned['removal']['review_revision'])
+        assert result['state'] == 'removed' and result['evidence_scope'] == 'retained_local_removal_receipt'
+        if client == 'claude':
+            assert json.loads(path.read_bytes()) == json.loads(original)
+        else:
+&gt;           assert path.read_bytes() == original
+E           assert b'# preserved...-execute"\n\n' == b'# preserved...er-execute"\n'
+E
+E             Use -v to get more diff
+
+tests\execution_r4\test_participant_removal.py:68: AssertionError</failure></testcase></testsuite></testsuites>

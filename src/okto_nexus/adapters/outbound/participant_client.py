@@ -82,7 +82,14 @@ class ParticipantVault:
             backend = self.backend or open_backend()
             if action == 'store':
                 backend.set(self.service, 'agent-key', participant_key(value))
-            else:
+            elif action == 'remove':
+                backend.remove_if_present(self.service, 'agent-key')
+            elif action == 'load':
                 return participant_key(backend.get(self.service, 'agent-key'))
+            else:
+                raise ValueError('Unknown participant credential action')
         except Exception:
+            if action == 'remove':
+                raise ConnectionError('PARTICIPANT_VAULT_UNAVAILABLE',
+                    'Credential removal is unconfirmed. Unlock the OS vault and resume the same participant remove intent; an unavailable vault is not an absent entry.') from None
             raise ConnectionError('PARTICIPANT_VAULT_UNAVAILABLE', 'The protected participant credential is unavailable. Unlock the OS vault or supply the existing key again; no plaintext fallback is used.') from None

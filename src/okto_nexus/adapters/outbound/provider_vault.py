@@ -29,6 +29,15 @@ class WindowsCredentials:
     def remove(self, service, name):
         self.api.CredDelete(service+"/"+name,self.api.CRED_TYPE_GENERIC,0)
 
+    def remove_if_present(self, service, name):
+        try:
+            self.remove(service, name)
+        except Exception as error:
+            # ERROR_NOT_FOUND is distinct from access denied or an unavailable
+            # credential manager. Only confirmed absence makes replay safe.
+            if getattr(error, 'winerror', None) != 1168:
+                raise
+
 
 class SystemKeyring:
     name = "os-keyring"
@@ -49,6 +58,17 @@ class SystemKeyring:
 
     def remove(self, service, name):
         self.api.delete_password(service,name)
+
+    def remove_if_present(self, service, name):
+        if self.get(service, name) is None:
+            return
+        try:
+            self.remove(service, name)
+        except Exception:
+            # Some protected keyrings report deletion races as a generic error.
+            # An independent successful absent read is needed to recover it.
+            if self.get(service, name) is not None:
+                raise
 
 
 def open_backend():
