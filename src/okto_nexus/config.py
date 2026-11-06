@@ -209,6 +209,10 @@ class NexusConfig:
     feature_dag: bool = False
     feature_memory: bool = False
     feature_harness_integrations: bool = True
+    # Operator attention is independent of runtime admission and native actions.
+    feature_attention: bool = True
+    attention_unclaimed_seconds: int = 300
+    attention_disconnected_seconds: int = 300
     # Startup rollout gate. Agent/global opt-in remains independently required.
     runtime_handoff_auto_claim_enabled: bool = True
     # Startup-only indexed recovery of lost runtime commit notifications.
@@ -228,6 +232,8 @@ class NexusConfig:
 
     def __post_init__(self) -> None:
         for name, low, high in (("runtime_recovery_interval_seconds", 1, 86400),
+                ("attention_unclaimed_seconds", 0, 86400),
+                ("attention_disconnected_seconds", 0, 86400),
                 ("runtime_idle_interval_ms", 100, 60000),
                 ("max_relay_depth", 0, 64), ("max_generated_messages_per_root", 1, 4096),
                 ("max_executions_per_root", 1, 1024), ("root_deadline_seconds", 1, 86400),
@@ -254,6 +260,12 @@ _PATH_FIELDS: dict[str, tuple[str, str]] = {
 }
 
 _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
+    "attention_unclaimed_seconds": (
+        "OKTO_NEXUS_ATTENTION_UNCLAIMED_SECONDS", "--attention-unclaimed-seconds", 300, 0,
+    ),
+    "attention_disconnected_seconds": (
+        "OKTO_NEXUS_ATTENTION_DISCONNECTED_SECONDS", "--attention-disconnected-seconds", 300, 0,
+    ),
     "runtime_recovery_interval_seconds": (
         "OKTO_NEXUS_RUNTIME_RECOVERY_INTERVAL_SECONDS",
         "--runtime-recovery-interval-seconds", 30, 1,
@@ -492,6 +504,9 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS",
         "--feature-harness-integrations",
         True,
+    ),
+    "feature_attention": (
+        "OKTO_NEXUS_FEATURE_ATTENTION", "--feature-attention", True,
     ),
     "feature_health": (
         "OKTO_NEXUS_FEATURE_HEALTH",

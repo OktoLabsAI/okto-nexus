@@ -9,6 +9,9 @@ INSTALLATION_TABLES = frozenset({
     'runtime_reset_generation', 'execution_embedded_store_bindings',
     'one_shot_policy_settings', 'one_shot_host_limits',
     'handoff_runtime_schedule_scan',
+    # Retained configuration keeps its original authority episode. Canonical
+    # source DELETE triggers remove only the anchors of erased history/resources.
+    'attention_operation_epochs',
 })
 
 # Preserve the whole configured connection, including its original authority

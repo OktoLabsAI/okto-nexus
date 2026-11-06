@@ -23,8 +23,9 @@ def guard(conn, agent_id):
     epoch = conn.execute('SELECT epoch FROM agent_runtime_policy_epochs WHERE agent_id=?', (agent_id,)).fetchone()
     # MCP inheritance is captured in each opening intent; changing the default
     # must not revoke or mutate already-running sessions.
-    policy = effective(conn, agent_id)
-    return {k: policy[k] for k in ('runtime_enabled', 'session_policy')} | {'epoch': epoch[0] if epoch else 0}
+    from .execution_native_facts import runtime_guard_facts
+    current = conn.execute('SELECT runtime_enabled,session_policy FROM agent_runtime_overrides WHERE agent_id=?', (agent_id,)).fetchone()
+    return runtime_guard_facts(defaults(conn), dict(current) if current else None, epoch[0] if epoch else 0)
 
 
 def handoff_automation_guard(conn, agent_id):

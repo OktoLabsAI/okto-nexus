@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="5" time="17.761" timestamp="2026-11-06T15:40:38.741726-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_api" name="test_policy_read_failure_is_sanitized_and_never_an_empty_success[/api/v1/attention-native]" time="4.105"><failure message="AssertionError: {&quot;ok&quot;:false,&quot;error&quot;:{&quot;code&quot;:&quot;DB_ERROR&quot;,&quot;message&quot;:&quot;The attention projection could not be read.&quot;}}&#10;assert 503 == 500&#10; +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code">attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001B74C27E660&gt;, clock=&lt;test_attention_api.Clock object at 0x000001B74B68F0E0&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B74B7B8D60&gt;
+family = 'native', path = '/api/v1/attention'
+
+    @pytest.mark.parametrize("family", ["native", "operations"])
+    @pytest.mark.parametrize("path", [BASE, BASE + "/summary"])
+    def test_policy_read_failure_is_sanitized_and_never_an_empty_success(attention_env, monkeypatch, family, path):
+        env = attention_env
+        adapter = importlib.import_module("okto_nexus.adapters.outbound.sqlite.attention_" + family)
+        original = adapter.build_policy
+        before = snapshot(env)
+&#32;&#32;&#32;&#32;
+        def unavailable(uow, **kwargs):
+            # Fail a real SQLite query while preparing authority, before UDF setup.
+            uow.connection.execute("SELECT * FROM private_attention_failure_marker")
+&#32;&#32;&#32;&#32;
+        monkeypatch.setattr(adapter, "build_policy", unavailable)
+        response = env.client.get(path)
+&gt;       assert response.status_code == 500, response.text
+E       AssertionError: {"ok":false,"error":{"code":"DB_ERROR","message":"The attention projection could not be read."}}
+E       assert 503 == 500
+E        +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code
+
+tests\test_attention_api.py:152: AssertionError</failure></testcase><testcase classname="tests.test_attention_api" name="test_policy_read_failure_is_sanitized_and_never_an_empty_success[/api/v1/attention-operations]" time="2.297"><failure message="AssertionError: {&quot;ok&quot;:false,&quot;error&quot;:{&quot;code&quot;:&quot;DB_ERROR&quot;,&quot;message&quot;:&quot;The attention projection could not be read.&quot;}}&#10;assert 503 == 500&#10; +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code">attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001B74DD12AD0&gt;, clock=&lt;test_attention_api.Clock object at 0x000001B74C55AD50&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B74B7B89D0&gt;
+family = 'operations', path = '/api/v1/attention'
+
+    @pytest.mark.parametrize("family", ["native", "operations"])
+    @pytest.mark.parametrize("path", [BASE, BASE + "/summary"])
+    def test_policy_read_failure_is_sanitized_and_never_an_empty_success(attention_env, monkeypatch, family, path):
+        env = attention_env
+        adapter = importlib.import_module("okto_nexus.adapters.outbound.sqlite.attention_" + family)
+        original = adapter.build_policy
+        before = snapshot(env)
+&#32;&#32;&#32;&#32;
+        def unavailable(uow, **kwargs):
+            # Fail a real SQLite query while preparing authority, before UDF setup.
+            uow.connection.execute("SELECT * FROM private_attention_failure_marker")
+&#32;&#32;&#32;&#32;
+        monkeypatch.setattr(adapter, "build_policy", unavailable)
+        response = env.client.get(path)
+&gt;       assert response.status_code == 500, response.text
+E       AssertionError: {"ok":false,"error":{"code":"DB_ERROR","message":"The attention projection could not be read."}}
+E       assert 503 == 500
+E        +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code
+
+tests\test_attention_api.py:152: AssertionError</failure></testcase><testcase classname="tests.test_attention_api" name="test_policy_read_failure_is_sanitized_and_never_an_empty_success[/api/v1/attention/summary-native]" time="2.238"><failure message="AssertionError: {&quot;ok&quot;:false,&quot;error&quot;:{&quot;code&quot;:&quot;DB_ERROR&quot;,&quot;message&quot;:&quot;The attention projection could not be read.&quot;}}&#10;assert 503 == 500&#10; +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code">attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001B74E432AD0&gt;, clock=&lt;test_attention_api.Clock object at 0x000001B74DD13390&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B74DD22570&gt;
+family = 'native', path = '/api/v1/attention/summary'
+
+    @pytest.mark.parametrize("family", ["native", "operations"])
+    @pytest.mark.parametrize("path", [BASE, BASE + "/summary"])
+    def test_policy_read_failure_is_sanitized_and_never_an_empty_success(attention_env, monkeypatch, family, path):
+        env = attention_env
+        adapter = importlib.import_module("okto_nexus.adapters.outbound.sqlite.attention_" + family)
+        original = adapter.build_policy
+        before = snapshot(env)
+&#32;&#32;&#32;&#32;
+        def unavailable(uow, **kwargs):
+            # Fail a real SQLite query while preparing authority, before UDF setup.
+            uow.connection.execute("SELECT * FROM private_attention_failure_marker")
+&#32;&#32;&#32;&#32;
+        monkeypatch.setattr(adapter, "build_policy", unavailable)
+        response = env.client.get(path)
+&gt;       assert response.status_code == 500, response.text
+E       AssertionError: {"ok":false,"error":{"code":"DB_ERROR","message":"The attention projection could not be read."}}
+E       assert 503 == 500
+E        +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code
+
+tests\test_attention_api.py:152: AssertionError</failure></testcase><testcase classname="tests.test_attention_api" name="test_policy_read_failure_is_sanitized_and_never_an_empty_success[/api/v1/attention/summary-operations]" time="3.093"><failure message="AssertionError: {&quot;ok&quot;:false,&quot;error&quot;:{&quot;code&quot;:&quot;DB_ERROR&quot;,&quot;message&quot;:&quot;The attention projection could not be read.&quot;}}&#10;assert 503 == 500&#10; +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code">attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001B74E7FD0F0&gt;, clock=&lt;test_attention_api.Clock object at 0x000001B74DD42650&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B74E416E00&gt;
+family = 'operations', path = '/api/v1/attention/summary'
+
+    @pytest.mark.parametrize("family", ["native", "operations"])
+    @pytest.mark.parametrize("path", [BASE, BASE + "/summary"])
+    def test_policy_read_failure_is_sanitized_and_never_an_empty_success(attention_env, monkeypatch, family, path):
+        env = attention_env
+        adapter = importlib.import_module("okto_nexus.adapters.outbound.sqlite.attention_" + family)
+        original = adapter.build_policy
+        before = snapshot(env)
+&#32;&#32;&#32;&#32;
+        def unavailable(uow, **kwargs):
+            # Fail a real SQLite query while preparing authority, before UDF setup.
+            uow.connection.execute("SELECT * FROM private_attention_failure_marker")
+&#32;&#32;&#32;&#32;
+        monkeypatch.setattr(adapter, "build_policy", unavailable)
+        response = env.client.get(path)
+&gt;       assert response.status_code == 500, response.text
+E       AssertionError: {"ok":false,"error":{"code":"DB_ERROR","message":"The attention projection could not be read."}}
+E       assert 503 == 500
+E        +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code
+
+tests\test_attention_api.py:152: AssertionError</failure></testcase><testcase classname="tests.test_attention_api" name="test_real_projection_budget_failure_is_unavailable_never_empty" time="3.306" /></testsuite></testsuites>

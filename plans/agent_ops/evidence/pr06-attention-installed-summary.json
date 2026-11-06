@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "passed": 462,
+  "skipped": 0,
+  "reports": [
+    {
+      "artifact": "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
+      "sha256": "aa7b023113595aabf29ae5b832c9d36e48e7c2751be58ba2ed0c12b887702a5f",
+      "cases": 171,
+      "passed": 171,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "artifact": "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
+      "sha256": "fd861ac1bdf8fe548e1c4f1bda4325325b2770fbee7844d968b1f62e1676966e",
+      "cases": 130,
+      "passed": 130,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "artifact": "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
+      "sha256": "5f10ba8948fac564d4b51fbdc5b6479051c99eb39286e2120ff3a76f322b942e",
+      "cases": 161,
+      "passed": 160,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "artifact": "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+      "sha256": "c27833e22413eb422412c4845c0693e11de6550fda97ab56c2163bc8ace8ff86",
+      "cases": 1,
+      "passed": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "installed_module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-attention-lo6hhhj8\\validation\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "wheel_sha256": "03551068009a808c1f71547f0aa740d4809eebbacbfcf331eac78da87d4c9c7c",
+  "qualification": "Windows installed wheel outside checkout; synthetic identities/native peers; real SQLite and TCP SSE; no UI/provider acceptance",
+  "release_wheel_sha256": "8642d7ed8b3fe51a7cd9bb72f9f79452c638b9aea124ef7e29ea6c1403418824",
+  "release_scope": "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+}

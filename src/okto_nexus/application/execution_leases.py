@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 import hashlib
 import json
 import secrets
-import time
 
 from nexus_connector_core import R4_PREVIEW_REVISION, decode_r4_frame, encode_r4_frame
 from nexus_connector_core.protocol import canonical_json
@@ -62,18 +61,9 @@ def require_execution_lane(uow, *, scope, channel, now, operator_containment=Fal
     # Revision changes retire productive lane admission. A separately
     # authenticated operator can still stop its exact applied session while
     # the same host connection and unrevoked ticket remain bound.
-    allowed_states = ('ADMITTED', 'DISCONNECTED') if operator_containment else ('ADMITTED',)
-    if (lane is None or lane['state'] not in allowed_states or lane['agent_id'] != scope['agent_id'] or
-            lane['connection_id'] != channel.connection_id or
-            lane['connection_generation'] != channel.connection_generation or
-            lane['bound_connection_id'] != channel.connection_id or lane['revoked_at'] is not None or
-            'lease:request' not in json.loads(lane['scopes_json']) or
-            any(lane[k] != scope[k] for k in ('authorization_revision','configuration_revision','credential_epoch'))):
-        raise _conflict('An admitted binding lane with lease authority is required.')
-    expires = min(_stamp(lane['expires_at']), _stamp(lane['ticket_expires_at']))
-    if expires <= now:
-        raise _conflict('The binding lane authority has expired.')
-    return expires
+    from .execution_native_facts import require_lane_facts
+    return require_lane_facts(scope=scope, lane=lane, connection_id=channel.connection_id,
+        connection_generation=channel.connection_generation, now=now, operator_containment=operator_containment)
 
 
 class ExecutionLeaseService:

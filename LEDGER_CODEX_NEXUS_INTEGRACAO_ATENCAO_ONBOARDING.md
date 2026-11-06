@@ -387,3 +387,13 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - **440 testes distintos instalados passaram**, com uma campanha manual A/B não executada. Relatórios iniciais e correções preservados; a contagem substitui casos revalidados, sem somar reruns. O wheel final contém **460 arquivos Python, sete assets e 160 SQLs** idênticos ao fonte; SHA-256 `bb9143f2181993d93ff78dba9d6a6536d9a2f20de3b602997e048474ce43307d`. Dependências compatíveis; Ruff passou nos arquivos alterados.
 - **DX-08 implementado**, com subcontratos verificados entre identidades sintéticas. Clientes/provedores reais, M1/M2 produtivo, campanhas nativas e plano integral continuam pendentes. PR-03/04/05 seguem em progresso; os IDs e o hash do plano fixo não mudaram. Connector/Core não foram alterados.
 - [Evidências, falhas corrigidas e limites](plans/agent_ops/evidence/pr04-cooperation.md).
+
+## 2026-11-06 — PR-06: backend da central de atenção
+
+- Entregues os doze tipos iniciais, projeção em lote, API de operador com filtros/paginação/total coerentes, visto/adiado compartilhado e SSE de invalidação. GET não decide nem altera o trabalho.
+- Migração 161 aditiva: preferências e âncoras de episódios estáveis. Arquivamento remove ações nativas; expiração compara instantes; falhas de leitura retornam erro sanitizado. Reset e aposentadoria preservam a semântica das âncoras.
+- **462 testes distintos instalados passaram**, com 0 skips. Wheel conferido byte a byte: 470 Python, 7 assets, 161 SQLs; SHA-256 `8642d7ed8b3fe51a7cd9bb72f9f79452c638b9aea124ef7e29ea6c1403418824`. Relatórios iniciais e limites preservados.
+- ATN-02/03/04 implementados com subcontratos verificados. **PR-06 continua em progresso**: bloqueios de autoridade ainda cobrem apenas handoffs gerenciados, e aprovações não nativas não estão projetadas. ATN-01/05 seguem em progresso; PR-07 UI/browser permanece pendente. M1–M4 e plano integral não foram declarados concluídos. Connector/Core não mudaram.
+- [Contrato](docs/attention.md) e [evidências](plans/agent_ops/evidence/pr06-attention.md).
+
+O wheel de entrega remove apenas uma linha vazia final; equivalência sintática, demais payloads e instalação conferidos em `pr06-attention-release-scope.json`.

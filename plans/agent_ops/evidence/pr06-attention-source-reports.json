@@ -1,0 +1,1020 @@
+{
+  "version": 1,
+  "phase": "PR-06 attention source reports",
+  "collected_at": "2026-11-06T18:53:33.629966+00:00",
+  "selection": "Frozen list of 16 temporary and 6 existing repository reports observed at collection start; later reports excluded.",
+  "transformations": {
+    "key_redaction": "Only nxs_ plus exactly 48 lowercase hexadecimal characters, bounded as a complete token and accepted by domain.keys.is_well_formed_api_key. Tokens are replaced without printing them.",
+    "whitespace": "Trailing spaces/tabs encoded as numeric XML character entities; full parsed tree including attributes/text/tails verified equal after key redaction.",
+    "line_endings": "CRLF normalized to LF with parsed XML preserved; Git text eol=lf retains canonical report hashes across platforms. Original source hashes remain unchanged."
+  },
+  "reports": [
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-api-config-initial.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-api-config-initial.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "b1004469d7aad5ff0665e4e342461fbe2f58593b993a34983e52f6016d12a933",
+      "artifact_sha256": "b1004469d7aad5ff0665e4e342461fbe2f58593b993a34983e52f6016d12a933",
+      "test_count": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "2",
+          "time": "2.199",
+          "timestamp": "2026-11-06T14:51:20.331931-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "b1004469d7aad5ff0665e4e342461fbe2f58593b993a34983e52f6016d12a933",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-api-integration-final.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-api-integration-final.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "afa1b76a07e489bcf15f2b2a7b4f5e7b223ea10542a6ff27c95b752302224a02",
+      "artifact_sha256": "afa1b76a07e489bcf15f2b2a7b4f5e7b223ea10542a6ff27c95b752302224a02",
+      "test_count": 38,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "38",
+          "time": "113.272",
+          "timestamp": "2026-11-06T15:21:13.196304-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "afa1b76a07e489bcf15f2b2a7b4f5e7b223ea10542a6ff27c95b752302224a02",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-api-integration-initial.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-api-integration-initial.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "0b0ad2fe82889b760255e0d7e8bd0299c0304421f135337e6f17f1d10456991b",
+      "artifact_sha256": "58f4a5402254b4f1f71b3766a705fb043f432860e0f44abb763d18cb6dcbeaaf",
+      "test_count": 46,
+      "errors": 8,
+      "failures": 8,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 80,
+      "whitespace_characters_escaped": 248,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "8",
+          "failures": "8",
+          "skipped": "0",
+          "tests": "46",
+          "time": "120.028",
+          "timestamp": "2026-11-06T15:17:50.431979-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "9c2c76662d829e2a6bc50c85abd398b56ced38b580c1cf4242a74e874d3878de",
+      "line_endings_normalized_to_lf": true
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-api-settings-initial.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-api-settings-initial.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "74167bc76500feaca323fe38f9bb07cde6b9349ed131d790fd36de7261165edd",
+      "artifact_sha256": "a527ce130d7eb516b706076ba7deef3ba0b81f108430939d3ee535b9570f7d05",
+      "test_count": 3,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "3",
+          "time": "11.617",
+          "timestamp": "2026-11-06T15:11:51.372447-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "74167bc76500feaca323fe38f9bb07cde6b9349ed131d790fd36de7261165edd",
+      "line_endings_normalized_to_lf": true
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-api-settings-strict-final.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-api-settings-strict-final.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "87c3c67371ba22ae068634c91e3e880540e28cf0cd290e319e0cfb0b2a0d8a59",
+      "artifact_sha256": "87c3c67371ba22ae068634c91e3e880540e28cf0cd290e319e0cfb0b2a0d8a59",
+      "test_count": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "3",
+          "time": "11.090",
+          "timestamp": "2026-11-06T15:14:01.822693-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "87c3c67371ba22ae068634c91e3e880540e28cf0cd290e319e0cfb0b2a0d8a59",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-api-validation-initial.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-api-validation-initial.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "1ebe6c2f39227a17836ff2f1e36bd350ce3220658a5830c037ae79613a7f1c20",
+      "artifact_sha256": "1ebe6c2f39227a17836ff2f1e36bd350ce3220658a5830c037ae79613a7f1c20",
+      "test_count": 17,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "17",
+          "time": "39.793",
+          "timestamp": "2026-11-06T15:16:12.612476-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "1ebe6c2f39227a17836ff2f1e36bd350ce3220658a5830c037ae79613a7f1c20",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-config-regression.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-config-regression.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "6a5e2aad8b84cfba9793bcd4ffca56a2eb3b959620afa82d2b38cd61a2cd4863",
+      "artifact_sha256": "6a5e2aad8b84cfba9793bcd4ffca56a2eb3b959620afa82d2b38cd61a2cd4863",
+      "test_count": 59,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "59",
+          "time": "4.172",
+          "timestamp": "2026-11-06T14:52:06.104404-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "6a5e2aad8b84cfba9793bcd4ffca56a2eb3b959620afa82d2b38cd61a2cd4863",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-feature-inventory-regression.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-feature-inventory-regression.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "aca4eeb4330c96adacffebeeb5ae08b426d2fc2ea8c190a9dcd36896842a66ca",
+      "artifact_sha256": "aca4eeb4330c96adacffebeeb5ae08b426d2fc2ea8c190a9dcd36896842a66ca",
+      "test_count": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "3",
+          "time": "6.843",
+          "timestamp": "2026-11-06T14:58:48.056851-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "aca4eeb4330c96adacffebeeb5ae08b426d2fc2ea8c190a9dcd36896842a66ca",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-native-agent.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-native-agent.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "25eb2e85d149d44b8b34ae75a1750dfcbf4c961ba8056f794f46f40bec35cd34",
+      "artifact_sha256": "25eb2e85d149d44b8b34ae75a1750dfcbf4c961ba8056f794f46f40bec35cd34",
+      "test_count": 18,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "18",
+          "time": "59.174",
+          "timestamp": "2026-11-06T15:31:21.322812-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "25eb2e85d149d44b8b34ae75a1750dfcbf4c961ba8056f794f46f40bec35cd34",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-native-extraction-agent.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-native-extraction-agent.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "9e0441cd33709987144f1ad8cab94d55222df3b3d116aaec31e6c5ffaf1411b1",
+      "artifact_sha256": "9e0441cd33709987144f1ad8cab94d55222df3b3d116aaec31e6c5ffaf1411b1",
+      "test_count": 74,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "74",
+          "time": "245.840",
+          "timestamp": "2026-11-06T14:57:55.264935-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "9e0441cd33709987144f1ad8cab94d55222df3b3d116aaec31e6c5ffaf1411b1",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-native-http-engine-agent.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-native-http-engine-agent.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "8cc7b72b9f04d28f82883d1db281a7242ce9229d400822a07e6a45cdedb00ef3",
+      "artifact_sha256": "8cc7b72b9f04d28f82883d1db281a7242ce9229d400822a07e6a45cdedb00ef3",
+      "test_count": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "3",
+          "time": "15.843",
+          "timestamp": "2026-11-06T15:48:09.077122-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "8cc7b72b9f04d28f82883d1db281a7242ce9229d400822a07e6a45cdedb00ef3",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-native-policy-agent.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-native-policy-agent.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "4ee9ad62508b085b437a3f4b084a9edbbf43b3cd1046730188bbb3c68f3b94ef",
+      "artifact_sha256": "4ee9ad62508b085b437a3f4b084a9edbbf43b3cd1046730188bbb3c68f3b94ef",
+      "test_count": 16,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "16",
+          "time": "72.461",
+          "timestamp": "2026-11-06T15:33:09.282662-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "4ee9ad62508b085b437a3f4b084a9edbbf43b3cd1046730188bbb3c68f3b94ef",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-operator-auth-regression.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-operator-auth-regression.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "16ef865adb302cbb57ea8d93ee4a712c2c643d85f9cecc565c5728024087ee87",
+      "artifact_sha256": "16ef865adb302cbb57ea8d93ee4a712c2c643d85f9cecc565c5728024087ee87",
+      "test_count": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "10",
+          "time": "50.941",
+          "timestamp": "2026-11-06T15:22:08.031670-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "16ef865adb302cbb57ea8d93ee4a712c2c643d85f9cecc565c5728024087ee87",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-settings-regression.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-settings-regression.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "a474f1b2b833b621c528ef8e2ed613555c0201fbe72851aedf4519e2b7cc078c",
+      "artifact_sha256": "a474f1b2b833b621c528ef8e2ed613555c0201fbe72851aedf4519e2b7cc078c",
+      "test_count": 12,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "12",
+          "time": "51.404",
+          "timestamp": "2026-11-06T15:11:51.371287-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "a474f1b2b833b621c528ef8e2ed613555c0201fbe72851aedf4519e2b7cc078c",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-stream-tcp-initial.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-stream-tcp-initial.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "60422c269ef8bc274fdac51da973cdf6ac97150c6313134cba4bd73c07c30838",
+      "artifact_sha256": "60422c269ef8bc274fdac51da973cdf6ac97150c6313134cba4bd73c07c30838",
+      "test_count": 17,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "17",
+          "time": "35.136",
+          "timestamp": "2026-11-06T15:32:18.074117-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "60422c269ef8bc274fdac51da973cdf6ac97150c6313134cba4bd73c07c30838",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-stream-tcp-sqlite-failures-final.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-stream-tcp-sqlite-failures-final.xml",
+      "collection_mode": "temporary_copy",
+      "original_sha256": "264c2626de172195be2fa0007ad89862df4a25642958ca8090a925c5cbd11492",
+      "artifact_sha256": "264c2626de172195be2fa0007ad89862df4a25642958ca8090a925c5cbd11492",
+      "test_count": 20,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "20",
+          "time": "46.651",
+          "timestamp": "2026-11-06T15:42:48.204366-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "264c2626de172195be2fa0007ad89862df4a25642958ca8090a925c5cbd11492",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-storage-source.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "e4b1d75d77d56523924522d2264c96f583af41618453c26fac5ccc11f482503e",
+      "artifact_sha256": "1f7f4fb6622a6e59d9b8ad10c62612de3da593691ba5fe82c525a97fa98acbf6",
+      "test_count": 6,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "6",
+          "time": "12.147",
+          "timestamp": "2026-11-06T15:28:48.375060-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "e4b1d75d77d56523924522d2264c96f583af41618453c26fac5ccc11f482503e",
+      "line_endings_normalized_to_lf": true
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-storage-source-final.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-storage-source-final.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "0a10a23281f3649739f7316eeea61a90a5500cc3aee67e12ef9d4d923e6dc203",
+      "artifact_sha256": "0a10a23281f3649739f7316eeea61a90a5500cc3aee67e12ef9d4d923e6dc203",
+      "test_count": 6,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "6",
+          "time": "11.495",
+          "timestamp": "2026-11-06T15:40:38.765408-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "0a10a23281f3649739f7316eeea61a90a5500cc3aee67e12ef9d4d923e6dc203",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-query-error-source.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-query-error-source.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "48ffae038fa8c1759960aa2095af60d724c46bbda431b78066d57343d0a80006",
+      "artifact_sha256": "6c7355507c737d42bde7d97d2694cc0650a71d03cf3100ad4e74184f93183b53",
+      "test_count": 5,
+      "errors": 0,
+      "failures": 4,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 8,
+      "whitespace_characters_escaped": 32,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "4",
+          "skipped": "0",
+          "tests": "5",
+          "time": "17.761",
+          "timestamp": "2026-11-06T15:40:38.741726-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "cab92924d65e5135dc26a70313487d8d99180efb41208168cb1c718a852efb07",
+      "line_endings_normalized_to_lf": true
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-query-error-source-final.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-query-error-source-final.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "2fe6a3c58add146c709674939f6af04297e830d4e0acc81566854be648707a52",
+      "artifact_sha256": "2fe6a3c58add146c709674939f6af04297e830d4e0acc81566854be648707a52",
+      "test_count": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "5",
+          "time": "16.029",
+          "timestamp": "2026-11-06T15:41:18.968952-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "2fe6a3c58add146c709674939f6af04297e830d4e0acc81566854be648707a52",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-operations-source.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-operations-source.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "43461d692fbd91173644bf383e865ff1b9c807dc465e1dbc38def37ee9907d56",
+      "artifact_sha256": "43461d692fbd91173644bf383e865ff1b9c807dc465e1dbc38def37ee9907d56",
+      "test_count": 40,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "40",
+          "time": "87.209",
+          "timestamp": "2026-11-06T15:17:46.282119-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "43461d692fbd91173644bf383e865ff1b9c807dc465e1dbc38def37ee9907d56",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-operations-directed.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-operations-directed.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "b63be66efc4854172bbbfb788fe5e23f6b860ddcdbab1c6c62946b8833354f13",
+      "artifact_sha256": "b63be66efc4854172bbbfb788fe5e23f6b860ddcdbab1c6c62946b8833354f13",
+      "test_count": 4,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "4",
+          "time": "6.179",
+          "timestamp": "2026-11-06T15:26:23.226698-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "b63be66efc4854172bbbfb788fe5e23f6b860ddcdbab1c6c62946b8833354f13",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-native-archive.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-native-archive.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "f26428dda9b22f38e163425a7237349e7ebe57aaa648fc621b933d81749bd83c",
+      "artifact_sha256": "f26428dda9b22f38e163425a7237349e7ebe57aaa648fc621b933d81749bd83c",
+      "test_count": 23,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "23",
+          "time": "80.872",
+          "timestamp": "2026-11-06T15:51:03.281551-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "f26428dda9b22f38e163425a7237349e7ebe57aaa648fc621b933d81749bd83c",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-native-expiry.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-native-expiry.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "8833288e7f8a9a4dc0fbc9646791d15ba25fb85eb195b8581b96680d17cc6b4c",
+      "artifact_sha256": "8833288e7f8a9a4dc0fbc9646791d15ba25fb85eb195b8581b96680d17cc6b4c",
+      "test_count": 36,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "36",
+          "time": "52.249",
+          "timestamp": "2026-11-06T15:56:08.684790-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "8833288e7f8a9a4dc0fbc9646791d15ba25fb85eb195b8581b96680d17cc6b4c",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-authority-anchors-source-final.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-authority-anchors-source-final.xml",
+      "collection_mode": "explicit_copy",
+      "original_sha256": "14db5298fdbd125065ef9b5ca09d90ab9dad775f36c04354dbd4acb9fbf84e6b",
+      "artifact_sha256": "14db5298fdbd125065ef9b5ca09d90ab9dad775f36c04354dbd4acb9fbf84e6b",
+      "test_count": 53,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "53",
+          "time": "74.546",
+          "timestamp": "2026-11-06T15:56:10.829821-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "14db5298fdbd125065ef9b5ca09d90ab9dad775f36c04354dbd4acb9fbf84e6b",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-authority-gates-reset-source-final.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-authority-gates-reset-source-final.xml",
+      "collection_mode": "explicit_copy",
+      "original_sha256": "d317c5196ca27b61f81c6ccf9607c227c787e6fe1978f0d2dda28b7ffb7dce9f",
+      "artifact_sha256": "d317c5196ca27b61f81c6ccf9607c227c787e6fe1978f0d2dda28b7ffb7dce9f",
+      "test_count": 58,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "58",
+          "time": "140.059",
+          "timestamp": "2026-11-06T16:08:23.189853-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "d317c5196ca27b61f81c6ccf9607c227c787e6fe1978f0d2dda28b7ffb7dce9f",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-authority-retirement-reset-directed.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-authority-retirement-reset-directed.xml",
+      "collection_mode": "explicit_copy",
+      "original_sha256": "3928b138cb24dc3f4dbfca0bc6570e460b848e9d0728476f228c0da8534cbe53",
+      "artifact_sha256": "3928b138cb24dc3f4dbfca0bc6570e460b848e9d0728476f228c0da8534cbe53",
+      "test_count": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "5",
+          "time": "10.701",
+          "timestamp": "2026-11-06T16:04:56.952384-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "3928b138cb24dc3f4dbfca0bc6570e460b848e9d0728476f228c0da8534cbe53",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-authority-timestamps-after.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-authority-timestamps-after.xml",
+      "collection_mode": "explicit_copy",
+      "original_sha256": "969a8c8921b26a0ad9421440c590ab9beb69c7b7acf7b498cebf49273cc4b665",
+      "artifact_sha256": "969a8c8921b26a0ad9421440c590ab9beb69c7b7acf7b498cebf49273cc4b665",
+      "test_count": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "3",
+          "time": "6.024",
+          "timestamp": "2026-11-06T15:53:19.207062-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "969a8c8921b26a0ad9421440c590ab9beb69c7b7acf7b498cebf49273cc4b665",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-authority-timestamps-before.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-authority-timestamps-before.xml",
+      "collection_mode": "explicit_copy",
+      "original_sha256": "15801db4a580b2790962416bc29131053550fa72b38861b216073ad4c79bbd56",
+      "artifact_sha256": "b7f89c04185c5f9e5243d4b68bde7f4f655ab6321703014bacb919e2921d82ac",
+      "test_count": 3,
+      "errors": 0,
+      "failures": 3,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 5,
+      "whitespace_characters_escaped": 35,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "3",
+          "skipped": "0",
+          "tests": "3",
+          "time": "4.957",
+          "timestamp": "2026-11-06T15:51:16.330897-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "8fb4c7578e1660637aa1dafa127c7a6546423176e374fe327943815a889aea7f",
+      "line_endings_normalized_to_lf": true
+    },
+    {
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-reset-http-regression.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-source-reset-http-regression.xml",
+      "collection_mode": "explicit_copy",
+      "original_sha256": "82256b60140745e1b9b88e249e378347820ae6b90fa2fc32ac58c4738dd2df58",
+      "artifact_sha256": "82256b60140745e1b9b88e249e378347820ae6b90fa2fc32ac58c4738dd2df58",
+      "test_count": 4,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "4",
+          "time": "54.202",
+          "timestamp": "2026-11-06T16:08:23.193917-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "82256b60140745e1b9b88e249e378347820ae6b90fa2fc32ac58c4738dd2df58",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "c7a79f19c44d625739ce3b2a1991b61ecb37c34ca23d666e8bc67d17eb4209fd",
+      "artifact_sha256": "5f10ba8948fac564d4b51fbdc5b6479051c99eb39286e2120ff3a76f322b942e",
+      "test_count": 161,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 1,
+      "whitespace_characters_escaped": 1,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "161",
+          "time": "345.355",
+          "timestamp": "2026-11-06T16:08:28.018237-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "560184e2d36abfeb41f30842893db46016f245bf6e00630b65a4c52ac3c51d26",
+      "line_endings_normalized_to_lf": true
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "c27833e22413eb422412c4845c0693e11de6550fda97ab56c2163bc8ace8ff86",
+      "artifact_sha256": "c27833e22413eb422412c4845c0693e11de6550fda97ab56c2163bc8ace8ff86",
+      "test_count": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "1",
+          "time": "15.271",
+          "timestamp": "2026-11-06T16:15:09.374236-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "c27833e22413eb422412c4845c0693e11de6550fda97ab56c2163bc8ace8ff86",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "aa7b023113595aabf29ae5b832c9d36e48e7c2751be58ba2ed0c12b887702a5f",
+      "artifact_sha256": "aa7b023113595aabf29ae5b832c9d36e48e7c2751be58ba2ed0c12b887702a5f",
+      "test_count": 171,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "171",
+          "time": "471.687",
+          "timestamp": "2026-11-06T16:08:27.986495-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "aa7b023113595aabf29ae5b832c9d36e48e7c2751be58ba2ed0c12b887702a5f",
+      "line_endings_normalized_to_lf": false
+    },
+    {
+      "source": "D:/Projetos/Techridy/okto_labs_okto_nexus/plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
+      "artifact": "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
+      "collection_mode": "existing_repository_report",
+      "original_sha256": "fd861ac1bdf8fe548e1c4f1bda4325325b2770fbee7844d968b1f62e1676966e",
+      "artifact_sha256": "fd861ac1bdf8fe548e1c4f1bda4325325b2770fbee7844d968b1f62e1676966e",
+      "test_count": 130,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "synthetic_key_occurrences_redacted": 0,
+      "whitespace_entity_runs": 0,
+      "whitespace_characters_escaped": 0,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "130",
+          "time": "670.666",
+          "timestamp": "2026-11-06T16:08:28.015188-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "pre_lf_artifact_sha256": "fd861ac1bdf8fe548e1c4f1bda4325325b2770fbee7844d968b1f62e1676966e",
+      "line_endings_normalized_to_lf": false
+    }
+  ],
+  "unretained_runs": [
+    {
+      "name": "initial native projection isolation run",
+      "source": "C:/Users/jpamb/AppData/Local/Temp/attention-native-agent.xml",
+      "retained": false,
+      "original_sha256": null,
+      "tests_passed_before_teardown": 6,
+      "errors": 1,
+      "failures": 0,
+      "reason": "The same temporary JUnit path was overwritten by subsequent runs; no initial XML was retained or reconstructed.",
+      "failure": "RuntimeError: This portal is not running, during TestClient opening fixture teardown after test_project_uses_only_explicit_time_policy_and_facts.",
+      "cause": "Projection-only monkeypatches of connection_factory.unit_of_work and clock.now_iso remained active during application lifespan shutdown.",
+      "correction": "Scope the monkeypatches in monkeypatch.context() around project calls and restore them before fixture teardown.",
+      "final_retained_report": "plans/agent_ops/evidence/pr06-attention-source-native-agent.xml"
+    }
+  ],
+  "additional_collections": [
+    {
+      "collected_at": "2026-11-06T19:03:10.570158+00:00",
+      "artifacts": [
+        "plans/agent_ops/evidence/pr06-attention-native-archive.xml",
+        "plans/agent_ops/evidence/pr06-attention-native-expiry.xml"
+      ]
+    },
+    {
+      "collected_at": "2026-11-06T19:13:15.418116+00:00",
+      "artifacts": [
+        "plans/agent_ops/evidence/pr06-attention-source-authority-anchors-source-final.xml",
+        "plans/agent_ops/evidence/pr06-attention-source-authority-gates-reset-source-final.xml",
+        "plans/agent_ops/evidence/pr06-attention-source-authority-retirement-reset-directed.xml",
+        "plans/agent_ops/evidence/pr06-attention-source-authority-timestamps-after.xml",
+        "plans/agent_ops/evidence/pr06-attention-source-authority-timestamps-before.xml",
+        "plans/agent_ops/evidence/pr06-attention-source-reset-http-regression.xml"
+      ]
+    },
+    {
+      "collected_at": "2026-11-06T19:17:06.620612+00:00",
+      "artifacts": [
+        "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml"
+      ]
+    },
+    {
+      "collected_at": "2026-11-06T19:18:10.689394+00:00",
+      "artifacts": [
+        "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml"
+      ]
+    },
+    {
+      "collected_at": "2026-11-06T19:20:17.121528+00:00",
+      "artifacts": [
+        "plans/agent_ops/evidence/pr06-attention-authority-installed.xml"
+      ]
+    }
+  ]
+}

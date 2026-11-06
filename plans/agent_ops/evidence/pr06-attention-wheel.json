@@ -1,0 +1,20 @@
+{
+  "artifact": "okto_nexus-0.3.3-py3-none-any.whl",
+  "sha256": "8642d7ed8b3fe51a7cd9bb72f9f79452c638b9aea124ef7e29ea6c1403418824",
+  "python_payloads": 470,
+  "static_payloads": 7,
+  "migrations": 161,
+  "raw_bytes_match": true,
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-attention-lo6hhhj8\\validation\\Lib\\site-packages\\okto_nexus\\__init__.py",
+  "dependencies": {
+    "mcp": "1.30.0",
+    "httpx": "0.28.1",
+    "anyio": "4.16.0",
+    "okto-nexus-connector-core": "0.0.14",
+    "okto-nexus-connector": "0.0.12"
+  },
+  "qualification_wheel_sha256": "03551068009a808c1f71547f0aa740d4809eebbacbfcf331eac78da87d4c9c7c",
+  "release_scope": "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+  "installed_release_raw_bytes_match": true
+}

@@ -21,9 +21,14 @@ def native_requirement_schema(kind, substrate=None):
 
 def validate_canonical_native_requirements(config, adapter_id, *, hitl_enabled=None):
     """Profile restrictions do not discover, launch, or grant native authority."""
-    from types import SimpleNamespace
     from nexus_connector_core import get_runtime_catalog
     descriptor = next((item for item in get_runtime_catalog().runtimes if item.adapter_id == adapter_id), None)
+    return validate_native_requirements_descriptor(config, descriptor, hitl_enabled=hitl_enabled)
+
+
+def validate_native_requirements_descriptor(config, descriptor, *, hitl_enabled=None):
+    """Same profile predicate with an explicitly supplied catalog snapshot."""
+    from types import SimpleNamespace
     if descriptor is None or descriptor.connection_mode != 'managed':
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, 'Unsupported runtime profile adapter.', {})
     schema = native_requirement_schema(descriptor.native_kind,

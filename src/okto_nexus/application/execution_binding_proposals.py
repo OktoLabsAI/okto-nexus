@@ -49,32 +49,11 @@ def _agent_guard(conn, agent_id: str) -> str:
         "SELECT DISTINCT p.* FROM runtime_profiles p JOIN agent_endpoints e "
         "ON e.profile_id=p.profile_id WHERE e.agent_id=? ORDER BY p.profile_id",
         (agent_id,))]
-    agent_fields = (
-        "role", "capabilities", "metadata", "api_key_hash", "is_active",
-        "permissions", "preset_id", "tags", "comm_scope", "color",
-    )
-    endpoint_fields = (
-        "endpoint_id", "workspace_id", "adapter_id", "protocol",
-        "contract_version", "profile_id", "enabled", "activation_state",
-        "health", "priority", "selection_group", "consumption",
-        "response_policy", "public_config", "revision",
-    )
-    profile_fields = (
-        "profile_id", "adapter_id", "config", "secret_refs",
-        "inherit_ambient", "enabled", "revision",
-    )
     from .runtime_policy import guard
-    return _digest({
-        "runtime_policy": guard(conn, agent_id),
-        "execution_policy": [dict(row) for row in conn.execute(
-            "SELECT * FROM agent_execution_policies WHERE agent_id=?", (agent_id,))],
-        "agent": {key: agent[key] for key in agent_fields},
-        "methods": methods,
-        "endpoints": [{key: row[key] for key in endpoint_fields}
-                      for row in endpoints],
-        "profiles": [{key: row[key] for key in profile_fields}
-                     for row in profiles],
-    })
+    from .execution_native_facts import agent_guard_facts
+    return agent_guard_facts(agent=agent, methods=methods, endpoints=endpoints, profiles=profiles,
+        runtime_policy=guard(conn, agent_id), execution_policy=list(conn.execute(
+            'SELECT * FROM agent_execution_policies WHERE agent_id=?', (agent_id,))))
 def _binding_operator(uow, *, actor_agent_id, context, access) -> bool:
     """Revalidate middleware authority inside the binding transaction."""
     if context is None and access is None:

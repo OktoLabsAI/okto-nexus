@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="12.147" timestamp="2026-11-06T15:28:48.375060-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_storage" name="test_upgrade_from_160_preserves_canonical_rows_and_backfills_only_metadata" time="3.533" /><testcase classname="tests.test_attention_storage" name="test_episode_transition_and_canonical_change_rollback_together" time="1.301" /><testcase classname="tests.test_attention_storage" name="test_reentry_has_a_new_episode_under_the_same_storage_timestamp" time="1.237" /><testcase classname="tests.test_attention_storage" name="test_source_retention_removes_its_anchor_but_not_other_preferences" time="1.256"><failure message="sqlite3.IntegrityError: FOREIGN KEY constraint failed">migrated_factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x000002530C2E4640&gt;
+tmp_config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10441/test_source_retention..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+
+    def test_source_retention_removes_its_anchor_but_not_other_preferences(migrated_factory, tmp_config):
+        factory = migrated_factory
+        seed(factory, tmp_config)
+        query = SqliteAttentionQueries()
+        with factory.unit_of_work() as uow:
+            query.save_preference(uow, attention_id='att_retained_viewing', seen_at=NOW, snoozed_until=None,
+                                  expected_revision=0, now=NOW)
+&gt;           uow.connection.execute("DELETE FROM messages WHERE message_id='attention-message'")
+E           sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+tests\test_attention_storage.py:107: IntegrityError</failure></testcase><testcase classname="tests.test_attention_storage" name="test_concurrent_devices_cannot_overwrite_the_same_preference_revision" time="1.603" /><testcase classname="tests.test_attention_storage" name="test_preference_write_rollback_keeps_no_partial_mark" time="2.067" /></testsuite></testsuites>

@@ -16,18 +16,13 @@ def policy_view(uow, agent_id):
 
 def require_execution_location(uow, *, agent_id, executor_id, adapter_id):
     from .runtime_policy import effective
-    if not effective(uow.connection, agent_id)['runtime_enabled']:
-        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Runtime is disabled; this agent uses MCP only.', {'reason': 'RUNTIME_DISABLED'})
+    from .execution_native_facts import require_location_facts
+    runtime_enabled = effective(uow.connection, agent_id)['runtime_enabled']
     row = uow.connection.execute('SELECT e.kind FROM execution_executors e JOIN execution_installation i '
         'ON i.server_id=e.server_id AND i.singleton=1 WHERE e.executor_id=? LIMIT 2', (executor_id,)).fetchall()
-    if len(row) != 1:
-        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Execution host is not uniquely identified.', {})
-    local = row[0]['kind'] == 'embedded'
     policy = policy_view(uow, agent_id)
-    if policy['execution_location'] != ('local' if local else 'remote'):
-        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Execution host is restricted by the agent policy.', {'reason': 'EXECUTION_LOCATION_RESTRICTED'})
-    if local and policy['local_adapter_id'] is not None and policy['local_adapter_id'] != adapter_id:
-        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Local runtime integration is restricted by the agent policy.', {'reason': 'LOCAL_INTEGRATION_RESTRICTED'})
+    require_location_facts(runtime_enabled=runtime_enabled, host_kinds=[value[0] for value in row],
+        policy=policy, adapter_id=adapter_id)
 
 
 def read_policy(deps, context, agent_id):

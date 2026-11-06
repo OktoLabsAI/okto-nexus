@@ -321,6 +321,24 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "Workspaces screen and the /api/v1/workspaces API. Off (default) "
         "redacts the path (defense-in-depth); turn on to reveal it.",
     ),
+    SettingSpec(
+        "feature_attention", "bool",
+        "Show the operator attention projection of existing Nexus facts. Disabling it "
+        "preserves Approvals, Handoffs and their original actions.",
+        group="interface",
+    ),
+    SettingSpec(
+        "attention_unclaimed_seconds", "int",
+        "Seconds before an eligible open handoff without a claimant needs attention. "
+        "0 disables this time threshold; handoff leases and execution remain unchanged.",
+        minimum=0, maximum=86400, group="interface",
+    ),
+    SettingSpec(
+        "attention_disconnected_seconds", "int",
+        "Seconds before an executor disconnected with pending work is escalated in attention. "
+        "0 disables this escalation; connection recovery and execution remain unchanged.",
+        minimum=0, maximum=86400, group="interface",
+    ),
     # ------------------------------------------------------------------ #
     # Meta-harness feature flags (R-I0). All opt-in (default off). Most flags
     # unlock behaviour inside consuming use-cases once those features ship.
@@ -389,6 +407,11 @@ _SPEC_BY_KEY: dict[str, SettingSpec] = {spec.key: spec for spec in SETTING_SPECS
 
 def _coerce(spec: SettingSpec, raw: Any) -> Any:
     """Validate ``raw`` against the spec; raise CONFIG_ERROR otherwise."""
+    if spec.key in {"attention_unclaimed_seconds", "attention_disconnected_seconds"} and type(raw) is not int:
+        # Zero explicitly disables a time rule; never turn false or a fraction
+        # into that policy through the legacy integer coercion below.
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            "Attention thresholds must be integer seconds; use 0 explicitly to disable a time rule.", {})
     if spec.key == "connection_key_ttl_seconds" and type(raw) is not int:
         # Unlike an ordinary numeric tuning knob, truncating 0.5 or coercing
         # false to zero would silently grant an unlimited credential lifetime.

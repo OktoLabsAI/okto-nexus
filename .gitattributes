@@ -1,3 +1,5 @@
 # Vite preserves source HTML newlines in the packaged entrypoint.
 frontend/index.html text eol=lf
 src/okto_nexus/adapters/inbound/http/static/index.html text eol=lf
+# Retained qualification hashes describe exact report bytes on every platform.
+plans/agent_ops/evidence/pr06-attention-*.xml text eol=lf

@@ -1,0 +1,3300 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="8" failures="8" skipped="0" tests="46" time="120.028" timestamp="2026-11-06T15:17:50.431979-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_api" name="test_empty_list_and_summary_are_explicit_passive_snapshots" time="4.410" /><testcase classname="tests.test_attention_api" name="test_existing_operator_auth_paths_and_agent_refusal[/api/v1/attention]" time="3.358"><failure message="RuntimeError: Task &lt;Task pending name='Task-13' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A046D66C10&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A046D66C10&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A047172C10&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A045A67110&gt;)
+path = '/api/v1/attention'
+
+    @pytest.mark.parametrize("path", [BASE, BASE + "/summary"])
+    def test_existing_operator_auth_paths_and_agent_refusal(attention_env, path):
+        env = attention_env
+        _, operator_key = ensure_operator_key(env.deps, env.app.state.auth)
+        with env.deps.connection_factory.unit_of_work() as uow:
+            worker_key = env.app.state.auth.issue_key(uow, agent_id="attention-worker")
+        auth = env.app.state.operator_auth
+        auth.configure(**ACCOUNT, local=True)
+&gt;       with TestClient(env.app, client=("192.0.2.25", 50001)) as remote:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:134:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A047198A50&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-13' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_existing_operator_auth_paths_and_agent_refusal[/api/v1/attention]" time="0.030"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_existing_operator_auth_pa0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A044C44E90&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_existing_operator_auth_paths_and_agent_refusal[/api/v1/attention/summary]" time="3.052"><failure message="RuntimeError: Task &lt;Task pending name='Task-48' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A047B79450&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A047B79450&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A0471A2C40&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A04719A850&gt;)
+path = '/api/v1/attention/summary'
+
+    @pytest.mark.parametrize("path", [BASE, BASE + "/summary"])
+    def test_existing_operator_auth_paths_and_agent_refusal(attention_env, path):
+        env = attention_env
+        _, operator_key = ensure_operator_key(env.deps, env.app.state.auth)
+        with env.deps.connection_factory.unit_of_work() as uow:
+            worker_key = env.app.state.auth.issue_key(uow, agent_id="attention-worker")
+        auth = env.app.state.operator_auth
+        auth.configure(**ACCOUNT, local=True)
+&gt;       with TestClient(env.app, client=("192.0.2.25", 50001)) as remote:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:134:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A0479E5D10&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-48' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_existing_operator_auth_paths_and_agent_refusal[/api/v1/attention/summary]" time="0.013"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_existing_operator_auth_pa1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A047187530&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query0]" time="2.299" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query1]" time="3.042" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query2]" time="2.717" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query3]" time="2.522" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query4]" time="2.318" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query5]" time="2.900" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query6]" time="2.644" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query7]" time="2.236" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query8]" time="2.418" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query9]" time="3.139" /><testcase classname="tests.test_attention_api" name="test_invalid_filters_use_envelope_and_never_write[query10]" time="2.668" /><testcase classname="tests.test_attention_api" name="test_invalid_preferences_are_strict_and_do_not_echo_values[seen-body0]" time="2.541" /><testcase classname="tests.test_attention_api" name="test_invalid_preferences_are_strict_and_do_not_echo_values[seen-body1]" time="2.309" /><testcase classname="tests.test_attention_api" name="test_invalid_preferences_are_strict_and_do_not_echo_values[seen-body2]" time="2.299" /><testcase classname="tests.test_attention_api" name="test_invalid_preferences_are_strict_and_do_not_echo_values[seen-body3]" time="2.896" /><testcase classname="tests.test_attention_api" name="test_invalid_preferences_are_strict_and_do_not_echo_values[snooze-body4]" time="2.407" /><testcase classname="tests.test_attention_api" name="test_invalid_preferences_are_strict_and_do_not_echo_values[snooze-body5]" time="2.646" /><testcase classname="tests.test_attention_api" name="test_canonical_parked_source_filters_summary_and_payload_privacy" time="2.543" /><testcase classname="tests.test_attention_api" name="test_cursor_has_stable_ties_and_cannot_change_filters" time="2.928" /><testcase classname="tests.test_attention_api" name="test_real_projection_budget_failure_is_unavailable_never_empty" time="2.467" /><testcase classname="tests.test_attention_api" name="test_preferences_are_shared_between_devices_cas_and_independent_from_resolution" time="3.568"><failure message="RuntimeError: Task &lt;Task pending name='Task-264' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A046E61F90&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A046E61F90&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A046D76CF0&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A045BDEFD0&gt;)
+
+    def test_preferences_are_shared_between_devices_cas_and_independent_from_resolution(attention_env):
+        env = attention_env
+        parked(env)
+        original = item(env)
+        before = snapshot(env, domain_only=True)
+        env.app.state.operator_auth.configure(**ACCOUNT, local=True)
+&gt;       with TestClient(env.app, client=("192.0.2.30", 50001)) as first, \
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                TestClient(env.app, client=("192.0.2.31", 50002)) as second:
+
+tests\test_attention_api.py:238:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A046DBA720&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-264' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_preferences_are_shared_between_devices_cas_and_independent_from_resolution" time="0.018"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_preferences_are_shared_be0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A048582DD0&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_missing_and_changed_sources_never_create_preferences" time="2.802" /><testcase classname="tests.test_attention_api" name="test_snooze_expiry_is_derived_without_a_read_side_write" time="3.182" /><testcase classname="tests.test_attention_api" name="test_agent_cannot_mutate_preferences_even_with_an_operator_cookie" time="3.443"><failure message="RuntimeError: Task &lt;Task pending name='Task-324' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A0457BF250&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A0457BF250&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A04701C8D0&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A046D47E90&gt;)
+
+    def test_agent_cannot_mutate_preferences_even_with_an_operator_cookie(attention_env):
+        env = attention_env
+        parked(env)
+        original = item(env)
+        with env.deps.connection_factory.unit_of_work() as uow:
+            key = env.app.state.auth.issue_key(uow, agent_id="attention-worker")
+        env.app.state.operator_auth.configure(**ACCOUNT, local=True)
+&gt;       with TestClient(env.app, client=("192.0.2.32", 50001)) as remote:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:299:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A046FFA7B0&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-324' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_agent_cannot_mutate_preferences_even_with_an_operator_cookie" time="0.022"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_agent_cannot_mutate_prefe0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A047704830&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_operator_key_rotation_is_checked_after_warm_http_auth" time="2.476"><failure message="RuntimeError: Task &lt;Task pending name='Task-359' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A048111F90&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A048111F90&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A046E63570&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A042E03950&gt;)
+
+    def test_operator_key_rotation_is_checked_after_warm_http_auth(attention_env):
+        env = attention_env
+        _, key = ensure_operator_key(env.deps, env.app.state.auth)
+&gt;       with TestClient(env.app, client=("192.0.2.33", 50001)) as remote:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:314:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A046ECA8D0&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-359' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_operator_key_rotation_is_checked_after_warm_http_auth" time="0.011"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_operator_key_rotation_is_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A045BD87C0&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_preferences_survive_server_restart" time="3.083" /><testcase classname="tests.test_attention_api" name="test_human_preference_mutations_require_existing_csrf_protection[headers0]" time="2.884"><failure message="RuntimeError: Task &lt;Task pending name='Task-413' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A045BE7110&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A045BE7110&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A0484E86B0&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A045B59AE0&gt;)
+headers = {}
+
+    @pytest.mark.parametrize("headers", [{}, {"Origin": "https://evil.example", "x-nexus-ui": "1"},
+                                        {"Sec-Fetch-Site": "cross-site", "x-nexus-ui": "1"}])
+    def test_human_preference_mutations_require_existing_csrf_protection(attention_env, headers):
+        env = attention_env
+        parked(env)
+        original = item(env)
+        env.app.state.operator_auth.configure(**ACCOUNT, local=True)
+&gt;       with TestClient(env.app, client=("192.0.2.30", 50001)) as remote:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:344:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A0474683B0&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-413' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_human_preference_mutations_require_existing_csrf_protection[headers0]" time="0.014"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_human_preference_mutation0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A045B3E120&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_human_preference_mutations_require_existing_csrf_protection[headers1]" time="4.004"><failure message="RuntimeError: Task &lt;Task pending name='Task-448' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A047EF51D0&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A047EF51D0&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A04547D7B0&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A047482350&gt;)
+headers = {'Origin': 'https://evil.example', 'x-nexus-ui': '1'}
+
+    @pytest.mark.parametrize("headers", [{}, {"Origin": "https://evil.example", "x-nexus-ui": "1"},
+                                        {"Sec-Fetch-Site": "cross-site", "x-nexus-ui": "1"}])
+    def test_human_preference_mutations_require_existing_csrf_protection(attention_env, headers):
+        env = attention_env
+        parked(env)
+        original = item(env)
+        env.app.state.operator_auth.configure(**ACCOUNT, local=True)
+&gt;       with TestClient(env.app, client=("192.0.2.30", 50001)) as remote:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:344:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A046DFC830&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-448' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_human_preference_mutations_require_existing_csrf_protection[headers1]" time="0.009"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_human_preference_mutation1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A047773E70&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_human_preference_mutations_require_existing_csrf_protection[headers2]" time="3.138"><failure message="RuntimeError: Task &lt;Task pending name='Task-483' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop">app = &lt;fastapi.applications.FastAPI object at 0x000001A04776A490&gt;
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: FastAPI):
+        from ....application.execution_revocation import repair_revoked_sessions
+        from ....bootstrap.remote_connection_recovery import fence_remote_connections_after_restart
+        await anyio.to_thread.run_sync(
+            fence_remote_connections_after_restart, deps.connection_factory)
+        with deps.connection_factory.unit_of_work() as uow:
+            repair_revoked_sessions(uow.connection, now=deps.clock.now_iso())
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+&#32;&#32;&#32;&#32;
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+&#32;&#32;&#32;&#32;
+        loop.set_exception_handler(_filter_conn_reset)
+&#32;&#32;&#32;&#32;
+        # The mounted MCP sub-app's own lifespan never runs under a parent
+        # FastAPI, so its session manager is driven from here (SDK-documented
+        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
+        embedded_dispatch = None
+        shutdown_coordinator = None
+        if lock is not None:
+&#32;&#32;&#32;&#32;
+            async def _beat() -&gt; None:
+                while True:
+                    await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
+                    lock.heartbeat()
+&#32;&#32;&#32;&#32;
+            heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+&#32;&#32;&#32;&#32;
+            async def _publish_metrics() -&gt; None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+&#32;&#32;&#32;&#32;
+            metrics_task = asyncio.create_task(_publish_metrics())
+        try:
+            from ....bootstrap.server_runtime import start_runtime_services
+&gt;           embedded_core_host, embedded_inventory, embedded_dispatch, shutdown_coordinator = await start_runtime_services(app)
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src\okto_nexus\adapters\inbound\http\app.py:666:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+app = &lt;fastapi.applications.FastAPI object at 0x000001A04776A490&gt;
+native_factory = None
+
+    async def start_runtime_services(app, *, native_factory=None):
+        from .runtime_host import EmbeddedRuntimeHost
+        from .server_shutdown import ServerShutdownCoordinator
+        from .runtime_boot_owner import RuntimeBootOwner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..adapters.inbound.mcp.tools.harness import build_dispatcher, run_runtime_boot
+        from ..application.connection_test import ConnectionTests
+        from .handoff_runtime_scheduler import build_handoff_notice_maintenance, build_handoff_runtime_scheduler
+        from ..application.handoff_runtime_service import HandoffRuntimeService
+        deps = app.state.deps
+        previous_supervisor = getattr(app.state, 'embedded_runtime_supervisor', None)
+        if previous_supervisor is not None and not previous_supervisor.drained:
+            raise RuntimeError('The previous embedded supervisor has not drained.')
+        previous_boot = getattr(app.state, 'runtime_boot_owner', None)
+        if previous_boot is not None and not previous_boot.drained:
+            raise RuntimeError('The previous runtime boot owner has not drained.')
+        previous_notices = getattr(app.state, 'handoff_notice_maintenance', None)
+        if previous_notices is not None and not previous_notices.drained:
+&gt;           raise RuntimeError('The previous handoff notice owner has not drained.')
+E           RuntimeError: The previous handoff notice owner has not drained.
+
+src\okto_nexus\bootstrap\server_runtime.py:23: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000001A045428E20&gt;, clock=&lt;test_attention_api.Clock object at 0x000001A045B095E0&gt;)
+headers = {'Sec-Fetch-Site': 'cross-site', 'x-nexus-ui': '1'}
+
+    @pytest.mark.parametrize("headers", [{}, {"Origin": "https://evil.example", "x-nexus-ui": "1"},
+                                        {"Sec-Fetch-Site": "cross-site", "x-nexus-ui": "1"}])
+    def test_human_preference_mutations_require_existing_csrf_protection(attention_env, headers):
+        env = attention_env
+        parked(env)
+        original = item(env)
+        env.app.state.operator_auth.configure(**ACCOUNT, local=True)
+&gt;       with TestClient(env.app, client=("192.0.2.30", 50001)) as remote:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:344:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:697: in lifespan
+    await shutdown_coordinator.wait()
+src\okto_nexus\bootstrap\server_shutdown.py:90: in wait
+    await asyncio.shield(self._task)
+src\okto_nexus\bootstrap\server_shutdown.py:177: in _run
+    await asyncio.gather(self._embedded(), self._legacy(), notices(), handoffs(), boot())
+src\okto_nexus\bootstrap\server_shutdown.py:161: in notices
+    await self.handoff_notices.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.handoff_notice_maintenance.HandoffNoticeMaintenance object at 0x000001A04731C3B0&gt;
+
+    async def aclose(self):
+        self.begin_shutdown()
+        if self._task is not None:
+&gt;           await asyncio.shield(self._task)
+E           RuntimeError: Task &lt;Task pending name='Task-483' coro=&lt;ServerShutdownCoordinator._run.&lt;locals&gt;.notices() running at D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\bootstrap\server_shutdown.py:161&gt; cb=[gather.&lt;locals&gt;._done_callback() at C:\Python313\Lib\asyncio\tasks.py:820]&gt; got Future &lt;Future pending cb=[shield.&lt;locals&gt;._outer_done_callback() at C:\Python313\Lib\asyncio\tasks.py:975]&gt; attached to a different loop
+
+src\okto_nexus\application\handoff_notice_maintenance.py:56: RuntimeError</failure></testcase><testcase classname="tests.test_attention_api" name="test_human_preference_mutations_require_existing_csrf_protection[headers2]" time="0.017"><error message="failed on teardown with &quot;RuntimeError: Event loop is closed&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10435/test_human_preference_mutation2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A0473CA2E0&gt;
+
+    @pytest.fixture
+    def attention_env(tmp_path, monkeypatch):
+        clock = Clock()
+        monkeypatch.setattr(dependencies, "SystemClock", lambda: clock)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = dependencies.bootstrap({}, ["--home", str(tmp_path / "home"),
+            "--feature-harness-integrations", "false", "--embedding-mode", "off"])
+        with deps.connection_factory.unit_of_work() as uow:
+            for workspace in ("attention-one", "attention-two"):
+                deps.repos.workspaces.upsert(uow, workspace_id=workspace, display_name=workspace)
+            deps.repos.agents.upsert(uow, agent_id="attention-worker")
+        app = build_app(deps)
+&gt;       with TestClient(app, client=("127.0.0.1", 50000), base_url="http://localhost") as client:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_api.py:53:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:708: in __exit__
+    self.exit_stack.close()
+C:\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+C:\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+C:\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv\Lib\site-packages\starlette\testclient.py:701: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:748: in wait_shutdown
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:738: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+src\okto_nexus\adapters\inbound\http\transport_security.py:28: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:221: in __aexit__
+    await anext(self.gen)
+src\okto_nexus\adapters\inbound\http\app.py:696: in lifespan
+    await shutdown_coordinator.request()
+src\okto_nexus\bootstrap\server_shutdown.py:83: in request
+    await asyncio.wait((self._task,), timeout=max(
+C:\Python313\Lib\asyncio\tasks.py:451: in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:534: in _wait
+    f.add_done_callback(_on_completion)
+C:\Python313\Lib\asyncio\base_events.py:828: in call_soon
+    self._check_closed()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;ProactorEventLoop running=False closed=True debug=False&gt;
+
+    def _check_closed(self):
+        if self._closed:
+&gt;           raise RuntimeError('Event loop is closed')
+E           RuntimeError: Event loop is closed
+
+C:\Python313\Lib\asyncio\base_events.py:551: RuntimeError</error></testcase><testcase classname="tests.test_attention_api" name="test_feature_off_is_explicit_and_leaves_original_paths_and_domain_intact" time="2.476" /><testcase classname="tests.test_attention_api" name="test_attention_settings_catalog_bounds_persistence_and_no_runtime_coupling" time="2.935" /><testcase classname="tests.test_attention_api" name="test_attention_settings_explicit_defaults_pin_stored_overrides[env]" time="2.842" /><testcase classname="tests.test_attention_api" name="test_attention_settings_explicit_defaults_pin_stored_overrides[cli]" time="2.997" /><testcase classname="tests.test_attention_api" name="test_attention_threshold_config_bounds_and_zero[attention_unclaimed_seconds]" time="0.001" /><testcase classname="tests.test_attention_api" name="test_attention_threshold_config_bounds_and_zero[attention_disconnected_seconds]" time="0.001" /></testsuite></testsuites>

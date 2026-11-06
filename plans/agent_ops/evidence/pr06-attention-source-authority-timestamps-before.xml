@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="4.957" timestamp="2026-11-06T15:51:16.330897-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_operations" name="test_authority_revision_episode_survives_retry_and_observation_timestamps[grant]" time="1.104"><failure message="AssertionError: assert '2026-11-06T1....000000+00:00' == '2026-11-06T1....000000+00:00'&#10;  &#10;  - 2026-11-06T12:10:00.000000+00:00&#10;  ?               ^&#10;  + 2026-11-06T12:00:00.000000+00:00&#10;  ?               ^">db = &lt;sqlite3.Connection object at 0x0000013BA28BBA60&gt;, resource = 'grant'
+
+    @pytest.mark.parametrize("resource", ["grant", "endpoint", "profile"])
+    def test_authority_revision_episode_survives_retry_and_observation_timestamps(db, resource):
+        managed_operation(db)
+        db.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,created_at,updated_at) "
+                   "VALUES('profile','fixture','{}',1,?,?)", (NOW, NOW))
+        db.execute("UPDATE agent_endpoints SET profile_id='profile' WHERE endpoint_id='ep'")
+        db.execute("UPDATE delivery_outbox SET profile_revision=1 WHERE operation_id='domain-op'")
+        assert not only(db, "execution_authority_blocking")
+        changed_at = "2026-11-06T12:10:00.000000Z"
+        db.create_function("strftime", -1, lambda *args: changed_at)
+        statements = {
+            "grant": "UPDATE runtime_execution_grants SET revision=2 WHERE grant_id='g'",
+            "endpoint": "UPDATE agent_endpoints SET revision=2,updated_at=? WHERE endpoint_id='ep'",
+            "profile": "UPDATE runtime_profiles SET revision=2,updated_at=? WHERE profile_id='profile'",
+        }
+        db.execute(statements[resource], () if resource == "grant" else (changed_at,))
+        first = only(db, "execution_authority_blocking", now=changed_at)[0]
+&gt;       assert first["first_detected_at"] == "2026-11-06T12:10:00.000000+00:00"
+E       AssertionError: assert '2026-11-06T1....000000+00:00' == '2026-11-06T1....000000+00:00'
+E&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+E         - 2026-11-06T12:10:00.000000+00:00
+E         ?               ^
+E         + 2026-11-06T12:00:00.000000+00:00
+E         ?               ^
+
+tests\test_attention_operations.py:294: AssertionError</failure></testcase><testcase classname="tests.test_attention_operations" name="test_authority_revision_episode_survives_retry_and_observation_timestamps[endpoint]" time="1.461"><failure message="AssertionError: assert {'attention_i...warning', ...} == {'attention_i...warning', ...}&#10;  &#10;  Omitting 18 identical items, use -vv to show&#10;  Differing items:&#10;  {'first_detected_at': '2026-11-06T13:00:00.000000+00:00'} != {'first_detected_at': '2026-11-06T12:10:00.000000+00:00'}&#10;  {'last_changed_at': '2026-11-06T13:00:00.000000+00:00'} != {'last_changed_at': '2026-11-06T12:10:00.000000+00:00'}&#10;  Use -v to get more diff">db = &lt;sqlite3.Connection object at 0x0000013BA29DCA90&gt;, resource = 'endpoint'
+
+    @pytest.mark.parametrize("resource", ["grant", "endpoint", "profile"])
+    def test_authority_revision_episode_survives_retry_and_observation_timestamps(db, resource):
+        managed_operation(db)
+        db.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,created_at,updated_at) "
+                   "VALUES('profile','fixture','{}',1,?,?)", (NOW, NOW))
+        db.execute("UPDATE agent_endpoints SET profile_id='profile' WHERE endpoint_id='ep'")
+        db.execute("UPDATE delivery_outbox SET profile_revision=1 WHERE operation_id='domain-op'")
+        assert not only(db, "execution_authority_blocking")
+        changed_at = "2026-11-06T12:10:00.000000Z"
+        db.create_function("strftime", -1, lambda *args: changed_at)
+        statements = {
+            "grant": "UPDATE runtime_execution_grants SET revision=2 WHERE grant_id='g'",
+            "endpoint": "UPDATE agent_endpoints SET revision=2,updated_at=? WHERE endpoint_id='ep'",
+            "profile": "UPDATE runtime_profiles SET revision=2,updated_at=? WHERE profile_id='profile'",
+        }
+        db.execute(statements[resource], () if resource == "grant" else (changed_at,))
+        first = only(db, "execution_authority_blocking", now=changed_at)[0]
+        assert first["first_detected_at"] == "2026-11-06T12:10:00.000000+00:00"
+        assert first["last_changed_at"] == first["first_detected_at"]
+&#32;&#32;&#32;&#32;
+        db.create_function("strftime", -1, lambda *args: LATER)
+        db.execute("UPDATE delivery_outbox SET attempt_count=attempt_count+1,status='RETRY_WAIT',updated_at=?", (LATER,))
+        db.execute("UPDATE agent_endpoints SET health='healthy',last_observed_at=?,updated_at=?", (LATER, LATER))
+        db.execute("UPDATE runtime_profiles SET updated_at=?", (LATER,))
+        db.execute("UPDATE runtime_execution_grants SET used_executions=used_executions+1")
+        before = list(db.iterdump())
+&gt;       assert only(db, "execution_authority_blocking", now=LATER)[0] == first
+E       AssertionError: assert {'attention_i...warning', ...} == {'attention_i...warning', ...}
+E&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+E         Omitting 18 identical items, use -vv to show
+E         Differing items:
+E         {'first_detected_at': '2026-11-06T13:00:00.000000+00:00'} != {'first_detected_at': '2026-11-06T12:10:00.000000+00:00'}
+E         {'last_changed_at': '2026-11-06T13:00:00.000000+00:00'} != {'last_changed_at': '2026-11-06T12:10:00.000000+00:00'}
+E         Use -v to get more diff
+
+tests\test_attention_operations.py:303: AssertionError</failure></testcase><testcase classname="tests.test_attention_operations" name="test_authority_revision_episode_survives_retry_and_observation_timestamps[profile]" time="1.373"><failure message="AssertionError: assert {'attention_i...warning', ...} == {'attention_i...warning', ...}&#10;  &#10;  Omitting 18 identical items, use -vv to show&#10;  Differing items:&#10;  {'first_detected_at': '2026-11-06T13:00:00.000000+00:00'} != {'first_detected_at': '2026-11-06T12:10:00.000000+00:00'}&#10;  {'last_changed_at': '2026-11-06T13:00:00.000000+00:00'} != {'last_changed_at': '2026-11-06T12:10:00.000000+00:00'}&#10;  Use -v to get more diff">db = &lt;sqlite3.Connection object at 0x0000013BA29DCB80&gt;, resource = 'profile'
+
+    @pytest.mark.parametrize("resource", ["grant", "endpoint", "profile"])
+    def test_authority_revision_episode_survives_retry_and_observation_timestamps(db, resource):
+        managed_operation(db)
+        db.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,created_at,updated_at) "
+                   "VALUES('profile','fixture','{}',1,?,?)", (NOW, NOW))
+        db.execute("UPDATE agent_endpoints SET profile_id='profile' WHERE endpoint_id='ep'")
+        db.execute("UPDATE delivery_outbox SET profile_revision=1 WHERE operation_id='domain-op'")
+        assert not only(db, "execution_authority_blocking")
+        changed_at = "2026-11-06T12:10:00.000000Z"
+        db.create_function("strftime", -1, lambda *args: changed_at)
+        statements = {
+            "grant": "UPDATE runtime_execution_grants SET revision=2 WHERE grant_id='g'",
+            "endpoint": "UPDATE agent_endpoints SET revision=2,updated_at=? WHERE endpoint_id='ep'",
+            "profile": "UPDATE runtime_profiles SET revision=2,updated_at=? WHERE profile_id='profile'",
+        }
+        db.execute(statements[resource], () if resource == "grant" else (changed_at,))
+        first = only(db, "execution_authority_blocking", now=changed_at)[0]
+        assert first["first_detected_at"] == "2026-11-06T12:10:00.000000+00:00"
+        assert first["last_changed_at"] == first["first_detected_at"]
+&#32;&#32;&#32;&#32;
+        db.create_function("strftime", -1, lambda *args: LATER)
+        db.execute("UPDATE delivery_outbox SET attempt_count=attempt_count+1,status='RETRY_WAIT',updated_at=?", (LATER,))
+        db.execute("UPDATE agent_endpoints SET health='healthy',last_observed_at=?,updated_at=?", (LATER, LATER))
+        db.execute("UPDATE runtime_profiles SET updated_at=?", (LATER,))
+        db.execute("UPDATE runtime_execution_grants SET used_executions=used_executions+1")
+        before = list(db.iterdump())
+&gt;       assert only(db, "execution_authority_blocking", now=LATER)[0] == first
+E       AssertionError: assert {'attention_i...warning', ...} == {'attention_i...warning', ...}
+E&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+E         Omitting 18 identical items, use -vv to show
+E         Differing items:
+E         {'first_detected_at': '2026-11-06T13:00:00.000000+00:00'} != {'first_detected_at': '2026-11-06T12:10:00.000000+00:00'}
+E         {'last_changed_at': '2026-11-06T13:00:00.000000+00:00'} != {'last_changed_at': '2026-11-06T12:10:00.000000+00:00'}
+E         Use -v to get more diff
+
+tests\test_attention_operations.py:303: AssertionError</failure></testcase></testsuite></testsuites>

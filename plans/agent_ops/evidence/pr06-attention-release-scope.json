@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "qualification_wheel_sha256": "03551068009a808c1f71547f0aa740d4809eebbacbfcf331eac78da87d4c9c7c",
+  "release_wheel_sha256": "8642d7ed8b3fe51a7cd9bb72f9f79452c638b9aea124ef7e29ea6c1403418824",
+  "changed_payloads": [
+    "okto_nexus/adapters/outbound/sqlite/attention.py"
+  ],
+  "change": "Removed one trailing blank line at EOF to pass staged diff-check.",
+  "identical_python_ast": true,
+  "only_trailing_whitespace": true,
+  "raw_source_and_installed_payloads_match": true,
+  "test_reuse": "462 distinct installed cases on the qualification wheel; the release changes no executable syntax or other package payload. No redundant behavioral rerun for EOF whitespace."
+}

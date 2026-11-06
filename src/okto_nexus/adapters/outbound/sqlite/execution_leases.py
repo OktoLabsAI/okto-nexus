@@ -81,11 +81,8 @@ class SqliteExecutionLeaseRepository:
             "SELECT * FROM execution_leases WHERE server_id=? AND executor_id=? AND session_id=? "
             "AND lease_serial=? AND status='ACTIVE' AND applied_at IS NOT NULL",
             (*self.key(scope), latest['lease_serial'] - 1)).fetchone()
-        fields = ('scope_json','connection_id','connection_generation','grant_id',
-                  'source_grant_revision','allowed_actions_json')
-        if previous is not None and all(previous[k] == latest[k] for k in fields):
-            return previous
-        return latest
+        from ....application.execution_native_facts import effective_lease_facts
+        return effective_lease_facts(latest, previous)
 
     def request(self, uow, scope, request_id):
         return uow.connection.execute(

@@ -61,27 +61,10 @@ class ExecutionCapabilityService:
             'SELECT credential_epoch,authorization_revision,configuration_revision '
             'FROM execution_agent_revisions WHERE server_id=? AND agent_id=?',
             (scope['server_id'], scope['agent_id'])).fetchone()
-        if revisions is None or any(revisions[k] != scope[k] for k in revisions.keys()):
-            raise _error(ErrorCode.CONFLICT, 'The session capability revisions changed.')
         row = self.repo.authority(uow, scope)
-        if (row is None or not row['is_active'] or not row['api_key_hash'] or
-                row['lifecycle_state'] not in ('OPEN_PENDING', 'READY') or
-                row['revoked_at'] is not None or row['protocol'] != 'nxl-r4' or
-                row['activation_state'] != 'approved' or not row['enabled'] or
-                row['health'] == 'quarantined' or row['workspace_status'] != 'READY' or
-                row['realization_status'] != 'READY' or
-                row['realization_revision'] != row['current_realization_revision'] or
-                row['agent_id'] != scope['agent_id'] or row['subject_agent_id'] != scope['agent_id'] or
-                row['binding_id'] != scope['binding_id'] or
-                row['binding_revision'] != scope['binding_revision'] or
-                row['workspace_id'] != scope['workspace_id'] or
-                any(row[k] != scope['workspace_binding_id'] for k in (
-                    'workspace_binding_id', 'binding_workspace_binding_id', 'realization_workspace_binding_id')) or
-                row['owner_generation'] != scope['session_owner_generation'] or
-                json.loads(row['expected_revisions_json']) != scope or
-                row['admission_state'] not in ('ACCEPTED', 'DISPATCH_PENDING', 'DISPATCHED', 'RESOLVED_TERMINAL') or
-                row['source_guard_digest'] != _agent_guard(uow.connection, scope['agent_id'])):
-            raise _error(ErrorCode.CONFLICT, 'The session capability authority changed.')
+        from .execution_native_facts import require_capability_scope_facts, require_source_guard
+        require_capability_scope_facts(scope=scope, revisions=revisions, authority=row)
+        require_source_guard(row['source_guard_digest'], _agent_guard(uow.connection, scope['agent_id']))
         from .execution_operator_authority import require_recorded_operator
         require_recorded_operator(uow, actor=row['actor_agent_id'], subject=scope['agent_id'],
                                   guard=row['actor_guard_digest'], access=self.access)

@@ -936,6 +936,10 @@ The other flags gate live behavior.
 | `okto-nexus work` | [Submit work, observe results and answer native requests from the terminal](docs/terminal-work.md) |
 | `okto-nexus message send`, `handoff create/wait`, `request inspect` | [Send coordination with durable request IDs and passive completion observation](docs/terminal-coordination.md) |
 | `okto-nexus participant smoke` | [Review an optional directed exchange and a separately consented handoff](docs/terminal-cooperation.md) |
+
+The [operator attention API](docs/attention.md) projects canonical pending work,
+results and maintenance conditions with shared seen/snooze preferences and SSE
+invalidation. Its dashboard page and badge are tracked separately in PR-07.
 | `okto-nexus` | Show CLI help |
 | `okto-nexus tail` | Operator NDJSON follower over the event service |
 | `okto-nexus admin prune` | Enforce retention, optionally vacuum |

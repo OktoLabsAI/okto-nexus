@@ -119,8 +119,27 @@ class RuntimeMaintenanceService:
             if report.get("absent") is not True:
                 raise OSError("Artifact absence was not verified")
         except Exception:
+            # This is an explicitly requested operator cleanup, not a normal
+            # automatic slot-close retry. Preserve its first failed attempt as
+            # durable attention metadata without altering the productive result.
+            attention_recorded = False
+            try:
+                with owner.cf.unit_of_work() as uow:
+                    attention_recorded = uow.connection.execute(
+                        "UPDATE runtime_result_maintenance SET "
+                        "attention_failure_at=COALESCE(attention_failure_at,?),"
+                        "attention_failure_code='ARTIFACT_CLEANUP_UNCONFIRMED' "
+                        "WHERE maintenance_id=? AND status='PENDING'",
+                        (owner.clock.now_iso(), operation["maintenance_id"]),
+                    ).rowcount == 1
+            except Exception:
+                # The existing PENDING maintenance receipt still fences the
+                # artifact reservation. A diagnostic-write failure must retain
+                # that receipt and uncertainty, never repeat filesystem effects.
+                attention_recorded = False
             raise OktoNexusError(ErrorCode.CONFLICT, "Artifact cleanup remains pending; retry the same maintenance key.",
-                {"maintenance_id": operation["maintenance_id"]}) from None
+                {"maintenance_id": operation["maintenance_id"],
+                 "cleanup_outcome": "unconfirmed", "attention_recorded": attention_recorded}) from None
         with owner.cf.unit_of_work() as uow:
             current = uow.connection.execute("SELECT * FROM runtime_result_maintenance WHERE maintenance_id=?", (operation["maintenance_id"],)).fetchone()
             if current["status"] == "DONE":

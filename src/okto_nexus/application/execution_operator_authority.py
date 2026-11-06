@@ -3,7 +3,7 @@ import json
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
 from .execution_binding_proposals import _agent_guard
-from .runtime_actor_authority import LOCAL_OPERATOR_PREFIX, local_operator_binding
+from .runtime_actor_authority import local_operator_binding
 
 
 def require_operator_request(uow, *, actor, subject, access, context, require_feature=True,
@@ -41,23 +41,15 @@ def require_recorded_operator(uow, *, actor, subject, guard, access):
     if actor == subject:
         return
     current = access.agents.get(uow, actor) if access is not None else None
-    if current is None or not guard:
-        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                            'The initiating operator authority is unavailable.', {})
-    if guard.startswith('delegated:'):
-        proof = json.loads(guard.removeprefix('delegated:'))
-        context = RuntimeRequestContext(actor, 'agent_key', credential_binding=current.api_key_hash,
-            execution_grant_id=proof['grant_id'])
+    from .execution_native_facts import recorded_actor_context
+    context, proof = recorded_actor_context(actor=actor, subject=subject, guard=guard, current=current)
+    if proof is not None:
         actual = require_operator_request(uow, actor=actor, subject=subject, access=access, context=context,
             binding_id=proof['binding_id'], action=proof['action'])
         if actual != guard:
             raise OktoNexusError(ErrorCode.CONFLICT, 'The delegated execution authority changed.', {})
         # Delegation never acquires operator containment privileges.
         return None
-    local = guard.startswith(LOCAL_OPERATOR_PREFIX)
-    context = RuntimeRequestContext(actor, 'http_loopback' if local else 'agent_key',
-                                    trusted_local_operator=local,
-                                    credential_binding=None if local else current.api_key_hash)
     actual = require_operator_request(uow, actor=actor, subject=subject, access=access, context=context)
     if actual != guard:
         raise OktoNexusError(ErrorCode.CONFLICT, 'The initiating operator authority changed.', {})

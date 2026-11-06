@@ -184,31 +184,16 @@ class ExecutionNativeDecisions:
                                tuple(scope[name] for name in ("server_id", "executor_id", "session_id"))).fetchone()
         lease = SqliteExecutionLeaseRepository().effective(uow, scope)
         now = _stamp(self.access.clock.now_iso())
-        if (session is None or session["stream_epoch"] != row["stream_epoch"] or
-                session["lifecycle_state"] != "READY" or session["lease_state"] != "ACTIVE" or
-                _stamp(row["expires_at"]) <= now or row["state"] not in {"PENDING", "DECIDED"} or
-                lease is None or lease["status"] != "ACTIVE" or lease["applied_at"] is None or
-                not lease["scope_json"] or json.loads(lease["scope_json"]) != scope or
-                _stamp(lease["valid_until_server"]) <= now or lease["grant_id"] != grant["grant_id"] or
-                lease["connection_id"] != authority["owner_instance_id"] or
-                lease["connection_generation"] != authority["generation"] or
-                authority["control_state"] != "CONTROL_READY"):
-            _fail("The native request no longer has a live session lease.")
         endpoint = self.access.endpoints.get(uow, authority['endpoint_id'])
         profile = self.access.endpoints.profile(uow, endpoint['profile_id']) if endpoint and endpoint['profile_id'] else None
-        if profile is not None and 'approvals' in profile['config'].get('disabled_capabilities', ()):
-            _fail('The session profile does not authorize native decisions.', ErrorCode.PERMISSION_DENIED)
         source = conn.execute("SELECT * FROM execution_operations WHERE server_id=? AND executor_id=? AND operation_id=?",
                               (scope["server_id"], scope["executor_id"], row["source_operation_id"])).fetchone()
         receipt = conn.execute("SELECT stage FROM execution_receipts WHERE server_id=? AND executor_id=? AND operation_id=? "
                                "ORDER BY receipt_revision DESC LIMIT 1",
                                (scope["server_id"], scope["executor_id"], row["source_operation_id"])).fetchone()
-        if (source is None or source["action"] != "turn.submit" or
-                source["subject_agent_id"] != scope["agent_id"] or
-                json.loads(source["expected_revisions_json"]) != scope or
-                source["admission_state"] == "RESOLVED_TERMINAL" or
-                (receipt is not None and receipt["stage"] in {"SUCCEEDED", "FAILED", "CANCELLED", "UNCERTAIN"})):
-            _fail("The native request turn is no longer active.")
+        from .execution_native_facts import require_native_live_facts
+        require_native_live_facts(scope=scope, request=row, session=session, lease=lease,
+            authority=authority, grant=grant, profile=profile, source=source, receipt=receipt, now=now)
         if authority["kind"] == "remote":
             require_execution_lane(uow, scope=scope, channel=ExecutionChannel(
                 scope["server_id"], scope["executor_id"], lease["connection_id"], lease["connection_generation"]), now=now)

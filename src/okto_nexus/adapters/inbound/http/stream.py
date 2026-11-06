@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import AsyncIterator
+from typing import AsyncIterator, Literal
 
 import anyio.to_thread
 from fastapi import APIRouter, Request
@@ -45,7 +45,11 @@ def build_router() -> APIRouter:
         request: Request,
         workspace: str | None = None,
         stream: str | None = None,
+        view: Literal['attention'] | None = None,
     ) -> StreamingResponse:
+        if view == 'attention':
+            from .attention_stream import attention_stream
+            return await attention_stream(request, cursor=_parse_cursor(request), workspace=workspace, stream=stream)
         deps = request.app.state.deps
         observability = request.app.state.observability
         poll_seconds: float = request.app.state.sse_poll_seconds

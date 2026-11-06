@@ -35,7 +35,10 @@ FEATURE_FLAGS = [
 ]
 
 FEATURE_FIELDS = [field for field, _, _ in FEATURE_FLAGS]
-DEFAULT_ON = {"feature_harness_integrations"}
+DEFAULT_ON = {"feature_harness_integrations", "feature_attention"}
+# Attention belongs to interface settings; the original meta-harness group
+# above remains unchanged. Both kinds appear in the runtime feature inventory.
+RUNTIME_FEATURE_FIELDS = [*FEATURE_FIELDS, "feature_attention"]
 
 
 def test_retired_attach_cannot_be_enabled_through_settings(loopback_client):
@@ -228,7 +231,7 @@ def _call(server, name: str, arguments: dict | None = None) -> dict:
 
 
 def test_feature_flag_fields_constant_matches_the_7_flags():
-    assert set(FEATURE_FLAG_FIELDS) == set(FEATURE_FIELDS)
+    assert set(FEATURE_FLAG_FIELDS) == set(RUNTIME_FEATURE_FIELDS)
 
 
 def test_nexus_info_features_identical_on_inprocess_and_http_composition(tmp_path):
@@ -244,8 +247,8 @@ def test_nexus_info_features_identical_on_inprocess_and_http_composition(tmp_pat
     http_info = http_env["data"] if "data" in http_env else http_env
 
     assert local_info["features"] == http_info["features"]
-    assert set(local_info["features"]) == set(FEATURE_FIELDS)
-    assert local_info["features"] == {field: field in DEFAULT_ON for field in FEATURE_FIELDS}
+    assert set(local_info["features"]) == set(RUNTIME_FEATURE_FIELDS)
+    assert local_info["features"] == {field: field in DEFAULT_ON for field in RUNTIME_FEATURE_FIELDS}
     assert local_info["surface_revision"] == http_info["surface_revision"] == SURFACE_REVISION
 
 

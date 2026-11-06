@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="11.617" timestamp="2026-11-06T15:11:51.372447-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_api" name="test_attention_settings_catalog_bounds_persistence_and_no_runtime_coupling" time="3.766"><failure message="AssertionError: assert 200 == 422&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code&#10; +    where &lt;Response [200 OK]&gt; = patch('/api/v1/settings', json={'attention_unclaimed_seconds': True})&#10; +      where patch = &lt;starlette.testclient.TestClient object at 0x000002841C486510&gt;.patch&#10; +        where &lt;starlette.testclient.TestClient object at 0x000002841C486510&gt; = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000002841C486510&gt;, clock=&lt;test_attention_api.Clock object at 0x000002841B8C2E40&gt;).client">attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000002841C486510&gt;, clock=&lt;test_attention_api.Clock object at 0x000002841B8C2E40&gt;)
+
+    def test_attention_settings_catalog_bounds_persistence_and_no_runtime_coupling(attention_env):
+        env = attention_env
+        settings = {v["key"]: v for v in env.client.get("/api/v1/settings").json()["data"]["items"]}
+        assert settings["feature_attention"]["value"] is True
+        for name in ("attention_unclaimed_seconds", "attention_disconnected_seconds"):
+            assert settings[name]["value"] == 300
+            assert (settings[name]["min"], settings[name]["max"]) == (0, 86400)
+            for invalid in (-1, 86401, True):
+&gt;               assert env.client.patch("/api/v1/settings", json={name: invalid}).status_code == 422
+E               AssertionError: assert 200 == 422
+E                +  where 200 = &lt;Response [200 OK]&gt;.status_code
+E                +    where &lt;Response [200 OK]&gt; = patch('/api/v1/settings', json={'attention_unclaimed_seconds': True})
+E                +      where patch = &lt;starlette.testclient.TestClient object at 0x000002841C486510&gt;.patch
+E                +        where &lt;starlette.testclient.TestClient object at 0x000002841C486510&gt; = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x000002841C486510&gt;, clock=&lt;test_attention_api.Clock object at 0x000002841B8C2E40&gt;).client
+
+tests\test_attention_api.py:380: AssertionError</failure></testcase><testcase classname="tests.test_attention_api" name="test_attention_settings_explicit_defaults_pin_stored_overrides[env]" time="2.695" /><testcase classname="tests.test_attention_api" name="test_attention_settings_explicit_defaults_pin_stored_overrides[cli]" time="2.946" /></testsuite></testsuites>

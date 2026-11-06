@@ -768,6 +768,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # becomes the documented envelope.
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(request, exc: RequestValidationError):
+        if request.url.path == '/api/v1/attention' or request.url.path.startswith('/api/v1/attention/'):
+            response = err(422, 'VALIDATION_ERROR', 'The request does not match the attention contract.')
+            response.headers['Cache-Control'] = 'no-store'
+            return response
         if request.url.path.startswith('/api/v1/operator-auth/'):
             return err(422, 'VALIDATION_ERROR',
                        'Enter a username (1–80 characters) and a password. New passwords require 12–1024 characters.')
@@ -816,6 +820,12 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.state.observability = observability
     app.state.search = search_service
     app.state.settings_service = settings_service
+    from ....application.attention import AttentionService
+    from ...outbound.sqlite.attention import SqliteAttentionQueries
+    from ....bootstrap.execution_authority import build_execution_access
+    app.state.attention = AttentionService(
+        factory=deps.connection_factory, access=build_execution_access(deps),
+        queries=SqliteAttentionQueries(), clock=deps.clock, config=deps.config)
     app.state.workspace_analytics = workspace_analytics
     app.state.workspace_list = workspace_list
     app.state.workspace_health = workspace_health
@@ -890,6 +900,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.include_router(native_actions_router(), prefix="/v1")
     app.include_router(executor_link_router(), prefix="/v1")
     app.include_router(routes.build_router(), prefix="/api/v1")
+    from .attention import build_router as attention_router
+    app.include_router(attention_router(), prefix="/api/v1")
     app.include_router(stream.build_router(), prefix="/api/v1")
     app.mount("/mcp", mcp_app)
     return app
