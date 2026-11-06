@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.885" timestamp="2026-11-05T23:30:35.820923-03:00" hostname="Alienware_m15"><testcase classname="tests.test_public_docs" name="test_public_local_links_resolve" time="0.004"><failure message="AssertionError: (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-participant-init-6elabogi/core/README.md'), 'CONTRIBUTING.md')&#10;assert False&#10; +  where False = is_file()&#10; +    where is_file = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-participant-init-6elabogi/core') / 'CONTRIBUTING.md').is_file&#10;[+1 more line; full report in element text]">def test_public_local_links_resolve() -&gt; None:
+        for page in [ROOT / "README.md", *(ROOT / "docs").glob("*.md")]:
+            text = page.read_text(encoding="utf-8")
+            for target in re.findall(r"\[[^]]+\]\(([^)]+)\)", text):
+                if "://" not in target:
+&gt;                   assert (page.parent / target).is_file(), (page, target)
+E                   AssertionError: (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-participant-init-6elabogi/core/README.md'), 'CONTRIBUTING.md')
+E                   assert False
+E                    +  where False = is_file()
+E                    +    where is_file = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-participant-init-6elabogi/core') / 'CONTRIBUTING.md').is_file
+E                    +      where WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-participant-init-6elabogi/core') = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-participant-init-6elabogi/core/README.md').parent
+
+tests\test_public_docs.py:33: AssertionError</failure></testcase></testsuite></testsuites>

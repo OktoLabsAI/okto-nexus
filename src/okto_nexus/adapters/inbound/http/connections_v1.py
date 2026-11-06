@@ -167,6 +167,21 @@ def build_router() -> APIRouter:
             },
         })
 
+    @router.get('/connections/participant')
+    async def participant(request: Request, workspace_id: str):
+        from ....application.participant_setup import participant_context
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, 'AUTH_FAILED', 'Authenticate with the existing participant key.')
+        if request.headers.get('X-Nexus-Agent-Hint', agent.agent_id) != agent.agent_id:
+            return v1_err(403, 'SCOPE_MISMATCH', 'The key belongs to another identity.')
+        try:
+            value = await anyio.to_thread.run_sync(lambda: participant_context(
+                request.app.state.deps, agent.agent_id, workspace_id))
+            return JSONResponse(value, headers={'Cache-Control': 'no-store'})
+        except OktoNexusError as error:
+            return binding_error(error, 'connection.participant')
+
     @router.post("/connections/executors:register")
     async def register_executor(request: Request,
                                 body: RegisterExecutorRequest) -> JSONResponse:

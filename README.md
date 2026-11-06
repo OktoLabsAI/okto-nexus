@@ -930,6 +930,7 @@ The other flags gate live behavior.
 |---|---|
 | `okto-nexus serve` | Start MCP HTTP, REST, SSE, and dashboard |
 | `okto-nexus connect` | [Review a local project connection with a new or existing identity](docs/terminal-connect.md) |
+| `okto-nexus init --mode participant` | [Review an existing identity's external MCP configuration](docs/terminal-participant.md) |
 | `okto-nexus doctor` | [Inspect service, authority, connection and work evidence independently](docs/terminal-doctor.md) |
 | `okto-nexus preset` | [Review optional preset evolution while preserving personalized settings](docs/terminal-preset.md) |
 | `okto-nexus work` | [Submit work, observe results and answer native requests from the terminal](docs/terminal-work.md) |

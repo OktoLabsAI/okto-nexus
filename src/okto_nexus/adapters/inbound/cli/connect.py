@@ -85,6 +85,12 @@ def _display(value, as_json):
 
 
 def run_connect(argv):
+    mode_parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+    mode_parser.add_argument('--mode', choices=('managed', 'participant'), default='managed')
+    mode, argv = mode_parser.parse_known_args(argv)
+    if mode.mode == 'participant':
+        from .participant import run_participant
+        return run_participant(argv)
     parser = argparse.ArgumentParser(prog='okto-nexus connect',
         description='Review and connect this local project using the canonical managed setup.')
     parser.add_argument('--profile', help='saved local project profile name')

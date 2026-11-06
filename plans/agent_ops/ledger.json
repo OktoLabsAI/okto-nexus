@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-05",
+  "updated_at": "2026-11-06",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -132,7 +132,17 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ]
     },
     "PR-05": {
@@ -1669,7 +1679,6 @@
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Real binary campaign is configuration parsing only; it does not initialize MCP, resolve a real credential or prove participation.",
-        "Host connect/init, durable reviewed-stage recovery, protected backup ACL checks and credential/launcher integration remain pending.",
         "TOML editing preserves unrelated bytes and refuses ambiguous/customized owned spans. Noncooperating writers can still race the final filesystem compare/replace.",
         "Only the declared Windows client builds were exercised; other versions/platforms are not qualified."
       ],
@@ -1723,7 +1732,6 @@
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Real binary campaign is configuration parsing only; it does not initialize MCP, resolve a real credential or prove participation.",
-        "Host connect/init, durable reviewed-stage recovery, protected backup ACL checks and credential/launcher integration remain pending.",
         "TOML editing preserves unrelated bytes and refuses ambiguous/customized owned spans. Noncooperating writers can still race the final filesystem compare/replace.",
         "Only the declared Windows client builds were exercised; other versions/platforms are not qualified."
       ],
@@ -1747,18 +1755,30 @@
         "PR-03"
       ],
       "files": [
-        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
-        "../okto-nexus-connector-core/src/nexus_connector_core/config_document.py",
-        "../okto-nexus-connector-core/tests/test_participant_config.py",
-        "../okto-nexus-connector-core/docs/participant-config.md",
-        "../okto-nexus-connector-core/docs/api.md",
         "../okto-nexus-connector-core/README.md",
+        "../okto-nexus-connector-core/docs/api.md",
+        "../okto-nexus-connector-core/docs/participant-config.md",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_document.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_persistence.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
+        "../okto-nexus-connector-core/tests/test_config_persistence.py",
+        "../okto-nexus-connector-core/tests/test_participant_config.py",
         "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
-        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
-        "vendor/ci/manifest.json",
-        "scripts/qualify_participant_formats.py",
+        "docs/terminal-participant.md",
         "plans/agent_ops/adr.md",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "scripts/qualify_participant_formats.py",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/participant.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
+        "src/okto_nexus/adapters/outbound/participant_client.py",
+        "src/okto_nexus/adapters/outbound/participant_files.py",
+        "src/okto_nexus/application/participant_setup.py",
+        "src/okto_nexus/application/terminal_participant.py",
+        "tests/execution_r4/test_participant_init.py",
+        "vendor/ci/manifest.json",
+        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
@@ -1771,15 +1791,25 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Real binary campaign is configuration parsing only; it does not initialize MCP, resolve a real credential or prove participation.",
-        "Host connect/init, durable reviewed-stage recovery, protected backup ACL checks and credential/launcher integration remain pending.",
         "TOML editing preserves unrelated bytes and refuses ambiguous/customized owned spans. Noncooperating writers can still race the final filesystem compare/replace.",
-        "Only the declared Windows client builds were exercised; other versions/platforms are not qualified."
+        "Only the declared Windows client builds were exercised; other versions/platforms are not qualified.",
+        "This increment validates init on Windows using real HTTP handlers/SQLite, temporary client files and a synthetic vault backend. OS-vault storage is implemented but no real user credential was stored; actual launcher/GUI inheritance, MCP negotiation and cooperation remain unqualified. Approved policy drift requires inspection; automated compensation/removal and other-platform campaigns are pending."
       ],
       "subscopes": {
         "pure_participant_reference_contract": "VERIFIED",
@@ -1787,12 +1817,18 @@
         "selected_json_toml_owned_entry_cas": "VERIFIED",
         "installed_claude_codex_config_parsing": "VERIFIED",
         "actual_client_credential_resolution": "NOT_RUN",
-        "authenticated_mcp_participation": "NOT_RUN"
+        "authenticated_mcp_participation": "NOT_RUN",
+        "participant_existing_identity_review": "VERIFIED",
+        "participant_protected_file_apply_windows": "VERIFIED",
+        "participant_durable_stage_recovery": "VERIFIED",
+        "participant_secret_import_with_synthetic_vault": "VERIFIED",
+        "participant_authenticated_mcp": "NOT_RUN",
+        "participant_cleanup_compensation_ux": "NOT_RUN"
       }
     },
     "DX-04": {
       "title": "credenciais",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-04"
       ],
@@ -1800,12 +1836,52 @@
         "PR-00",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/docs/participant-config.md",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_persistence.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
+        "../okto-nexus-connector-core/tests/test_config_persistence.py",
+        "../okto-nexus-connector-core/tests/test_participant_config.py",
+        "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "docs/terminal-participant.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/participant.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
+        "src/okto_nexus/adapters/outbound/participant_client.py",
+        "src/okto_nexus/adapters/outbound/participant_files.py",
+        "src/okto_nexus/application/participant_setup.py",
+        "src/okto_nexus/application/terminal_participant.py",
+        "tests/execution_r4/test_participant_init.py",
+        "vendor/ci/manifest.json",
+        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "This increment validates init on Windows using real HTTP handlers/SQLite, temporary client files and a synthetic vault backend. OS-vault storage is implemented but no real user credential was stored; actual launcher/GUI inheritance, MCP negotiation and cooperation remain unqualified. Approved policy drift requires inspection; automated compensation/removal and other-platform campaigns are pending."
+      ],
+      "subscopes": {
+        "participant_existing_identity_review": "VERIFIED",
+        "participant_protected_file_apply_windows": "VERIFIED",
+        "participant_durable_stage_recovery": "VERIFIED",
+        "participant_secret_import_with_synthetic_vault": "VERIFIED",
+        "actual_client_credential_resolution": "NOT_RUN",
+        "participant_authenticated_mcp": "NOT_RUN",
+        "participant_cleanup_compensation_ux": "NOT_RUN"
+      }
     },
     "DX-15": {
       "title": "connect como entrada principal",
@@ -2539,7 +2615,7 @@
     },
     "DX-05": {
       "title": "init",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03",
         "PR-04"
@@ -2549,16 +2625,56 @@
         "PR-02",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/docs/participant-config.md",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_persistence.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
+        "../okto-nexus-connector-core/tests/test_config_persistence.py",
+        "../okto-nexus-connector-core/tests/test_participant_config.py",
+        "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "docs/terminal-participant.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/participant.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
+        "src/okto_nexus/adapters/outbound/participant_client.py",
+        "src/okto_nexus/adapters/outbound/participant_files.py",
+        "src/okto_nexus/application/participant_setup.py",
+        "src/okto_nexus/application/terminal_participant.py",
+        "tests/execution_r4/test_participant_init.py",
+        "vendor/ci/manifest.json",
+        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "This increment validates init on Windows using real HTTP handlers/SQLite, temporary client files and a synthetic vault backend. OS-vault storage is implemented but no real user credential was stored; actual launcher/GUI inheritance, MCP negotiation and cooperation remain unqualified. Approved policy drift requires inspection; automated compensation/removal and other-platform campaigns are pending."
+      ],
+      "subscopes": {
+        "participant_existing_identity_review": "VERIFIED",
+        "participant_protected_file_apply_windows": "VERIFIED",
+        "participant_durable_stage_recovery": "VERIFIED",
+        "participant_secret_import_with_synthetic_vault": "VERIFIED",
+        "actual_client_credential_resolution": "NOT_RUN",
+        "participant_authenticated_mcp": "NOT_RUN",
+        "participant_cleanup_compensation_ux": "NOT_RUN"
+      }
     },
     "DX-06": {
       "title": "sem transaÃ§Ã£o distribuÃ­da fictÃ­cia",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-03",
         "PR-04"
@@ -2568,12 +2684,52 @@
         "PR-02",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "../okto-nexus-connector-core/docs/participant-config.md",
+        "../okto-nexus-connector-core/src/nexus_connector_core/config_persistence.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/participant_config.py",
+        "../okto-nexus-connector-core/tests/test_config_persistence.py",
+        "../okto-nexus-connector-core/tests/test_participant_config.py",
+        "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "docs/terminal-participant.md",
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/participant.py",
+        "src/okto_nexus/adapters/inbound/http/connections_v1.py",
+        "src/okto_nexus/adapters/outbound/participant_client.py",
+        "src/okto_nexus/adapters/outbound/participant_files.py",
+        "src/okto_nexus/application/participant_setup.py",
+        "src/okto_nexus/application/terminal_participant.py",
+        "tests/execution_r4/test_participant_init.py",
+        "vendor/ci/manifest.json",
+        "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "This increment validates init on Windows using real HTTP handlers/SQLite, temporary client files and a synthetic vault backend. OS-vault storage is implemented but no real user credential was stored; actual launcher/GUI inheritance, MCP negotiation and cooperation remain unqualified. Approved policy drift requires inspection; automated compensation/removal and other-platform campaigns are pending."
+      ],
+      "subscopes": {
+        "participant_existing_identity_review": "VERIFIED",
+        "participant_protected_file_apply_windows": "VERIFIED",
+        "participant_durable_stage_recovery": "VERIFIED",
+        "participant_secret_import_with_synthetic_vault": "VERIFIED",
+        "actual_client_credential_resolution": "NOT_RUN",
+        "participant_authenticated_mcp": "NOT_RUN",
+        "participant_cleanup_compensation_ux": "NOT_RUN"
+      }
     },
     "DX-07": {
       "title": "doctor estruturado",
@@ -4626,18 +4782,66 @@
     },
     "DX-T01": {
       "requirement": "Init usa agente existente e nÃ£o cria/rotaciona identidade implicitamente.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "subscopes": {
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
+      }
     },
     "DX-T02": {
       "requirement": "Participante sem permissÃ£o nÃ£o cria agentes, grants ou bindings.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "subscopes": {
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
+      }
     },
     "DX-T03": {
       "requirement": "Adicionar cliente MCP nÃ£o desativa runtime jÃ¡ existente da identidade.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "subscopes": {
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
+      }
     },
     "DX-T04": {
       "requirement": "Plan nÃ£o muda configuraÃ§Ã£o; apply sÃ³ altera entrada revisada.",
@@ -4653,11 +4857,23 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
-        "shared_participant_contract_and_editor": "VERIFIED"
+        "shared_participant_contract_and_editor": "VERIFIED",
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
       }
     },
     "DX-T05": {
@@ -4674,11 +4890,23 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
-        "shared_participant_contract_and_editor": "VERIFIED"
+        "shared_participant_contract_and_editor": "VERIFIED",
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
       }
     },
     "DX-T06": {
@@ -4695,11 +4923,23 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
-        "shared_participant_contract_and_editor": "VERIFIED"
+        "shared_participant_contract_and_editor": "VERIFIED",
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
       }
     },
     "DX-T07": {
@@ -4737,11 +4977,23 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
-        "shared_participant_contract_and_editor": "VERIFIED"
+        "shared_participant_contract_and_editor": "VERIFIED",
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
       }
     },
     "DX-T09": {
@@ -4758,22 +5010,66 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
-        "shared_participant_contract_and_editor": "VERIFIED"
+        "shared_participant_contract_and_editor": "VERIFIED",
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
       }
     },
     "DX-T10": {
       "requirement": "VariÃ¡vel referenciada mas indisponÃ­vel ao harness produz diagnÃ³stico, nÃ£o sucesso.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "subscopes": {
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
+      }
     },
     "DX-T11": {
       "requirement": "Origem trocada/redirect nÃ£o recebe a credencial da origem aprovada.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
+      ],
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "subscopes": {
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
+      }
     },
     "DX-T12": {
       "requirement": "Doctor padrÃ£o nÃ£o inicia turnos/probes nativos nem muda configuraÃ§Ãµes.",
@@ -5704,11 +6000,23 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
-        "shared_participant_contract_and_editor": "VERIFIED"
+        "shared_participant_contract_and_editor": "VERIFIED",
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
       }
     },
     "RG-07": {
@@ -5730,11 +6038,23 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-followup.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-contract.md"
+        "plans/agent_ops/evidence/pr04-participant-contract.md",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
-        "shared_participant_contract_and_editor": "VERIFIED"
+        "shared_participant_contract_and_editor": "VERIFIED",
+        "participant_init_review_apply_recovery_windows": "VERIFIED",
+        "participant_actual_harness_environment": "NOT_RUN"
       }
     },
     "RG-09": {
@@ -6403,6 +6723,23 @@
         "plans/agent_ops/evidence/pr04-participant-contract-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-contract-wheels.json",
         "plans/agent_ops/evidence/pr04-participant-contract.md"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "scope": "PR-04 participant init protected stages and recovery",
+      "result": "PR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-core-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-import.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
+        "plans/agent_ops/evidence/pr04-participant-init.md"
       ]
     }
   ]

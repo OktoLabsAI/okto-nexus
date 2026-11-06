@@ -1,5 +1,8 @@
 # Local project connection from the terminal
 
+For an existing agent's external MCP client, use
+[`connect --mode participant` or `init --mode participant`](terminal-participant.md).
+
 `okto-nexus connect` starts or reuses the selected local Server and uses its
 existing operator setup API. The review proposes a persistent project identity,
 or reuses an explicitly selected existing agent. In an interactive terminal,

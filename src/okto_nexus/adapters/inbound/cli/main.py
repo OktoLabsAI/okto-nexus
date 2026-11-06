@@ -12,6 +12,7 @@ _HELP = """okto-nexus - local agent coordination bus
 
 Usage:
   okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
   okto-nexus doctor [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
   okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
@@ -37,6 +38,9 @@ def main(argv: list[str] | None = None) -> int:
     if command == 'connect':
         from .connect import run_connect
         return run_connect(rest)
+    if command == 'init':
+        from .participant import run_participant
+        return run_participant(rest)
     if command == 'doctor':
         from .doctor import run_doctor
         return run_doctor(rest)

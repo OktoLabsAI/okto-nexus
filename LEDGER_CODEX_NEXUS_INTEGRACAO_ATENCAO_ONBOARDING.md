@@ -309,3 +309,14 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - Mesmo wheel Core com **131 arquivos Python conferidos** nos dois consumidores; Nexus/Connector mantêm seus payloads. Auditoria do import instalado não observou sockets, processos, threads ou leitura de arquivos fora do código. Pins continuam 0.0.14; nenhum pacote publicado.
 - [Evidências e limites](plans/agent_ops/evidence/pr04-participant-contract.md). DX-01 verificado no contrato puro; DX-02/03 e PR-04 em progresso. `init`, integração de credencial/launcher, retomada local e cooperação autenticada seguem pendentes. O plano integral e M1 produtivo continuam incompletos.
 - Commit/push coordenado: Core `7a58bd3`; Connector `7b2c3bf`.
+
+## 2026-11-05 — PR-04: init de participante, proteção local e retomada
+
+- `init --mode participant` e `connect --mode participant` compartilham seleção de Server, agente/workspace existentes, revisão e aplicação consentida. A consulta Bearer não cria identidade, grant, binding ou sessão nem altera o runtime existente.
+- Entrada da chave existente por prompt oculto, stdin ou ambiente explicitamente escolhido; aprovação precede cofre e arquivo. Referência no cliente não contém o segredo. Cofre indisponível interrompe sem fallback plaintext.
+- Checkpoints separados mantêm o mesmo `setup_run_id`; perda de confirmação recupera o arquivo exato sem duplicar alteração. Mudanças concorrentes são preservadas. Backups recebem ACL privada antes dos bytes; substituições conservam a ACL original verificada no Windows.
+- **Fonte: 105 testes Core e 22 Nexus passaram. Instalados: 105 casos únicos Core, 80 Connector e 36 Nexus passaram**, incluindo recuperação após edição externa e regressão de connect gerenciado. Um teste documental precisou de duas correções no fixture temporário; os relatórios anteriores permanecem disponíveis.
+- Wheels conferidos byte a byte: Nexus 441 arquivos Python e sete assets; Connector 117; Core 131. Mesmo novo Core nos dois consumidores, sem publicação de release. `origin/main` novamente recuperada e já contida nas três branches.
+- [Evidências](plans/agent_ops/evidence/pr04-participant-init.md). DX-03/04/05/06 e PR-04 continuam em progresso. Credencial no launcher/GUI real, doctor de participante, MCP, cooperação, compensação/limpeza e M1 produtivo ainda não foram concluídos. O plano fixo permanece intacto.
+- Core enviado em `5d31784`; candidato coordenado do Connector enviado em `7bdd0f5`.
+- Finalização da entrega Nexus em 2026-11-06; evidências de validação mantêm a data original de 2026-11-05.

@@ -41,6 +41,14 @@ native qualification checks remain intact. Generic export is a manual
 instruction, and real-client config parsing is separate from secret resolution,
 MCP negotiation, session participation and productive work.
 
+Participant init and connect share a host flow with explicit existing identity,
+origin and workspace. Read-only Server preparation precedes a hash-bound local
+review. Approval binds separate vault and selected-file checkpoints to one setup
+ID. Exact postimage recovery handles lost file completion; drift is preserved.
+Core persistence lets the host protect empty backup/replacement files before
+writing bytes. Protected storage is not proof of credential availability in an
+external launcher; that level remains unknown until independently observed.
+
 Human prompts use canonical native operations; inter-agent work uses handoffs.
 CLI saves request identity before transport, inspects the same ID after response
 loss, and uses existing receipts where their scope proves deduplication. Generic
