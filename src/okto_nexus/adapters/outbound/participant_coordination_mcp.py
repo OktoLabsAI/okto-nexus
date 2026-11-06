@@ -21,7 +21,7 @@ from . import participant_mcp as diagnostic
 
 
 PRODUCTIVE = frozenset({'message_create', 'handoff_create'})
-TOOLS = PRODUCTIVE | {'coordination_request_get', 'handoff_get', 'event_cursor', 'event_wait', 'nexus_info'}
+TOOLS = PRODUCTIVE | {'coordination_request_get', 'handoff_get', 'event_cursor', 'event_wait', 'nexus_info', 'message_status'}
 
 
 def _error(code, message, *, possible_effect=False):

@@ -703,6 +703,72 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             raise _db_error("reading inbox deliveries", exc) from exc
         return [self._row(r) for r in rows]
 
+    def list_direct_replies(
+        self, uow: UnitOfWork, *, message_id: str, workspace_id: str,
+        sender_agent_id: str, peer_agent_id: str, now: str, limit: int,
+    ) -> list[dict[str, Any]]:
+        """Observe one directed exchange without consuming any delivery lane.
+
+        Correlation and provenance ordering precede LIMIT. An unrelated inbox
+        backlog or unconfirmed same-parent noise cannot hide a confirmed reply.
+        Runtime provenance mirrors the canonical publication source fence; no
+        output text, credential, approval payload or runtime payload is returned.
+        """
+        sql = """
+            WITH replies AS (
+                SELECT m.message_id,m.parent_message_id,m.workspace_id,m.from_agent_id,m.created_at,
+                    CASE WHEN d.status='delivered' AND d.lease_expires_at<:now
+                        THEN 'unread' ELSE d.status END AS delivery_status,d.read_at,
+                    EXISTS(SELECT 1 FROM coordination_requests c
+                        JOIN execution_installation i ON i.singleton=1 AND i.server_id=c.server_id
+                        WHERE c.operation='message_create' AND c.state='created'
+                        AND c.resource_id=m.message_id AND c.actor_agent_id=m.from_agent_id
+                        AND c.workspace_id=m.workspace_id) AS coordination_proven,
+                    (SELECT r.delivery_outcome FROM runtime_results r
+                        JOIN delivery_outbox o ON o.operation_id=r.operation_id
+                        WHERE r.publication_message_id=m.message_id AND r.publication_state='PUBLISHED'
+                        AND o.message_id=m.parent_message_id AND o.workspace_id=m.workspace_id
+                        AND o.actor_agent_id=:sender AND o.recipient_agent_id=m.from_agent_id
+                        AND r.delivery_outcome IN ('success','failed','interrupted')
+                        AND ((r.canonical_server_id IS NULL AND r.event_id=o.terminal_event_id
+                            AND r.runtime_session_id=o.runtime_session_id)
+                        OR EXISTS(SELECT 1 FROM execution_results e
+                            JOIN execution_domain_deliveries b USING(server_id,executor_id,operation_id)
+                            WHERE e.server_id=r.canonical_server_id AND e.executor_id=r.canonical_executor_id
+                            AND e.operation_id=r.canonical_operation_id AND b.domain_operation_id=o.operation_id
+                            AND o.canonical_terminal_operation_id=e.operation_id AND e.terminal_sequence IS NOT NULL
+                            AND e.delivery_outcome=r.delivery_outcome AND e.output_text=r.output_text
+                            AND e.output_truncated=r.output_truncated AND e.output_event_count=r.output_event_count))
+                        ORDER BY CASE r.delivery_outcome WHEN 'success' THEN 0 ELSE 1 END,r.result_id LIMIT 1
+                    ) AS runtime_outcome
+                FROM messages m JOIN message_deliveries d ON d.message_id=m.message_id
+                WHERE m.parent_message_id=:parent AND m.workspace_id=:workspace AND m.from_agent_id=:peer
+                    AND d.recipient_agent_id=:sender
+                    AND CASE WHEN json_valid(m.target) THEN
+                        lower(trim(CASE WHEN json_type(m.target,'$.strategy') IS NOT NULL
+                            THEN json_extract(m.target,'$.strategy') ELSE json_extract(m.target,'$.kind') END))='direct'
+                        AND json_extract(m.target,'$.agent_id')=:sender ELSE 0 END
+            )
+            SELECT * FROM replies ORDER BY CASE
+                WHEN runtime_outcome='success' OR (runtime_outcome IS NULL AND coordination_proven) THEN 0
+                WHEN runtime_outcome IS NOT NULL THEN 1 ELSE 2 END,created_at,message_id LIMIT :limit
+        """
+        try:
+            rows = uow.connection.execute(sql, dict(parent=message_id, workspace=workspace_id,
+                sender=sender_agent_id, peer=peer_agent_id, now=now, limit=int(limit))).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("observing direct message replies", exc) from exc
+        result = []
+        for row in rows:
+            item = {name: row[name] for name in ('message_id', 'parent_message_id', 'workspace_id',
+                'from_agent_id', 'created_at', 'delivery_status', 'read_at')}
+            item['target'] = {'strategy': 'direct', 'agent_id': sender_agent_id}
+            item['authority_kind'] = ('runtime_result' if row['runtime_outcome'] is not None
+                else 'coordination_request' if row['coordination_proven'] else 'unconfirmed')
+            item['runtime_outcome'] = 'completed' if row['runtime_outcome'] == 'success' else row['runtime_outcome']
+            result.append(item)
+        return result
+
     def list_for_message(
         self, uow: UnitOfWork, *, message_id: str, now: str
     ) -> list[dict[str, Any]]:

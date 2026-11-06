@@ -46,6 +46,11 @@ BASELINE: dict[str, int] = {
 #: so gratuitous description bloat stays caught. The BASELINE above remains
 #: frozen (BR8) - this ledger is additive and auditable per spec.
 APPROVED_GROWTH: dict[str, int] = {
+    # Fixed R3 plan DX-08, SURFACE_REVISION 68: message_status include_replies
+    # adds 128 parameter-description chars; its docstring stays 137 chars.
+    # Live default surface before/after: 36,881 -> 37,009. No new tool or
+    # instruction growth; provenance semantics live in tool-docs/inbox v5.
+    "coordination_cooperation_dx08": 128,
     # Fixed R3 plan DX-11, SURFACE_REVISION 67: passive + workspace_id
     # descriptions on event_get/cursor/wait add 193 chars each; handoff_get
     # passive adds 102. Live-schema delta against the revision-66 wheel:

@@ -1,10 +1,12 @@
 """Independent participant evidence; passive inspection never repairs setup."""
 from .project_diagnostics import ProjectDiagnostics, diagnostic_code
-from .terminal_connection import ConnectionError
+from .terminal_connection import ConnectionError, document_revision
+from .terminal_cooperation import TerminalCooperation
 from .terminal_participant import TerminalParticipant
 from ..adapters.outbound import participant_files
 from ..adapters.outbound.participant_client import ParticipantHTTP, participant_key
 from ..adapters.outbound.participant_mcp import inspect_mcp
+from ..adapters.outbound.cooperation_files import CooperationFiles
 
 LEVELS = ('participant_profile', 'local_service', 'server_reachability', 'participant_authentication',
     'client_configuration', 'credential_store', 'credential_environment', 'client_reload',
@@ -56,6 +58,7 @@ def inspect_participant(report, home, saved, *, check_server=False, check_mcp=Fa
     report.set('participant_profile', 'PASS', 'PROFILE_READ',
         'The existing participant checkpoint was validated without modification.',
         'Resume the same init profile if setup is incomplete.', setup_run_id=review['setup_run_id'], state=saved['state'])
+    _cooperation_history(report, home, saved, review)
     removal = saved.get('removal')
     if removal and removal['stage'] != 'review':
         report.set('participant_profile', 'NOT_APPLICABLE', 'PARTICIPANT_PROFILE_RETIRED',
@@ -155,3 +158,31 @@ def inspect_participant(report, home, saved, *, check_server=False, check_mcp=Fa
                 'Tool visibility does not grant permission to invoke any action; no tool was called.', context='participant_doctor')
         except Exception as error:
             report.error('mcp_negotiation', error)
+
+
+def _cooperation_history(report, home, saved, review):
+    """Show retained evidence without turning a local receipt into a live check."""
+    scope = dict(origin=review['origin'], server_id=review['context']['server_id'],
+        agent_id=review['context']['agent_id'], workspace_id=review['context']['workspace']['workspace_id'])
+    binding = document_revision(dict(setup_run_id=review['setup_run_id'], review_revision=saved['review_revision']))
+    try:
+        store = CooperationFiles(home / 'terminal/cooperation' / report.profile, scope, binding)
+        document = store.load()
+        if document is None:
+            return
+        flow = TerminalCooperation(None, scope, lambda value: None, None, document)
+        status = flow.status()
+    except Exception:
+        for level in ('coordination_participation', 'handoff_test'):
+            report.set(level, 'UNKNOWN', 'COOPERATION_HISTORY_UNCONFIRMED',
+                'The local cooperation reference could not be validated.',
+                'Inspect participant smoke status for the selected profile; doctor does not repair or replay it.')
+        return
+    for level in ('coordination_participation', 'handoff_test'):
+        check = status['checks'][level]
+        report.set(level, 'UNKNOWN', 'HISTORICAL_EVIDENCE_ONLY',
+            'A local cooperation receipt records an earlier observation; this diagnostic has not rechecked it.',
+            'Use participant smoke observe for an explicit current Server read of the same attempt.',
+            source='local_receipt', smoke_id=document['smoke_id'], qualification='identities_only',
+            last_observed_status=check['status'], observation=check['evidence'],
+            request_ids=status['request_ids'])

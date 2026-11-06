@@ -61,7 +61,9 @@ for recovery until explicitly removed through the local removal flow below.
 identity, entry present, credential in the client context, client reload, MCP
 negotiation and work submitted. Vault storage does not make the variable
 available to a launcher or GUI. Use the foreground launcher below for secure
-delivery to a new terminal process. Cooperation smoke remains pending. Use
+delivery to a new terminal process. Use the optional
+[cooperation check](terminal-cooperation.md) to review a directed exchange and
+then a separately consented handoff. Use
 `doctor --mode participant` to inspect this profile; managed doctor selects
 managed profiles. The external client still needs secure environment delivery,
 project trust/reload and reconnect before its readiness can be verified.
@@ -209,3 +211,9 @@ it to shell arguments to obtain this evidence.
 MCP success is labeled `participant_doctor`. Client reload, actual harness
 environment, participation, handoff and work remain separate unknown levels.
 No single aggregate state is a promise that the external client is ready.
+
+If a local cooperation receipt exists, doctor shows its references as historical
+evidence with a separate `last_observed_status`. Participation and handoff checks
+remain `UNKNOWN/HISTORICAL_EVIDENCE_ONLY` until an explicit current observation;
+doctor itself never sends or repeats the test. See
+[`participant smoke`](terminal-cooperation.md) for review, consent and recovery.

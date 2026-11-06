@@ -2129,6 +2129,17 @@ class MessageDeliveryRepo(Protocol):
         (no effective-lane projection; used to explain failed transitions)."""
         ...
 
+    def list_direct_replies(
+        self, uow: UnitOfWork, *, message_id: str, workspace_id: str,
+        sender_agent_id: str, peer_agent_id: str, now: str, limit: int,
+    ) -> list[dict[str, Any]]:
+        """Read correlated direct reply metadata across all delivery lanes.
+
+        Confirmed successful provenance sorts before failed or unconfirmed rows.
+        Recipient, peer, parent and workspace predicates precede the limit.
+        """
+        ...
+
     def list_for_message(
         self, uow: UnitOfWork, *, message_id: str, now: str
     ) -> list[Mapping[str, Any]]:

@@ -58,6 +58,7 @@ from ..errors import ErrorCode, OktoNexusError
 #: Page-size defaults/ceiling for inbox reads (mirrors the message limits).
 DEFAULT_INBOX_LIMIT = 50
 MAX_INBOX_LIMIT = 200
+MAX_COOPERATION_REPLIES = 50
 # The in-flight lease TTL is a NexusConfig knob (``inbox_lease_ttl_seconds``,
 # env OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS, parsed FAIL-CLOSED at startup); its
 # default is imported from config above and re-exported under its historic
@@ -430,7 +431,8 @@ class InboxService:
     # message_status (sender-side)
     # ------------------------------------------------------------------ #
     def message_status(
-        self, *, message_id: Any, caller_agent_id: str | None = None
+        self, *, message_id: Any, caller_agent_id: str | None = None,
+        include_replies: bool = False,
     ) -> dict[str, Any]:
         """Return the per-recipient delivery states of a SENT message.
 
@@ -444,6 +446,8 @@ class InboxService:
         A publication also returns ``relay_state`` and ``relay_reason`` from
         its runtime result.
         """
+        if type(include_replies) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "include_replies must be a boolean.", {})
         if not isinstance(message_id, str) or not message_id.strip():
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
@@ -451,7 +455,10 @@ class InboxService:
                 {"message_id": message_id},
             )
         now = self._clock.now_iso()
+        replies = None
         with self._cf.unit_of_work(write=False) as uow:
+            if include_replies:
+                caller_agent_id = self._require_reply_observer(uow)
             found = self._messages.list_by_ids(uow, message_ids=[message_id])
             if not found or (
                 caller_agent_id is not None
@@ -462,6 +469,20 @@ class InboxService:
                     "No such message. Pass the message_id returned by message_create.",
                     {"message_id": message_id},
                 )
+            if include_replies:
+                from ..domain.execution_principal import current_execution_principal
+                from ..domain.targets import target_strategy
+                principal = current_execution_principal.get()
+                original = found[0]
+                if principal is not None and original.workspace_id != principal.scope['workspace_id']:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The message is outside this session workspace.", {})
+                target = parse_target(original.target)
+                if target_strategy(target) != 'direct':
+                    raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                        "Reply observation requires an original message with a direct target.", {})
+                replies = self._deliveries.list_direct_replies(uow, message_id=message_id,
+                    workspace_id=original.workspace_id, sender_agent_id=original.from_agent_id,
+                    peer_agent_id=target['agent_id'], now=now, limit=MAX_COOPERATION_REPLIES + 1)
             rows = self._deliveries.list_for_message(
                 uow, message_id=message_id, now=now
             )
@@ -487,7 +508,32 @@ class InboxService:
         if relay is not None:
             result["relay_state"] = relay["relay_state"]
             result["relay_reason"] = relay["relay_reason"]
+        if replies is not None:
+            result['replies'] = replies[:MAX_COOPERATION_REPLIES]
+            result['replies_truncated'] = len(replies) > MAX_COOPERATION_REPLIES
         return result
+
+    def _require_reply_observer(self, uow: Any) -> str:
+        """Fresh authority inside the observation transaction; no presence writes."""
+        from ..domain.execution_principal import current_execution_principal
+        from .connection_policy import require_method
+        from .execution_tools import ExecutionToolConnectionFactory, execution_actions, denied
+        from .runtime_actor_authority import authenticated_message_context
+        principal = current_execution_principal.get()
+        if principal is not None:
+            if not isinstance(self._cf, ExecutionToolConnectionFactory):
+                raise denied()
+            self._cf.capabilities.authorize_principal(uow, principal=principal,
+                actions=execution_actions(principal))
+            actor_id = principal.scope['agent_id']
+        else:
+            context = self._request_context_provider() if self._request_context_provider else None
+            context = authenticated_message_context(uow, context, self._agents)
+            if context is None or context.authentication_source != 'agent_key':
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "An authenticated sender is required.", {})
+            actor_id = context.actor_agent_id
+        require_method(uow, actor_id, 'mcp')
+        return actor_id
 
     # ------------------------------------------------------------------ #
     # Internal helpers

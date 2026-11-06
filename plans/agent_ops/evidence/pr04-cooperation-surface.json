@@ -1,0 +1,40 @@
+{
+  "measurement": {
+    "instructions": 5465,
+    "docstrings": 8370,
+    "params": 23174,
+    "cuttable": 37009,
+    "total": 56350,
+    "cuttable_tokens": 9252,
+    "total_tokens": 14087
+  },
+  "baseline": {
+    "instructions": 11206,
+    "docstrings": 13983,
+    "params": 16406,
+    "cuttable": 41595
+  },
+  "growth": {
+    "coordination_cooperation_dx08": 128,
+    "coordination_observation_dx11": 681,
+    "coordination_requests_dx10": 542,
+    "runtime_inputs_r4": 693,
+    "verification_i4": 1716,
+    "orchestration_i5": 202,
+    "memory_i6": 2388,
+    "health_i7": 291,
+    "policies_b3": 127,
+    "comm_presets_c5": 0,
+    "monitor_ept": 760,
+    "coordination_guidance_r32": 1221,
+    "harness_p35": 4065,
+    "harness_backend_h1_h2": 1680
+  },
+  "presence": {
+    "include_experimental": false,
+    "include_harness": true
+  },
+  "adjusted_reduction": 0.4012982329606924,
+  "prior_cuttable": 36881,
+  "measured_delta": 128
+}

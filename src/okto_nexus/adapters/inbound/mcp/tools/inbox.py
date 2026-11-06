@@ -262,8 +262,11 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     def message_status(
         message_id: Annotated[str, Field(description=_P_STATUS_MESSAGE_ID)],
+        include_replies: Annotated[bool, Field(strict=True,
+            description="Observe correlated direct reply metadata across all lanes without activity writes. Requires authenticated sender; default false.")] = False,
     ) -> dict[str, Any]:
-        """Track a message you SENT: per-recipient delivery states {recipient, status, attempts, read_at} (unread/delivered/read/parked). READ-ONLY."""
+        """Track a sent message's delivery states. include_replies adds passive direct reply evidence. Docs: okto-nexus://reference/tool-docs/inbox."""
         principal = current_execution_principal.get()
         caller = principal.scope['agent_id'] if principal is not None else None
-        return service.message_status(message_id=message_id, caller_agent_id=caller)
+        return service.message_status(message_id=message_id, caller_agent_id=caller,
+            include_replies=include_replies)

@@ -1,0 +1,290 @@
+[
+  {
+    "source": "D:\\projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\pr05-cooperation-doctor-regression.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-doctor-regression.xml",
+    "original_sha256": "45a9c7b61e1b0e798dae047ca7b57a120ee95d8c2e3655458dc8cd766edc1ed3",
+    "artifact_sha256": "45a9c7b61e1b0e798dae047ca7b57a120ee95d8c2e3655458dc8cd766edc1ed3",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "19",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "D:\\projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\pr05-cooperation-reply-read-source.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-reply-read-source.xml",
+    "original_sha256": "af6c792a8f4341215ded49098fb0b7c31abecc30f33ce4f47c7916ca008c6d98",
+    "artifact_sha256": "af6c792a8f4341215ded49098fb0b7c31abecc30f33ce4f47c7916ca008c6d98",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "16",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "D:\\projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\pr05-cooperation-reply-regression.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-reply-regression.xml",
+    "original_sha256": "1371525b0f4396d02a96e84c49930122e074d1a37fffc837001188686966bcae",
+    "artifact_sha256": "43141c3e36888f0286ae5752490a9880d51ddacb3c70fd154d148cb8f23cc5ad",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 2,
+    "suites": [
+      {
+        "tests": "77",
+        "failures": "2",
+        "errors": "0",
+        "skipped": "1"
+      }
+    ]
+  },
+  {
+    "source": "D:\\projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\pr05-cooperation-reply-surface-corrected.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-reply-surface-corrected.xml",
+    "original_sha256": "3a5e15be3284f01670a0749f51dd8d3bc023fa2f75aa9319b698dfa3ea6f30e2",
+    "artifact_sha256": "3a5e15be3284f01670a0749f51dd8d3bc023fa2f75aa9319b698dfa3ea6f30e2",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-cooperation-agent.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-source-terminal-cooperation-agent.xml",
+    "original_sha256": "8d2d642e795c97fcb697f0a224b565b4cece52601ee9dd2f8c2a3f498865f702",
+    "artifact_sha256": "8d2d642e795c97fcb697f0a224b565b4cece52601ee9dd2f8c2a3f498865f702",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "105",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\cooperation-cli-agent-initial.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-source-cooperation-cli-agent-initial.xml",
+    "original_sha256": "d46dc4caf0cf53dc176da4cdbcac599b5bc7ea6e527fcdae6578d38deb8ffa28",
+    "artifact_sha256": "d46dc4caf0cf53dc176da4cdbcac599b5bc7ea6e527fcdae6578d38deb8ffa28",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "25",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\cooperation-cli-agent-history-revocation.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-source-cooperation-cli-agent-history-revocation.xml",
+    "original_sha256": "ada98874f0c2cf38e1f44e7af484d4a394c9cd6f8f01e3403e563f1bd7d88d74",
+    "artifact_sha256": "ada98874f0c2cf38e1f44e7af484d4a394c9cd6f8f01e3403e563f1bd7d88d74",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\cooperation-cli-agent-retained-plan-locks.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-source-cooperation-cli-agent-retained-plan-locks.xml",
+    "original_sha256": "95c2351c1194e3d55f6f731e48abbc39f0c17eec3b71ce898006dea70b06557d",
+    "artifact_sha256": "95c2351c1194e3d55f6f731e48abbc39f0c17eec3b71ce898006dea70b06557d",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "2",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\cooperation-cli-agent-retained-plan-locks-final.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-source-cooperation-cli-agent-retained-plan-locks-final.xml",
+    "original_sha256": "35d8c809623be76f2142183b6f9e0c1f1200f0e0ee9ab4199b6042334d02afec",
+    "artifact_sha256": "35d8c809623be76f2142183b6f9e0c1f1200f0e0ee9ab4199b6042334d02afec",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-h3fpsesy\\behavior-installed.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-behavior-installed.xml",
+    "original_sha256": "ba0fdb291b137a671efc4cf0e1b574341aa5b4837a494f5732266a1296ad0637",
+    "artifact_sha256": "ba0fdb291b137a671efc4cf0e1b574341aa5b4837a494f5732266a1296ad0637",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "150",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-h3fpsesy\\coordination-installed.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-coordination-installed.xml",
+    "original_sha256": "9a34e3f4df16f1dd3b4d20c7f7764ddb24a5453c30906bb312f4d6d6927cc2dc",
+    "artifact_sha256": "9a34e3f4df16f1dd3b4d20c7f7764ddb24a5453c30906bb312f4d6d6927cc2dc",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "165",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-h3fpsesy\\server-installed.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-server-installed.xml",
+    "original_sha256": "fc15c79861b5ef6fc65b97605a2cf220703a2507de94333bb4c2c86a80e0b1b1",
+    "artifact_sha256": "fc15c79861b5ef6fc65b97605a2cf220703a2507de94333bb4c2c86a80e0b1b1",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "117",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "1"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-h3fpsesy\\checkpoint-revocation-initial.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-checkpoint-revocation-initial.xml",
+    "original_sha256": "d7f2f726ee959478852faf44c3fd956f5199176f86dc65f15decc488b393466b",
+    "artifact_sha256": "120e9dce82039110fda21daf9d8b081496f5f9da410209add990a656318d3e34",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 2,
+    "suites": [
+      {
+        "tests": "1",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\terminal-cooperation-recovery-current-evidence-agent.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-facade-recovery-source.xml",
+    "original_sha256": "98577c765bd35a479f04322dabfa22f0d0828c5d126e2ed513962c9fbd59252f",
+    "artifact_sha256": "98577c765bd35a479f04322dabfa22f0d0828c5d126e2ed513962c9fbd59252f",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "33",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-final-_6nw5s6v\\release-installed.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-facade-cli-installed.xml",
+    "original_sha256": "45476f332157f41dec5700d41e23ec3cfee9166f5f3b21d1f9a65480147c8569",
+    "artifact_sha256": "45476f332157f41dec5700d41e23ec3cfee9166f5f3b21d1f9a65480147c8569",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "143",
+        "failures": "1",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-release-r1f5o67n\\release-boundaries-installed.xml",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-release-boundaries-installed.xml",
+    "original_sha256": "427538fb25b18f6fb72952f4fafc6dad6216d25a7d3c7e570adac073c28c8edd",
+    "artifact_sha256": "427538fb25b18f6fb72952f4fafc6dad6216d25a7d3c7e570adac073c28c8edd",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0,
+    "suites": [
+      {
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-h3fpsesy\\wheel.json",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-wheel-initial.json",
+    "original_sha256": "3518927a0ec224cd79f28fb60312ee134f9a1a28a033b7c6afa7cc7094d61234",
+    "artifact_sha256": "3518927a0ec224cd79f28fb60312ee134f9a1a28a033b7c6afa7cc7094d61234",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-final-_6nw5s6v\\wheel.json",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-wheel-facade-corrected.json",
+    "original_sha256": "9a713abfd181cf15fed0064040f55c184637731e84e62f306e9b10c0222ec4f8",
+    "artifact_sha256": "9a713abfd181cf15fed0064040f55c184637731e84e62f306e9b10c0222ec4f8",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-release-r1f5o67n\\wheel.json",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-wheel.json",
+    "original_sha256": "dd0d92a59442957c8f0deaece620ca555defdc301b8d35d1fa1d5bc6f5e15449",
+    "artifact_sha256": "dd0d92a59442957c8f0deaece620ca555defdc301b8d35d1fa1d5bc6f5e15449",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0
+  },
+  {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperation-h3fpsesy\\surface.json",
+    "artifact": "plans/agent_ops/evidence/pr04-cooperation-surface.json",
+    "original_sha256": "e00b10b4406aff58c14186310c96f181a5fd04f48e87cba2bbdaf8bfcd76a7ac",
+    "artifact_sha256": "e00b10b4406aff58c14186310c96f181a5fd04f48e87cba2bbdaf8bfcd76a7ac",
+    "synthetic_key_occurrences_redacted": 0,
+    "whitespace_entity_runs": 0
+  }
+]

@@ -226,6 +226,8 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         if name in ('nexus_info', 'coordination_request_get'):
             return True
         arguments = params.get('arguments')
+        if name == 'message_status':
+            return type(arguments) is dict and arguments.get('include_replies') is True
         return (name in ('event_get', 'event_cursor', 'event_wait', 'handoff_get')
                 and type(arguments) is dict and arguments.get('passive') is True)
 

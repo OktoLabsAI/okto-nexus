@@ -224,7 +224,7 @@ add_resource(
     slug="tool-docs/inbox",
     name="Tool docs - inbox",
     description="Full reference for the per-recipient inbox tools (pull/ack/extend/peek/count/history/message_status).",
-    version="4",
+    version="5",
     body=f"""\
 The inbox is GLOBAL (keyed by agent_id): a direct message reaches you regardless
 of which workspace it was sent in. At-least-once: pulled messages are leased; if
@@ -283,6 +283,32 @@ unread/delivered/read/parked. Use it instead of re-sending when a recipient
 seems silent. A session sees only messages it sent: any other id returns
 NOT_FOUND. A result publication also returns ``relay_state`` and
 ``relay_reason``.
+
+``include_replies=true`` requires the authenticated sender and an original
+direct target. It adds ``replies`` (at most 50) and ``replies_truncated``.
+Each reply is metadata only: message_id, parent_message_id, workspace_id,
+from_agent_id, target, created_at, delivery_status, read_at, authority_kind,
+runtime_outcome. The parent, workspace, peer, direct return target and canonical
+delivery must all match, across every lane including messages already read by
+another session. No pull, ack, heartbeat or presence update occurs. Authentication
+is fresh and scope/method authority is checked in the read transaction.
+
+``authority_kind=coordination_request`` means a retained created receipt binds
+the reply resource, actor and workspace. Ask the peer to reply with its own
+client_request_id. ``runtime_result`` means a published canonical result binds
+the reply to the original directed execution; runtime_outcome is completed,
+failed or interrupted. Only completed qualifies as a successful exchange.
+``unconfirmed`` means retained provenance is insufficient; it does not prove
+the peer replied. runtime_outcome is null for non-runtime replies. Successful
+confirmed evidence sorts first, then other runtime outcomes, then unconfirmed
+rows. Body text and trace_id are never proof. Absence after retention/pruning
+does not prove that no reply was ever created. This observation proves a
+directed exchange, not handoff completion: use passive handoff_get for that.
+
+Check nexus_info.coordination_cooperation revision 1 with direct_replies and
+authority_provenance before creating optional smoke work. Servers without
+this capability cannot supply this proof; discovery itself sends no work.
+Omitted/false include_replies preserves the previous delivery-status contract.
 
 # profile parameter (inbox_pull/peek/history; also event_get/event_wait)
 One of: default (all fields minus dead ones), summary (minimal + follow_up -

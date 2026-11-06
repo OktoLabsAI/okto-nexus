@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="27.308" timestamp="2026-11-06T13:58:57.747678-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_cooperation_cli" name="test_revoked_credential_during_uncertain_resume_preserves_possible_effect_and_ids[missing-False]" time="17.022"><failure message="assert (3 == 5)">cli = namespace(runtime=(Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pyt...tial_during0\\participant-home', '--profile', 'coordination', '--key-env', 'SYNTHETIC_COORDINATION_CLI_KEY', '--json'])
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x0000028F5FE157F0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000028F5DB29CD0&gt;
+checkpoint = 'missing'
+
+    @pytest.mark.parametrize('checkpoint', ['retained', 'missing'])
+    def test_revoked_credential_during_uncertain_resume_preserves_possible_effect_and_ids(cli, capsys, monkeypatch, checkpoint):
+        code, review = invoke(cli, capsys, 'exchange', '--to', 'worker', '--plan')
+        assert code == 0
+        original = ParticipantMCP.call
+        productive = []
+&#32;&#32;&#32;&#32;
+        def lose(self, name, args, **kwargs):
+            result = original(self, name, args, **kwargs)
+            if name == 'message_create':
+                productive.append(args['client_request_id'])
+                raise ConnectionError('OUTCOME_UNKNOWN', 'Injected response loss after commit.', possible_effect=True)
+            return result
+&#32;&#32;&#32;&#32;
+        monkeypatch.setattr(ParticipantMCP, 'call', lose)
+        code, lost = invoke(cli, capsys, 'exchange', '--approve', review['review_revision'])
+        assert code == 5 and lost['possible_effect'] is True
+        if checkpoint == 'missing':
+            path, saved = document(cli)
+            assert saved['consents']['exchange'] is not None and saved['receipts']['exchange'] is None
+            requests = [p for p in (path.parent / 'requests').glob('*.json') if p.name != 'latest.json']
+            assert len(requests) == 1
+            requests[0].unlink()
+        with cli.deps.connection_factory.unit_of_work() as uow:
+            AgentKeyAuthService(cli.deps.repos.agents, cli.deps.clock).issue_key(uow, agent_id='caller')
+        before, local = snapshot(cli), files(cli)
+        code, refused = invoke(cli, capsys, 'exchange')
+&gt;       assert code == 5 and refused['state'] == 'uncertain' and refused['possible_effect'] is True
+E       assert (3 == 5)
+
+tests\execution_r4\test_cooperation_cli.py:473: AssertionError</failure></testcase></testsuite></testsuites>

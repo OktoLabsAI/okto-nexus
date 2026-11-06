@@ -187,6 +187,7 @@ def test_nexus_info_reports_versions(surface):
         "features",
         "coordination_requests",
         "coordination_observation",
+        "coordination_cooperation",
     }
     assert data['coordination_requests'] == {
         'revision': 1, 'retention_days': 30,
@@ -200,6 +201,10 @@ def test_nexus_info_reports_versions(surface):
     assert iso_plus(observed_at, 0) == observed_at
     assert data['coordination_observation'] == {
         'revision': 1, 'passive': True, 'workspace_selector': True,
+    }
+    assert data['coordination_cooperation'] == {
+        'revision': 1, 'reply_tool': 'message_status',
+        'direct_replies': True, 'authority_provenance': True,
     }
 
     assert isinstance(data["package_version"], str) and data["package_version"]

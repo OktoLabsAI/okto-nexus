@@ -170,7 +170,7 @@ def test_changed_guidance_resources_publish_new_cache_versions(surface):
 
     info = _call(server, "nexus_info")
     assert info["ok"] is True
-    assert info["data"]["surface_revision"] == 67
+    assert info["data"]["surface_revision"] == 68
     versions = info["data"]["resource_versions"]
     for uri, expected in expected_versions.items():
         assert versions[uri] == expected, (

@@ -384,7 +384,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 # 65 removes legacy connection issuance/configuration and documents local UI ownership.
 # 66 adds bounded coordination request receipts and authenticated metadata recovery.
 # 67 adds passive canonical observation with logical workspace selectors.
-SURFACE_REVISION = 67
+# 68 adds passive, provenance-qualified direct replies to message_status.
+SURFACE_REVISION = 68
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
@@ -533,6 +534,8 @@ def register_meta_tools(server: Any, deps: Deps) -> None:
                 "operations": ["message_create", "handoff_create"],
                 "recovery_tool": "coordination_request_get", "response": "references"},
             "coordination_observation": {"revision": 1, "passive": True, "workspace_selector": True},
+            "coordination_cooperation": {"revision": 1, "reply_tool": "message_status",
+                "direct_replies": True, "authority_provenance": True},
             "resource_versions": resource_versions(),
             # Effective (post-precedence) values read from the LIVE config at
             # call time - a PATCH that flips a flag shows up without restart.

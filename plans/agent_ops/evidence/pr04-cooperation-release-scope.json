@@ -1,0 +1,13 @@
+{
+  "raw_bytes_match_current_source": true,
+  "payload_count": 630,
+  "changes_from_initial": [
+    "okto_nexus/adapters/inbound/cli/cooperation.py",
+    "okto_nexus/application/terminal_cooperation.py"
+  ],
+  "changes_from_facade_corrected": [
+    "okto_nexus/adapters/inbound/cli/cooperation.py"
+  ],
+  "final_package_sha256": "bb9143f2181993d93ff78dba9d6a6536d9a2f20de3b602997e048474ce43307d",
+  "assertions": "All package payload names unchanged; all other Python, static and SQL bytes identical."
+}

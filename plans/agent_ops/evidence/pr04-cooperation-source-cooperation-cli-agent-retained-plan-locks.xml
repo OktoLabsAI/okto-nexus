@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="20.847" timestamp="2026-11-06T13:38:29.882437-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_cooperation_cli" name="test_retained_plans_are_local_snapshots_with_missing_or_busy_guards[absent-False]" time="9.920" /><testcase classname="tests.execution_r4.test_cooperation_cli" name="test_retained_plans_are_local_snapshots_with_missing_or_busy_guards[busy-False]" time="8.459"><failure message="PermissionError: [Errno 13] Permission denied">tests\execution_r4\test_cooperation_cli.py:494: in test_retained_plans_are_local_snapshots_with_missing_or_busy_guards
+    before, local = snapshot(cli), files(cli)
+                                   ^^^^^^^^^^
+tests\execution_r4\test_cooperation_cli.py:57: in files
+    return {path.relative_to(cli.home): path.read_bytes() for path in cli.home.rglob('*') if path.is_file()}
+                                        ^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:626: in read_bytes
+    return f.read()
+           ^^^^^^^^
+E   PermissionError: [Errno 13] Permission denied</failure></testcase></testsuite></testsuites>
