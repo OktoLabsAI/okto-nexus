@@ -1930,6 +1930,7 @@ class HandoffService:
         workspace_id: Any = None,
         handoff_id: Any,
         agent_id: Any,
+        passive: bool = False,
     ) -> dict[str, Any]:
         """Read ONE handoff by id - the creator's path to the outcome.
 
@@ -1945,17 +1946,25 @@ class HandoffService:
         Verification-first handoffs (I4) additionally expose
         ``acceptance_criteria``/``verify_by`` (decoded) and
         ``verification_feedback`` - each omitted when NULL.
+        ``passive=True`` keeps the same access rules and response, but reads
+        persisted state without lease expiry, notifications or presence writes.
         """
+        if type(passive) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "passive must be a boolean.", {})
         logical_workspace = workspace_id is not None
         workspace_id = self._resolve_workspace(project_root, workspace_id)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         now = self._clock.now_iso()
 
-        with self._cf.unit_of_work() as uow:
+        with self._cf.unit_of_work(write=not passive) as uow:
             self._require_logical_workspace(uow, workspace_id, logical_workspace)
-            self._require_actor(uow, agent_id)
-            self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
+            actor_binding = self._require_actor(uow, agent_id)
+            if passive and actor_binding:
+                from .connection_policy import require_method
+                require_method(uow, agent_id, 'mcp')
+            if not passive:
+                self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if agent_id not in (handoff.from_agent_id, handoff.claimed_by):
                 viewer = self._routing_agent(uow, agent_id, workspace_id)
@@ -1976,7 +1985,8 @@ class HandoffService:
             dep_rows = self._handoffs.read_dependencies(
                 uow, workspace_id=workspace_id, handoff_id=handoff_id
             )
-            self._touch_agent(uow, agent_id, now)
+            if not passive:
+                self._touch_agent(uow, agent_id, now)
             runtime_execution = self.runtime_work.binding(uow, handoff_id=handoff_id, claim_epoch=handoff.claim_epoch) if self.runtime_work else None
             managed_lease = self.runtime_work.owns_claim(uow, handoff_id=handoff_id) if self.runtime_work else False
             from ..domain.execution_principal import current_execution_principal

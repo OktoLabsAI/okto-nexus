@@ -162,14 +162,15 @@ def test_changed_guidance_resources_publish_new_cache_versions(surface):
     expected_versions = {
         "okto-nexus://reference/preflight": "4",
         "okto-nexus://reference/communication": "3",
-        "okto-nexus://reference/tool-docs/messages": "7",
-        "okto-nexus://reference/tool-docs/handoff": "6",
+        "okto-nexus://reference/tool-docs/messages": "8",
+        "okto-nexus://reference/tool-docs/handoff": "7",
+        "okto-nexus://reference/tool-docs/events": "3",
         "okto-nexus://reference/tool-docs/identity": "31",
     }
 
     info = _call(server, "nexus_info")
     assert info["ok"] is True
-    assert info["data"]["surface_revision"] == 66
+    assert info["data"]["surface_revision"] == 67
     versions = info["data"]["resource_versions"]
     for uri, expected in expected_versions.items():
         assert versions[uri] == expected, (

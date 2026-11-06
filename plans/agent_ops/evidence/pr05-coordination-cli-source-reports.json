@@ -1,0 +1,349 @@
+[
+  {
+    "original": "coordination-cli-agent-auth-final.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-auth-final.xml",
+    "original_sha256": "2d24ff3f90df325a899297509663719880082d10094e0abd21d3fec0d50a3850",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "29",
+        "time": "157.710",
+        "timestamp": "2026-11-06T12:04:44.963510-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "coordination-cli-agent-complete.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-complete.xml",
+    "original_sha256": "880256e1c588e5964379d27ddb154f6f8feacd115ce4c54d779533c4533c73f9",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "1",
+        "skipped": "0",
+        "tests": "27",
+        "time": "171.330",
+        "timestamp": "2026-11-06T11:38:59.193385-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "xml_trailing_whitespace_escaped": 1
+  },
+  {
+    "original": "coordination-cli-agent-confirmed-observation.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-confirmed-observation.xml",
+    "original_sha256": "1ec6010702fd3913bbaa6e9ca387e0464a8019cb38d71acd5f59abb6c2d21f0f",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "2",
+        "skipped": "0",
+        "tests": "2",
+        "time": "19.915",
+        "timestamp": "2026-11-06T11:51:59.152302-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "xml_trailing_whitespace_escaped": 2
+  },
+  {
+    "original": "coordination-cli-agent-contract.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-contract.xml",
+    "original_sha256": "be39f43c8eb3411b321c6b7444d2df1862188c9177bb27b35c2066dcf51382f2",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "10",
+        "time": "53.473",
+        "timestamp": "2026-11-06T11:36:01.877731-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "coordination-cli-agent-final.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-final.xml",
+    "original_sha256": "8e4c24163446655dca2c8bb6f4e6960fcc005e7b82142e24fce647b891aa97a1",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "2",
+        "skipped": "0",
+        "tests": "23",
+        "time": "159.447",
+        "timestamp": "2026-11-06T11:32:22.722933-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "coordination-cli-agent-independent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-independent.xml",
+    "original_sha256": "4c6690c76df4a1bde068b051305f852e1c9cfdc577809743f5c9dfaef5466827",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "11",
+        "time": "61.301",
+        "timestamp": "2026-11-06T11:30:31.935201-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "coordination-cli-agent-initial.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-initial.xml",
+    "original_sha256": "63ab25cd171b5ffb7bb1e3e03980b55fed93f2d160db3fab81e95189287563bb",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "1",
+        "skipped": "0",
+        "tests": "5",
+        "time": "39.336",
+        "timestamp": "2026-11-06T11:28:28.682533-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "coordination-cli-agent-verified.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-verified.xml",
+    "original_sha256": "6c166c93241e249d2ebb8a9e2339a14a838b9f372f8bf6ce91bdb160ed7bdbc6",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "18",
+        "skipped": "0",
+        "tests": "27",
+        "time": "128.567",
+        "timestamp": "2026-11-06T11:45:06.183273-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "xml_trailing_whitespace_escaped": 19
+  },
+  {
+    "original": "coordination-cli-agent-visibility-final.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-visibility-final.xml",
+    "original_sha256": "531f38c8506762b47711408606616e33d1a4591beff687620a9946962796dc0f",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "3",
+        "time": "18.355",
+        "timestamp": "2026-11-06T12:09:49.007704-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "participant-coordination-doctor-regression-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-participant-coordination-doctor-regression-agent.xml",
+    "original_sha256": "8b478ff640493b48f04cfc7de7aa819735ce9b3ac5a2a53b757bd8820def615a",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "19",
+        "time": "44.919",
+        "timestamp": "2026-11-06T11:16:06.532643-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "participant-coordination-mcp-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-participant-coordination-mcp-agent.xml",
+    "original_sha256": "4916db0bc885b529303d912f9383845f162d23e98089a4f094d69e9d9f9939b5",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "26",
+        "time": "74.060",
+        "timestamp": "2026-11-06T11:14:30.015455-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "participant-coordination-postcommit-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-participant-coordination-postcommit-agent.xml",
+    "original_sha256": "b8691f2c109ae8f0d5955cba5f4425e389bf23bd4d9cb2b677e8aaee162a9c13",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "2",
+        "skipped": "0",
+        "tests": "5",
+        "time": "32.985",
+        "timestamp": "2026-11-06T11:30:43.557034-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "xml_trailing_whitespace_escaped": 2
+  },
+  {
+    "original": "participant-coordination-postcommit-final-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-participant-coordination-postcommit-final-agent.xml",
+    "original_sha256": "567832dfe8bb568382dfadea6022423138c136f34f33a1c98d014312ebf5926f",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "2",
+        "time": "16.021",
+        "timestamp": "2026-11-06T11:32:14.620173-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "terminal-coordination-facade-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-facade-agent.xml",
+    "original_sha256": "a52765f50e0eadce4d0a79b6c5b343df9362adb4fa07f0eaeb071fbd355e091c",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "2",
+        "skipped": "0",
+        "tests": "54",
+        "time": "0.984",
+        "timestamp": "2026-11-06T11:25:42.853634-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ],
+    "xml_trailing_whitespace_escaped": 1
+  },
+  {
+    "original": "terminal-coordination-facade-expanded-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-facade-expanded-agent.xml",
+    "original_sha256": "5b41aa0476140e7d8445c03866309ae6a351245291beca60395e6b50971b125c",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "2",
+        "skipped": "0",
+        "tests": "63",
+        "time": "1.493",
+        "timestamp": "2026-11-06T11:29:20.573044-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "terminal-coordination-facade-final-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-facade-final-agent.xml",
+    "original_sha256": "9af361b8f292bc5fff2057cf47984540862cbc73fc576bf7886a38ca4ec76d8e",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "63",
+        "time": "1.349",
+        "timestamp": "2026-11-06T11:30:43.615097-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "terminal-coordination-optimized-final-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-optimized-final-agent.xml",
+    "original_sha256": "85890293140c56e7260a0490ad105c72216b226d17b67cf421a1127f67faec3b",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "82",
+        "time": "2.610",
+        "timestamp": "2026-11-06T12:11:06.530570-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "terminal-coordination-final-agent.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-final-agent.xml",
+    "original_sha256": "7900efcf53ce9c770a3f17f88e2e34ea807783fa39b043def71de854074ce703",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "84",
+        "time": "2.608",
+        "timestamp": "2026-11-06T12:15:07.739686-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  },
+  {
+    "original": "coordination-cli-agent-profile-safety-final.xml",
+    "evidence": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-profile-safety-final.xml",
+    "original_sha256": "b714ed6e05baf5f6f8643fd22f93ef695c1e3f8c074bf973a72350970f7727f0",
+    "synthetic_key_redactions": 0,
+    "suites": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "2",
+        "time": "21.338",
+        "timestamp": "2026-11-06T12:22:15.898097-03:00",
+        "hostname": "Alienware_m15"
+      }
+    ]
+  }
+]

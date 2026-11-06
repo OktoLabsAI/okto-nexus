@@ -181,8 +181,9 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
     Runs for EVERY route - including the mounted MCP sub-app - except the
     public allowlist. The resolved agent is parked in ``identity_ctx`` so
-    handlers and tools can read the caller identity. The resolve itself
-    performs the only write of the read path (``last_seen_at`` touch).
+    handlers and tools can read the caller identity. Passive transport/discovery
+    and explicitly passive canonical reads authenticate freshly without the
+    ordinary activity stamp (``last_seen_at`` touch).
 
     Operator convenience (same-machine trust, the stdio rationale): when the
     serve is bound to loopback (``app.state.local_open``) AND the request
@@ -193,6 +194,40 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
     same-machine opening is still fenced off from BROWSERS by
     ``_loopback_trust_ok`` - a cross-origin or DNS-rebound page cannot ride it.
     """
+
+    @staticmethod
+    async def _passive_authentication(request: Request, *, path: str, is_mcp: bool) -> bool:
+        """Classify exact read contracts, never a caller-controlled bypass header."""
+        if request.method == 'GET' and path == '/v1/connections/participant':
+            return True
+        if not is_mcp:
+            return False
+        if request.method in ('GET', 'DELETE'):
+            return True
+        if request.method != 'POST':
+            return False
+        try:
+            rpc = await request.json()
+        except (ValueError, UnicodeError):
+            return False
+        if type(rpc) is not dict or rpc.get('jsonrpc') != '2.0':
+            return False
+        method = rpc.get('method')
+        if type(method) is not str:
+            return False
+        if method in {
+                'initialize', 'notifications/initialized', 'tools/list', 'resources/list',
+                'resources/read', 'resources/templates/list', 'ping'}:
+            return True
+        params = rpc.get('params')
+        if method != 'tools/call' or type(params) is not dict:
+            return False
+        name = params.get('name')
+        if name in ('nexus_info', 'coordination_request_get'):
+            return True
+        arguments = params.get('arguments')
+        return (name in ('event_get', 'event_cursor', 'event_wait', 'handoff_get')
+                and type(arguments) is dict and arguments.get('passive') is True)
 
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path.rstrip("/") or "/"
@@ -356,10 +391,11 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         auth: AgentKeyAuthService = request.app.state.auth
         deps: Deps = request.app.state.deps
         api_key = extract_bearer(request) if is_v1 else extract_api_key(request)
+        passive = await self._passive_authentication(request, path=path, is_mcp=is_mcp)
 
         def _resolve():
-            with deps.connection_factory.unit_of_work() as uow:
-                return auth.resolve(uow, api_key)
+            with deps.connection_factory.unit_of_work(write=not passive) as uow:
+                return auth.resolve_readonly(uow, api_key) if passive else auth.resolve(uow, api_key)
 
         try:
             agent = await anyio.to_thread.run_sync(_resolve)

@@ -383,7 +383,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 # R4 tool schemas: document runtime guards and retain compact descriptions.
 # 65 removes legacy connection issuance/configuration and documents local UI ownership.
 # 66 adds bounded coordination request receipts and authenticated metadata recovery.
-SURFACE_REVISION = 66
+# 67 adds passive canonical observation with logical workspace selectors.
+SURFACE_REVISION = 67
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
@@ -528,8 +529,10 @@ def register_meta_tools(server: Any, deps: Deps) -> None:
             "schema_version": _schema_version(deps.connection_factory),
             "surface_revision": SURFACE_REVISION,
             "coordination_requests": {"revision": 1, "retention_days": 30,
+                "observed_at": deps.clock.now_iso(),
                 "operations": ["message_create", "handoff_create"],
                 "recovery_tool": "coordination_request_get", "response": "references"},
+            "coordination_observation": {"revision": 1, "passive": True, "workspace_selector": True},
             "resource_versions": resource_versions(),
             # Effective (post-precedence) values read from the LIVE config at
             # call time - a PATCH that flips a flag shows up without restart.

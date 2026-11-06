@@ -186,11 +186,20 @@ def test_nexus_info_reports_versions(surface):
         "resource_versions",
         "features",
         "coordination_requests",
+        "coordination_observation",
     }
     assert data['coordination_requests'] == {
         'revision': 1, 'retention_days': 30,
+        'observed_at': data['coordination_requests']['observed_at'],
         'operations': ['message_create', 'handoff_create'],
         'recovery_tool': 'coordination_request_get', 'response': 'references',
+    }
+    from okto_nexus.domain.base import iso_plus
+    observed_at = data['coordination_requests']['observed_at']
+    assert isinstance(observed_at, str) and observed_at.endswith('Z')
+    assert iso_plus(observed_at, 0) == observed_at
+    assert data['coordination_observation'] == {
+        'revision': 1, 'passive': True, 'workspace_selector': True,
     }
 
     assert isinstance(data["package_version"], str) and data["package_version"]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="5" time="32.985" timestamp="2026-11-06T11:30:43.557034-03:00" hostname="Alienware_m15"><testcase classname="tests.test_participant_coordination_mcp" name="test_real_tcp_discovery_creation_and_recovery_use_canonical_identity[message_create]" time="8.873" /><testcase classname="tests.test_participant_coordination_mcp" name="test_real_tcp_discovery_creation_and_recovery_use_canonical_identity[handoff_create]" time="6.196" /><testcase classname="tests.test_participant_coordination_mcp" name="test_known_canonical_refusal_is_not_reported_as_uncertain_or_echoed" time="4.671" /><testcase classname="tests.test_participant_coordination_mcp" name="test_postcommit_transport_or_sdk_failure_recovers_without_a_second_create[canonical_db]" time="4.751"><failure message="AssertionError: assert 'MCP_RESPONSE_UNCONFIRMED' == 'DB_ERROR'&#10;  &#10;  - DB_ERROR&#10;  + MCP_RESPONSE_UNCONFIRMED">tests\test_participant_coordination_mcp.py:180: in test_postcommit_transport_or_sdk_failure_recovers_without_a_second_create
+    assert caught.value.code == ('DB_ERROR' if mode == 'canonical_db' else 'INTERNAL_ERROR')
+E   AssertionError: assert 'MCP_RESPONSE_UNCONFIRMED' == 'DB_ERROR'
+E&#32;&#32;&#32;&#32;&#32;
+E     - DB_ERROR
+E     + MCP_RESPONSE_UNCONFIRMED</failure></testcase><testcase classname="tests.test_participant_coordination_mcp" name="test_postcommit_transport_or_sdk_failure_recovers_without_a_second_create[canonical_internal]" time="4.620"><failure message="AssertionError: assert 'MCP_RESPONSE_UNCONFIRMED' == 'INTERNAL_ERROR'&#10;  &#10;  - INTERNAL_ERROR&#10;  + MCP_RESPONSE_UNCONFIRMED">tests\test_participant_coordination_mcp.py:180: in test_postcommit_transport_or_sdk_failure_recovers_without_a_second_create
+    assert caught.value.code == ('DB_ERROR' if mode == 'canonical_db' else 'INTERNAL_ERROR')
+E   AssertionError: assert 'MCP_RESPONSE_UNCONFIRMED' == 'INTERNAL_ERROR'
+E&#32;&#32;&#32;&#32;&#32;
+E     - INTERNAL_ERROR
+E     + MCP_RESPONSE_UNCONFIRMED</failure></testcase></testsuite></testsuites>

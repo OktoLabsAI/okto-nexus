@@ -1,0 +1,24 @@
+{
+  "measurement": {
+    "instructions": 5465,
+    "docstrings": 8370,
+    "params": 23046,
+    "cuttable": 36881,
+    "total": 56117,
+    "cuttable_tokens": 9220,
+    "total_tokens": 14029
+  },
+  "baseline": {
+    "instructions": 11206,
+    "docstrings": 13983,
+    "params": 16406,
+    "cuttable": 41595
+  },
+  "approved_observation_growth": 681,
+  "present_surface": {
+    "include_experimental": false,
+    "include_harness": true
+  },
+  "adjusted_reduction": 0.4012982329606924,
+  "default_helper_reduction_without_surface_flags": 0.26318067075369633
+}

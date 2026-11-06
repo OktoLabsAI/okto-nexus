@@ -135,6 +135,7 @@ class EventService:
         sleeper: Optional[Callable[[float], None]] = None,
         monotonic: Optional[Callable[[], float]] = None,
         touch_on_read: bool = True,
+        request_context_provider: Optional[Callable[[], Any]] = None,
     ) -> None:
         self._cf = connection_factory
         self._events = events
@@ -149,6 +150,7 @@ class EventService:
         # not activity - so ``last_seen_at`` keeps meaning "most recent action
         # on the bus" instead of being held eternally fresh by a monitor.
         self._touch_on_read = bool(touch_on_read)
+        self._request_context_provider = request_context_provider
         # Blocking seam resolution: explicit waiter > legacy sleeper shim >
         # the store's own change waiter (data_version-gated sleep-poll).
         # ``sleeper``/``monotonic`` are the legacy injection seam (kept for the
@@ -169,24 +171,27 @@ class EventService:
     def event_get(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
         agent_id: Any,
         stream: Any,
         cursor: Any = None,
         limit: Any = None,
         filters: Any = None,
+        workspace_id: Any = None,
+        passive: bool = False,
     ) -> dict[str, Any]:
         """Non-blocking, cursor-paginated read of the workspace event log.
 
         Returns ``{events, next_cursor, has_more, timed_out: false}`` where
         ``next_cursor`` is the largest ``event_id`` scanned and ``has_more`` is
         ``True`` iff a matching, visible event exists beyond the returned page.
+        ``passive=True`` suppresses presence writes, never authorization.
         """
-        workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
-            project_root, agent_id, stream, cursor, limit, filters
+        workspace_id, agent_id, stream, cursor, limit, filters = self._prepare_selector(
+            project_root, workspace_id, agent_id, stream, cursor, limit, filters, passive
         )
         return self._event_get_prepared(
-            workspace_id, agent_id, stream, cursor, limit, filters
+            workspace_id, agent_id, stream, cursor, limit, filters, passive
         )
 
     def event_get_for_workspace(
@@ -198,19 +203,21 @@ class EventService:
         cursor: Any = None,
         limit: Any = None,
         filters: Any = None,
+        passive: bool = False,
     ) -> dict[str, Any]:
         """``event_get`` variant for already-authenticated workspace scopes.
 
         Used by the EPT data plane: the token row supplies ``workspace_id`` and
         the client cannot override it with a ``project_root``.
         """
+        self._validate_passive(passive)
         workspace_id, agent_id, stream, cursor, limit, filters = (
             self._prepare_workspace_id(
                 workspace_id, agent_id, stream, cursor, limit, filters
             )
         )
         return self._event_get_prepared(
-            workspace_id, agent_id, stream, cursor, limit, filters
+            workspace_id, agent_id, stream, cursor, limit, filters, passive
         )
 
     def _event_get_prepared(
@@ -221,22 +228,25 @@ class EventService:
         cursor: int,
         limit: int,
         filters: dict[str, str],
+        passive: bool = False,
     ) -> dict[str, Any]:
-        self._require_read_permission(agent_id)
-        self._touch_agent(agent_id)
+        self._require_read_permission(agent_id, workspace_id)
+        self._touch_agent(agent_id, workspace_id=workspace_id, passive=passive)
         page = self._read_page(workspace_id, agent_id, stream, cursor, limit, filters)
         return self._page_payload(page, timed_out=False)
 
     def event_wait(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
         agent_id: Any,
         stream: Any,
         cursor: Any = None,
         limit: Any = None,
         filters: Any = None,
         timeout_seconds: Any = None,
+        workspace_id: Any = None,
+        passive: bool = False,
     ) -> dict[str, Any]:
         """Long-poll: ``event_get`` re-scanned on store changes until timeout.
 
@@ -248,9 +258,11 @@ class EventService:
         ``event_get`` with no waiting. Blocking is delegated to the
         :class:`Waiter` port; the log is re-scanned ONLY when the waiter
         reports a change (a commit by any process), never once per interval.
+        ``passive=True`` suppresses presence writes. Every page and the final
+        timeout recheck the current reader authority and events.read permission.
         """
-        workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
-            project_root, agent_id, stream, cursor, limit, filters
+        workspace_id, agent_id, stream, cursor, limit, filters = self._prepare_selector(
+            project_root, workspace_id, agent_id, stream, cursor, limit, filters, passive
         )
         return self._event_wait_prepared(
             workspace_id,
@@ -260,6 +272,7 @@ class EventService:
             limit,
             filters,
             timeout_seconds,
+            passive,
         )
 
     def event_wait_for_workspace(
@@ -272,8 +285,10 @@ class EventService:
         limit: Any = None,
         filters: Any = None,
         timeout_seconds: Any = None,
+        passive: bool = False,
     ) -> dict[str, Any]:
         """``event_wait`` variant for EPT/server-derived workspace scopes."""
+        self._validate_passive(passive)
         workspace_id, agent_id, stream, cursor, limit, filters = (
             self._prepare_workspace_id(
                 workspace_id, agent_id, stream, cursor, limit, filters
@@ -287,6 +302,7 @@ class EventService:
             limit,
             filters,
             timeout_seconds,
+            passive,
         )
 
     def _event_wait_prepared(
@@ -298,13 +314,14 @@ class EventService:
         limit: int,
         filters: dict[str, str],
         timeout_seconds: Any,
+        passive: bool = False,
     ) -> dict[str, Any]:
-        self._require_read_permission(agent_id)
+        self._require_read_permission(agent_id, workspace_id)
         timeout = self._resolve_timeout(timeout_seconds)
         # Touch BEFORE the change-token snapshot: the presence stamp is this
         # caller's own write, and snapshotting after it keeps the first wait
         # from waking spuriously on it.
-        self._touch_agent(agent_id)
+        self._touch_agent(agent_id, workspace_id=workspace_id, passive=passive)
         waiter = self._waiter
 
         # Snapshot precedes the first scan (Waiter contract): a write landing
@@ -321,11 +338,13 @@ class EventService:
         while True:
             remaining = deadline - waiter.monotonic()
             if remaining <= 0:
+                self._require_read_permission(agent_id, workspace_id)
                 return self._timed_out_payload(cursor)
             if not waiter.wait_for_change(token, remaining):
                 # The full remaining window elapsed with NO commit anywhere:
                 # a re-scan provably returns the same empty page, so the
                 # timeout is answered without touching the log again.
+                self._require_read_permission(agent_id, workspace_id)
                 return self._timed_out_payload(cursor)
             token = waiter.snapshot()
             page = self._read_page(
@@ -337,9 +356,11 @@ class EventService:
     def latest_cursor(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
         agent_id: Any,
         stream: Any,
+        workspace_id: Any = None,
+        passive: bool = False,
     ) -> int:
         """Resolve the stream's CURRENT END as a cursor, in O(1) (no scan).
 
@@ -352,11 +373,11 @@ class EventService:
         so both yield the same cursor). Validation order and the best-effort
         presence touch match ``event_get``.
         """
-        workspace_id, agent_id, stream, _, _, _ = self._prepare(
-            project_root, agent_id, stream, None, None, None
+        workspace_id, agent_id, stream, _, _, _ = self._prepare_selector(
+            project_root, workspace_id, agent_id, stream, None, None, None, passive
         )
         return self.latest_cursor_for_workspace(
-            workspace_id=workspace_id, agent_id=agent_id, stream=stream
+            workspace_id=workspace_id, agent_id=agent_id, stream=stream, passive=passive
         )
 
     def latest_cursor_for_workspace(
@@ -365,14 +386,17 @@ class EventService:
         workspace_id: Any,
         agent_id: Any,
         stream: Any,
+        passive: bool = False,
     ) -> int:
         """Resolve the stream end for an already-authenticated workspace."""
+        self._validate_passive(passive)
         workspace_id, agent_id, stream, _, _, _ = self._prepare_workspace_id(
             workspace_id, agent_id, stream, None, None, None
         )
-        self._require_read_permission(agent_id)
-        self._touch_agent(agent_id)
+        self._require_read_permission(agent_id, workspace_id)
+        self._touch_agent(agent_id, workspace_id=workspace_id, passive=passive)
         with self._cf.unit_of_work(write=False) as uow:
+            self._authorize_read(uow, agent_id, workspace_id)
             return int(
                 self._events.max_event_id(uow, workspace_id=workspace_id, stream=stream)
             )
@@ -380,6 +404,20 @@ class EventService:
     # ------------------------------------------------------------------ #
     # Input preparation / validation
     # ------------------------------------------------------------------ #
+    @staticmethod
+    def _validate_passive(passive):
+        if type(passive) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "passive must be a boolean.", {})
+
+    def _prepare_selector(self, project_root, workspace_id, agent_id, stream, cursor, limit, filters, passive):
+        self._validate_passive(passive)
+        if workspace_id is not None:
+            if project_root is not None:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    "Select exactly one project_root or workspace_id.", {})
+            return self._prepare_workspace_id(workspace_id, agent_id, stream, cursor, limit, filters)
+        return self._prepare(project_root, agent_id, stream, cursor, limit, filters)
+
     def _prepare(
         self,
         project_root: Any,
@@ -482,7 +520,29 @@ class EventService:
             return 0
         return min(value, ceiling)
 
-    def _require_read_permission(self, agent_id: str) -> None:
+    def _authorize_read(self, uow, agent_id, workspace_id):
+        """Current caller and visibility permission in the page's transaction."""
+        from ..domain.execution_principal import current_execution_principal
+        from .execution_tools import ExecutionToolConnectionFactory, denied
+        from .connection_policy import require_method
+        principal = current_execution_principal.get()
+        if principal is not None:
+            if (not isinstance(self._cf, ExecutionToolConnectionFactory)
+                    or agent_id != principal.scope['agent_id']
+                    or workspace_id != principal.scope['workspace_id']):
+                raise denied()
+            # The decorated factory already reauthorizes this principal after BEGIN.
+        else:
+            context = self._request_context_provider() if self._request_context_provider else None
+            if context is not None:
+                from .runtime_actor_authority import authenticated_message_context
+                authenticated = authenticated_message_context(uow, context, self._agents)
+                if authenticated is None or authenticated.actor_agent_id != agent_id:
+                    raise denied('Use the authenticated event reader.')
+                require_method(uow, agent_id, 'mcp')
+        permission_set_for(self._agents, uow, agent_id).require("events", "read")
+
+    def _require_read_permission(self, agent_id: str, workspace_id: str) -> None:
         """Gate ``events.read`` (migration 011) in its own read-only uow.
 
         Unlike presence touching, a denial here MUST fail the read: an
@@ -490,9 +550,9 @@ class EventService:
         flag is off gets the canonical PERMISSION_DENIED envelope.
         """
         with self._cf.unit_of_work(write=False) as uow:
-            permission_set_for(self._agents, uow, agent_id).require("events", "read")
+            self._authorize_read(uow, agent_id, workspace_id)
 
-    def _touch_agent(self, agent_id: str) -> None:
+    def _touch_agent(self, agent_id: str, *, workspace_id: str, passive: bool = False) -> None:
         """Best-effort stamp of the caller's ``last_seen_at`` (own uow).
 
         Presence tracking is a side effect of consuming the log, so it must NEVER
@@ -505,10 +565,11 @@ class EventService:
         follower) skips the stamp entirely: passive observation is not
         activity, keeping the ``last_seen_at`` liveness signal honest.
         """
-        if not self._touch_on_read or self._agents is None:
+        if passive or not self._touch_on_read or self._agents is None:
             return
         try:
             with self._cf.unit_of_work() as uow:
+                self._authorize_read(uow, agent_id, workspace_id)
                 self._agents.touch(uow, agent_id=agent_id, at=self._clock.now_iso())
         except OktoNexusError:
             pass  # best-effort presence; never break a read
@@ -539,6 +600,7 @@ class EventService:
         batch_size = limit + 1
 
         with self._cf.unit_of_work(write=False) as uow:
+            self._authorize_read(uow, agent_id, workspace_id)
             # ONE batched agent lookup per page (F2): the registry is read
             # once and reused for the viewer's own profile and for every
             # actor-reachability check of this scan - never per event.

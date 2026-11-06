@@ -46,6 +46,12 @@ BASELINE: dict[str, int] = {
 #: so gratuitous description bloat stays caught. The BASELINE above remains
 #: frozen (BR8) - this ledger is additive and auditable per spec.
 APPROVED_GROWTH: dict[str, int] = {
+    # Fixed R3 plan DX-11, SURFACE_REVISION 67: passive + workspace_id
+    # descriptions on event_get/cursor/wait add 193 chars each; handoff_get
+    # passive adds 102. Live-schema delta against the revision-66 wheel:
+    # 36,881 - 36,200 = 681. No tool/docstring/instruction growth; discovery
+    # timestamps and capability metadata are responses, not resident schema.
+    "coordination_observation_dx11": 681,
     # Fixed R3 plan DX-10, SURFACE_REVISION 66: coordination_request_get
     # (151 description + 156 params = 307), two client_request_id params
     # (135 each), and message_create description 193 -> 158 (-35).

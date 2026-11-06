@@ -538,6 +538,7 @@ def register(server: Any, deps: Any) -> None:
         agent_id: Annotated[str, Field(description=_P_GET_AGENT)],
         project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
         workspace_id: Annotated[str | None, Field(description=_P_WSID)] = None,
+        passive: Annotated[bool, Field(strict=True, description="Read stored state without presence updates or lease expiry (default false); access checks still apply.")] = False,
     ) -> dict[str, Any]:
         """Read a handoff by id: status, claimant, payload, result/rejected_reason + verification/dependency fields if set. The creator's path to the outcome. Full docs: okto-nexus://reference/tool-docs/handoff."""
         return service.handoff_get(
@@ -545,4 +546,5 @@ def register(server: Any, deps: Any) -> None:
             workspace_id=workspace_id,
             handoff_id=handoff_id,
             agent_id=agent_id,
+            passive=passive,
         )

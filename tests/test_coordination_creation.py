@@ -12,7 +12,11 @@ import okto_nexus
 import test_pr34_remediation as fixtures
 from test_pr34_remediation import tool, mcp_call
 from test_hitl import _attach, _rule
+from okto_nexus.application.coordination_requests import CoordinationRequestService
 from okto_nexus.domain.base import iso_plus
+from okto_nexus.domain.keys import hash_api_key
+from okto_nexus.domain.runtime_context import RuntimeRequestContext
+from okto_nexus.errors import ErrorCode, OktoNexusError
 
 
 runtime = fixtures.runtime
@@ -165,11 +169,28 @@ def test_actor_forgery_permission_revocation_and_metadata_only_lookup(runtime, o
     assert recover(runtime, operation, args)['ok']
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agents SET api_key_hash='revoked' WHERE agent_id='caller'")
-    # The middleware may retain its short-lived auth cache; the read transaction
-    # must independently reject that stale identity before disclosing a receipt.
-    response = recover(runtime, operation, args)
-    assert response['error']['code'] == 'PERMISSION_DENIED', response
-    assert original['data']['request_receipt']['resource_id'] not in json.dumps(response)
+    # Passive HTTP authentication bypasses the positive cache and refuses the
+    # revoked key before MCP dispatch, without disclosing the receipt.
+    lookup = dict(workspace_id=args['workspace_id'], operation=operation,
+                  client_request_id=args['client_request_id'])
+    before = snapshot(deps)
+    response = runtime[1].post('/mcp/', headers={'x-api-key': runtime[5],
+        'Accept': 'application/json, text/event-stream'}, json={
+            'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',
+            'params': {'name': 'coordination_request_get', 'arguments': lookup}})
+    assert response.status_code == 401
+    assert response.json()['error']['code'] == 'AUTH_FAILED'
+    assert original['data']['request_receipt']['resource_id'] not in response.text
+    # A context authenticated before rotation is independently rejected inside
+    # the receipt read transaction as well.
+    stale = RuntimeRequestContext('caller', 'agent_key', credential_binding=hash_api_key(runtime[5]))
+    service = CoordinationRequestService(factory=deps.connection_factory,
+        repo=deps.repos.coordination_requests, agents=deps.repos.agents,
+        workspaces=deps.repos.workspaces, clock=deps.clock, context_provider=lambda: stale)
+    with pytest.raises(OktoNexusError) as denied:
+        service.get(**lookup)
+    assert denied.value.code == ErrorCode.PERMISSION_DENIED
+    assert snapshot(deps) == before
 
 
 @pytest.mark.parametrize('operation', ['message_create', 'handoff_create'])

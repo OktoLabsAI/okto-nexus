@@ -116,6 +116,22 @@ class AgentKeyAuthService:
     # ------------------------------------------------------------------ #
     # Resolution (the per-request hot path)
     # ------------------------------------------------------------------ #
+    def resolve_readonly(self, uow: UnitOfWork, api_key: str | None) -> Optional[Agent]:
+        """Authenticate passive observation against current storage, without touch.
+
+        Never consult or populate the positive cache: a monitoring request must
+        observe revocation immediately and must not advertise agent activity.
+        The transport owns the read-only transaction and the ordinary failure
+        envelope; this method grants exactly the same active-key authority.
+        """
+        if not api_key or not is_well_formed_api_key(api_key):
+            return None
+        key_hash = hash_api_key(api_key)
+        agent = self._agents.get_active_by_key_hash(uow, api_key_hash=key_hash)
+        if agent is None:
+            self._evict_hash(key_hash)
+        return agent
+
     def resolve(self, uow: UnitOfWork, api_key: str | None) -> Optional[Agent]:
         """Resolve an inbound key to its ACTIVE agent, or ``None``.
 

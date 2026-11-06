@@ -1,0 +1,7 @@
+{
+  "compared_payloads": 627,
+  "changed_payloads": [
+    "okto_nexus/adapters/inbound/cli/coordination.py"
+  ],
+  "reason": "Participant directory/link/ACL check before profile/credential access; all other package payloads byte-identical to the broad qualification wheel."
+}

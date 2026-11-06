@@ -18,6 +18,9 @@ Usage:
   okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
   okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
   okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
   okto-nexus operator login|status|logout --profile NAME [options]
   okto-nexus operator approval APPROVAL_ID --profile NAME [options]
   okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
@@ -37,6 +40,9 @@ def main(argv: list[str] | None = None) -> int:
         print(_HELP)
         return 0
     command, rest = args[0], args[1:]
+    if command in ('message', 'handoff', 'request'):
+        from .coordination import run_coordination
+        return run_coordination(command, rest)
     if command == 'connect':
         from .connect import run_connect
         return run_connect(rest)

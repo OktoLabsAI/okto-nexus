@@ -1,0 +1,50 @@
+{
+  "reports": [
+    {
+      "report": "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+      "passed": 139,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "report": "plans/agent_ops/evidence/pr05-coordination-cli-transport-auth-installed.xml",
+      "passed": 145,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "report": "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml",
+      "passed": 325,
+      "failed": 2,
+      "skipped": 0
+    },
+    {
+      "report": "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
+      "passed": 42,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "report": "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "report": "plans/agent_ops/evidence/pr05-coordination-cli-surface-installed.xml",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 1
+    }
+  ],
+  "distinct_passed": 614,
+  "failed_initially": 2,
+  "unresolved_failures": [],
+  "skipped": [
+    [
+      "tests.test_frente1_measurement",
+      "test_s5_ab_assertiveness_battery_is_a_manual_gate"
+    ]
+  ],
+  "overlap": true
+}

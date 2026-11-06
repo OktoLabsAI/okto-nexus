@@ -68,6 +68,15 @@ _P_TIMEOUT = (
     "event arrives or the timeout elapses."
 )
 _P_PROFILE = "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens)."
+_P_WORKSPACE = "Existing logical workspace ID; select this or project_root. Managed sessions use their bound workspace."
+_P_PASSIVE = "Read without updating presence (default false); authentication and visibility still apply."
+
+
+def _request_context():
+    from ...http.identity_ctx import get_authenticated_agent
+    from .....domain.runtime_context import RuntimeRequestContext
+    actor = get_authenticated_agent()
+    return RuntimeRequestContext(actor.agent_id, 'agent_key', credential_binding=actor.api_key_hash) if actor else None
 
 
 def build_service(deps: Any) -> EventService:
@@ -97,6 +106,7 @@ def build_service(deps: Any) -> EventService:
         config=deps.config,
         default_limit=DEFAULT_EVENT_LIMIT,
         max_limit=deps.config.max_event_limit,
+        request_context_provider=_request_context,
     )
 
 
@@ -107,13 +117,15 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def event_get(
-        project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         stream: Annotated[str, Field(description=_P_STREAM)],
+        project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
         cursor: Annotated[Any, Field(description=_P_CURSOR)] = None,
         limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
         filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
         profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WORKSPACE)] = None,
+        passive: Annotated[bool, Field(strict=True, description=_P_PASSIVE)] = False,
     ) -> dict[str, Any]:
         """Read a cursor-paginated page of the event log (non-blocking). Actors outside your comm scope are omitted; yours and system events always show. Docs: okto-nexus://reference/tool-docs/events."""
         prof = parse_profile(profile)
@@ -125,6 +137,8 @@ def register(server: Any, deps: Any) -> None:
                 cursor=cursor,
                 limit=limit,
                 filters=filters,
+                workspace_id=workspace_id,
+                passive=passive,
             ),
             "events",
             prof,
@@ -134,28 +148,33 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def event_cursor(
-        project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         stream: Annotated[str, Field(description=_P_STREAM)],
+        project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WORKSPACE)] = None,
+        passive: Annotated[bool, Field(strict=True, description=_P_PASSIVE)] = False,
     ) -> dict[str, Any]:
         """Return the stream's CURRENT END as a cursor (O(1), no scan) - the pre-flight monitor anchor so you see only events appended after now. Returns {cursor} (0 for empty)."""
         return {
             "cursor": service.latest_cursor(
-                project_root=project_root, agent_id=agent_id, stream=stream
+                project_root=project_root, agent_id=agent_id, stream=stream,
+                workspace_id=workspace_id, passive=passive,
             )
         }
 
     @server.tool()
     @async_tool_envelope
     async def event_wait(
-        project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         stream: Annotated[str, Field(description=_P_STREAM)],
+        project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
         cursor: Annotated[Any, Field(description=_P_CURSOR)] = None,
         limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
         filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
         timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = 0,
         profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
+        workspace_id: Annotated[str | None, Field(description=_P_WORKSPACE)] = None,
+        passive: Annotated[bool, Field(strict=True, description=_P_PASSIVE)] = False,
     ) -> dict[str, Any]:
         """Read the event log; optionally long-poll (0/omitted/null = snapshot; >0 blocks). Scoped like event_get (actors outside your comm scope omitted). Patterns: okto-nexus://reference/monitoring."""
         # Validate the profile BEFORE parking on the long-poll: an invalid value
@@ -176,6 +195,8 @@ def register(server: Any, deps: Any) -> None:
                 limit=limit,
                 filters=filters,
                 timeout_seconds=0 if timeout_seconds is None else timeout_seconds,
+                workspace_id=workspace_id,
+                passive=passive,
             )
         )
         # Projection is pure/synchronous and runs after the (threaded) wait

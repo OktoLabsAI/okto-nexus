@@ -125,7 +125,7 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="7",
+    version="8",
     body="""\
 # message_create
 Select either ``project_root`` or ``workspace_id``. An explicit ``workspace_id``
@@ -192,6 +192,10 @@ are pruned: NOT_FOUND does not prove that an old request never committed. Never
 automatically generate a fresh ID after a timeout. Check nexus_info's
 ``coordination_requests`` capability first; older Servers cannot promise this
 recovery contract. This is not exactly-once execution of external effects.
+``coordination_requests.observed_at`` is an informative snapshot of the Server's
+UTC clock. It lets a client retain a conservative deadline before transmission
+and detect clock regression on recovery. Reading it never extends the original
+receipt's expires_at or authorizes replay after its retention window.
 
 # channel_create
 Create a channel by name (idempotent). Channels are organizational LABELS, not
@@ -289,7 +293,7 @@ add_resource(
     slug="tool-docs/events",
     name="Tool docs - event log",
     description="Full reference for event_get / event_cursor / event_wait (streams, filters, cursors, the long-poll).",
-    version="2",
+    version="3",
     body="""\
 Events are OBSERVABILITY (audit/monitoring of message.created, handoff.*,
 session.* events); they are NOT how you receive messages addressed to you - that
@@ -298,6 +302,14 @@ sender-only receipts message.delivered/message.read and artifact.created are on
 ``workspace``. filters (equality, AND-combined) allow keys: type and agent_id
 (event columns) plus task_id, handoff_id and trace_id (payload-level).
 Visibility is per-event: you only see events you may see.
+
+All three reads accept exactly one project_root or workspace_id. Use the logical
+workspace_id for remote workspaces; managed sessions keep their bound actor and
+workspace. ``passive=true`` reads without updating agent presence or any session
+heartbeat. It never relaxes authentication, current events.read permission or
+visibility. Omitted/false keeps the existing presence behavior. The boolean is
+strict. Authentication and permissions are rechecked for each page and after a
+long-poll timeout. nexus_info.coordination_observation advertises this support.
 
 # event_get
 Read a cursor-paginated page (non-blocking). cursor = the last event_id you
@@ -324,7 +336,7 @@ add_resource(
     slug="tool-docs/handoff",
     name="Tool docs - handoff",
     description="Full reference for the handoff lifecycle (create/list_available/claim/complete/verify/reject/cancel/get), including the opt-in VERIFYING cycle and DAG dependencies.",
-    version="6",
+    version="7",
     body="""\
 All handoff operations accept exactly one project_root or existing workspace_id.
 Use workspace_id for a logical or remote workspace without a Server-local path.
@@ -478,7 +490,21 @@ pool target that matched zero agents). Only OPEN handoffs cancel.
 Read one handoff by id: status, claimant, result/rejected_reason; ``payload``
 is included only when the reader is the claimant. THIS is the creator's path to
 the outcome after handoff_create (do not scan events).
-An expired claim lease reads as OPEN again. Verification-first handoffs also
+By default an expired claim lease reads as OPEN again. ``passive=true`` instead
+reads stored state in a read-only transaction: no lease expiry, notifications,
+agent presence update or session heartbeat. An elapsed lease can therefore still
+have status CLAIMED; the observer does not reopen work. Access and payload
+visibility are unchanged. ``passive`` accepts only a boolean.
+
+For a passive wait, check nexus_info.coordination_observation, obtain event_cursor
+for stream=handoff BEFORE handoff_get, then use event_wait with a handoff_id filter.
+Reread handoff_get after every event page or timeout: a creator can read an outcome
+whose event is invisible to them. COMPLETED is success; VERIFYING is still pending;
+REJECTED and CANCELLED are terminal without success. Timeout or interruption stops
+only observation, never the work. Unsupported Servers must not fall back silently
+to a read that expires leases or updates presence.
+
+Verification-first handoffs also
 expose ``acceptance_criteria``/``verify_by`` (decoded) and
 ``verification_feedback`` - each omitted when NULL. Dependent handoffs expose
 ``depends_on`` plus the LIVE ``dependencies`` aggregate {total, satisfied,
