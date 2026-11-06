@@ -304,6 +304,7 @@ class SqliteObservabilityQueries:
         until_iso: str | None = None,
         from_agent_id: str | None = None,
         to_agent_id: str | None = None,
+        handoff_id: str | None = None,
     ) -> list[dict[str, Any]]:
         sql = (
             "SELECT handoff_id, workspace_id, status, created_at, updated_at, "
@@ -313,6 +314,9 @@ class SqliteObservabilityQueries:
             "FROM handoffs WHERE 1=1"
         )
         params: list[Any] = []
+        if handoff_id is not None:
+            sql += " AND handoff_id = ?"
+            params.append(handoff_id)
         if workspace_id is not None:
             sql += " AND workspace_id = ?"
             params.append(workspace_id)

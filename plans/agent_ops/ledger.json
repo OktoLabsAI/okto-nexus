@@ -348,7 +348,19 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-wheel.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-authority-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-checks.json"
       ]
     },
     "PR-07": {
@@ -4901,29 +4913,56 @@
         "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py",
         "src/okto_nexus/adapters/inbound/http/attention.py",
         "src/okto_nexus/adapters/inbound/http/attention_stream.py",
-        "src/okto_nexus/migrations/161_attention_preferences.sql"
+        "src/okto_nexus/migrations/161_attention_preferences.sql",
+        "src/okto_nexus/application/attention_approvals.py",
+        "src/okto_nexus/application/attention_authority.py",
+        "src/okto_nexus/application/attention_results.py",
+        "src/okto_nexus/application/runtime_delivery_facts.py",
+        "src/okto_nexus/application/runtime_delivery.py",
+        "src/okto_nexus/application/runtime_maintenance.py",
+        "src/okto_nexus/application/approvals.py",
+        "src/okto_nexus/application/observability.py",
+        "src/okto_nexus/application/ports.py",
+        "src/okto_nexus/application/database_reset.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_results.py",
+        "src/okto_nexus/adapters/outbound/sqlite/migrations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observability_repo.py",
+        "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-authority-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Operator attention version 1 now composes the twelve initial kinds, exact filtered snapshots/keyset pages, shared operator seen/snooze CAS and metadata-only SSE invalidation. Additive migration 161 preserves atomic episode anchors across retries, equal timestamps, rollback and canonical history reset. Native actions reuse pure command authority; archival, timezone-equivalent grant expiry and SQLite error paths are corrected. 462 distinct installed cases passed with 0 skipped on Windows outside the checkout. All 470 Python files, 7 static assets and 161 migrations match wheel/source bytes. PR-06 remains IN_PROGRESS: authority-blocking coverage is currently managed-handoff-only; general approvals and remaining message/native policy gates are not claimed. PR-07 client/UI/browser, qualified providers, native service campaigns and full R3 remain open. Connector/Core are unchanged.",
+      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Authority-blocking projection currently covers admitted managed handoffs; pending message/native work and remaining canonical policy gates are not yet fully covered.",
-        "Approval records without execution_native_requests are not projected; AT-01 broader approval coverage is open.",
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical action navigation and accessibility require implementation and browser evidence.",
-        "Exact counts scan eligible facts under a five-second budget; aged-handoff eligibility can inspect multiple candidates inside SQL. No unlimited-scale claim.",
-        "Windows synthetic fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
+        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
+        "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
+        "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
       ],
       "subscopes": {
         "twelve_initial_kinds": "VERIFIED",
         "native_shared_authority": "VERIFIED",
         "managed_handoff_authority": "VERIFIED",
-        "pending_message_native_authority": "NOT_RUN",
-        "general_approval_coverage": "NOT_RUN"
+        "pending_message_native_authority": "VERIFIED",
+        "general_approval_coverage": "VERIFIED",
+        "manual_native_result_identity": "VERIFIED",
+        "global_effective_policy_recurrence": "IN_PROGRESS"
       }
     },
     "ATN-02": {
@@ -4947,27 +4986,53 @@
         "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py",
         "src/okto_nexus/adapters/inbound/http/attention.py",
         "src/okto_nexus/adapters/inbound/http/attention_stream.py",
-        "src/okto_nexus/migrations/161_attention_preferences.sql"
+        "src/okto_nexus/migrations/161_attention_preferences.sql",
+        "src/okto_nexus/application/attention_approvals.py",
+        "src/okto_nexus/application/attention_authority.py",
+        "src/okto_nexus/application/attention_results.py",
+        "src/okto_nexus/application/runtime_delivery_facts.py",
+        "src/okto_nexus/application/runtime_delivery.py",
+        "src/okto_nexus/application/runtime_maintenance.py",
+        "src/okto_nexus/application/approvals.py",
+        "src/okto_nexus/application/observability.py",
+        "src/okto_nexus/application/ports.py",
+        "src/okto_nexus/application/database_reset.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_results.py",
+        "src/okto_nexus/adapters/outbound/sqlite/migrations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observability_repo.py",
+        "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-authority-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Operator attention version 1 now composes the twelve initial kinds, exact filtered snapshots/keyset pages, shared operator seen/snooze CAS and metadata-only SSE invalidation. Additive migration 161 preserves atomic episode anchors across retries, equal timestamps, rollback and canonical history reset. Native actions reuse pure command authority; archival, timezone-equivalent grant expiry and SQLite error paths are corrected. 462 distinct installed cases passed with 0 skipped on Windows outside the checkout. All 470 Python files, 7 static assets and 161 migrations match wheel/source bytes. PR-06 remains IN_PROGRESS: authority-blocking coverage is currently managed-handoff-only; general approvals and remaining message/native policy gates are not claimed. PR-07 client/UI/browser, qualified providers, native service campaigns and full R3 remain open. Connector/Core are unchanged.",
+      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Authority-blocking projection currently covers admitted managed handoffs; pending message/native work and remaining canonical policy gates are not yet fully covered.",
-        "Approval records without execution_native_requests are not projected; AT-01 broader approval coverage is open.",
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical action navigation and accessibility require implementation and browser evidence.",
-        "Exact counts scan eligible facts under a five-second budget; aged-handoff eligibility can inspect multiple candidates inside SQL. No unlimited-scale claim.",
-        "Windows synthetic fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
+        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
+        "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
+        "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
       ],
       "subscopes": {
         "shared_operator_preferences": "VERIFIED",
         "atomic_source_episode_metadata": "VERIFIED",
-        "migration_upgrade_rollback_reset": "VERIFIED"
+        "migration_upgrade_rollback_reset": "VERIFIED",
+        "result_preference_upgrade_161_162": "VERIFIED"
       }
     },
     "ATN-03": {
@@ -4991,22 +5056,47 @@
         "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py",
         "src/okto_nexus/adapters/inbound/http/attention.py",
         "src/okto_nexus/adapters/inbound/http/attention_stream.py",
-        "src/okto_nexus/migrations/161_attention_preferences.sql"
+        "src/okto_nexus/migrations/161_attention_preferences.sql",
+        "src/okto_nexus/application/attention_approvals.py",
+        "src/okto_nexus/application/attention_authority.py",
+        "src/okto_nexus/application/attention_results.py",
+        "src/okto_nexus/application/runtime_delivery_facts.py",
+        "src/okto_nexus/application/runtime_delivery.py",
+        "src/okto_nexus/application/runtime_maintenance.py",
+        "src/okto_nexus/application/approvals.py",
+        "src/okto_nexus/application/observability.py",
+        "src/okto_nexus/application/ports.py",
+        "src/okto_nexus/application/database_reset.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_results.py",
+        "src/okto_nexus/adapters/outbound/sqlite/migrations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observability_repo.py",
+        "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-authority-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Operator attention version 1 now composes the twelve initial kinds, exact filtered snapshots/keyset pages, shared operator seen/snooze CAS and metadata-only SSE invalidation. Additive migration 161 preserves atomic episode anchors across retries, equal timestamps, rollback and canonical history reset. Native actions reuse pure command authority; archival, timezone-equivalent grant expiry and SQLite error paths are corrected. 462 distinct installed cases passed with 0 skipped on Windows outside the checkout. All 470 Python files, 7 static assets and 161 migrations match wheel/source bytes. PR-06 remains IN_PROGRESS: authority-blocking coverage is currently managed-handoff-only; general approvals and remaining message/native policy gates are not claimed. PR-07 client/UI/browser, qualified providers, native service campaigns and full R3 remain open. Connector/Core are unchanged.",
+      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Authority-blocking projection currently covers admitted managed handoffs; pending message/native work and remaining canonical policy gates are not yet fully covered.",
-        "Approval records without execution_native_requests are not projected; AT-01 broader approval coverage is open.",
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical action navigation and accessibility require implementation and browser evidence.",
-        "Exact counts scan eligible facts under a five-second budget; aged-handoff eligibility can inspect multiple candidates inside SQL. No unlimited-scale claim.",
-        "Windows synthetic fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
+        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
+        "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
+        "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
       ],
       "subscopes": {
         "read_projection_passivity": "VERIFIED",
@@ -5034,26 +5124,52 @@
         "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py",
         "src/okto_nexus/adapters/inbound/http/attention.py",
         "src/okto_nexus/adapters/inbound/http/attention_stream.py",
-        "src/okto_nexus/migrations/161_attention_preferences.sql"
+        "src/okto_nexus/migrations/161_attention_preferences.sql",
+        "src/okto_nexus/application/attention_approvals.py",
+        "src/okto_nexus/application/attention_authority.py",
+        "src/okto_nexus/application/attention_results.py",
+        "src/okto_nexus/application/runtime_delivery_facts.py",
+        "src/okto_nexus/application/runtime_delivery.py",
+        "src/okto_nexus/application/runtime_maintenance.py",
+        "src/okto_nexus/application/approvals.py",
+        "src/okto_nexus/application/observability.py",
+        "src/okto_nexus/application/ports.py",
+        "src/okto_nexus/application/database_reset.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_results.py",
+        "src/okto_nexus/adapters/outbound/sqlite/migrations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observability_repo.py",
+        "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-authority-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Operator attention version 1 now composes the twelve initial kinds, exact filtered snapshots/keyset pages, shared operator seen/snooze CAS and metadata-only SSE invalidation. Additive migration 161 preserves atomic episode anchors across retries, equal timestamps, rollback and canonical history reset. Native actions reuse pure command authority; archival, timezone-equivalent grant expiry and SQLite error paths are corrected. 462 distinct installed cases passed with 0 skipped on Windows outside the checkout. All 470 Python files, 7 static assets and 161 migrations match wheel/source bytes. PR-06 remains IN_PROGRESS: authority-blocking coverage is currently managed-handoff-only; general approvals and remaining message/native policy gates are not claimed. PR-07 client/UI/browser, qualified providers, native service campaigns and full R3 remain open. Connector/Core are unchanged.",
+      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Authority-blocking projection currently covers admitted managed handoffs; pending message/native work and remaining canonical policy gates are not yet fully covered.",
-        "Approval records without execution_native_requests are not projected; AT-01 broader approval coverage is open.",
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical action navigation and accessibility require implementation and browser evidence.",
-        "Exact counts scan eligible facts under a five-second budget; aged-handoff eligibility can inspect multiple candidates inside SQL. No unlimited-scale claim.",
-        "Windows synthetic fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
+        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
+        "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
+        "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
       ],
       "subscopes": {
         "operator_api_cas_filters_pages": "VERIFIED",
-        "mixed_source_http_integration": "VERIFIED"
+        "mixed_source_http_integration": "VERIFIED",
+        "canonical_record_navigation_references": "VERIFIED"
       }
     },
     "ATN-05": {
@@ -5077,22 +5193,47 @@
         "src/okto_nexus/adapters/outbound/sqlite/attention_operations.py",
         "src/okto_nexus/adapters/inbound/http/attention.py",
         "src/okto_nexus/adapters/inbound/http/attention_stream.py",
-        "src/okto_nexus/migrations/161_attention_preferences.sql"
+        "src/okto_nexus/migrations/161_attention_preferences.sql",
+        "src/okto_nexus/application/attention_approvals.py",
+        "src/okto_nexus/application/attention_authority.py",
+        "src/okto_nexus/application/attention_results.py",
+        "src/okto_nexus/application/runtime_delivery_facts.py",
+        "src/okto_nexus/application/runtime_delivery.py",
+        "src/okto_nexus/application/runtime_maintenance.py",
+        "src/okto_nexus/application/approvals.py",
+        "src/okto_nexus/application/observability.py",
+        "src/okto_nexus/application/ports.py",
+        "src/okto_nexus/application/database_reset.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_approvals.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_authority.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_results.py",
+        "src/okto_nexus/adapters/outbound/sqlite/migrations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observability_repo.py",
+        "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/routes.py",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+        "src/okto_nexus/migrations/162_attention_authority_epochs.sql"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-platform-installed-initial.xml",
-        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml"
+        "plans/agent_ops/evidence/pr06-attention-platform-recovery-installed.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-authority-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-platform-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-decisions-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-transport-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Operator attention version 1 now composes the twelve initial kinds, exact filtered snapshots/keyset pages, shared operator seen/snooze CAS and metadata-only SSE invalidation. Additive migration 161 preserves atomic episode anchors across retries, equal timestamps, rollback and canonical history reset. Native actions reuse pure command authority; archival, timezone-equivalent grant expiry and SQLite error paths are corrected. 462 distinct installed cases passed with 0 skipped on Windows outside the checkout. All 470 Python files, 7 static assets and 161 migrations match wheel/source bytes. PR-06 remains IN_PROGRESS: authority-blocking coverage is currently managed-handoff-only; general approvals and remaining message/native policy gates are not claimed. PR-07 client/UI/browser, qualified providers, native service campaigns and full R3 remain open. Connector/Core are unchanged.",
+      "result": "Attention now includes generic approvals with optional canonical decision CAS; manual/MCP and native handoff results share a stable claim identity and migrated viewing preferences. Pending managed messages, handoffs, queued execution and native decisions revalidate current authority from batched metadata, including relay and notification provenance. Canonical inspection references include message/result/executor IDs, exact handoff selection and maintenance history beyond overview limits; cleanup inspection survives disabled execution without enabling mutations. Migration 162 preserves data/preferences and nullable legacy timestamps; migration 161 is unchanged. 718 distinct installed behavioral cases passed with zero skipped, plus one observation of the known global-feature off/on/off episode-reuse gap. The final 477-Python-file, seven-asset, 162-migration wheel matches source/installed bytes; two changed payloads versus the broad candidate were requalified by 43 installed cases. PR-06 remains IN_PROGRESS for effective global-policy episode generations and client reconciliation; PR-07/browser, real provider/client/service campaigns and full R3 remain open. Core/Connector are unchanged.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
-        "Authority-blocking projection currently covers admitted managed handoffs; pending message/native work and remaining canonical policy gates are not yet fully covered.",
-        "Approval records without execution_native_requests are not projected; AT-01 broader approval coverage is open.",
-        "PR-07 client stale-state reconciliation, protected counter clearing, canonical action navigation and accessibility require implementation and browser evidence.",
-        "Exact counts scan eligible facts under a five-second budget; aged-handoff eligibility can inspect multiple candidates inside SQL. No unlimited-scale claim.",
-        "Windows synthetic fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
+        "Global effective feature off/on/off without persisted source change reuses the authority episode/preference. The passing limitation-observation test does not qualify AT-08; a durable effective-policy generation remains to implement.",
+        "PR-07 client stale-state reconciliation, protected counter clearing, canonical controls and accessibility still require implementation and real browser evidence.",
+        "Authority classification concerns managed canonical execution and revoked/expired authorization/configuration. External attach and content-guardrail verdicts are not promoted into this classifier.",
+        "Exact filtered counts use batched facts under a cooperative five-second budget; constant query count for forty distinct actors does not claim constant computation or unlimited scale.",
+        "Synthetic native peers and disposable Windows fixtures do not qualify real providers, external clients, native user-service campaigns, other platforms or full R3."
       ],
       "subscopes": {
         "tcp_sse_metadata_batching_gap_revocation": "VERIFIED",
@@ -7191,7 +7332,7 @@
     },
     "AT-01": {
       "requirement": "AprovaÃ§Ã£o pendente aparece para operador autorizado.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -7231,13 +7372,18 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Native approval appears for the authorized operator; broad non-native approval coverage remains open."
+      "result": "Installed operator API projects canonical native and generic pending approvals, with actual registry/recipient and scoped receipt/proposal correlation. PR-07 rendering remains separate."
     },
     "AT-02": {
       "requirement": "AprovaÃ§Ã£o expirada perde aÃ§Ã£o e preserva referÃªncia histÃ³rica adequada.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -7277,9 +7423,14 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Native expiry and archival remove decision actions while preserving history and identity; broad non-native approval coverage remains open."
+      "result": "Known expired native, coordination, proposal and retained legacy approvals lose decision controls and preserve inspection/history. Governance records gain no invented TTL. Installed backend evidence; UI pending in PR-07."
     },
     "AT-03": {
       "requirement": "Pergunta destinada ao agente A nÃ£o vira pergunta respondÃ­vel pelo operador como A.",
@@ -7507,7 +7658,12 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
@@ -7553,9 +7709,14 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Native, handoff, result and current transition episodes are stable; other authority-source coverage remains open."
+      "result": "Persisted source episodes, rollback/reentry, result seen retention and 161-to-162 preference migration are qualified. Global effective feature off/on/off without persisted generation still reuses the episode; its passing observation is explicitly not acceptance. Browser reconnect remains pending."
     },
     "AT-09": {
       "requirement": "AÃ§Ã£o com revisÃ£o antiga conflita e recarrega o fato; nÃ£o decide pedido novo.",
@@ -7599,9 +7760,14 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Backend source/preference CAS and canonical decision fencing are verified; UI conflict reload remains pending."
+      "result": "Installed source/preference CAS and strict optional canonical decision_revision fence stale forms after failed execution/re-pending. UI conflict reload remains pending in PR-07."
     },
     "AT-10": {
       "requirement": "Lista, total e filtros respeitam a mesma autorizaÃ§Ã£o e paginaÃ§Ã£o.",
@@ -7645,7 +7811,12 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
@@ -7829,7 +8000,12 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
       "result": "Installed backend contract verified with synthetic canonical facts; see exact test/report scope. No browser/provider acceptance inferred."
     },
@@ -7840,7 +8016,7 @@
     },
     "AT-16": {
       "requirement": "Consulta em lote nÃ£o cresce em N+1 por ocorrÃªncia/agente.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr06-attention-authority-installed.xml",
         "plans/agent_ops/evidence/pr06-attention-behavior-installed.xml",
@@ -7880,9 +8056,14 @@
         "plans/agent_ops/evidence/pr06-attention-storage-source.xml",
         "plans/agent_ops/evidence/pr06-attention-wheel.json",
         "plans/agent_ops/evidence/pr06-attention.md",
-        "plans/agent_ops/evidence/pr06-attention-release-scope.json"
+        "plans/agent_ops/evidence/pr06-attention-release-scope.json",
+        "plans/agent_ops/evidence/pr06-attention-completion.md",
+        "plans/agent_ops/evidence/pr06-attention-completion-source-reports.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-installed-summary.json",
+        "plans/agent_ops/evidence/pr06-attention-completion-behavior-installed-initial.xml",
+        "plans/agent_ops/evidence/pr06-attention-completion-release-installed.xml"
       ],
-      "result": "Native batching has constant SQL counts for 1/25 requests, and shared engine uses batched relations. Broader classifier/source coverage and full-view performance remain open."
+      "result": "Installed whole-engine queries remain constant across one versus forty distinct agents/profiles/endpoints with 120 mixed occurrences; filtered exact counts, kind-family pruning and cooperative Python-budget failure/recovery are verified. This is bounded batching, not unlimited-scale performance."
     },
     "OB-01": {
       "requirement": "Fonte vinculada somente a agente/workspace autorizado.",

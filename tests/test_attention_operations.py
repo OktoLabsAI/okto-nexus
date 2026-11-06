@@ -11,6 +11,8 @@ from okto_nexus.adapters.outbound.sqlite.attention_operations import (
 from okto_nexus.adapters.outbound.sqlite.handoff_repo import SqliteHandoffRepo
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.attention_operations import operator_policy, project
+from okto_nexus.application.attention_results import project as project_result
+from okto_nexus.adapters.outbound.sqlite.attention_results import SOURCE_SQL as RESULT_SQL
 from okto_nexus.application.database_reset import clear_operational_history
 from okto_nexus.domain.attention import with_preferences
 from okto_nexus.application.runtime_maintenance import RuntimeMaintenanceService
@@ -46,6 +48,10 @@ def read(c, *, policy=None, now=NOW, workspace_id=None, agent_id=None):
     rows = c.execute(SOURCE_SQL, dict(now=now, workspace_id=workspace_id, agent_id=agent_id)).fetchall()
     facts = [json.loads(row["facts"]) for row in rows]
     result = [item for row in facts for item in project(row, now, policy or operator_policy(None))]
+    result_facts = [json.loads(row['facts']) for row in c.execute(
+        RESULT_SQL, dict(now=now, workspace_id=workspace_id, agent_id=agent_id))]
+    result.extend(item for row in result_facts for item in project_result(row, now, {}))
+    facts.extend(result_facts)
     return result, facts
 
 
@@ -228,22 +234,13 @@ def test_normal_claim_cleanup_and_unproved_eligibility_are_not_incidents(db):
 
 
 def test_result_seen_is_independent_of_canonical_success():
-    facts = dict(family="result", source_type="execution_result", source_id="op", episode=["stream", 1],
-        source_revision=["stream", 1, "success"], first_detected_at=NOW, last_changed_at=NOW,
-        canonical_result=True, operation_id="op")
-    item = project(facts, NOW, {})[0]
+    facts = dict(source_type="execution_result", operation_id="op", server_id="s", executor_id="e",
+        stream_epoch="stream", terminal_sequence=1, delivery_outcome="success", captured_at=NOW,
+        agent_id="worker", workspace_id="ws", session_id="session")
+    item = project_result(facts, NOW, {})[0]
     seen = with_preferences(item, now=LATER, seen_at=LATER)
     assert item["resolution"] == seen["resolution"] == "resolved"
     assert item["active"] is True and seen["active"] is False
-
-
-def test_authority_requires_live_work_and_explicit_binding_proof():
-    facts = dict(family="authority", source_type="delivery_operation", source_id="op", episode=["grant", 1],
-        source_revision="revoked", first_detected_at=NOW, last_changed_at=NOW,
-        pending=True, authority_blocked=True)
-    assert project(facts, NOW, {})[0]["kind"] == "execution_authority_blocking"
-    assert not project(facts | {"pending": False}, NOW, {})
-    assert not project(facts | {"authority_blocked": False}, NOW, {})
 
 
 def managed_operation(c):
@@ -258,30 +255,38 @@ def managed_operation(c):
               "VALUES('h',1,'domain-op','g',1,'worker','key','hash',?)", (NOW,))
 
 
-@pytest.mark.parametrize("change", [
-    "UPDATE runtime_execution_grants SET revoked_at='2026-11-06T12:00:00Z',revision=2",
-    "UPDATE runtime_execution_grants SET expires_at='2026-11-06T12:00:00Z'",
-    "UPDATE agent_endpoints SET enabled=0,revision=2",
-])
-def test_sql_authority_correlates_current_claim_exact_grant_and_pending_work(db, change):
-    managed_operation(db)
-    assert not only(db, "execution_authority_blocking")
-    db.execute(change)
-    first = only(db, "execution_authority_blocking")[0]
-    assert first["operation_id"] == "domain-op"
-    assert "SECRET" not in json.dumps(read(db)[1])
-    db.execute("UPDATE delivery_outbox SET attempt_count=attempt_count+1,updated_at=?", (LATER,))
-    assert only(db, "execution_authority_blocking")[0] == first
-    db.execute("UPDATE handoffs SET status='COMPLETED'")
-    assert not only(db, "execution_authority_blocking")
+def revision_anchor_resources(db):
+    """Synthetic resources for migration 161, not canonical admission proof.
 
-
-def managed_profile_operation(db):
+    The authority family's command-equivalent predicates are exercised with
+    actually admitted work in test_attention_authority.py.
+    """
     managed_operation(db)
     db.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,created_at,updated_at) "
                "VALUES('profile','fixture','{}',1,?,?)", (NOW, NOW))
     db.execute("UPDATE agent_endpoints SET profile_id='profile' WHERE endpoint_id='ep'")
     db.execute("UPDATE delivery_outbox SET profile_revision=1 WHERE operation_id='domain-op'")
+
+
+REVISION_ANCHORS = {
+    "grant": ("runtime_grant_revision", "g"),
+    "endpoint": ("runtime_endpoint_revision", "ep"),
+    "profile": ("runtime_profile_revision", "profile"),
+}
+
+
+def revision_anchor(db, resource):
+    row = db.execute("SELECT * FROM attention_operation_epochs WHERE source_type=? AND source_id=?",
+                     REVISION_ANCHORS[resource]).fetchone()
+    assert row is not None
+    return dict(row)
+
+
+def revision_state(resource, revision):
+    if resource == "grant":
+        return str(revision)
+    return json.dumps([revision, 1, "approved"] if resource == "endpoint" else [revision, 1],
+                      separators=(",", ":"))
 
 
 def change_authority_revision(db, resource, revision, at):
@@ -296,13 +301,15 @@ def change_authority_revision(db, resource, revision, at):
 
 @pytest.mark.parametrize("resource", ["grant", "endpoint", "profile"])
 def test_authority_revision_episode_survives_retry_and_observation_timestamps(db, resource):
-    managed_profile_operation(db)
-    assert not only(db, "execution_authority_blocking")
+    revision_anchor_resources(db)
+    initial = revision_anchor(db, resource)
+    assert initial["state"] == revision_state(resource, 1) and initial["episode"] == 1
+    assert initial["first_detected_at"] == initial["last_changed_at"] == NOW
     changed_at = "2026-11-06T12:10:00.000000Z"
     change_authority_revision(db, resource, 2, changed_at)
-    first = only(db, "execution_authority_blocking", now=changed_at)[0]
-    assert first["first_detected_at"] == "2026-11-06T12:10:00.000000+00:00"
-    assert first["last_changed_at"] == first["first_detected_at"]
+    first = revision_anchor(db, resource)
+    assert first["state"] == revision_state(resource, 2) and first["episode"] == 2
+    assert first["first_detected_at"] == first["last_changed_at"] == changed_at
 
     db.create_function("strftime", -1, lambda *args: LATER)
     db.execute("UPDATE delivery_outbox SET attempt_count=attempt_count+1,status='RETRY_WAIT',updated_at=?", (LATER,))
@@ -310,37 +317,45 @@ def test_authority_revision_episode_survives_retry_and_observation_timestamps(db
     db.execute("UPDATE runtime_profiles SET updated_at=?", (LATER,))
     db.execute("UPDATE runtime_execution_grants SET used_executions=used_executions+1")
     before = list(db.iterdump())
-    assert only(db, "execution_authority_blocking", now=LATER)[0] == first
-    assert only(db, "execution_authority_blocking", now="2026-11-07T00:00:00Z")[0] == first
+    assert revision_anchor(db, resource) == first
+    # The remaining operations/results projections are also passive observers
+    # of these counters; they do not manufacture authority from this fixture.
+    read(db, now=LATER)
+    read(db, now="2026-11-07T00:00:00Z")
+    assert revision_anchor(db, resource) == first
     assert list(db.iterdump()) == before
 
 
 @pytest.mark.parametrize("resource", ["grant", "endpoint", "profile"])
 def test_authority_revision_anchors_rollback_and_reenter_with_distinct_episode(db, resource):
-    managed_profile_operation(db)
+    revision_anchor_resources(db)
     changed_at = "2026-11-06T12:10:00.000000Z"
     change_authority_revision(db, resource, 2, changed_at)
-    first = only(db, "execution_authority_blocking", now=changed_at)[0]
+    first = revision_anchor(db, resource)
+    assert first["state"] == revision_state(resource, 2) and first["episode"] == 2
     before = list(db.iterdump())
     db.execute("SAVEPOINT revision_change")
     change_authority_revision(db, resource, 3, LATER)
-    aborted = only(db, "execution_authority_blocking", now=LATER)[0]
-    assert aborted["attention_id"] != first["attention_id"]
-    assert aborted["source_revision"] != first["source_revision"]
-    assert aborted["first_detected_at"] == aborted["last_changed_at"] == "2026-11-06T13:00:00.000000+00:00"
+    aborted = revision_anchor(db, resource)
+    assert aborted["episode"] == first["episode"] + 1 and aborted["state"] == revision_state(resource, 3)
+    assert aborted["first_detected_at"] == aborted["last_changed_at"] == LATER
     db.execute("ROLLBACK TO revision_change")
     db.execute("RELEASE revision_change")
     assert list(db.iterdump()) == before
-    assert only(db, "execution_authority_blocking", now=LATER)[0] == first
+    assert revision_anchor(db, resource) == first
     change_authority_revision(db, resource, 3, LATER)
-    assert only(db, "execution_authority_blocking", now=LATER)[0] == aborted
-    # Restoring a matching version closes the condition; recurrence is a new
-    # durable episode even if revision numbers and the write clock repeat.
+    assert revision_anchor(db, resource) == aborted
+    # Returning to a previous value still records a material transition;
+    # recurrence advances the counter even if the write clock repeats.
     change_authority_revision(db, resource, 1, LATER)
-    assert not only(db, "execution_authority_blocking", now=LATER)
+    restored = revision_anchor(db, resource)
+    assert restored["state"] == revision_state(resource, 1)
+    assert restored["episode"] == aborted["episode"] + 1
     change_authority_revision(db, resource, 2, LATER)
-    repeated = only(db, "execution_authority_blocking", now=LATER)[0]
-    assert repeated["attention_id"] not in {first["attention_id"], aborted["attention_id"]}
+    repeated = revision_anchor(db, resource)
+    assert repeated["state"] == first["state"]
+    assert repeated["episode"] == restored["episode"] + 1
+    assert repeated["first_detected_at"] == repeated["last_changed_at"] == LATER
 
 
 def test_unused_authority_resource_deletion_removes_its_revision_anchor(db):
@@ -363,8 +378,9 @@ def test_unused_authority_resource_deletion_removes_its_revision_anchor(db):
 
 
 def test_real_agent_retirement_records_endpoint_gate_without_fabricating_revision(db):
-    managed_profile_operation(db)
+    revision_anchor_resources(db)
     before = dict(db.execute("SELECT * FROM agent_endpoints WHERE endpoint_id='ep'").fetchone())
+    initial = revision_anchor(db, "endpoint")
     changed_at = "2026-11-06T12:10:00.000000Z"
     db.create_function("strftime", -1, lambda *args: changed_at)
     assert SqliteAgentRepo(FakeClock(iso=changed_at)).delete(SimpleNamespace(connection=db), agent_id="worker")
@@ -372,61 +388,97 @@ def test_real_agent_retirement_records_endpoint_gate_without_fabricating_revisio
     assert current["enabled"] == 0
     assert current["revision"] == before["revision"] and current["updated_at"] == before["updated_at"]
     assert db.execute("SELECT status FROM handoffs WHERE handoff_id='h'").fetchone()[0] == "CLAIMED"
-    first = only(db, "execution_authority_blocking", now=changed_at)[0]
-    assert first["first_detected_at"] == "2026-11-06T12:10:00.000000+00:00"
+    first = revision_anchor(db, "endpoint")
+    assert first["state"] == '[1,0,"approved"]' and first["episode"] == initial["episode"] + 1
+    assert first["first_detected_at"] == first["last_changed_at"] == changed_at
     db.execute("UPDATE delivery_outbox SET attempt_count=attempt_count+1,updated_at=?", (LATER,))
     db.execute("UPDATE agent_endpoints SET health='healthy',updated_at=?", (LATER,))
-    assert only(db, "execution_authority_blocking", now=LATER)[0] == first
+    assert revision_anchor(db, "endpoint") == first
 
 
-@pytest.mark.parametrize("resource,column,blocked,restored", [
-    ("agent_endpoints", "activation_state", "pending_review", "approved"),
-    ("runtime_profiles", "enabled", 0, 1),
+@pytest.mark.parametrize("resource,table,column,blocked,restored,blocked_state", [
+    ("endpoint", "agent_endpoints", "activation_state", "pending_review", "approved", '[1,1,"pending_review"]'),
+    ("profile", "runtime_profiles", "enabled", 0, 1, '[1,0]'),
 ])
-def test_authority_gate_without_revision_has_material_episode_and_revision(db, resource, column, blocked, restored):
-    managed_profile_operation(db)
+def test_authority_gate_without_revision_has_material_anchor_state_and_episode(db, resource, table, column, blocked, restored, blocked_state):
+    revision_anchor_resources(db)
+    initial = revision_anchor(db, resource)
     changed_at = "2026-11-06T12:10:00.000000Z"
     db.create_function("strftime", -1, lambda *args: changed_at)
-    db.execute(f"UPDATE {resource} SET {column}=?", (blocked,))
-    first = only(db, "execution_authority_blocking", now=changed_at)[0]
-    assert first["first_detected_at"] == "2026-11-06T12:10:00.000000+00:00"
-    db.execute(f"UPDATE {resource} SET {column}=?", (restored,))
-    assert not only(db, "execution_authority_blocking", now=changed_at)
-    db.execute(f"UPDATE {resource} SET {column}=?", (blocked,))
-    repeated = only(db, "execution_authority_blocking", now=changed_at)[0]
-    assert repeated["attention_id"] != first["attention_id"]
-    assert repeated["source_revision"] != first["source_revision"]
-    assert repeated["first_detected_at"] == first["first_detected_at"]
+    db.execute(f"UPDATE {table} SET {column}=?", (blocked,))
+    first = revision_anchor(db, resource)
+    assert first["state"] == blocked_state and first["episode"] == initial["episode"] + 1
+    assert first["first_detected_at"] == first["last_changed_at"] == changed_at
+    assert db.execute(f"SELECT revision FROM {table}").fetchone()[0] == 1
+    db.execute(f"UPDATE {table} SET {column}=?", (restored,))
+    reopened = revision_anchor(db, resource)
+    assert reopened["state"] == initial["state"] and reopened["episode"] == first["episode"] + 1
+    db.execute(f"UPDATE {table} SET {column}=?", (blocked,))
+    repeated = revision_anchor(db, resource)
+    assert repeated["state"] == first["state"] and repeated["episode"] == reopened["episode"] + 1
+    assert repeated["first_detected_at"] == repeated["last_changed_at"] == first["first_detected_at"]
 
 
 @pytest.mark.parametrize("keep_agents", [True, False])
 def test_reset_preserves_only_anchors_whose_canonical_resources_survive(db, keep_agents):
-    managed_profile_operation(db)
+    revision_anchor_resources(db)
     for resource in ("grant", "endpoint", "profile"):
         change_authority_revision(db, resource, 2, NOW)
+    db.execute("UPDATE runtime_execution_grants SET used_executions=7 WHERE grant_id='g'")
     before = {(row["source_type"], row["source_id"]): dict(row)
               for row in db.execute("SELECT * FROM attention_operation_epochs")}
+    configuration_tables = ("agents", "agent_endpoints", "runtime_profiles", "runtime_execution_grants",
+                            "execution_executors", "execution_bindings", "execution_workspace_bindings")
+    configuration = {table: sorted((tuple(row) for row in db.execute(f"SELECT * FROM {table}")), key=repr)
+                     for table in configuration_tables}
+    # 162 keeps the authority counters of installation defaults independently
+    # of identities. Its per-resource counters follow retained configuration.
+    defaults = ("authority_runtime_policy_defaults", "[1]")
     clear_operational_history(db, keep_agents=keep_agents)
     remaining = {(row["source_type"], row["source_id"]): dict(row)
                  for row in db.execute("SELECT * FROM attention_operation_epochs")}
     if not keep_agents:
-        assert remaining == {}
-        for table in ("agents", "agent_endpoints", "runtime_profiles", "runtime_execution_grants", "execution_executors"):
+        assert remaining == {defaults: before[defaults]}
+        assert remaining[defaults]["state"] == "present"
+        for table in configuration_tables:
             assert db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] == 0
         return
-    retained_types = {"runtime_grant_revision", "runtime_endpoint_revision", "runtime_profile_revision", "execution_executor"}
-    assert remaining == {key: value for key, value in before.items() if key[0] in retained_types}
+    retained_keys = {
+        ("runtime_grant_revision", "g"), ("runtime_endpoint_revision", "ep"),
+        ("runtime_profile_revision", "profile"), ("execution_executor", '["s","e"]'),
+        defaults,
+        ("authority_agents", '["operator"]'), ("authority_agents", '["worker"]'),
+        ("authority_agents", '["creator"]'),
+        ("authority_agent_endpoints", '["ep"]'),
+        ("authority_runtime_profiles", '["profile"]'),
+        ("authority_runtime_execution_grants", '["g"]'),
+        ("authority_execution_executors", '["s","e"]'),
+        ("authority_execution_bindings", '["s","e","b"]'),
+        ("authority_execution_workspace_bindings", '["s","e","wb"]'),
+    }
+    assert remaining == {key: before[key] for key in retained_keys}
+    assert {table: sorted((tuple(row) for row in db.execute(f"SELECT * FROM {table}")), key=repr)
+            for table in configuration_tables} == configuration
+    assert tuple(db.execute("SELECT used_executions,max_executions,revision FROM runtime_execution_grants "
+                            "WHERE grant_id='g'").fetchone()) == (7, 100, 2)
     assert not read(db, now=LATER)[0]
-    for resource, source_type, identity in (
-        ("grant", "runtime_grant_revision", "g"),
-        ("endpoint", "runtime_endpoint_revision", "ep"),
-        ("profile", "runtime_profile_revision", "profile"),
+    for resource, authority_type in (
+        ("grant", "authority_runtime_execution_grants"),
+        ("endpoint", "authority_agent_endpoints"),
+        ("profile", "authority_runtime_profiles"),
     ):
+        source_type, identity = REVISION_ANCHORS[resource]
         change_authority_revision(db, resource, 3, LATER)
-        row = dict(db.execute("SELECT * FROM attention_operation_epochs WHERE source_type=? AND source_id=?",
-                              (source_type, identity)).fetchone())
+        row = revision_anchor(db, resource)
+        assert row["state"] == revision_state(resource, 3)
         assert row["episode"] == remaining[(source_type, identity)]["episode"] + 1
         assert row["first_detected_at"] == row["last_changed_at"] == LATER
+        authority_key = (authority_type, json.dumps([identity], separators=(",", ":")))
+        authority = dict(db.execute("SELECT * FROM attention_operation_epochs WHERE source_type=? AND source_id=?",
+                                    authority_key).fetchone())
+        assert authority["state"] == "present"
+        assert authority["episode"] == remaining[authority_key]["episode"] + 1
+        assert authority["first_detected_at"] == authority["last_changed_at"] == LATER
 
 
 def canonical_result(c, *, terminal=None):
@@ -523,7 +575,8 @@ def cleanup_service(migrated_factory, monkeypatch):
         raise OSError("fixture lost cleanup response")
 
     artifacts = SimpleNamespace(discard_unpublished=fail)
-    service = RuntimeMaintenanceService(access=SimpleNamespace(authorize=lambda *args, **kwargs: None),
+    service = RuntimeMaintenanceService(access=SimpleNamespace(authorize=lambda *args, **kwargs: None,
+        authorize_maintenance=lambda *args, **kwargs: None, cf=migrated_factory),
                                         dispatcher=owner, artifact_store=artifacts)
     monkeypatch.setattr(service, "_authorize_owner", lambda context: owner)
     return service, migrated_factory, artifacts, calls, clock

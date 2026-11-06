@@ -38,7 +38,7 @@ def _profile(raw):
     return dict(raw, config=_json(raw['config'])) if raw else None
 
 
-def _runtime_grant(runtime, actor_data, *, action, grant_id, scope, now, policy):
+def _runtime_grant(runtime, actor_data, *, action, grant_id, scope, now, policy, check_budget=False):
     if policy['admission_closed']:
         fail('Runtime shutdown is in progress; new work is not accepted.', details={'reason': 'RUNTIME_DRAINING'})
     if not runtime or not runtime['endpoint'] or runtime['endpoint']['protocol'] != 'nxl-r4':
@@ -79,7 +79,7 @@ def _runtime_grant(runtime, actor_data, *, action, grant_id, scope, now, policy)
         if grant_candidate_authorized(grant, actor=actor,
                 represented=represented if grant['represented_agent_id'] == represented.agent_id else None,
                 endpoint=endpoint, profile=profile, action=action, represented_agent_id=scope['agent_id'],
-                workspace_id=scope.get('workspace_id'), check_budget=False, consume=False):
+                workspace_id=scope.get('workspace_id'), check_budget=check_budget, consume=False):
             return grant
     fail('Runtime action is not authorized.', ErrorCode.PERMISSION_DENIED)
 
@@ -216,7 +216,7 @@ def project(facts, now, policy):
     return [occurrence(kind=kind, source_type='execution_native_request', source_id=request['canonical_request_id'],
         episode=request['request_revision'], source_revision=revision, first_detected_at=request['received_at'],
         last_changed_at=changed, agent_id=scope['agent_id'], workspace_id=scope['workspace_id'],
-        session_id=scope['session_id'], operation_id=request['source_operation_id'],
+        session_id=scope['session_id'], operation_id=request['source_operation_id'], executor_id=scope['executor_id'],
         category='action_required' if actionable else 'watch', severity='warning' if actionable else 'info',
         priority=20 if actionable else 10, resolution=resolution, allowed_actions=actions,
         freshness='unavailable' if recipient is None and not permission else 'stale' if reason else 'current',

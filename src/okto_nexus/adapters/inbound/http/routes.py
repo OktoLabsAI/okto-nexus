@@ -309,6 +309,7 @@ class DecisionBody(BaseModel):
     decision: str = Field(min_length=1)
     justification: str | None = None
     response: dict[str, Any] | None = None
+    expected_decision_revision: int | None = Field(default=None, strict=True, ge=0)
 
 
 class SteeringBody(BaseModel):
@@ -906,7 +907,12 @@ def build_router() -> APIRouter:
         until: str | None = None,
         from_agent: str | None = None,
         to_agent: str | None = None,
+        handoff_id: str | None = None,
     ) -> JSONResponse:
+        if handoff_id is not None and (not handoff_id.strip() or len(handoff_id) > 2048
+                or any(ord(char) < 32 for char in handoff_id)
+                or len(request.query_params.getlist('handoff_id')) != 1):
+            return _err(422, 'INVALID_PARAM', 'handoff_id must be one nonempty canonical reference.')
         observability = request.app.state.observability
         try:
             rows = await _read(
@@ -919,6 +925,7 @@ def build_router() -> APIRouter:
                     until_iso=until,
                     from_agent_id=from_agent,
                     to_agent_id=to_agent,
+                    handoff_id=handoff_id,
                 ),
             )
         except OktoNexusError as exc:
@@ -3329,6 +3336,7 @@ def build_router() -> APIRouter:
                 justification=body.justification,
                 response=body.response,
                 decision_context=_binding_decision_context(),
+                expected_decision_revision=body.expected_decision_revision,
             )
 
         try:

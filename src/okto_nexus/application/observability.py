@@ -296,6 +296,7 @@ class ObservabilityService:
         until_iso: str | None = None,
         from_agent_id: str | None = None,
         to_agent_id: str | None = None,
+        handoff_id: str | None = None,
     ) -> list[dict[str, Any]]:
         statuses = (status,) if status else None
         rows = self._q.handoff_rows(
@@ -306,6 +307,7 @@ class ObservabilityService:
             until_iso=until_iso,
             from_agent_id=from_agent_id,
             to_agent_id=to_agent_id,
+            handoff_id=handoff_id,
         )
         if rows:
             from .handoff_runtime_views import progress

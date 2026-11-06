@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="33" time="91.011" timestamp="2026-11-06T16:55:43.890612-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_approvals" name="test_canonical_governance_approval_is_metadata_only_and_decidable_after_flag_off[message_create]" time="6.095" /><testcase classname="tests.test_attention_approvals" name="test_canonical_governance_approval_is_metadata_only_and_decidable_after_flag_off[handoff_create]" time="3.664" /><testcase classname="tests.test_attention_approvals" name="test_http_stale_generation_cannot_decide_after_failed_executor_reverts[approve]" time="3.515" /><testcase classname="tests.test_attention_approvals" name="test_http_stale_generation_cannot_decide_after_failed_executor_reverts[reject]" time="3.504" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[True]" time="3.765" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[False]" time="3.492" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[-1]" time="3.662" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[1.5]" time="3.538" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[0]" time="3.603" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[revision5]" time="3.583" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[revision6]" time="3.464" /><testcase classname="tests.test_attention_approvals" name="test_snapshot_registry_is_inert_and_does_not_predict_approve_business_gates" time="1.753" /><testcase classname="tests.test_attention_approvals" name="test_stale_revision_is_checked_before_registered_decision_handler[validator]" time="1.709" /><testcase classname="tests.test_attention_approvals" name="test_stale_revision_is_checked_before_registered_decision_handler[transactional]" time="1.690" /><testcase classname="tests.test_attention_approvals" name="test_http_engine_generic_approval_summary_pages_and_seen_do_not_decide" time="3.568"><failure message="KeyError: 'ok'">env = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10470/test_htt.....}, 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10470\\test_http_engine_generic_appro0\\project')
+
+    def test_http_engine_generic_approval_summary_pages_and_seen_do_not_decide(env):
+        deps, tools, root = env
+        first_id = pending(env)
+        second_id = pending(env, 'handoff_create')
+        workspace = _ws_id(tools, root)
+        with _client(deps) as client:
+            filters = dict(workspace_id=workspace, agent_id='alpha', kind='approval_pending')
+            first = _ok(client.get('/api/v1/attention', params=filters).json())
+            summary = _ok(client.get('/api/v1/attention/summary', params=filters).json())
+            assert first['total'] == summary['total'] == 2
+            assert first['counts'] == summary['counts']
+            assert first['snapshot_revision'] == summary['snapshot_revision']
+            assert {item['source_id'] for item in first['items']} == {first_id, second_id}
+            assert all(item['allowed_actions'] == ['inspect_approval', 'decide_approval'] for item in first['items'])
+            page = _ok(client.get('/api/v1/attention', params=dict(filters, limit=1)).json())
+            rest = _ok(client.get('/api/v1/attention', params=dict(filters, limit=1, cursor=page['next_cursor'])).json())
+            assert page['items'] + rest['items'] == first['items'] and rest['next_cursor'] is None
+            item = first['items'][0]
+            before = [_ok(client.get(f'/api/v1/approvals/{aid}').json()) for aid in (first_id, second_id)]
+            changed = client.post(f"/api/v1/attention/{item['attention_id']}/seen", json={
+                'source_revision': item['source_revision'], 'preference_revision': 0})
+            assert changed.status_code == 200, changed.text
+            viewed = _ok(changed.json())['item']
+            assert viewed['seen_state']['seen'] and viewed['resolution'] == 'open'
+            assert viewed['allowed_actions'] == item['allowed_actions']
+            assert [_ok(client.get(f'/api/v1/approvals/{aid}').json()) for aid in (first_id, second_id)] == before
+&gt;           listing = _ok(client.get('/api/v1/approvals').json())
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_approvals.py:236:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+env = {'detail': [{'type': 'missing', 'loc': ['query', 'workspace'], 'msg': 'Field required', 'input': None}]}
+
+&gt;   ???
+E   KeyError: 'ok'
+
+/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_hitl.py:78: KeyError</failure></testcase><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[operator-expected0]" time="1.705" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[beta-expected1]" time="1.488" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[None-expected2]" time="1.695" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[-expected3]" time="1.722" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[7-expected4]" time="1.609" /><testcase classname="tests.test_attention_approvals" name="test_generic_governance_has_no_invented_ttl_and_unknown_action_is_inspect_only" time="1.619" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[malformed]" time="1.593" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[[]]" time="1.593" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[{&quot;kwargs&quot;: []}]" time="1.517" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[{&quot;kwargs&quot;: null}]" time="1.695" /><testcase classname="tests.test_attention_approvals" name="test_archive_keeps_same_history_and_removes_decision" time="1.644" /><testcase classname="tests.test_attention_approvals" name="test_coordination_approval_uses_correlated_receipt_and_passive_expiry[message_create-False]" time="3.625" /><testcase classname="tests.test_attention_approvals" name="test_coordination_approval_uses_correlated_receipt_and_passive_expiry[handoff_create-False]" time="3.100" /><testcase classname="tests.test_attention_approvals" name="test_binding_proposal_correlates_revision_scope_and_deadline_without_deciding" time="3.775" /><testcase classname="tests.test_attention_approvals" name="test_canonical_native_not_duplicated_or_orphan_promoted_to_generic_decision" time="3.991" /><testcase classname="tests.test_attention_approvals" name="test_legacy_orphan_never_promises_generic_decision[execution.native.respond]" time="1.804" /><testcase classname="tests.test_attention_approvals" name="test_legacy_orphan_never_promises_generic_decision[runtime_native_approval]" time="1.789" /><testcase classname="tests.test_attention_approvals" name="test_source_is_pure_scope_filtered_and_constant_queries" time="1.642" /></testsuite></testsuites>

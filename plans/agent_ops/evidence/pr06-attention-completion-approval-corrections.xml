@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="18.831" timestamp="2026-11-06T16:53:58.055838-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_approvals" name="test_http_stale_generation_cannot_decide_after_failed_executor_reverts[approve]" time="5.530" /><testcase classname="tests.test_attention_approvals" name="test_http_stale_generation_cannot_decide_after_failed_executor_reverts[reject]" time="3.601"><failure message="assert 2 == 1&#10; +  where 2 = len([None, None])">env = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10469/test_htt.....}, 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10469\\test_http_stale_generation_can1\\project')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CDCCEB62C0&gt;
+final_decision = 'reject'
+
+    @pytest.mark.parametrize('final_decision', ['approve', 'reject'])
+    def test_http_stale_generation_cannot_decide_after_failed_executor_reverts(env, monkeypatch, final_decision):
+        deps, _, _ = env
+        approval_id = pending(env)
+        first = by_id(deps, approval_id)
+        calls = []
+&#32;&#32;&#32;&#32;
+        def counted(arguments):
+            calls.append(None)
+            return original(arguments)
+&#32;&#32;&#32;&#32;
+        with _client(deps) as client:
+            # build_app registers the real HTTP executors; count the final wiring.
+            original = deps.approvals._executors['message_create']
+            monkeypatch.setitem(deps.approvals._executors, 'message_create', counted)
+            url = f'/api/v1/approvals/{approval_id}'
+            old = _ok(client.get(url).json())['decision_revision']
+            # Re-execution still enforces the original sender's current permission.
+            _attach(deps, 'alpha', governance=[_rule('message_create', 'deny')])
+            rejected = client.post(url + '/decision', json={'decision': 'approve', 'expected_decision_revision': old})
+            assert rejected.status_code == 403, rejected.text
+            current = _ok(client.get(url).json())
+            assert current['status'] == 'pending' and current['decision_revision'] &gt; old
+            assert len(calls) == 1 and _count(deps, 'messages') == 0
+            still_reviewable = by_id(deps, approval_id)
+            assert still_reviewable['attention_id'] == first['attention_id']
+            assert still_reviewable['source_revision'] != first['source_revision']
+            assert still_reviewable['allowed_actions'] == ['inspect_approval', 'decide_approval']
+            before = (current, _count(deps, 'events'), _count(deps, 'messages'))
+            for stale_decision in ('approve', 'reject'):
+                stale = client.post(url + '/decision', json={
+                    'decision': stale_decision, 'expected_decision_revision': old})
+                assert stale.status_code == 409, stale.text
+                assert stale.json()['error']['code'] == 'CONFLICT'
+                assert len(calls) == 1
+                assert (_ok(client.get(url).json()), _count(deps, 'events'), _count(deps, 'messages')) == before
+            if final_decision == 'approve':
+                _attach(deps, 'alpha')
+            fresh = client.post(url + '/decision', json={
+                'decision': final_decision, 'expected_decision_revision': current['decision_revision']})
+            assert fresh.status_code == 200, fresh.text
+&gt;           assert len(calls) == (2 if final_decision == 'approve' else 1)
+E           assert 2 == 1
+E            +  where 2 = len([None, None])
+
+tests\test_attention_approvals.py:156: AssertionError</failure></testcase><testcase classname="tests.test_attention_approvals" name="test_binding_proposal_correlates_revision_scope_and_deadline_without_deciding" time="3.685" /><testcase classname="tests.test_attention_approvals" name="test_canonical_native_not_duplicated_or_orphan_promoted_to_generic_decision" time="3.498" /></testsuite></testsuites>

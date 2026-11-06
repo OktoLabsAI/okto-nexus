@@ -30,24 +30,52 @@ class RuntimeMaintenanceService:
             owner.wake()
         return result
 
-    def artifacts(self, context, *, action="inspect", result_id=None, quota_bytes=None, idempotency_key=None, reason=None):
-        owner = self._authorize_owner(context)
+    def artifacts(self, context, *, action="inspect", result_id=None, quota_bytes=None,
+                  idempotency_key=None, reason=None, maintenance_id=None):
+        if action == "inspect":
+            # Historical metadata remains readable when execution is disabled
+            # or its serve owner is absent. Existing recovery authorization
+            # still requires the current operator and retains its audit.
+            self.access.authorize_maintenance(context)
+            owner = None
+        else:
+            owner = self._authorize_owner(context)
+        if maintenance_id is not None and (action != "inspect" or not isinstance(maintenance_id, str)
+                or not 1 <= len(maintenance_id) <= 128):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                 "A maintenance reference is only accepted by inspection.", {})
         if action == "inspect":
             if any(value is not None for value in (result_id, quota_bytes, idempotency_key, reason)):
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Inspection does not accept mutation parameters.", {})
-            with owner.cf.unit_of_work(write=False) as uow:
+            with self.access.cf.unit_of_work(write=False) as uow:
+                selected = None
+                if maintenance_id is not None:
+                    row = uow.connection.execute("SELECT maintenance_id,result_id,action,status,created_at,updated_at,"
+                        "idempotency_key,reason,artifact_generation,workspace_id,agent_id,attention_failure_at,attention_failure_code "
+                        "FROM runtime_result_maintenance WHERE maintenance_id=?", (maintenance_id,)).fetchone()
+                    if row is None:
+                        raise OktoNexusError(ErrorCode.NOT_FOUND, "The maintenance record is no longer available.", {})
+                    selected = dict(row)
                 quota = uow.connection.execute("SELECT quota_bytes FROM runtime_artifact_settings").fetchone()[0]
                 used = uow.connection.execute("SELECT COALESCE(sum(artifact_reserved_bytes),0) FROM runtime_results").fetchone()[0]
                 event_used = uow.connection.execute('SELECT COALESCE(sum(size_bytes),0) FROM execution_event_artifacts').fetchone()[0]
+                result_filter = ("result_id=?" if selected is not None else
+                    "artifact_reserved_bytes>0 OR publication_state IN ('BLOCKED','REVIEW_REQUIRED','ARTIFACT_CLEANUP')")
                 results = [dict(row) for row in uow.connection.execute("SELECT result_id,publication_state,publication_reason,"
                     "artifact_reserved_bytes,artifact_generation,output_artifact_id FROM runtime_results "
-                    "WHERE artifact_reserved_bytes>0 OR publication_state IN ('BLOCKED','REVIEW_REQUIRED','ARTIFACT_CLEANUP') "
-                    "ORDER BY captured_at,result_id LIMIT 100")]
-                pending = [dict(row) for row in uow.connection.execute("SELECT maintenance_id,result_id,action,status,created_at,idempotency_key,reason "
-                    "FROM runtime_result_maintenance WHERE status='PENDING' ORDER BY created_at LIMIT 100")]
-            return {"quota_bytes": quota, "agent_quota_bytes": quota // 4, "workspace_quota_bytes": quota // 2,
+                    "WHERE " + result_filter + " ORDER BY captured_at,result_id LIMIT 100",
+                    (selected['result_id'],) if selected is not None else ())]
+                if selected is not None:
+                    pending = [selected] if selected['status'] == 'PENDING' else []
+                else:
+                    pending = [dict(row) for row in uow.connection.execute("SELECT maintenance_id,result_id,action,status,created_at,idempotency_key,reason "
+                        "FROM runtime_result_maintenance WHERE status='PENDING' ORDER BY created_at LIMIT 100")]
+            result = {"quota_bytes": quota, "agent_quota_bytes": quota // 4, "workspace_quota_bytes": quota // 2,
                 "reserved_bytes": used + event_used, "event_artifact_reserved_bytes": event_used,
                 "results": results, "pending_maintenance": pending}
+            if selected is not None:
+                result['maintenance'] = selected
+            return result
         if (not isinstance(action, str) or action not in {"cleanup", "retry", "quota"} or not isinstance(idempotency_key, str) or
                 not 1 <= len(idempotency_key) <= 128 or not isinstance(reason, str) or not 1 <= len(reason) <= 512 or not reason.strip()):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Maintenance requires action, idempotency key and audit reason.", {})

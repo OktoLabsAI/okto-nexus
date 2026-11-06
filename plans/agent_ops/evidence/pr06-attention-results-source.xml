@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="15" time="38.064" timestamp="2026-11-06T17:07:37.169622-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[complete]" time="2.521" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[reject]" time="1.936" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[verify]" time="1.929" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[reject_open]" time="1.978" /><testcase classname="tests.test_attention_results" name="test_open_claimed_verifying_and_cancelled_are_not_manual_terminal_results" time="1.899" /><testcase classname="tests.test_attention_results" name="test_native_and_handoff_result_share_seen_across_lag_and_partial_retention[handoff]" time="2.043" /><testcase classname="tests.test_attention_results" name="test_native_and_handoff_result_share_seen_across_lag_and_partial_retention[execution]" time="2.033" /><testcase classname="tests.test_attention_results" name="test_standalone_execution_result_preserves_the_existing_identity_and_metadata" time="1.777" /><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[success]" time="1.749" /><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[failed]" time="1.701" /><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[interrupted]" time="1.740" /><testcase classname="tests.test_attention_results" name="test_rework_does_not_assign_an_older_native_result_to_a_new_claim_epoch" time="1.964" /><testcase classname="tests.test_attention_results" name="test_handoff_terminal_anchor_rolls_back_and_deletion_cleans_only_its_metadata" time="1.937" /><testcase classname="tests.test_attention_results" name="test_projection_is_pure_and_result_api_requires_operator" time="1.990" /><testcase classname="tests.test_attention_results" name="test_automatic_handoff_real_canonical_execution_and_mcp_return_share_one_result" time="7.278"><failure message="ValueError: not enough values to unpack (expected 1, got 0)">runtime = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10476/test_au...agent_id': 'subject', ...}, &lt;test_embedded_dispatch.connect_local.&lt;locals&gt;.NativeFactory object at 0x00000237A0D00590&gt;)
+
+    def test_automatic_handoff_real_canonical_execution_and_mcp_return_share_one_result(runtime):
+        """Real automatic admission, receipt/event ingress and MCP; synthetic peer."""
+        setup, binding, native = runtime
+        deps, _, client, *_ = setup
+        _, hid, _ = business.prepare(runtime)
+        business.enable_capacity(runtime)
+        discovery = business.build_handoff_runtime_candidates(deps)
+        attempts = business.build_handoff_runtime_attempts(deps)
+        page = discovery.prepare_page(business.lease(runtime, hid), limit=4)
+        assert len(page.attempt_ids) == 1
+        assert client.portal.call(attempts.reserve, page.attempt_ids[0]).state == 'RESERVED'
+        winner = attempts.claim(page.attempt_ids[0])
+        client.portal.call(business.build_capacity_admission(deps).consume, winner.operation_id)
+        turn = business.current_turn(setup)
+        business.wait_receipt(setup, turn)
+        cap = business.capability(setup, binding, turn['session_id'], 'mcp')
+        business.emit(setup, native, turn, 'PRIVATE AUTOMATIC RESULT')
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+&gt;           before, = read(uow.connection)[0]
+            ^^^^^^^
+E           ValueError: not enough values to unpack (expected 1, got 0)
+
+tests\test_attention_results.py:260: ValueError</failure></testcase></testsuite></testsuites>

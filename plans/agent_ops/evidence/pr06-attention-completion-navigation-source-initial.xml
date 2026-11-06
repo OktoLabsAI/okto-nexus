@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="9" time="29.622" timestamp="2026-11-06T16:48:18.725660-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_navigation" name="test_delivery_attention_references_the_original_message_without_copying_it" time="2.791"><failure message="sqlite3.OperationalError: table runtime_pending_deliveries has no column named next_attempt_at">db = &lt;sqlite3.Connection object at 0x00000232E5F37A60&gt;
+
+    def test_delivery_attention_references_the_original_message_without_copying_it(db):
+        delivery(db, status='parked')
+        item, = only(db, 'delivery_parked')
+        assert item['source_id'] == 'd' and item['message_id'] == 'm-d'
+        assert 'SECRET BODY' not in json.dumps(item)
+        db.execute("UPDATE message_deliveries SET status='unread' WHERE delivery_id='d'")
+&gt;       db.execute("INSERT INTO runtime_pending_deliveries(delivery_id,status,reason,next_attempt_at,updated_at) "
+                   "VALUES('d','attention','fixture',?,?)", (NOW, NOW))
+E       sqlite3.OperationalError: table runtime_pending_deliveries has no column named next_attempt_at
+
+tests\test_attention_navigation.py:18: OperationalError</failure></testcase><testcase classname="tests.test_attention_navigation" name="test_age_threshold_change_fences_the_view_but_preserves_the_waiting_episode" time="6.797" /><testcase classname="tests.test_attention_navigation" name="test_canonical_cleanup_lookup_reaches_beyond_the_summary_and_resumes_the_same_receipt" time="2.324"><failure message="sqlite3.IntegrityError: UNIQUE constraint failed: runtime_result_maintenance.result_id">cleanup_service = (&lt;okto_nexus.application.runtime_maintenance.RuntimeMaintenanceService object at 0x00000232E5FB2E40&gt;, &lt;okto_nexus.adap...a214f7a5fcda0c2cee9660b7fc29f5649e3c68aad48e20e950137c98913a68'}], &lt;fake_clock.FakeClock object at 0x00000232E5FB2BA0&gt;)
+
+    def test_canonical_cleanup_lookup_reaches_beyond_the_summary_and_resumes_the_same_receipt(cleanup_service):
+        service, factory, artifacts, calls, _ = cleanup_service
+        with pytest.raises(OktoNexusError) as failure:
+            cleanup(service)
+        target = failure.value.details['maintenance_id']
+        with factory.unit_of_work() as uow:
+            for index in range(105):
+&gt;               uow.connection.execute("INSERT INTO runtime_result_maintenance "
+                    "(maintenance_id,actor_agent_id,idempotency_key,request_hash,action,result_id,reason,status,created_at,updated_at) "
+                    "VALUES(?,'operator',?,'fixture','cleanup','result','Synthetic older record','PENDING',?,?)",
+                    (f'older-{index:03}', f'older-key-{index:03}', '2020-01-01T00:00:00Z', NOW))
+E               sqlite3.IntegrityError: UNIQUE constraint failed: runtime_result_maintenance.result_id
+
+tests\test_attention_navigation.py:47: IntegrityError</failure></testcase><testcase classname="tests.test_attention_navigation" name="test_maintenance_selector_cannot_be_used_as_a_mutation[parameters0]" time="2.377" /><testcase classname="tests.test_attention_navigation" name="test_maintenance_selector_cannot_be_used_as_a_mutation[parameters1]" time="3.151" /><testcase classname="tests.test_attention_navigation" name="test_maintenance_selector_cannot_be_used_as_a_mutation[parameters2]" time="2.828" /><testcase classname="tests.test_attention_navigation" name="test_maintenance_selector_cannot_be_used_as_a_mutation[parameters3]" time="1.870" /><testcase classname="tests.test_attention_navigation" name="test_maintenance_selector_cannot_be_used_as_a_mutation[parameters4]" time="1.904" /><testcase classname="tests.test_attention_navigation" name="test_missing_maintenance_is_not_an_empty_success" time="2.814" /></testsuite></testsuites>

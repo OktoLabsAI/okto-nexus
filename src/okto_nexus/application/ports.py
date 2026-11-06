@@ -1185,6 +1185,7 @@ class ObservabilityQueries(Protocol):
         until_iso: str | None = None,
         from_agent_id: str | None = None,
         to_agent_id: str | None = None,
+        handoff_id: str | None = None,
     ) -> list[dict[str, Any]]: ...
 
     def handoff_dependency_aggregates(

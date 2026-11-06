@@ -169,10 +169,18 @@ def maintain_journal(deps, *, compact=False):
 
 def maintain_artifacts(deps, parameters=None):
     from okto_nexus.application.runtime_maintenance import RuntimeMaintenanceService
-    context = authorize_request(deps)
+    inspect_only = not isinstance(parameters, dict) or parameters.get("action", "inspect") == "inspect"
+    if inspect_only:
+        context = request_context()
+        access = build_access_service(deps)
+        access.authorize_maintenance(context)
+    else:
+        context = authorize_request(deps)
     parameters = runtime_object("maintenance", parameters if parameters is not None else {})
-    if set(parameters) - {"action", "result_id", "quota_bytes", "idempotency_key", "reason"}:
+    if set(parameters) - {"action", "result_id", "quota_bytes", "idempotency_key", "reason", "maintenance_id"}:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unknown artifact maintenance parameter.", {})
+    if inspect_only:
+        return RuntimeMaintenanceService(access=access, dispatcher=None).artifacts(context, **parameters)
     if not is_local_runtime_owner(deps):
         return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/artifacts", parameters)
     return RuntimeMaintenanceService(access=build_access_service(deps), dispatcher=deps.runtime_dispatcher,

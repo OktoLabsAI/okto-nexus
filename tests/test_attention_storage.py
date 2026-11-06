@@ -33,27 +33,40 @@ def rows(factory, table):
         return [dict(row) for row in uow.connection.execute('SELECT * FROM "' + table + '" ORDER BY rowid')]
 
 
-def test_upgrade_from_160_preserves_canonical_rows_and_backfills_only_metadata(tmp_config, tmp_path):
-    old = tmp_path / 'schema-160'
+@pytest.mark.parametrize('baseline', [160, 161])
+def test_upgrade_from_160_preserves_canonical_rows_and_backfills_only_metadata(tmp_config, tmp_path, baseline):
+    old = tmp_path / ('schema-' + str(baseline))
     old.mkdir()
     for path in _default_migrations_dir().glob('*.sql'):
-        if int(path.name.split('_')[0]) <= 160:
+        if int(path.name.split('_')[0]) <= baseline:
             shutil.copyfile(path, old / path.name)
     factory = ConnectionFactory(tmp_config)
     try:
-        assert MigrationRunner(factory, migrations_dir=old).apply()[-1] == 160
+        assert MigrationRunner(factory, migrations_dir=old).apply()[-1] == baseline
         seed(factory, tmp_config, status='parked')
+        with factory.unit_of_work() as uow:
+            uow.connection.execute("INSERT INTO handoffs(handoff_id,workspace_id,from_agent_id,target,status,claim_epoch,created_at,updated_at,result) "
+                "VALUES('historic-result','attention-workspace','author','{}','COMPLETED',2,?,?,'private-result')", (NOW, NOW))
+        previous_anchors = rows(factory, 'attention_operation_epochs') if baseline == 161 else []
         tables = ('workspaces', 'agents', 'messages', 'message_deliveries', 'handoffs', 'approvals',
                   'events', 'execution_operations', 'execution_receipts', 'coordination_requests')
         before = {table: rows(factory, table) for table in tables}
-        assert MigrationRunner(factory).apply() == [161]
+        assert MigrationRunner(factory).apply() == list(range(baseline + 1, 163))
         assert {table: rows(factory, table) for table in tables} == before
         anchors = rows(factory, 'attention_operation_epochs')
-        assert len(anchors) == 1
-        assert anchors[0]['source_type'] == 'message_delivery'
-        assert anchors[0]['source_id'] == 'attention-delivery' and anchors[0]['state'] == 'parked'
-        assert anchors[0]['episode'] == 1
-        assert anchors[0]['first_detected_at'] == anchors[0]['last_changed_at']
+        assert all(anchor in anchors for anchor in previous_anchors)
+        delivery = [anchor for anchor in anchors if anchor['source_type'] == 'message_delivery']
+        assert len(delivery) == 1
+        assert delivery[0]['source_id'] == 'attention-delivery' and delivery[0]['state'] == 'parked'
+        assert delivery[0]['episode'] == 1
+        assert delivery[0]['first_detected_at'] == delivery[0]['last_changed_at']
+        result = [anchor for anchor in anchors if anchor['source_type'] == 'handoff_result']
+        assert len(result) == 1 and result[0]['source_id'] == '["historic-result",2]'
+        assert result[0]['first_detected_at'] == result[0]['last_changed_at'] == NOW
+        authority = [anchor for anchor in anchors if anchor['source_type'].startswith('authority_')]
+        assert {anchor['source_id'] for anchor in authority if anchor['source_type'] == 'authority_agents'} == {'["author"]', '["recipient"]'}
+        assert all(anchor['state'] == 'present' and anchor['episode'] == 1 for anchor in authority)
+        assert 'private-result' not in repr(anchors)
         assert rows(factory, 'attention_preferences') == []
         assert MigrationRunner(factory).apply() == []
         assert rows(factory, 'attention_operation_epochs') == anchors
@@ -100,6 +113,8 @@ def test_reentry_has_a_new_episode_under_the_same_storage_timestamp(migrated_fac
 def test_source_retention_removes_its_anchor_but_not_other_preferences(migrated_factory, tmp_config):
     factory = migrated_factory
     seed(factory, tmp_config)
+    retained_anchors = [row for row in rows(factory, 'attention_operation_epochs')
+                        if row['source_type'] != 'message_delivery']
     query = SqliteAttentionQueries()
     with factory.unit_of_work() as uow:
         query.save_preference(uow, attention_id='att_retained_viewing', seen_at=NOW, snoozed_until=None,
@@ -109,7 +124,7 @@ def test_source_retention_removes_its_anchor_but_not_other_preferences(migrated_
         uow.connection.execute("DELETE FROM message_deliveries WHERE delivery_id='attention-delivery'")
         uow.connection.execute("DELETE FROM messages WHERE message_id='attention-message'")
     assert rows(factory, 'message_deliveries') == []
-    assert rows(factory, 'attention_operation_epochs') == []
+    assert rows(factory, 'attention_operation_epochs') == retained_anchors
     assert rows(factory, 'attention_preferences')[0]['seen_at'] == NOW
 
 

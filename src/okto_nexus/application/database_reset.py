@@ -94,6 +94,10 @@ def clear_operational_history(conn, *, keep_agents):
             counts[table] = conn.execute(f'DELETE FROM "{escaped}"').rowcount
     for sql in triggers:
         conn.execute(sql)
+    # No operational work survives this explicit reset. Authority tombstones
+    # no longer explain a pending reference; retained configuration counters
+    # remain intact, including when identities are preserved.
+    conn.execute("DELETE FROM attention_operation_epochs WHERE source_type LIKE 'authority_%' AND state='deleted'")
     conn.execute('UPDATE runtime_reset_generation SET generation=generation+1 WHERE singleton=1')
     conn.execute("UPDATE handoff_runtime_schedule_scan SET handoff_cursor=0,attempt_cursor=0,notice_cursor='',"
                  'wake_generation=wake_generation+1 WHERE singleton=1')

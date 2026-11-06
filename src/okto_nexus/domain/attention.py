@@ -14,7 +14,7 @@ KINDS = frozenset({
     'verification_pending', 'execution_outcome_unknown', 'delivery_parked',
     'runtime_recovery_attention', 'execution_authority_blocking',
     'executor_disconnected_with_work', 'handoff_unclaimed_aged', 'result_unseen',
-    'cleanup_attention',
+    'cleanup_attention', 'approval_pending',
 })
 CATEGORIES = frozenset({'action_required', 'watch'})
 SEVERITIES = frozenset({'info', 'warning', 'error'})
@@ -24,7 +24,7 @@ FRESHNESS = frozenset({'current', 'stale', 'unavailable'})
 ACTIONS = frozenset({
     'inspect_approval', 'respond_native', 'decide_native', 'inspect_handoff',
     'verify_handoff', 'inspect_operation', 'inspect_recovery', 'review_authority',
-    'inspect_executor', 'inspect_result', 'inspect_cleanup', 'inspect_delivery',
+    'inspect_executor', 'inspect_result', 'inspect_cleanup', 'inspect_delivery', 'decide_approval',
 })
 FILTERS = frozenset({'workspace_id', 'agent_id', 'category', 'kind', 'state', 'priority', 'seen'})
 
@@ -67,7 +67,8 @@ def identity(value, *, optional=False):
 
 def occurrence(*, kind, source_type, source_id, episode, source_revision,
                first_detected_at, last_changed_at, agent_id=None, workspace_id=None,
-               session_id=None, operation_id=None, category='watch', severity='info',
+               session_id=None, operation_id=None, message_id=None, result_id=None, executor_id=None,
+               category='watch', severity='info',
                priority=10, resolution='open', allowed_actions=(), freshness='current',
                next_change_at=None, active=None, summary_code=None):
     """Build a secret-free reference from a canonical fact and durable episode.
@@ -91,6 +92,8 @@ def occurrence(*, kind, source_type, source_id, episode, source_revision,
         kind=kind, category=category, severity=severity, priority=priority,
         agent_id=identity(agent_id, optional=True), workspace_id=identity(workspace_id, optional=True),
         session_id=identity(session_id, optional=True), operation_id=identity(operation_id, optional=True),
+        message_id=identity(message_id, optional=True), result_id=identity(result_id, optional=True),
+        executor_id=identity(executor_id, optional=True),
         source_type=source_type, source_id=source_id,
         source_revision=digest([VERSION, source_revision]),
         first_detected_at=first, last_changed_at=changed, freshness=freshness,

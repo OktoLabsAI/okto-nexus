@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="8.159" timestamp="2026-11-06T17:14:59.801151-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_authority" name="test_managed_message_uses_canonical_sender_audience_permissions_and_policy" time="5.806"><failure message="AssertionError: policy revision&#10;assert []">queued_message = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10480/test_man...RuntimeAvailabilityService object at 0x000001AB0F309D30&gt;), &lt;fastapi.applications.FastAPI object at 0x000001AB0FBC4590&gt;)
+
+    def test_managed_message_uses_canonical_sender_audience_permissions_and_policy(queued_message):
+        deps, _ = queued_message
+        from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
+        service = build_service(deps)
+        cases = [
+            ('sender retired', "UPDATE agents SET is_active=0 WHERE agent_id='operator'"),
+            ('sender credential', "UPDATE agents SET api_key_hash='rotated' WHERE agent_id='operator'"),
+            ('sender permission', "UPDATE agents SET permissions='{\"messages\":{\"send_direct\":false}}' WHERE agent_id='operator'"),
+            ('recipient retired', "UPDATE agents SET is_active=0 WHERE agent_id='subject'"),
+            ('audience', "UPDATE agents SET comm_scope='{\"inbound\":{\"team\":[\"blocked\"]}}' WHERE agent_id='subject'"),
+            ('endpoint revision', "UPDATE agent_endpoints SET revision=revision+1"),
+            ('profile revision', "UPDATE runtime_profiles SET revision=revision+1"),
+            ('method disabled', "INSERT INTO agent_connection_methods(agent_id,method,enabled) VALUES('subject','codex_app_server',0)"),
+            ('policy revision', "INSERT INTO agent_policy_bindings(agent_id,position,source,audience,governance,created_at) VALUES('operator',0,'INLINE',NULL,'[]','2026-01-01T00:00:00Z')"),
+        ]
+        access = build_execution_access(deps)
+        with deps.connection_factory.unit_of_work() as uow:
+            operation = dict(uow.connection.execute('SELECT * FROM delivery_outbox').fetchone())
+            assert items(uow, deps) == []
+            for label, sql in cases:
+                uow.connection.execute('SAVEPOINT message_case')
+                try:
+                    uow.connection.execute(sql)
+                    result = items(uow, deps)
+&gt;                   assert result, label
+E                   AssertionError: policy revision
+E                   assert []
+
+tests\test_attention_authority.py:283: AssertionError</failure></testcase></testsuite></testsuites>

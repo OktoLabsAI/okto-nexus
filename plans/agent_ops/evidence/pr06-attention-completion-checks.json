@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-11-06T21:36:11.314267+00:00",
+  "branch": "feature/v0.3.3",
+  "previous_commit": "7d9743386095589ddb1740012d470586f7ef8d1a",
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "fixed_scope": {
+    "tasks": 59,
+    "scenarios": 132,
+    "invariants": 28,
+    "completion_criteria": 17
+  },
+  "retained_xml_reports": 42,
+  "working_and_staged_xml_hashes_match": true,
+  "migration_161_unchanged": true,
+  "staged_diff_check": "passed",
+  "changed_python_ruff": {
+    "files": 32,
+    "rules": "E9,F",
+    "status": "passed",
+    "harness_module": "Four preexisting F401 findings compared with HEAD; identical findings, zero new."
+  },
+  "implementation_status": "IN_PROGRESS",
+  "known_gap": "Global effective feature off/on/off lacks a persisted episode generation; no AT-08 acceptance claimed."
+}

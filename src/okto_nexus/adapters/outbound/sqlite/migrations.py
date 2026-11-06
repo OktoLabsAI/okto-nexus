@@ -23,6 +23,9 @@ splitter is line-based, see :func:`_split_statements`).
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+import hashlib
+import json
 import re
 import sqlite3
 import time
@@ -39,6 +42,23 @@ _VERSION_RE = re.compile(r"^(\d+)_.*\.sql$")
 # for a concurrent process that is mid-migration.
 _LOCK_RETRY_ATTEMPTS = 10
 _LOCK_RETRY_SLEEP_SECONDS = 0.1
+
+
+def _attention_id_v1(kind, source_type, source_id, episode_json):
+    """Frozen migration identity; never import a future attention VERSION."""
+    payload = json.dumps([1, kind, source_type, source_id, json.loads(episode_json)],
+                         ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False)
+    return 'att_' + hashlib.sha256(payload.encode('utf-8')).hexdigest()
+
+
+def _attention_stamp_v1(value):
+    """Frozen UTC ordering for stored viewing timestamps, including micros."""
+    if value is None:
+        return None
+    parsed = datetime.fromisoformat(value.replace('Z', '+00:00'))
+    if parsed.tzinfo is None:
+        raise ValueError('Attention preference timestamp requires a timezone.')
+    return parsed.astimezone(timezone.utc).isoformat(timespec='microseconds')
 
 
 def _default_migrations_dir() -> Path:
@@ -244,6 +264,9 @@ class MigrationRunner:
             # migration connection before BEGIN. Other connections retain FK
             # enforcement; the writer lock and final check protect the commit.
             conn.execute("PRAGMA foreign_keys=OFF")
+        if version == 162:
+            conn.create_function('nexus_attention_id_v1', 4, _attention_id_v1, deterministic=True)
+            conn.create_function('nexus_attention_stamp_v1', 1, _attention_stamp_v1, deterministic=True)
         try:
             self._begin_immediate(conn)
             row = conn.execute(
@@ -277,6 +300,9 @@ class MigrationRunner:
                 },
             ) from exc
         finally:
+            if version == 162:
+                conn.create_function('nexus_attention_id_v1', 4, None)
+                conn.create_function('nexus_attention_stamp_v1', 1, None)
             if rebuild:
                 conn.execute("PRAGMA foreign_keys=ON")
 

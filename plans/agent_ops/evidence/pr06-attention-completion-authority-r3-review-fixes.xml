@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="5" time="27.025" timestamp="2026-11-06T17:46:38.533696-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_authority" name="test_native_decision_revalidates_responder_and_original_opening_authority[responder_key]" time="5.309"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">facts = {'family': 'dispatch', 'work': {'server_id': 'srv_ca055928a00c16202474055264e1e6dd', 'executor_id': 'exe_148f1496b495a...ile_revision': None, 'native_request_id': 'r4request_0454bdf2181ad5ffc5f3b08d25a65fe05038146184c147b16913e1771565bc51'}
+now = '2026-11-06T20:46:45.068169Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+&gt;               _dispatch(graph, facts, now, policy)
+
+src\okto_nexus\application\attention_authority.py:687:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention_authority.py:528: in _dispatch
+    _decision(graph, work, scope, runtime, now, policy)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+graph = {'agents': {('operator',): {'agent_id': 'operator', 'role': 'operator', 'capabilities': None, 'metadata': None, ...}, ...ile', 'adapter_id': 'codex_app_server', 'config': '{}', 'secret_refs': '{}', ...}}, 'agent_runtime_overrides': {}, ...}
+work = {'server_id': 'srv_ca055928a00c16202474055264e1e6dd', 'executor_id': 'exe_148f1496b495a0a4d47503d55108e8dc', 'operation_id': 'r4op_d7ba5870e281109cb4c3c927890ad49f', 'subject_agent_id': 'subject', ...}
+scope = {'agent_id': 'subject', 'authorization_revision': 1, 'binding_id': 'binding', 'binding_revision': 1, ...}
+runtime = {'endpoint': {'endpoint_id': 'ep', 'agent_id': 'subject', 'workspace_id': 'ws', 'adapter_id': 'codex_app_server', ...}...server', 'config': '{}', 'secret_refs': '{}', ...}, 'binding_executors': ['exe_148f1496b495a0a4d47503d55108e8dc'], ...}
+now = '2026-11-06T20:46:45.068169Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def _decision(graph, work, scope, runtime, now, policy):
+        decision = graph['execution_decisions'].get((work['operation_id'],))
+        refs = _agent_refs(graph, work['actor_agent_id']) + _runtime_refs(graph, runtime)
+        if not policy['feature_hitl'] or not decision or not decision['source_valid'] or decision['actor_agent_id'] != work['actor_agent_id']:
+            raise AuthorityDenied('native_decision_authority_changed', refs)
+        if stamp(decision['expires_at']) &lt;= stamp(now):
+            raise AuthorityDenied('native_decision_expired', refs, decision['expires_at'])
+        actor_data = graph['agent_facts'].get(work['actor_agent_id'])
+        actor = _agent(actor_data)
+        guard = decision['actor_guard_digest']
+        if not actor or not actor.is_active or not actor.api_key_hash or not guard:
+            raise AuthorityDenied('native_responder_changed', refs)
+        current = _guard(actor_data, policy)
+        if guard.startswith('managed-input-v1:'):
+            proof = json.loads(guard[len('managed-input-v1:'):])
+            if proof['agent_guard'] != current or decision['kind'] != 'native_input':
+                raise AuthorityDenied('native_responder_changed', refs)
+            _capability_binding(graph, actor.agent_id, proof['principal'], scope['workspace_id'], now, policy, responding=True)
+        elif guard != current:
+&gt;           raise AuthorityDenied('native_responder_changed', refs)
+E           okto_nexus.application.attention_authority.AuthorityDenied: ('native_responder_changed', [('authority_agents', '["operator"]'), ('authority_agent_runtime_overrides', '["operator"]'), ('authority_agent_runtime_policy_epochs', '["operator"]'), ('authority_agent_execution_policies', '["operator"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agents', '["subject"]'), ('authority_agent_runtime_overrides', '["subject"]'), ('authority_agent_runtime_policy_epochs', '["subject"]'), ('authority_agent_execution_policies', '["subject"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_execution_grants', '["grant_0f192ddb13b94bf5919d1e28008d6c95"]')])
+
+src\okto_nexus\application\attention_authority.py:612: AuthorityDenied
+
+During handling of the above exception, another exception occurred:
+
+decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10497/test_nat...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': '3Zr8nOxRe6AcDypqGa_oTnTOsAyxGepQ88kmY8UiBwk', ...})
+change = 'responder_key'
+
+    @pytest.mark.parametrize('change', ['responder_key', 'opening_grant', 'opening_initiator'])
+    def test_native_decision_revalidates_responder_and_original_opening_authority(decision_state, change):
+        deps, _, _ = decision_state
+        if change == 'opening_initiator':
+            # Recorded delegated initiation is a fixture precondition; its guard
+            # is produced by the same canonical helper used by native admission.
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute("UPDATE execution_operations SET actor_agent_id='operator' WHERE action='runtime.open'")
+                uow.connection.execute("UPDATE execution_client_intents SET actor_agent_id='operator',actor_guard_digest=? "
+                    "WHERE operation_id IN(SELECT operation_id FROM execution_operations WHERE action='runtime.open')",
+                    ('local-operator:' + _agent_guard(uow.connection, 'operator'),))
+        accepted = native_fixtures.post(decision_state)
+        assert accepted.status_code == 202, accepted.text
+        with deps.connection_factory.unit_of_work() as uow:
+            if change == 'opening_grant':
+                uow.connection.execute("UPDATE runtime_execution_grants SET actions='[\"send\",\"interrupt\",\"close\"]',revision=revision+1")
+            elif change == 'opening_initiator':
+                uow.connection.execute("UPDATE execution_client_intents SET actor_guard_digest='local-operator:changed' "
+                    "WHERE operation_id IN(SELECT operation_id FROM execution_operations WHERE action='runtime.open')")
+            else:
+                uow.connection.execute("UPDATE agents SET api_key_hash='rotated' WHERE agent_id='operator'")
+            facts, policy, now = read(uow, deps)
+            pending = next(row for row in facts if row['family'] == 'dispatch' and row['work']['action'] == 'approval.decide')
+&gt;           projected, = project(pending, now, policy)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_authority.py:409:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'family': 'dispatch', 'work': {'server_id': 'srv_ca055928a00c16202474055264e1e6dd', 'executor_id': 'exe_148f1496b495a...ile_revision': None, 'native_request_id': 'r4request_0454bdf2181ad5ffc5f3b08d25a65fe05038146184c147b16913e1771565bc51'}
+now = '2026-11-06T20:46:45.068169Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+                _dispatch(graph, facts, now, policy)
+            else:
+                _native(graph, facts['native'], now, policy)
+        except AuthorityDenied as denial:
+            anchors = [graph['anchors'][key] for key in sorted(set(denial.refs)) if key in graph['anchors']]
+            transitions = [work['created_at']] + [row['last_changed_at'] for row in anchors]
+            if denial.deadline:
+                transitions.append(denial.deadline)
+            changed = max(transitions, key=stamp)
+            revision = dict(reason=denial.reason, anchors=[(row['source_type'], row['source_id'], row['episode']) for row in anchors],
+                deadline=denial.deadline)
+            episode = revision
+            detected = changed
+            legacy = _legacy_handoff_episode(graph, work, now) if family == 'delivery' else None
+            if legacy:
+                episode, detected, legacy_revision = legacy
+                changed = max((changed, detected), key=stamp)
+                revision = dict(legacy=legacy_revision, authority=revision)
+            executors = graph['domain_executors'].get(work['operation_id'], set())
+            executor_id = work.get('executor_id') or (next(iter(executors)) if len(executors) == 1 else None)
+&gt;           return [occurrence(kind='execution_authority_blocking', source_type=source_type, source_id=source_id,
+                episode=episode, source_revision=revision, first_detected_at=detected, last_changed_at=changed,
+                agent_id=work.get('recipient_agent_id', work.get('subject_agent_id')), workspace_id=work['workspace_id'],
+                session_id=work.get('runtime_session_id', work.get('session_id')), operation_id=work['operation_id'], executor_id=executor_id,
+                category='action_required', severity='warning', priority=30, resolution='open',
+                allowed_actions=['inspect_approval', 'review_authority'] if family == 'native' else ['inspect_operation', 'review_authority'])]
+E           TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_authority.py:707: TypeError</failure></testcase><testcase classname="tests.test_attention_authority" name="test_native_decision_revalidates_responder_and_original_opening_authority[opening_grant]" time="3.658"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">facts = {'family': 'dispatch', 'work': {'server_id': 'srv_27bd8e1f57c92cb076e3bea102e0069c', 'executor_id': 'exe_f02aa65c8a05a...ile_revision': None, 'native_request_id': 'r4request_7507a0c6d5664b02abde88eb35232ba3f2c045df1035846112f765f17e4a21c1'}
+now = '2026-11-06T20:46:49.862768Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+&gt;               _dispatch(graph, facts, now, policy)
+
+src\okto_nexus\application\attention_authority.py:687:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention_authority.py:529: in _dispatch
+    _opening_authority(graph, scope, now, policy)
+src\okto_nexus\application\attention_authority.py:294: in _opening_authority
+    return _grant(graph, runtime, graph['agent_facts'].get(scope['agent_id']), action='open',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+graph = {'agents': {('operator',): {'agent_id': 'operator', 'role': 'operator', 'capabilities': None, 'metadata': None, ...}, ...ile', 'adapter_id': 'codex_app_server', 'config': '{}', 'secret_refs': '{}', ...}}, 'agent_runtime_overrides': {}, ...}
+runtime = {'endpoint': {'endpoint_id': 'ep', 'agent_id': 'subject', 'workspace_id': 'ws', 'adapter_id': 'codex_app_server', ...}...server', 'config': '{}', 'secret_refs': '{}', ...}, 'binding_executors': ['exe_f02aa65c8a05a94041eadf6a7050adce'], ...}
+actor_data = {'agent': {'agent_id': 'subject', 'role': None, 'capabilities': None, 'metadata': None, ...}, 'methods': [], 'endpoint...rofiles': [{'profile_id': 'profile', 'adapter_id': 'codex_app_server', 'config': '{}', 'secret_refs': '{}', ...}], ...}
+action = 'open', grant_id = 'grant_2faf2ba94ab0482183c09cd054b0d32c'
+scope = {'agent_id': 'subject', 'authorization_revision': 1, 'binding_id': 'binding', 'binding_revision': 1, ...}
+now = '2026-11-06T20:46:49.862768Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+budget = False
+
+    def _grant(graph, runtime, actor_data, *, action, grant_id, scope, now, policy, budget):
+        refs = _runtime_refs(graph, runtime) + _agent_refs(graph, actor_data['agent']['agent_id'] if actor_data else None)
+        if grant_id:
+            refs.append(ref('runtime_execution_grants', grant_id))
+            grant = graph['runtime_execution_grants'].get((grant_id,))
+            if grant and grant['revoked_at']:
+                raise AuthorityDenied('grant_revoked', [ref('runtime_execution_grants', grant_id)], grant['revoked_at'])
+            if grant and not grant['no_expiry'] and stamp(grant['expires_at']) &lt;= stamp(now):
+                raise AuthorityDenied('grant_expired', [ref('runtime_execution_grants', grant_id)], grant['expires_at'])
+        try:
+            selected = _runtime_grant(runtime, actor_data, action=action, grant_id=grant_id,
+                scope=scope, now=now, policy=policy, check_budget=budget)
+            if selected is None:
+                raise AuthorityDenied('canonical_grant_required', refs)
+            return selected
+        except OktoNexusError:
+            deadlines = []
+            # A message that has not selected an execution lease may use any
+            # currently eligible grant. If the last such grant merely expires,
+            # its durable deadline (not the next GET) starts the blocked episode.
+            for grant in runtime['grants'] if runtime and not grant_id else ():
+                if grant['no_expiry'] or not grant['expires_at'] or grant['revoked_at'] or stamp(grant['expires_at']) &gt; stamp(now):
+                    continue
+                try:
+                    _runtime_grant(dict(runtime, grants=[grant]), actor_data, action=action, grant_id=grant['grant_id'],
+                        scope=scope, now=(stamp(grant['expires_at']) - timedelta(microseconds=1)).isoformat(), policy=policy, check_budget=budget)
+                except OktoNexusError:
+                    continue
+                deadlines.append(grant['expires_at'])
+&gt;           raise AuthorityDenied('runtime_authority_changed', refs, max(deadlines, key=stamp) if deadlines else None) from None
+E           okto_nexus.application.attention_authority.AuthorityDenied: ('runtime_authority_changed', [('authority_agents', '["subject"]'), ('authority_agent_runtime_overrides', '["subject"]'), ('authority_agent_runtime_policy_epochs', '["subject"]'), ('authority_agent_execution_policies', '["subject"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_execution_grants', '["grant_2faf2ba94ab0482183c09cd054b0d32c"]'), ('authority_agents', '["subject"]'), ('authority_agent_runtime_overrides', '["subject"]'), ('authority_agent_runtime_policy_epochs', '["subject"]'), ('authority_agent_execution_policies', '["subject"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_execution_grants', '["grant_2faf2ba94ab0482183c09cd054b0d32c"]')], None)
+
+src\okto_nexus\application\attention_authority.py:199: AuthorityDenied
+
+During handling of the above exception, another exception occurred:
+
+decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10497/test_nat...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'tskWwJT_iCq6pRaNUArbxOQQwQmM0bZlZNJ_mc5-Rzc', ...})
+change = 'opening_grant'
+
+    @pytest.mark.parametrize('change', ['responder_key', 'opening_grant', 'opening_initiator'])
+    def test_native_decision_revalidates_responder_and_original_opening_authority(decision_state, change):
+        deps, _, _ = decision_state
+        if change == 'opening_initiator':
+            # Recorded delegated initiation is a fixture precondition; its guard
+            # is produced by the same canonical helper used by native admission.
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute("UPDATE execution_operations SET actor_agent_id='operator' WHERE action='runtime.open'")
+                uow.connection.execute("UPDATE execution_client_intents SET actor_agent_id='operator',actor_guard_digest=? "
+                    "WHERE operation_id IN(SELECT operation_id FROM execution_operations WHERE action='runtime.open')",
+                    ('local-operator:' + _agent_guard(uow.connection, 'operator'),))
+        accepted = native_fixtures.post(decision_state)
+        assert accepted.status_code == 202, accepted.text
+        with deps.connection_factory.unit_of_work() as uow:
+            if change == 'opening_grant':
+                uow.connection.execute("UPDATE runtime_execution_grants SET actions='[\"send\",\"interrupt\",\"close\"]',revision=revision+1")
+            elif change == 'opening_initiator':
+                uow.connection.execute("UPDATE execution_client_intents SET actor_guard_digest='local-operator:changed' "
+                    "WHERE operation_id IN(SELECT operation_id FROM execution_operations WHERE action='runtime.open')")
+            else:
+                uow.connection.execute("UPDATE agents SET api_key_hash='rotated' WHERE agent_id='operator'")
+            facts, policy, now = read(uow, deps)
+            pending = next(row for row in facts if row['family'] == 'dispatch' and row['work']['action'] == 'approval.decide')
+&gt;           projected, = project(pending, now, policy)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_authority.py:409:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'family': 'dispatch', 'work': {'server_id': 'srv_27bd8e1f57c92cb076e3bea102e0069c', 'executor_id': 'exe_f02aa65c8a05a...ile_revision': None, 'native_request_id': 'r4request_7507a0c6d5664b02abde88eb35232ba3f2c045df1035846112f765f17e4a21c1'}
+now = '2026-11-06T20:46:49.862768Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+                _dispatch(graph, facts, now, policy)
+            else:
+                _native(graph, facts['native'], now, policy)
+        except AuthorityDenied as denial:
+            anchors = [graph['anchors'][key] for key in sorted(set(denial.refs)) if key in graph['anchors']]
+            transitions = [work['created_at']] + [row['last_changed_at'] for row in anchors]
+            if denial.deadline:
+                transitions.append(denial.deadline)
+            changed = max(transitions, key=stamp)
+            revision = dict(reason=denial.reason, anchors=[(row['source_type'], row['source_id'], row['episode']) for row in anchors],
+                deadline=denial.deadline)
+            episode = revision
+            detected = changed
+            legacy = _legacy_handoff_episode(graph, work, now) if family == 'delivery' else None
+            if legacy:
+                episode, detected, legacy_revision = legacy
+                changed = max((changed, detected), key=stamp)
+                revision = dict(legacy=legacy_revision, authority=revision)
+            executors = graph['domain_executors'].get(work['operation_id'], set())
+            executor_id = work.get('executor_id') or (next(iter(executors)) if len(executors) == 1 else None)
+&gt;           return [occurrence(kind='execution_authority_blocking', source_type=source_type, source_id=source_id,
+                episode=episode, source_revision=revision, first_detected_at=detected, last_changed_at=changed,
+                agent_id=work.get('recipient_agent_id', work.get('subject_agent_id')), workspace_id=work['workspace_id'],
+                session_id=work.get('runtime_session_id', work.get('session_id')), operation_id=work['operation_id'], executor_id=executor_id,
+                category='action_required', severity='warning', priority=30, resolution='open',
+                allowed_actions=['inspect_approval', 'review_authority'] if family == 'native' else ['inspect_operation', 'review_authority'])]
+E           TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_authority.py:707: TypeError</failure></testcase><testcase classname="tests.test_attention_authority" name="test_native_decision_revalidates_responder_and_original_opening_authority[opening_initiator]" time="3.376"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">facts = {'family': 'dispatch', 'work': {'server_id': 'srv_bd0d3088842c1e826899052cb91aaafd', 'executor_id': 'exe_e71adbc79a3f1...ile_revision': None, 'native_request_id': 'r4request_ca4977da340e06e7137f9e15b2034e716465ab4a79cf9aafb51823fecd0a3afd'}
+now = '2026-11-06T20:46:53.429269Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+&gt;               _dispatch(graph, facts, now, policy)
+
+src\okto_nexus\application\attention_authority.py:687:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention_authority.py:529: in _dispatch
+    _opening_authority(graph, scope, now, policy)
+src\okto_nexus\application\attention_authority.py:289: in _opening_authority
+    _recorded(graph, opening, scope, provenance, runtime, now, policy, budget=False)
+src\okto_nexus\application\attention_authority.py:253: in _recorded
+    _check('initiator_authority_changed', refs, lambda: _recorded_operator(facts, policy, now))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+reason = 'initiator_authority_changed'
+refs = [('authority_agents', '["operator"]'), ('authority_agent_runtime_overrides', '["operator"]'), ('authority_agent_runtim...ion_policies', '["operator"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agents', '["subject"]'), ...]
+call = &lt;function _recorded.&lt;locals&gt;.&lt;lambda&gt; at 0x0000026DCAE1FF60&gt;
+
+    def _check(reason, refs, call):
+        try:
+            return call()
+        except OktoNexusError:
+&gt;           raise AuthorityDenied(reason, refs) from None
+E           okto_nexus.application.attention_authority.AuthorityDenied: ('initiator_authority_changed', [('authority_agents', '["operator"]'), ('authority_agent_runtime_overrides', '["operator"]'), ('authority_agent_runtime_policy_epochs', '["operator"]'), ('authority_agent_execution_policies', '["operator"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agents', '["subject"]'), ('authority_agent_runtime_overrides', '["subject"]'), ('authority_agent_runtime_policy_epochs', '["subject"]'), ('authority_agent_execution_policies', '["subject"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_execution_grants', '["grant_a1e6a733c4b248488c4abafa26b72bf4"]')])
+
+src\okto_nexus\application\attention_authority.py:167: AuthorityDenied
+
+During handling of the above exception, another exception occurred:
+
+decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10497/test_nat...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'odKpeMULyeBGSXxj4BlA2cRUIZrb0pPt9Fm-TxRzER4', ...})
+change = 'opening_initiator'
+
+    @pytest.mark.parametrize('change', ['responder_key', 'opening_grant', 'opening_initiator'])
+    def test_native_decision_revalidates_responder_and_original_opening_authority(decision_state, change):
+        deps, _, _ = decision_state
+        if change == 'opening_initiator':
+            # Recorded delegated initiation is a fixture precondition; its guard
+            # is produced by the same canonical helper used by native admission.
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute("UPDATE execution_operations SET actor_agent_id='operator' WHERE action='runtime.open'")
+                uow.connection.execute("UPDATE execution_client_intents SET actor_agent_id='operator',actor_guard_digest=? "
+                    "WHERE operation_id IN(SELECT operation_id FROM execution_operations WHERE action='runtime.open')",
+                    ('local-operator:' + _agent_guard(uow.connection, 'operator'),))
+        accepted = native_fixtures.post(decision_state)
+        assert accepted.status_code == 202, accepted.text
+        with deps.connection_factory.unit_of_work() as uow:
+            if change == 'opening_grant':
+                uow.connection.execute("UPDATE runtime_execution_grants SET actions='[\"send\",\"interrupt\",\"close\"]',revision=revision+1")
+            elif change == 'opening_initiator':
+                uow.connection.execute("UPDATE execution_client_intents SET actor_guard_digest='local-operator:changed' "
+                    "WHERE operation_id IN(SELECT operation_id FROM execution_operations WHERE action='runtime.open')")
+            else:
+                uow.connection.execute("UPDATE agents SET api_key_hash='rotated' WHERE agent_id='operator'")
+            facts, policy, now = read(uow, deps)
+            pending = next(row for row in facts if row['family'] == 'dispatch' and row['work']['action'] == 'approval.decide')
+&gt;           projected, = project(pending, now, policy)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_authority.py:409:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'family': 'dispatch', 'work': {'server_id': 'srv_bd0d3088842c1e826899052cb91aaafd', 'executor_id': 'exe_e71adbc79a3f1...ile_revision': None, 'native_request_id': 'r4request_ca4977da340e06e7137f9e15b2034e716465ab4a79cf9aafb51823fecd0a3afd'}
+now = '2026-11-06T20:46:53.429269Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': True, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+                _dispatch(graph, facts, now, policy)
+            else:
+                _native(graph, facts['native'], now, policy)
+        except AuthorityDenied as denial:
+            anchors = [graph['anchors'][key] for key in sorted(set(denial.refs)) if key in graph['anchors']]
+            transitions = [work['created_at']] + [row['last_changed_at'] for row in anchors]
+            if denial.deadline:
+                transitions.append(denial.deadline)
+            changed = max(transitions, key=stamp)
+            revision = dict(reason=denial.reason, anchors=[(row['source_type'], row['source_id'], row['episode']) for row in anchors],
+                deadline=denial.deadline)
+            episode = revision
+            detected = changed
+            legacy = _legacy_handoff_episode(graph, work, now) if family == 'delivery' else None
+            if legacy:
+                episode, detected, legacy_revision = legacy
+                changed = max((changed, detected), key=stamp)
+                revision = dict(legacy=legacy_revision, authority=revision)
+            executors = graph['domain_executors'].get(work['operation_id'], set())
+            executor_id = work.get('executor_id') or (next(iter(executors)) if len(executors) == 1 else None)
+&gt;           return [occurrence(kind='execution_authority_blocking', source_type=source_type, source_id=source_id,
+                episode=episode, source_revision=revision, first_detected_at=detected, last_changed_at=changed,
+                agent_id=work.get('recipient_agent_id', work.get('subject_agent_id')), workspace_id=work['workspace_id'],
+                session_id=work.get('runtime_session_id', work.get('session_id')), operation_id=work['operation_id'], executor_id=executor_id,
+                category='action_required', severity='warning', priority=30, resolution='open',
+                allowed_actions=['inspect_approval', 'review_authority'] if family == 'native' else ['inspect_operation', 'review_authority'])]
+E           TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_authority.py:707: TypeError</failure></testcase><testcase classname="tests.test_attention_authority" name="test_expiration_without_write_uses_last_eligible_grant_deadline" time="4.682"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">facts = {'family': 'dispatch', 'work': {'server_id': 'srv_7a3936726a175003dda17603131a6ac5', 'executor_id': 'exe_e6f5d7cc45293...b45c2beb7a14c39c35c5ce9a161ff2', 'subject_agent_id': 'subject', ...}, 'profile_revision': 1, 'native_request_id': None}
+now = '2026-11-06T20:48:58.531047+00:00'
+policy = {'feature_harness_integrations': True, 'feature_hitl': False, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+&gt;               _dispatch(graph, facts, now, policy)
+
+src\okto_nexus\application\attention_authority.py:687:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention_authority.py:534: in _dispatch
+    _delivery(graph, delivery, now, policy)
+src\okto_nexus\application\attention_authority.py:503: in _delivery
+    _grant(graph, runtime, subject, action='send', grant_id=None,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+graph = {'agents': {('operator',): {'agent_id': 'operator', 'role': 'operator', 'capabilities': None, 'metadata': None, ...}, ...ile', 'adapter_id': 'codex_app_server', 'config': '{}', 'secret_refs': '{}', ...}}, 'agent_runtime_overrides': {}, ...}
+runtime = {'endpoint': {'endpoint_id': 'ep', 'agent_id': 'subject', 'workspace_id': 'ws', 'adapter_id': 'codex_app_server', ...}...server', 'config': '{}', 'secret_refs': '{}', ...}, 'binding_executors': ['exe_e6f5d7cc4529377da50b85435f54f7df'], ...}
+actor_data = {'agent': {'agent_id': 'subject', 'role': None, 'capabilities': None, 'metadata': None, ...}, 'methods': [], 'endpoint...rofiles': [{'profile_id': 'profile', 'adapter_id': 'codex_app_server', 'config': '{}', 'secret_refs': '{}', ...}], ...}
+action = 'send', grant_id = None
+scope = {'agent_id': 'subject', 'workspace_id': 'ws'}
+now = '2026-11-06T20:48:58.531047+00:00'
+policy = {'feature_harness_integrations': True, 'feature_hitl': False, 'admission_closed': False, 'viewer_is_operator': True, ...}
+budget = True
+
+    def _grant(graph, runtime, actor_data, *, action, grant_id, scope, now, policy, budget):
+        refs = _runtime_refs(graph, runtime) + _agent_refs(graph, actor_data['agent']['agent_id'] if actor_data else None)
+        if grant_id:
+            refs.append(ref('runtime_execution_grants', grant_id))
+            grant = graph['runtime_execution_grants'].get((grant_id,))
+            if grant and grant['revoked_at']:
+                raise AuthorityDenied('grant_revoked', [ref('runtime_execution_grants', grant_id)], grant['revoked_at'])
+            if grant and not grant['no_expiry'] and stamp(grant['expires_at']) &lt;= stamp(now):
+                raise AuthorityDenied('grant_expired', [ref('runtime_execution_grants', grant_id)], grant['expires_at'])
+        try:
+            selected = _runtime_grant(runtime, actor_data, action=action, grant_id=grant_id,
+                scope=scope, now=now, policy=policy, check_budget=budget)
+            if selected is None:
+                raise AuthorityDenied('canonical_grant_required', refs)
+            return selected
+        except OktoNexusError:
+            deadlines = []
+            # A message that has not selected an execution lease may use any
+            # currently eligible grant. If the last such grant merely expires,
+            # its durable deadline (not the next GET) starts the blocked episode.
+            for grant in runtime['grants'] if runtime and not grant_id else ():
+                if grant['no_expiry'] or not grant['expires_at'] or grant['revoked_at'] or stamp(grant['expires_at']) &gt; stamp(now):
+                    continue
+                try:
+                    _runtime_grant(dict(runtime, grants=[grant]), actor_data, action=action, grant_id=grant['grant_id'],
+                        scope=scope, now=(stamp(grant['expires_at']) - timedelta(microseconds=1)).isoformat(), policy=policy, check_budget=budget)
+                except OktoNexusError:
+                    continue
+                deadlines.append(grant['expires_at'])
+&gt;           raise AuthorityDenied('runtime_authority_changed', refs, max(deadlines, key=stamp) if deadlines else None) from None
+E           okto_nexus.application.attention_authority.AuthorityDenied: ('runtime_authority_changed', [('authority_agents', '["subject"]'), ('authority_agent_runtime_overrides', '["subject"]'), ('authority_agent_runtime_policy_epochs', '["subject"]'), ('authority_agent_execution_policies', '["subject"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_execution_grants', '["grant_14ea0099832e4a9d8215da5c366252b1"]'), ('authority_runtime_execution_grants', '["grant_3ba8817dc1df4f2288719529d81c31ab"]'), ('authority_runtime_execution_grants', '["grant_8baf7d51780540449a12335b9a9c4d6b"]'), ('authority_agents', '["subject"]'), ('authority_agent_runtime_overrides', '["subject"]'), ('authority_agent_runtime_policy_epochs', '["subject"]'), ('authority_agent_execution_policies', '["subject"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep"]'), ('authority_runtime_profiles', '["profile"]'), ('authority_runtime_profiles', '["profile"]')], '2026-11-06T20:48:57.531047Z')
+
+src\okto_nexus\application\attention_authority.py:199: AuthorityDenied
+
+During handling of the above exception, another exception occurred:
+
+queued_message = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10497/test_exp...RuntimeAvailabilityService object at 0x0000026DCAE72B10&gt;), &lt;fastapi.applications.FastAPI object at 0x0000026DCAD33750&gt;)
+
+    def test_expiration_without_write_uses_last_eligible_grant_deadline(queued_message):
+        deps, _ = queued_message
+        now = deps.clock.now_iso()
+        deadline = (stamp(now) + timedelta(seconds=60)).isoformat()
+        last_deadline = (stamp(now) + timedelta(seconds=120)).isoformat()
+        access = build_execution_access(deps)
+        context = RuntimeRequestContext('operator', 'http_loopback', trusted_local_operator=True)
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('UPDATE runtime_execution_grants SET no_expiry=0,expires_at=?', (deadline,))
+        access.issue(context, actor_agent_id='subject', endpoint_id='ep', actions=['open', 'send'],
+            expires_at=last_deadline, max_executions=10)
+        access.issue(context, actor_agent_id='other', endpoint_id='ep', actions=['open', 'send'],
+            expires_at=(stamp(now) + timedelta(seconds=600)).isoformat(), max_executions=10)
+        with deps.connection_factory.unit_of_work() as uow:
+            assert items(uow, deps, now=(stamp(now) + timedelta(seconds=59)).isoformat()) == []
+            assert items(uow, deps, now=(stamp(now) + timedelta(seconds=61)).isoformat()) == []
+&gt;           result = items(uow, deps, now=(stamp(now) + timedelta(seconds=121)).isoformat())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_authority.py:433:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_authority.py:52: in items
+    return [item for row in facts for item in project(row, now, policy)]
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'family': 'dispatch', 'work': {'server_id': 'srv_7a3936726a175003dda17603131a6ac5', 'executor_id': 'exe_e6f5d7cc45293...b45c2beb7a14c39c35c5ce9a161ff2', 'subject_agent_id': 'subject', ...}, 'profile_revision': 1, 'native_request_id': None}
+now = '2026-11-06T20:48:58.531047+00:00'
+policy = {'feature_harness_integrations': True, 'feature_hitl': False, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+                _dispatch(graph, facts, now, policy)
+            else:
+                _native(graph, facts['native'], now, policy)
+        except AuthorityDenied as denial:
+            anchors = [graph['anchors'][key] for key in sorted(set(denial.refs)) if key in graph['anchors']]
+            transitions = [work['created_at']] + [row['last_changed_at'] for row in anchors]
+            if denial.deadline:
+                transitions.append(denial.deadline)
+            changed = max(transitions, key=stamp)
+            revision = dict(reason=denial.reason, anchors=[(row['source_type'], row['source_id'], row['episode']) for row in anchors],
+                deadline=denial.deadline)
+            episode = revision
+            detected = changed
+            legacy = _legacy_handoff_episode(graph, work, now) if family == 'delivery' else None
+            if legacy:
+                episode, detected, legacy_revision = legacy
+                changed = max((changed, detected), key=stamp)
+                revision = dict(legacy=legacy_revision, authority=revision)
+            executors = graph['domain_executors'].get(work['operation_id'], set())
+            executor_id = work.get('executor_id') or (next(iter(executors)) if len(executors) == 1 else None)
+&gt;           return [occurrence(kind='execution_authority_blocking', source_type=source_type, source_id=source_id,
+                episode=episode, source_revision=revision, first_detected_at=detected, last_changed_at=changed,
+                agent_id=work.get('recipient_agent_id', work.get('subject_agent_id')), workspace_id=work['workspace_id'],
+                session_id=work.get('runtime_session_id', work.get('session_id')), operation_id=work['operation_id'], executor_id=executor_id,
+                category='action_required', severity='warning', priority=30, resolution='open',
+                allowed_actions=['inspect_approval', 'review_authority'] if family == 'native' else ['inspect_operation', 'review_authority'])]
+E           TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_authority.py:707: TypeError</failure></testcase><testcase classname="tests.test_attention_authority" name="test_pending_relay_rechecks_original_actor_and_ancestor_configuration" time="6.528"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">facts = {'family': 'dispatch', 'work': {'server_id': 'srv_dadb82ba4d4f51e1fbf7a468f065275e', 'executor_id': 'exe_c105519b1ee76...b15cab0b8e2d070e71a727253468d', 'subject_agent_id': 'observer', ...}, 'profile_revision': 1, 'native_request_id': None}
+now = '2026-11-06T20:47:04.086846Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': False, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+&gt;               _dispatch(graph, facts, now, policy)
+
+src\okto_nexus\application\attention_authority.py:687:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention_authority.py:534: in _dispatch
+    _delivery(graph, delivery, now, policy)
+src\okto_nexus\application\attention_authority.py:494: in _delivery
+    _check('delivery_authority_changed', refs, lambda: require_delivery_facts(operation=work,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+reason = 'delivery_authority_changed'
+refs = [('authority_agents', '["caller"]'), ('authority_agent_runtime_overrides', '["caller"]'), ('authority_agent_runtime_po...hority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep_7f4d0c427fa2ec5a043f74c766f186ba"]'), ...]
+call = &lt;function _delivery.&lt;locals&gt;.&lt;lambda&gt; at 0x0000026DC7D08360&gt;
+
+    def _check(reason, refs, call):
+        try:
+            return call()
+        except OktoNexusError:
+&gt;           raise AuthorityDenied(reason, refs) from None
+E           okto_nexus.application.attention_authority.AuthorityDenied: ('delivery_authority_changed', [('authority_agents', '["caller"]'), ('authority_agent_runtime_overrides', '["caller"]'), ('authority_agent_runtime_policy_epochs', '["caller"]'), ('authority_agent_execution_policies', '["caller"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep_7f4d0c427fa2ec5a043f74c766f186ba"]'), ('authority_runtime_profiles', '["profile_3b0470df8bf25c3530dd426f545687c1"]'), ('authority_runtime_profiles', '["profile_3b0470df8bf25c3530dd426f545687c1"]'), ('authority_agents', '["observer"]'), ('authority_agent_runtime_overrides', '["observer"]'), ('authority_agent_runtime_policy_epochs', '["observer"]'), ('authority_agent_execution_policies', '["observer"]'), ('authority_runtime_policy_defaults', '[1]'), ('authority_agent_endpoints', '["ep_ac211e488eae497c54655887ee199d95"]'), ('authority_runtime_profiles', '["profile_60f5d74adb99d5b739ff5229938fc360"]'), ('authority_runtime_profiles', '["profile_60f5d74adb99d5b739ff5229938fc360"]'), ('authority_runtime_execution_grants', '["grant_f8211b364a7344e1810188f2915b7d87"]'), ('authority_agent_endpoints', '["ep_ac211e488eae497c54655887ee199d95"]')])
+
+src\okto_nexus\application\attention_authority.py:167: AuthorityDenied
+
+During handling of the above exception, another exception occurred:
+
+relay_pair = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10497/test_pe...&gt;.Peer object at 0x0000026DC7E00AD0&gt;], &lt;test_canonical_relay.relay_pair.&lt;locals&gt;.Factory object at 0x0000026DC7E01010&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000026DCB315AE0&gt;
+
+    def test_pending_relay_rechecks_original_actor_and_ancestor_configuration(relay_pair, monkeypatch):
+        from okto_nexus.application import execution_dispatch_pump
+        setup, first, _, _, native_factory = relay_pair
+        deps = setup[0]
+        observer_setup = relay_fixtures.create_agent(setup, 'observer')
+        _, third, _ = relay_fixtures.connect_local(observer_setup, agent_id='observer')
+        setup[1].state.embedded_dispatch_owner.native_factory = native_factory
+        deps.config.max_relay_depth = 1
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy='conversation',public_config=? WHERE endpoint_id=?",
+                (json.dumps(dict(relay_results=True)), third['endpoint_id']))
+            uow.connection.execute('UPDATE agent_endpoints SET public_config=? WHERE endpoint_id=?',
+                (json.dumps(dict(relay_results=True, notify_target=dict(strategy='direct', agent_id='observer'))), first['endpoint_id']))
+        held, release = threading.Event(), threading.Event()
+        original = execution_dispatch_pump.begin_execution_send
+        def hold_relay(factory, **kwargs):
+            reservation = kwargs['reservation']
+            with factory.unit_of_work(write=False) as uow:
+                relay = uow.connection.execute('SELECT d.source_result_id FROM execution_domain_deliveries x '
+                    'JOIN delivery_outbox d ON d.operation_id=x.domain_operation_id WHERE x.server_id=? '
+                    'AND x.executor_id=? AND x.operation_id=?',
+                    (reservation.server_id, reservation.executor_id, reservation.operation_id)).fetchone()
+            if relay and relay[0] and not held.is_set():
+                held.set()
+                assert release.wait(30), 'The test did not release its reserved relay'
+            return original(factory, **kwargs)
+        monkeypatch.setattr(execution_dispatch_pump, 'begin_execution_send', hold_relay)
+        try:
+            result = relay_fixtures.send(setup, monkeypatch)
+            assert result['ok'], result
+            assert held.wait(20), 'No real canonical relay reached its deferred-send fence'
+            with deps.connection_factory.unit_of_work() as uow:
+                relay = dict(uow.connection.execute('SELECT * FROM delivery_outbox WHERE source_result_id IS NOT NULL').fetchone())
+                assert relay['actor_agent_id'] == 'caller' and relay['recipient_agent_id'] == 'observer'
+                assert items(uow, deps) == []
+                build_execution_access(deps).validate_domain_delivery(uow, relay)
+                for sql, values in (
+                    ("UPDATE agents SET api_key_hash='rotated' WHERE agent_id='caller'", ()),
+                    ("UPDATE agent_endpoints SET public_config=json_set(public_config,'$.relay_results',json('false')) WHERE endpoint_id=?", (first['endpoint_id'],)),
+                    ("INSERT INTO agent_policy_bindings(agent_id,position,source,audience,governance,created_at) VALUES('caller',0,'inline',NULL,'[]','2026-01-01T00:00:00Z')", ()),
+                ):
+                    uow.connection.execute('SAVEPOINT relay_change')
+                    try:
+                        uow.connection.execute(sql, values)
+&gt;                       assert items(uow, deps), sql
+                               ^^^^^^^^^^^^^^^^
+
+tests\test_attention_authority.py:496:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_authority.py:52: in items
+    return [item for row in facts for item in project(row, now, policy)]
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'family': 'dispatch', 'work': {'server_id': 'srv_dadb82ba4d4f51e1fbf7a468f065275e', 'executor_id': 'exe_c105519b1ee76...b15cab0b8e2d070e71a727253468d', 'subject_agent_id': 'observer', ...}, 'profile_revision': 1, 'native_request_id': None}
+now = '2026-11-06T20:47:04.086846Z'
+policy = {'feature_harness_integrations': True, 'feature_hitl': False, 'admission_closed': False, 'viewer_is_operator': True, ...}
+
+    def project(facts, now, policy):
+        graph = policy['graph']
+        family = facts['family']
+        if family == 'native':
+            native = facts['native']
+            request, scope = native['request'], native['request']['scope']
+            work = dict(operation_id=request['source_operation_id'], created_at=request['received_at'],
+                workspace_id=scope['workspace_id'], subject_agent_id=scope['agent_id'], session_id=scope['session_id'], executor_id=scope['executor_id'])
+            source_id, source_type = request['canonical_request_id'], 'execution_native_request'
+        else:
+            work = facts['work']
+            source_id = work['operation_id']
+            source_type = 'delivery_operation' if family == 'delivery' else 'execution_operation'
+        try:
+            if family == 'delivery':
+                _delivery(graph, work, now, policy)
+            elif family == 'dispatch':
+                _dispatch(graph, facts, now, policy)
+            else:
+                _native(graph, facts['native'], now, policy)
+        except AuthorityDenied as denial:
+            anchors = [graph['anchors'][key] for key in sorted(set(denial.refs)) if key in graph['anchors']]
+            transitions = [work['created_at']] + [row['last_changed_at'] for row in anchors]
+            if denial.deadline:
+                transitions.append(denial.deadline)
+            changed = max(transitions, key=stamp)
+            revision = dict(reason=denial.reason, anchors=[(row['source_type'], row['source_id'], row['episode']) for row in anchors],
+                deadline=denial.deadline)
+            episode = revision
+            detected = changed
+            legacy = _legacy_handoff_episode(graph, work, now) if family == 'delivery' else None
+            if legacy:
+                episode, detected, legacy_revision = legacy
+                changed = max((changed, detected), key=stamp)
+                revision = dict(legacy=legacy_revision, authority=revision)
+            executors = graph['domain_executors'].get(work['operation_id'], set())
+            executor_id = work.get('executor_id') or (next(iter(executors)) if len(executors) == 1 else None)
+&gt;           return [occurrence(kind='execution_authority_blocking', source_type=source_type, source_id=source_id,
+                episode=episode, source_revision=revision, first_detected_at=detected, last_changed_at=changed,
+                agent_id=work.get('recipient_agent_id', work.get('subject_agent_id')), workspace_id=work['workspace_id'],
+                session_id=work.get('runtime_session_id', work.get('session_id')), operation_id=work['operation_id'], executor_id=executor_id,
+                category='action_required', severity='warning', priority=30, resolution='open',
+                allowed_actions=['inspect_approval', 'review_authority'] if family == 'native' else ['inspect_operation', 'review_authority'])]
+E           TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_authority.py:707: TypeError</failure></testcase></testsuite></testsuites>

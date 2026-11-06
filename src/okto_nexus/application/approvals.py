@@ -87,6 +87,7 @@ def approval_to_summary(approval: Approval) -> dict[str, Any]:
         "agent_id": approval.agent_id,
         "policy_id": approval.policy_id,
         "status": "archived" if approval.archived_at else approval.status,
+        "decision_revision": approval.decision_revision,
         "created_at": approval.created_at,
         "decided_at": approval.decided_at,
         "decided_by": approval.decided_by,
@@ -176,6 +177,19 @@ class ApprovalService:
         self._decision_validators[action] = validator
         if detail:
             self._decision_details[action] = detail
+
+    def attention_decision_actions(self) -> dict[str, dict[str, bool]]:
+        """Snapshot wiring for passive operator review, without invoking it.
+
+        An available control never promises successful approved re-execution.
+        The command retains its validators, CAS and current business gates.
+        """
+        executors = set(self._executors)
+        validators = set(self._decision_validators)
+        transactional = set(self._transactional_decisions)
+        return {action: dict(executor=action in executors, validator=action in validators,
+                             transactional=action in transactional)
+                for action in sorted(executors | validators | transactional)}
 
     def _wake_decision_listener(self, action):
         listener = self._decision_listeners.get(action)
@@ -303,6 +317,7 @@ class ApprovalService:
         justification: Any = None,
         response: Any = None,
         decision_context: Any = None,
+        expected_decision_revision: Any = None,
     ) -> dict[str, Any]:
         """Decide one pending approval: approve re-executes, reject notifies.
 
@@ -332,6 +347,13 @@ class ApprovalService:
         the original creation receipt fences concurrent/crash recovery.
         """
         normalized = validate_decision(decision)
+        if expected_decision_revision is not None and (
+            type(expected_decision_revision) is not int or expected_decision_revision < 0
+        ):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "expected_decision_revision must be a non-negative integer.", {},
+            )
         just_raw = "" if justification is None else str(justification).strip()
         just = just_raw or None
         aid = str(approval_id)
@@ -345,6 +367,12 @@ class ApprovalService:
             row = self._approvals.get(uow, aid)
             if row is None:
                 raise self._not_found(aid)
+            if (expected_decision_revision is not None and
+                    expected_decision_revision != row.decision_revision):
+                raise OktoNexusError(
+                    ErrorCode.CONFLICT, "The approval decision revision has changed.",
+                    {"approval_id": aid, "decision_revision": row.decision_revision},
+                )
             if row.archived_at:
                 raise OktoNexusError(ErrorCode.CONFLICT, "This approval has been archived.", {"approval_id": aid})
             try:

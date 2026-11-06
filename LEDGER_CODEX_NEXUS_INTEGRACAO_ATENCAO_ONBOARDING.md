@@ -397,3 +397,13 @@ Campanhas reais de provedor, login/logout/reboot, serviço do usuário e Herdr p
 - [Contrato](docs/attention.md) e [evidências](plans/agent_ops/evidence/pr06-attention.md).
 
 O wheel de entrega remove apenas uma linha vazia final; equivalência sintática, demais payloads e instalação conferidos em `pr06-attention-release-scope.json`.
+
+## 2026-11-06 — PR-06: aprovações, resultados e autoridade
+
+- Aprovações genéricas entram na projeção; a decisão canônica aceita revisão opcional e recusa formulário obsoleto após falha/retomada.
+- Resultados manuais/MCP e nativos do mesmo handoff compartilham identidade por claim. Migração 162 preserva visto/adiado, histórico e registros legados com data de atualização ausente; migração 161 intacta.
+- Bloqueios de mensagens, handoffs e decisões nativas revalidam autoridade atual em lote, incluindo origem, destinatário, relay e notificações. Inspeção canônica alcança handoffs antigos, executor e recibos de limpeza além dos limites das listas; leitura de limpeza funciona com execução desabilitada sem habilitar mutações.
+- **718 casos comportamentais distintos instalados passaram; zero skips**, mais uma observação explícita de limitação. Wheel final: 477 módulos Python, 7 recursos estáticos e 162 migrações; fontes e bytes instalados conferidos. Falha inicial real em timestamp legado corrigida; 43 casos requalificam os dois payloads alterados no wheel final.
+- AT-01/02/16 verificados no backend. PR-06/ATN-01/AT-08 continuam em progresso: off→on→off somente da flag global ainda reutiliza episódio/visto/adiado; falta geração persistida da política efetivamente aplicada. O teste que documenta isso não conta como aceite de recorrência.
+- PR-07/UI/browser, campanhas reais de cliente/provedor/serviço e aceite integral R3 seguem pendentes. Connector/Core permanecem nas branches preparadas, sem alterações neste marco.
+- Evidências e limites: [pr06-attention-completion.md](plans/agent_ops/evidence/pr06-attention-completion.md). Plano e conjuntos fixos de IDs preservados.

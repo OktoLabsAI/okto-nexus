@@ -825,7 +825,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     from ....bootstrap.execution_authority import build_execution_access
     app.state.attention = AttentionService(
         factory=deps.connection_factory, access=build_execution_access(deps),
-        queries=SqliteAttentionQueries(), clock=deps.clock, config=deps.config)
+        queries=SqliteAttentionQueries(decision_registry=deps.approvals.attention_decision_actions),
+        clock=deps.clock, config=deps.config)
     app.state.workspace_analytics = workspace_analytics
     app.state.workspace_list = workspace_list
     app.state.workspace_health = workspace_health

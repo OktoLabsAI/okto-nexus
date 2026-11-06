@@ -61,7 +61,7 @@ def _base(facts: dict, *, kind: str, source_type: str | None = None) -> dict:
         first_detected_at=facts["first_detected_at"],
         last_changed_at=facts["last_changed_at"],
         **{key: facts.get(key) for key in
-           ("agent_id", "workspace_id", "session_id", "operation_id")},
+           ("agent_id", "workspace_id", "session_id", "operation_id", "message_id", "result_id", "executor_id")},
     )
 
 
@@ -110,12 +110,6 @@ def project(facts: dict, now: str, policy: dict) -> list[dict]:
         return [occurrence(**_base(facts, kind="runtime_recovery_attention"),
             category="action_required", severity="warning", priority=30,
             allowed_actions=["inspect_recovery"])]
-    if family == "authority":
-        if not facts.get("pending") or not facts.get("authority_blocked"):
-            return []
-        return [occurrence(**_base(facts, kind="execution_authority_blocking"),
-            category="action_required", severity="warning", priority=30,
-            allowed_actions=["inspect_operation", "review_authority"])]
     if family == "disconnected":
         if facts.get("control_state") != "DISCONNECTED" or not facts.get("pending"):
             return []
@@ -132,12 +126,6 @@ def project(facts: dict, now: str, policy: dict) -> list[dict]:
             severity="warning" if escalated else "info", priority=30 if escalated else 20,
             next_change_at=boundary if boundary and not escalated else None,
             allowed_actions=["inspect_executor", "inspect_recovery"])]
-    if family == "result":
-        if not facts.get("canonical_result"):
-            return []
-        return [occurrence(**_base(facts, kind="result_unseen"),
-            resolution="resolved", active=True, severity="info", priority=10,
-            allowed_actions=["inspect_result"])]
     if family == "aged":
         threshold = policy.get("handoff_unclaimed_seconds")
         if (facts.get("status") != "OPEN" or not facts.get("eligible")
@@ -148,6 +136,7 @@ def project(facts: dict, now: str, policy: dict) -> list[dict]:
             return []
         # Repeated GETs never become a new episode or move the threshold.
         base = _base(facts, kind="handoff_unclaimed_aged")
+        base["source_revision"] = [facts["source_revision"], threshold, boundary]
         base["first_detected_at"] = base["last_changed_at"] = boundary
         return [occurrence(**base, category="watch", severity="info", priority=20,
             allowed_actions=["inspect_handoff"])]

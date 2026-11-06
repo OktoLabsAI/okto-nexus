@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="30" time="97.402" timestamp="2026-11-06T16:51:45.653106-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_approvals" name="test_canonical_governance_approval_is_metadata_only_and_decidable_after_flag_off[message_create]" time="6.230" /><testcase classname="tests.test_attention_approvals" name="test_canonical_governance_approval_is_metadata_only_and_decidable_after_flag_off[handoff_create]" time="4.255" /><testcase classname="tests.test_attention_approvals" name="test_http_stale_generation_cannot_decide_after_failed_executor_reverts[approve]" time="4.002"><failure message="assert (0 == 1)&#10; +  where 0 = len([])">env = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10467/test_htt.....}, 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10467\\test_http_stale_generation_can0\\project')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000025CADAE17F0&gt;
+final_decision = 'approve'
+
+    @pytest.mark.parametrize('final_decision', ['approve', 'reject'])
+    def test_http_stale_generation_cannot_decide_after_failed_executor_reverts(env, monkeypatch, final_decision):
+        deps, _, _ = env
+        approval_id = pending(env)
+        first = by_id(deps, approval_id)
+        original = deps.approvals._executors['message_create']
+        calls = []
+&#32;&#32;&#32;&#32;
+        def counted(arguments):
+            calls.append(None)
+            return original(arguments)
+&#32;&#32;&#32;&#32;
+        monkeypatch.setitem(deps.approvals._executors, 'message_create', counted)
+        with _client(deps) as client:
+            url = f'/api/v1/approvals/{approval_id}'
+            old = _ok(client.get(url).json())['decision_revision']
+            # Re-execution still enforces the original sender's current permission.
+            _attach(deps, 'alpha', governance=[_rule('message_create', 'deny')])
+            rejected = client.post(url + '/decision', json={'decision': 'approve', 'expected_decision_revision': old})
+            assert rejected.status_code == 403, rejected.text
+            current = _ok(client.get(url).json())
+            assert current['status'] == 'pending' and current['decision_revision'] &gt; old
+&gt;           assert len(calls) == 1 and _count(deps, 'messages') == 0
+E           assert (0 == 1)
+E            +  where 0 = len([])
+
+tests\test_attention_approvals.py:132: AssertionError</failure></testcase><testcase classname="tests.test_attention_approvals" name="test_http_stale_generation_cannot_decide_after_failed_executor_reverts[reject]" time="4.679"><failure message="assert (0 == 1)&#10; +  where 0 = len([])">env = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10467/test_htt.....}, 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10467\\test_http_stale_generation_can1\\project')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000025CAE32B130&gt;
+final_decision = 'reject'
+
+    @pytest.mark.parametrize('final_decision', ['approve', 'reject'])
+    def test_http_stale_generation_cannot_decide_after_failed_executor_reverts(env, monkeypatch, final_decision):
+        deps, _, _ = env
+        approval_id = pending(env)
+        first = by_id(deps, approval_id)
+        original = deps.approvals._executors['message_create']
+        calls = []
+&#32;&#32;&#32;&#32;
+        def counted(arguments):
+            calls.append(None)
+            return original(arguments)
+&#32;&#32;&#32;&#32;
+        monkeypatch.setitem(deps.approvals._executors, 'message_create', counted)
+        with _client(deps) as client:
+            url = f'/api/v1/approvals/{approval_id}'
+            old = _ok(client.get(url).json())['decision_revision']
+            # Re-execution still enforces the original sender's current permission.
+            _attach(deps, 'alpha', governance=[_rule('message_create', 'deny')])
+            rejected = client.post(url + '/decision', json={'decision': 'approve', 'expected_decision_revision': old})
+            assert rejected.status_code == 403, rejected.text
+            current = _ok(client.get(url).json())
+            assert current['status'] == 'pending' and current['decision_revision'] &gt; old
+&gt;           assert len(calls) == 1 and _count(deps, 'messages') == 0
+E           assert (0 == 1)
+E            +  where 0 = len([])
+
+tests\test_attention_approvals.py:132: AssertionError</failure></testcase><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[True]" time="5.599" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[False]" time="4.752" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[-1]" time="4.962" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[1.5]" time="4.164" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[0]" time="4.790" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[revision5]" time="4.114" /><testcase classname="tests.test_attention_approvals" name="test_decision_revision_is_strict_in_application_and_http[revision6]" time="3.678" /><testcase classname="tests.test_attention_approvals" name="test_snapshot_registry_is_inert_and_does_not_predict_approve_business_gates" time="1.784" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[operator-expected0]" time="2.097" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[beta-expected1]" time="1.636" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[None-expected2]" time="1.432" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[-expected3]" time="1.549" /><testcase classname="tests.test_attention_approvals" name="test_generic_directed_recipient_is_not_borrowed_from_operator[7-expected4]" time="1.630" /><testcase classname="tests.test_attention_approvals" name="test_generic_governance_has_no_invented_ttl_and_unknown_action_is_inspect_only" time="1.881" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[malformed]" time="1.869" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[[]]" time="1.866" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[{&quot;kwargs&quot;: []}]" time="1.815" /><testcase classname="tests.test_attention_approvals" name="test_malformed_payload_retains_inspectable_reference[{&quot;kwargs&quot;: null}]" time="2.023" /><testcase classname="tests.test_attention_approvals" name="test_archive_keeps_same_history_and_removes_decision" time="2.009" /><testcase classname="tests.test_attention_approvals" name="test_coordination_approval_uses_correlated_receipt_and_passive_expiry[message_create-False]" time="4.851" /><testcase classname="tests.test_attention_approvals" name="test_coordination_approval_uses_correlated_receipt_and_passive_expiry[handoff_create-False]" time="3.140" /><testcase classname="tests.test_attention_approvals" name="test_binding_proposal_correlates_revision_scope_and_deadline_without_deciding" time="3.663"><failure message="okto_nexus.errors.OktoNexusError: INTERNAL_ERROR: Refusing to compute a lease timestamp from '2026-11-06T20:03:13.154567+00:00': it is not the canonical fixed-width UTC form 'YYYY-MM-DDTHH:MM:SS.ffffffZ'. Lease expiry compares timestamps lexicographically, so a mixed-width value would corrupt expiry ordering. Fix the injected Clock to emit utc_now_iso()'s format.">onboarding = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10467/test_bin...ent_id_hint': 'subject', 'executor_id': 'exe_499debfde3cd1c4f8275ab83b3fd3615', 'adapter_id': 'codex_app_server', ...})
+
+    def test_binding_proposal_correlates_revision_scope_and_deadline_without_deciding(onboarding):
+        deps, client, headers, prepare_body = onboarding
+        _, _, approval_id = binding_fixtures.prepare_delegated(client, headers, prepare_body)
+        first = by_id(deps, approval_id)
+        assert first['allowed_actions'] == ['inspect_approval', 'decide_approval']
+        for sql in (
+            "UPDATE execution_proposals SET status='APPLIED'",
+            'UPDATE execution_proposals SET proposal_revision=proposal_revision+1',
+            "UPDATE execution_proposals SET diff_hash='changed'",
+            "UPDATE execution_proposals SET expected_revisions_json=json_set(expected_revisions_json,'$.operator_approval_id','other')",
+        ):
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute('SAVEPOINT changed')
+                uow.connection.execute(sql)
+                rows, policy, now = read(uow, deps)
+                assert project(rows[0], now, policy)[0]['allowed_actions'] == ['inspect_approval'], sql
+                uow.connection.execute('ROLLBACK TO changed')
+                uow.connection.execute('RELEASE changed')
+&gt;       expired = by_id(deps, approval_id, now=iso_plus(first['next_change_at'], 1))
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_approvals.py:269:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+now_iso = '2026-11-06T20:03:13.154567+00:00', seconds = 1
+
+    def iso_plus(now_iso: str, seconds: float) -&gt; str:
+        """Return ``now_iso`` shifted forward by ``seconds``, in canonical form.
+&#32;&#32;&#32;&#32;
+        This is the LEASE-WRITE boundary: lease timestamps are compared
+        lexicographically (SQL ``&lt;``) against other canonical timestamps, so the
+        base instant MUST itself be canonical fixed-width (a mixed-width value -
+        e.g. ``...T00:00:00Z`` next to ``...T00:00:00.500000Z`` - orders WRONG
+        lexicographically). A non-canonical input is a producer/wiring bug (an
+        injected clock not emitting :func:`utc_now_iso`'s shape), so it raises
+        ``INTERNAL_ERROR`` with a prescriptive message rather than writing a lease
+        that silently corrupts expiry ordering.
+        """
+        if not isinstance(now_iso, str) or not _CANONICAL_UTC_RE.match(now_iso):
+&gt;           raise OktoNexusError(
+                ErrorCode.INTERNAL_ERROR,
+                f"Refusing to compute a lease timestamp from {now_iso!r}: it is not "
+                "the canonical fixed-width UTC form 'YYYY-MM-DDTHH:MM:SS.ffffffZ'. "
+                "Lease expiry compares timestamps lexicographically, so a "
+                "mixed-width value would corrupt expiry ordering. Fix the injected "
+                "Clock to emit utc_now_iso()'s format.",
+                {"now_iso": now_iso},
+            )
+E           okto_nexus.errors.OktoNexusError: INTERNAL_ERROR: Refusing to compute a lease timestamp from '2026-11-06T20:03:13.154567+00:00': it is not the canonical fixed-width UTC form 'YYYY-MM-DDTHH:MM:SS.ffffffZ'. Lease expiry compares timestamps lexicographically, so a mixed-width value would corrupt expiry ordering. Fix the injected Clock to emit utc_now_iso()'s format.
+
+src\okto_nexus\domain\base.py:83: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_approvals" name="test_canonical_native_not_duplicated_or_orphan_promoted_to_generic_decision" time="3.904"><failure message="okto_nexus.errors.OktoNexusError: INTERNAL_ERROR: Refusing to compute a lease timestamp from '2026-11-06T19:55:17.278000+00:00': it is not the canonical fixed-width UTC form 'YYYY-MM-DDTHH:MM:SS.ffffffZ'. Lease expiry compares timestamps lexicographically, so a mixed-width value would corrupt expiry ordering. Fix the injected Clock to emit utc_now_iso()'s format.">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10467/test_can...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'OvHJR-bwz0X16IflwiJMJVj-1GChdfOGfgpvm8ndsns', ...})
+
+    def test_canonical_native_not_duplicated_or_orphan_promoted_to_generic_decision(decision_state):
+        deps, _, _ = decision_state
+        assert snapshot(deps) == []
+        with deps.connection_factory.unit_of_work() as uow:
+            row = uow.connection.execute('SELECT canonical_request_id,expires_at FROM execution_native_requests').fetchone()
+            uow.connection.execute('DELETE FROM execution_native_requests')
+        item = by_id(deps, row['canonical_request_id'])
+        assert item['allowed_actions'] == ['inspect_approval']
+        assert item['freshness'] == 'unavailable'
+&gt;       old = by_id(deps, row['canonical_request_id'], now=iso_plus(row['expires_at'], 1))
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_approvals.py:286:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+now_iso = '2026-11-06T19:55:17.278000+00:00', seconds = 1
+
+    def iso_plus(now_iso: str, seconds: float) -&gt; str:
+        """Return ``now_iso`` shifted forward by ``seconds``, in canonical form.
+&#32;&#32;&#32;&#32;
+        This is the LEASE-WRITE boundary: lease timestamps are compared
+        lexicographically (SQL ``&lt;``) against other canonical timestamps, so the
+        base instant MUST itself be canonical fixed-width (a mixed-width value -
+        e.g. ``...T00:00:00Z`` next to ``...T00:00:00.500000Z`` - orders WRONG
+        lexicographically). A non-canonical input is a producer/wiring bug (an
+        injected clock not emitting :func:`utc_now_iso`'s shape), so it raises
+        ``INTERNAL_ERROR`` with a prescriptive message rather than writing a lease
+        that silently corrupts expiry ordering.
+        """
+        if not isinstance(now_iso, str) or not _CANONICAL_UTC_RE.match(now_iso):
+&gt;           raise OktoNexusError(
+                ErrorCode.INTERNAL_ERROR,
+                f"Refusing to compute a lease timestamp from {now_iso!r}: it is not "
+                "the canonical fixed-width UTC form 'YYYY-MM-DDTHH:MM:SS.ffffffZ'. "
+                "Lease expiry compares timestamps lexicographically, so a "
+                "mixed-width value would corrupt expiry ordering. Fix the injected "
+                "Clock to emit utc_now_iso()'s format.",
+                {"now_iso": now_iso},
+            )
+E           okto_nexus.errors.OktoNexusError: INTERNAL_ERROR: Refusing to compute a lease timestamp from '2026-11-06T19:55:17.278000+00:00': it is not the canonical fixed-width UTC form 'YYYY-MM-DDTHH:MM:SS.ffffffZ'. Lease expiry compares timestamps lexicographically, so a mixed-width value would corrupt expiry ordering. Fix the injected Clock to emit utc_now_iso()'s format.
+
+src\okto_nexus\domain\base.py:83: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_approvals" name="test_legacy_orphan_never_promises_generic_decision[execution.native.respond]" time="1.974" /><testcase classname="tests.test_attention_approvals" name="test_legacy_orphan_never_promises_generic_decision[runtime_native_approval]" time="1.628" /><testcase classname="tests.test_attention_approvals" name="test_source_is_pure_scope_filtered_and_constant_queries" time="1.580" /></testsuite></testsuites>

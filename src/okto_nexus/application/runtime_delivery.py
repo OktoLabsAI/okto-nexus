@@ -3,10 +3,9 @@ import json
 from dataclasses import replace
 from ..domain.base import new_id
 from ..domain.delivery import DeliveryEnvelope
-from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_bootstrap import delivery_context
-from .connection_policy import method_enabled, require_method
+from .connection_policy import method_enabled
 from .runtime_requirements import validate_native_requirements
 from .runtime_causality import RuntimeCausalityService
 from .runtime_actor_authority import authenticated_message_context, valid_actor_binding
@@ -280,56 +279,28 @@ class RuntimeDeliveryPlanner:
         return operation_id
 
     def revalidate(self, uow, *, operation, config):
-        if operation.get("reconciliation_id"):
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Transport attempt was administratively reconciled.", {})
-        if operation.get("admission_binding"):
-            admission = json.loads(operation["admission_binding"])
-            original = self.endpoints.get(uow, admission["endpoint_id"])
-            if (not original or original["revision"] != admission["revision"]
-                    or not original["enabled"] or original["activation_state"] != "approved"
-                    or original["selection_group"] != admission["selection_group"]):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Original fallback approval changed.", {})
-            original_profile = self.endpoints.profile(uow, admission["profile_id"]) if admission["profile_id"] else None
-            if admission["profile_id"] and (not original_profile or not original_profile["enabled"]
-                    or original_profile["revision"] != admission["profile_revision"]):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Original fallback profile approval changed.", {})
-        actor = self.agents.get(uow, operation["actor_agent_id"])
-        recipient = self.agents.get(uow, operation["recipient_agent_id"])
-        endpoint = self.endpoints.get(uow, operation["endpoint_id"])
-        if operation.get("admission_binding") and endpoint and endpoint["selection_group"] != admission["selection_group"]:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Fallback equivalence approval changed.", {})
-        if (not config.feature_harness_integrations or not actor or not actor.is_active or
-                not valid_actor_binding(uow, actor, operation["credential_binding"],
-                    capabilities=self.capabilities, workspace_id=operation['workspace_id']) or not recipient or not recipient.is_active or
-                not reachable(actor, recipient) or
-                not endpoint or not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["revision"] != operation["endpoint_revision"] or
-                endpoint["health"] == "quarantined" or
-                endpoint["agent_id"] != recipient.agent_id or endpoint["workspace_id"] != operation["workspace_id"] or
-                endpoint["response_policy"] != "conversation" or endpoint["consumption"] != "exclusive"):
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Transport authorization changed before dispatch.", {})
-        require_method(uow, endpoint["agent_id"], endpoint["adapter_id"])
-        profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
-        if endpoint["profile_id"] and (not profile or not profile["enabled"] or profile["revision"] != operation["profile_revision"]):
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime profile changed before dispatch.", {})
-        if profile and operation["runtime_session_id"] and self.endpoints.session_profile_revision(uow, operation["runtime_session_id"]) != profile["revision"]:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime must be reopened with the current approved profile.", {})
-        if endpoint["protocol"] == "nxl-r4":
-            from nexus_connector_core import get_runtime_catalog
-            descriptor = next((r for r in get_runtime_catalog().runtimes if r.adapter_id == endpoint["adapter_id"]), None)
-            if descriptor is None or descriptor.connection_mode != "managed" or not profile or "conversation" in profile["config"].get("disabled_capabilities", ()):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Canonical conversation delivery is unavailable.", {})
-            from .runtime_requirements import validate_canonical_native_requirements
-            validate_canonical_native_requirements(profile['config'], endpoint['adapter_id'], hitl_enabled=config.feature_hitl)
-            return endpoint, profile
-        if profile:
-            validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
-                                         hitl_enabled=config.feature_hitl)
-            if "conversation" in profile["config"].get("disabled_capabilities", ()):
-                raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Profile disables conversation transport.", {})
-        if not self.registry.get(endpoint["adapter_id"]).capabilities.conversation:
-            raise OktoNexusError(ErrorCode.CONFIG_ERROR, "adapter_capability_unsupported: conversation is unavailable.",
-                {"reason": "adapter_capability_unsupported", "capability": "conversation"})
-        return endpoint, profile
+        if operation.get('reconciliation_id'):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'Transport attempt was administratively reconciled.', {})
+        from nexus_connector_core import get_runtime_catalog
+        from .connection_policy import method_enabled
+        from .runtime_delivery_facts import require_delivery_facts
+        admission = json.loads(operation['admission_binding']) if operation.get('admission_binding') else None
+        original = self.endpoints.get(uow, admission['endpoint_id']) if admission else None
+        original_profile = self.endpoints.profile(uow, admission['profile_id']) if admission and admission['profile_id'] else None
+        actor = self.agents.get(uow, operation['actor_agent_id'])
+        recipient = self.agents.get(uow, operation['recipient_agent_id'])
+        endpoint = self.endpoints.get(uow, operation['endpoint_id'])
+        profile = self.endpoints.profile(uow, endpoint['profile_id']) if endpoint and endpoint['profile_id'] else None
+        descriptor = next((item for item in get_runtime_catalog().runtimes if endpoint and item.adapter_id == endpoint['adapter_id']), None)
+        return require_delivery_facts(operation=operation, config=config, actor=actor, recipient=recipient,
+            endpoint=endpoint, profile=profile, original=original, original_profile=original_profile,
+            actor_binding_valid=bool(config.feature_harness_integrations and actor and actor.is_active and valid_actor_binding(uow, actor, operation['credential_binding'],
+                capabilities=self.capabilities, workspace_id=operation['workspace_id'])),
+            method_enabled=bool(endpoint and method_enabled(uow, endpoint['agent_id'], endpoint['adapter_id'])),
+            session_profile_revision=self.endpoints.session_profile_revision(uow, operation['runtime_session_id'])
+                if profile and operation['runtime_session_id'] else None,
+            descriptor=descriptor, legacy_descriptor=(lambda: self.registry.get(endpoint['adapter_id']))
+                if endpoint and endpoint['protocol'] != 'nxl-r4' else None)
 
     def fallback(self, uow, *, operation):
         """Select only a new conversational operation's approved alternative.

@@ -1,0 +1,1942 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="0" tests="24" time="62.537" timestamp="2026-11-06T17:46:33.432554-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_handoff_navigation" name="test_exact_handoff_beyond_1000_overview_rows_is_read_without_side_effects" time="3.082"><failure message="AssertionError: {&quot;ok&quot;:false,&quot;error&quot;:{&quot;code&quot;:&quot;DB_ERROR&quot;,&quot;message&quot;:&quot;The attention projection could not be read.&quot;}}&#10;assert 503 == 200&#10; +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code">attention_env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...tte.testclient.TestClient object at 0x0000025E3A4238C0&gt;, clock=&lt;test_attention_api.Clock object at 0x0000025E39132270&gt;)
+
+    def test_exact_handoff_beyond_1000_overview_rows_is_read_without_side_effects(attention_env):
+        env = attention_env
+        identity = completed(env)
+        env.clock.advance(10)
+        with env.deps.connection_factory.unit_of_work() as uow:
+            # The target above follows real create/claim/complete. Only the large
+            # overview background below is synthetic metadata, without payloads.
+            uow.connection.executemany(
+                'INSERT INTO handoffs(handoff_id,workspace_id,from_agent_id,target,visibility,status,'
+                'claimed_by,claim_epoch,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)',
+                [(f'background-{index:04d}', 'attention-one', 'operator',
+                  '{"strategy":"direct","agent_id":"attention-worker"}', 'eligible', 'COMPLETED',
+                  'attention-worker', 1, env.clock.now_iso(), env.clock.now_iso()) for index in range(1001)])
+        before = snapshot(env)
+        overview = data(env.client.get(BASE, params={'workspace': 'attention-one', 'status': 'COMPLETED'}))
+        assert len(overview['items']) == 1000
+        assert identity not in {row['handoff_id'] for row in overview['items']}
+&gt;       attention = data(env.client.get('/api/v1/attention', params={'kind': 'result_unseen', 'limit': 1}))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_handoff_navigation.py:49:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [503 Service Unavailable]&gt;
+
+    def data(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: {"ok":false,"error":{"code":"DB_ERROR","message":"The attention projection could not be read."}}
+E       assert 503 == 200
+E        +  where 503 = &lt;Response [503 Service Unavailable]&gt;.status_code
+
+tests\test_attention_handoff_navigation.py:15: AssertionError</failure></testcase><testcase classname="tests.test_attention_handoff_navigation" name="test_handoff_selector_composes_with_every_existing_filter_and_absence_stays_empty" time="2.522" /><testcase classname="tests.test_attention_handoff_navigation" name="test_invalid_handoff_selector_is_rejected_without_writes[]" time="2.546" /><testcase classname="tests.test_attention_handoff_navigation" name="test_invalid_handoff_selector_is_rejected_without_writes[ ]" time="2.753" /><testcase classname="tests.test_attention_handoff_navigation" name="test_invalid_handoff_selector_is_rejected_without_writes[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]" time="2.886" /><testcase classname="tests.test_attention_handoff_navigation" name="test_invalid_handoff_selector_is_rejected_without_writes[bad\nreference]" time="2.595" /><testcase classname="tests.test_attention_handoff_navigation" name="test_invalid_handoff_selector_is_rejected_without_writes[bad\x00reference]" time="2.986" /><testcase classname="tests.test_attention_handoff_navigation" name="test_duplicate_handoff_selector_is_not_silently_ambiguous" time="2.830" /><testcase classname="tests.test_attention_handoff_navigation" name="test_selector_preserves_existing_observability_auth_and_key_revocation" time="3.026" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[complete]" time="2.139"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.">self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3B2B6D50&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3B4EB800&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD13C50&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&gt;           yield relation, params
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:120:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3B2B6D50&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3B4EB800&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD13C50&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+after = None, limit = 50
+
+    def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
+        with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+            conn = uow.connection
+&gt;           aggregate = conn.execute(sql + '''SELECT COUNT(*) AS total,
+                COUNT(DISTINCT json_extract(item,'$.attention_id')) AS unique_episodes,
+                nexus_attention_set_digest_v1(item) AS revision,
+                SUM(json_extract(item,'$.category')='action_required') AS action_required,
+                SUM(json_extract(item,'$.category')='watch') AS watch,
+                SUM(json_extract(item,'$.priority')=10) AS p10,
+                SUM(json_extract(item,'$.priority')=20) AS p20,
+                SUM(json_extract(item,'$.priority')=30) AS p30,
+                SUM(json_extract(item,'$.seen_state.seen')=0) AS unseen,
+                SUM(json_extract(item,'$.seen_state.snoozed')=1) AS snoozed,
+                (SELECT MIN(CASE WHEN json_extract(item,'$.next_change_at')&gt;:now
+                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at
+                FROM filtered''', params).fetchone()
+E           sqlite3.OperationalError: user-defined function raised exception
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:139: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+observation = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...abilityService object at 0x0000025E3B2B4E50&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B2B5450&gt;)
+outcome = 'complete'
+
+    @pytest.mark.parametrize('outcome', ['complete', 'reject', 'verify', 'reject_open'])
+    def test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent(observation, outcome):
+        env = observation
+        hid = create(env, verifiable=outcome == 'verify')
+        if outcome != 'reject_open':
+            claim = call(env, 'handoff_claim', actor='worker', agent_id='worker', handoff_id=hid)
+            epoch = claim['claim_epoch']
+        else:
+            epoch = 0
+        env.deps.clock.set_iso(LATER)
+        action = 'handoff_reject' if outcome.startswith('reject') else 'handoff_complete'
+        done = call(env, action, actor='worker', agent_id='worker', handoff_id=hid,
+            **(dict(reason='PRIVATE REJECTION') if outcome.startswith('reject') else dict(result='PRIVATE RESULT')),
+            **({'claim_epoch': epoch} if epoch else {}))
+        if outcome == 'verify':
+            assert done['status'] == 'VERIFYING'
+            with env.deps.connection_factory.unit_of_work(write=False) as uow:
+                assert read(uow.connection)[0] == []
+            call(env, 'handoff_verify', agent_id='reader', handoff_id=hid, claim_epoch=epoch, verdict='pass')
+        before = passive.snapshot(env.deps)
+        attention = service(env)
+&gt;       view = attention.read(context=OPERATOR, filters={'kind': 'result_unseen'})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:82:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention.py:48: in read
+    return self._snapshot(context=context, filters=filters, cursor=cursor, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\attention.py:31: in _snapshot
+    value = self.queries.snapshot(uow, filters=filters, now=now, config=config,
+src\okto_nexus\adapters\outbound\sqlite\attention.py:137: in snapshot
+    with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3B2B6D50&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3B4EB800&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD13C50&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+            yield relation, params
+        except sqlite3.Error as error:
+            if expired:
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {}) from None
+&gt;           raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention projection could not be read.', {}) from error
+E           okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:125: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[reject]" time="1.820"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.">self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A9D96D0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3A59C680&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD10950&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&gt;           yield relation, params
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:120:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A9D96D0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3A59C680&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD10950&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+after = None, limit = 50
+
+    def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
+        with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+            conn = uow.connection
+&gt;           aggregate = conn.execute(sql + '''SELECT COUNT(*) AS total,
+                COUNT(DISTINCT json_extract(item,'$.attention_id')) AS unique_episodes,
+                nexus_attention_set_digest_v1(item) AS revision,
+                SUM(json_extract(item,'$.category')='action_required') AS action_required,
+                SUM(json_extract(item,'$.category')='watch') AS watch,
+                SUM(json_extract(item,'$.priority')=10) AS p10,
+                SUM(json_extract(item,'$.priority')=20) AS p20,
+                SUM(json_extract(item,'$.priority')=30) AS p30,
+                SUM(json_extract(item,'$.seen_state.seen')=0) AS unseen,
+                SUM(json_extract(item,'$.seen_state.snoozed')=1) AS snoozed,
+                (SELECT MIN(CASE WHEN json_extract(item,'$.next_change_at')&gt;:now
+                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at
+                FROM filtered''', params).fetchone()
+E           sqlite3.OperationalError: user-defined function raised exception
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:139: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+observation = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...abilityService object at 0x0000025E3A9D8B90&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B2CB6B0&gt;)
+outcome = 'reject'
+
+    @pytest.mark.parametrize('outcome', ['complete', 'reject', 'verify', 'reject_open'])
+    def test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent(observation, outcome):
+        env = observation
+        hid = create(env, verifiable=outcome == 'verify')
+        if outcome != 'reject_open':
+            claim = call(env, 'handoff_claim', actor='worker', agent_id='worker', handoff_id=hid)
+            epoch = claim['claim_epoch']
+        else:
+            epoch = 0
+        env.deps.clock.set_iso(LATER)
+        action = 'handoff_reject' if outcome.startswith('reject') else 'handoff_complete'
+        done = call(env, action, actor='worker', agent_id='worker', handoff_id=hid,
+            **(dict(reason='PRIVATE REJECTION') if outcome.startswith('reject') else dict(result='PRIVATE RESULT')),
+            **({'claim_epoch': epoch} if epoch else {}))
+        if outcome == 'verify':
+            assert done['status'] == 'VERIFYING'
+            with env.deps.connection_factory.unit_of_work(write=False) as uow:
+                assert read(uow.connection)[0] == []
+            call(env, 'handoff_verify', agent_id='reader', handoff_id=hid, claim_epoch=epoch, verdict='pass')
+        before = passive.snapshot(env.deps)
+        attention = service(env)
+&gt;       view = attention.read(context=OPERATOR, filters={'kind': 'result_unseen'})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:82:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention.py:48: in read
+    return self._snapshot(context=context, filters=filters, cursor=cursor, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\attention.py:31: in _snapshot
+    value = self.queries.snapshot(uow, filters=filters, now=now, config=config,
+src\okto_nexus\adapters\outbound\sqlite\attention.py:137: in snapshot
+    with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A9D96D0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3A59C680&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD10950&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+            yield relation, params
+        except sqlite3.Error as error:
+            if expired:
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {}) from None
+&gt;           raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention projection could not be read.', {}) from error
+E           okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:125: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[verify]" time="1.937"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.">self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A6FC8C0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3AB29910&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD11550&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&gt;           yield relation, params
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:120:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A6FC8C0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3AB29910&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD11550&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+after = None, limit = 50
+
+    def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
+        with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+            conn = uow.connection
+&gt;           aggregate = conn.execute(sql + '''SELECT COUNT(*) AS total,
+                COUNT(DISTINCT json_extract(item,'$.attention_id')) AS unique_episodes,
+                nexus_attention_set_digest_v1(item) AS revision,
+                SUM(json_extract(item,'$.category')='action_required') AS action_required,
+                SUM(json_extract(item,'$.category')='watch') AS watch,
+                SUM(json_extract(item,'$.priority')=10) AS p10,
+                SUM(json_extract(item,'$.priority')=20) AS p20,
+                SUM(json_extract(item,'$.priority')=30) AS p30,
+                SUM(json_extract(item,'$.seen_state.seen')=0) AS unseen,
+                SUM(json_extract(item,'$.seen_state.snoozed')=1) AS snoozed,
+                (SELECT MIN(CASE WHEN json_extract(item,'$.next_change_at')&gt;:now
+                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at
+                FROM filtered''', params).fetchone()
+E           sqlite3.OperationalError: user-defined function raised exception
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:139: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+observation = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...abilityService object at 0x0000025E3A6FCE60&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3A6FD220&gt;)
+outcome = 'verify'
+
+    @pytest.mark.parametrize('outcome', ['complete', 'reject', 'verify', 'reject_open'])
+    def test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent(observation, outcome):
+        env = observation
+        hid = create(env, verifiable=outcome == 'verify')
+        if outcome != 'reject_open':
+            claim = call(env, 'handoff_claim', actor='worker', agent_id='worker', handoff_id=hid)
+            epoch = claim['claim_epoch']
+        else:
+            epoch = 0
+        env.deps.clock.set_iso(LATER)
+        action = 'handoff_reject' if outcome.startswith('reject') else 'handoff_complete'
+        done = call(env, action, actor='worker', agent_id='worker', handoff_id=hid,
+            **(dict(reason='PRIVATE REJECTION') if outcome.startswith('reject') else dict(result='PRIVATE RESULT')),
+            **({'claim_epoch': epoch} if epoch else {}))
+        if outcome == 'verify':
+            assert done['status'] == 'VERIFYING'
+            with env.deps.connection_factory.unit_of_work(write=False) as uow:
+                assert read(uow.connection)[0] == []
+            call(env, 'handoff_verify', agent_id='reader', handoff_id=hid, claim_epoch=epoch, verdict='pass')
+        before = passive.snapshot(env.deps)
+        attention = service(env)
+&gt;       view = attention.read(context=OPERATOR, filters={'kind': 'result_unseen'})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:82:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention.py:48: in read
+    return self._snapshot(context=context, filters=filters, cursor=cursor, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\attention.py:31: in _snapshot
+    value = self.queries.snapshot(uow, filters=filters, now=now, config=config,
+src\okto_nexus\adapters\outbound\sqlite\attention.py:137: in snapshot
+    with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A6FC8C0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3AB29910&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD11550&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+            yield relation, params
+        except sqlite3.Error as error:
+            if expired:
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {}) from None
+&gt;           raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention projection could not be read.', {}) from error
+E           okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:125: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[reject_open]" time="1.764"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.">self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3AF1ADD0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3AFBFE30&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3A99DCD0&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&gt;           yield relation, params
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:120:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3AF1ADD0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3AFBFE30&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3A99DCD0&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+after = None, limit = 50
+
+    def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
+        with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+            conn = uow.connection
+&gt;           aggregate = conn.execute(sql + '''SELECT COUNT(*) AS total,
+                COUNT(DISTINCT json_extract(item,'$.attention_id')) AS unique_episodes,
+                nexus_attention_set_digest_v1(item) AS revision,
+                SUM(json_extract(item,'$.category')='action_required') AS action_required,
+                SUM(json_extract(item,'$.category')='watch') AS watch,
+                SUM(json_extract(item,'$.priority')=10) AS p10,
+                SUM(json_extract(item,'$.priority')=20) AS p20,
+                SUM(json_extract(item,'$.priority')=30) AS p30,
+                SUM(json_extract(item,'$.seen_state.seen')=0) AS unseen,
+                SUM(json_extract(item,'$.seen_state.snoozed')=1) AS snoozed,
+                (SELECT MIN(CASE WHEN json_extract(item,'$.next_change_at')&gt;:now
+                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at
+                FROM filtered''', params).fetchone()
+E           sqlite3.OperationalError: user-defined function raised exception
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:139: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+observation = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...abilityService object at 0x0000025E3AAE83D0&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3AAE8750&gt;)
+outcome = 'reject_open'
+
+    @pytest.mark.parametrize('outcome', ['complete', 'reject', 'verify', 'reject_open'])
+    def test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent(observation, outcome):
+        env = observation
+        hid = create(env, verifiable=outcome == 'verify')
+        if outcome != 'reject_open':
+            claim = call(env, 'handoff_claim', actor='worker', agent_id='worker', handoff_id=hid)
+            epoch = claim['claim_epoch']
+        else:
+            epoch = 0
+        env.deps.clock.set_iso(LATER)
+        action = 'handoff_reject' if outcome.startswith('reject') else 'handoff_complete'
+        done = call(env, action, actor='worker', agent_id='worker', handoff_id=hid,
+            **(dict(reason='PRIVATE REJECTION') if outcome.startswith('reject') else dict(result='PRIVATE RESULT')),
+            **({'claim_epoch': epoch} if epoch else {}))
+        if outcome == 'verify':
+            assert done['status'] == 'VERIFYING'
+            with env.deps.connection_factory.unit_of_work(write=False) as uow:
+                assert read(uow.connection)[0] == []
+            call(env, 'handoff_verify', agent_id='reader', handoff_id=hid, claim_epoch=epoch, verdict='pass')
+        before = passive.snapshot(env.deps)
+        attention = service(env)
+&gt;       view = attention.read(context=OPERATOR, filters={'kind': 'result_unseen'})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:82:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\attention.py:48: in read
+    return self._snapshot(context=context, filters=filters, cursor=cursor, limit=limit)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\attention.py:31: in _snapshot
+    value = self.queries.snapshot(uow, filters=filters, now=now, config=config,
+src\okto_nexus\adapters\outbound\sqlite\attention.py:137: in snapshot
+    with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3AF1ADD0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x0000025E3AFBFE30&gt;
+filters = {'kind': 'result_unseen', 'state': 'active', 'seen': 'all'}
+now = '2026-11-06T13:00:00.000000+00:00'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_real_mcp_termina..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3A99DCD0&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+            yield relation, params
+        except sqlite3.Error as error:
+            if expired:
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {}) from None
+&gt;           raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention projection could not be read.', {}) from error
+E           okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:125: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_results" name="test_open_claimed_verifying_and_cancelled_are_not_manual_terminal_results" time="1.955" /><testcase classname="tests.test_attention_results" name="test_native_and_handoff_result_share_seen_across_lag_and_partial_retention[handoff]" time="1.773"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.">self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3B71ACF0&gt;
+uow = namespace(connection=&lt;sqlite3.Connection object at 0x0000025E3A6FF5B0&gt;)
+filters = {'state': 'all', 'seen': 'all', 'kind': 'result_unseen'}
+now = '2026-11-06T13:00:00.000000Z'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_native_and_hando..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD13B90&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&gt;           yield relation, params
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:120:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3B71ACF0&gt;
+uow = namespace(connection=&lt;sqlite3.Connection object at 0x0000025E3A6FF5B0&gt;)
+filters = {'state': 'all', 'seen': 'all', 'kind': 'result_unseen'}
+now = '2026-11-06T13:00:00.000000Z'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_native_and_hando..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD13B90&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+after = None, limit = 50
+
+    def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
+        with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+            conn = uow.connection
+&gt;           aggregate = conn.execute(sql + '''SELECT COUNT(*) AS total,
+                COUNT(DISTINCT json_extract(item,'$.attention_id')) AS unique_episodes,
+                nexus_attention_set_digest_v1(item) AS revision,
+                SUM(json_extract(item,'$.category')='action_required') AS action_required,
+                SUM(json_extract(item,'$.category')='watch') AS watch,
+                SUM(json_extract(item,'$.priority')=10) AS p10,
+                SUM(json_extract(item,'$.priority')=20) AS p20,
+                SUM(json_extract(item,'$.priority')=30) AS p30,
+                SUM(json_extract(item,'$.seen_state.seen')=0) AS unseen,
+                SUM(json_extract(item,'$.seen_state.snoozed')=1) AS snoozed,
+                (SELECT MIN(CASE WHEN json_extract(item,'$.next_change_at')&gt;:now
+                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at
+                FROM filtered''', params).fetchone()
+E           sqlite3.OperationalError: user-defined function raised exception
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:139: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+managed = (&lt;sqlite3.Connection object at 0x0000025E3A6FF5B0&gt;, namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Us...bilityService object at 0x0000025E3AB07860&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3AB075F0&gt;))
+first_source = 'handoff'
+
+    @pytest.mark.parametrize('first_source', ['handoff', 'execution'])
+    def test_native_and_handoff_result_share_seen_across_lag_and_partial_retention(managed, first_source):
+        c, env = managed
+        if first_source == 'execution':
+            operations.canonical_result(c, terminal=1)
+        else:
+            c.execute("UPDATE handoffs SET status='COMPLETED',updated_at=? WHERE handoff_id='h'", (NOW,))
+&gt;       first, = engine(c, env)['items']
+                 ^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:142:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:130: in engine
+    return SqliteAttentionQueries().snapshot(SimpleNamespace(connection=conn),
+src\okto_nexus\adapters\outbound\sqlite\attention.py:137: in snapshot
+    with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3B71ACF0&gt;
+uow = namespace(connection=&lt;sqlite3.Connection object at 0x0000025E3A6FF5B0&gt;)
+filters = {'state': 'all', 'seen': 'all', 'kind': 'result_unseen'}
+now = '2026-11-06T13:00:00.000000Z'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_native_and_hando..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3AD13B90&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+            yield relation, params
+        except sqlite3.Error as error:
+            if expired:
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {}) from None
+&gt;           raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention projection could not be read.', {}) from error
+E           okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:125: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_results" name="test_native_and_handoff_result_share_seen_across_lag_and_partial_retention[execution]" time="1.712"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.">self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A92E0D0&gt;
+uow = namespace(connection=&lt;sqlite3.Connection object at 0x0000025E3A6FF2E0&gt;)
+filters = {'state': 'all', 'seen': 'all', 'kind': 'result_unseen'}
+now = '2026-11-06T13:00:00.000000Z'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_native_and_hando..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3A377F50&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&gt;           yield relation, params
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:120:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A92E0D0&gt;
+uow = namespace(connection=&lt;sqlite3.Connection object at 0x0000025E3A6FF2E0&gt;)
+filters = {'state': 'all', 'seen': 'all', 'kind': 'result_unseen'}
+now = '2026-11-06T13:00:00.000000Z'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_native_and_hando..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3A377F50&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+after = None, limit = 50
+
+    def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
+        with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+            conn = uow.connection
+&gt;           aggregate = conn.execute(sql + '''SELECT COUNT(*) AS total,
+                COUNT(DISTINCT json_extract(item,'$.attention_id')) AS unique_episodes,
+                nexus_attention_set_digest_v1(item) AS revision,
+                SUM(json_extract(item,'$.category')='action_required') AS action_required,
+                SUM(json_extract(item,'$.category')='watch') AS watch,
+                SUM(json_extract(item,'$.priority')=10) AS p10,
+                SUM(json_extract(item,'$.priority')=20) AS p20,
+                SUM(json_extract(item,'$.priority')=30) AS p30,
+                SUM(json_extract(item,'$.seen_state.seen')=0) AS unseen,
+                SUM(json_extract(item,'$.seen_state.snoozed')=1) AS snoozed,
+                (SELECT MIN(CASE WHEN json_extract(item,'$.next_change_at')&gt;:now
+                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at
+                FROM filtered''', params).fetchone()
+E           sqlite3.OperationalError: user-defined function raised exception
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:139: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+managed = (&lt;sqlite3.Connection object at 0x0000025E3A6FF2E0&gt;, namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Us...bilityService object at 0x0000025E3B770710&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B770B90&gt;))
+first_source = 'execution'
+
+    @pytest.mark.parametrize('first_source', ['handoff', 'execution'])
+    def test_native_and_handoff_result_share_seen_across_lag_and_partial_retention(managed, first_source):
+        c, env = managed
+        if first_source == 'execution':
+            operations.canonical_result(c, terminal=1)
+        else:
+            c.execute("UPDATE handoffs SET status='COMPLETED',updated_at=? WHERE handoff_id='h'", (NOW,))
+&gt;       first, = engine(c, env)['items']
+                 ^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:142:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:130: in engine
+    return SqliteAttentionQueries().snapshot(SimpleNamespace(connection=conn),
+src\okto_nexus\adapters\outbound\sqlite\attention.py:137: in snapshot
+    with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:162: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x0000025E3A92E0D0&gt;
+uow = namespace(connection=&lt;sqlite3.Connection object at 0x0000025E3A6FF2E0&gt;)
+filters = {'state': 'all', 'seen': 'all', 'kind': 'result_unseen'}
+now = '2026-11-06T13:00:00.000000Z'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_native_and_hando..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x0000025E3A377F50&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, functions = [], {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+&#32;&#32;&#32;&#32;
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+&#32;&#32;&#32;&#32;
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+&#32;&#32;&#32;&#32;
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+&#32;&#32;&#32;&#32;
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+&#32;&#32;&#32;&#32;
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            for name, arity, function in functions:
+                conn.create_function(name, arity, function, deterministic=True)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+            yield relation, params
+        except sqlite3.Error as error:
+            if expired:
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {}) from None
+&gt;           raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention projection could not be read.', {}) from error
+E           okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:125: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_results" name="test_standalone_execution_result_preserves_the_existing_identity_and_metadata" time="1.736"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">managed = (&lt;sqlite3.Connection object at 0x0000025E3B7448B0&gt;, namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Us...bilityService object at 0x0000025E3A980650&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3A980AD0&gt;))
+
+    def test_standalone_execution_result_preserves_the_existing_identity_and_metadata(managed):
+        c, _ = managed
+        c.execute('DELETE FROM execution_domain_deliveries')
+        operations.canonical_result(c, terminal=1)
+&gt;       item, = read(c)[0]
+                ^^^^^^^
+
+tests\test_attention_results.py:170:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'execution_result', 'server_id': 's', 'executor_id': 'e', 'operation_id': 'op', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+&gt;           return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+E           TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:7: TypeError</failure></testcase><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[success]" time="1.871"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">managed = (&lt;sqlite3.Connection object at 0x0000025E3B745120&gt;, namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Us...bilityService object at 0x0000025E3B4B9FF0&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B4BA2B0&gt;))
+outcome = 'success'
+
+    @pytest.mark.parametrize('outcome', ['success', 'failed', 'interrupted'])
+    def test_native_outcomes_require_terminal_proof_and_do_not_read_contents(managed, outcome):
+        c, _ = managed
+        operations.canonical_result(c)
+        assert read(c)[0] == []
+        c.execute('UPDATE execution_results SET terminal_sequence=1,delivery_outcome=?', (outcome,))
+        before = list(c.iterdump())
+&gt;       items, facts = read(c)
+                       ^^^^^^^
+
+tests\test_attention_results.py:185:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'handoff_result', 'handoff_id': 'h', 'claim_epoch': 1, 'workspace_id': 'ws', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+            return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+        native = sorted(facts['native_results'], key=lambda row: (
+            instant(row['captured_at']), row['server_id'], row['executor_id'], row['operation_id']))
+        latest = native[-1] if native else None
+        # Completion may arrive before or after its native result. The handoff claim
+        # is the productive identity in either order, never the currently visible row.
+        revision = dict(claim_epoch=facts['claim_epoch'], terminal_status=facts['terminal_status'],
+            terminal_at=facts['terminal_at'], native_results=native)
+&gt;       return [occurrence(kind='result_unseen', source_type='handoff_result', source_id=facts['handoff_id'],
+            episode=facts['claim_epoch'], source_revision=revision,
+            first_detected_at=facts['first_detected_at'], last_changed_at=facts['last_changed_at'],
+            agent_id=latest['agent_id'] if latest else facts['agent_id'], workspace_id=facts['workspace_id'],
+            session_id=latest['session_id'] if latest else None,
+            operation_id=latest['operation_id'] if latest else None,
+            executor_id=latest['executor_id'] if latest else None,
+            resolution='resolved', active=True,
+            allowed_actions=['inspect_handoff'] + (['inspect_result'] if latest else []))]
+E       TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:22: TypeError</failure></testcase><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[failed]" time="1.905"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">managed = (&lt;sqlite3.Connection object at 0x0000025E3B745E40&gt;, namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Us...bilityService object at 0x0000025E3B92A570&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B92A830&gt;))
+outcome = 'failed'
+
+    @pytest.mark.parametrize('outcome', ['success', 'failed', 'interrupted'])
+    def test_native_outcomes_require_terminal_proof_and_do_not_read_contents(managed, outcome):
+        c, _ = managed
+        operations.canonical_result(c)
+        assert read(c)[0] == []
+        c.execute('UPDATE execution_results SET terminal_sequence=1,delivery_outcome=?', (outcome,))
+        before = list(c.iterdump())
+&gt;       items, facts = read(c)
+                       ^^^^^^^
+
+tests\test_attention_results.py:185:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'handoff_result', 'handoff_id': 'h', 'claim_epoch': 1, 'workspace_id': 'ws', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+            return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+        native = sorted(facts['native_results'], key=lambda row: (
+            instant(row['captured_at']), row['server_id'], row['executor_id'], row['operation_id']))
+        latest = native[-1] if native else None
+        # Completion may arrive before or after its native result. The handoff claim
+        # is the productive identity in either order, never the currently visible row.
+        revision = dict(claim_epoch=facts['claim_epoch'], terminal_status=facts['terminal_status'],
+            terminal_at=facts['terminal_at'], native_results=native)
+&gt;       return [occurrence(kind='result_unseen', source_type='handoff_result', source_id=facts['handoff_id'],
+            episode=facts['claim_epoch'], source_revision=revision,
+            first_detected_at=facts['first_detected_at'], last_changed_at=facts['last_changed_at'],
+            agent_id=latest['agent_id'] if latest else facts['agent_id'], workspace_id=facts['workspace_id'],
+            session_id=latest['session_id'] if latest else None,
+            operation_id=latest['operation_id'] if latest else None,
+            executor_id=latest['executor_id'] if latest else None,
+            resolution='resolved', active=True,
+            allowed_actions=['inspect_handoff'] + (['inspect_result'] if latest else []))]
+E       TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:22: TypeError</failure></testcase><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[interrupted]" time="1.763"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">managed = (&lt;sqlite3.Connection object at 0x0000025E3B7475B0&gt;, namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Us...bilityService object at 0x0000025E3B1F94F0&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B2DC730&gt;))
+outcome = 'interrupted'
+
+    @pytest.mark.parametrize('outcome', ['success', 'failed', 'interrupted'])
+    def test_native_outcomes_require_terminal_proof_and_do_not_read_contents(managed, outcome):
+        c, _ = managed
+        operations.canonical_result(c)
+        assert read(c)[0] == []
+        c.execute('UPDATE execution_results SET terminal_sequence=1,delivery_outcome=?', (outcome,))
+        before = list(c.iterdump())
+&gt;       items, facts = read(c)
+                       ^^^^^^^
+
+tests\test_attention_results.py:185:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'handoff_result', 'handoff_id': 'h', 'claim_epoch': 1, 'workspace_id': 'ws', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+            return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+        native = sorted(facts['native_results'], key=lambda row: (
+            instant(row['captured_at']), row['server_id'], row['executor_id'], row['operation_id']))
+        latest = native[-1] if native else None
+        # Completion may arrive before or after its native result. The handoff claim
+        # is the productive identity in either order, never the currently visible row.
+        revision = dict(claim_epoch=facts['claim_epoch'], terminal_status=facts['terminal_status'],
+            terminal_at=facts['terminal_at'], native_results=native)
+&gt;       return [occurrence(kind='result_unseen', source_type='handoff_result', source_id=facts['handoff_id'],
+            episode=facts['claim_epoch'], source_revision=revision,
+            first_detected_at=facts['first_detected_at'], last_changed_at=facts['last_changed_at'],
+            agent_id=latest['agent_id'] if latest else facts['agent_id'], workspace_id=facts['workspace_id'],
+            session_id=latest['session_id'] if latest else None,
+            operation_id=latest['operation_id'] if latest else None,
+            executor_id=latest['executor_id'] if latest else None,
+            resolution='resolved', active=True,
+            allowed_actions=['inspect_handoff'] + (['inspect_result'] if latest else []))]
+E       TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:22: TypeError</failure></testcase><testcase classname="tests.test_attention_results" name="test_rework_does_not_assign_an_older_native_result_to_a_new_claim_epoch" time="2.005"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">managed = (&lt;sqlite3.Connection object at 0x0000025E3B7464D0&gt;, namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Us...bilityService object at 0x0000025E3AC840F0&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B929700&gt;))
+
+    def test_rework_does_not_assign_an_older_native_result_to_a_new_claim_epoch(managed):
+        c, env = managed
+        operations.canonical_result(c, terminal=1)
+&gt;       prior, = read(c)[0]
+                 ^^^^^^^
+
+tests\test_attention_results.py:196:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'handoff_result', 'handoff_id': 'h', 'claim_epoch': 1, 'workspace_id': 'ws', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+            return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+        native = sorted(facts['native_results'], key=lambda row: (
+            instant(row['captured_at']), row['server_id'], row['executor_id'], row['operation_id']))
+        latest = native[-1] if native else None
+        # Completion may arrive before or after its native result. The handoff claim
+        # is the productive identity in either order, never the currently visible row.
+        revision = dict(claim_epoch=facts['claim_epoch'], terminal_status=facts['terminal_status'],
+            terminal_at=facts['terminal_at'], native_results=native)
+&gt;       return [occurrence(kind='result_unseen', source_type='handoff_result', source_id=facts['handoff_id'],
+            episode=facts['claim_epoch'], source_revision=revision,
+            first_detected_at=facts['first_detected_at'], last_changed_at=facts['last_changed_at'],
+            agent_id=latest['agent_id'] if latest else facts['agent_id'], workspace_id=facts['workspace_id'],
+            session_id=latest['session_id'] if latest else None,
+            operation_id=latest['operation_id'] if latest else None,
+            executor_id=latest['executor_id'] if latest else None,
+            resolution='resolved', active=True,
+            allowed_actions=['inspect_handoff'] + (['inspect_result'] if latest else []))]
+E       TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:22: TypeError</failure></testcase><testcase classname="tests.test_attention_results" name="test_handoff_terminal_anchor_rolls_back_and_deletion_cleans_only_its_metadata" time="1.795"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">observation = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...abilityService object at 0x0000025E3B236DE0&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B4B9390&gt;)
+
+    def test_handoff_terminal_anchor_rolls_back_and_deletion_cleans_only_its_metadata(observation):
+        env = observation
+        hid = create(env)
+        claim = call(env, 'handoff_claim', actor='worker', agent_id='worker', handoff_id=hid)
+        with env.deps.connection_factory.unit_of_work() as uow:
+            c = uow.connection
+            c.execute('SAVEPOINT terminal')
+            c.execute("UPDATE handoffs SET status='COMPLETED',updated_at=? WHERE handoff_id=?", (LATER, hid))
+&gt;           assert read(c)[0]
+                   ^^^^^^^
+
+tests\test_attention_results.py:219:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'handoff_result', 'handoff_id': 'hof_c8e9ff58df214f61b87a4f8396b90e11', 'claim_epoch': 1, 'workspace_id': 'workspace', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+            return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+        native = sorted(facts['native_results'], key=lambda row: (
+            instant(row['captured_at']), row['server_id'], row['executor_id'], row['operation_id']))
+        latest = native[-1] if native else None
+        # Completion may arrive before or after its native result. The handoff claim
+        # is the productive identity in either order, never the currently visible row.
+        revision = dict(claim_epoch=facts['claim_epoch'], terminal_status=facts['terminal_status'],
+            terminal_at=facts['terminal_at'], native_results=native)
+&gt;       return [occurrence(kind='result_unseen', source_type='handoff_result', source_id=facts['handoff_id'],
+            episode=facts['claim_epoch'], source_revision=revision,
+            first_detected_at=facts['first_detected_at'], last_changed_at=facts['last_changed_at'],
+            agent_id=latest['agent_id'] if latest else facts['agent_id'], workspace_id=facts['workspace_id'],
+            session_id=latest['session_id'] if latest else None,
+            operation_id=latest['operation_id'] if latest else None,
+            executor_id=latest['executor_id'] if latest else None,
+            resolution='resolved', active=True,
+            allowed_actions=['inspect_handoff'] + (['inspect_result'] if latest else []))]
+E       TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:22: TypeError</failure></testcase><testcase classname="tests.test_attention_results" name="test_projection_is_pure_and_result_api_requires_operator" time="1.973"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">observation = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...abilityService object at 0x0000025E3B6F71D0&gt;), server=&lt;mcp.server.fastmcp.server.FastMCP object at 0x0000025E3B4BB1D0&gt;)
+
+    def test_projection_is_pure_and_result_api_requires_operator(observation):
+        env = observation
+        hid = create(env)
+        call(env, 'handoff_reject', actor='worker', agent_id='worker', handoff_id=hid, reason='PRIVATE REJECTION')
+        with env.deps.connection_factory.unit_of_work(write=False) as uow:
+&gt;           items, facts = read(uow.connection)
+                           ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:237:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'handoff_result', 'handoff_id': 'hof_a8ef07a404d54238ab4e55577e30b3f4', 'claim_epoch': 0, 'workspace_id': 'workspace', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+            return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+        native = sorted(facts['native_results'], key=lambda row: (
+            instant(row['captured_at']), row['server_id'], row['executor_id'], row['operation_id']))
+        latest = native[-1] if native else None
+        # Completion may arrive before or after its native result. The handoff claim
+        # is the productive identity in either order, never the currently visible row.
+        revision = dict(claim_epoch=facts['claim_epoch'], terminal_status=facts['terminal_status'],
+            terminal_at=facts['terminal_at'], native_results=native)
+&gt;       return [occurrence(kind='result_unseen', source_type='handoff_result', source_id=facts['handoff_id'],
+            episode=facts['claim_epoch'], source_revision=revision,
+            first_detected_at=facts['first_detected_at'], last_changed_at=facts['last_changed_at'],
+            agent_id=latest['agent_id'] if latest else facts['agent_id'], workspace_id=facts['workspace_id'],
+            session_id=latest['session_id'] if latest else None,
+            operation_id=latest['operation_id'] if latest else None,
+            executor_id=latest['executor_id'] if latest else None,
+            resolution='resolved', active=True,
+            allowed_actions=['inspect_handoff'] + (['inspect_result'] if latest else []))]
+E       TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:22: TypeError</failure></testcase><testcase classname="tests.test_attention_results" name="test_automatic_handoff_real_canonical_execution_and_mcp_return_share_one_result" time="7.003"><failure message="TypeError: occurrence() got an unexpected keyword argument 'executor_id'">runtime = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10496/test_au...agent_id': 'subject', ...}, &lt;test_embedded_dispatch.connect_local.&lt;locals&gt;.NativeFactory object at 0x0000025E3924B770&gt;)
+
+    def test_automatic_handoff_real_canonical_execution_and_mcp_return_share_one_result(runtime):
+        """Real automatic admission, receipt/event ingress and MCP; synthetic peer."""
+        setup, binding, native = runtime
+        deps, _, client, *_ = setup
+        _, hid, _ = business.prepare(runtime)
+        business.enable_capacity(runtime)
+        discovery = business.build_handoff_runtime_candidates(deps)
+        attempts = business.build_handoff_runtime_attempts(deps)
+        page = discovery.prepare_page(business.lease(runtime, hid), limit=4)
+        assert len(page.attempt_ids) == 1
+        assert client.portal.call(attempts.reserve, page.attempt_ids[0]).state == 'RESERVED'
+        winner = attempts.claim(page.attempt_ids[0])
+        client.portal.call(business.build_capacity_admission(deps).consume, winner.operation_id)
+        turn = business.current_turn(setup)
+        business.wait_receipt(setup, turn)
+        cap = business.capability(setup, binding, turn['session_id'], 'mcp')
+        business.emit(setup, native, turn, 'PRIVATE AUTOMATIC RESULT')
+        deadline = time.monotonic() + 10
+        while True:
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                terminal = uow.connection.execute(
+                    'SELECT terminal_sequence FROM execution_results WHERE operation_id=?',
+                    (turn['operation_id'],)).fetchone()
+            if terminal and terminal[0] is not None:
+                break
+            assert time.monotonic() &lt; deadline, 'Canonical terminal result was not projected.'
+            time.sleep(.02)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+&gt;           before, = read(uow.connection)[0]
+                      ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results.py:274:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_attention_results.py:38: in read
+    return [item for row in facts for item in project(row, now, {})], facts
+                                              ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+facts = {'source_type': 'handoff_result', 'handoff_id': 'hof_8d6b1371c69d49b080ed41323708782b', 'claim_epoch': 1, 'workspace_id': '9e2c06cf74890ae730272b0fda4cde9e91d53c91a722d0d6038ae070954e02f6', ...}
+now = '2026-11-06T12:00:00.000000Z', policy = {}
+
+    def project(facts, now, policy):
+        if facts['source_type'] == 'execution_result':
+            return [occurrence(kind='result_unseen', source_type='execution_result', source_id=facts['operation_id'],
+                episode=[facts['server_id'], facts['executor_id'], facts['stream_epoch'], facts['terminal_sequence']],
+                source_revision=[facts['stream_epoch'], facts['terminal_sequence'], facts['delivery_outcome']],
+                first_detected_at=facts['captured_at'], last_changed_at=facts['captured_at'],
+                agent_id=facts['agent_id'], workspace_id=facts['workspace_id'], session_id=facts['session_id'],
+                operation_id=facts['operation_id'], resolution='resolved', active=True,
+                executor_id=facts['executor_id'],
+                allowed_actions=['inspect_result'])]
+        native = sorted(facts['native_results'], key=lambda row: (
+            instant(row['captured_at']), row['server_id'], row['executor_id'], row['operation_id']))
+        latest = native[-1] if native else None
+        # Completion may arrive before or after its native result. The handoff claim
+        # is the productive identity in either order, never the currently visible row.
+        revision = dict(claim_epoch=facts['claim_epoch'], terminal_status=facts['terminal_status'],
+            terminal_at=facts['terminal_at'], native_results=native)
+&gt;       return [occurrence(kind='result_unseen', source_type='handoff_result', source_id=facts['handoff_id'],
+            episode=facts['claim_epoch'], source_revision=revision,
+            first_detected_at=facts['first_detected_at'], last_changed_at=facts['last_changed_at'],
+            agent_id=latest['agent_id'] if latest else facts['agent_id'], workspace_id=facts['workspace_id'],
+            session_id=latest['session_id'] if latest else None,
+            operation_id=latest['operation_id'] if latest else None,
+            executor_id=latest['executor_id'] if latest else None,
+            resolution='resolved', active=True,
+            allowed_actions=['inspect_handoff'] + (['inspect_result'] if latest else []))]
+E       TypeError: occurrence() got an unexpected keyword argument 'executor_id'
+
+src\okto_nexus\application\attention_results.py:22: TypeError</failure></testcase></testsuite></testsuites>

@@ -10,6 +10,16 @@ from ....domain.attention import canonical, with_preferences
 from ....errors import ErrorCode, OktoNexusError
 
 
+_FAMILIES = {
+    'native': {'native_permission_pending', 'native_question_pending', 'question_waiting_for_agent'},
+    'operations': {'verification_pending', 'execution_outcome_unknown', 'delivery_parked',
+        'runtime_recovery_attention', 'executor_disconnected_with_work', 'handoff_unclaimed_aged', 'cleanup_attention'},
+    'approvals': {'approval_pending'},
+    'results': {'result_unseen'},
+    'authority': {'execution_authority_blocking'},
+}
+
+
 class _SetDigest:
     """Order-independent fingerprint; a page fence, never authorization."""
     def __init__(self):
@@ -26,6 +36,9 @@ class _SetDigest:
 class SqliteAttentionQueries:
     QUERY_SECONDS = 5.0
 
+    def __init__(self, *, decision_registry=None):
+        self.decision_registry = decision_registry
+
     @contextmanager
     def _relation(self, uow, *, filters, now, config, access, context):
         conn = uow.connection
@@ -37,6 +50,11 @@ class SqliteAttentionQueries:
             nonlocal expired
             expired = time.monotonic() >= deadline
             return int(expired)
+
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
 
         def project(family, facts, observed_at):
             if interrupt():
@@ -50,11 +68,17 @@ class SqliteAttentionQueries:
         registered = False
         try:
             conn.set_progress_handler(interrupt, 1000)
-            for family in ('native', 'operations'):
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
                 adapter = importlib.import_module('.attention_' + family, __package__)
                 application = importlib.import_module('okto_nexus.application.attention_' + family)
                 sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
-                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now)
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family == 'authority':
+                    extra['check_budget'] = check_budget
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
                 projectors[family] = application.project
                 functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
             registered = True

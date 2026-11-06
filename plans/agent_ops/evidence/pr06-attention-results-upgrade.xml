@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="21" time="51.321" timestamp="2026-11-06T17:18:00.733058-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_results_upgrade" name="test_upgrade_preserves_seen_or_snooze_across_projection_and_retention[seen]" time="2.368"><failure message="sqlite3.OperationalError: no such column: rowid">legacy = (&lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x00000178786FA120&gt;, &lt;okto_nexus.application.attention.AttentionService object at 0x00000178787E2660&gt;)
+mode = 'seen'
+
+    @pytest.mark.parametrize('mode', ['seen', 'snoozed'])
+    def test_upgrade_preserves_seen_or_snooze_across_projection_and_retention(legacy, mode):
+        factory, attention = legacy
+        preference(factory, seen=NOW if mode == 'seen' else None,
+                   snooze='2026-11-06T11:00:00.000001-03:00' if mode == 'snoozed' else None, revision=3)
+&gt;       before = snapshot(factory, canonical=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results_upgrade.py:83:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x00000178786FA120&gt;
+canonical = True
+
+    def snapshot(factory, *, canonical=False):
+        with factory.unit_of_work(write=False) as uow:
+            names = [row[0] for row in uow.connection.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")]
+&gt;           return {name: [tuple(row) for row in uow.connection.execute('SELECT * FROM "' + name + '" ORDER BY rowid')]
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    for name in names if not canonical or name not in
+                    {'schema_migrations', 'attention_preferences', 'attention_operation_epochs'}}
+E           sqlite3.OperationalError: no such column: rowid
+
+tests\test_attention_results_upgrade.py:67: OperationalError</failure></testcase><testcase classname="tests.test_attention_results_upgrade" name="test_upgrade_preserves_seen_or_snooze_across_projection_and_retention[snoozed]" time="1.969"><failure message="sqlite3.OperationalError: no such column: rowid">legacy = (&lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x0000017878751A90&gt;, &lt;okto_nexus.application.attention.AttentionService object at 0x000001787889D450&gt;)
+mode = 'snoozed'
+
+    @pytest.mark.parametrize('mode', ['seen', 'snoozed'])
+    def test_upgrade_preserves_seen_or_snooze_across_projection_and_retention(legacy, mode):
+        factory, attention = legacy
+        preference(factory, seen=NOW if mode == 'seen' else None,
+                   snooze='2026-11-06T11:00:00.000001-03:00' if mode == 'snoozed' else None, revision=3)
+&gt;       before = snapshot(factory, canonical=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results_upgrade.py:83:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x0000017878751A90&gt;
+canonical = True
+
+    def snapshot(factory, *, canonical=False):
+        with factory.unit_of_work(write=False) as uow:
+            names = [row[0] for row in uow.connection.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")]
+&gt;           return {name: [tuple(row) for row in uow.connection.execute('SELECT * FROM "' + name + '" ORDER BY rowid')]
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    for name in names if not canonical or name not in
+                    {'schema_migrations', 'attention_preferences', 'attention_operation_epochs'}}
+E           sqlite3.OperationalError: no such column: rowid
+
+tests\test_attention_results_upgrade.py:67: OperationalError</failure></testcase><testcase classname="tests.test_attention_results_upgrade" name="test_multiple_native_turn_preferences_merge_conservatively_with_existing_claim" time="2.010"><failure message="sqlite3.OperationalError: table execution_results has 11 columns but 9 values were supplied">legacy = (&lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x000001787889D6D0&gt;, &lt;okto_nexus.application.attention.AttentionService object at 0x00000178788B1810&gt;)
+
+    def test_multiple_native_turn_preferences_merge_conservatively_with_existing_claim(legacy):
+        factory, attention = legacy
+        second_id = attention_id('execution_result', 'op2', ['s', 'e', 'stream', 2])
+        with factory.unit_of_work() as uow:
+            c = uow.connection
+            operations.execution(c, 'op2')
+            c.execute("UPDATE execution_operations SET session_id='session-op' WHERE operation_id='op2'")
+            c.execute("INSERT INTO execution_domain_deliveries VALUES('s','e','op2','domain-op')")
+            c.execute("INSERT INTO execution_event_ingress SELECT server_id,executor_id,session_id,stream_epoch,2,"
+                "'second','turn_state','{}',received_at FROM execution_event_ingress")
+&gt;           c.execute("INSERT INTO execution_results SELECT server_id,executor_id,'op2',session_id,stream_epoch,"
+                "output_text,delivery_outcome,captured_at,2 FROM execution_results")
+E           sqlite3.OperationalError: table execution_results has 11 columns but 9 values were supplied
+
+tests\test_attention_results_upgrade.py:114: OperationalError</failure></testcase><testcase classname="tests.test_attention_results_upgrade" name="test_upgrade_does_not_transfer_a_cross_workspace_unproven_link" time="2.279" /><testcase classname="tests.test_attention_results_upgrade" name="test_upgrade_preference_merge_and_anchors_roll_back_together_and_udfs_are_removed" time="2.098"><failure message="sqlite3.OperationalError: no such column: rowid">legacy = (&lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x00000178788855B0&gt;, &lt;okto_nexus.application.attention.AttentionService object at 0x0000017878880C30&gt;)
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10483/test_upgrade_preference_merge_0')
+
+    def test_upgrade_preference_merge_and_anchors_roll_back_together_and_udfs_are_removed(legacy, tmp_path):
+        factory, _ = legacy
+        preference(factory, seen=NOW)
+        original = next(_default_migrations_dir().glob('162_*.sql'))
+        failing = tmp_path / original.name
+        failing.write_text(original.read_text(encoding='utf-8') + '\nSELECT * FROM synthetic_missing_table;\n', encoding='utf-8')
+&gt;       before = snapshot(factory)
+                 ^^^^^^^^^^^^^^^^^
+
+tests\test_attention_results_upgrade.py:147:&#32;
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+factory = &lt;okto_nexus.adapters.outbound.sqlite.connection.ConnectionFactory object at 0x00000178788855B0&gt;
+canonical = False
+
+    def snapshot(factory, *, canonical=False):
+        with factory.unit_of_work(write=False) as uow:
+            names = [row[0] for row in uow.connection.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")]
+&gt;           return {name: [tuple(row) for row in uow.connection.execute('SELECT * FROM "' + name + '" ORDER BY rowid')]
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    for name in names if not canonical or name not in
+                    {'schema_migrations', 'attention_preferences', 'attention_operation_epochs'}}
+E           sqlite3.OperationalError: no such column: rowid
+
+tests\test_attention_results_upgrade.py:67: OperationalError</failure></testcase><testcase classname="tests.test_attention_results_upgrade" name="test_frozen_migration_identity_matches_v1_unicode_and_does_not_import_future_version" time="0.001" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[complete]" time="2.299" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[reject]" time="1.811" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[verify]" time="1.779" /><testcase classname="tests.test_attention_results" name="test_real_mcp_terminal_handoff_is_passive_result_and_seen_is_independent[reject_open]" time="1.825" /><testcase classname="tests.test_attention_results" name="test_open_claimed_verifying_and_cancelled_are_not_manual_terminal_results" time="1.880" /><testcase classname="tests.test_attention_results" name="test_native_and_handoff_result_share_seen_across_lag_and_partial_retention[handoff]" time="2.004" /><testcase classname="tests.test_attention_results" name="test_native_and_handoff_result_share_seen_across_lag_and_partial_retention[execution]" time="1.844" /><testcase classname="tests.test_attention_results" name="test_standalone_execution_result_preserves_the_existing_identity_and_metadata" time="2.018" /><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[success]" time="2.098" /><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[failed]" time="1.727" /><testcase classname="tests.test_attention_results" name="test_native_outcomes_require_terminal_proof_and_do_not_read_contents[interrupted]" time="2.970" /><testcase classname="tests.test_attention_results" name="test_rework_does_not_assign_an_older_native_result_to_a_new_claim_epoch" time="2.397" /><testcase classname="tests.test_attention_results" name="test_handoff_terminal_anchor_rolls_back_and_deletion_cleans_only_its_metadata" time="1.983" /><testcase classname="tests.test_attention_results" name="test_projection_is_pure_and_result_api_requires_operator" time="2.356" /><testcase classname="tests.test_attention_results" name="test_automatic_handoff_real_canonical_execution_and_mcp_return_share_one_result" time="7.454" /></testsuite></testsuites>
