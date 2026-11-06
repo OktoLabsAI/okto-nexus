@@ -35,6 +35,9 @@ jobs:
       - name: Install frontend dependencies from lock
         working-directory: frontend
         run: npm ci
+      - name: Test agent colour helpers
+        working-directory: frontend
+        run: node --test tests/agentColor.test.mjs
       - name: Build packaged dashboard
         working-directory: frontend
         run: npm run build
