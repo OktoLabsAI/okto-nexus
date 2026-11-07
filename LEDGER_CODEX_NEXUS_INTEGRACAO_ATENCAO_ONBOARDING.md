@@ -1108,3 +1108,15 @@ Não houve nova execução nem promoção de cenário ou critério. A campanha M
 permanece aguardando a autorização específica já solicitada.
 
 Evidência: `plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json`.
+
+## 2026-11-07 — M1 v8 autorizada
+
+O usuário respondeu “pode seguir” aos termos da campanha v8, snapshot
+`a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb`.
+O recibo fixa seis novas/oito admissões cumulativas, 200 mil tokens preventivos
+e tolerância de 700 mil, carregando duas admissões e 45.843 tokens observados.
+Preflight confirmou hashes, tarefas ausentes e porta livre. Instalação, serviços
+e inferência ainda não foram executados neste checkpoint. A autorização exclui
+força de serviço, logout/reboot e replay; não encerra nenhum aceite do plano.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v8-authorization/authorization.json`.

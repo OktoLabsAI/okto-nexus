@@ -1,0 +1,26 @@
+{
+  "status": "USER_APPROVED",
+  "proposal_revision": 8,
+  "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign",
+  "policy": {
+    "revision": 8,
+    "carry_in_admissions": 2,
+    "carry_in_tokens": 45843,
+    "max_cumulative_admissions": 8,
+    "max_new_admissions": 6,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "ancestry": {
+    "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+    "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+    "predecessor_faults": [
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ]
+  },
+  "user_quote": "pode seguir",
+  "approved_at_utc": "2026-11-07T23:40:32.912482+00:00",
+  "approval_context": "Direct user reply after explicit M1 v8 terms: same authenticated Codex CLI account, six new/eight cumulative admissions, 200000 preventive cumulative tokens, existing 700000 tolerance, offline installation, two temporary Windows tasks/eight lifecycle actions/at most one implicit Scheduler start. No service force/logout/reboot."
+}

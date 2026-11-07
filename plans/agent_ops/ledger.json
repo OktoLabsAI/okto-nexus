@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T20:30:09.924777+00:00",
+  "updated_at": "2026-11-07T23:41:49.885452+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12302,6 +12302,27 @@
         "The completed 24-action campaign and consumed M1 force authorization remain closed.",
         "Login, logout, shutdown, suspend/resume and reboot require separate observations and user coordination."
       ]
+    },
+    "r3_m1_v8_execution": {
+      "status": "AUTHORIZED_NOT_STARTED",
+      "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+      "approval_sha256": "9b9db35fd62fab3afa55c17ca0a7b8df8e0426d3645eb464c819dd7d54017a61",
+      "policy": {
+        "revision": 8,
+        "carry_in_admissions": 2,
+        "carry_in_tokens": 45843,
+        "max_cumulative_admissions": 8,
+        "max_new_admissions": 6,
+        "preventive_cumulative_tokens": 200000,
+        "operational_tolerance": 700000,
+        "deadline_seconds": 120
+      },
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v8-authorization/authorization.json"
+      ],
+      "new_productive_admissions": 0,
+      "service_actions": 0,
+      "service_force_authorized": false
     }
   },
   "history": [
@@ -13378,6 +13399,15 @@
       "summary": "Replace stale not-executed wording with the retained 24-action real Windows result. SVC-05 remains IN_PROGRESS; no new execution or scenario/criterion promotion. M1 v8 authorization remains pending.",
       "evidence": [
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "M1 v8 authorization received",
+      "status": "AUTHORIZED_NOT_STARTED",
+      "summary": "User replied pode seguir to the exact v8 terms. Carry-in and predecessor fault preserved; no new effects yet.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v8-authorization/authorization.json"
       ]
     }
   ]
