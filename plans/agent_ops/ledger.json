@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T16:45:06.389789+00:00",
+  "updated_at": "2026-11-07T17:10:57.041053+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -1473,7 +1473,8 @@
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
-        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
       ],
       "result": "Drain/força explícita/autoridade atual/timeout pendente e retenção de recursos estão comprovados. O novo T22 prova filho real e parada cooperativa, não logout/shutdown externo.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1491,7 +1492,8 @@
         "cooperative_nexus_installed": "VERIFIED",
         "explicit_generation_force": "VERIFIED",
         "admitted_authority_continuation": "VERIFIED",
-        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED",
+        "released_session_drain_installed_contract": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Cooperative drain delivered in Core and both hosts. 217 Core,194 Connector and247 Nexus installed unique contract cases pass; Nexus also passes45 isolation/recovery cases. New productive work is fenced, admitted authority/results/ACKs continue, timeout stays pending, explicit force checks current generation and expired drain, and unknown resources retain ownership. Real external shutdown/service/provider campaigns remain open.",
@@ -1572,7 +1574,8 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
       ],
       "result": "Durable launch/mutation/drain recovery and exact receipt reuse are implemented. Synthetic recovery preserves occupied Core resources and grant authority. Remaining: Real supervisor crash/backoff/limit and suspend/return context still not qualified; OS loss is not proof of child death.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1584,7 +1587,8 @@
         "runtime_recovery_campaign": "NOT_RUN",
         "connector_pending_native_effects_isolated": "VERIFIED",
         "enablement_response_loss_isolated": "VERIFIED",
-        "reviewed_pending_detached_launch_recovery": "VERIFIED"
+        "reviewed_pending_detached_launch_recovery": "VERIFIED",
+        "released_session_drain_installed_contract": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Durable launch/mutation/drain recovery and exact receipt reuse are implemented. Synthetic recovery preserves occupied Core resources and grant authority.",
@@ -1931,7 +1935,8 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
       ],
       "result": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback. Remaining: Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1963,7 +1968,8 @@
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
         "binding_approval_loss_recovery_without_repost": "VERIFIED",
-        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED",
+        "released_session_drain_installed_contract": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback.",
@@ -7245,7 +7251,8 @@
         "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
         "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
       ],
       "remaining": "Actual external logout/shutdown bounded persistence remains unqualified.",
       "remaining_kind": "real_external_shutdown",
@@ -12166,6 +12173,25 @@
         "plans/agent_ops/evidence/r3-dx04-native-startup/milestone.md",
         "plans/agent_ops/evidence/r3-dx04-native-startup/artifact-manifest.json"
       ]
+    },
+    "r3_released_session_drain_fix": {
+      "status": "INSTALLED_CONSUMER_REGRESSION_VERIFIED",
+      "core_commit": "830f7ce8ef55f018fd4ad6301f97001a6a05bb93",
+      "core_wheel_sha256": "4e677a205f5a486ef7134b8411983420c1c763c3dda274128a9c623ad1b1775d",
+      "core_unique_cases": 59,
+      "nexus_cases": 18,
+      "connector_cases": 26,
+      "nexus_red_green_regression_included_in_18": true,
+      "nexus_input_count": 1419,
+      "connector_input_count": 1124,
+      "inputs_unchanged": true,
+      "package_payloads": 981,
+      "source_test_sha256": "e1232658211f452ff3378dc8389bab08fd0d562dd7b4e27e163f90fea3f1321d",
+      "native_campaign_rerun": false,
+      "live_m1_hotpatch": false,
+      "provider_admissions": 0,
+      "acceptance_promoted": false,
+      "evidence": "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
     }
   },
   "history": [
@@ -13177,6 +13203,15 @@
       "summary": "2admissions/45843observed tokens; useful work CANCELLED, closeSUCCEEDED/sessionCLOSED, no result/decision/Connector. Diagnostic publication fault retained. Ordinary service stop remains UNKNOWN after120s; exact force proposal pending explicit authorization. Prepared diagnostic helper10PASS, never reran provider.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Released-session drain proof and consumer pins",
+      "status": "IMPLEMENTED",
+      "summary": "Core local proof fixes false orphan-claim drain after confirmed release without history rewrites.59Core/18Nexus/26Connector installed PASS; same host regression REDold/GREENnew. Identical Core wheel pinned by both consumers; no live hotpatch or new provider use.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
       ]
     }
   ]

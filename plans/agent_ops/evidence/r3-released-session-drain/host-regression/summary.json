@@ -1,0 +1,48 @@
+{
+  "status": "INSTALLED_SYNTHETIC_REGRESSION_REPRODUCED_AND_FIXED",
+  "unique_test_cases": 1,
+  "test_name": "test_normally_closed_evicted_session_drains_with_acked_history_and_retained_claim",
+  "test_module_sha256": "e1232658211f452ff3378dc8389bab08fd0d562dd7b4e27e163f90fea3f1321d",
+  "same_test_bytes_both_runs": true,
+  "runs": [
+    {
+      "path": "baseline-i9lkstiq",
+      "pytest_exit": 1,
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "seconds": 23.09,
+      "input_files": 990,
+      "inputs_unchanged": true,
+      "product_shadow_modules": [],
+      "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv"
+    },
+    {
+      "path": "corrected-cpicrxqs",
+      "pytest_exit": 0,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 28.064,
+      "input_files": 990,
+      "inputs_unchanged": true,
+      "product_shadow_modules": [],
+      "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-drain-hosts-n7pm3omg\\venv"
+    }
+  ],
+  "baseline_core_wheel_sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+  "corrected_core_wheel_sha256": "4e677a205f5a486ef7134b8411983420c1c763c3dda274128a9c623ad1b1775d",
+  "corrected_nexus_wheel_sha256": "fdb8f37866f5332244a6916d6e6eaac433cd317d4ed2792a81bd4a3f426b49c2",
+  "connector_wheel_sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+  "red_oracle": "DRAINING_PENDING despite physical stop, real eviction/released tombstone, owned slot1, committed terminal work and positive ACKed stream",
+  "green_oracle": "DRAINED before fixture teardown, force_requested=false and safety_shutdown=false; retained claim/open receipt/event cursors unchanged",
+  "no_drain_status_mock": true,
+  "no_claim_reset_or_delete": true,
+  "no_manual_db_mutation": true,
+  "fixture_teardown": "Existing canonical lifespan teardown only, after the test oracle; red assertion is not promoted by cleanup.",
+  "provider": false,
+  "vault": false,
+  "os_services": false,
+  "real_m1_state_unchanged": true,
+  "scope_limit": "Installed ASGI/SQLite/Core with a synthetic native peer; does not resolve or promote the previous real M1 drain/force state."
+}

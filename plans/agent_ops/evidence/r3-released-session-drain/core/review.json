@@ -1,0 +1,65 @@
+{
+  "kind": "finite_readonly_core_eviction_drain_review",
+  "reviewer": "coordination_review",
+  "reviewed_at": "2026-11-07",
+  "conclusion": "No concrete blocker found in the frozen three-product delta and its focused tests.",
+  "scope": [
+    "src/nexus_connector_core/runtime.py",
+    "src/nexus_connector_core/drain.py",
+    "src/nexus_connector_core/journal.py",
+    "tests/test_cooperative_drain_eviction.py"
+  ],
+  "checks": [
+    "The existing bounded session tombstone retains an immutable release proof only after observed STOPPED, confirmed slot release, completed binding producers, no pending native request, lease hold or supersession.",
+    "The proof uses the SessionKey dictionary key and exact opening operation, stream epoch and original owner generation; no owner or epoch is guessed.",
+    "Claims are selected with the existing 257-row sentinel; epoch ambiguity examines at most two namespace-matching streams. Missing/ambiguous epoch or generation stays UNKNOWN.",
+    "A proof suppresses only the exact SESSION_RECONCILIATION_PENDING resource. Journal operations, ACK backlog, late handles, release obligations, outstanding producers, sink watermarks and truncated observations remain independently blocking.",
+    "Tombstone changes and capacity eviction increment the revision included in drain_revision. A change while the journal snapshot is awaited yields SNAPSHOT_CHANGED rather than confirmed quiescence.",
+    "Shared-journal composition accepts released proof only with a unique owner and complete matching tuple; duplicate release owners and simultaneous live/released owners are rejected.",
+    "Drain observation remains read-only. No new schema/migration, claim reconciliation, receipt mutation or ACK advancement was added.",
+    "After restart or loss/eviction of process-local proof, the historic pending claim remains UNKNOWN."
+  ],
+  "tests_reviewed": {
+    "new_case_identities": 24,
+    "coverage": [
+      "normal close/eviction with ACK and unchanged durable dump",
+      "restart without local proof",
+      "unjoined late producer/event",
+      "opening/epoch/owner/missing/ambiguous identity",
+      "ACK/unresolved receipt/late handle/release/producer obligations",
+      "revision change and bounded proof eviction",
+      "shared owner composition and conflicting/missing metadata"
+    ],
+    "scope_note": "The new positive close fixture explicitly uses legacy SUBMITTED dispatch. R4 terminal-close behavior is qualified separately by the existing regression selected by its owner; no equivalent native-provider/M1-live execution is inferred.",
+    "reviewer_executed": 0,
+    "run_status_at_review": "Source-final regression was in progress; this review does not assert its result."
+  },
+  "limits": [
+    "This is a source-and-test reading, not installed qualification or native-provider execution.",
+    "The existing M1 service, old installed Core, checkpoints and journals were not changed by this review or by applying this source delta.",
+    "Pending force authorization remains separate; neither close success nor this prospective fix clears the live historical UNKNOWN state.",
+    "Conservative UNKNOWN remains when the bounded local proof or required durable identity cannot be established."
+  ],
+  "inputs": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\runtime.py",
+      "sha256": "f60e8006f95906b14d8846182e8583a718e4444353cf04c5fc811ba1f03e7c5f"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\drain.py",
+      "sha256": "a957febb4df190659d5303612dd23f5f1201bfd7870c5343269e108fa392e83f"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\journal.py",
+      "sha256": "07b1f90ab12bd5b32f9046c23f6a692253eb7432124b62ed7047c82db93e3ab7"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_cooperative_drain_eviction.py",
+      "sha256": "13042651ec14bbab494595fd60729026367e5e6f1d60651ef54af041da563e72"
+    }
+  ],
+  "freeze_manifest": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-eviction-drain-ru1nczz0\\freeze.json",
+    "sha256": "9da214456bd87c2c18a66ecf8d3f38a1c16a98cb470d852c779306a07a39d789"
+  }
+}

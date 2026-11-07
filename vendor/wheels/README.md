@@ -1,5 +1,17 @@
 # Current development dependency
 
+Core 0.0.14 is pinned by Nexus 0.3.3 and Connector 0.0.12. Both consumers use
+the same unpublished validation wheel with SHA-256
+`4e677a205f5a486ef7134b8411983420c1c763c3dda274128a9c623ad1b1775d`.
+
+This candidate preserves exact local release evidence during cooperative drain,
+without rewriting historical claims, receipts or ACKs. Missing proof after
+restart and other unresolved resources remain UNKNOWN. The Core candidate has
+59 installed regression cases; its consumers have 18 Nexus and 26 Connector
+cases. This does not qualify a fresh real provider campaign or publish a release.
+
+## Previous dependency record
+
 Core 0.0.14 is pinned by Nexus 0.3.3 and Connector 0.0.12 for the agent-operations
 R3 implementation. Both consumers use identical candidate wheel bytes. The
 authoritative SHA-256 is in `../ci/manifest.json`. This preparation only bumps

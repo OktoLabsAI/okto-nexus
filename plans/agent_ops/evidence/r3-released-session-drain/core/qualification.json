@@ -1,0 +1,85 @@
+{
+  "status": "QUALIFIED_SYNTHETIC_WINDOWS",
+  "stages": {
+    "initial": {
+      "tests": "24",
+      "failures": "24",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.500"
+    },
+    "corrected-fixture": {
+      "tests": "24",
+      "failures": "24",
+      "errors": "0",
+      "skipped": "0",
+      "time": "3.185"
+    },
+    "fixture-contract": {
+      "tests": "24",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "3.545"
+    },
+    "source-final": {
+      "tests": "59",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "35.525"
+    },
+    "installed-final": {
+      "tests": "59",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "33.701"
+    }
+  },
+  "new_cases": 24,
+  "final_selection": 59,
+  "unique_final_cases": 59,
+  "wheel_sha256": "4e677a205f5a486ef7134b8411983420c1c763c3dda274128a9c623ad1b1775d",
+  "package_files": 166,
+  "change": "Bounded local eviction proof discharges only the exact pending claim resource; no persistent retirement.",
+  "identity": [
+    "server_id",
+    "executor_id",
+    "session_id",
+    "opening_operation_id",
+    "stream_epoch",
+    "session_owner_generation"
+  ],
+  "preserved": [
+    "receipts",
+    "claims",
+    "ACKs",
+    "operation blockers",
+    "late handles",
+    "slot release",
+    "producer blockers"
+  ],
+  "proof_fences": [
+    "unique durable epoch from at most two candidate rows",
+    "original owner generation",
+    "local completed producers",
+    "sink watermark",
+    "bounded tombstone",
+    "activity revision",
+    "one owner in same-journal composition"
+  ],
+  "failure_history": {
+    "initial": "Fixture used sequence0 for direct journal append and R4 SUCCEEDED expectation in a legacy context.",
+    "corrected-fixture": "Legacy policy close still returns SUBMITTED; expectation corrected after reading implementation.",
+    "fixture-contract": "Only final synthetic verb assertion remained wrong: send_turn is the native verb, not submit."
+  },
+  "limits": [
+    "No native provider execution or live M1 change.",
+    "Legacy context positive uses SUBMITTED dispatch close; R4 terminal close tests are separate, host RED/GREEN is curated by root.",
+    "Restart without process-local proof stays UNKNOWN.",
+    "Missing/ambiguous epoch or generation and bounded-proof eviction stay UNKNOWN.",
+    "No migration, claim retirement, receipt rewrite, ACK change, new protocol authority, force or live hotpatch.",
+    "Six existing Ruff findings remain unchanged; no new lint findings."
+  ]
+}

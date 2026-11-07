@@ -1,0 +1,12 @@
+{
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "tests": [
+    "tests/test_cooperative_drain_eviction.py",
+    "tests/test_cooperative_drain.py",
+    "tests/test_cooperative_drain_composition.py",
+    "tests/test_pc07_release.py",
+    "tests/test_r4_terminal_close.py"
+  ],
+  "scope": "Core source + synthetic peers, isolated home, installed test dependencies"
+}

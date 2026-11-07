@@ -3,7 +3,7 @@ import time
 import sqlite3
 
 import pytest
-from nexus_connector_core import RuntimeEvent
+from nexus_connector_core import RuntimeEvent, SessionKey
 
 from test_embedded_dispatch import admit, wait_receipt
 
@@ -35,6 +35,77 @@ def test_idle_open_drains_without_force_or_rewriting_open_receipt(connected_loca
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT stage FROM execution_receipts WHERE operation_id=? '
             'ORDER BY receipt_revision DESC LIMIT 1', (opened['operation_id'],)).fetchone()[0] == 'SUBMITTED'
+
+
+def test_normally_closed_evicted_session_drains_with_acked_history_and_retained_claim(connected_local):
+    setup, binding, native = connected_local
+    deps, app, client, headers, *_ = setup
+    opened = admit(setup, binding, 'drain-closed-open', 'runtime.start', new_session=True)
+    wait_receipt(setup, opened)
+    session = opened['scope']['session_id']
+    turn = admit(setup, binding, 'drain-closed-turn', 'turn.submit',
+                 session_id=session, text='Synthetic finite work')
+    wait_receipt(setup, turn)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = dict(uow.connection.execute(
+            'SELECT * FROM execution_local_streams WHERE session_id=?', (session,)).fetchone())
+    for method, phase in (('turn/started', 'started'), ('turn/completed', 'terminal')):
+        payload = {'delivery_phase': phase, 'turn_id': 'closed-turn', 'thread_id': 'closed-thread'}
+        if phase == 'terminal':
+            payload['delivery_outcome'] = 'success'
+        client.portal.call(native.native.queue.put, RuntimeEvent(stream['server_id'], stream['executor_id'],
+            session, stream['stream_epoch'], 0, 'turn_state', method, payload, turn['operation_id']))
+    wait_receipt(setup, turn, stages=('SUCCEEDED',))
+    closed = admit(setup, binding, 'drain-closed-close', 'runtime.close', session_id=session)
+    wait_receipt(setup, closed, stages=('SUCCEEDED',))
+    host = app.state.embedded_core_host
+    key = SessionKey(stream['server_id'], stream['executor_id'], session)
+
+    async def evicted():
+        runtime, _ = await host._runtime_tasks[(key.executor_id, key.session_id)]
+        return (key not in runtime._sessions and runtime._session_tombstones.get(key) == 'released'
+                and not runtime._cleanup_tasks)
+
+    eventually(lambda: client.portal.call(evicted))
+    assert native.native.stopped and native.opens == 1 and len(native.native.sent) == 1
+    journal_path = host._journal_path(key.executor_id, key.session_id)
+
+    def history():
+        with sqlite3.connect(journal_path.as_uri() + '?mode=ro', uri=True) as db:
+            db.execute('PRAGMA query_only=ON')
+            claim = db.execute('SELECT reconciliation_pending FROM session_claims WHERE '
+                'server_id=? AND executor_id=? AND session_id=? AND operation_id=?',
+                (key.server_id, key.executor_id, session, opened['operation_id'])).fetchone()
+            cursor = db.execute('SELECT next_sequence,acked_sequence,compacted_sequence FROM event_streams '
+                'WHERE server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?',
+                (key.server_id, key.executor_id, session, stream['stream_epoch'])).fetchone()
+            opening = db.execute('SELECT stage FROM operations_v2 WHERE server_id=? AND executor_id=? '
+                'AND operation_id=?', (key.server_id, key.executor_id, opened['operation_id'])).fetchone()
+            return claim, cursor, opening
+
+    def fully_acked():
+        _, cursor, _ = history()
+        return cursor is not None and cursor[0] > 1 and cursor[1] == cursor[0] - 1
+
+    eventually(fully_acked)
+    before = history()
+    assert before[0] == (1,) and before[2] == ('SUBMITTED',)
+    with sqlite3.connect((host.store_dir / 'owned-slots.db').as_uri() + '?mode=ro', uri=True) as db:
+        assert db.execute('SELECT released FROM owned_slot_reservations WHERE server_id=? AND executor_id=? '
+            'AND session_id=? AND operation_id=?',
+            (key.server_id, key.executor_id, session, opened['operation_id'])).fetchone() == (1,)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions WHERE session_id=?',
+            (session,)).fetchone()[0] == 'CLOSED'
+    response = client.post('/v1/runtime/shutdown', headers=headers['operator'], json={'timeout_seconds': .1})
+    assert response.status_code in {200, 202}, response.text
+    until = time.monotonic() + 5
+    while app.state.runtime_shutdown.status()['state'] != 'DRAINED' and time.monotonic() < until:
+        time.sleep(.02)
+    status = app.state.runtime_shutdown.status()
+    assert status['state'] == 'DRAINED', status
+    assert not status['force_requested'] and not status['safety_shutdown']
+    assert history() == before  # Drain reads release proof; historical claims/receipts/ACKs stay intact.
 
 
 @pytest.mark.parametrize('drift', [None, 'agent', 'grant', 'revision'])

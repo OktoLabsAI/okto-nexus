@@ -1,0 +1,8 @@
+{
+  "exit_code": 1,
+  "inputs_unchanged": true,
+  "tests": [
+    "tests/test_cooperative_drain_eviction.py"
+  ],
+  "scope": "Core source + synthetic peers, isolated home, installed test dependencies"
+}

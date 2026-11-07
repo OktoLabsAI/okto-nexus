@@ -1,0 +1,262 @@
+FFFFFFFFFFFFFFFFFFFFFFFF                                                 [100%]
+================================== FAILURES ===================================
+_____ test_normal_close_eviction_drains_without_retiring_history_or_claim _____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:46: in test_normal_close_eviction_drains_without_retiring_history_or_claim
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+___________ test_restart_cannot_inherit_process_local_release_proof ___________
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:71: in test_restart_cannot_inherit_process_local_release_proof
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+_____ test_eviction_does_not_attest_unjoined_event_producer_or_late_event _____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:102: in test_eviction_does_not_attest_unjoined_event_producer_or_late_event
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+___ test_release_proof_requires_exact_unambiguous_durable_identity[opening] ___
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+____ test_release_proof_requires_exact_unambiguous_durable_identity[epoch] ____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+____ test_release_proof_requires_exact_unambiguous_durable_identity[owner] ____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+_ test_release_proof_requires_exact_unambiguous_durable_identity[missing_generation] _
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+_ test_release_proof_requires_exact_unambiguous_durable_identity[ambiguous_epoch] _
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+__ test_release_proof_requires_exact_unambiguous_durable_identity[no_epoch] ___
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+__________ test_release_proof_never_hides_other_obligations[unacked] __________
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+________ test_release_proof_never_hides_other_obligations[unresolved] _________
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+________ test_release_proof_never_hides_other_obligations[late_handle] ________
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+_______ test_release_proof_never_hides_other_obligations[slot_pending] ________
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+_________ test_release_proof_never_hides_other_obligations[producer] __________
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+_____ test_tombstone_change_fences_inflight_read_and_capacity_drops_proof _____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:188: in test_tombstone_change_fences_inflight_read_and_capacity_drops_proof
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED
+____ test_shared_journal_composes_exact_eviction_without_hiding_ack[True] _____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:228: in test_shared_journal_composes_exact_eviction_without_hiding_ack
+    first, second, journal = await released_sibling(tmp_path, ack=ack)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+____ test_shared_journal_composes_exact_eviction_without_hiding_ack[False] ____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:228: in test_shared_journal_composes_exact_eviction_without_hiding_ack
+    first, second, journal = await released_sibling(tmp_path, ack=ack)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+_ test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[epoch] __
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+_ test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[owner] __
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+_ test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[opening] _
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+_ test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[namespace] _
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+_ test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[duplicate] _
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+_ test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[missing_revision] _
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+_ test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[live_owner] _
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:217: in released_sibling
+    await journal.append_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1494: in append_event
+    self._validate_event(event)
+D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\journal.py:1365: in _validate_event
+    raise CoreError("EVENT_INVALID", "event_append")
+E   nexus_connector_core.models.CoreError: EVENT_INVALID
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_normal_close_eviction_drains_without_retiring_history_or_claim
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_restart_cannot_inherit_process_local_release_proof
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_eviction_does_not_attest_unjoined_event_producer_or_late_event
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_requires_exact_unambiguous_durable_identity[opening]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_requires_exact_unambiguous_durable_identity[epoch]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_requires_exact_unambiguous_durable_identity[owner]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_requires_exact_unambiguous_durable_identity[missing_generation]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_requires_exact_unambiguous_durable_identity[ambiguous_epoch]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_requires_exact_unambiguous_durable_identity[no_epoch]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_never_hides_other_obligations[unacked]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_never_hides_other_obligations[unresolved]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_never_hides_other_obligations[late_handle]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_never_hides_other_obligations[slot_pending]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_release_proof_never_hides_other_obligations[producer]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_tombstone_change_fences_inflight_read_and_capacity_drops_proof
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_journal_composes_exact_eviction_without_hiding_ack[True]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_journal_composes_exact_eviction_without_hiding_ack[False]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[epoch]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[owner]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[opening]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[namespace]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[duplicate]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[missing_revision]
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[live_owner]
+24 failed in 6.13s

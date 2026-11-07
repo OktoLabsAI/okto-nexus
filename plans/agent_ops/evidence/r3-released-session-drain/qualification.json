@@ -1,0 +1,18 @@
+{
+  "status": "INSTALLED_CONSUMER_REGRESSION_VERIFIED",
+  "core_commit": "830f7ce8ef55f018fd4ad6301f97001a6a05bb93",
+  "core_wheel_sha256": "4e677a205f5a486ef7134b8411983420c1c763c3dda274128a9c623ad1b1775d",
+  "core_unique_cases": 59,
+  "nexus_cases": 18,
+  "connector_cases": 26,
+  "nexus_red_green_regression_included_in_18": true,
+  "nexus_input_count": 1419,
+  "connector_input_count": 1124,
+  "inputs_unchanged": true,
+  "package_payloads": 981,
+  "source_test_sha256": "e1232658211f452ff3378dc8389bab08fd0d562dd7b4e27e163f90fea3f1321d",
+  "native_campaign_rerun": false,
+  "live_m1_hotpatch": false,
+  "provider_admissions": 0,
+  "acceptance_promoted": false
+}

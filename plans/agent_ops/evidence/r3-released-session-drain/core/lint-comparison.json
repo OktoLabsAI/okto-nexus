@@ -1,0 +1,35 @@
+{
+  "new_findings": [],
+  "unchanged_baseline_findings": [
+    {
+      "file": "journal.py",
+      "code": "F401",
+      "message": "`asyncio` imported but unused"
+    },
+    {
+      "file": "journal.py",
+      "code": "F811",
+      "message": "Redefinition of unused `asyncio` from line 9: `asyncio` redefined here"
+    },
+    {
+      "file": "runtime.py",
+      "code": "F401",
+      "message": "`.journal.SQLiteJournal` imported but unused"
+    },
+    {
+      "file": "runtime.py",
+      "code": "F722",
+      "message": "Syntax error in forward annotation: Expected an expression"
+    },
+    {
+      "file": "runtime.py",
+      "code": "F722",
+      "message": "Syntax error in forward annotation: Expected an expression"
+    },
+    {
+      "file": "runtime.py",
+      "code": "F841",
+      "message": "Local variable `loop` is assigned to but never used"
+    }
+  ]
+}

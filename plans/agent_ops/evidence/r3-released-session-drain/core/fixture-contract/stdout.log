@@ -1,0 +1,13 @@
+F.......................                                                 [100%]
+================================== FAILURES ===================================
+_____ test_normal_close_eviction_drains_without_retiring_history_or_claim _____
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:63: in test_normal_close_eviction_drains_without_retiring_history_or_claim
+    assert factory.open_count == 1 and [call[0] for call in factory.native.sent] == ['submit']
+E   AssertionError: assert (1 == 1 and ['send_turn'] == ['submit']
+E    +  where 1 = <test_runtime.FakeFactory object at 0x000002C7A3824050>.open_count
+E     
+E     At index 0 diff: 'send_turn' != 'submit'
+E     Use -v to get more diff)
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py::test_normal_close_eviction_drains_without_retiring_history_or_claim
+1 failed, 23 passed in 4.09s

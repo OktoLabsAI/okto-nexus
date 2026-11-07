@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="24" skipped="0" tests="24" time="3.185" timestamp="2026-11-07T13:54:04.776552-03:00" hostname="Alienware_m15"><testcase classname="tests.test_cooperative_drain_eviction" name="test_normal_close_eviction_drains_without_retiring_history_or_claim" time="0.089"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:46: in test_normal_close_eviction_drains_without_retiring_history_or_claim
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_restart_cannot_inherit_process_local_release_proof" time="0.065"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:71: in test_restart_cannot_inherit_process_local_release_proof
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_eviction_does_not_attest_unjoined_event_producer_or_late_event" time="0.064"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:102: in test_eviction_does_not_attest_unjoined_event_producer_or_late_event
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_requires_exact_unambiguous_durable_identity[opening]" time="0.068"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_requires_exact_unambiguous_durable_identity[epoch]" time="0.066"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_requires_exact_unambiguous_durable_identity[owner]" time="0.070"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_requires_exact_unambiguous_durable_identity[missing_generation]" time="0.066"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_requires_exact_unambiguous_durable_identity[ambiguous_epoch]" time="0.075"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_requires_exact_unambiguous_durable_identity[no_epoch]" time="0.068"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:125: in test_release_proof_requires_exact_unambiguous_durable_identity
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_never_hides_other_obligations[unacked]" time="0.074"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_never_hides_other_obligations[unresolved]" time="0.086"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_never_hides_other_obligations[late_handle]" time="0.084"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_never_hides_other_obligations[slot_pending]" time="0.084"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_release_proof_never_hides_other_obligations[producer]" time="0.079"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:152: in test_release_proof_never_hides_other_obligations
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_tombstone_change_fences_inflight_read_and_capacity_drops_proof" time="0.090"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:188: in test_tombstone_change_fences_inflight_read_and_capacity_drops_proof
+    await close(runtime, auth)
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:36: in close
+    assert receipt.stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_journal_composes_exact_eviction_without_hiding_ack[True]" time="0.104"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:228: in test_shared_journal_composes_exact_eviction_without_hiding_ack
+    first, second, journal = await released_sibling(tmp_path, ack=ack)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_journal_composes_exact_eviction_without_hiding_ack[False]" time="0.097"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:228: in test_shared_journal_composes_exact_eviction_without_hiding_ack
+    first, second, journal = await released_sibling(tmp_path, ack=ack)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[epoch]" time="0.096"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[owner]" time="0.101"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[opening]" time="0.104"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[namespace]" time="0.100"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[duplicate]" time="0.092"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[missing_revision]" time="0.093"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase><testcase classname="tests.test_cooperative_drain_eviction" name="test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown[live_owner]" time="0.101"><failure message="AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'&#10;  &#10;  - SUCCEEDED&#10;  + SUBMITTED">D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:243: in test_shared_release_proof_mismatch_or_multiple_owners_stays_unknown
+    first, second, journal = await released_sibling(tmp_path)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector-core\tests\test_cooperative_drain_eviction.py:220: in released_sibling
+    assert (await first.close(CloseOperation('close-0', 'session-0', 'Done', ShutdownPolicy(.01, .01)), auth)).stage == 'SUCCEEDED'
+E   AssertionError: assert 'SUBMITTED' == 'SUCCEEDED'
+E     
+E     - SUCCEEDED
+E     + SUBMITTED</failure></testcase></testsuite></testsuites>
