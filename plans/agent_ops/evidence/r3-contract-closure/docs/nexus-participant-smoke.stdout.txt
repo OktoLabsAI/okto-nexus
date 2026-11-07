@@ -1,0 +1,36 @@
+usage: okto-nexus participant smoke [-h] [--home HOME] [--profile PROFILE]
+                                    [--project PROJECT]
+                                    [--workspace WORKSPACE_ID]
+                                    [--attempt ATTEMPT] [--to TO] [--plan |
+                                    --approve REVISION] [--new]
+                                    [--session-id SESSION_ID]
+                                    [--session-secret-env NAME]
+                                    [--timeout TIMEOUT] [--key-stdin |
+                                    --key-env NAME] [--json]
+                                    {exchange,handoff,status,observe}
+
+An optional directed exchange, followed by a separately consented handoff.
+
+positional arguments:
+  {exchange,handoff,status,observe}
+
+options:
+  -h, --help            show this help message and exit
+  --home HOME
+  --profile PROFILE
+  --project PROJECT
+  --workspace, --workspace-id WORKSPACE_ID
+  --attempt ATTEMPT     Select a retained smoke ID instead of the latest
+                        review
+  --to TO               Exact peer identity for a new directed exchange
+  --plan
+  --approve REVISION
+  --new                 Review an explicitly new attempt; retain old attempts
+  --session-id SESSION_ID
+                        Reuse explicit existing conversation context; no
+                        session is opened
+  --session-secret-env NAME
+  --timeout TIMEOUT     Observation budget in seconds, up to 86400
+  --key-stdin
+  --key-env NAME
+  --json

@@ -1,0 +1,401 @@
+{
+  "files": [
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+      "sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925",
+      "bytes": 15168
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/config_document.py",
+      "sha256": "ada269c555e38a4d8670ecbcbf712cb8a929339898ead4e76b0544464bc967df",
+      "bytes": 13049
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/config_persistence.py",
+      "sha256": "8b1417bd97e124158e58fde2a63b094164991d7af7e0c4f267158a4f387ed88d",
+      "bytes": 8081
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/connection_configuration.py",
+      "sha256": "1017c9e482682aee10080d617faf465ce6efd3c75c276b7e95eb2601b817adcc",
+      "bytes": 6721
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/participant_config.py",
+      "sha256": "340820cd81082dc0715b597bb7888f3ec22c92f3810374743d51012d7b170d43",
+      "bytes": 7049
+    },
+    {
+      "repository": "core",
+      "path": "tests/test_config_persistence.py",
+      "sha256": "27697af74f8291fc535d9d5b99ca3e7446bc7d77f8c24caac7bcb49040e52b04",
+      "bytes": 7776
+    },
+    {
+      "repository": "core",
+      "path": "tests/test_harness_config.py",
+      "sha256": "21754a06330d873112b5ab9d9d2137a1cb5440fef46ec53e3e403eeb7c48c661",
+      "bytes": 9784
+    },
+    {
+      "repository": "core",
+      "path": "tests/test_participant_config.py",
+      "sha256": "b768e9cba98dc5228ccb6ff6aad6d4dc8a730ad38bf42a43cac355373726bba3",
+      "bytes": 8216
+    },
+    {
+      "repository": "nexus",
+      "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+      "bytes": 133337
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/participantGuide.ts",
+      "sha256": "1dccd57fac3d5db0139569e63e3acc019dd4d2f0506c63f50205f9311c27c394",
+      "bytes": 4944
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/campaigns/participant-environment.py",
+      "sha256": "d850d4e5c7d4a0f24ee7d31b924b8e01d2e73a132f29dbecee3cea40dd0fa49a",
+      "bytes": 9234
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+      "sha256": "c858dd7c21295fd5af0598127ad5ea7154c1bf28920ea88e53124ed21d5f7fbc",
+      "bytes": 26321
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
+      "sha256": "49dd7940269a5cd66c830e1082627dd985ae6ec47c80a4bf812ef4a1cdd87aca",
+      "bytes": 6698
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+      "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+      "bytes": 12747
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/nexus/installed.xml",
+      "sha256": "99193233c05e14eae36adde80189a00b954516411e572cf12604dca21e4f43cd",
+      "bytes": 5174
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-cooperation-behavior-installed.xml",
+      "sha256": "ba0fdb291b137a671efc4cf0e1b574341aa5b4837a494f5732266a1296ad0637",
+      "bytes": 23191
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-cooperation-facade-cli-installed.xml",
+      "sha256": "45476f332157f41dec5700d41e23ec3cfee9166f5f3b21d1f9a65480147c8569",
+      "bytes": 23731
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+      "sha256": "9744eac732687adc8265cd559d4f3d9f47fb4760056133b47a66e1f62fc36bbc",
+      "bytes": 8024
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
+      "sha256": "7791bbca39631539b3d77d5371437269f03ba0fa5c7315e6dbd38f252e90c6d9",
+      "bytes": 6278
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+      "sha256": "a895c722752fecf00cfcad6f5b7c2a74781b0e5a59fecd30e2e56a0dd3a84f52",
+      "bytes": 16709
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-launch-native.json",
+      "sha256": "c8cedc4394f1b62a0afc625ecda33233b82080ae24d3c1bebec50d238dcd63f9",
+      "bytes": 7354
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-removal-cli.json",
+      "sha256": "709f3220af97468301adbc843925d6394a86cdf16ede3cf547a3150d6d49556d",
+      "bytes": 994
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+      "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+      "bytes": 16634
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-correlation/installed/diagnostics/installed.xml",
+      "sha256": "3c5c6c8cca530260f595ae41bce61ec91b73f6dcb781e4c61d3bbb7c2aea3335",
+      "bytes": 11435
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-public-artifact-review/verification.json",
+      "sha256": "70c26ac0e3d25299f971367a912d54f9984aa0222a4ffa23e5b8365aa0c5a392",
+      "bytes": 625
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+      "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+      "bytes": 286943
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/ledger.json",
+      "sha256": "851ff6297e1aaa8d941d79d665bb03dd07aadf28cdc82e8bd9cce96b24c8d0bd",
+      "bytes": 925810
+    },
+    {
+      "repository": "nexus",
+      "path": "scripts/qualify_participant_formats.py",
+      "sha256": "333208abc6016d07ea0c8ac4368d25c5623b69cb78e7754e5e0bcb928dd849cd",
+      "bytes": 5717
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3",
+      "bytes": 21054
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/cooperation.py",
+      "sha256": "d61a5d74f9fc8faa5dda42acd5952d8a0e7af77e3e788a4f33da7f544a040261",
+      "bytes": 13416
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/coordination.py",
+      "sha256": "7e9ebc799961d053b15ecd4c37ee2d99964f80013380798715491947b1ae66fb",
+      "bytes": 14200
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/doctor.py",
+      "sha256": "cfa4139879ca6757ef1248226935cb331b67c8abb0e620f881566e062fcdea90",
+      "bytes": 10591
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/participant.py",
+      "sha256": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017",
+      "bytes": 9151
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/participant_doctor.py",
+      "sha256": "e6ecdd575ae7860ee3a44f1766c120ba48c4546ac62fcce451fcb3eed6c7608c",
+      "bytes": 3383
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/remote_setup_io.py",
+      "sha256": "3244aac9c49b9a94bf86f00cc4e99cc084a10481d5d5afe2c3ecf3326dbaf3df",
+      "bytes": 6833
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/participant_client.py",
+      "sha256": "9f4a7d429e4a7a0959a490043c74304a288ebf3f51e265a75533bb15e4d0b08c",
+      "bytes": 5356
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/participant_files.py",
+      "sha256": "6f1b655451b934719a92cca20b5df0be280fbf21989f76f36b095c2b183a5e96",
+      "bytes": 10751
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/participant_process.py",
+      "sha256": "f5153c14eb808f958666da3db63497735e79c9b969c4ce02b044edfc9d64295a",
+      "bytes": 4038
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/connection_setup.py",
+      "sha256": "ed43ab293fe8c8834897c98cc627399526c467f771982f74d91edff12f7ac287",
+      "bytes": 22715
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/participant_diagnostics.py",
+      "sha256": "ceb9dcf1c3385dad62b41d8ee147387c5597ec9ec3ca0936535e0c40eb8374d9",
+      "bytes": 12601
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/participant_launch.py",
+      "sha256": "287f2d0af70c1e95b3f7313492bc263c31ac764a5bd81a3e837510f9aff6758c",
+      "bytes": 6673
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/participant_removal.py",
+      "sha256": "d8a162984e702eb2a3dd521fb59105804c0c8264d001143deb1d3cac8da88b2e",
+      "bytes": 4337
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/participant_setup.py",
+      "sha256": "1e4a6206d172f7c351ffe9852beeba59b95e5a1861a1859be234053d84f5dc04",
+      "bytes": 2860
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/project_diagnostics.py",
+      "sha256": "b110ce62d50385cb058e39680d85e21b204d404b853fce57205822e266f270fe",
+      "bytes": 14178
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/project_preset_update.py",
+      "sha256": "2ac1c0f5bad6239bfd471ebc88a6aaccdf71d4c14c761ab1e0ce8413aa6bd252",
+      "bytes": 12656
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/remote_setup.py",
+      "sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd",
+      "bytes": 21304
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/remote_terminal_setup.py",
+      "sha256": "c5919c1e317dd0357dba3870b43ecb83e8a91f095ca5c2d77a770e7de3c577d1",
+      "bytes": 21684
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63",
+      "bytes": 20873
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_cooperation.py",
+      "sha256": "aad4b50308af9ab29b59e0d66d65d4e29a2bf7f52068adc4a01ada01f43e9a43",
+      "bytes": 27242
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_coordination.py",
+      "sha256": "65920e954d88f23589b2f1806caadca7cf5077cad0e4644c260cd3fce4f39e27",
+      "bytes": 17321
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_participant.py",
+      "sha256": "b96e8d2ca962efb8b129232a3da6d9c5f8fcedb5a1ba4013e2cae402c320e6b4",
+      "bytes": 9384
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_preset.py",
+      "sha256": "33ac9374ea347791b3f0b8b826010d04c22684618d20946e14b0cdd3d2665790",
+      "bytes": 6811
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_work.py",
+      "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "bytes": 21125
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/diagnostic_report.py",
+      "sha256": "48e9b5d2a5ade865e5fcb76cebde27a1b90690ae5e62ceba0e72af1df0047934",
+      "bytes": 21001
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_connection_setup.py",
+      "sha256": "a3f3bf2d3a01289850fdae92e925df6d1cf2063213657688cc1555cf2ea38cb3",
+      "bytes": 24873
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_connection_setup_recovery.py",
+      "sha256": "13d2b0f3fe0ee1fe60a7107137e25980d376d2d4f0cb22601388c428098d5b23",
+      "bytes": 9681
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_cooperation_cli.py",
+      "sha256": "f548447b767a1d03c317be258832a5e3dd02573ad2a57d3e6441fbe619d8aaf3",
+      "bytes": 28368
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_participant_doctor.py",
+      "sha256": "f1ab0bdb3b0e86975071f972f7d41adb9f917cb413967d80ab6c3c8c7a75c593",
+      "bytes": 12307
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_participant_init.py",
+      "sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+      "bytes": 15032
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_participant_launch.py",
+      "sha256": "fc91d1c87230276495ec20449319edd800bd03f50bd479129971b3a7af0f04a3",
+      "bytes": 10986
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_project_diagnostics.py",
+      "sha256": "529986bf97152ba8d13b425ef98e7dd6205c71f8478481c508ec389e57c0b30b",
+      "bytes": 8028
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_project_preset_update.py",
+      "sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+      "bytes": 12396
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_terminal_identity.py",
+      "sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+      "bytes": 13692
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_cooperation_reply_read.py",
+      "sha256": "974543aed56bd6e358246fa398af32137804c1cbc54c431ef993eae07815ba1b",
+      "bytes": 16519
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_doctor_diagnostic_format.py",
+      "sha256": "b8b9320f1c27faf16eb24c37ad1019907301afde3b82a62ac0c7b93468897e30",
+      "bytes": 6105
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_remote_setup_server.py",
+      "sha256": "bc695a67d8fdb9a1775eee0e584bd8738449d2821a578b0eb366237b76efbec0",
+      "bytes": 15880
+    }
+  ],
+  "selection": "explicit cited public files only"
+}

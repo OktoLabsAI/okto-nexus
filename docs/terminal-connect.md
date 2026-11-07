@@ -139,9 +139,10 @@ available for explicit later changes. Native login qualification remains pending
 
 The versioned preset origin is retained in the canonical Finish receipt and
 exposed by setup reads. Dashboard and terminal still use the same binding,
-runtime policy and harness configuration. Participant initialization,
-new remote identity bootstrap and real provider
-qualification remain in progress. Reconnect and repeated Finish do not re-enable a policy
+runtime policy and harness configuration. Existing-client initialization uses
+the [participant flow](terminal-participant.md); new remote project identities use
+[remote project setup](remote-project-setup.md). Their implemented setup contracts
+do not establish real-provider qualification. Reconnect and repeated Finish do not re-enable a policy
 disabled after setup. A recorded decision whose native delivery is refused is
 shown explicitly. New service contexts retain which configuration values were
 explicit; frozen launch arguments do not pin defaults. Older contexts without

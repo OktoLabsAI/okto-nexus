@@ -1,0 +1,14 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\r3-controls-installed-o1mwvkx6
+configfile: pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 2 items
+
+test_service_process.py::test_concurrent_detached_start_survives_cli_exit_reuses_and_drains PASSED [ 50%]
+test_detached_service_lifecycle.py::test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner PASSED [100%]
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\r3-controls-installed-o1mwvkx6\tests.xml -
+======================== 2 passed in 71.16s (0:01:11) =========================

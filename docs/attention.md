@@ -194,7 +194,7 @@ after gaps; do not infer that an absent invalidation means absent work. Honor
 is capped at 15 seconds and shortened for known native authority deadlines,
 disconnection escalation and snooze expiry. This also reconciles preferences
 changed on another device. Network/read failures must never replace the view
-with a successful zero count. The PR-07 client must implement these behaviors.
+with a successful zero count. The dashboard uses these reconciliation rules.
 
 ## Persistence and rollback
 

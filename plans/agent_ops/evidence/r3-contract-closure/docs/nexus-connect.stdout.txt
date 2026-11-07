@@ -1,0 +1,54 @@
+usage: okto-nexus connect [-h] [--profile PROFILE]
+                          [--operator-profile OPERATOR_PROFILE]
+                          [--remote-draft REMOTE_DRAFT]
+                          [--setup-receipt-output SETUP_RECEIPT_OUTPUT]
+                          [--review-current] [--start-at-login |
+                          --no-start-at-login] [--agent AGENT |
+                          --new-agent NEW_AGENT] [--name NAME]
+                          [--client {codex,claude,pi}] [--project PROJECT]
+                          [--workspace-id WORKSPACE_ID]
+                          [--binding-id BINDING_ID]
+                          [--candidate-ref CANDIDATE_REF]
+                          [--provider-home PROVIDER_HOME] [--plan]
+                          [--approve APPROVE] [--json] [--no-chat]
+                          [--timeout TIMEOUT]
+
+Review and connect this local project using the canonical managed setup.
+
+options:
+  -h, --help            show this help message and exit
+  --profile PROFILE     saved local project profile name
+  --operator-profile OPERATOR_PROFILE
+                        use this saved human operator profile on a remote
+                        Server
+  --remote-draft REMOTE_DRAFT
+                        review a remote host draft exported by Connector
+                        connect --setup-draft
+  --setup-receipt-output SETUP_RECEIPT_OUTPUT
+                        export the public remote host handoff here (contains
+                        no key)
+  --review-current      explicitly refresh a pending remote setup review while
+                        retaining its original bootstrap
+  --start-at-login      include user login startup and controlled supervisor
+                        transition in this review
+  --no-start-at-login   omit login startup from an unapproved review; existing
+                        integrations are preserved
+  --agent AGENT         reuse this authorized existing canonical agent ID
+  --new-agent NEW_AGENT
+                        propose this unused ID instead of generating a new
+                        project identity ID
+  --name NAME           display name for the new project identity
+  --client {codex,claude,pi}
+  --project PROJECT
+  --workspace-id WORKSPACE_ID
+  --binding-id BINDING_ID
+  --candidate-ref CANDIDATE_REF
+  --provider-home PROVIDER_HOME
+  --plan                save/show the review without starting service, probes
+                        or model turns
+  --approve APPROVE     apply the exact displayed review revision
+  --json
+  --no-chat             return after connection setup, without entering
+                        interactive project work
+  --timeout TIMEOUT     maximum test observation time; does not cancel
+                        execution

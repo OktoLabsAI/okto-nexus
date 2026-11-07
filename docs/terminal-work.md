@@ -133,10 +133,11 @@ Ctrl+C. Admission exit 0 does not prove task completion: inspect the returned
 state and receipts.
 
 The same facade accepts a saved [human operator profile](terminal-operator.md)
-for an already approved binding on a remote Server. Unified Connector onboarding
-and its full productive campaign remain unfinished. Native decisions require the
+for an already approved binding on a remote Server. To create a remote project
+connection, use the implemented [Connector onboarding flow](remote-project-setup.md).
+Its real-provider productive campaign remains separately pending. Native decisions require the
 existing service setting `feature_hitl=true`. Initial project setup includes
 reviewed activation when the Server has no explicit policy; it preserves an
 existing disabled policy and any later changes. Work itself does not enable it
-and reports native delivery refusal when disabled. Start-at-login review and
-productive real provider/context qualification remain required before M1 is complete.
+and reports native delivery refusal when disabled. Native user-login campaigns
+and productive real-provider/context qualification remain separately pending.

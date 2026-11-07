@@ -1,0 +1,27 @@
+{
+  "exit": 0,
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-controls-installed-o1mwvkx6\\pytest.ini",
+    "--confcutdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-controls-installed-o1mwvkx6",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-controls-installed-o1mwvkx6\\test_service_process.py",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-controls-installed-o1mwvkx6\\test_detached_service_lifecycle.py",
+    "-v",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-controls-installed-o1mwvkx6\\tests.xml"
+  ],
+  "source_test_hashes": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_process.py": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\integration\\test_detached_service_lifecycle.py": "116d079f14a89b6e3e17c7f4a86f4cb600c996cc16ed4337067ce4a5668b87cc"
+  },
+  "changed_inputs": [],
+  "cases": 2,
+  "failures": [],
+  "scope": "Actual disposable Windows detached CLI processes only. No provider/native user-task campaign."
+}

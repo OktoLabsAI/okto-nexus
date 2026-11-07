@@ -1,0 +1,351 @@
+{
+  "versions": {
+    "okto-nexus": "0.3.3",
+    "okto-nexus-connector": "0.0.12",
+    "okto-nexus-connector-core": "0.0.14"
+  },
+  "all_project_modules_inside_selected_venv": true,
+  "modules": {
+    "okto_nexus_connector.errors": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus_connector\\errors.py",
+      "sha256": "3316e4765bdb9958c6295efdb37c834bd15e9ee073032fea36f972919fbe5c24"
+    },
+    "okto_nexus_connector": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "sha256": "c79833725989b43129854c224c1ffd9095de2701371daefd577bb3dc6f0ef46f"
+    },
+    "okto_nexus_connector.cli": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus_connector.cli.presentation": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\presentation.py",
+      "sha256": "f71124a8ea94344addafff68d8a8dfaa2aac3a6524ba27b0df42d31819d49991"
+    },
+    "okto_nexus_connector.cli.output": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\output.py",
+      "sha256": "a9d043c974f33d44a7115c11ec6e91ca33636e545a32e60245cb1f3477815e11"
+    },
+    "okto_nexus_connector.cli.main": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\main.py",
+      "sha256": "0ab9fe7e9f6b6680699e127f32c0377a553459e0791a5276adf0d4a726b48c4b"
+    },
+    "nexus_connector_core.discovery_control": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\discovery_control.py",
+      "sha256": "c2d728edadcf02bdf8f85f888262174af6184b063af157e0f555935c2d557840"
+    },
+    "nexus_connector_core.models": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\models.py",
+      "sha256": "8f4d23ee6eb1fa55b0e59fd7ba83b4cd4b1c70e2f58224b641d98d6685f10506"
+    },
+    "nexus_connector_core.journal_locations": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\journal_locations.py",
+      "sha256": "033605ddf8687c72dac2034814f749062a2960586d6a47cb104d983024ad7e8e"
+    },
+    "nexus_connector_core.automation": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\automation.py",
+      "sha256": "66eb0a3861f0085afb4cafd105d7d7916415b94237b03b391d65d25e91d5ecbf"
+    },
+    "nexus_connector_core.protocol": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\protocol.py",
+      "sha256": "610b4b0f925d6b01c8f1474790e749416d7410c4c1a3e5597c4522d8b23cdc61"
+    },
+    "nexus_connector_core.frame_codec": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\frame_codec.py",
+      "sha256": "db224fb5a1d506e17016a4363027e69ea1eedb053189602bb11cbace5941531c"
+    },
+    "nexus_connector_core.frame_codec_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\frame_codec_r4.py",
+      "sha256": "543fdd5f69d1ea1b7c5c78fdbd7ced3181bface4e37f45dbab322e8d2ef29fa0"
+    },
+    "nexus_connector_core.lease_reducer_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\lease_reducer_r4.py",
+      "sha256": "17e36344525a7748fef5efbf38b8dfbab5a16d789f160e4785423491f7d8b9fd"
+    },
+    "nexus_connector_core.receipt_reducer_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\receipt_reducer_r4.py",
+      "sha256": "d4b197ca7cb484d46ceccdbc0d908ae838eb256667ebe0b560f4f5458760b8c3"
+    },
+    "nexus_connector_core.harness_configuration": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\harness_configuration.py",
+      "sha256": "23c5fbdbf53b6782ffabcfebe4e062fd3cc34cf2d63f5be7305003974217c9eb"
+    },
+    "nexus_connector_core.installation": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\installation.py",
+      "sha256": "0be6684c1f51d67b981895f69b95f3bd65ec8ae3b6c8f3d2dbb0d919a1ed27fd"
+    },
+    "nexus_connector_core.close_operation": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\close_operation.py",
+      "sha256": "42728427273fa620c4e1719bd9405ee10a0e8c71cb8614cbc6009ba051793444"
+    },
+    "nexus_connector_core.decision_bridge_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\decision_bridge_r4.py",
+      "sha256": "0727e44d060765d74525894a2178a40dc369c195d4dfe3eb4af9dbebda3ab0ba"
+    },
+    "nexus_connector_core.receipt_bridge_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\receipt_bridge_r4.py",
+      "sha256": "85c7e36baa48c13b1f248648bb9577e3fad7a1266a508b3c2e8a9b671b4bbae0"
+    },
+    "nexus_connector_core.receipt_binding_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\receipt_binding_r4.py",
+      "sha256": "11ffbb40a38a31a4228654fa705822b6db85e448a58b969db1e21191e80a5f16"
+    },
+    "nexus_connector_core.resource_release_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\resource_release_r4.py",
+      "sha256": "daaaeaec276fb86f01e18a553053690343d7b7f70134dce26dcf23959320d829"
+    },
+    "nexus_connector_core.lease_denial": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\lease_denial.py",
+      "sha256": "d3022957ded9b8778e4c6f3a7c26597eadbc6f18a528984e40efca3a3570f337"
+    },
+    "nexus_connector_core.process_launch": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\process_launch.py",
+      "sha256": "75e9b22b0f65fb7c529541da2017274e396f60a337267c08fad3faff77a724e9"
+    },
+    "nexus_connector_core.capacity": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity.py",
+      "sha256": "cf3cabe78b45394d6026565f3ac461cfde882b640f735a013653d6e6a5aa4a3c"
+    },
+    "nexus_connector_core.ports": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\ports.py",
+      "sha256": "851ab534cd89b240d25703e42b495441e89403f14fe86610e09fad99665ff94e"
+    },
+    "nexus_connector_core.operation_refusal_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\operation_refusal_r4.py",
+      "sha256": "80e86b145db99cafafda30a471070e64c874b4e8eb1a4e4a67c65d03902d033f"
+    },
+    "nexus_connector_core.clock": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\clock.py",
+      "sha256": "788feb43947a8bf31ec856fb5744b341c4e7b27f83e4a435cc2587bdd0505165"
+    },
+    "nexus_connector_core.native_action_bridge": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native_action_bridge.py",
+      "sha256": "f355ea2f90716355a6a766d4e0d0484a8af638ee20f276aca9b6aac4f5a0f5f2"
+    },
+    "nexus_connector_core.startup_refusal_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\startup_refusal_r4.py",
+      "sha256": "9f71d96760987c807099ab3c26f59c93287c682b63debcb5b54bb98ab9adf056"
+    },
+    "nexus_connector_core.startup_refusal_link": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\startup_refusal_link.py",
+      "sha256": "ee8ae4cc775707e7350c97f34ec41d80b2506206544794130c6fcdcad39dbb97"
+    },
+    "nexus_connector_core.preopen_refusal_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\preopen_refusal_r4.py",
+      "sha256": "9abb1f5f8c8d9e0b15c42f6a039833a4bb0fac25f322f933b7d6b08cca526047"
+    },
+    "nexus_connector_core.control_reducer_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\control_reducer_r4.py",
+      "sha256": "71fa5768a9a5882cfc0f2b5fe600eb3b856c8d66820ce9c400e5ceeb7812732a"
+    },
+    "nexus_connector_core.event_reducer_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\event_reducer_r4.py",
+      "sha256": "0dbb7a2db3c406955314e04faac106a32b834704f7321be3a3b2065f70737c6e"
+    },
+    "nexus_connector_core.approval_reducer_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\approval_reducer_r4.py",
+      "sha256": "ac68880650ccfb2c7ca66b0dbbe47d7287297c308f425d09902cfb2a8aa42e4b"
+    },
+    "nexus_connector_core.capacity_runtime": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_runtime.py",
+      "sha256": "f1a37db205597e2c89ee9b0d98ebcae526fbe5e7f8a6e7bb954c562d9c588fc5"
+    },
+    "nexus_connector_core.capacity_publication": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_publication.py",
+      "sha256": "9d379e608cb906b52cb76d132a316b2d5eb2f0454aac0904bddccc5db0acb157"
+    },
+    "nexus_connector_core.capacity_waiter": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_waiter.py",
+      "sha256": "7041e1faef95f4216f21ac39b194466ba5fd5eb444dc10ecfaffa71ee93e0331"
+    },
+    "nexus_connector_core.capacity_codec": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_codec.py",
+      "sha256": "43539a1dcb2e59ff03236c87c836620a560b3bdb24d8ad17046e3abe9209327b"
+    },
+    "nexus_connector_core.session_release": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\session_release.py",
+      "sha256": "c58308409e756b6819dbf60b7c9da24c07ca248e19ba8c8f096e08814a967d6c"
+    },
+    "nexus_connector_core.event_artifacts": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\event_artifacts.py",
+      "sha256": "bde30bc48b4037c3b0fd6f0394d29052daf00b99af84b4936a059b615d3c8923"
+    },
+    "nexus_connector_core.control_codec": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\control_codec.py",
+      "sha256": "dddb05a70e34ed802af1935db3dcd53cebff0cb21b694ad5f10eff51a3a82123"
+    },
+    "nexus_connector_core.capacity_control": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_control.py",
+      "sha256": "005e4a65b827c49621c485f25845eb33868134ebc973192dea2ce28c0deeaa59"
+    },
+    "nexus_connector_core.capacity_bundle": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_bundle.py",
+      "sha256": "6c426e73a788a5e40b0298cf204e3a85248d787d080284326a0a9681feaf5d7a"
+    },
+    "nexus_connector_core.native": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\__init__.py",
+      "sha256": "ea6c141a4b0f933a8c226c1af8ba4f900e9a5fc1e0b36621c0e76708d952c04b"
+    },
+    "nexus_connector_core.native.adapter_types": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapter_types.py",
+      "sha256": "3ff8331d88348afdd0a89e0c5535a20b4a0d207e06f1445d89475c8c1a39eb67"
+    },
+    "nexus_connector_core.harness_config": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\harness_config.py",
+      "sha256": "653c2908e240d843eac33a6d0f9620519a4b3328528cd3e431b1d3d620ee5260"
+    },
+    "nexus_connector_core.pi_extension_resource": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\pi_extension_resource.py",
+      "sha256": "f34ce3b70bc4fbb72a450ad145e60e9525f65d7df98af009364d03c365e533c6"
+    },
+    "nexus_connector_core.native.adapters": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapters\\__init__.py",
+      "sha256": "0fa00e2ab4cbc5c7d30740ed46efa21b8c76b69c02899d363bfbe76c837beaf1"
+    },
+    "nexus_connector_core.native.process.birth": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\process\\birth.py",
+      "sha256": "f8680644f90c5428300e03ecff8e81356a129a38ccfea35678279c07cbac60f1"
+    },
+    "nexus_connector_core.native.process.preflight": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\process\\preflight.py",
+      "sha256": "a9be4b82bcd0720539b8e8efc68ff5a71f41ac2e8caf769f678e819a7d4f428a"
+    },
+    "nexus_connector_core.native.process": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\process\\__init__.py",
+      "sha256": "49427a7050e46eb48532d6d940d8e246a83adbcb40b6b843f18df6bcb0660f8e"
+    },
+    "nexus_connector_core.native.adapters.compatibility": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapters\\compatibility.py",
+      "sha256": "1b2adaf98a0dd2ebb7b04d348a9bdc79ee6b35680cdb97b1dcb0ad89694ec7ab"
+    },
+    "nexus_connector_core.offloop": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\offloop.py",
+      "sha256": "5330f25dfe2d1b0daed37de83a22d736979d124ecda5f8be559ec0801f9eb7b7"
+    },
+    "nexus_connector_core.process_launch_storage": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\process_launch_storage.py",
+      "sha256": "e74793eb74cd411e3f9ee785f3be38bcc26259eda11611b47877ee7ea2d18106"
+    },
+    "nexus_connector_core.journal": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\journal.py",
+      "sha256": "718e46f30b7a5c10d3d20eec7753af60a40c5688f702d2994563211953b026b2"
+    },
+    "nexus_connector_core.native.redaction": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\redaction.py",
+      "sha256": "f2913754ee329b79f45162df35656429b60798779f978d4a7089e0ad25b613a1"
+    },
+    "nexus_connector_core.native.event_ingest": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\event_ingest.py",
+      "sha256": "2cbf5281c165b7c5569dda5894f7da1e912247f1d193257830d10913ed2be916"
+    },
+    "nexus_connector_core.native.registry": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\registry.py",
+      "sha256": "1da789d2cb82f6aec3a04206301b0ac1a1d6376f1cf9071df56b475b73ca121a"
+    },
+    "nexus_connector_core.native.runtime_bridge": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\runtime_bridge.py",
+      "sha256": "9b25fdd47b80da79f3e933bc4daeabac7158dfcf0f39239a2a8b78786fed75af"
+    },
+    "nexus_connector_core.validation_flights": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\validation_flights.py",
+      "sha256": "8686f503c1088f627f156925ab42584f1383da5dd9fe278568a322289c55e62e"
+    },
+    "nexus_connector_core.build_identity": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\build_identity.py",
+      "sha256": "d88ed79ddb2b07204330610d6908f91f538013a794f0c5fe95b6a4685630b6ab"
+    },
+    "nexus_connector_core.discovery": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\discovery.py",
+      "sha256": "add88263115f95877127fc32a5e5de2ebf035fe847f4d578d153c24f9a0cbaa7"
+    },
+    "nexus_connector_core.kernel": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\kernel.py",
+      "sha256": "d0ea79751775ccd4c5d1198022c23783be9aab883757c5cb2edf29ce07fa0713"
+    },
+    "nexus_connector_core.profiles": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\profiles.py",
+      "sha256": "51df88f683719611c1608e32028cb0f025a9d03c9f98dc7ed6dab497a53fc278"
+    },
+    "nexus_connector_core.targeting": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\targeting.py",
+      "sha256": "cbc3d8bfcff03fd431963a194390772a2bbe338ca3618a7f77ee4832c6295516"
+    },
+    "nexus_connector_core.lease_runtime_r4": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\lease_runtime_r4.py",
+      "sha256": "144d54b2920db641239721ad9742148d31a40224b9cce25169c469927f01777f"
+    },
+    "nexus_connector_core.close_runtime": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\close_runtime.py",
+      "sha256": "63666f2d65d0012a039e64d91de0709dc40ccc9b802711344068340327ec7346"
+    },
+    "nexus_connector_core.drain": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\drain.py",
+      "sha256": "65359996135f94e421f4a014fc0f5d95bb8eee2bff4ef87ee9d0b3b217eb766f"
+    },
+    "nexus_connector_core.runtime": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\runtime.py",
+      "sha256": "c4cf6e4c69c04c55c0dbdd848f371746dff2827d2768c9afe8c75e4af3c97c18"
+    },
+    "nexus_connector_core.composition": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\composition.py",
+      "sha256": "496e2c9c7a5afbef00edb8b703d0eb48150bcd4b20da6ef87fb092f82f2ffcee"
+    },
+    "nexus_connector_core.catalog": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\catalog.py",
+      "sha256": "85676c1ae91376623fafa3750f53f4746598856396ca7b3c15ee6e9505cc11f4"
+    },
+    "nexus_connector_core.availability": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\availability.py",
+      "sha256": "cbc8996ec91d871b4fb639e3137fe25edec7881d68720bd3961dc1104bdb6d8b"
+    },
+    "nexus_connector_core.capacity_storage": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_storage.py",
+      "sha256": "812effd47dd14fae98f9409dbf26f16947ad21946f334c588ee007a79108da1b"
+    },
+    "nexus_connector_core.journal_location_storage": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\journal_location_storage.py",
+      "sha256": "6dc7f89a289375498027ebf177c93769b1c564bcb6c0641d11ca9811e45004da"
+    },
+    "nexus_connector_core.slot_ledger": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\slot_ledger.py",
+      "sha256": "fd7b6c580b78221762a311c68a538d20b06d4b94144460e7722fce2aaa5aa1ca"
+    },
+    "nexus_connector_core.inventory_observations": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\inventory_observations.py",
+      "sha256": "9770d76f08a8fc3a1924f30ea4a95dc27deccfa82450a9a2310e62366b072018"
+    },
+    "nexus_connector_core.executor_inventory": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\executor_inventory.py",
+      "sha256": "383b71edaf87dcc80f406ebc4367a5218be395309562c61802b80e4f903fa38f"
+    },
+    "nexus_connector_core.inventory_observer": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\inventory_observer.py",
+      "sha256": "7f593af1533b921477c6eb5c9db7e5f013cd2104f9aecfe4c0015d3e3211881e"
+    },
+    "nexus_connector_core.provider_discovery": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\provider_discovery.py",
+      "sha256": "b052aa544595687308c5dbc8ef9e58736394743bed5ee223a991408948f46dbe"
+    },
+    "nexus_connector_core.configuration_file": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\configuration_file.py",
+      "sha256": "0dbdb288a3332232e955381f8cb7f18b2270bde210a21605b5eab9097a178d4e"
+    },
+    "nexus_connector_core.configuration_probe": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\configuration_probe.py",
+      "sha256": "09d11882b8348735418def5390b2c5ba387a46a5306800870ee68d9b91376549"
+    },
+    "nexus_connector_core.native.native_inputs": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\native_inputs.py",
+      "sha256": "0a1a1128c74389f1dfcd009f9af0177960ac3c7c61b0699d466ac50678eba9ca"
+    },
+    "nexus_connector_core": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "sha256": "2c4ca5d38bac7033748d5eea54aa5acb5d868566136c5a6d6782a5e65c507caf"
+    },
+    "okto_nexus": {
+      "file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "connector_parser_count": 75
+}

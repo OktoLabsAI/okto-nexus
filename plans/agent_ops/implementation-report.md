@@ -606,3 +606,21 @@ nativo/provedor/credencial real foi executado neste milestone.
 Evidências: `plans/agent_ops/evidence/r3-cooperative-drain/milestone.md`,
 `plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json` e
 `plans/agent_ops/evidence/r3-campaign-proposals/milestone.md`.
+
+## 2026-11-07 — documentação vigente e contratos de recuperação
+
+Corrigidos oito documentos dos três repos: fluxos já entregues deixaram de ser
+descritos como futuros; referência Connector confere com75 parsers atuais;
+API Core documenta drain cooperativo. Dez helps Nexus passaram e29 recursos
+JSON Core conferem com a wheel. Core docs publicado em `f9a5c3b`, Connector em
+`55a14a6`; produto e wheels inalterados.
+
+Dois casos físicos existentes passaram nas wheels atuais, em perfis isolados:
+Nexus e Connector com start concorrente, reuso, restart e drain, sem serviço
+nativo/provedor. Matriz explícita fecha AC-05/08/15 dentro dos contratos;16DX e
+SVC-T26/T28 passam a VERIFIED por provas específicas já retidas. Não se somam
+nodes de relatórios sobrepostos nem se apresentam mocks como Task Scheduler.
+T23/T24 ganham testes focais separados de restart real; sua aceitação ainda não
+é antecipada. M1/M2 e campanhas reais permanecem abertos.
+
+Evidência: `plans/agent_ops/evidence/r3-contract-closure/milestone.md`.

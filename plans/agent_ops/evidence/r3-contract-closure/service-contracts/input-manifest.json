@@ -1,0 +1,154 @@
+{
+  "files": [
+    {
+      "repository": "connector",
+      "path": "docs/service-lifecycle.md",
+      "sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e",
+      "bytes": 13301
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/daemon/manager.py",
+      "sha256": "65ee837a61af3bbb2c4a3e98f13e2d02cd691c0ca2bf41d4f0c555d6d9a47611",
+      "bytes": 12292
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/service_upgrade.py",
+      "sha256": "a12bd6546b0b6a26fd41a8308e9a793aa63e97b2583ec6d5ae7861b90d29254f",
+      "bytes": 2658
+    },
+    {
+      "repository": "connector",
+      "path": "tests/integration/test_service_upgrade_process.py",
+      "sha256": "7c77997bff90d6a74437ac889e82e758caf1e34be23bd6bec9567408757c6f15",
+      "bytes": 3285
+    },
+    {
+      "repository": "connector",
+      "path": "tests/integration/test_windows_job_daemon.py",
+      "sha256": "c6ad3348399c20e385ee105a5b569f083a33630991ceddeee1ce5a0468ff9abd",
+      "bytes": 3231
+    },
+    {
+      "repository": "connector",
+      "path": "tests/unit/test_service_upgrade.py",
+      "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+      "bytes": 17936
+    },
+    {
+      "repository": "nexus",
+      "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+      "bytes": 133337
+    },
+    {
+      "repository": "nexus",
+      "path": "docs/service-lifecycle.md",
+      "sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7",
+      "bytes": 19473
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+      "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0",
+      "bytes": 9752
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+      "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+      "bytes": 28656
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-upgrade-wheels.json",
+      "sha256": "8e758a4c405d270628261a78b474fe7059a19bbde0aaada17487304b5e8db71f",
+      "bytes": 630
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-upgrade.md",
+      "sha256": "7df97ea61e138712d80c2961e0b82f18ecfbe0336e885dbf7e1098be08d5d0f5",
+      "bytes": 6345
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-v1/canonical/tests.xml",
+      "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+      "bytes": 60132
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+      "sha256": "926b62892b561e43ff0cf8cd2baef4c962705c31faa6dfc6226fa1dfedf05ee8",
+      "bytes": 39148
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+      "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+      "bytes": 136618
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/ledger.json",
+      "sha256": "851ff6297e1aaa8d941d79d665bb03dd07aadf28cdc82e8bd9cce96b24c8d0bd",
+      "bytes": 925810
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/runtime_server.py",
+      "sha256": "3e16a907f6f659fbc075cac65c49512235239d578fcd21e20730b8a0ee1ae515",
+      "bytes": 2063
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/serve.py",
+      "sha256": "e035f239181391c24e35038fda3b2b13ce44a34d87437d3d2d6130358eb5d512",
+      "bytes": 30457
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+      "sha256": "4cb4f62d878dad0b3dcad8c486e46d5c2c9b6acc864fadcc1cf737bbecfd3fc8",
+      "bytes": 4456
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
+      "sha256": "8c8d79fd4d133dc993d4167636b3eea2348c4ac9c116246dd7018a0dfe807f09",
+      "bytes": 4150
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/service_upgrade.py",
+      "sha256": "5b8ebf6da20e9d72493080dbd3ce88ab50eff42967880d0c25a10f03112815c1",
+      "bytes": 16447
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_server_signal_shutdown.py",
+      "sha256": "c3a691ca3cd316ee3bc4426e167686ed4ef887335a96d17723e784ef6ce23889",
+      "bytes": 8120
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_service_upgrade.py",
+      "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+      "bytes": 18258
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_service_upgrade_process.py",
+      "sha256": "5374fe6a203478caf24b66a38268b82009c9afbc3d48bca791a422cb49e5d258",
+      "bytes": 3426
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_user_service_installation.py",
+      "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "bytes": 24157
+    }
+  ]
+}

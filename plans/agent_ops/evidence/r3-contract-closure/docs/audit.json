@@ -1,0 +1,1740 @@
+{
+  "criterion": "AC-08",
+  "requirement_exact": "Documentação, schemas e ajuda da CLI descrevem o comportamento realmente entregue.",
+  "base_commits": {
+    "nexus": "4855abd5",
+    "connector": "ef8e267",
+    "core": "3cdba87"
+  },
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "recommendation": "AC08 supported for the finite reviewed three-package delivery after committing these documentation corrections; no ledger promotion performed.",
+  "scope": "Current lifecycle/connect/participant/work/coordination/OBS/ATN docs, installed parser help and published Core schema resources. Historical reports remain historical evidence, not current user instructions.",
+  "actions": {
+    "new_tests": 0,
+    "productive_examples_executed": 0,
+    "services_started": 0,
+    "provider_calls": 0,
+    "credentials_used": 0,
+    "new_help_commands": 10,
+    "parser_imports": 1,
+    "rendered_connector_parsers": 75,
+    "reused_help_reports": 6,
+    "product_edits": 0,
+    "schema_edits": 0,
+    "ledger_edits": 0
+  },
+  "changes": {
+    "nexus/docs/service-lifecycle.md": {
+      "before_sha256": "c703f5c52a9d816850a58ea756b73f21f6b76a9fe372de48805b74532548c8ad",
+      "after_sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7"
+    },
+    "nexus/docs/terminal-connect.md": {
+      "before_sha256": "6fe36d65469eb913157c286d11e7937c8c8b0582cc41aa977cf5ece717639ee9",
+      "after_sha256": "67a10f695e7c946e387a8836a5124ebb56118b2d29fd60b30e197dbd30e69657"
+    },
+    "nexus/docs/terminal-work.md": {
+      "before_sha256": "4d7c54c5ea55e4d46b417d70b26834f73154cf7048524c014ce469aef6cc2a9e",
+      "after_sha256": "b83602a7908f13cc3d134c59b6ed62f156b992444055a155aa5c2ae356b1f15b"
+    },
+    "nexus/docs/attention.md": {
+      "before_sha256": "825f255bbd1c37ba7f455e3b988d9212ed7fd269636e6f863a2f23d006756a7c",
+      "after_sha256": "c538c0160b92cf5b0b7b184b57820f05952ef2fd9e96bfac34abc9ae1b7616aa"
+    },
+    "connector/docs/service-lifecycle.md": {
+      "before_sha256": "c651dd3c4be58ca43f4f0b4845b3ad3b8c94a31269a4fe82796f6e653d0c47c2",
+      "after_sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e"
+    },
+    "connector/docs/cli.md": {
+      "before_sha256": "dc21eccd8fac61108f8d4274d3cbdd65039282a8ffe95606c8a87831df85feac",
+      "after_sha256": "a083675a1d8805a187985fd8625ead6f4b12dd8c3aa7d5f6f75b7d754d1812ec"
+    },
+    "core/docs/api.md": {
+      "before_sha256": "2f169c33194817d1eafa8090accdb235872f21f9dd701c8025de589dce128879",
+      "after_sha256": "6d59fe81688614d466e22ca75f91c636417e76b29bd78827988623257c60a664"
+    },
+    "connector/docs/cli-reference.md": {
+      "before_sha256": "20e84694ad250a62ec032567f11836fa4ec227c69932cac072c36bccd85e8ab6",
+      "after_sha256": "a48e38d7f249a515ff3e992cad6eae069f6b8bb77561e57ebfeee57376973868"
+    }
+  },
+  "coverage": [
+    {
+      "surface": "Nexus service lifecycle",
+      "docs": [
+        "docs/service-lifecycle.md"
+      ],
+      "source": [
+        "src/okto_nexus/adapters/inbound/cli/service.py",
+        "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+        "src/okto_nexus/bootstrap/server_shutdown.py"
+      ],
+      "compared": "Generation-fenced explicit force only after pending drain deadline; normal stop/restart, install/enable/disable, upgrade-plan/apply; passive status/logs and no timeout force.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-contract-closure/controls/result.json"
+      ],
+      "result": "Aligned after removing obsolete upgrade-pending aggregate text.",
+      "documentation_inventory": [
+        {
+          "repository": "nexus",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/service.py",
+          "sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+          "sha256": "63c1be3056176a59a3d195b51796824185f631595d7338f483d6dde97af304e7"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/bootstrap/server_shutdown.py",
+          "sha256": "c521b76f6573a9503c4dde0064f190d4bc213dbc6dbb9ac901e8b5920b8a7013"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+          "sha256": "926b62892b561e43ff0cf8cd2baef4c962705c31faa6dfc6226fa1dfedf05ee8"
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/r3-contract-closure/controls/result.json",
+          "sha256": "b5bd55cb411562320ec8c45479df4a787ef83f31917f3f3ee69bbb632e061a1d"
+        }
+      ]
+    },
+    {
+      "surface": "Nexus connect and remote project setup",
+      "docs": [
+        "docs/terminal-connect.md",
+        "docs/remote-project-setup.md",
+        "docs/terminal-operator.md"
+      ],
+      "source": [
+        "src/okto_nexus/adapters/inbound/cli/connect.py",
+        "src/okto_nexus/adapters/inbound/http/remote_setup.py"
+      ],
+      "compared": "Plan/approve, remote draft/handoff, current review, stable root and child IDs, one-shot material, protected import and completed reconnect; configured is not running work.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap/reports.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json"
+      ],
+      "result": "Aligned after replacing obsolete statements that participant initialization and remote bootstrap remain unimplemented.",
+      "documentation_inventory": [
+        {
+          "repository": "nexus",
+          "path": "docs/terminal-connect.md",
+          "sha256": "67a10f695e7c946e387a8836a5124ebb56118b2d29fd60b30e197dbd30e69657"
+        },
+        {
+          "repository": "nexus",
+          "path": "docs/remote-project-setup.md",
+          "sha256": "c71cbf03c18c6a167bef87e2ba79922037da9b01ae00ca774d23cb2dd19e855a"
+        },
+        {
+          "repository": "nexus",
+          "path": "docs/terminal-operator.md",
+          "sha256": "cddd111197fe6bbcab6f9e126266b5d564f77c1bc273c3b7bab23c38d0feeb59"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+          "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/http/remote_setup.py",
+          "sha256": "451f36c07c7a3051686b7d2105c14fb3a24a0d58879f353a26955dc2ba35a85f"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/reports.json",
+          "sha256": "bbcb9542668ad9dae11dd77f40cd54a1597baf409f5abe94a39211b848596470"
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+          "sha256": "7112703111e576e88960ad7a5cbbd896ed8c322511edc3b4b5cc00de58aa110c"
+        }
+      ]
+    },
+    {
+      "surface": "Nexus participant lifecycle",
+      "docs": [
+        "docs/terminal-participant.md"
+      ],
+      "source": [
+        "src/okto_nexus/adapters/inbound/cli/participant.py",
+        "src/okto_nexus/adapters/inbound/cli/participant_launch.py",
+        "src/okto_nexus/adapters/inbound/cli/participant_remove.py"
+      ],
+      "compared": "Existing identity, reference-only credential template, explicit plan/apply/remove, CAS recovery, foreground launch distinct from actual client/MCP/work readiness; passive doctor versus explicit active checks.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-removal-installed-final.xml"
+      ],
+      "result": "No concrete doc/parser mismatch found; real two-client/provider participation is not inferred from these contracts.",
+      "documentation_inventory": [
+        {
+          "repository": "nexus",
+          "path": "docs/terminal-participant.md",
+          "sha256": "d67266ac78c0e76b279889ad8b1ae94d0feb3267923d0bcbe850472858a74377"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/participant.py",
+          "sha256": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/participant_launch.py",
+          "sha256": "8212196986ad6bab658e44188a953b67c721d302e65ce306f7cc8e9ea936ec5a"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/participant_remove.py",
+          "sha256": "e83665c949d02596f6897b571b467f7600a1a6ef435af2a4f5367e20aec9d160"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+          "sha256": "d3d325891c083b1b72f012fcf9e1f89f90111c38437969cfb27ea1eadbfef418"
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+          "sha256": "272afa473480020c3c16cdc56c2c2dd079164cd462ac18b17ab65d2c3698433f"
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr04-participant-removal-installed-final.xml",
+          "sha256": "5391384983a8fff5bd3eb2fcfe845c69373ab513a62a8d1a4423486044cfb010"
+        }
+      ]
+    },
+    {
+      "surface": "Nexus work",
+      "docs": [
+        "docs/terminal-work.md"
+      ],
+      "source": [
+        "src/okto_nexus/adapters/inbound/cli/work.py",
+        "src/okto_nexus/application/terminal_authorization.py"
+      ],
+      "compared": "Explicit submit/steer/answer/interrupt/close, stable IDs and observation recovery, grant review 1..1440 minutes / 1..1000 actions, no automatic renewal or productive replay.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/source/operator/remote-renewal-operator-uncertainty-transport-final.xml"
+      ],
+      "result": "Aligned after separating delivered onboarding/startup review from pending real-provider/native-login qualification.",
+      "documentation_inventory": [
+        {
+          "repository": "nexus",
+          "path": "docs/terminal-work.md",
+          "sha256": "b83602a7908f13cc3d134c59b6ed62f156b992444055a155aa5c2ae356b1f15b"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/work.py",
+          "sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/application/terminal_authorization.py",
+          "sha256": "b58507fd91ed398503fedc14ed82bbe6c0f28024526ba2df620ab78a63f03063"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+          "sha256": "2d137a500141a686bbf38fececad83c9385eddd34bdf4441b7a772bd0927cfa8"
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-remote-renewal/source/operator/remote-renewal-operator-uncertainty-transport-final.xml",
+          "sha256": "093dabed40a0b675029f30716f56a99ff2705b908bfcf1ec5ec90ca23eee21d3"
+        }
+      ]
+    },
+    {
+      "surface": "Nexus coordination",
+      "docs": [
+        "docs/terminal-coordination.md"
+      ],
+      "source": [
+        "src/okto_nexus/adapters/inbound/cli/coordination.py",
+        "src/okto_nexus/application/terminal_coordination.py"
+      ],
+      "compared": "Message/handoff/request surfaces, original request recovery, 30-day receipt horizon, passive handoff completion and distinct timeout/unknown exit codes.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-final-agent.xml",
+        "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-auth-final.xml"
+      ],
+      "result": "No concrete mismatch found; no creation/observation command was executed during this audit.",
+      "documentation_inventory": [
+        {
+          "repository": "nexus",
+          "path": "docs/terminal-coordination.md",
+          "sha256": "f237ddb2c947b986db794a08ad93c0f11f234f8a6d596892bc6999784b6588bf"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/coordination.py",
+          "sha256": "7e9ebc799961d053b15ecd4c37ee2d99964f80013380798715491947b1ae66fb"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/application/terminal_coordination.py",
+          "sha256": "65920e954d88f23589b2f1806caadca7cf5077cad0e4644c260cd3fce4f39e27"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-final-agent.xml",
+          "sha256": "7900efcf53ce9c770a3f17f88e2e34ea807783fa39b043def71de854074ce703"
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr05-coordination-cli-source-coordination-cli-agent-auth-final.xml",
+          "sha256": "2d24ff3f90df325a899297509663719880082d10094e0abd21d3fec0d50a3850"
+        }
+      ]
+    },
+    {
+      "surface": "Nexus attention API and UI",
+      "docs": [
+        "docs/attention.md"
+      ],
+      "source": [
+        "src/okto_nexus/adapters/inbound/http/attention.py",
+        "src/okto_nexus/application/attention.py",
+        "frontend/src/attentionController.ts"
+      ],
+      "compared": "Strict viewing writes, source/preference CAS, page1..200, operator auth, classifiers, five-second budget, SSE/refresh behavior and no canonical business mutation.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+      ],
+      "result": "Contract aligned; removed obsolete future PR07 client wording. Existing behavior assertions and retained PASS references are included separately.",
+      "documentation_inventory": [
+        {
+          "repository": "nexus",
+          "path": "docs/attention.md",
+          "sha256": "c538c0160b92cf5b0b7b184b57820f05952ef2fd9e96bfac34abc9ae1b7616aa"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/http/attention.py",
+          "sha256": "012a8a711b759cf209cdd83119f6b9bd5d1a9b28bff03e60496f0dec74a6bd6f"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/application/attention.py",
+          "sha256": "cf0b96fe7d568fcc04f50d99ce30c3eae3f42e826b40b905eb384c2cf3500553"
+        },
+        {
+          "repository": "nexus",
+          "path": "frontend/src/attentionController.ts",
+          "sha256": "6cf1c8e313e74f9b08f44102687f7b89dc2cff9bf25871a9c7e32e28638d3804"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+          "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd"
+        }
+      ]
+    },
+    {
+      "surface": "Nexus external observations and correlation",
+      "docs": [
+        "docs/external-observations.md"
+      ],
+      "source": [
+        "src/okto_nexus/domain/observations.py",
+        "src/okto_nexus/domain/observation_correlation.py",
+        "src/okto_nexus/adapters/inbound/http/observations.py",
+        "src/okto_nexus/config.py"
+      ],
+      "compared": "Closed version1 report and correlation inputs, current/stale/unavailable projection, TTL3600/future30 defaults, finite quotas, publish-only token, passive reads and private birth proof with no authority/capacity promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+        "plans/agent_ops/evidence/pr10-correlation/reports.json"
+      ],
+      "result": "No concrete mismatch found in reviewed fields/endpoints/defaults. Correlation remains local Windows only as documented.",
+      "documentation_inventory": [
+        {
+          "repository": "nexus",
+          "path": "docs/external-observations.md",
+          "sha256": "0f35cec29def8b7b480db985abdb1d844d558beb20fdaf3da9e8141dc6cfcedd"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/domain/observations.py",
+          "sha256": "86314c9def2301034daf22b103d26a13abd3acf1da81ba70fccdcb8298fc8a81"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/domain/observation_correlation.py",
+          "sha256": "2d6365cbcc3ae32fa034a83312930a204f5aeaafadd0113d0ecf5859c074f93a"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/http/observations.py",
+          "sha256": "43c6e5483a90573f165671cdae36a5b9543feae73d0f66c988f333f765a31e43"
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/config.py",
+          "sha256": "e498a660a830f208ad87f5e9c2e0915ec4a1b994cf257b6c6726fd7504231cf4"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+          "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd"
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr10-correlation/reports.json",
+          "sha256": "1c0d4130c22f84de52afcf6132a501934a4c2362d8077f8079bce0f7adffcfa9"
+        }
+      ]
+    },
+    {
+      "surface": "Connector connect/configure and lifecycle",
+      "repository": "connector",
+      "docs": [
+        "docs/connection-configuration.md",
+        "docs/service-lifecycle.md",
+        "docs/cli.md",
+        "docs/cli-reference.md"
+      ],
+      "source": [
+        "src/okto_nexus_connector/cli/main.py",
+        "src/okto_nexus_connector/cli/commands/reconnect.py",
+        "src/okto_nexus_connector/cli/commands/connect.py"
+      ],
+      "compared": "All75 parser help blocks, remote draft/current review, protected handoff import, completed rotation reuse, daemon drain/restart and owned-service enablement/upgrades.",
+      "evidence": [
+        "docs/evidence/cooperative-drain/milestone.md"
+      ],
+      "result": "Regenerated stale CLI reference; corrected reconnect interruption claim and obsolete upgrade-pending aggregate text.",
+      "documentation_inventory": [
+        {
+          "repository": "connector",
+          "path": "docs/connection-configuration.md",
+          "sha256": "68f8e6f45e8721b15c23e0a7b573f00d29077fc2305b6c9f5172c0164a990dd1"
+        },
+        {
+          "repository": "connector",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e"
+        },
+        {
+          "repository": "connector",
+          "path": "docs/cli.md",
+          "sha256": "a083675a1d8805a187985fd8625ead6f4b12dd8c3aa7d5f6f75b7d754d1812ec"
+        },
+        {
+          "repository": "connector",
+          "path": "docs/cli-reference.md",
+          "sha256": "a48e38d7f249a515ff3e992cad6eae069f6b8bb77561e57ebfeee57376973868"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "connector",
+          "path": "src/okto_nexus_connector/cli/main.py",
+          "sha256": "0ab9fe7e9f6b6680699e127f32c0377a553459e0791a5276adf0d4a726b48c4b"
+        },
+        {
+          "repository": "connector",
+          "path": "src/okto_nexus_connector/cli/commands/reconnect.py",
+          "sha256": "78b9b37a618fe3c7dc8f38600b8a858a296b6e4874e96ac2eb0e18d4ecbe6cec"
+        },
+        {
+          "repository": "connector",
+          "path": "src/okto_nexus_connector/cli/commands/connect.py",
+          "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "connector",
+          "path": "docs/evidence/cooperative-drain/milestone.md",
+          "sha256": "a55bb2ac72995bdc3d8e34dad571d73b9ee1b94ac649549e8ec95dedac8caf4d"
+        }
+      ]
+    },
+    {
+      "surface": "Core API, participant format and published schemas",
+      "repository": "core",
+      "docs": [
+        "docs/api.md",
+        "docs/lifecycle.md",
+        "docs/participant-config.md",
+        "docs/compatibility.md"
+      ],
+      "source": [
+        "src/nexus_connector_core/ports.py",
+        "src/nexus_connector_core/drain.py",
+        "src/nexus_connector_core/__init__.py"
+      ],
+      "compared": "Synchronous begin_drain/drain_revision, async status and same-journal-only combination; participant JSON/TOML references, no identity/authority claim; published schema/manifest bytes match installed package.",
+      "evidence": [
+        "docs/evidence/cooperative-drain/milestone.md"
+      ],
+      "result": "Completed API method reference; lifecycle contract was current. Core is a library with no new CLI requirement.",
+      "documentation_inventory": [
+        {
+          "repository": "core",
+          "path": "docs/api.md",
+          "sha256": "6d59fe81688614d466e22ca75f91c636417e76b29bd78827988623257c60a664"
+        },
+        {
+          "repository": "core",
+          "path": "docs/lifecycle.md",
+          "sha256": "c7185569bc2fcb1c156ebad2b377b7e29a4b77d3427691fc8255d21ea685713b"
+        },
+        {
+          "repository": "core",
+          "path": "docs/participant-config.md",
+          "sha256": "eeec7628e20c65efa7b724ad703ff956e920809217d90bdfa3a5b141aaba2b2b"
+        },
+        {
+          "repository": "core",
+          "path": "docs/compatibility.md",
+          "sha256": "aad80a30cb2494a727596e967ac271c9a3e4e0992f6834248fc9ae9886e4be59"
+        }
+      ],
+      "source_inventory": [
+        {
+          "repository": "core",
+          "path": "src/nexus_connector_core/ports.py",
+          "sha256": "851ab534cd89b240d25703e42b495441e89403f14fe86610e09fad99665ff94e"
+        },
+        {
+          "repository": "core",
+          "path": "src/nexus_connector_core/drain.py",
+          "sha256": "65359996135f94e421f4a014fc0f5d95bb8eee2bff4ef87ee9d0b3b217eb766f"
+        },
+        {
+          "repository": "core",
+          "path": "src/nexus_connector_core/__init__.py",
+          "sha256": "2c4ca5d38bac7033748d5eea54aa5acb5d868566136c5a6d6782a5e65c507caf"
+        }
+      ],
+      "evidence_inventory": [
+        {
+          "repository": "core",
+          "path": "docs/evidence/cooperative-drain/milestone.md",
+          "sha256": "d8e7fbe254c90fb3ba3667aba4c20d6c2cfd24d7dea36287333f56f7095b9c37"
+        }
+      ]
+    }
+  ],
+  "new_help_checks": [
+    {
+      "command": [
+        "okto-nexus",
+        "connect",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-connect.stdout.txt",
+      "stderr": "nexus-connect.stderr.txt",
+      "stdout_sha256": "60a34c1c13175e8cfc93c5140236433e6a117dc3856ddea8f815a91410c1a8b5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "init",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-init.stdout.txt",
+      "stderr": "nexus-init.stderr.txt",
+      "stdout_sha256": "377558db9c7d51331023567344d08897b42d74f571a4a7846f6400bfb4923dc3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "work",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-work.stdout.txt",
+      "stderr": "nexus-work.stderr.txt",
+      "stdout_sha256": "3ea700b43d6da95e18daeb1cfbfa24533e4e7064f666d86a4dd290e364169fa4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "participant",
+        "launch",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-participant-launch.stdout.txt",
+      "stderr": "nexus-participant-launch.stderr.txt",
+      "stdout_sha256": "df0e67f0a9e9bf990427bbc3805240cf18666772bf83ca9a3a846ba1358be4b2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "participant",
+        "remove",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-participant-remove.stdout.txt",
+      "stderr": "nexus-participant-remove.stderr.txt",
+      "stdout_sha256": "dadf3b6894e6d787a014e6cf4586a572adf5d075ff4968313473e40995190263",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "participant",
+        "smoke",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-participant-smoke.stdout.txt",
+      "stderr": "nexus-participant-smoke.stderr.txt",
+      "stdout_sha256": "ead7968da078b59dc254d07043361785aa93a102b1648ca28648ab2ecdb332f3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "message",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-message.stdout.txt",
+      "stderr": "nexus-message.stderr.txt",
+      "stdout_sha256": "69d7f7c5ae935421e1cbf9712350135b4d076ba935a4c1dfdd078b7a5e2c3d28",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "handoff",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-handoff.stdout.txt",
+      "stderr": "nexus-handoff.stderr.txt",
+      "stdout_sha256": "605bd633be3d3fc3798fdf9483472d34d0eded730ec2c269a1cd0d5d421d58be",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "request",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-request.stdout.txt",
+      "stderr": "nexus-request.stderr.txt",
+      "stdout_sha256": "2982160b5e1c27f21e17f897ab2e1c90a6c2cb236ec269eb546f42aeb106de8c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "okto-nexus",
+        "doctor",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "nexus-doctor.stdout.txt",
+      "stderr": "nexus-doctor.stderr.txt",
+      "stdout_sha256": "3b03f41aa3a1773dd9a273081f49f40098578dd0959d288b48f597c9cf9a4554",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "isolated import and parser.format_help only"
+      ],
+      "exit_code": 0,
+      "stdout": "parser-import.stdout.txt",
+      "stderr": "parser-import.stderr.txt",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "reused_help_reports": [
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-campaign-proposals/prepared-v2/native/connector-daemon-help.stdout.txt",
+      "sha256": "44c636ceb3e62eaf5b6c0665999041dc1f63bdfa4175d56395301ef5dc74f6b0"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-campaign-proposals/prepared-v2/native/connector-daemon-start-help.stdout.txt",
+      "sha256": "567da96634bc47f71b606f8a420b621f2cb858ccd52e1938ce254cfac226c9b1"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-campaign-proposals/prepared-v2/native/connector-daemon-stop-help.stdout.txt",
+      "sha256": "47001da8b362c8e5ec18909934cf5998847db3636e77d594c617e9bfdf6a4a50"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-campaign-proposals/prepared-v2/native/connector-service-help.stdout.txt",
+      "sha256": "7e4f760040c6455de61ceba7f7d275b140df25a4aaa485da52dd81534dd35aa2"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-campaign-proposals/prepared-v2/native/connector-service-install-help.stdout.txt",
+      "sha256": "5edf6c8200317528b33f917a35b7c662549d2598e09705a58a1080d356fd7c45"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-campaign-proposals/prepared-v2/native/nexus-service-help.stdout.txt",
+      "sha256": "bbf9417dedc0b14c0323384ceb6f0888ef04e717f1941281062e900aa8e2c2d5"
+    }
+  ],
+  "generated_reference": {
+    "exact_installed_parser_output": true,
+    "before_sections": 69,
+    "current_sections": 75,
+    "added_sections": [
+      "okto-nexus-connector daemon recover-start",
+      "okto-nexus-connector daemon restart",
+      "okto-nexus-connector service disable",
+      "okto-nexus-connector service enable",
+      "okto-nexus-connector service upgrade-apply",
+      "okto-nexus-connector service upgrade-plan"
+    ]
+  },
+  "schemas": {
+    "published_core_json_resources": [
+      {
+        "path": "nexus_connector_core/contracts/capacity/v1/fixtures.json",
+        "sha256": "9d288c82660488d0f6a5b4aad5a893cade72fa784bca22269b61eb7564571129",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/capacity/v1/manifest.json",
+        "sha256": "34c3143c8970af93eebf2c000377bc28a5a9e7fef73aea33c534840e6cbe305c",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/capacity/v1/schema.json",
+        "sha256": "e47a0d7758d4ac19141b840e34f9075ec3a92c5926bfbae76bdf06e7c8554e28",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/capacity/v2/fixtures.json",
+        "sha256": "7a9aacef9eeedcaa3e7e9351963003e6a3f9e10ac4b4617a088ae73a07afef9d",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/capacity/v2/manifest.json",
+        "sha256": "4a6508774c1a47e2d78bb85e3fa8c76603ae5217384e848d000f98702a2a0d78",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/capacity/v2/schema.json",
+        "sha256": "7a6cb00f909bf3fb7b0271613ca1671adad3ca4f3962a5612cb920f66533170b",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/launch_recovery/v1/manifest.json",
+        "sha256": "50e7649e3bddb102c44c8710571d4af9a850cdb7bba57516eb3ad8d93ae97bd2",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/launch_recovery/v1/proof.schema.json",
+        "sha256": "ea77a49fffb0db56bdda9ac2cbdbe5b527fa2e8e7b106a48b2b688d0a0fd6e7d",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/lease_denial/v1/fixtures.json",
+        "sha256": "155c80408509ec46088a863f864cff87140bedac1f04fd73d4e550c47828acdd",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/lease_denial/v1/manifest.json",
+        "sha256": "e9c1c7648f2c9dafff9542e67a2407de7e20c73f358d99aba2fe6e254dc5fe6f",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/lease_denial/v1/schema.json",
+        "sha256": "deca4e726bb7ddfe37604ed0bac621a049aa91e29c8003bcbf547850c1958ab6",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/r4/frame.schema.json",
+        "sha256": "b3b063d75f13d9b9c54ee64fe1b0e0bd6d191a98702c12393da687e3631fd0f9",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/r4/inventory.schema.json",
+        "sha256": "84f9c99f156d38aa195ba1f52599f2f3b69ad000b7dfa7b9131ffaecb9af7429",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/r4/manifest.json",
+        "sha256": "6febb72fd4b0fc9b13dc49f940cc5878b636a080dd71780c78aea369c92ddfda",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/capability.schema.json",
+        "sha256": "0ed1b79fd420cbb5f40766f6f8df3c3a6b8375bfe1e15844f2f7a336d4ead59a",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/error.schema.json",
+        "sha256": "f8bdffbbfd14940e3f12b628a6599ce46e9a968ac65e1d514d9ff7b15a2edc5a",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/event.schema.json",
+        "sha256": "3766c37c04e70b78ea710404f239898ee2f30c382fb6bfb386a3b812df29b057",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/fixtures.json",
+        "sha256": "9b4b705a555f083b381e0c2e80a84d5325c7628b05e5ab32dcd2271aa5394bd2",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/frame.schema.json",
+        "sha256": "2e3759a42ebb095492b4401ec2eef48b0da0d0bc98d3e64a777a7c684cc1d653",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/hash-vectors.json",
+        "sha256": "53d1cc0fdd9fc70d34a5b970d928a9cb177599b8f5152943e18af4d22cfc18ec",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/http-response.schema.json",
+        "sha256": "407b806797dfbdba158be4738c2a26334367ffb9134834f0ed04a267c65a8164",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/intent.schema.json",
+        "sha256": "af7e1ed337ec617d4c4b97e4e66c3471f65be9dcd7d0c67125414d36e4fbe03d",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/inventory.schema.json",
+        "sha256": "4dfeb6ba9576cc61ca87ae00167b5370bad8df68f069f99e5c0ff14a7c6c1541",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/nxl/v1/manifest.json",
+        "sha256": "a4fd84304de7ba12041721c07f4edce29d3f39d17d8bd24f375de24b0a728630",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/preopen_refusal/v1/manifest.json",
+        "sha256": "d95b908aed06412d10155ec23597c9d7d7f4431060eadefad18674a3dfb0b83e",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/preopen_refusal/v1/schema.json",
+        "sha256": "39eb1b08149556df23cae5ee86c3321cab86c5f33d3fefbe12b192bd54503975",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/session_release/v1/fixtures.json",
+        "sha256": "e0cf2491ebda95d76c8231b90ca64117b6a928fe5a3cfe077a647f0849ea70b1",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/session_release/v1/manifest.json",
+        "sha256": "e847a04ed9c7049bcd4bf69871b4b3345df9e826566ee9a3ff7abfcf4a34b314",
+        "installed_exact_bytes": true
+      },
+      {
+        "path": "nexus_connector_core/contracts/session_release/v1/schema.json",
+        "sha256": "6fc0a3cecd62f99d32f16499deacc1c95ca49a992a842c837b6e8f55abe4291a",
+        "installed_exact_bytes": true
+      }
+    ],
+    "planning_schema": {
+      "path": "plans/contratos/http-target.schema.json",
+      "sha256": "8315a736a23037ce95888cc0f931316a272d381977057f917a6f192ed2b14143",
+      "defs": 69,
+      "classification": "Explicit historical planning DTO target, not a published codec or complete current HTTP OpenAPI contract. Existing capability shape assertions are retained; no target schema was relabeled or changed."
+    },
+    "obs_attention": "Current HTTP/domain closed validators and config bounds were compared directly to the guides; their source references appear in coverage."
+  },
+  "retained_reports_inspected": [
+    {
+      "path": "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
+      "sha256": "2d137a500141a686bbf38fececad83c9385eddd34bdf4441b7a772bd0927cfa8",
+      "scope": "Existing retained qualification; not reexecuted or added to any new test total.",
+      "suites": [
+        {
+          "tests": "35",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "selected_cases": []
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+      "sha256": "d3d325891c083b1b72f012fcf9e1f89f90111c38437969cfb27ea1eadbfef418",
+      "scope": "Existing retained qualification; not reexecuted or added to any new test total.",
+      "suites": [
+        {
+          "tests": "36",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "selected_cases": []
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+      "sha256": "272afa473480020c3c16cdc56c2c2dd079164cd462ac18b17ab65d2c3698433f",
+      "scope": "Existing retained qualification; not reexecuted or added to any new test total.",
+      "suites": [
+        {
+          "tests": "74",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "selected_cases": []
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr04-participant-removal-installed-final.xml",
+      "sha256": "5391384983a8fff5bd3eb2fcfe845c69373ab513a62a8d1a4423486044cfb010",
+      "scope": "Existing retained qualification; not reexecuted or added to any new test total.",
+      "suites": [
+        {
+          "tests": "4",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "selected_cases": []
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli-source-terminal-coordination-final-agent.xml",
+      "sha256": "7900efcf53ce9c770a3f17f88e2e34ea807783fa39b043def71de854074ce703",
+      "scope": "Existing retained qualification; not reexecuted or added to any new test total.",
+      "suites": [
+        {
+          "tests": "84",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "selected_cases": []
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "scope": "Existing retained qualification; not reexecuted or added to any new test total.",
+      "suites": [
+        {
+          "tests": "62",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ],
+      "selected_cases": [
+        {
+          "name": "test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch",
+          "passed": true
+        },
+        {
+          "name": "test_capability_request_rejects_invalid_fields_before_issuance[change0]",
+          "passed": true
+        },
+        {
+          "name": "test_capability_request_rejects_invalid_fields_before_issuance[change1]",
+          "passed": true
+        },
+        {
+          "name": "test_capability_request_rejects_invalid_fields_before_issuance[change2]",
+          "passed": true
+        },
+        {
+          "name": "test_capability_request_rejects_invalid_fields_before_issuance[change3]",
+          "passed": true
+        },
+        {
+          "name": "test_capability_request_rejects_invalid_fields_before_issuance[change4]",
+          "passed": true
+        },
+        {
+          "name": "test_capability_request_rejects_invalid_fields_before_issuance[change5]",
+          "passed": true
+        },
+        {
+          "name": "test_capability_request_rejects_invalid_fields_before_issuance[change6]",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "retained_assertion_proofs": [
+    {
+      "family": "api",
+      "test": "tests/test_attention_api.py::test_existing_operator_auth_paths_and_agent_refusal",
+      "assertions": [
+        {
+          "line": 181,
+          "text": "env.deps.config.feature_harness_integrations is False"
+        },
+        {
+          "line": 173,
+          "text": "remote.get(path).status_code == 401"
+        },
+        {
+          "line": 174,
+          "text": "data(remote.get(path, headers={'x-api-key': operator_key}))['version'] == 1"
+        },
+        {
+          "line": 175,
+          "text": "remote.get(path, headers={'x-api-key': worker_key}).status_code == 403"
+        },
+        {
+          "line": 177,
+          "text": "data(remote.get(path))['version'] == 1"
+        },
+        {
+          "line": 178,
+          "text": "remote.get(path, headers={'x-api-key': worker_key}).status_code == 403"
+        },
+        {
+          "line": 179,
+          "text": "remote.post('/api/v1/operator-auth/logout', headers=HEADERS).status_code == 200"
+        },
+        {
+          "line": 180,
+          "text": "remote.get(path).status_code == 401"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_api.py",
+        "sha256": "3b21f99d943bc2d6519ef6e2cf2b29270b79221fdc9ec6bf56a68bbf09493cae"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "73e2e4bc8c9e4c2edd8cd85ea6cae87353290ed1b3a4e1e2dafe1535b309b17b",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "e6dcf3c37522825275061b3b8c039a553163370e33b38e39fec5733cd476ff9f",
+            "status": "passed"
+          }
+        ],
+        "passed": 2,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "api",
+      "test": "tests/test_attention_api.py::test_canonical_parked_source_filters_summary_and_payload_privacy",
+      "assertions": [
+        {
+          "line": 226,
+          "text": "listing['total'] == summary['total'] == 2"
+        },
+        {
+          "line": 227,
+          "text": "listing['counts'] == summary['counts']"
+        },
+        {
+          "line": 228,
+          "text": "listing['snapshot_revision'] == summary['snapshot_revision']"
+        },
+        {
+          "line": 229,
+          "text": "{value['workspace_id'] for value in listing['items']} == {'attention-one'}"
+        },
+        {
+          "line": 230,
+          "text": "{value['kind'] for value in listing['items']} == {'delivery_parked'}"
+        },
+        {
+          "line": 231,
+          "text": "'private-attention-payload-marker' not in str(listing)"
+        },
+        {
+          "line": 232,
+          "text": "snapshot(env) == before"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_api.py",
+        "sha256": "3b21f99d943bc2d6519ef6e2cf2b29270b79221fdc9ec6bf56a68bbf09493cae"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "600ef0b729a03e358d0f8a3a4ce2c613acfb3b699b5eeadc411ec57818f6ee5a",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "preferences",
+      "test": "tests/test_attention_api.py::test_preferences_are_shared_between_devices_cas_and_independent_from_resolution",
+      "assertions": [
+        {
+          "line": 297,
+          "text": "snapshot(env, domain_only=True) == before"
+        },
+        {
+          "line": 282,
+          "text": "seen['seen_state']['seen'] is True"
+        },
+        {
+          "line": 283,
+          "text": "seen['seen_state']['revision'] == original['seen_state']['revision'] + 1"
+        },
+        {
+          "line": 285,
+          "text": "observed['seen_state'] == seen['seen_state']"
+        },
+        {
+          "line": 286,
+          "text": "second.post(path + '/seen', json=revision_body(original), headers=HEADERS).status_code == 409"
+        },
+        {
+          "line": 289,
+          "text": "snoozed['seen_state']['snoozed'] is True"
+        },
+        {
+          "line": 290,
+          "text": "iso_to_epoch(snoozed['seen_state']['snoozed_until']) == iso_to_epoch(until)"
+        },
+        {
+          "line": 291,
+          "text": "snoozed['resolution'] == original['resolution']"
+        },
+        {
+          "line": 292,
+          "text": "data(first.get(BASE, params={'kind': 'delivery_parked', 'seen': 'snoozed', 'state': 'all'}))['total'] == 1"
+        },
+        {
+          "line": 294,
+          "text": "unsnoozed['seen_state']['snoozed'] is False"
+        },
+        {
+          "line": 296,
+          "text": "unseen['seen_state']['seen'] is False"
+        },
+        {
+          "line": 279,
+          "text": "client.post('/api/v1/operator-auth/login', json=ACCOUNT, headers=HEADERS).status_code == 200"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_api.py",
+        "sha256": "3b21f99d943bc2d6519ef6e2cf2b29270b79221fdc9ec6bf56a68bbf09493cae"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "7203b4b55411f43dd1b4767a148b91c2684813a3786d42de390c26fa8366d88f",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "preferences",
+      "test": "tests/test_attention_storage.py::test_concurrent_devices_cannot_overwrite_the_same_preference_revision",
+      "assertions": [
+        {
+          "line": 152,
+          "text": "outcomes.count('saved') == 1 and outcomes.count('conflict') == 5"
+        },
+        {
+          "line": 154,
+          "text": "len(saved) == 1 and saved[0]['revision'] == 1"
+        },
+        {
+          "line": 162,
+          "text": "error.value.code == ErrorCode.CONFLICT"
+        },
+        {
+          "line": 163,
+          "text": "rows(migrated_factory, 'attention_preferences')[0]['revision'] == 2"
+        },
+        {
+          "line": 164,
+          "text": "rows(migrated_factory, 'attention_preferences')[0]['seen_at'] == NOW"
+        },
+        {
+          "line": 146,
+          "text": "error.code == ErrorCode.CONFLICT"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_storage.py",
+        "sha256": "d8b656df9e813aa18813448b251ed2cb3c2c41dcb302479d6289244548b92700"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "115e7bec1b36b488813fc26f4a599b0c752a5efa4e345555d3440fd7d559409f",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "stream",
+      "test": "tests/test_attention_stream.py::test_initial_and_reconnect_reset_never_replay_historical_payload",
+      "assertions": [
+        {
+          "line": 175,
+          "text": "first['id'] == last"
+        },
+        {
+          "line": 176,
+          "text": "'historical-private-output-marker' not in json.dumps(first)"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_stream.py",
+        "sha256": "334629c86109c5bdfc920e2ec5dc7913d1c66d14ce9c6000d661d3b67b04cb21"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "2e73054a11da943375f86e676f99fafceb8af00ce941529ad2ae891ecb98dcfd",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "stream",
+      "test": "tests/test_attention_stream.py::test_canonical_occurrence_and_large_burst_emit_metadata_batches",
+      "assertions": [
+        {
+          "line": 192,
+          "text": "view.status_code == 200 and view.json()['data']['total'] == 1"
+        },
+        {
+          "line": 201,
+          "text": "len(batches) == math.ceil(1001 / 500)"
+        },
+        {
+          "line": 202,
+          "text": "[event['id'] for event in batches] == sorted({event['id'] for event in batches})"
+        },
+        {
+          "line": 203,
+          "text": "'historical-private-output-marker' not in json.dumps(batches)"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_stream.py",
+        "sha256": "334629c86109c5bdfc920e2ec5dc7913d1c66d14ce9c6000d661d3b67b04cb21"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "49bcab465b42e66ec9d58671fd59671c2c2c9271fd327857ecb45f3dde0e2034",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "registration",
+      "test": "tests/test_observation_service.py::test_canonical_self_management_requires_current_key_and_explicit_approval",
+      "assertions": [
+        {
+          "line": 176,
+          "text": "obs.service.get_source(context=alice, source_id=obs.source['source_id'])['source'] == obs.source"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_service.py",
+        "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "fe815143bf2cc1f56f0626851013f338e1956dee82bf587136033fd72f363200",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "registration",
+      "test": "tests/test_observation_service.py::test_source_registration_idempotency_does_not_grant_permission",
+      "assertions": [
+        {
+          "line": 157,
+          "text": "same == obs.source"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_service.py",
+        "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "ff5f026704d6779c94e283be663e3d07674fb346be5eb3420477c97979df89e3",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "replay",
+      "test": "tests/test_observation_service.py::test_replay_after_ttl_and_policy_change_returns_exact_receipt",
+      "assertions": [
+        {
+          "line": 93,
+          "text": "replay == dict(first, replayed=True)"
+        },
+        {
+          "line": 94,
+          "text": "len(events(obs)) == 1"
+        },
+        {
+          "line": 96,
+          "text": "projected['freshness'] == 'stale' and projected['activity_state'] == 'unknown'"
+        },
+        {
+          "line": 97,
+          "text": "projected['last_report']['valid_until'] == first['valid_until']"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_service.py",
+        "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "56aa26e0ad6cebfcec39e4212cd622e5749feb644e96680ceabbe01ab4e149c6",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "replay",
+      "test": "tests/test_observation_service.py::test_same_sequence_different_hash_conflicts",
+      "assertions": [],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_service.py",
+        "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "9bcb33234747f9ba9bc64d1b4cf41e19397ba6aedd5478f92caa086e9f295f91",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "freshness",
+      "test": "tests/test_observations_domain.py::test_freshness_is_minimum_of_server_and_observed_lifetimes",
+      "assertions": [
+        {
+          "line": 222,
+          "text": "fresh.received_at == NOW"
+        },
+        {
+          "line": 223,
+          "text": "fresh.valid_until == expected_until"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observations_domain.py",
+        "sha256": "d3480717466ac801a585f44627ff850baf152aff08551ec0f798c27cd3c52cb6"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-domain-initial.xml",
+        "sha256": "38161520517b212cbb0ee8c605fd96a14fcc665a7a02125d5a463a9072d75c45",
+        "cases": [
+          {
+            "identity_sha256": "2600a19dca02b2b23c47df64e9f07750c28632f47c9df8a8d4e24a39f195c151",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "b98fd50e6ced6f35c1d3db2a0dfaa7792e4d584732c872474d5007e726dd2001",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "d221a6c2a3d3f5c18cb024ade2b72830efbf03073f852ce82b4b952bce7bbe80",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "4c5c63be1c0b738999e77bb2c9719fff1bf79e027564385a92e088f381a1c760",
+            "status": "passed"
+          }
+        ],
+        "passed": 4,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "freshness",
+      "test": "tests/test_observation_service.py::test_backlog_and_future_reports_are_rejected_without_writes",
+      "assertions": [
+        {
+          "line": 232,
+          "text": "snapshot(obs, auxiliary=True) == before"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_service.py",
+        "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "01daaa6a2cb7ad1d4a976db3cc43f5d04a4afcdfbf3f525851420c43b5d5dd85",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "bbf5b49f7fe1a6f972969c1355c0a6ea803207d67a25258d93e20ace310c3329",
+            "status": "passed"
+          }
+        ],
+        "passed": 2,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "external",
+      "test": "tests/test_attention_external.py::test_blocked_is_observational_navigation_only_and_read_does_not_mutate",
+      "assertions": [
+        {
+          "line": 44,
+          "text": "result['total'] == 1 and result['counts']['watch'] == 1"
+        },
+        {
+          "line": 46,
+          "text": "item['category'] == 'watch'"
+        },
+        {
+          "line": 47,
+          "text": "item['allowed_actions'] == ['inspect_external_observation']"
+        },
+        {
+          "line": 48,
+          "text": "item['source_type'] == 'external_observation'"
+        },
+        {
+          "line": 49,
+          "text": "item['session_id'] is item['operation_id'] is None"
+        },
+        {
+          "line": 50,
+          "text": "item['external_observation'] == env.service.read(context=OPERATOR)['items'][0]"
+        },
+        {
+          "line": 51,
+          "text": "item['external_observation']['last_report']['reason_text'] == '<script>synthetic()</script>'"
+        },
+        {
+          "line": 52,
+          "text": "env.token not in json.dumps(result)"
+        },
+        {
+          "line": 53,
+          "text": "'publisher_token_id' not in json.dumps(result)"
+        },
+        {
+          "line": 54,
+          "text": "snapshot(env, auxiliary=True) == before"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_external.py",
+        "sha256": "b644255f7464dde7245452fa93a50732700f07c826b5e0455807e8e56f9114e3"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "1dc7235ff28e1d86c2973a354bfdd60d67d923138401ee197e6534686bf73d28",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "external",
+      "test": "tests/test_attention_external.py::test_continuous_blocked_heartbeat_retains_episode_and_seen",
+      "assertions": [
+        {
+          "line": 65,
+          "text": "second['attention_id'] == first['attention_id']"
+        },
+        {
+          "line": 66,
+          "text": "second['first_detected_at'] == first['first_detected_at']"
+        },
+        {
+          "line": 67,
+          "text": "second['seen_state']['seen'] is True and second['active'] is True"
+        },
+        {
+          "line": 68,
+          "text": "second['source_revision'] != first['source_revision']"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_external.py",
+        "sha256": "b644255f7464dde7245452fa93a50732700f07c826b5e0455807e8e56f9114e3"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "cases": [
+          {
+            "identity_sha256": "d92b954fdf02d3d2d699cea28695d69faedd0080c6242fd9cc8ad80c13ee7fe3",
+            "status": "passed"
+          }
+        ],
+        "passed": 1,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "correlation",
+      "test": "tests/test_observation_correlation_http.py::test_only_operator_can_read_select_or_clear",
+      "assertions": [
+        {
+          "line": 558,
+          "text": "response.status_code in (401, 403)"
+        },
+        {
+          "line": 559,
+          "text": "env.birth_calls == env.os_calls == 0 and read(env)['revision'] == 0"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_correlation_http.py",
+        "sha256": "cae448fd884d8266040eebd557fb41e505fa47bf5981240cde9050f59ae15376"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+        "sha256": "a52edc9a727bf2b810b1b432c9fedb48e5d8d37753d0954f486eb2dba60d2a01",
+        "cases": [
+          {
+            "identity_sha256": "92e5edddb34cce69b3ef32e912bb30516202d1ef947e3d01128d7e30b6357f74",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "5fca60cd0552c6db55b954a808437e2fee8e152fe3d9ca74001c85cc51f26623",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "52bee114397c75f069c0b26736c10444f11e43f825022eea88b2957f9d3622e1",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "eb7e02f91c6fbdb8e6505de5b882e9be467673f9868b5baa13031623b90f2912",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "a60870dc889ecdf75199942baa989226c434726965b2078b54a75525f93a8c37",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "a21709f3dadacaf80d518fae3b2b156d6bb5c8d318ad36b7568eee05c258de0e",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "f23b356270109db34d674fd10af46e797a5cb27f9da0c5b92b014dbdba56d4cd",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "bbc73e1618d02b9efaeb56cfd71e5a9735a6f8e7283e1136c32f55205daffaaf",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "4f895e818863cd48010215800996a312cbdfc452d5bb519ae17daf270da63397",
+            "status": "passed"
+          }
+        ],
+        "passed": 9,
+        "failed_or_skipped": 0
+      }
+    },
+    {
+      "family": "correlation",
+      "test": "tests/test_observation_correlation_http.py::test_client_cannot_supply_native_or_os_proof",
+      "assertions": [
+        {
+          "line": 570,
+          "text": "response.status_code == 422 and 'DO_NOT_ECHO' not in response.text"
+        },
+        {
+          "line": 571,
+          "text": "env.birth_calls == env.os_calls == 0 and read(env)['revision'] == 0"
+        }
+      ],
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_correlation_http.py",
+        "sha256": "cae448fd884d8266040eebd557fb41e505fa47bf5981240cde9050f59ae15376"
+      },
+      "retained_pass": {
+        "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+        "sha256": "a52edc9a727bf2b810b1b432c9fedb48e5d8d37753d0954f486eb2dba60d2a01",
+        "cases": [
+          {
+            "identity_sha256": "89e0da93c2932a6315323283cbcab3cbe2e59d23b99dbfeafc855f3918147a00",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "74392d2b8a2bad38bd4de44f35285326d24c7e63d9eea02e8c502cad56f84d3e",
+            "status": "passed"
+          },
+          {
+            "identity_sha256": "94ce8c92e2d6aa65bd491f6942bbe5f65bfe53062d8123086761b3fba1d39957",
+            "status": "passed"
+          }
+        ],
+        "passed": 3,
+        "failed_or_skipped": 0
+      }
+    }
+  ],
+  "initial_report_preserved": {
+    "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+    "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+    "scope": "Existing retained qualification; not reexecuted or added to any new test total.",
+    "suites": [
+      {
+        "tests": "102",
+        "failures": "3",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "selected_cases": []
+  },
+  "clarity_note": "Connector root help says configure is an interactive wizard (JSON optional). The optional JSON input is --file; --json output is explicitly refused in code and documented as unsupported. This short phrase does not assert support for --json. No product/wheel change was made.",
+  "limits": [
+    "No real provider, native scheduled-task mutation, two physical hosts or actual two-client productive campaign was executed or inferred.",
+    "Published historical XMLs were read only and were not reexecuted or aggregated as new test counts.",
+    "Planning schemas and old milestone reports were not rewritten as current deployment promises.",
+    "No requirement was added for new platforms, a Core CLI, schema generation for every internal API, or rewriting historical evidence."
+  ],
+  "validation": {
+    "diff_check_all_three_repositories": "PASS",
+    "isolated_profile_files_created": 0,
+    "all_help_exit_codes_zero": true,
+    "core_resources_equal_installed": true
+  }
+}

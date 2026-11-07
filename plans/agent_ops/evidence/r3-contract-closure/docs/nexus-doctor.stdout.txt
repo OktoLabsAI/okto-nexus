@@ -1,0 +1,26 @@
+usage: okto-nexus doctor [-h] [--mode {managed,participant}]
+                         [--profile PROFILE] [--project PROJECT]
+                         [--operator-profile OPERATOR_PROFILE]
+                         [--check-server] [--timeout TIMEOUT] [--json]
+                         [--diagnostic-format {legacy,v1}]
+
+Inspect independent proof levels. Never start services/harnesses, apply setup,
+issue grants or submit work.
+
+options:
+  -h, --help            show this help message and exit
+  --mode {managed,participant}
+                        select the saved profile type
+  --profile PROFILE     existing project profile; default is the current
+                        project
+  --project PROJECT
+  --operator-profile OPERATOR_PROFILE
+                        existing human operator profile for a remote Server
+  --check-server        permit bounded authenticated GETs, including the OS-
+                        vault session read for a remote operator; no MCP or
+                        native probes
+  --timeout TIMEOUT     Server GET budget, 0 < seconds <= 30 (default 10)
+  --json
+  --diagnostic-format {legacy,v1}
+                        opt into the common diagnostic schema; legacy
+                        preserves existing output

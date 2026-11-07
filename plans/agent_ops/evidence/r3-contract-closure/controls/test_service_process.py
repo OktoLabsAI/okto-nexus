@@ -1,0 +1,107 @@
+"""Real detached local processes, disposable data and no provider/credential use."""
+from __future__ import annotations
+
+import json
+import os
+import socket
+import subprocess
+import sys
+import time
+from urllib.error import HTTPError
+from urllib.request import ProxyHandler, Request, build_opener
+
+
+def test_concurrent_detached_start_survives_cli_exit_reuses_and_drains(tmp_path):
+    with socket.socket() as listener:
+        listener.bind(('127.0.0.1', 0))
+        port = listener.getsockname()[1]
+    env = {key: value for key, value in os.environ.items() if key.upper() in {
+        'SYSTEMROOT', 'WINDIR', 'COMSPEC', 'TEMP', 'TMP', 'USERPROFILE',
+        'LOCALAPPDATA', 'APPDATA', 'PATH', 'LANG', 'LC_ALL', 'HOME'}}
+    home = tmp_path / 'isolated home'
+    base = [sys.executable, '-m', 'okto_nexus.adapters.inbound.cli.main', 'service']
+    selection = ['--home', str(home), '--host', '127.0.0.1', '--port', str(port),
+                 '--project-root', str(tmp_path), '--embedding-mode', 'off']
+    def invoke(action, *extra):
+        completed = subprocess.run([*base, action, '--home', str(home), '--json', *extra],
+            cwd=tmp_path, env=env, capture_output=True, text=True, timeout=65)
+        assert completed.returncode == 0, (completed.stdout, completed.stderr)
+        return json.loads(completed.stdout)
+    parents = []
+    stopped = False
+    from okto_nexus.adapters.outbound.service_manager.context import atomic_json, document_revision
+    from okto_nexus.adapters.outbound.service_manager.identity import server_instance_id
+    home.mkdir()
+    interrupted = {'revision': 1, 'instance_id': server_instance_id(home, home / 'nexus.db'),
+        'token': 'interrupted-token', 'state': 'pending', 'pid': None}
+    atomic_json(home / 'service-launch.json', interrupted)
+    recovered = invoke('recover-start', '--expected-revision', document_revision(interrupted))
+    assert recovered['recovered'] and not (home / 'nexus.db').exists()
+    try:
+        for _ in range(3):
+            parents.append(subprocess.Popen([*base, 'start', *selection, '--timeout', '40', '--json'],
+                cwd=tmp_path, env=env, stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True))
+        observations = []
+        for parent in parents:
+            out, err = parent.communicate(timeout=55)
+            if parent.returncode:
+                print(err)
+            assert parent.returncode == 0, (json.loads(out).get('state'), json.loads(out).get('reason'), err)
+            observations.append(json.loads(out))
+        assert all(view['state'] == 'ready' for view in observations)
+        generations = {view['generation'] for view in observations}
+        pids = {view['pid'] for view in observations}
+        assert len(generations) == len(pids) == 1
+        assert all(view['supervisor'] == 'detached' for view in observations)
+        # Every launcher has exited, and selection is restored without the old
+        # port, cwd, environment configuration flags or terminal handles.
+        time.sleep(.3)
+        original = invoke('status')
+        assert original['generation'] in generations and original['pid'] in pids
+        assert invoke('start')['generation'] == original['generation']
+        late = subprocess.run([sys.executable, '-I', '-m',
+            'okto_nexus.adapters.inbound.cli.service_process', str(home), str(home / 'nexus.db'), interrupted['token']],
+            cwd=tmp_path, env=env, capture_output=True, text=True, timeout=20)
+        assert late.returncode == 2, (late.stdout, late.stderr)
+        assert invoke('status')['generation'] == original['generation']
+        reopened = invoke('restart', '--timeout', '40')
+        assert reopened['generation'] != original['generation']
+        opener = build_opener(ProxyHandler({}))
+        stale = Request(f'http://127.0.0.1:{port}/api/v1/service/stop', method='POST',
+            data=json.dumps({'instance_id': original['instance_id'],
+                             'generation': original['generation']}).encode(),
+            headers={'Content-Type': 'application/json'})
+        try:
+            opener.open(stale, timeout=5)
+        except HTTPError as error:
+            assert error.code == 409
+        else:
+            raise AssertionError('A stale generation stopped a new instance')
+        assert invoke('status')['generation'] == reopened['generation']
+        result = invoke('stop', '--timeout', '40')
+        assert result['state'] == 'stopped' and result['shutdown_outcome'] == 'drained'
+        receipt = json.loads((home / 'service-shutdown.json').read_text(encoding='utf-8'))
+        assert receipt['generation'] == reopened['generation'] and receipt['state'] == 'DRAINED'
+        run_marker = json.loads((home / 'service-run.json').read_text(encoding='utf-8'))
+        assert run_marker['state'] == 'drained' and run_marker['generation'] == reopened['generation']
+        assert run_marker['instance_id'] == reopened['instance_id']
+        stopped = True
+        assert invoke('status')['state'] == 'stopped'
+        assert home.joinpath('nexus.db').is_file()
+        log_view = invoke('logs', '--tail', '50')
+        events = log_view['events']
+        assert log_view['service_state'] == 'not_checked'
+        assert {event['generation'] for event in events} == {*generations, reopened['generation']}
+        assert any(event['code'] == 'READY_FOR_QUERIES' for event in events)
+        assert any(event['code'] == 'SERVICE_EXIT' and event['state'] == 'DRAINED'
+                   and event['generation'] == reopened['generation'] for event in events)
+    finally:
+        for parent in parents:
+            if parent.poll() is None:
+                parent.communicate(timeout=55)
+        if not stopped and home.exists():
+            # Only the configured disposable instance; never signal a PID from
+            # metadata or touch an existing personal service.
+            subprocess.run([*base, 'stop', *selection, '--timeout', '40', '--json'],
+                cwd=tmp_path, env=env, capture_output=True, timeout=55)

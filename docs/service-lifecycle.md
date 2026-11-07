@@ -148,8 +148,9 @@ be compared/restored against `native_xml` in `service-installation.json`.
 
 The wrapper retains a coded supervisor exit record and the canonical drain
 receipt. The foreground Server also emits the bounded lifecycle log described
-below. General definition reconciliation, upgrade workflows and other-platform
-adapters remain open R3 requirements.
+below. Reviewed environment upgrades and owned-task enablement are described
+below. Unrelated external definition edits remain refused; actual native service
+and other-platform qualification remain separate.
 
 ## Enable or disable the installed task
 

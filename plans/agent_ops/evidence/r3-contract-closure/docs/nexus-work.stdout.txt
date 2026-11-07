@@ -1,0 +1,44 @@
+usage: okto-nexus work [-h] [--profile PROFILE]
+                       [--operator-profile OPERATOR_PROFILE]
+                       [--project PROJECT] [--message MESSAGE]
+                       [--session-id SESSION_ID] [--new-session]
+                       [--request-id REQUEST_ID]
+                       [--target-turn-id TARGET_TURN_ID]
+                       [--approval-id APPROVAL_ID] [--decision {approve,deny}]
+                       [--review REVIEW] [--minutes MINUTES]
+                       [--actions ACTIONS] [--answer-file ANSWER_FILE]
+                       [--control] [--after-sequence AFTER_SEQUENCE]
+                       [--stream-epoch STREAM_EPOCH] [--timeout TIMEOUT]
+                       [--json]
+
+Submit project work and observe or decide canonical runtime requests.
+
+options:
+  -h, --help            show this help message and exit
+  --profile PROFILE
+  --operator-profile OPERATOR_PROFILE
+                        use this saved human operator profile on a remote
+                        Server
+  --project PROJECT
+  --message MESSAGE
+  --session-id SESSION_ID
+  --new-session
+  --request-id REQUEST_ID
+                        stable client intent ID for an explicit
+                        submission/retry
+  --target-turn-id TARGET_TURN_ID
+  --approval-id APPROVAL_ID
+  --decision {approve,deny}
+  --review REVIEW       hash of the exact displayed native question or
+                        authorization review
+  --minutes MINUTES     authorize: lifetime from review, 1..1440 minutes
+                        (default 60)
+  --actions ACTIONS     authorize: runtime action budget, 1..1000 (default 20)
+  --answer-file ANSWER_FILE
+                        UTF-8 JSON native response object, read only for this
+                        submission
+  --control             observe or resume the saved interrupt/close action
+  --after-sequence AFTER_SEQUENCE
+  --stream-epoch STREAM_EPOCH
+  --timeout TIMEOUT
+  --json

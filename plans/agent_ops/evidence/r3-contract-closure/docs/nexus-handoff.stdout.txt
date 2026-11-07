@@ -1,0 +1,54 @@
+usage: okto-nexus handoff [-h] [--home HOME] [--profile PROFILE]
+                          [--project PROJECT] [--workspace WORKSPACE_ID]
+                          [--json] [--key-stdin | --key-env NAME]
+                          [--request-id REQUEST_ID] [--new-request] [--to TO |
+                          --target-json TARGET_JSON | --broadcast]
+                          [--body BODY | --body-file BODY_FILE | --body-stdin]
+                          [--trace-id TRACE_ID] [--session-id SESSION_ID]
+                          [--session-secret-env NAME] [--title TITLE]
+                          [--payload-json PAYLOAD_JSON]
+                          [--visibility {private,eligible,public}]
+                          [--acceptance-criteria ACCEPTANCE_CRITERIA]
+                          [--verify-by VERIFY_BY] [--depends-on DEPENDS_ON]
+                          [--wait] [--timeout TIMEOUT]
+                          {create,wait} [id]
+
+Messages are conversation; handoffs are work. Both use canonical MCP.
+
+positional arguments:
+  {create,wait}
+  id
+
+options:
+  -h, --help            show this help message and exit
+  --home HOME
+  --profile PROFILE
+  --project PROJECT
+  --workspace, --workspace-id WORKSPACE_ID
+  --json
+  --key-stdin
+  --key-env NAME
+  --request-id REQUEST_ID
+  --new-request         Explicitly start new work; otherwise resume the latest
+                        request.
+  --to TO
+  --target-json TARGET_JSON
+                        Exact canonical routing object, without strategy
+                        conversion
+  --broadcast
+  --body BODY
+  --body-file BODY_FILE
+  --body-stdin
+  --trace-id TRACE_ID
+  --session-id SESSION_ID
+                        Reuse this existing canonical session; no session is
+                        opened automatically
+  --session-secret-env NAME
+  --title TITLE
+  --payload-json PAYLOAD_JSON
+  --visibility {private,eligible,public}
+  --acceptance-criteria ACCEPTANCE_CRITERIA
+  --verify-by VERIFY_BY
+  --depends-on DEPENDS_ON
+  --wait
+  --timeout TIMEOUT

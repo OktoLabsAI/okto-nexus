@@ -1,0 +1,18 @@
+usage: okto-nexus participant remove [-h] [--home HOME] [--profile PROFILE]
+                                     [--project PROJECT] [--plan]
+                                     [--approve APPROVE] [--refresh]
+                                     [--keep-config] [--json]
+
+Review and resume removal of a participant's own local configuration and key.
+
+options:
+  -h, --help         show this help message and exit
+  --home HOME
+  --profile PROFILE
+  --project PROJECT
+  --plan
+  --approve APPROVE  exact removal review revision
+  --refresh          replace only an unapproved removal review
+  --keep-config      explicitly leave all client files untouched; retire the
+                     profile and remove only its vault entry
+  --json

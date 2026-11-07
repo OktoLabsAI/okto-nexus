@@ -1,0 +1,46 @@
+{
+  "nexus/docs/service-lifecycle.md": {
+    "working_sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7",
+    "normalized_sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7",
+    "normalization": "CRLF-to-LF only if applicable"
+  },
+  "nexus/docs/terminal-connect.md": {
+    "working_sha256": "67a10f695e7c946e387a8836a5124ebb56118b2d29fd60b30e197dbd30e69657",
+    "normalized_sha256": "67a10f695e7c946e387a8836a5124ebb56118b2d29fd60b30e197dbd30e69657",
+    "normalization": "CRLF-to-LF only if applicable"
+  },
+  "nexus/docs/terminal-work.md": {
+    "working_sha256": "b83602a7908f13cc3d134c59b6ed62f156b992444055a155aa5c2ae356b1f15b",
+    "normalized_sha256": "b83602a7908f13cc3d134c59b6ed62f156b992444055a155aa5c2ae356b1f15b",
+    "normalization": "CRLF-to-LF only if applicable"
+  },
+  "nexus/docs/attention.md": {
+    "working_sha256": "c538c0160b92cf5b0b7b184b57820f05952ef2fd9e96bfac34abc9ae1b7616aa",
+    "normalized_sha256": "c538c0160b92cf5b0b7b184b57820f05952ef2fd9e96bfac34abc9ae1b7616aa",
+    "normalization": "CRLF-to-LF only if applicable"
+  },
+  "connector/docs/service-lifecycle.md": {
+    "working_sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e",
+    "normalized_sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e",
+    "normalization": "CRLF-to-LF only if applicable",
+    "published_commit": "55a14a6cd60644b67c6d985b810c8969fe4f43e5"
+  },
+  "connector/docs/cli.md": {
+    "working_sha256": "a083675a1d8805a187985fd8625ead6f4b12dd8c3aa7d5f6f75b7d754d1812ec",
+    "normalized_sha256": "4f9cbf94c4a3145caf5991ff3cba801a07658f628265ccb3f27cf0fdf9cdd2e3",
+    "normalization": "CRLF-to-LF only if applicable",
+    "published_commit": "55a14a6cd60644b67c6d985b810c8969fe4f43e5"
+  },
+  "core/docs/api.md": {
+    "working_sha256": "6d59fe81688614d466e22ca75f91c636417e76b29bd78827988623257c60a664",
+    "normalized_sha256": "d7e5321d9fad3b76d7cbd4de40e0753b38bc349f25c32fd7204394e3c7d94d83",
+    "normalization": "CRLF-to-LF only if applicable",
+    "published_commit": "f9a5c3b153db7a1168fc48fcb2bba816c1015f0b"
+  },
+  "connector/docs/cli-reference.md": {
+    "working_sha256": "a48e38d7f249a515ff3e992cad6eae069f6b8bb77561e57ebfeee57376973868",
+    "normalized_sha256": "72b4767ccf71564b0cd976153f3a020e326abe8bb504da0d0e47d2c178365af8",
+    "normalization": "CRLF-to-LF only if applicable",
+    "published_commit": "55a14a6cd60644b67c6d985b810c8969fe4f43e5"
+  }
+}

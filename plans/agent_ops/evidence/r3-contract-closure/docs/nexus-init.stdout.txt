@@ -1,0 +1,38 @@
+usage: okto-nexus init [-h] [--mode {participant}] [--home HOME]
+                       [--profile PROFILE] [--server SERVER] [--agent AGENT]
+                       [--workspace-id WORKSPACE_ID]
+                       [--client {claude,codex,generic}]
+                       [--client-version CLIENT_VERSION] [--project PROJECT]
+                       [--config-file CONFIG_FILE] [--entry-name ENTRY_NAME]
+                       [--plan] [--approve APPROVE] [--refresh] [--json]
+                       [--key-stdin | --key-env NAME]
+
+Existing-identity participant init; no service or provider process starts.
+
+options:
+  -h, --help            show this help message and exit
+  --mode {participant}
+  --home HOME
+  --profile PROFILE
+  --server SERVER       explicit HTTPS origin; HTTP is limited to loopback
+  --agent AGENT         existing canonical participant identity; no automatic
+                        creation
+  --workspace-id WORKSPACE_ID
+  --client {claude,codex,generic}
+  --client-version CLIENT_VERSION
+                        observed client version, if known; does not qualify
+                        readiness
+  --project PROJECT
+  --config-file CONFIG_FILE
+                        explicit local client configuration; defaults to
+                        project scope
+  --entry-name ENTRY_NAME
+  --plan
+  --approve APPROVE     exact review revision; resumes the same setup after a
+                        partial effect
+  --refresh             replace only an unapproved review after inspecting
+                        drift
+  --json
+  --key-stdin
+  --key-env NAME        read only this explicitly authorized environment
+                        variable

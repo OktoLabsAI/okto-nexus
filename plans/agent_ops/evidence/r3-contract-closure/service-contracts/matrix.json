@@ -1,0 +1,1221 @@
+{
+  "format": "r3.svc-two-scenario-reconciliation",
+  "version": 1,
+  "base_head": "4855abd56ae4733a3e0445d835a085a697dda1df",
+  "plan": {
+    "repository": "nexus",
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "bytes": 133337
+  },
+  "scope": [
+    "SVC-T26",
+    "SVC-T28"
+  ],
+  "scenarios": [
+    {
+      "id": "SVC-T26",
+      "literal_requirement": "Upgrade interrompido permite recuperação documentada sem downgrade destrutivo da base.",
+      "plan_line": 852,
+      "status_read": "IN_PROGRESS",
+      "proposed_status": "VERIFIED",
+      "rationale": "O literal exige recuperação documentada de upgrade interrompido sem downgrade destrutivo; não exige executar um downgrade histórico nem mutar Task Scheduler real. Os dois hosts retomam o mesmo plano após cada fronteira persistida, aceitam resposta nativa perdida só pelo efeito exato, recusam downgrade e preservam DB/journal nos upgrades instalados reais.",
+      "evidence": [
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_service_upgrade.py",
+            "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+            "bytes": 18258,
+            "symbol": "test_every_persistence_boundary_can_resume_same_plan",
+            "line": 113,
+            "end_line": 136,
+            "function_sha256": "47f130a8e4711dedf6ba84ecfc92082e5de00e1d2fe3e3e0584e65236843373f",
+            "assertions": [
+              {
+                "line": 134,
+                "expression": "service.apply(document, document['plan_revision'])['applied']"
+              },
+              {
+                "line": 135,
+                "expression": "tasks.calls == ['replace']"
+              },
+              {
+                "line": 136,
+                "expression": "host.read(host.context_path) == document['plan']['target_context']"
+              },
+              {
+                "line": 132,
+                "expression": "count < write_index"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-1]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-2]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-3]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-4]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-5]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-6]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-7]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-8]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-1]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-2]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-3]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-4]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-5]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-6]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-7]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-8]",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_service_upgrade.py",
+            "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+            "bytes": 18258,
+            "symbol": "test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+            "line": 139,
+            "end_line": 151,
+            "function_sha256": "ddea984059cd864cd102e008234e7544b99e33f2ed6c52dddf45c7b670e7ea8f",
+            "assertions": [
+              {
+                "line": 145,
+                "expression": "host.read(host.context_path)['upgrade_pending'] == document['plan_revision']"
+              },
+              {
+                "line": 150,
+                "expression": "service.apply(document, document['plan_revision'])['applied']"
+              },
+              {
+                "line": 151,
+                "expression": "tasks.calls == ['replace']"
+              }
+            ],
+            "exception_oracles": [
+              {
+                "line": 143,
+                "expression": "pytest.raises(OSError)"
+              },
+              {
+                "line": 146,
+                "expression": "pytest.raises(Exception, match='SERVICE_UPGRADE_PENDING')"
+              },
+              {
+                "line": 148,
+                "expression": "pytest.raises(Exception, match='SERVICE_UPGRADE_PENDING')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_service_upgrade::test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_service_upgrade.py",
+            "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+            "bytes": 18258,
+            "symbol": "test_user_edit_after_lost_response_is_not_adopted",
+            "line": 154,
+            "end_line": 166,
+            "function_sha256": "986d6f0fe46fb6168e7a4d43ca84b54dcf5767f9abcb2622a614cc9cfc5324d1",
+            "assertions": [
+              {
+                "line": 165,
+                "expression": "host.read(host.context_path)['upgrade_pending'] == document['plan_revision']"
+              },
+              {
+                "line": 166,
+                "expression": "tasks.calls == ['replace']"
+              }
+            ],
+            "exception_oracles": [
+              {
+                "line": 158,
+                "expression": "pytest.raises(OSError)"
+              },
+              {
+                "line": 163,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_NATIVE_CONFLICT')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_service_upgrade::test_user_edit_after_lost_response_is_not_adopted",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_service_upgrade.py",
+            "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+            "bytes": 18258,
+            "symbol": "test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+            "line": 229,
+            "end_line": 237,
+            "function_sha256": "3f7f57cabfc3d4185f91bf2c8f755bf7d3c91cd25db77484d80ff83dec9eae70",
+            "assertions": [],
+            "exception_oracles": [
+              {
+                "line": 232,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_DOWNGRADE_REFUSED')"
+              },
+              {
+                "line": 236,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_DRAIN_UNCONFIRMED')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_service_upgrade::test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_service_upgrade.py",
+            "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+            "bytes": 18258,
+            "symbol": "test_context_edit_during_interruption_is_preserved",
+            "line": 328,
+            "end_line": 339,
+            "function_sha256": "739f65ad2c534f0071982a2159e7c314ada0581939c2251536e65e2f2f3f7544",
+            "assertions": [
+              {
+                "line": 338,
+                "expression": "host.read(host.context_path) == changed"
+              },
+              {
+                "line": 339,
+                "expression": "tasks.calls == ['replace']"
+              }
+            ],
+            "exception_oracles": [
+              {
+                "line": 332,
+                "expression": "pytest.raises(OSError)"
+              },
+              {
+                "line": 336,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_CONTEXT_CONFLICT')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_service_upgrade::test_context_edit_during_interruption_is_preserved",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "connector",
+            "path": "tests/unit/test_service_upgrade.py",
+            "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+            "bytes": 17936,
+            "symbol": "test_every_persistence_boundary_can_resume_same_plan",
+            "line": 112,
+            "end_line": 135,
+            "function_sha256": "47f130a8e4711dedf6ba84ecfc92082e5de00e1d2fe3e3e0584e65236843373f",
+            "assertions": [
+              {
+                "line": 133,
+                "expression": "service.apply(document, document['plan_revision'])['applied']"
+              },
+              {
+                "line": 134,
+                "expression": "tasks.calls == ['replace']"
+              },
+              {
+                "line": 135,
+                "expression": "host.read(host.context_path) == document['plan']['target_context']"
+              },
+              {
+                "line": 131,
+                "expression": "count < write_index"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-1]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-2]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-3]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-4]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-5]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-6]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-7]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[False-8]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-1]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-2]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-3]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-4]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-5]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-6]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-7]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_every_persistence_boundary_can_resume_same_plan[True-8]",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "connector",
+            "path": "tests/unit/test_service_upgrade.py",
+            "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+            "bytes": 17936,
+            "symbol": "test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+            "line": 138,
+            "end_line": 150,
+            "function_sha256": "ddea984059cd864cd102e008234e7544b99e33f2ed6c52dddf45c7b670e7ea8f",
+            "assertions": [
+              {
+                "line": 144,
+                "expression": "host.read(host.context_path)['upgrade_pending'] == document['plan_revision']"
+              },
+              {
+                "line": 149,
+                "expression": "service.apply(document, document['plan_revision'])['applied']"
+              },
+              {
+                "line": 150,
+                "expression": "tasks.calls == ['replace']"
+              }
+            ],
+            "exception_oracles": [
+              {
+                "line": 142,
+                "expression": "pytest.raises(OSError)"
+              },
+              {
+                "line": 145,
+                "expression": "pytest.raises(Exception, match='SERVICE_UPGRADE_PENDING')"
+              },
+              {
+                "line": 147,
+                "expression": "pytest.raises(Exception, match='SERVICE_UPGRADE_PENDING')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "connector",
+            "path": "tests/unit/test_service_upgrade.py",
+            "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+            "bytes": 17936,
+            "symbol": "test_user_edit_after_lost_response_is_not_adopted",
+            "line": 153,
+            "end_line": 165,
+            "function_sha256": "986d6f0fe46fb6168e7a4d43ca84b54dcf5767f9abcb2622a614cc9cfc5324d1",
+            "assertions": [
+              {
+                "line": 164,
+                "expression": "host.read(host.context_path)['upgrade_pending'] == document['plan_revision']"
+              },
+              {
+                "line": 165,
+                "expression": "tasks.calls == ['replace']"
+              }
+            ],
+            "exception_oracles": [
+              {
+                "line": 157,
+                "expression": "pytest.raises(OSError)"
+              },
+              {
+                "line": 162,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_NATIVE_CONFLICT')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_user_edit_after_lost_response_is_not_adopted",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "connector",
+            "path": "tests/unit/test_service_upgrade.py",
+            "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+            "bytes": 17936,
+            "symbol": "test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+            "line": 228,
+            "end_line": 236,
+            "function_sha256": "3f7f57cabfc3d4185f91bf2c8f755bf7d3c91cd25db77484d80ff83dec9eae70",
+            "assertions": [],
+            "exception_oracles": [
+              {
+                "line": 231,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_DOWNGRADE_REFUSED')"
+              },
+              {
+                "line": 235,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_DRAIN_UNCONFIRMED')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "connector",
+            "path": "tests/unit/test_service_upgrade.py",
+            "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+            "bytes": 17936,
+            "symbol": "test_context_edit_during_interruption_is_preserved",
+            "line": 329,
+            "end_line": 340,
+            "function_sha256": "739f65ad2c534f0071982a2159e7c314ada0581939c2251536e65e2f2f3f7544",
+            "assertions": [
+              {
+                "line": 339,
+                "expression": "host.read(host.context_path) == changed"
+              },
+              {
+                "line": 340,
+                "expression": "tasks.calls == ['replace']"
+              }
+            ],
+            "exception_oracles": [
+              {
+                "line": 333,
+                "expression": "pytest.raises(OSError)"
+              },
+              {
+                "line": 337,
+                "expression": "pytest.raises(protocol.UpgradeError, match='UPGRADE_CONTEXT_CONFLICT')"
+              }
+            ]
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "injected_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_connector_service_upgrade::test_context_edit_during_interruption_is_preserved",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_service_upgrade_process.py",
+            "sha256": "5374fe6a203478caf24b66a38268b82009c9afbc3d48bca791a422cb49e5d258",
+            "bytes": 3426,
+            "symbol": "test_reviewed_upgrade_between_installed_environments_preserves_database",
+            "line": 13,
+            "end_line": 63,
+            "function_sha256": "e5f020f0194f84e6c86f123fb4259fd9b63adb07f101dbe1d300e72a3c2d0c94",
+            "assertions": [
+              {
+                "line": 17,
+                "expression": "Path(target).absolute() != Path(sys.executable).absolute()"
+              },
+              {
+                "line": 29,
+                "expression": "result.returncode == expected"
+              },
+              {
+                "line": 38,
+                "expression": "json.loads(plan.read_text(encoding='utf-8')) == document"
+              },
+              {
+                "line": 39,
+                "expression": "document['plan']['source_generation'] == initial['generation']"
+              },
+              {
+                "line": 42,
+                "expression": "refusal['reason'] == 'UPGRADE_OWNER_UNCONFIRMED'"
+              },
+              {
+                "line": 43,
+                "expression": "invoke('status')['generation'] == initial['generation']"
+              },
+              {
+                "line": 44,
+                "expression": "invoke('stop', '--timeout', '40')['shutdown_outcome'] == 'drained'"
+              },
+              {
+                "line": 47,
+                "expression": "invoke('upgrade-apply', *apply_args)['applied']"
+              },
+              {
+                "line": 48,
+                "expression": "hashlib.sha256(database.read_bytes()).hexdigest() == before"
+              },
+              {
+                "line": 49,
+                "expression": "invoke('status')['state'] == 'stopped'"
+              },
+              {
+                "line": 50,
+                "expression": "not invoke('upgrade-apply', *apply_args)['changed']"
+              },
+              {
+                "line": 52,
+                "expression": "context['executable'] == target and context['revision'] == 2"
+              },
+              {
+                "line": 53,
+                "expression": "context['arguments'] == original_context['arguments']"
+              },
+              {
+                "line": 55,
+                "expression": "restarted['generation'] != initial['generation']"
+              },
+              {
+                "line": 56,
+                "expression": "restarted['state'] == 'ready'"
+              },
+              {
+                "line": 57,
+                "expression": "json.loads((home / 'service-context.json').read_text(encoding='utf-8')) == context"
+              },
+              {
+                "line": 58,
+                "expression": "invoke('stop', '--timeout', '40')['shutdown_outcome'] == 'drained'"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "real_installed_environment_and_process",
+          "nodes": [
+            {
+              "node_id": "tests.test_service_upgrade_process::test_reviewed_upgrade_between_installed_environments_preserves_database",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "connector",
+            "path": "tests/integration/test_service_upgrade_process.py",
+            "sha256": "7c77997bff90d6a74437ac889e82e758caf1e34be23bd6bec9567408757c6f15",
+            "bytes": 3285,
+            "symbol": "test_reviewed_upgrade_between_installed_environments_preserves_journal",
+            "line": 12,
+            "end_line": 59,
+            "function_sha256": "5911a969702dfab57fb13ad1ea089c05be7ed924fde0a6ddc3e64d18415bafff",
+            "assertions": [
+              {
+                "line": 16,
+                "expression": "Path(target).absolute() != Path(sys.executable).absolute()"
+              },
+              {
+                "line": 25,
+                "expression": "result.returncode == expected"
+              },
+              {
+                "line": 33,
+                "expression": "json.loads(plan.read_text(encoding='utf-8')) == document"
+              },
+              {
+                "line": 34,
+                "expression": "document['plan']['source_generation'] == initial['generation']"
+              },
+              {
+                "line": 37,
+                "expression": "refusal['error']['code'] == 'UPGRADE_OWNER_UNCONFIRMED'"
+              },
+              {
+                "line": 38,
+                "expression": "invoke('daemon', 'status')['generation'] == initial['generation']"
+              },
+              {
+                "line": 39,
+                "expression": "invoke('daemon', 'stop')['shutdown_outcome'] == 'drained'"
+              },
+              {
+                "line": 43,
+                "expression": "invoke('service', 'upgrade-apply', *apply_args)['applied']"
+              },
+              {
+                "line": 44,
+                "expression": "hashlib.sha256(ledger.read_bytes()).hexdigest() == before"
+              },
+              {
+                "line": 45,
+                "expression": "invoke('daemon', 'status')['state'] == 'stopped'"
+              },
+              {
+                "line": 46,
+                "expression": "not invoke('service', 'upgrade-apply', *apply_args)['changed']"
+              },
+              {
+                "line": 48,
+                "expression": "context['executable'] == target and context['revision'] == 2"
+              },
+              {
+                "line": 49,
+                "expression": "context['environment'] == original_context['environment']"
+              },
+              {
+                "line": 51,
+                "expression": "restarted['generation'] != initial['generation']"
+              },
+              {
+                "line": 52,
+                "expression": "restarted['state'] == 'ready'"
+              },
+              {
+                "line": 53,
+                "expression": "json.loads((root / 'service-context.json').read_text(encoding='utf-8')) == context"
+              },
+              {
+                "line": 54,
+                "expression": "invoke('daemon', 'stop')['shutdown_outcome'] == 'drained'"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+            "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+            "bytes": 28656
+          },
+          "qualification_mode": "real_installed_environment_and_process",
+          "nodes": [
+            {
+              "node_id": "tests.test_connector_service_upgrade_process::test_reviewed_upgrade_between_installed_environments_preserves_journal",
+              "status": "PASS"
+            }
+          ]
+        }
+      ],
+      "implementation": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/service_upgrade.py",
+          "sha256": "5b8ebf6da20e9d72493080dbd3ce88ab50eff42967880d0c25a10f03112815c1",
+          "bytes": 16447
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
+          "sha256": "8c8d79fd4d133dc993d4167636b3eea2348c4ac9c116246dd7018a0dfe807f09",
+          "bytes": 4150
+        },
+        {
+          "repository": "connector",
+          "path": "src/okto_nexus_connector/platform/service_upgrade.py",
+          "sha256": "a12bd6546b0b6a26fd41a8308e9a793aa63e97b2583ec6d5ae7861b90d29254f",
+          "bytes": 2658
+        }
+      ],
+      "documentation": [
+        {
+          "repository": "nexus",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7",
+          "bytes": 19473,
+          "line": 304,
+          "end_line": 318
+        },
+        {
+          "repository": "connector",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e",
+          "bytes": 13301,
+          "line": 195,
+          "end_line": 209
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade.md",
+          "sha256": "7df97ea61e138712d80c2961e0b82f18ecfbe0336e885dbf7e1098be08d5d0f5",
+          "bytes": 6345
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-wheels.json",
+          "sha256": "8e758a4c405d270628261a78b474fe7059a19bbde0aaada17487304b5e8db71f",
+          "bytes": 630
+        }
+      ],
+      "installed_campaign": {
+        "report": {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656
+        },
+        "passed": 200,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0,
+        "not_additive_with_selected_nodes": true
+      },
+      "documented_recovery": "Preservar plano/ambiente antigo/documentos; repetir upgrade-apply com o mesmo arquivo/revisão; SERVICE_UPGRADE_PENDING bloqueia start. Efeito nativo incerto exige comparação exata, mudanças alheias permanecem conflito. Upgrade não migra a base; downgrade binário é recusado.",
+      "stale_remaining": "No historical schema binary downgrade recovery or real task upgrade claimed é limite honesto, não pendência do literal SVC-T26.",
+      "specific_pending_for_literal": null,
+      "limit": "Windows e ambientes descartáveis instalados. Interrupções e resposta de Task Scheduler são injetadas; dois upgrades de ambientes/processos são reais. Não prova atualização nativa de tarefa, migração histórica cruzada, rollback após migração, login/reboot, POSIX ou trabalho produtivo."
+    },
+    {
+      "id": "SVC-T28",
+      "literal_requirement": "Container/supervisor externo usa foreground sem dupla supervisão ou dupla daemonização.",
+      "plan_line": 854,
+      "status_read": "IN_PROGRESS",
+      "proposed_status": "VERIFIED",
+      "rationale": "A alternativa supervisor externo é atendida no escopo Windows: Connector fica foreground dentro de Job Object real restritivo, e Nexus executa run_serve instalado em processo real mantido/controlado por um pai externo de teste. A evidência real Nexus é própria; não deriva da prova Connector. Código usa o mesmo owner foreground, enquanto contratos separados recusam concorrência com integração instalada.",
+      "evidence": [
+        {
+          "source": {
+            "repository": "connector",
+            "path": "tests/integration/test_windows_job_daemon.py",
+            "sha256": "c6ad3348399c20e385ee105a5b569f083a33630991ceddeee1ce5a0468ff9abd",
+            "bytes": 3231,
+            "symbol": "test_daemon_under_restrictive_job",
+            "line": 17,
+            "end_line": 73,
+            "function_sha256": "4e70df1c83a2551822d8824abdcd9981e4dc18c2db08d9dfa2c50efe210524b3",
+            "assertions": [
+              {
+                "line": 63,
+                "expression": "process.returncode == 0"
+              },
+              {
+                "line": 68,
+                "expression": "not manager.status(root).running"
+              },
+              {
+                "line": 58,
+                "expression": "manager.status(root).running"
+              },
+              {
+                "line": 59,
+                "expression": "manager.stop(root, timeout=30)['stopped'] is True"
+              },
+              {
+                "line": 66,
+                "expression": "error['code'] == 'DAEMON_UNAVAILABLE'"
+              },
+              {
+                "line": 67,
+                "expression": "'daemon run' in error['action']"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+            "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0",
+            "bytes": 9752
+          },
+          "qualification_mode": "real_Windows_Job_Object_and_process",
+          "nodes": [
+            {
+              "node_id": "tests.integration.test_windows_job_daemon::test_daemon_under_restrictive_job[detached]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.integration.test_windows_job_daemon::test_daemon_under_restrictive_job[foreground]",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/execution_r4/test_server_signal_shutdown.py",
+            "sha256": "c3a691ca3cd316ee3bc4426e167686ed4ef887335a96d17723e784ef6ce23889",
+            "bytes": 8120,
+            "symbol": "test_signal_keeps_serve_process_and_http_until_inventory_release",
+            "line": 59,
+            "end_line": 135,
+            "function_sha256": "80d12a2c51dc2d2ef7d85647132b1eeefdb9dc7eb38ae27adcd0516a9bef2a32",
+            "assertions": [
+              {
+                "line": 135,
+                "expression": "len(rows) == 1 and rows[0][0] == 'DISCONNECTED'"
+              },
+              {
+                "line": 88,
+                "expression": "process.poll() is None"
+              },
+              {
+                "line": 89,
+                "expression": "time.monotonic() < until"
+              },
+              {
+                "line": 121,
+                "expression": "healthy() and process.poll() is None"
+              },
+              {
+                "line": 123,
+                "expression": "repeated['state'] == 'DRAINING_PENDING'"
+              },
+              {
+                "line": 124,
+                "expression": "repeated['deadline_monotonic'] == report['deadline_monotonic']"
+              },
+              {
+                "line": 126,
+                "expression": "process.wait(timeout=15) == 0"
+              },
+              {
+                "line": 103,
+                "expression": "response.status_code == 202"
+              },
+              {
+                "line": 110,
+                "expression": "report['deadline_monotonic'] == initial['deadline_monotonic']"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-v1/canonical/tests.xml",
+            "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+            "bytes": 60132
+          },
+          "qualification_mode": "real_installed_foreground_process_managed_by_external_test_parent",
+          "nodes": [
+            {
+              "node_id": "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGINT]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGTERM]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGINT]",
+              "status": "PASS"
+            },
+            {
+              "node_id": "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGTERM]",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_user_service_installation.py",
+            "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+            "bytes": 24157,
+            "symbol": "test_supervised_entry_is_foreground_fenced_and_uses_saved_context",
+            "line": 204,
+            "end_line": 224,
+            "function_sha256": "ce96c791f4a5a59c7e8f542276b1fefb926be1fd4dd8341fb0cd4ef7c471130e",
+            "assertions": [
+              {
+                "line": 219,
+                "expression": "run_supervised(adapter.home, adapter.database, 'wrong', installation=adapter.installation) == 2"
+              },
+              {
+                "line": 220,
+                "expression": "run_supervised(adapter.home, adapter.database, receipt['token'], installation=adapter.installation) == 0"
+              },
+              {
+                "line": 222,
+                "expression": "os.getcwd() == original_cwd and dict(os.environ) == original_environment"
+              },
+              {
+                "line": 223,
+                "expression": "read_json(adapter.home / 'service-supervisor-exit.json')['exit_code'] == 1"
+              },
+              {
+                "line": 224,
+                "expression": "adapter.inspect()['shutdown_outcome'] == 'unconfirmed'"
+              },
+              {
+                "line": 208,
+                "expression": "acquired_lock.owned and supervisor == SUPERVISOR"
+              },
+              {
+                "line": 209,
+                "expression": "os.getcwd() == adapter.context['cwd']"
+              },
+              {
+                "line": 210,
+                "expression": "dict(os.environ) == {key.upper(): value for key, value in environment.items()}"
+              },
+              {
+                "line": 211,
+                "expression": "environment == adapter.context['environment']"
+              },
+              {
+                "line": 212,
+                "expression": "arguments == adapter.context['arguments']"
+              },
+              {
+                "line": 213,
+                "expression": "settings_pinned_fields == adapter.context.get('settings_pinned_fields')"
+              },
+              {
+                "line": 214,
+                "expression": "settings_provenance_legacy == adapter.context.get('settings_provenance_legacy', False)"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-v1/canonical/tests.xml",
+            "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+            "bytes": 60132
+          },
+          "qualification_mode": "injected_run_serve_wrapper_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_user_service_installation::test_supervised_entry_is_foreground_fenced_and_uses_saved_context",
+              "status": "PASS"
+            }
+          ]
+        },
+        {
+          "source": {
+            "repository": "nexus",
+            "path": "tests/test_user_service_installation.py",
+            "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+            "bytes": 24157,
+            "symbol": "test_foreground_refuses_installed_integration_before_bootstrap",
+            "line": 339,
+            "end_line": 345,
+            "function_sha256": "4cd526b595e3a6b7ee7f6bbb8def08f030b49d29df5b427a1d9b82d312f0c285",
+            "assertions": [
+              {
+                "line": 344,
+                "expression": "run_serve(adapter.context['arguments'], adapter.context['environment']) == 1"
+              }
+            ],
+            "exception_oracles": []
+          },
+          "report": {
+            "repository": "nexus",
+            "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-v1/canonical/tests.xml",
+            "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+            "bytes": 60132
+          },
+          "qualification_mode": "injected_installation_conflict_contract",
+          "nodes": [
+            {
+              "node_id": "tests.test_user_service_installation::test_foreground_refuses_installed_integration_before_bootstrap",
+              "status": "PASS"
+            }
+          ]
+        }
+      ],
+      "implementation": [
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/serve.py",
+          "sha256": "e035f239181391c24e35038fda3b2b13ce44a34d87437d3d2d6130358eb5d512",
+          "bytes": 30457,
+          "symbol": "run_serve",
+          "line": 457,
+          "end_line": 709,
+          "function_sha256": "4c48efb95587891171575ae070267d17fe1a74b9904d62578f809d22b525f169",
+          "assertions": [],
+          "exception_oracles": []
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/runtime_server.py",
+          "sha256": "3e16a907f6f659fbc075cac65c49512235239d578fcd21e20730b8a0ee1ae515",
+          "bytes": 2063,
+          "symbol": "RuntimeServer",
+          "line": 8,
+          "end_line": 50,
+          "function_sha256": "2015aa43aca9234b07a7cd8ea08072f5da29d62632875308990e7c960b673dca",
+          "assertions": [],
+          "exception_oracles": []
+        },
+        {
+          "repository": "nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+          "sha256": "4cb4f62d878dad0b3dcad8c486e46d5c2c9b6acc864fadcc1cf737bbecfd3fc8",
+          "bytes": 4456,
+          "symbol": "run",
+          "line": 21,
+          "end_line": 94,
+          "function_sha256": "86a11fefc426d99266c98f19709f85d8bad73cd93caffcb6d22c64d74fe1d844",
+          "assertions": [],
+          "exception_oracles": []
+        },
+        {
+          "repository": "connector",
+          "path": "src/okto_nexus_connector/daemon/manager.py",
+          "sha256": "65ee837a61af3bbb2c4a3e98f13e2d02cd691c0ca2bf41d4f0c555d6d9a47611",
+          "bytes": 12292,
+          "symbol": "run_foreground",
+          "line": 194,
+          "end_line": 281,
+          "function_sha256": "9b9a22ce0a9ffe777416c18972cee17484746e3df507b4559b865cfaab74a623",
+          "assertions": [],
+          "exception_oracles": []
+        }
+      ],
+      "documentation": [
+        {
+          "repository": "nexus",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7",
+          "bytes": 19473,
+          "line": 3,
+          "end_line": 24
+        },
+        {
+          "repository": "nexus",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "4bc8ee7e4aaf79a0577cdf2e193b5924e037b97379d593a2e099ee731c719ec7",
+          "bytes": 19473,
+          "line": 104,
+          "end_line": 127
+        },
+        {
+          "repository": "connector",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e",
+          "bytes": 13301,
+          "line": 27,
+          "end_line": 31
+        },
+        {
+          "repository": "connector",
+          "path": "docs/service-lifecycle.md",
+          "sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e",
+          "bytes": 13301,
+          "line": 74,
+          "end_line": 77
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+          "sha256": "926b62892b561e43ff0cf8cd2baef4c962705c31faa6dfc6226fa1dfedf05ee8",
+          "bytes": 39148
+        }
+      ],
+      "component_scopes": {
+        "connector": {
+          "real": "Job Object Windows com KILL_ON_JOB_CLOSE, sem permissão de breakaway. Foreground fica ready, para via IPC e o processo retorna 0; tentativa detached é recusada com orientação daemon run. Nenhum Task Scheduler é registrado.",
+          "retained_nodes": 2
+        },
+        "nexus": {
+          "real": "Popen de Python -I chama o run_serve instalado diretamente. O pai espera healthz e envia SIGINT/SIGTERM ao filho por controlador de stdin; processo/HTTP permanecem até liberar o owner. Saída 0 e único executor embedded DISCONNECTED são conferidos. Não há start/daemon intermediário nessa composição.",
+          "injected": "Discovery é sintético e a liberação de inventory é bloqueada/injetada; HTTP, processo, sinais e run_serve/RuntimeServer são reais. O teste de wrapper run_supervised usa Mock de run_serve e NÃO é usado sozinho como prova runtime.",
+          "retained_real_nodes": 4
+        }
+      },
+      "interpretation": "Supervisor externo mínimo aqui significa o processo pai de teste que cria, acompanha, sinaliza e junta o Server foreground real. Não significa que Task Scheduler, Docker, Kubernetes, systemd ou outro produto específico foi qualificado.",
+      "no_double_supervision_basis": "Nexus run_serve toma o lock e chama RuntimeServer.run no processo foreground; pai real continua observando esse processo até o encerramento. Wrapper chama foreground uma vez e entrada foreground recusa integração instalada concorrente. Connector run_foreground e Job Object exercitam a alternativa operacional sem detached. Watchdog de recursos nativos, quando existente, não é apresentado como segundo Server/supervisor de serviço.",
+      "stale_remaining": "A prova real de foreground Nexus estava fora do E10 antigo; restringir T28 a POSIX/container ou exigir registro real de tarefa acrescentaria uma condição não literal à alternativa de supervisor externo já observada.",
+      "specific_pending_for_literal": null,
+      "limit": "Verificado somente no escopo externo Windows descrito, não em container nem POSIX. Não prova políticas de restart/logon de um supervisor instalado. A prova de conflito/wrapper do Task Scheduler é injetada e assim permanece rotulada; não é promovida a registro nativo real."
+    }
+  ],
+  "historical_audit": {
+    "repository": "nexus",
+    "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+    "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+    "bytes": 136618,
+    "locator": "scenarios[id=SVC-T26 or SVC-T28]"
+  },
+  "tests_executed": 0,
+  "product_imports": false,
+  "checkout_edits": false,
+  "ledger_edits": false,
+  "method": "Read source, documentation and exact retained XML PASS nodes; no new campaign or runtime execution.",
+  "acceptance": "No M1/M2/R3 or untested platform promotion; these are scoped literal scenario recommendations."
+}

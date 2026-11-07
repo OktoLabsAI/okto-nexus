@@ -1,0 +1,25 @@
+usage: okto-nexus participant [-h] [--home HOME] [--profile PROFILE]
+                              [--project PROJECT] [--executable EXECUTABLE]
+                              [--plan] [--approve APPROVE] [--new] [--json]
+                              {launch}
+
+Launch an external participant client with protected credential delivery.
+
+positional arguments:
+  {launch}
+
+options:
+  -h, --help            show this help message and exit
+  --home HOME
+  --profile PROFILE
+  --project PROJECT
+  --executable EXECUTABLE
+                        selected native Claude/Codex executable, never a shell
+                        command
+  --plan
+  --approve APPROVE     exact launch review revision; replay only reports the
+                        retained attempt
+  --new                 review a new launch, acknowledging possible overlap
+                        with an uncertain previous process
+  --json                JSON review/receipt; the launched foreground client
+                        owns the terminal

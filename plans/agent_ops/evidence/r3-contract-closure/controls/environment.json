@@ -1,0 +1,21 @@
+{
+  "forwarded_names": [
+    "APPDATA",
+    "COMSPEC",
+    "HOME",
+    "LOCALAPPDATA",
+    "OKTO_NEXUS_NO_BANNER",
+    "PATH",
+    "PATHEXT",
+    "PYTHONDONTWRITEBYTECODE",
+    "PYTHONUTF8",
+    "SYSTEMROOT",
+    "TEMP",
+    "TMP",
+    "USERPROFILE",
+    "WINDIR"
+  ],
+  "isolated_profiles": true,
+  "provider_credentials_forwarded": false,
+  "native_task_registration": false
+}

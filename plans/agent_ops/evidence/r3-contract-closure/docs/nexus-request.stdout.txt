@@ -1,0 +1,22 @@
+usage: okto-nexus request [-h] [--home HOME] [--profile PROFILE]
+                          [--project PROJECT] [--workspace WORKSPACE_ID]
+                          [--json] [--key-stdin | --key-env NAME]
+                          [--operation {message_create,handoff_create}]
+                          {inspect} [id]
+
+Messages are conversation; handoffs are work. Both use canonical MCP.
+
+positional arguments:
+  {inspect}
+  id
+
+options:
+  -h, --help            show this help message and exit
+  --home HOME
+  --profile PROFILE
+  --project PROJECT
+  --workspace, --workspace-id WORKSPACE_ID
+  --json
+  --key-stdin
+  --key-env NAME
+  --operation {message_create,handoff_create}

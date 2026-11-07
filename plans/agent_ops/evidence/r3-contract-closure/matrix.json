@@ -1,0 +1,394 @@
+{
+  "scope": "Finite contract closure for AC05 and AC15; real M1/M2/provider/native task gates remain separate",
+  "new_test_runs": 2,
+  "product_changes": 0,
+  "rows": [
+    {
+      "criterion": "AC-05",
+      "entry_path": "message/handoff creation and canonical approval",
+      "assertion_reviewed": "One persisted client request resolves the same message/handoff/approval; DB commit and receipt are atomic. Before/after process death resumes that request; approval.granted remains one.",
+      "current_sources": [
+        {
+          "path": "src/okto_nexus/application/terminal_coordination.py",
+          "sha256": "65920e954d88f23589b2f1806caadca7cf5077cad0e4644c260cd3fce4f39e27"
+        },
+        {
+          "path": "tests/test_coordination_creation.py",
+          "sha256": "ff8add10a6825344350b26ef8335961ac9251b56948566f12d754aad764e63c5"
+        },
+        {
+          "path": "tests/test_coordination_requests.py",
+          "sha256": "33fc67d64e89f15e2119ade873633c7187f98c0fbf4a3595b283ec9f3542c9e4"
+        },
+        {
+          "path": "tests/execution_r4/test_coordination_cli.py",
+          "sha256": "4c9b5ca2a44e3da5b776d5b7443dbbee4611f8226616d4843b154d145873bc20"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/pr05-coordination-creation-installed.xml",
+          "sha256": "bf31f03f4e9c4bbeb86bb771c05160706c4d20b9c4ee60ecb6ee525493bba64e",
+          "passed_cases": [
+            "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[after_creation-handoff_create-False]",
+            "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[after_creation-message_create-False]",
+            "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[before_execution-handoff_create-False]",
+            "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[before_execution-message_create-False]",
+            "tests.test_coordination_requests::test_process_termination_at_commit_boundary[False]",
+            "tests.test_coordination_requests::test_process_termination_at_commit_boundary[True]"
+          ]
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+          "sha256": "17f61e80065da17ff85d35c68a0b1f620d45fb75b407ca2e3193b87fb24b01e5",
+          "passed_cases": [
+            "tests.execution_r4.test_coordination_cli::test_real_process_death_after_commit_recovers_through_installed_entrypoint[False]"
+          ]
+        },
+        {
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+          "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+          "passed_cases": [
+            "tests.test_terminal_coordination::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[inspect]",
+            "tests.test_terminal_coordination::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[submit]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-handoff_create]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-message_create]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-save_result-handoff_create]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-save_result-message_create]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-handoff_create]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-message_create]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-handoff_create]",
+            "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-message_create]"
+          ]
+        }
+      ],
+      "limits": "Historical installed actual SQLite/HTTP/CLI process death composes with current same-facade recovery. No universal exactly-once outside receipt retention."
+    },
+    {
+      "criterion": "AC-05",
+      "entry_path": "participant cooperation exchange and handoff",
+      "assertion_reviewed": "Separate consent and fixed request IDs survive failure before/after transmission, request-file and consent-file failures. Missing/expired receipts cause uncertainty, never recreation. Actual CLI death preserves one exchange message.",
+      "current_sources": [
+        {
+          "path": "src/okto_nexus/application/terminal_cooperation.py",
+          "sha256": "aad4b50308af9ab29b59e0d66d65d4e29a2bf7f52068adc4a01ada01f43e9a43"
+        },
+        {
+          "path": "tests/test_terminal_cooperation.py",
+          "sha256": "61aa262a571250c9166780e98cd94144f18d71394e4db42913e7b630018858b0"
+        },
+        {
+          "path": "tests/execution_r4/test_cooperation_cli.py",
+          "sha256": "f548447b767a1d03c317be258832a5e3dd02573ad2a57d3e6441fbe619d8aaf3"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+          "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+          "passed_cases": [
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[after-exchange]",
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[after-handoff]",
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[before-exchange]",
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[before-handoff]",
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-exchange]",
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-handoff]",
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-exchange]",
+            "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-handoff]",
+            "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-exchange]",
+            "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-handoff]",
+            "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-exchange]",
+            "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-handoff]",
+            "tests.test_terminal_cooperation::test_missing_request_file_does_not_reset_a_confirmed_request_window"
+          ]
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-cooperation-facade-cli-installed.xml",
+          "sha256": "45476f332157f41dec5700d41e23ec3cfee9166f5f3b21d1f9a65480147c8569",
+          "passed_cases": [
+            "tests.execution_r4.test_cooperation_cli::test_real_process_death_after_exchange_commit_recovers_installed_entrypoint[False]"
+          ]
+        }
+      ],
+      "limits": "Unit fault injection and actual CLI/HTTP/SQLite; no real client/provider M2 qualification."
+    },
+    {
+      "criterion": "AC-05",
+      "entry_path": "productive work submission and native decision",
+      "assertion_reviewed": "Lost intent-resolution/operation response reopens the same operation; one native opening and send. Lost decision response resolves the original canonical decision and one native answer without storing private response text.",
+      "current_sources": [
+        {
+          "path": "src/okto_nexus/application/terminal_work.py",
+          "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad"
+        },
+        {
+          "path": "tests/execution_r4/test_terminal_work.py",
+          "sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+          "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+          "passed_cases": [
+            "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[/runtime/operations]",
+            "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[intents:resolve]",
+            "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False]",
+            "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True]",
+            "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True]"
+          ]
+        }
+      ],
+      "limits": "Current installed canonical services and synthetic native peers; real active-provider interruption is AC14, still open."
+    },
+    {
+      "criterion": "AC-05",
+      "entry_path": "local participant initialization, launch and identity Finish",
+      "assertion_reviewed": "Credential/file checkpoints observe the original intent; uncertain launch does not respawn; current file drift is preserved. Finish recovers one reviewed identity without rotating its key.",
+      "current_sources": [
+        {
+          "path": "tests/execution_r4/test_participant_init.py",
+          "sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c"
+        },
+        {
+          "path": "tests/execution_r4/test_participant_launch.py",
+          "sha256": "fc91d1c87230276495ec20449319edd800bd03f50bd479129971b3a7af0f04a3"
+        },
+        {
+          "path": "tests/execution_r4/test_terminal_identity.py",
+          "sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+          "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+          "passed_cases": [
+            "tests.execution_r4.test_participant_init::test_lost_checkpoint_resumes_same_intent_by_observing_effect[credential_stored]",
+            "tests.execution_r4.test_participant_init::test_lost_checkpoint_resumes_same_intent_by_observing_effect[done]",
+            "tests.execution_r4.test_participant_init::test_uncertain_file_with_later_edit_is_preserved_without_new_intent",
+            "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[exited-1]",
+            "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[started-1]",
+            "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[starting-0]",
+            "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False]",
+            "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True]"
+          ]
+        }
+      ],
+      "limits": "Current installed simulated credential/client mechanisms; no complete real credential-to-client chain claimed."
+    },
+    {
+      "criterion": "AC-05",
+      "entry_path": "remote bootstrap review, human approval and host Finish",
+      "assertion_reviewed": "Lost bootstrap/decision/checkpoint replies retain original references, approval and Finish. The host Finish is the only completion authority; receipt recovery does not reissue setup.",
+      "current_sources": [
+        {
+          "path": "tests/execution_r4/test_remote_terminal_setup.py",
+          "sha256": "7dd4b3c799dbc6574e76dca2eda038d696c59ee0a975767063f608717560f69f"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+          "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+          "passed_cases": [
+            "tests.execution_r4.test_remote_terminal_setup::test_checkpoint_failure_after_bootstrap_reports_uncertainty_without_reissue",
+            "tests.execution_r4.test_remote_terminal_setup::test_lost_bootstrap_response_recovers_references_without_reissue",
+            "tests.execution_r4.test_remote_terminal_setup::test_lost_decision_resumes_same_approval_then_only_host_finish_completes"
+          ]
+        }
+      ],
+      "limits": "Current installed canonical operator/host protocol, synthetic native peer; remote real provider work remains M1."
+    },
+    {
+      "criterion": "AC-15",
+      "entry_path": "Nexus status/logs/default doctor observations",
+      "assertion_reviewed": "Absent homes remain absent; logs do not require launching saved Python. Unreachable live owners are not declared stopped. Default doctor does not initialize/start the service.",
+      "current_sources": [
+        {
+          "path": "tests/test_service_inspection.py",
+          "sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140"
+        },
+        {
+          "path": "tests/test_service_logs.py",
+          "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7"
+        },
+        {
+          "path": "tests/test_project_doctor_cli.py",
+          "sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+          "passed_cases": [
+            "tests.test_project_doctor_cli::test_absent_instance_is_not_started_or_initialized",
+            "tests.test_service_inspection::test_status_of_absent_instance_does_not_create_home_or_start_process",
+            "tests.test_service_inspection::test_unreachable_live_owner_is_not_reported_as_stopped"
+          ]
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+          "passed_cases": [
+            "test_service_logs::test_absent_logs_are_passive_and_do_not_require_saved_python",
+            "test_service_logs::test_unavailable_log_is_not_inferred_as_stopped"
+          ]
+        }
+      ],
+      "limits": "Historical installed passive contracts retained; unchanged diagnostic behavior reviewed. No inference or credential access attributed to passive observation."
+    },
+    {
+      "criterion": "AC-15",
+      "entry_path": "Nexus start/stop/restart/foreground",
+      "assertion_reviewed": "Actual detached process survives launcher exit, reuses owner and drains. Restart refuses pending/unknown stop. Foreground SIGINT/SIGTERM/HTTP retains HTTP and process until resource release. Current force remains explicit and generation-bound.",
+      "current_sources": [
+        {
+          "path": "tests/test_service_process.py",
+          "sha256": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b"
+        },
+        {
+          "path": "tests/test_service_start.py",
+          "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a"
+        },
+        {
+          "path": "tests/execution_r4/test_server_signal_shutdown.py",
+          "sha256": "c3a691ca3cd316ee3bc4426e167686ed4ef887335a96d17723e784ef6ce23889"
+        },
+        {
+          "path": "tests/test_service_drain_decision.py",
+          "sha256": "145147f3e7d1cc2649413687cb9047166273f87cb40d2238b029c021a797f8a6"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+          "passed_cases": [
+            "test_service_process::test_concurrent_detached_start_survives_cli_exit_reuses_and_drains"
+          ]
+        },
+        {
+          "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-v1/canonical/tests.xml",
+          "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+          "passed_cases": [
+            "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGINT]",
+            "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGTERM]",
+            "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGINT]",
+            "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGTERM]",
+            "tests.test_service_drain_decision::test_force_cli_requires_explicit_stop_and_generation[arguments0]",
+            "tests.test_service_drain_decision::test_force_cli_requires_explicit_stop_and_generation[arguments1]",
+            "tests.test_service_drain_decision::test_force_cli_requires_explicit_stop_and_generation[arguments2]",
+            "tests.test_service_drain_decision::test_timeout_does_not_start_shutdown_or_reopen_admission",
+            "tests.test_service_start::test_restart_does_not_start_when_drain_is_pending",
+            "tests.test_service_start::test_unconfirmed_exit_does_not_authorize_restart"
+          ]
+        }
+      ],
+      "limits": "Actual Windows disposable processes and synthetic native peers; registered Task Scheduler actions remain AC13, not inferred here."
+    },
+    {
+      "criterion": "AC-15",
+      "entry_path": "Connector passive observations",
+      "assertion_reviewed": "Status/logs/doctor preserve absent or existing state, do not initialize vault/start daemon, and keep redacted diagnostic output. Explicit credential resolution differs from default status.",
+      "current_sources": [
+        {
+          "path": "../okto-nexus-connector/docs/service-lifecycle.md",
+          "sha256": "8e1f6b033bf66e0b0f9214ea3563b365a5cf4b5e50d845ec0a62ba5f9731b42e"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/pr02-connector-passive-installed.xml",
+          "sha256": "ca4b2cb5ea482bbe79cea931deb166af59854b7046fd5dd70ef1c95bf41dfd43",
+          "passed_cases": [
+            "tests.test_cli_diagnostics::test_logs_are_persisted_redacted_and_filtered",
+            "tests.test_passive_cli::test_cli_observation_never_initializes_an_absent_instance",
+            "tests.test_passive_diagnostics::test_absent_instance_stays_absent[False-doctor]",
+            "tests.test_passive_diagnostics::test_absent_instance_stays_absent[False-logs]",
+            "tests.test_passive_diagnostics::test_absent_instance_stays_absent[False-status]",
+            "tests.test_passive_diagnostics::test_absent_instance_stays_absent[True-doctor]",
+            "tests.test_passive_diagnostics::test_absent_instance_stays_absent[True-logs]",
+            "tests.test_passive_diagnostics::test_absent_instance_stays_absent[True-status]",
+            "tests.test_passive_diagnostics::test_existing_snapshot_is_not_rewritten_or_locked[doctor]",
+            "tests.test_passive_diagnostics::test_existing_snapshot_is_not_rewritten_or_locked[logs]",
+            "tests.test_passive_diagnostics::test_existing_snapshot_is_not_rewritten_or_locked[status]"
+          ]
+        }
+      ],
+      "limits": "Historical installed Connector contract; actual registered user-task operation remains unexecuted."
+    },
+    {
+      "criterion": "AC-05",
+      "entry_path": "reviewed grant renewal and issuance receipt recovery",
+      "assertion_reviewed": "Existing usable authority refuses duplicate issuance. Lost response resolves one issuance receipt and two total grants (old expired plus new); subsequent revocation never reissues or revives that grant.",
+      "current_sources": [
+        {
+          "path": "src/okto_nexus/application/terminal_authorization.py",
+          "sha256": "b58507fd91ed398503fedc14ed82bbe6c0f28024526ba2df620ab78a63f03063"
+        },
+        {
+          "path": "tests/execution_r4/test_terminal_authorization.py",
+          "sha256": "1a97a51513b6e4b4ddb5edd054671f557539c9ac6e310f057298359d38110a2d"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+          "sha256": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430",
+          "passed_cases": [
+            "tests.execution_r4.test_terminal_authorization::test_available_grant_is_observed_without_duplicate_authority",
+            "tests.execution_r4.test_terminal_authorization::test_uncertain_issue_recovers_same_receipt_even_after_later_revocation[after]",
+            "tests.execution_r4.test_terminal_authorization::test_uncertain_issue_recovers_same_receipt_even_after_later_revocation[before]"
+          ]
+        }
+      ],
+      "limits": "Historical installed canonical renewal, actual current grant authority remains mandatory; no provider work implied."
+    },
+    {
+      "criterion": "AC-15",
+      "entry_path": "current Nexus and Connector detached lifecycle plus Connector foreground ownership",
+      "assertion_reviewed": "Both current installed CLIs survive launcher exit, reuse one owner, restart into a new generation and drain canonically. Stale generation/token cannot stop or replace the new owner. Connector foreground acquires exclusion before initializing state/vault.",
+      "current_sources": [
+        {
+          "path": "tests/test_service_process.py",
+          "sha256": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b"
+        },
+        {
+          "path": "../okto-nexus-connector/tests/integration/test_detached_service_lifecycle.py",
+          "sha256": "116d079f14a89b6e3e17c7f4a86f4cb600c996cc16ed4337067ce4a5668b87cc"
+        },
+        {
+          "path": "../okto-nexus-connector/tests/unit/test_user_service_lifecycle.py",
+          "sha256": "36a49e137bd1979af59798c1acd1416ac298c9e1dbe07d5b15ed68ea582155d0"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "plans/agent_ops/evidence/r3-contract-closure/controls/tests.xml",
+          "sha256": "0658327f279543e2b281e1f6299f03d062ea71771ff624c308b51af141187c94",
+          "passed_cases": [
+            "test_detached_service_lifecycle::test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner",
+            "test_service_process::test_concurrent_detached_start_survives_cli_exit_reuses_and_drains"
+          ]
+        },
+        {
+          "path": "../okto-nexus-connector/docs/evidence/cooperative-drain/installed/installed.xml",
+          "sha256": "cadd71326eb83049a83d0ab30e647ac651a3e86c505b9e1c9c838a68c0093355",
+          "passed_cases": [
+            "tests.unit.test_user_service_lifecycle::test_production_foreground_owns_lock_before_state_or_vault_initialization",
+            "tests.unit.test_user_service_lifecycle::test_stop_latches_before_ipc_and_preserves_canonical_drain"
+          ]
+        }
+      ],
+      "limits": "Two new runs of existing tests in isolated profiles with exact current wheels; neither registers native tasks nor invokes provider work."
+    }
+  ],
+  "AC05_boundary": "Only documented idempotent request/receipt windows and named current paths; no automatic replay of uncertain requests and no guarantee after tombstone expiry.",
+  "AC15_remaining": "No missing literal control/passivity contract identified. Registered native task qualification belongs to AC13 and remains open.",
+  "recommended_status": {
+    "AC-05": "VERIFIED",
+    "AC-15": "VERIFIED"
+  }
+}

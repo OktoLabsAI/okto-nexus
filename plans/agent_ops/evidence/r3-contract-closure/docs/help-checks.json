@@ -1,0 +1,135 @@
+[
+  {
+    "command": [
+      "okto-nexus",
+      "connect",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-connect.stdout.txt",
+    "stderr": "nexus-connect.stderr.txt",
+    "stdout_sha256": "60a34c1c13175e8cfc93c5140236433e6a117dc3856ddea8f815a91410c1a8b5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "init",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-init.stdout.txt",
+    "stderr": "nexus-init.stderr.txt",
+    "stdout_sha256": "377558db9c7d51331023567344d08897b42d74f571a4a7846f6400bfb4923dc3",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "work",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-work.stdout.txt",
+    "stderr": "nexus-work.stderr.txt",
+    "stdout_sha256": "3ea700b43d6da95e18daeb1cfbfa24533e4e7064f666d86a4dd290e364169fa4",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "participant",
+      "launch",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-participant-launch.stdout.txt",
+    "stderr": "nexus-participant-launch.stderr.txt",
+    "stdout_sha256": "df0e67f0a9e9bf990427bbc3805240cf18666772bf83ca9a3a846ba1358be4b2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "participant",
+      "remove",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-participant-remove.stdout.txt",
+    "stderr": "nexus-participant-remove.stderr.txt",
+    "stdout_sha256": "dadf3b6894e6d787a014e6cf4586a572adf5d075ff4968313473e40995190263",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "participant",
+      "smoke",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-participant-smoke.stdout.txt",
+    "stderr": "nexus-participant-smoke.stderr.txt",
+    "stdout_sha256": "ead7968da078b59dc254d07043361785aa93a102b1648ca28648ab2ecdb332f3",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "message",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-message.stdout.txt",
+    "stderr": "nexus-message.stderr.txt",
+    "stdout_sha256": "69d7f7c5ae935421e1cbf9712350135b4d076ba935a4c1dfdd078b7a5e2c3d28",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "handoff",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-handoff.stdout.txt",
+    "stderr": "nexus-handoff.stderr.txt",
+    "stdout_sha256": "605bd633be3d3fc3798fdf9483472d34d0eded730ec2c269a1cd0d5d421d58be",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "request",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-request.stdout.txt",
+    "stderr": "nexus-request.stderr.txt",
+    "stdout_sha256": "2982160b5e1c27f21e17f897ab2e1c90a6c2cb236ec269eb546f42aeb106de8c",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "okto-nexus",
+      "doctor",
+      "--help"
+    ],
+    "exit_code": 0,
+    "stdout": "nexus-doctor.stdout.txt",
+    "stderr": "nexus-doctor.stderr.txt",
+    "stdout_sha256": "3b03f41aa3a1773dd9a273081f49f40098578dd0959d288b48f597c9cf9a4554",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "isolated import and parser.format_help only"
+    ],
+    "exit_code": 0,
+    "stdout": "parser-import.stdout.txt",
+    "stderr": "parser-import.stderr.txt",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]
