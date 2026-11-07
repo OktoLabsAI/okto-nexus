@@ -1,0 +1,123 @@
+{
+  "status": "UNCONFIRMED",
+  "native_args": [
+    "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+    "--no-daemon"
+  ],
+  "provider_credentials_supplied": false,
+  "native_inputs_sent": [],
+  "scope": "Windows local synthetic exact ParticipantLaunch startup only",
+  "win32_preflight": {
+    "win32api": {
+      "TerminateProcess": true
+    },
+    "win32job": {
+      "CreateJobObject": true,
+      "AssignProcessToJobObject": true,
+      "IsProcessInJob": true,
+      "QueryInformationJobObject": true,
+      "SetInformationJobObject": true,
+      "TerminateJobObject": true
+    },
+    "win32process": {
+      "CreateProcess": true,
+      "ResumeThread": true,
+      "GetExitCodeProcess": true,
+      "STARTUPINFO": true
+    },
+    "win32event": {
+      "WaitForSingleObject": true
+    }
+  },
+  "installed_modules": {
+    "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+    "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+  },
+  "input_hashes_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\application\\participant_launch.py": "287f2d0af70c1e95b3f7313492bc263c31ac764a5bd81a3e837510f9aff6758c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_participant.py": "b96e8d2ca962efb8b129232a3da6d9c5f8fcedb5a1ba4013e2cae402c320e6b4",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\participant.py": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\participant_launch.py": "8212196986ad6bab658e44188a953b67c721d302e65ce306f7cc8e9ea936ec5a",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\participant_process.py": "f5153c14eb808f958666da3db63497735e79c9b969c4ce02b044edfc9d64295a",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\participant_client.py": "9f4a7d429e4a7a0959a490043c74304a288ebf3f51e265a75533bb15e4d0b08c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\provider_vault.py": "5a4a005dc73863f0cf956e0c0e00293fef7c098c80212d3d3aa9aad82d5d8236",
+    "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe": "edfdd48f8b458af0906e507b4cb05217b326c3d6e515e9f024e05e3b8d650f70",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\dx04_probe.py": "80153ab8e8701299730e4144513506c65f6f078423abc4e9309d2198b167c34e"
+  },
+  "native_sha256": "edfdd48f8b458af0906e507b4cb05217b326c3d6e515e9f024e05e3b8d650f70",
+  "missing_bearer_status": 401,
+  "vault_target_absent_before": true,
+  "context": {
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\run-002\\project",
+    "config_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\run-002\\native\\codex\\config.toml",
+    "homes": {
+      "HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\run-002\\native\\home",
+      "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\run-002\\native\\home",
+      "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\run-002\\native\\appdata",
+      "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\run-002\\native\\localappdata",
+      "CODEX_HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\run-002\\native\\codex"
+    },
+    "credential_stores": {
+      "provider": "file",
+      "mcp_oauth": "file"
+    },
+    "check_for_update_on_startup": false,
+    "parent_reference_absent": true
+  },
+  "observation_seconds": 5.957,
+  "console_cleanup": {
+    "job_assigned_before_resume": true,
+    "kill_on_job_close": true,
+    "leader_pid": 9168,
+    "thread_id": 21788,
+    "forced_job_termination": true,
+    "active_processes_after_join": 0,
+    "leader_exit_code": 125
+  },
+  "native_mcp_confirmed": false,
+  "screen_labels": {
+    "labels": [
+      "Press Enter to continue",
+      "Sign in with ChatGPT",
+      "Use an API key",
+      "Welcome to Codex"
+    ],
+    "gate_seen": true,
+    "raw_text_retained": false
+  },
+  "tty_owner": {
+    "pid": 48004,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    }
+  },
+  "tty_child": {
+    "pid": 52784,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    }
+  },
+  "worker_result": null,
+  "server_listener_closed": true,
+  "own_vault_absent_after": true,
+  "console_watcher_error": {
+    "error_class": "PermissionError"
+  },
+  "errors": [
+    {
+      "phase": "probe",
+      "error_class": "CONSOLE_WATCHER_FAILED"
+    },
+    {
+      "phase": "console_watcher",
+      "error_class": "PermissionError"
+    }
+  ],
+  "cleanup_confirmed": false,
+  "scope_limit": "Startup/credential transport only; no provider, work, tool call, account login or trust approval."
+}

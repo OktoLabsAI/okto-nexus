@@ -1,0 +1,37 @@
+{
+  "scope": "Installed Nexus CLI --help only",
+  "server_started": false,
+  "vault_accessed": false,
+  "native_cli_started": false,
+  "cleanup": {
+    "job_assigned_before_resume": true,
+    "kill_on_job_close": true,
+    "leader_pid": 40840,
+    "thread_id": 30076,
+    "forced_job_termination": false,
+    "active_processes_after_join": 0,
+    "leader_exit_code": 0
+  },
+  "handle_close_errors": [],
+  "tty-owner": {
+    "pid": 21996,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    }
+  },
+  "tty-child": {
+    "pid": 42588,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    }
+  },
+  "worker-result": {
+    "participant_cli_invoked": true,
+    "cli_exit": 0,
+    "watcher_joined": true
+  }
+}

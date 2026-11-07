@@ -1,0 +1,28 @@
+{
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Scripts\\python.exe",
+  "base_python": "C:\\Python313\\python.exe",
+  "apis": {
+    "win32api": {
+      "TerminateProcess": true
+    },
+    "win32job": {
+      "CreateJobObject": true,
+      "AssignProcessToJobObject": true,
+      "IsProcessInJob": true,
+      "QueryInformationJobObject": true,
+      "SetInformationJobObject": true,
+      "TerminateJobObject": true
+    },
+    "win32process": {
+      "CreateProcess": true,
+      "ResumeThread": true,
+      "GetExitCodeProcess": true,
+      "STARTUPINFO": true
+    },
+    "win32event": {
+      "WaitForSingleObject": true
+    }
+  },
+  "native_started": false,
+  "vault_accessed": false
+}

@@ -1,0 +1,7 @@
+{
+  "scope": "Installed Nexus CLI --help only",
+  "server_started": false,
+  "vault_accessed": false,
+  "native_cli_started": false,
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\console_diagnostic.py\", line 21, in <module>\n    owned = module.OwnedConsole(config, module.environment(root), root)\n  File \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\failure-001-snapshot\\dx04_probe.py\", line 280, in __init__\n    self.job = win32job.CreateJobObject(None, None)\n               ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nTypeError: None is not a valid string in this context\n"
+}

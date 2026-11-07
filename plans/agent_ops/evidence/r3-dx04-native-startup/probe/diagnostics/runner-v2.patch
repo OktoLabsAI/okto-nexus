@@ -1,0 +1,11 @@
+--- dx04_probe.py@9bf238
++++ dx04_probe.py@v2
+@@ -277,7 +277,7 @@
+         import win32job
+         import win32process
+         self.api, self.job_api, self.process_api = win32api, win32job, win32process
+-        self.job = win32job.CreateJobObject(None, None)
++        self.job = win32job.CreateJobObject(None, 'dx04-probe-' + uuid.uuid4().hex)
+         self.process = self.thread = None
+         self.cleanup_started = None
+         self.facts = {'job_assigned_before_resume': False, 'kill_on_job_close': True}

@@ -1,0 +1,45 @@
+{
+  "review_kind": "readonly_dx04_runner_v2",
+  "reviewer": "ac03_review",
+  "created_utc": "2026-11-07T13:42:35.081228+00:00",
+  "runner_sha256": "80153ab8e8701299730e4144513506c65f6f078423abc4e9309d2198b167c34e",
+  "prior_runner_sha256": "9bf238a2f0088ddf65259da61bfd27004fb0afd35cfed823e556215aec0c91ea",
+  "manifest_sha256": "f2b5a559b3a467edd387b52463bfc0c85f27291bc171b42369223e2f02dbdcb3",
+  "decision": "no_blocking_issue_found_for_same_isolated_startup_scope",
+  "checks": {
+    "exact_single_byte_replacement_verified": true,
+    "delta": "CreateJobObject second argument None replaced with dx04-probe- plus UUID4 hex",
+    "all_13_manifest_payload_sizes_and_hashes_verified": true,
+    "benign_result_copy_matches_original": true,
+    "job_assigned_and_membership_checked_before_resume": true,
+    "kill_on_close_and_exact_owned_handle_cleanup_preserved": true,
+    "isolated_homes_environment_and_file_credential_store_preserved": true,
+    "native_argv_and_no_prompt_or_login_or_trust_input_preserved": true,
+    "owned_synthetic_vault_target_cleanup_guards_preserved": true,
+    "passive_observer_and_no_tools_call_requirement_preserved": true,
+    "deadlines_and_cleanup_unchanged": true
+  },
+  "benign_evidence": {
+    "installed_cli_argv": [
+      "--help"
+    ],
+    "owner_three_tty": true,
+    "python_child_three_tty": true,
+    "cli_exit": 0,
+    "leader_exit": 0,
+    "active_processes_after_join": 0,
+    "watcher_joined": true,
+    "handle_close_errors": [],
+    "server_started": false,
+    "vault_accessed": false,
+    "native_cli_started": false
+  },
+  "limits": [
+    "Read and hash review only; diagnostic artifacts were not independently rerun.",
+    "No CLI, Server, native client, test, provider or vault operation was performed by reviewer.",
+    "This correction qualifies harness startup containment only; it proves no native login, trust, MCP handshake or inference result.",
+    "Same intended probe may use only its own synthetic Nexus credential; no personal or provider credential is authorized by this review.",
+    "No claim that run-002 has executed or passed."
+  ],
+  "findings": []
+}

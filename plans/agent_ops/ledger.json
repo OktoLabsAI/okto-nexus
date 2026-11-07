@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T12:59:57.104083+00:00",
+  "updated_at": "2026-11-07T13:48:59.405838+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -2426,14 +2426,19 @@
         "plans/agent_ops/evidence/pr04-participant-removal-vault-source.xml",
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md",
+        "plans/agent_ops/evidence/r3-dx04-native-startup/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx04-native-startup/milestone.md",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
       ],
-      "result": "Importação protegida, vault, isolamento do ambiente filho, Bearer/origem e negativos estão provados separadamente. Não há prova da ligação completa pelo ParticipantLaunch distribuído até cliente real.",
+      "result": "Importação protegida, vault, isolamento e negativos permanecem verificados. O launcher instalado iniciou Codex0.167.0 isolado e exibiu login; não houve cadeia MCP autenticada. Run002 UNCONFIRMED por PermissionError no watcher; nenhum defeito de produto demonstrado.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Gate concreto de entrega/consumo da credencial. GUI/TUI não suportada e cooperação/handoff pertencem a seus escopos; não exigir M1/M2 integral para DX04."
+        "Run001 falhou no harness antes de CreateProcess; delta benigno validado e preservado.",
+        "Run002: startup/login observados, watcher PermissionError sem causa demonstrada; somente controle MCP401.",
+        "Job vazio após contenção forçada125, listener fechado e cofre próprio ausente; resultado agregado UNCONFIRMED preservado.",
+        "Não comprova autenticação MCP, login de provedor, trabalho, serviço de usuário ou M1."
       ],
       "subscopes": {
         "participant_existing_identity_review": "VERIFIED",
@@ -2464,14 +2469,22 @@
       ],
       "reconciliation": {
         "superseded_text": "actual_client_credential_resolution VERIFIED em alguns IDs é o subscope estreito de variável sintética/initialize; participant_os_vault_client_end_to_end continua NOT_RUN. Não tratá-los como equivalentes.",
-        "current_scope": "Há provas separadas de vault Windows, processo filho e initialize real com env sintético; não existe a prova composta exigida. Sem novo defeito concreto de produto demonstrado.",
-        "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+        "current_scope": "Importação protegida, vault, isolamento e negativos permanecem verificados. O launcher instalado iniciou Codex0.167.0 isolado e exibiu login; não houve cadeia MCP autenticada. Run002 UNCONFIRMED por PermissionError no watcher; nenhum defeito de produto demonstrado.",
+        "evidence": "plans/agent_ops/evidence/r3-dx04-native-startup/milestone.md"
       },
-      "remaining_evidence": "Exercitar o launcher suportado com perfil isolado, chave sintética existente e mecanismo protegido; observar autenticação do processo real e o negativo sem referência. Cofre pode conter apenas credencial sintética. Um turno pago não é requisito dessa prova.",
+      "remaining_evidence": "Observar autenticação MCP do cliente suportado iniciado pelo ParticipantLaunch com referência protegida. Nesta tentativa isolada, a tela de login precedeu qualquer MCP positivo. Acesso à conta real depende de autorização específica; um turno pago não é requisito literal de DX04.",
       "contract_reconciliation": {
         "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
         "previous_overbroad_limit": "412f4705 prova clientes reais com token recebido por helper programático, sem vault/ParticipantLaunch. Não resolve esta integração e não deve ser rotulado como launcher Claude/Codex."
+      },
+      "native_startup_probe": {
+        "status": "UNCONFIRMED",
+        "native_version": "0.167.0",
+        "native_mcp_confirmed": false,
+        "provider_credentials_supplied": false,
+        "provider_inference_performed": false,
+        "evidence": "plans/agent_ops/evidence/r3-dx04-native-startup/artifact-manifest.json"
       }
     },
     "DX-15": {
@@ -12043,6 +12056,19 @@
         "plans/agent_ops/evidence/r3-remaining-task-contracts/milestone.md",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json"
       ]
+    },
+    "r3_dx04_native_startup": {
+      "status": "UNCONFIRMED",
+      "accepted_tasks": [],
+      "attempts": 2,
+      "native_startup_attempts": 1,
+      "benign_console_diagnostic": "PASS",
+      "product_changed": false,
+      "native_mcp_confirmed": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx04-native-startup/milestone.md",
+        "plans/agent_ops/evidence/r3-dx04-native-startup/artifact-manifest.json"
+      ]
     }
   },
   "history": [
@@ -12964,6 +12990,15 @@
       "summary": "DX15/DX16 verified; six remaining implemented tasks retain their own concrete campaign gaps. Original nine-task audit preserves pendingDX08;4455b841 already qualifies it. No product/tests changed.",
       "evidence": [
         "plans/agent_ops/evidence/r3-remaining-task-contracts/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Isolated native participant startup",
+      "status": "UNCONFIRMED",
+      "summary": "Preserved harness failure, benign correction and native login gate. DX04 remains IMPLEMENTED; no provider use or product change.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx04-native-startup/milestone.md"
       ]
     }
   ]

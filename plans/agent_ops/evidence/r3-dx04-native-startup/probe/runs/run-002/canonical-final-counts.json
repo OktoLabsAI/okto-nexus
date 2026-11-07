@@ -1,0 +1,19 @@
+{
+  "read_mode": "SQLite mode=ro and query_only=ON",
+  "table_counts": {
+    "agents": 2,
+    "workspaces": 1,
+    "sessions": 0,
+    "messages": 0,
+    "handoffs": 0,
+    "execution_bindings": 0,
+    "execution_sessions": 0,
+    "execution_operations": 0,
+    "execution_receipts": 0
+  },
+  "expected_synthetic_agent_count": 1,
+  "expected_synthetic_workspace_count": 1,
+  "before_snapshot_retained": false,
+  "unchanged_claim": "NOT_ESTABLISHED",
+  "limit": "Only final counts are retained. Empty work/session tables show no such surviving rows; this is not a byte-for-byte or before/after preservation proof. Authentication/access timestamps are not compared. No credential columns or other DBs were read; DB not copied or hashed."
+}

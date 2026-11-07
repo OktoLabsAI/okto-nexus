@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "kind": "dx04_native_launch_postmortem_public_allowlist",
+  "status": "UNCONFIRMED",
+  "aggregate_cleanup_confirmed": false,
+  "files": {
+    "audit/curate_postmortem.py": {
+      "sha256": "2da301f0eb11499cda71e142d6651fbdbd0e6ec71a6d3eb92c5335cf58c53f21",
+      "bytes": 12675
+    },
+    "audit/postmortem.json": {
+      "sha256": "9079707c4f9e7362e81a8c0941cea0db2aba839275212fb68a5404d9d00d11aa",
+      "bytes": 13825
+    },
+    "diagnostics/diagnostic-v2.md": {
+      "sha256": "9647970757f8bad0ef310f9ad9595ca2c502c4fe6ffd9a36f1f5c3df83e2f0a1",
+      "bytes": 1734
+    },
+    "diagnostics/fixed-benign.json": {
+      "sha256": "3e4d259090fe1053a9f61f3cfe5fe10fa020cdaaa4f03c3740e1f573571cc1fc",
+      "bytes": 804
+    },
+    "diagnostics/initial-benign.json": {
+      "sha256": "ac5c4aa658f05c7b82de56b71645faf88e5500d91187fee0047f2e1d74bbc153",
+      "bytes": 707
+    },
+    "diagnostics/ruff-v2.txt": {
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+      "bytes": 20
+    },
+    "diagnostics/runner-v2.patch": {
+      "sha256": "75c4b44d2fe2b722204f8f48bf93e811200c28b49e0e75a315b55186f8264b1c",
+      "bytes": 525
+    },
+    "preflight/packages-before.json": {
+      "sha256": "3b718ce9c6db4b1c37cf0ba3d0ede97fedbd2d002f6d9a950b153e6d430a2dde",
+      "bytes": 199
+    },
+    "preflight/pywin32.json": {
+      "sha256": "b011375a44bff804d1c6cd193c3059db979dc25ae9016ed38760c1dabf5274f9",
+      "bytes": 761
+    },
+    "README.md": {
+      "sha256": "a69b972529ab67dbb438bdabf478b2ae7b5cb548e3944e4e82a50bfd43f2360c",
+      "bytes": 2135
+    },
+    "reviews/run-002.json": {
+      "sha256": "672a56b0fea06670d898381304861c9171395355be2fff9d5a4a93adc3eb7cb8",
+      "bytes": 4652
+    },
+    "reviews/runner-v2.json": {
+      "sha256": "d66ebf5d03a3ce7f889c6f42de16fe1122d83edd3834493537946fb9217dad3e",
+      "bytes": 2175
+    },
+    "runners/console-diagnostic-v1.py": {
+      "sha256": "3e878941cf3235e24db83f0f17656926df1477b6f995ddcece8a7f1c157ddced",
+      "bytes": 1312
+    },
+    "runners/console-diagnostic-v2.py": {
+      "sha256": "23be8cb0bb97ce565fdb3fae303d2194849703f9b75a22d00f88ffa1e5e90ca5",
+      "bytes": 1484
+    },
+    "runners/restart-fixture.py": {
+      "sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "bytes": 19369
+    },
+    "runners/runner-v1.py": {
+      "sha256": "9bf238a2f0088ddf65259da61bfd27004fb0afd35cfed823e556215aec0c91ea",
+      "bytes": 33050
+    },
+    "runners/runner-v2.py": {
+      "sha256": "80153ab8e8701299730e4144513506c65f6f078423abc4e9309d2198b167c34e",
+      "bytes": 33078
+    },
+    "runs/run-001/canonical-final-counts.json": {
+      "sha256": "c5819e407a7ce6ede842f3babf1c3d3bb046b3530f359a6482d786f5748d51a4",
+      "bytes": 756
+    },
+    "runs/run-001/launch-checkpoint-projection.json": {
+      "sha256": "41f1936d148dbdb37b526af67228939e2bc8caf9a129265e7b757e3df77e69e9",
+      "bytes": 180
+    },
+    "runs/run-001/mcp-observations.jsonl": {
+      "sha256": "8bfebdb566147004cc088ae71d738be5136b31dd1c0d74f1c806f64b64e86d2e",
+      "bytes": 133
+    },
+    "runs/run-001/owner-proofs.json": {
+      "sha256": "a049e4c8ab36fab70b05afa11f3442df31fb3dfbf281d471df942ff5cedaa786",
+      "bytes": 288
+    },
+    "runs/run-001/result.json": {
+      "sha256": "d81605a7db88f5020789938b65b87e4434dfd04a6495c2f30d5b4b49a5d89d4a",
+      "bytes": 5013
+    },
+    "runs/run-002/canonical-final-counts.json": {
+      "sha256": "c5819e407a7ce6ede842f3babf1c3d3bb046b3530f359a6482d786f5748d51a4",
+      "bytes": 756
+    },
+    "runs/run-002/launch-checkpoint-projection.json": {
+      "sha256": "d788421cada6bf83644984b853bc51f8995994fac63e4206bb4497dd07e590df",
+      "bytes": 182
+    },
+    "runs/run-002/mcp-observations.jsonl": {
+      "sha256": "8bfebdb566147004cc088ae71d738be5136b31dd1c0d74f1c806f64b64e86d2e",
+      "bytes": 133
+    },
+    "runs/run-002/owner-proofs.json": {
+      "sha256": "5311ca4a262e93a7f6b9ea8ae82412562220a3e844ae081f518cd13055172206",
+      "bytes": 289
+    },
+    "runs/run-002/result.json": {
+      "sha256": "a6b13a0fce9022b47907e7ab477333ae7967a5fa45390f904f59c3d0207704b3",
+      "bytes": 6036
+    },
+    "runs/run-002/screen-labels.json": {
+      "sha256": "de4434f915ac16b0209b9e1785a50f6aa9dff27b568afec71e2b213c847544b6",
+      "bytes": 187
+    },
+    "runs/run-002/tty-child.json": {
+      "sha256": "24faf2c6ef593d3eafc0c10c61931a8368a60d396abda3f2f864ad37e617e77a",
+      "bytes": 74
+    },
+    "runs/run-002/tty-owner.json": {
+      "sha256": "22390c5c3dbd2f09ec673818456d28d51c0cdbb47dcc89927968f9dd4a60c695",
+      "bytes": 105
+    },
+    "runs/run-002/watcher-error.json": {
+      "sha256": "f914a7b077f36d3d0399d1be70cfd90dd4f0016b8fc3db3a59d9b842f63a11d9",
+      "bytes": 42
+    },
+    "runs/run-002/worker-stage.json": {
+      "sha256": "adfb273b71d162dd6a314de906c46cb6dae5adb7a119b01c716ac935229e297a",
+      "bytes": 41
+    }
+  },
+  "exclusions": [
+    "homes",
+    "DBs",
+    "private configs",
+    "credentials or credential hashes",
+    "raw console text/screenshots",
+    "Server/native logs",
+    "pending files",
+    "__pycache__"
+  ]
+}

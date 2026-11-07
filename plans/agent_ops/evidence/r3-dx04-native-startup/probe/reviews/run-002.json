@@ -1,0 +1,68 @@
+{
+  "kind": "readonly_dx04_run_002_review",
+  "reviewer": "ac03_review",
+  "created_utc": "2026-11-07T13:45:30.708544+00:00",
+  "recommendation": {
+    "DX04": "IMPLEMENTED",
+    "verification": "NOT_VERIFIED",
+    "probe_result": "UNCONFIRMED",
+    "reason": "Startup and login labels observed, but no native MCP chain; console watcher failure prevents a passing qualification."
+  },
+  "runner_sha256": "80153ab8e8701299730e4144513506c65f6f078423abc4e9309d2198b167c34e",
+  "public_evidence_sha256": {
+    "result.json": "a6b13a0fce9022b47907e7ab477333ae7967a5fa45390f904f59c3d0207704b3",
+    "mcp-observations.jsonl": "8bfebdb566147004cc088ae71d738be5136b31dd1c0d74f1c806f64b64e86d2e",
+    "screen-labels.json": "de4434f915ac16b0209b9e1785a50f6aa9dff27b568afec71e2b213c847544b6",
+    "tty-owner.json": "22390c5c3dbd2f09ec673818456d28d51c0cdbb47dcc89927968f9dd4a60c695",
+    "tty-child.json": "24faf2c6ef593d3eafc0c10c61931a8368a60d396abda3f2f864ad37e617e77a",
+    "watcher-error.json": "f914a7b077f36d3d0399d1be70cfd90dd4f0016b8fc3db3a59d9b842f63a11d9",
+    "worker-stage.json": "adfb273b71d162dd6a314de906c46cb6dae5adb7a119b01c716ac935229e297a"
+  },
+  "private_checkpoint_projection": {
+    "sha256": "20f04bb0bd9eb935e4ef86fdbc2b4d37c15ed5b08617bfeb13f12948472730ef",
+    "state": "started",
+    "pid_hint_present": true,
+    "raw_checkpoint_copied": false
+  },
+  "findings": [
+    {
+      "topic": "startup",
+      "conclusion": "Participant CLI invocation and three TTY streams for owner/benign Python child are retained. Launch checkpoint state started with pid_hint and fixed Codex login labels support partial native startup; they do not prove MCP readiness."
+    },
+    {
+      "topic": "mcp_negative_control",
+      "conclusion": "Observer has exactly one initialize HTTP401 with protocol_result false and tools_count zero. Runner sends this missing-bearer negative control before native startup. It is not a native initialize success; no tools/list or successful MCP chain is retained."
+    },
+    {
+      "topic": "login_gate",
+      "conclusion": "Fixed labels Sign in with ChatGPT, Use an API key, Welcome to Codex and Press Enter to continue were retained. No login input or trust approval was sent. Labels do not establish account authentication or completed login."
+    },
+    {
+      "topic": "harness_error",
+      "conclusion": "Watcher retained only PermissionError. Specific failing operation and underlying cause are not established by retained evidence. Probe correctly reports CONSOLE_WATCHER_FAILED and UNCONFIRMED."
+    },
+    {
+      "topic": "containment",
+      "conclusion": "Owned Job was force-terminated with leader exit125; ActiveProcesses after join is0. Report records server_listener_closed true and own_vault_absent_after true. Reviewer did not independently query processes, listener or vault."
+    },
+    {
+      "topic": "cleanup_status",
+      "conclusion": "cleanup_confirmed false is computed from all errors including watcher failure. Do not equate it with evidence of a live child or residual credential, and do not relabel the overall run as a clean pass."
+    },
+    {
+      "topic": "skipped_postchecks",
+      "conclusion": "Watcher failure occurs before final canonical_counts_unchanged and input_hashes_unchanged checks. They are absent from result and not independently verified in this review."
+    },
+    {
+      "topic": "provider_and_inference",
+      "conclusion": "Reviewed scope supplied no provider credentials or native inputs and used isolated homes/file stores plus an own synthetic Nexus credential. This run is not a paid inference campaign, authenticated provider validation, M1 evidence or budget consumption measurement."
+    }
+  ],
+  "limits": [
+    "Read-only artifact/source review; no tests, native CLI, Server, provider, vault operation or rerun performed by reviewer.",
+    "No inferred root cause for PermissionError.",
+    "No claim of native MCP success, completed login, tool execution or paid inference.",
+    "Only sanitized checkpoint projection and public evidence hashes retained here."
+  ],
+  "suggested_ledger_text": "DX04 permanece IMPLEMENTED, nao VERIFIED. run-002 iniciou o cliente e observou rotulos de login em console isolado, mas a cadeia MCP nativa nao foi observada; o unico initialize HTTP401 foi controle negativo do harness. PermissionError do watcher deixou o probe UNCONFIRMED, sem causa especifica demonstrada. Job terminou forcado com active0; listener fechado e credencial sintetica propria ausente foram registrados. Nao houve validacao de login de conta ou inferencia paga."
+}

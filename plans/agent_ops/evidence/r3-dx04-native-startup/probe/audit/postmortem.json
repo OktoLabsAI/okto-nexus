@@ -1,0 +1,239 @@
+{
+  "kind": "read_only_postmortem",
+  "observed_at": "2026-11-07T13:48:23.010864+00:00",
+  "status": "UNCONFIRMED",
+  "aggregate_cleanup_confirmed": false,
+  "native_retries_during_postmortem": 0,
+  "new_vault_accesses": 0,
+  "runs": {
+    "run-001": {
+      "launch_checkpoint": {
+        "state": "review",
+        "pid_hint": null,
+        "basis": "Read of the retained own launch checkpoint; PID hint grants no process authority.",
+        "raw_checkpoint_copied": false
+      },
+      "input_hash_comparisons": [
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\application\\participant_launch.py",
+          "before_sha256": "287f2d0af70c1e95b3f7313492bc263c31ac764a5bd81a3e837510f9aff6758c",
+          "current_sha256": "287f2d0af70c1e95b3f7313492bc263c31ac764a5bd81a3e837510f9aff6758c",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_participant.py",
+          "before_sha256": "b96e8d2ca962efb8b129232a3da6d9c5f8fcedb5a1ba4013e2cae402c320e6b4",
+          "current_sha256": "b96e8d2ca962efb8b129232a3da6d9c5f8fcedb5a1ba4013e2cae402c320e6b4",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\participant.py",
+          "before_sha256": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017",
+          "current_sha256": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\participant_launch.py",
+          "before_sha256": "8212196986ad6bab658e44188a953b67c721d302e65ce306f7cc8e9ea936ec5a",
+          "current_sha256": "8212196986ad6bab658e44188a953b67c721d302e65ce306f7cc8e9ea936ec5a",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\participant_process.py",
+          "before_sha256": "f5153c14eb808f958666da3db63497735e79c9b969c4ce02b044edfc9d64295a",
+          "current_sha256": "f5153c14eb808f958666da3db63497735e79c9b969c4ce02b044edfc9d64295a",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\participant_client.py",
+          "before_sha256": "9f4a7d429e4a7a0959a490043c74304a288ebf3f51e265a75533bb15e4d0b08c",
+          "current_sha256": "9f4a7d429e4a7a0959a490043c74304a288ebf3f51e265a75533bb15e4d0b08c",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\provider_vault.py",
+          "before_sha256": "5a4a005dc73863f0cf956e0c0e00293fef7c098c80212d3d3aa9aad82d5d8236",
+          "current_sha256": "5a4a005dc73863f0cf956e0c0e00293fef7c098c80212d3d3aa9aad82d5d8236",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+          "before_sha256": "edfdd48f8b458af0906e507b4cb05217b326c3d6e515e9f024e05e3b8d650f70",
+          "current_sha256": "edfdd48f8b458af0906e507b4cb05217b326c3d6e515e9f024e05e3b8d650f70",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\test_service_restart_contracts.py",
+          "before_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+          "current_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\dx04_probe.py",
+          "before_sha256": "9bf238a2f0088ddf65259da61bfd27004fb0afd35cfed823e556215aec0c91ea",
+          "current_sha256": "80153ab8e8701299730e4144513506c65f6f078423abc4e9309d2198b167c34e",
+          "current_matches_before": false,
+          "retained_artifact": "runners/runner-v1.py",
+          "retained_sha256": "9bf238a2f0088ddf65259da61bfd27004fb0afd35cfed823e556215aec0c91ea",
+          "retained_matches_before": true,
+          "explanation": "Current runner is the intentionally corrected V2; exact V1 retained."
+        }
+      ],
+      "all_current_inputs_match_before": false,
+      "all_inputs_matched_current_or_retained": true,
+      "mcp_observation_count": 1,
+      "mcp_statuses": [
+        401
+      ],
+      "accepted_initialize_count": 0,
+      "accepted_tools_list_count": 0,
+      "canonical_final_counts": {
+        "read_mode": "SQLite mode=ro and query_only=ON",
+        "table_counts": {
+          "agents": 2,
+          "workspaces": 1,
+          "sessions": 0,
+          "messages": 0,
+          "handoffs": 0,
+          "execution_bindings": 0,
+          "execution_sessions": 0,
+          "execution_operations": 0,
+          "execution_receipts": 0
+        },
+        "expected_synthetic_agent_count": 1,
+        "expected_synthetic_workspace_count": 1,
+        "before_snapshot_retained": false,
+        "unchanged_claim": "NOT_ESTABLISHED",
+        "limit": "Only final counts are retained. Empty work/session tables show no such surviving rows; this is not a byte-for-byte or before/after preservation proof. Authentication/access timestamps are not compared. No credential columns or other DBs were read; DB not copied or hashed."
+      },
+      "server_listener_closed_reported": true,
+      "own_vault_absent_after_reported": true,
+      "aggregate_cleanup_confirmed_retained": false,
+      "original_status": "UNCONFIRMED",
+      "original_errors": [
+        {
+          "phase": "probe",
+          "error_class": "TypeError"
+        }
+      ]
+    },
+    "run-002": {
+      "launch_checkpoint": {
+        "state": "started",
+        "pid_hint": 48708,
+        "basis": "Read of the retained own launch checkpoint; PID hint grants no process authority.",
+        "raw_checkpoint_copied": false
+      },
+      "input_hash_comparisons": [
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\application\\participant_launch.py",
+          "before_sha256": "287f2d0af70c1e95b3f7313492bc263c31ac764a5bd81a3e837510f9aff6758c",
+          "current_sha256": "287f2d0af70c1e95b3f7313492bc263c31ac764a5bd81a3e837510f9aff6758c",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_participant.py",
+          "before_sha256": "b96e8d2ca962efb8b129232a3da6d9c5f8fcedb5a1ba4013e2cae402c320e6b4",
+          "current_sha256": "b96e8d2ca962efb8b129232a3da6d9c5f8fcedb5a1ba4013e2cae402c320e6b4",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\participant.py",
+          "before_sha256": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017",
+          "current_sha256": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\participant_launch.py",
+          "before_sha256": "8212196986ad6bab658e44188a953b67c721d302e65ce306f7cc8e9ea936ec5a",
+          "current_sha256": "8212196986ad6bab658e44188a953b67c721d302e65ce306f7cc8e9ea936ec5a",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\participant_process.py",
+          "before_sha256": "f5153c14eb808f958666da3db63497735e79c9b969c4ce02b044edfc9d64295a",
+          "current_sha256": "f5153c14eb808f958666da3db63497735e79c9b969c4ce02b044edfc9d64295a",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\participant_client.py",
+          "before_sha256": "9f4a7d429e4a7a0959a490043c74304a288ebf3f51e265a75533bb15e4d0b08c",
+          "current_sha256": "9f4a7d429e4a7a0959a490043c74304a288ebf3f51e265a75533bb15e4d0b08c",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\provider_vault.py",
+          "before_sha256": "5a4a005dc73863f0cf956e0c0e00293fef7c098c80212d3d3aa9aad82d5d8236",
+          "current_sha256": "5a4a005dc73863f0cf956e0c0e00293fef7c098c80212d3d3aa9aad82d5d8236",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+          "before_sha256": "edfdd48f8b458af0906e507b4cb05217b326c3d6e515e9f024e05e3b8d650f70",
+          "current_sha256": "edfdd48f8b458af0906e507b4cb05217b326c3d6e515e9f024e05e3b8d650f70",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\test_service_restart_contracts.py",
+          "before_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+          "current_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+          "current_matches_before": true
+        },
+        {
+          "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-native-launch-probe-l3gc2mp1\\dx04_probe.py",
+          "before_sha256": "80153ab8e8701299730e4144513506c65f6f078423abc4e9309d2198b167c34e",
+          "current_sha256": "80153ab8e8701299730e4144513506c65f6f078423abc4e9309d2198b167c34e",
+          "current_matches_before": true
+        }
+      ],
+      "all_current_inputs_match_before": true,
+      "all_inputs_matched_current_or_retained": true,
+      "mcp_observation_count": 1,
+      "mcp_statuses": [
+        401
+      ],
+      "accepted_initialize_count": 0,
+      "accepted_tools_list_count": 0,
+      "canonical_final_counts": {
+        "read_mode": "SQLite mode=ro and query_only=ON",
+        "table_counts": {
+          "agents": 2,
+          "workspaces": 1,
+          "sessions": 0,
+          "messages": 0,
+          "handoffs": 0,
+          "execution_bindings": 0,
+          "execution_sessions": 0,
+          "execution_operations": 0,
+          "execution_receipts": 0
+        },
+        "expected_synthetic_agent_count": 1,
+        "expected_synthetic_workspace_count": 1,
+        "before_snapshot_retained": false,
+        "unchanged_claim": "NOT_ESTABLISHED",
+        "limit": "Only final counts are retained. Empty work/session tables show no such surviving rows; this is not a byte-for-byte or before/after preservation proof. Authentication/access timestamps are not compared. No credential columns or other DBs were read; DB not copied or hashed."
+      },
+      "server_listener_closed_reported": true,
+      "own_vault_absent_after_reported": true,
+      "aggregate_cleanup_confirmed_retained": false,
+      "original_status": "UNCONFIRMED",
+      "original_errors": [
+        {
+          "phase": "probe",
+          "error_class": "CONSOLE_WATCHER_FAILED"
+        },
+        {
+          "phase": "console_watcher",
+          "error_class": "PermissionError"
+        }
+      ]
+    }
+  },
+  "interpretation": {
+    "run_001": "Harness TypeError at CreateJobObject before CreateProcess; retained launch checkpoint remains review. Own Server/vault cleanup is reported, without an aggregate successful execution.",
+    "run_002": "Fixed login labels were observed; no accepted initialize/tools-list was recorded. Watcher failed with PermissionError and the own Job was terminated with exit125 and active0. This is a limited observation in this attempt, not a general causal claim that login or inference always precedes MCP.",
+    "watcher_error_cause": "UNKNOWN: only PermissionError class is retained; no new diagnosis or repair attempted.",
+    "preflight": "packages-before.json is the original prior verification summary (691/166/124 package files), not a retained file-by-file proof. Post-hashes check only the exact inputs listed in input_hashes_before.",
+    "status": "Keep UNCONFIRMED and aggregate cleanup false; do not promote DX04, native MCP, M1, or provider readiness."
+  }
+}
