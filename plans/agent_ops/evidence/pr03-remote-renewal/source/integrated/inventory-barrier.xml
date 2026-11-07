@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="37.401" timestamp="2026-11-07T04:41:56.297508-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_renewal" name="test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session" time="31.578"><failure message="assert 1 == 2">runtime = &lt;isolated HTTP runtime; synthetic credentials redacted&gt;
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10670/test_remote_exhaustion_lost_is0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021F79181940&gt;
+
+    def test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session(runtime, tmp_path, monkeypatch):
+        project = RemoteProject(runtime, tmp_path, monkeypatch)
+    
+        async def run():
+            try:
+                await project.start()
+                first = await project.send_and_complete(request_id='first-remote-work')
+                original_grant, = project.rows('runtime_execution_grants')
+                assert original_grant['used_executions'] == original_grant['max_executions'] == 2
+                leases = deepcopy(project.rows('execution_leases'))
+                operations = deepcopy(project.rows('execution_operations'))
+                flow = project.work()
+                review = await asyncio.to_thread(flow.authorization_review, minutes=30, max_executions=4)
+                assert review['can_issue'] and review['current_grants'][0]['state'] == 'exhausted'
+                assert project.rows('runtime_execution_grants') == [original_grant]
+                project.lose_next = PREFIX + '/connections/authorizations:issue'
+                with pytest.raises(ConnectionError) as lost:
+                    await asyncio.to_thread(flow.authorize, approval=review['review_revision'])
+                assert lost.value.possible_effect
+                assert project.work().document['authorization']['state'] == 'submitted'
+                committed, = project.rows('connection_authorization_receipts')
+                before = len(project.calls)
+                receipt = await asyncio.to_thread(project.work().authorize)
+                assert receipt['client_request_id'] == committed['client_request_id']
+                assert not any(path.endswith(':issue') for _, path in project.calls[before:])
+                assert len(project.rows('runtime_execution_grants')) == 2
+                assert project.rows('execution_operations') == operations
+                assert project.rows('execution_leases') == leases
+                assert len(project.native.opened) == 1
+                second = await project.send_and_complete(request_id='second-explicit-remote-work')
+                assert second['scope']['session_id'] != first['scope']['session_id']
+                new_grant = receipt['result']['grant']['grant_id']
+                current = project.rows('execution_leases')
+                assert {r['grant_id'] for r in current if r['session_id'] == first['scope']['session_id']} == {original_grant['grant_id']}
+                assert {r['grant_id'] for r in current if r['session_id'] == second['scope']['session_id']} == {new_grant}
+                assert len(project.rows('connection_authorization_receipts')) == 1
+                assert len(project.native.opened) == 2
+                assert all(len(native.sent) == 1 for native, _, _ in project.native.opened.values())
+                project.assert_redacted()
+            finally:
+                await project.close()
+    
+&gt;       asyncio.run(run())
+
+tests\execution_r4\test_remote_renewal.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def run():
+        try:
+            await project.start()
+            first = await project.send_and_complete(request_id='first-remote-work')
+            original_grant, = project.rows('runtime_execution_grants')
+&gt;           assert original_grant['used_executions'] == original_grant['max_executions'] == 2
+E           assert 1 == 2
+
+tests\execution_r4\test_remote_renewal.py:40: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="6" time="3.315" timestamp="2026-11-07T04:34:06.220637-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_authorization_uncertainty" name="test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens[target-login-review]" time="0.337" /><testcase classname="tests.execution_r4.test_remote_authorization_uncertainty" name="test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens[target-login-submitted]" time="0.023"><failure message="AssertionError: assert 'refused' == 'unconfirmed'&#10;  &#10;  - unconfirmed&#10;  + refused">tests\execution_r4\test_remote_authorization_uncertainty.py:93: in test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens
+    assert result['state'] == ('unconfirmed' if state == 'submitted' else 'refused')
+E   AssertionError: assert 'refused' == 'unconfirmed'
+E     
+E     - unconfirmed
+E     + refused</failure></testcase><testcase classname="tests.execution_r4.test_remote_authorization_uncertainty" name="test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens[target-login-done]" time="0.020" /><testcase classname="tests.execution_r4.test_remote_authorization_uncertainty" name="test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens[target-vault-review]" time="0.020" /><testcase classname="tests.execution_r4.test_remote_authorization_uncertainty" name="test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens[target-vault-submitted]" time="0.022"><failure message="AssertionError: assert 'refused' == 'unconfirmed'&#10;  &#10;  - unconfirmed&#10;  + refused">tests\execution_r4\test_remote_authorization_uncertainty.py:93: in test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens
+    assert result['state'] == ('unconfirmed' if state == 'submitted' else 'refused')
+E   AssertionError: assert 'refused' == 'unconfirmed'
+E     
+E     - unconfirmed
+E     + refused</failure></testcase><testcase classname="tests.execution_r4.test_remote_authorization_uncertainty" name="test_cli_auth_failure_preserves_durable_unknown_issuance_before_flow_opens[target-vault-done]" time="0.067" /></testsuite></testsuites>

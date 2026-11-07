@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="5.505" timestamp="2026-11-07T04:32:05.724366-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_remote_setup_rotation" name="test_completed_reconnect_after_explicit_rotation_keeps_original_receipts[cli-finish]" time="1.467"><failure message="okto_nexus_connector.errors.ConnectorError: AGENT_ID_MISMATCH (remote_setup): The canonical key does not match the reviewed Server, agent and credential revision.">remote = namespace(args=Namespace(json=False, verbose=False, non_interactive=False, state_dir=None, command='connect', server='...on remote.&lt;locals&gt;.store_key at 0x0000027ADB8C9EE0&gt;, resolve=&lt;function remote.&lt;locals&gt;.resolve at 0x0000027ADB8C9DA0&gt;))
+root_stage = 'configured'
+
+    @pytest.mark.parametrize('root_stage', ['configured', 'awaiting_host'], ids=['cli-finish', 'background-finish'])
+    async def test_completed_reconnect_after_explicit_rotation_keeps_original_receipts(remote, root_stage):
+        r = remote
+        r.store.update(lambda state: state.preferences[setup.PREFIX + 'project'].update(stage=root_stage))
+        historical = deepcopy(r.store.load().preferences)
+        await rotate(r)
+        before = r.store.path.read_bytes()
+&gt;       result = await reuse_fixtures.run(r)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto-nexus-connector\tests\unit\test_remote_setup_rotation.py:98: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto-nexus-connector\tests\unit\test_connect_reuse.py:66: in run
+    return await connect.run_connect(r.args, r.output, r.root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect.py:176: in run_connect
+    result = await configure_local(wizard, output, root, store, identity, args.server, portable)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\cli\commands\configure_local.py:163: in configure_local
+    require_configuration(store, saved, identity)
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\services\remote_setup.py:360: in require_configuration
+    verify_identity(identity, receipt)
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\services\remote_setup.py:346: in verify_identity
+    refuse('The canonical key does not match the reviewed Server, agent and credential revision.', 'AGENT_ID_MISMATCH')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+message = 'The canonical key does not match the reviewed Server, agent and credential revision.'
+code = 'AGENT_ID_MISMATCH'
+
+    def refuse(message, code='REMOTE_SETUP_INVALID'):
+&gt;       raise ConnectorError(code, 'remote_setup', message)
+E       okto_nexus_connector.errors.ConnectorError: AGENT_ID_MISMATCH (remote_setup): The canonical key does not match the reviewed Server, agent and credential revision.
+
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\services\remote_setup.py:33: ConnectorError</failure></testcase><testcase classname="tests.unit.test_remote_setup_rotation" name="test_completed_reconnect_after_explicit_rotation_keeps_original_receipts[background-finish]" time="0.758"><failure message="okto_nexus_connector.errors.ConnectorError: AGENT_ID_MISMATCH (remote_setup): The canonical key does not match the reviewed Server, agent and credential revision.">remote = namespace(args=Namespace(json=False, verbose=False, non_interactive=False, state_dir=None, command='connect', server='...on remote.&lt;locals&gt;.store_key at 0x0000027ADB688AE0&gt;, resolve=&lt;function remote.&lt;locals&gt;.resolve at 0x0000027ADB688B80&gt;))
+root_stage = 'awaiting_host'
+
+    @pytest.mark.parametrize('root_stage', ['configured', 'awaiting_host'], ids=['cli-finish', 'background-finish'])
+    async def test_completed_reconnect_after_explicit_rotation_keeps_original_receipts(remote, root_stage):
+        r = remote
+        r.store.update(lambda state: state.preferences[setup.PREFIX + 'project'].update(stage=root_stage))
+        historical = deepcopy(r.store.load().preferences)
+        await rotate(r)
+        before = r.store.path.read_bytes()
+&gt;       result = await reuse_fixtures.run(r)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto-nexus-connector\tests\unit\test_remote_setup_rotation.py:98: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+D:\Projetos\Techridy\okto-nexus-connector\tests\unit\test_connect_reuse.py:66: in run
+    return await connect.run_connect(r.args, r.output, r.root)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect.py:176: in run_connect
+    result = await configure_local(wizard, output, root, store, identity, args.server, portable)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\cli\commands\configure_local.py:163: in configure_local
+    require_configuration(store, saved, identity)
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\services\remote_setup.py:360: in require_configuration
+    verify_identity(identity, receipt)
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\services\remote_setup.py:346: in verify_identity
+    refuse('The canonical key does not match the reviewed Server, agent and credential revision.', 'AGENT_ID_MISMATCH')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+message = 'The canonical key does not match the reviewed Server, agent and credential revision.'
+code = 'AGENT_ID_MISMATCH'
+
+    def refuse(message, code='REMOTE_SETUP_INVALID'):
+&gt;       raise ConnectorError(code, 'remote_setup', message)
+E       okto_nexus_connector.errors.ConnectorError: AGENT_ID_MISMATCH (remote_setup): The canonical key does not match the reviewed Server, agent and credential revision.
+
+D:\Projetos\Techridy\okto-nexus-connector\src\okto_nexus_connector\services\remote_setup.py:33: ConnectorError</failure></testcase></testsuite></testsuites>

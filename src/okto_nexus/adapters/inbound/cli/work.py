@@ -246,10 +246,15 @@ def run_work(argv):
         parser.error('answer requires --approval-id')
     if action == 'chat' and (args.json or not sys.stdin.isatty()):
         parser.error('chat requires an interactive terminal; use send/status/watch/answer with --json')
-    guard = None
+    guard = flow = checkpoint = None
     try:
-        from .terminal_target import resolve_terminal_target
+        from .terminal_target import resolve_terminal_target, terminal_target_selection
         project, profile = project_profile(args.project, args.profile)
+        # Read durable uncertainty before opening the operator vault/client.
+        # Topology selection itself performs no authentication or lifecycle effect.
+        home, _ = terminal_target_selection(service_args, profile, args.operator_profile)
+        checkpoint_path = home / 'terminal/work' / (profile + '.json')
+        checkpoint = read_json(checkpoint_path) if checkpoint_path.exists() else None
         service = resolve_terminal_target(service_args, profile, args.operator_profile, resolve_local_service)
         target = service.adapter.home / 'terminal/profiles' / (profile + '.json')
         if not target.exists():
@@ -316,10 +321,14 @@ def run_work(argv):
     except KeyboardInterrupt:
         return 130
     except (ConnectionError, OktoNexusError, LockBusy, OSError, ValueError, KeyError, TypeError) as error:
-        display({'state': 'unconfirmed' if getattr(error, 'possible_effect', False) else 'refused',
+        retained = flow.document if flow is not None else checkpoint
+        authorization = retained.get('authorization') if isinstance(retained, dict) else None
+        pending_effect = isinstance(authorization, dict) and authorization.get('state') == 'submitted'
+        possible_effect = bool(getattr(error, 'possible_effect', False) or pending_effect)
+        display({'state': 'unconfirmed' if possible_effect else 'refused',
             'code': getattr(error, 'code', 'PROFILE_BUSY' if isinstance(error, LockBusy) else 'CONFIG_ERROR'),
             'message': getattr(error, 'message', 'Inspect the selected service and project profile.'),
-            'possible_effect': getattr(error, 'possible_effect', False)}, args.json)
+            'possible_effect': possible_effect}, args.json)
         return 3
     finally:
         if guard is not None:

@@ -1,0 +1,20 @@
+{
+  "D:\\Projetos\\Techridy\\okto_labs_okto_nexus": [
+    ".gitattributes",
+    "docs/remote-project-setup.md",
+    "docs/terminal-work.md",
+    "src/okto_nexus/adapters/inbound/cli/work.py",
+    "src/okto_nexus/application/terminal_authorization.py",
+    "tests/execution_r4/remote_renewal_helpers.py",
+    "tests/execution_r4/test_remote_authorization_uncertainty.py",
+    "tests/execution_r4/test_remote_renewal.py"
+  ],
+  "D:\\Projetos\\Techridy\\okto-nexus-connector": [
+    ".gitattributes",
+    "docs/connection-configuration.md",
+    "src/okto_nexus_connector/cli/commands/connect.py",
+    "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+    "src/okto_nexus_connector/services/remote_setup.py",
+    "tests/unit/test_remote_setup_rotation.py"
+  ]
+}

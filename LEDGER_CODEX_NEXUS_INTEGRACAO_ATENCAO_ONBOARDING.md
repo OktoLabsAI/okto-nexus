@@ -522,3 +522,10 @@ Pacotes não editáveis fora dos checkouts: **Nexus 187/187 e Connector 276/276 
 Connector commit/push: `7091ef2ebbf4b47ee41e38ec6b6df8c56e583f3c`. O plano e os conjuntos fixos de 59 tarefas, 132 cenários, 28 invariantes e 17 critérios permanecem iguais. PR-03, PR-10 integral e R3 continuam IN_PROGRESS; serviços nativos, provedores/clientes reais, renovação remota e regressão conjunta integral continuam pendentes. [Evidências e limites](plans/agent_ops/evidence/pr03-remote-bootstrap.md).
 
 Pacote Nexus final: remoção apenas de duas quebras vazias no EOF, com AST equivalente; 35 testes instalados de contrato/HTTP/guards passaram novamente, sem somá-los aos 187 casos únicos. A evidência anterior e a tentativa de build sem setuptools foram preservadas.
+
+
+## 2026-11-07 — PR-03: renovação remota e reconexão após troca de chave
+
+Quatro cenários conjuntos qualificaram renovação por esgotamento/expiração, resposta perdida, rotação explícita, reconexão concluída e revogação com HTTP/WebSocket, IPC TCP e DaemonApp reais. O harness/provedor é sintético. Bootstrap e Finish históricos permanecem imutáveis; setup pendente mantém o epoch original. Emissão pendente conserva incerteza durante falha de acesso, enquanto falha de leitura de recibo confirmado não reabre a emissão.
+
+Pacotes instalados: **Nexus 66/66 e Connector 233/233**, sem somar retestes. Core inalterado. Connector commit/push `fb3fff473ff246adcffa9e91573ac85f7a394170`. Plano e inventário fixos preservados; M1/M2 produtivos, serviços/cofres nativos, TLS/dois hosts e R3 integral permanecem abertos. [Evidências e limites](plans/agent_ops/evidence/pr03-remote-renewal.md).

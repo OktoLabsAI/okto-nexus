@@ -1,0 +1,14 @@
+..................................................................       [100%]
+============================== warnings summary ===============================
+tests/execution_r4/test_remote_renewal.py::test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session[expired]
+tests/execution_r4/test_remote_renewal.py::test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session[expired]
+tests/execution_r4/test_remote_renewal.py::test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session[expired]
+tests/execution_r4/test_remote_renewal.py::test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets
+tests/execution_r4/test_remote_renewal.py::test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets
+tests/execution_r4/test_remote_renewal.py::test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets
+  C:\Users\jpamb\AppData\Roaming\Python\Python313\site-packages\websockets\exceptions.py:137: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+    warnings.warn(  # deprecated in 13.1 - 2024-09-21
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\remote-renewal-release-8hs8nezr\candidate-v2\tests-nexus-final\installed.xml -
+66 passed, 6 warnings in 404.34s (0:06:44)

@@ -71,6 +71,10 @@ After an uncertain issuance, repeat `work authorize` to recover the same request
 and receipt. Recovery does not extend its expiry, replenish its budget or undo
 later revocation, including after a project configuration change. The receipt
 describes the original issuance, not a claim of current execution readiness.
+If login, vault access or receipt recovery fails while that issuance is still
+pending, the CLI keeps the result `unconfirmed` with `possible_effect=true`.
+Restore operator access and repeat the same profile's `work authorize`; do not
+replace its checkpoint or create another authorization request to retry.
 Reviews show at most 50 grant records and state when more exist; all records
 participate in the current-state check.
 

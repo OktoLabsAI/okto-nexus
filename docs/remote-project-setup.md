@@ -223,6 +223,25 @@ restricted to one host or workspace. Execution still needs the binding and
 current canonical authorization. Losing the sole copy of a one-shot key cannot
 be repaired by replaying this flow; no key rotation is included in setup recovery.
 
+After an operator explicitly rotates the canonical key through the existing
+identity controls, import the replacement through the host's masked prompt:
+
+```sh
+okto-nexus-connector identity replace-credential project
+okto-nexus-connector connect --identity project
+```
+
+Run `connect` from the original project directory. This reuse is available only
+after the setup and any chosen startup operation have completed. The Connector
+authenticates the current credential and checks the exact approved binding and
+retained local configuration. It keeps the original bootstrap, child requests
+and Finish result; it does not register again, probe the installation, reapply
+Finish or renew a grant. A pending local review or changed binding still refuses
+reuse. The original `--setup-receipt` remains tied to its bootstrap credential
+revision; use ordinary `connect --identity` for completed reuse after replacement.
+An unfinished setup cannot adopt a different credential revision through this
+path. Review execution authorization separately with `work authorize` when needed.
+
 The Server retains at most 1,024 setups per authenticated operator and 32
 revisions per setup, including the initial review. Each review is limited to
 64 KiB. Capacity exhaustion refuses new allocation with `QUOTA_EXCEEDED` before

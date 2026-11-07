@@ -21,6 +21,17 @@ class TerminalAuthorization:
         return review | {'review_revision': revision}
 
     def authorize(self, *, approval=None):
+        try:
+            return self._authorize(approval=approval)
+        except ConnectionError as error:
+            pending = self.document.get('authorization')
+            if pending and pending.get('state') == 'submitted' and not error.possible_effect:
+                # An unavailable login or recovery endpoint cannot resolve an
+                # earlier issuance whose response was never confirmed.
+                raise ConnectionError(error.code, error.message, stage=error.stage, possible_effect=True) from error
+            raise
+
+    def _authorize(self, *, approval=None):
         pending = self.document.get('authorization')
         if not pending:
             raise ConnectionError('REVIEW_REQUIRED', 'Run work authorize to review the project authorization first.')
@@ -47,7 +58,11 @@ class TerminalAuthorization:
         try:
             receipt = self.api('POST', '/connections/authorizations:recover', request)
         except ConnectionError as error:
-            if (error.code, error.stage) != ('NOT_FOUND', 'connection.authorization') or pending['state'] == 'done':
+            if pending['state'] == 'done':
+                # Recovery is read-only. Generic POST transport uncertainty
+                # cannot make an already confirmed issuance uncertain again.
+                raise ConnectionError(error.code, error.message, stage=error.stage, possible_effect=False) from error
+            if (error.code, error.stage) != ('NOT_FOUND', 'connection.authorization'):
                 raise
             try:
                 receipt = self.api('POST', '/connections/authorizations:issue', request)

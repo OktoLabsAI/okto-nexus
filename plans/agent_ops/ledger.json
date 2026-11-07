@@ -120,6 +120,14 @@
         "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json",
         "plans/agent_ops/evidence/pr03-remote-operator.md",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-setup-recovery.md",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
@@ -2284,6 +2292,7 @@
         "../okto-nexus-connector/tests/unit/test_r4_daemon_control.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup_revision.py",
+        "../okto-nexus-connector/tests/unit/test_remote_setup_rotation.py",
         "../okto-nexus-connector/tests/unit/test_runtime_admission.py",
         "../okto-nexus-connector/tests/unit/test_session_capability_owner.py",
         "docs/remote-project-setup.md",
@@ -2357,10 +2366,13 @@
         "src/okto_nexus/domain/server_origin.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "src/okto_nexus/migrations/167_remote_setup.sql",
+        "tests/execution_r4/remote_renewal_helpers.py",
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
+        "tests/execution_r4/test_remote_authorization_uncertainty.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_remote_project_policy.py",
+        "tests/execution_r4/test_remote_renewal.py",
         "tests/execution_r4/test_remote_setup_integration.py",
         "tests/execution_r4/test_remote_terminal_setup.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -2432,6 +2444,14 @@
         "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -2460,7 +2480,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -2469,7 +2489,8 @@
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
-        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone."
+        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone.",
+        "The remote renewal contract is now verified with Windows loopback HTTP/WSS/TCP IPC and synthetic native/provider peers. Real provider, two-host/TLS, OS-vault/service lifecycle and complete M1/M2 remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -2525,7 +2546,11 @@
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-16": {
@@ -2838,6 +2863,7 @@
         "../okto-nexus-connector/tests/unit/test_r4_daemon_control.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup_revision.py",
+        "../okto-nexus-connector/tests/unit/test_remote_setup_rotation.py",
         "../okto-nexus-connector/tests/unit/test_runtime_admission.py",
         "../okto-nexus-connector/tests/unit/test_session_capability_owner.py",
         "docs/connection-setup.md",
@@ -2921,14 +2947,17 @@
         "src/okto_nexus/domain/server_origin.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "src/okto_nexus/migrations/167_remote_setup.sql",
+        "tests/execution_r4/remote_renewal_helpers.py",
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_connection_test.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_diagnostics.py",
         "tests/execution_r4/test_project_preset_update.py",
+        "tests/execution_r4/test_remote_authorization_uncertainty.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_remote_project_policy.py",
+        "tests/execution_r4/test_remote_renewal.py",
         "tests/execution_r4/test_remote_setup_integration.py",
         "tests/execution_r4/test_remote_terminal_setup.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -3021,6 +3050,14 @@
         "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-nexus-final.xml",
@@ -3052,7 +3089,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -3063,7 +3100,8 @@
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
         "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1.",
         "Optional preset evolution is verified with synthetic future revisions and native effects; current shipped recommendation is revision 1. No real provider, OS vault/TLS or productive M1 acceptance is claimed.",
-        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone."
+        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone.",
+        "The remote renewal contract is now verified with Windows loopback HTTP/WSS/TCP IPC and synthetic native/provider peers. Real provider, two-host/TLS, OS-vault/service lifecycle and complete M1/M2 remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -3129,7 +3167,11 @@
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-05": {
@@ -3579,8 +3621,13 @@
         "../okto-nexus-connector/README.md",
         "../okto-nexus-connector/docs/connection-configuration.md",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect_reuse.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/services/remote_setup.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
+        "../okto-nexus-connector/tests/unit/test_remote_setup_rotation.py",
         "README.md",
+        "docs/remote-project-setup.md",
         "docs/terminal-connect.md",
         "docs/terminal-coordination.md",
         "docs/terminal-operator.md",
@@ -3635,11 +3682,14 @@
         "src/okto_nexus/application/terminal_work.py",
         "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/remote_renewal_helpers.py",
         "tests/execution_r4/test_connection_test.py",
         "tests/execution_r4/test_coordination_cli.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_preset_update.py",
+        "tests/execution_r4/test_remote_authorization_uncertainty.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_remote_renewal.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
@@ -3672,6 +3722,14 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -3727,14 +3785,15 @@
         "plans/agent_ops/evidence/pr05-coordination-passive-auth-regression.xml",
         "plans/agent_ops/evidence/pr05-coordination-passive-auth-source-initial.xml"
       ],
-      "result": "Generic participant message/handoff creation, request inspection and correlated wait now use a reusable facade and direct canonical MCP. Durable private checkpoints precede transmission, preserve original actor/workspace/session provenance and both 30-day deadlines, recover the same request after response loss/process death and refuse replay after expiry, backward clocks, missing confirmed receipts or incompatible Server discovery. Passive cursor/snapshot/long-poll rechecks current authority without presence or lease mutation; fresh HTTP authentication also bypasses the positive cache. CLI output preserves confirmed creation IDs if subsequent observation fails; timeout/Ctrl+C never cancel or resubmit work. 614 distinct installed cases passed across overlapping campaigns, with one optional tokenizer measurement skipped. The final 457-Python-file wheel, seven static assets and 160 migrations match source bytes; only the CLI profile-directory guard differs from the broad-qualified wheel. Initial failures and six synthetic fixture-key redactions are recorded. Both initial installed revocation failures were old HTTP-200 expectations; strict HTTP-401 and independent stale-context transaction checks passed afterward. Core/Connector are unchanged. Synthetic native peers do not qualify real productive M1/M2 or two-client cooperation; PR-05 and full R3 remain in progress.",
+      "result": "Generic participant message/handoff creation, request inspection and correlated wait now use a reusable facade and direct canonical MCP. Durable private checkpoints precede transmission, preserve original actor/workspace/session provenance and both 30-day deadlines, recover the same request after response loss/process death and refuse replay after expiry, backward clocks, missing confirmed receipts or incompatible Server discovery. Passive cursor/snapshot/long-poll rechecks current authority without presence or lease mutation; fresh HTTP authentication also bypasses the positive cache. CLI output preserves confirmed creation IDs if subsequent observation fails; timeout/Ctrl+C never cancel or resubmit work. 614 distinct installed cases passed across overlapping campaigns, with one optional tokenizer measurement skipped. The final 457-Python-file wheel, seven static assets and 160 migrations match source bytes; only the CLI profile-directory guard differs from the broad-qualified wheel. Initial failures and six synthetic fixture-key redactions are recorded. Both initial installed revocation failures were old HTTP-200 expectations; strict HTTP-401 and independent stale-context transaction checks passed afterward. Core/Connector are unchanged. Synthetic native peers do not qualify real productive M1/M2 or two-client cooperation; PR-05 and full R3 remain in progress.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Implementation and installed native-operation/generic-coordination contracts are exercised. Full task acceptance still awaits the fixed combined qualified-client campaigns; no new completion target is introduced.",
         "Managed/native execution peers are synthetic; real productive local/remote M1/M2 and real provider context restoration remain NOT_RUN.",
         "Optional DX-08 smoke is implemented and installed-tested between synthetic identities; two qualified external MCP clients cooperating through canonical messages/handoffs remain unqualified.",
-        "This increment qualifies Windows isolated CLI/TCP/filesystem/process behavior. Native user-service campaigns, real remote OS-vault/TLS accessibility and other-platform acceptance remain separate open plan requirements."
+        "This increment qualifies Windows isolated CLI/TCP/filesystem/process behavior. Native user-service campaigns, real remote OS-vault/TLS accessibility and other-platform acceptance remain separate open plan requirements.",
+        "The remote renewal contract is now verified with Windows loopback HTTP/WSS/TCP IPC and synthetic native/provider peers. Real provider, two-host/TLS, OS-vault/service lifecycle and complete M1/M2 remain open."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -3767,7 +3826,11 @@
         "coordination_authenticated_scope_and_explicit_session_provenance": "VERIFIED",
         "passive_http_authentication_without_presence_or_positive_cache": "VERIFIED",
         "coordination_cli_json_exit_codes_and_private_profile_boundary": "VERIFIED",
-        "qualified_native_and_external_client_combined_campaign": "NOT_RUN"
+        "qualified_native_and_external_client_combined_campaign": "NOT_RUN",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-10": {
@@ -4409,6 +4472,7 @@
         "../okto-nexus-connector/tests/unit/test_r4_daemon_control.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup_revision.py",
+        "../okto-nexus-connector/tests/unit/test_remote_setup_rotation.py",
         "../okto-nexus-connector/tests/unit/test_runtime_admission.py",
         "../okto-nexus-connector/tests/unit/test_session_capability_owner.py",
         "docs/remote-project-setup.md",
@@ -4473,9 +4537,12 @@
         "src/okto_nexus/domain/server_origin.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "src/okto_nexus/migrations/167_remote_setup.sql",
+        "tests/execution_r4/remote_renewal_helpers.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_dashboard.py",
+        "tests/execution_r4/test_remote_authorization_uncertainty.py",
         "tests/execution_r4/test_remote_project_policy.py",
+        "tests/execution_r4/test_remote_renewal.py",
         "tests/execution_r4/test_remote_setup_integration.py",
         "tests/execution_r4/test_remote_terminal_setup.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -4525,6 +4592,14 @@
         "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -4544,7 +4619,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml",
         "tests/execution_r4/test_project_dashboard.py"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Project introduction reads the canonical preset and suppresses automatic onboarding for existing identities, including setup from the terminal. Connections displays stored origin/current configuration; display name and role edits preserve the canonical identity, metadata, history, bindings and grants. 40 frontend, 32 source integration and 76 installed integration tests passed (overlapping suites). Real Chromium interaction against installed FastAPI/SQLite backends verified first/existing use, personalization, focus, themes/mobile and retry; native checks were synthetic. Productive M1, participant setup and preset evolution remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Project introduction reads the canonical preset and suppresses automatic onboarding for existing identities, including setup from the terminal. Connections displays stored origin/current configuration; display name and role edits preserve the canonical identity, metadata, history, bindings and grants. 40 frontend, 32 source integration and 76 installed integration tests passed (overlapping suites). Real Chromium interaction against installed FastAPI/SQLite backends verified first/existing use, personalization, focus, themes/mobile and retry; native checks were synthetic. Productive M1, participant setup and preset evolution remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -4554,7 +4629,8 @@
         "Remote topology, operator-session CLI authentication, participant init, start-at-login review, preset evolution and remaining participant/dashboard evolution remain open.",
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "UI campaign uses a real installed backend and synthetic harness; productive M1 and complete participant/preset evolution are not qualified.",
-        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone."
+        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone.",
+        "The remote renewal contract is now verified with Windows loopback HTTP/WSS/TCP IPC and synthetic native/provider peers. Real provider, two-host/TLS, OS-vault/service lifecycle and complete M1/M2 remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -4588,7 +4664,11 @@
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-19": {
@@ -4638,6 +4718,7 @@
         "../okto-nexus-connector/tests/unit/test_r4_daemon_control.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup_revision.py",
+        "../okto-nexus-connector/tests/unit/test_remote_setup_rotation.py",
         "../okto-nexus-connector/tests/unit/test_runtime_admission.py",
         "../okto-nexus-connector/tests/unit/test_session_capability_owner.py",
         "docs/connection-setup.md",
@@ -4718,12 +4799,15 @@
         "src/okto_nexus/domain/server_origin.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "src/okto_nexus/migrations/167_remote_setup.sql",
+        "tests/execution_r4/remote_renewal_helpers.py",
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_connection_setup_recovery.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_dashboard.py",
+        "tests/execution_r4/test_remote_authorization_uncertainty.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_remote_project_policy.py",
+        "tests/execution_r4/test_remote_renewal.py",
         "tests/execution_r4/test_remote_setup_integration.py",
         "tests/execution_r4/test_remote_terminal_setup.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -4790,6 +4874,14 @@
         "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-setup-recovery-connector.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-installed.xml",
         "plans/agent_ops/evidence/pr03-setup-recovery-nexus-final.xml",
@@ -4817,7 +4909,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml",
         "tests/execution_r4/test_project_dashboard.py"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Project introduction reads the canonical preset and suppresses automatic onboarding for existing identities, including setup from the terminal. Connections displays stored origin/current configuration; display name and role edits preserve the canonical identity, metadata, history, bindings and grants. 40 frontend, 32 source integration and 76 installed integration tests passed (overlapping suites). Real Chromium interaction against installed FastAPI/SQLite backends verified first/existing use, personalization, focus, themes/mobile and retry; native checks were synthetic. Productive M1, participant setup and preset evolution remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Project introduction reads the canonical preset and suppresses automatic onboarding for existing identities, including setup from the terminal. Connections displays stored origin/current configuration; display name and role edits preserve the canonical identity, metadata, history, bindings and grants. 40 frontend, 32 source integration and 76 installed integration tests passed (overlapping suites). Real Chromium interaction against installed FastAPI/SQLite backends verified first/existing use, personalization, focus, themes/mobile and retry; native checks were synthetic. Productive M1, participant setup and preset evolution remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Local terminal facade is covered by synthetic integration; productive local/remote M1 acceptance remains NOT_RUN.",
@@ -4828,7 +4920,8 @@
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
         "UI campaign uses a real installed backend and synthetic harness; productive M1 and complete participant/preset evolution are not qualified.",
-        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone."
+        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone.",
+        "The remote renewal contract is now verified with Windows loopback HTTP/WSS/TCP IPC and synthetic native/provider peers. Real provider, two-host/TLS, OS-vault/service lifecycle and complete M1/M2 remain open."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -4882,7 +4975,11 @@
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-20": {
@@ -4898,7 +4995,12 @@
         "../okto-nexus-connector/README.md",
         "../okto-nexus-connector/docs/connection-configuration.md",
         "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/configure_local.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/cli/commands/connect_reuse.py",
+        "../okto-nexus-connector/src/okto_nexus_connector/services/remote_setup.py",
         "../okto-nexus-connector/tests/unit/test_configure.py",
+        "../okto-nexus-connector/tests/unit/test_remote_setup_rotation.py",
+        "docs/remote-project-setup.md",
         "docs/terminal-connect.md",
         "docs/terminal-doctor.md",
         "docs/terminal-operator.md",
@@ -4943,9 +5045,12 @@
         "src/okto_nexus/bootstrap/dependencies.py",
         "src/okto_nexus/config.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
+        "tests/execution_r4/remote_renewal_helpers.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_diagnostics.py",
+        "tests/execution_r4/test_remote_authorization_uncertainty.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
+        "tests/execution_r4/test_remote_renewal.py",
         "tests/execution_r4/test_terminal_authorization.py",
         "tests/execution_r4/test_terminal_binding_approval.py",
         "tests/execution_r4/test_terminal_connect.py",
@@ -4971,6 +5076,14 @@
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-source.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -4991,7 +5104,7 @@
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml"
       ],
-      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "result": "Human operator CLI reviews and decides the original immutable Connector binding proposal through the existing approval API. Review includes actor, Server, subject, workspace, executor, installation, effects, revision and expiry. Participant authority cannot substitute for the operator; expiry, policy drift, rejection and conflicting decisions remain fenced. Lost decision responses recover the canonical receipt without another POST. The real Connector onboarding service and background continuation reopen persisted state and apply the original request once with the participant credential, producing one binding and grant. 30 source Server tests, 17 source Connector tests and 153 coordinated installed tests passed; 24 focused installed cases passed after the Connector README metadata rebuild, with unchanged Python payloads. Synthetic inventory and HTTP adapters establish the contract; real two-host provider work, OS vault/TLS and full M1 remain open. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Synthetic native peer qualifies facade/HTTP/admission/receipt behavior only; real provider context, coordination and local/remote productive M1 campaigns remain NOT_RUN.",
@@ -5001,7 +5114,8 @@
         "Renewal does not migrate a live session to a different source grant. Expired/exhausted sessions need explicit operator closure/reconciliation and a separately requested new session; provider context restoration is not claimed.",
         "Remote operator HTTP uses an isolated memory vault and synthetic embedded native peer in tests; actual OS-vault accessibility, real TLS deployment and two-host Connector execution are not qualified.",
         "Binding approval contract uses synthetic inventory/HTTP transport; real provider/two-host M1, unified new identity/setup and participant MCP remain open.",
-        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
+        "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1.",
+        "The remote renewal contract is now verified with Windows loopback HTTP/WSS/TCP IPC and synthetic native/provider peers. Real provider, two-host/TLS, OS-vault/service lifecycle and complete M1/M2 remain open."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -5029,7 +5143,11 @@
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
         "binding_approval_loss_recovery_without_repost": "VERIFIED",
         "passive_project_diagnostics_installed": "VERIFIED",
-        "canonical_work_diagnostics_without_replay": "VERIFIED"
+        "canonical_work_diagnostics_without_replay": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-21": {
@@ -5079,6 +5197,7 @@
         "../okto-nexus-connector/tests/unit/test_r4_daemon_control.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup.py",
         "../okto-nexus-connector/tests/unit/test_remote_setup_revision.py",
+        "../okto-nexus-connector/tests/unit/test_remote_setup_rotation.py",
         "../okto-nexus-connector/tests/unit/test_runtime_admission.py",
         "../okto-nexus-connector/tests/unit/test_session_capability_owner.py",
         "docs/remote-project-setup.md",
@@ -5159,13 +5278,16 @@
         "src/okto_nexus/domain/server_origin.py",
         "src/okto_nexus/migrations/158_connection_authorization_receipts.sql",
         "src/okto_nexus/migrations/167_remote_setup.sql",
+        "tests/execution_r4/remote_renewal_helpers.py",
         "tests/execution_r4/test_connect_login_start.py",
         "tests/execution_r4/test_connection_test.py",
         "tests/execution_r4/test_handoff_notice_migration.py",
         "tests/execution_r4/test_project_dashboard.py",
         "tests/execution_r4/test_project_preset_update.py",
+        "tests/execution_r4/test_remote_authorization_uncertainty.py",
         "tests/execution_r4/test_remote_operator_terminal.py",
         "tests/execution_r4/test_remote_project_policy.py",
+        "tests/execution_r4/test_remote_renewal.py",
         "tests/execution_r4/test_remote_setup_integration.py",
         "tests/execution_r4/test_remote_terminal_setup.py",
         "tests/execution_r4/test_terminal_authorization.py",
@@ -5252,6 +5374,14 @@
         "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-selection.xml",
@@ -5277,14 +5407,15 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml",
         "tests/execution_r4/test_project_dashboard.py"
       ],
-      "result": "Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution. Previous dashboard personalization and Connector reconnect contracts remain verified in their recorded scopes. Full DX-21/PR-03 and productive M1 remain in progress.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution. Previous dashboard personalization and Connector reconnect contracts remain verified in their recorded scopes. Full DX-21/PR-03 and productive M1 remain in progress.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Future preset revisions are simulated; the shipped recommendation remains project-generalist revision 1. No published historical-version upgrade campaign is claimed.",
         "Version checks, harness/model turns and native effects are synthetic; real local/remote productive M1, provider context and coordination remain unqualified.",
         "Remote operator tests use adapted HTTP transport and memory vault; real OS-vault accessibility, TLS and two-host execution remain unqualified.",
         "Native Windows login/logout/crash and personal credential/service qualification remain pending under the existing campaign plan.",
-        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone."
+        "Remote bootstrap is now installed-qualified in Windows loopback with synthetic native/provider/vault fixtures. Real TLS/two-host, OS-vault/service lifecycle, provider work, credential/grant renewal and productive M1/M2 remain unqualified by this milestone.",
+        "The remote renewal contract is now verified with Windows loopback HTTP/WSS/TCP IPC and synthetic native/provider peers. Real provider, two-host/TLS, OS-vault/service lifecycle and complete M1/M2 remain open."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -5341,7 +5472,11 @@
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "ATN-01": {
@@ -6749,6 +6884,14 @@
       "requirement": "Participante sem permissÃ£o nÃ£o cria agentes, grants ou bindings.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
@@ -6760,10 +6903,14 @@
         "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
         "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "subscopes": {
         "participant_init_review_apply_recovery_windows": "VERIFIED",
-        "participant_actual_harness_environment": "NOT_RUN"
+        "participant_actual_harness_environment": "NOT_RUN",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-T03": {
@@ -7996,6 +8143,14 @@
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
@@ -8004,13 +8159,17 @@
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
         "plans/agent_ops/evidence/pr03-terminal-work.md"
       ],
-      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-T41": {
@@ -8065,6 +8224,14 @@
         "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
         "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
         "plans/agent_ops/evidence/pr03-remote-preset.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
@@ -8076,7 +8243,7 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
       "subscopes": {
         "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
         "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
@@ -8087,7 +8254,11 @@
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
       }
     },
     "DX-T42": {
@@ -8302,13 +8473,27 @@
         "plans/agent_ops/evidence/pr03-connector-reconnect-source.xml",
         "plans/agent_ops/evidence/pr03-connector-reconnect-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr03-terminal-authorization-final.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
+      "subscopes": {
+        "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+        "remote_rotation_completed_reuse": "VERIFIED",
+        "remote_pending_grant_uncertainty": "VERIFIED",
+        "remote_confirmed_receipt_read_failure": "VERIFIED"
+      }
     },
     "DX-T49": {
       "requirement": "Abrir o dashboard depois do uso pelo terminal mostra o mesmo agente e configuraÃ§Ã£o; personalizar nome/papel mantÃ©m identidade, histÃ³rico e vÃ­nculos canÃ´nicos.",
@@ -10024,6 +10209,14 @@
         "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/package-proof.json",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/reports.json",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
         "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml",
@@ -10034,7 +10227,8 @@
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
-        "remote_setup_installed_contract": "VERIFIED"
+        "remote_setup_installed_contract": "VERIFIED",
+        "remote_renewal_installed_contract": "VERIFIED"
       }
     },
     "AC-06": {
@@ -10068,10 +10262,19 @@
         "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/nexus/qualification.json",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/package-proof.json",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/reports.json",
-        "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json"
+        "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json"
       ],
       "subscopes": {
-        "remote_setup_installed_contract": "VERIFIED"
+        "remote_setup_installed_contract": "VERIFIED",
+        "remote_renewal_installed_contract": "VERIFIED"
       }
     },
     "AC-08": {
@@ -10092,6 +10295,14 @@
         "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/package-proof.json",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/reports.json",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
         "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml",
@@ -10108,7 +10319,8 @@
         "generic_coordination_cli_installed_contract": "VERIFIED",
         "pr08_external_observation_server_contract": "VERIFIED",
         "pr09_optional_windows_observer_contract": "VERIFIED",
-        "remote_setup_installed_contract": "VERIFIED"
+        "remote_setup_installed_contract": "VERIFIED",
+        "remote_renewal_installed_contract": "VERIFIED"
       }
     },
     "AC-09": {
@@ -10174,11 +10386,20 @@
       "requirement": "Restart, suspensÃ£o e queda de conexÃ£o preservam contratos de autoridade, ownership e incerteza, sem repetiÃ§Ã£o produtiva implÃ­cita.",
       "status": "NOT_VERIFIED",
       "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
-        "pr09_optional_windows_observer_contract": "VERIFIED"
+        "pr09_optional_windows_observer_contract": "VERIFIED",
+        "remote_renewal_installed_contract": "VERIFIED"
       }
     },
     "AC-15": {
@@ -10194,7 +10415,19 @@
     "AC-17": {
       "requirement": "Reconnect, atualizaÃ§Ã£o e abertura posterior da interface preservam a configuraÃ§Ã£o e a identidade; personalizaÃ§Ã£o Ã© opcional e o uso padrÃ£o continua completo pelo terminal.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json"
+      ],
+      "subscopes": {
+        "remote_renewal_installed_contract": "VERIFIED"
+      }
     }
   },
   "campaigns": {
@@ -10265,6 +10498,24 @@
       "core_changed": false,
       "final_package_note": "Final Nexus candidate-v3 removes only two trailing CRLFs; AST unchanged; 35 overlapping installed contract tests passed. Initial 187 identities remain qualified with retained raw attempts.",
       "final_nexus_wheel_sha256": "978060cae47cdec0e95fa8931186b6e469ccbc98771cf0b28e5cf022abbf7053"
+    },
+    "pr03_remote_renewal_windows_loopback": {
+      "status": "VERIFIED",
+      "scope": "Windows loopback HTTP/WSS, actual DaemonApp and TCP IPC; synthetic native/provider and isolated vaults",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "nexus_installed": 66,
+      "connector_installed": 233,
+      "connector_commit": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+      "core_changed": false
     }
   },
   "history": [
@@ -11004,6 +11255,23 @@
         "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json"
       ],
       "connector_commit": "7091ef2ebbf4b47ee41e38ec6b6df8c56e583f3c"
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-03",
+      "status": "IN_PROGRESS",
+      "summary": "Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+        "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "connector_commit": "fb3fff473ff246adcffa9e91573ac85f7a394170"
     }
   ]
 }

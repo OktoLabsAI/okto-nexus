@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="26.047" timestamp="2026-11-07T04:36:09.239081-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_renewal" name="test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session" time="18.542"><failure message="okto_nexus_connector.errors.ConnectorError: VALIDATION_ERROR (ipc_bind): unknown IPC transport">async def run():
+        try:
+&gt;           await project.start()
+
+tests\execution_r4\test_remote_renewal.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\remote_renewal_helpers.py:171: in start
+    pending = await connect.run_connect(args, self.output, self.root)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect.py:65: in run_connect
+    return await run_setup(args, output, root, store)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect_setup.py:31: in run_setup
+    return await _resume(args, output, root, store)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect_setup.py:181: in _resume
+    result = await configure_local(wizard, output, root, store, identity, args.server, deepcopy(record['draft']['configuration']))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\configure_local.py:222: in configure_local
+    await ipc(root,'state.reload')
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\configure_local.py:41: in ipc
+    return await asyncio.to_thread(call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\configure_local.py:36: in call
+    with manager.connect(root) as client:
+         ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10662/test_remote_exhaustion_lost_is0/remote-host')
+timeout = 5.0
+
+    def connect(root: Path, *, timeout: float = 5.0) -&gt; IPCClient:
+        """Return an authenticated IPC client to the live daemon."""
+        lock = _lock(root)
+        readiness = lock.live_owner()
+        if readiness is None:
+&gt;           raise ConnectorError("DAEMON_UNAVAILABLE", "connect",
+                                 "no live daemon in this state directory",
+                                 action="Run 'okto-nexus-connector daemon start'.")
+E           okto_nexus_connector.errors.ConnectorError: DAEMON_UNAVAILABLE (connect): no live daemon in this state directory -- Run 'okto-nexus-connector daemon start'.
+
+..\okto-nexus-connector\src\okto_nexus_connector\daemon\manager.py:144: ConnectorError
+
+During handling of the above exception, another exception occurred:
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10662/test_rem...t', [], '[REDACTED_SYNTHETIC_CANONICAL_KEY]', '[REDACTED_SYNTHETIC_CANONICAL_KEY]')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10662/test_remote_exhaustion_lost_is0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B61BD59810&gt;
+
+    def test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session(runtime, tmp_path, monkeypatch):
+        project = RemoteProject(runtime, tmp_path, monkeypatch)
+    
+        async def run():
+            try:
+                await project.start()
+                first = await project.send_and_complete(request_id='first-remote-work')
+                original_grant, = project.rows('runtime_execution_grants')
+                assert original_grant['used_executions'] == original_grant['max_executions'] == 2
+                leases = deepcopy(project.rows('execution_leases'))
+                operations = deepcopy(project.rows('execution_operations'))
+                flow = project.work()
+                review = await asyncio.to_thread(flow.authorization_review, minutes=30, max_executions=4)
+                assert review['can_issue'] and review['current_grants'][0]['state'] == 'exhausted'
+                assert project.rows('runtime_execution_grants') == [original_grant]
+                project.lose_next = PREFIX + '/connections/authorizations:issue'
+                with pytest.raises(ConnectionError) as lost:
+                    await asyncio.to_thread(flow.authorize, approval=review['review_revision'])
+                assert lost.value.possible_effect
+                assert project.work().document['authorization']['state'] == 'submitted'
+                committed, = project.rows('connection_authorization_receipts')
+                before = len(project.calls)
+                receipt = await asyncio.to_thread(project.work().authorize)
+                assert receipt['client_request_id'] == committed['client_request_id']
+                assert not any(path.endswith(':issue') for _, path in project.calls[before:])
+                assert len(project.rows('runtime_execution_grants')) == 2
+                assert project.rows('execution_operations') == operations
+                assert project.rows('execution_leases') == leases
+                assert len(project.native.opened) == 1
+                second = await project.send_and_complete(request_id='second-explicit-remote-work')
+                assert second['scope']['session_id'] != first['scope']['session_id']
+                new_grant = receipt['result']['grant']['grant_id']
+                current = project.rows('execution_leases')
+                assert {r['grant_id'] for r in current if r['session_id'] == first['scope']['session_id']} == {original_grant['grant_id']}
+                assert {r['grant_id'] for r in current if r['session_id'] == second['scope']['session_id']} == {new_grant}
+                assert len(project.rows('connection_authorization_receipts')) == 1
+                assert len(project.native.opened) == 2
+                assert all(len(native.sent) == 1 for native, _, _ in project.native.opened.values())
+                project.assert_redacted()
+            finally:
+                await project.close()
+    
+&gt;       asyncio.run(run())
+
+tests\execution_r4\test_remote_renewal.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_remote_renewal.py:62: in run
+    await project.close()
+tests\execution_r4\remote_renewal_helpers.py:187: in close
+    result = await asyncio.wait_for(asyncio.shield(self.daemon_task), 45)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\tasks.py:507: in wait_for
+    return await fut
+           ^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\daemon\app.py:330: in run_forever
+    return await self._run_forever()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\daemon\app.py:347: in _run_forever
+    await self.ipc.start(paths.pid_dir(self.root), token,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus_connector.ipc.server.IPCServer object at 0x000001B61ED9C6E0&gt;
+run_dir = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10662/test_remote_exhaustion_lost_is0/remote-host/run')
+token = 'UKq7XwPsM2NXrhpX81nYQD-BwqV_StppHyD7dFQ1JqA', transport = 'tcp'
+
+    async def start(self, run_dir: Path, token: str, *, transport: str = 'auto') -&gt; None:
+        run_dir.mkdir(parents=True, exist_ok=True)
+        self._token = token
+        if transport == 'named_pipe':
+            if sys.platform != 'win32':
+                raise ConnectorError('CAPABILITY_UNSUPPORTED', 'ipc_bind',
+                                     'Windows named pipes are unavailable.')
+            from .named_pipe import serve_secure_pipe
+            name = r'\\.\pipe\okto-nexus-m6-' + secrets.token_hex(16)
+            def protocol_factory():
+                reader = asyncio.StreamReader(limit=MAX_FRAME_BYTES)
+                return asyncio.StreamReaderProtocol(reader, self._spawn_client)
+            self._pipe_server = await serve_secure_pipe(protocol_factory, name)
+            self.transport = 'named_pipe'
+            self.address = name
+            return
+        if transport != 'auto':
+&gt;           raise ConnectorError('VALIDATION_ERROR', 'ipc_bind', 'unknown IPC transport')
+E           okto_nexus_connector.errors.ConnectorError: VALIDATION_ERROR (ipc_bind): unknown IPC transport
+
+..\okto-nexus-connector\src\okto_nexus_connector\ipc\server.py:69: ConnectorError</failure></testcase></testsuite></testsuites>

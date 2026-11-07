@@ -1,0 +1,93 @@
+{
+  "base_connector_commit": "7091ef2",
+  "reports": [
+    {
+      "file": "dx1819-connector-rotation-initial.xml",
+      "bytes": 6523,
+      "sha256": "50cdc99134a47c7586429ce24553a5ad941d26773948db4369e16c6072566b68",
+      "unique_tests": 2,
+      "passed": 0,
+      "failure": 2,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-rotation-focused-initial.xml",
+      "bytes": 4022,
+      "sha256": "67d3ff82007f690eebc54c0863753846b7ff1664de69f5e7a53b16d5e1ca392e",
+      "unique_tests": 24,
+      "passed": 24,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-rotation-regression-final.xml",
+      "bytes": 35424,
+      "sha256": "d9e391f909d99fd972f1aac9240139d487302fd4735222c7209b8dcb40692e58",
+      "unique_tests": 233,
+      "passed": 232,
+      "failure": 1,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-rotation-cas-final.xml",
+      "bytes": 842,
+      "sha256": "c0e7ccb4fd2ca6032b33518d2c0dc3adf83b88a2ca4091811d6c2268cceb5e81",
+      "unique_tests": 4,
+      "passed": 4,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    }
+  ],
+  "source_qualification": {
+    "current_unique_tests": 233,
+    "passed": 233,
+    "broad": "dx1819-connector-rotation-regression-final.xml",
+    "superseding_focused": "dx1819-connector-rotation-cas-final.xml",
+    "overlap": 4,
+    "new_test_identities": 28
+  },
+  "lint": {
+    "command": "rtk proxy ruff check src/okto_nexus_connector/cli/commands/connect.py src/okto_nexus_connector/cli/commands/connect_reuse.py src/okto_nexus_connector/services/remote_setup.py tests/unit/test_remote_setup_rotation.py",
+    "exit_code": 0,
+    "scope": "Full configured Ruff checks on exactly the three changed production files and the new test; no select/ignore override."
+  },
+  "review": {
+    "diff_check_exit_code": 0,
+    "tracked_diff_reviewed": true,
+    "untracked_diff_command": "rtk proxy git diff --no-index -- NUL tests/unit/test_remote_setup_rotation.py",
+    "untracked_diff_exit_code": 1,
+    "untracked_exit_reason": "Git diff reports differences for the new file."
+  },
+  "failures": [
+    "Initial two CLI/background completed-reuse tests reproduce AGENT_ID_MISMATCH from historical bootstrap epoch after explicit replace_credential.",
+    "Broad one failure is an error-code expectation: changing base_url without origin triggers the existing PROFILE_DRIFT guard before snapshot comparison. Only the new test expectation/comment changed; production remained frozen."
+  ],
+  "files": {
+    "src/okto_nexus_connector/cli/commands/connect.py": {
+      "bytes": 15851,
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4"
+    },
+    "src/okto_nexus_connector/cli/commands/connect_reuse.py": {
+      "bytes": 15168,
+      "sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925"
+    },
+    "src/okto_nexus_connector/services/remote_setup.py": {
+      "bytes": 22746,
+      "sha256": "395090f6c7a354d3e80ffc321f182c3e3d0981fe6734c4744e60d840d23c0f99"
+    },
+    "tests/unit/test_remote_setup_rotation.py": {
+      "bytes": 12891,
+      "sha256": "c56d6afcdbcdafde2cd3ba8dd1e27d3a4c5bfb68f301b5abab54eedbd6769ed3"
+    }
+  },
+  "limitations": [
+    "Current reads are point-in-time validation; runtime admission continues to enforce later revocation.",
+    "No onboarding, grant issuance, credential reissue, protocol change, or setup receipt rewrite is performed by completed reuse.",
+    "Source tests use real persisted state and explicit HTTP/native/vault doubles; root reviewer separately owns real TCP/WSS integrated qualification.",
+    "Pending setup and unfinished startup do not use this completed-reuse path."
+  ]
+}

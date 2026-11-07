@@ -1,0 +1,205 @@
+{
+  "qualification": "real local TCP HTTP, WebSocket and authenticated Connector IPC; real DaemonApp, SQLite and Core journals; synthetic native/provider and installation peers; isolated human OperatorProfile and test vault",
+  "limitations": [
+    "No real provider, Windows service, personal vault, remote physical host or TLS campaign.",
+    "Expired grant established by controlled fixture shortening expires_at after first real work; no ticket, lease, capacity or clock extension.",
+    "Raw XML contains synthetic credential material and must remain in Temp; redact separate copy before repository retention.",
+    "Initial fixture failures retained; final four cases replace them. No production change was made by this campaign."
+  ],
+  "final_unique_cases": 4,
+  "final_passed": 4,
+  "historical_reports": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-pnqywuv9\\initial.xml",
+      "sha256": "e7a24c6729a4cdc69854c3372b09091cde998079a5c8333cd9a72952bed3fdaf",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "1",
+          "time": "26.047",
+          "timestamp": "2026-11-07T04:36:09.239081-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session",
+          "outcome": "failure"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-pnqywuv9\\ipc-correction.xml",
+      "sha256": "cbd2c135fdeb8bab4025624eef60d52e773434f6bc735b400531eacbd721014c",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "1",
+          "time": "62.533",
+          "timestamp": "2026-11-07T04:37:10.574249-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session",
+          "outcome": "failure"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-pnqywuv9\\receipt-stage-correction.xml",
+      "sha256": "99f9458ea40a81fbbfa2846fff2a08821bdc891dea9cb85d8ae4967811ffe9ba",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "1",
+          "time": "40.922",
+          "timestamp": "2026-11-07T04:38:53.766171-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session",
+          "outcome": "failure"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-pnqywuv9\\background-finish-recovery.xml",
+      "sha256": "3b9dbf6ea15a1b6a1361b96f9a651057dc2aad6f58765faa34bbfaa0b95fb94f",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "1",
+          "time": "30.869",
+          "timestamp": "2026-11-07T04:40:32.589802-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session",
+          "outcome": "failure"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-pnqywuv9\\inventory-barrier.xml",
+      "sha256": "777fe46b01016a70d76d26e42c307a51680271456572a2c17239355d797607aa",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "1",
+          "time": "37.401",
+          "timestamp": "2026-11-07T04:41:56.297508-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session",
+          "outcome": "failure"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-pnqywuv9\\action-budget-correction.xml",
+      "sha256": "6f55d9c2ea800b928131bd10c8c150edfac937b2cb0244c933ca2a264314e482",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "1",
+          "skipped": "0",
+          "tests": "2",
+          "time": "81.780",
+          "timestamp": "2026-11-07T04:43:11.897792-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets",
+          "outcome": "failure"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-pnqywuv9\\expiry-rotation-barrier.xml",
+      "sha256": "b1f43445be7bc2c2569e156752d845a2cee141e056cf5d17dcf0a577a539fd9b",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "4",
+          "time": "203.370",
+          "timestamp": "2026-11-07T04:47:10.940370-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session[exhausted]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session[expired]",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets",
+          "outcome": "passed"
+        },
+        {
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_remote_revocation_keeps_recovered_receipt_historical_and_participant_cannot_renew",
+          "outcome": "passed"
+        }
+      ]
+    }
+  ],
+  "final_source": [
+    {
+      "path": "tests/execution_r4/test_remote_renewal.py",
+      "sha256": "0fe4eddb6ec28419014707090305d78e5f73f16061c378d96f07932e9d38df61"
+    },
+    {
+      "path": "tests/execution_r4/remote_renewal_helpers.py",
+      "sha256": "f9365aa8ae61c16a3ce0bdaa1108cbdba159472bc2e6a25544fd7edc7ca86ad2"
+    }
+  ],
+  "ruff": "rtk proxy ruff check tests/execution_r4/test_remote_renewal.py tests/execution_r4/remote_renewal_helpers.py: passed"
+}

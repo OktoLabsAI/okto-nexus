@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="81.780" timestamp="2026-11-07T04:43:11.897792-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_renewal" name="test_remote_exhaustion_lost_issue_recovers_one_grant_without_migrating_session" time="37.571" /><testcase classname="tests.execution_r4.test_remote_renewal" name="test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets" time="37.487"><failure message="AssertionError: {'state': 'blocked', 'client_intent_id': 'after-rotation-explicit', 'blockers': ['inventory_not_fresh']}">runtime = &lt;isolated HTTP runtime; synthetic credentials redacted&gt;
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10671/test_rotated_credential_reconn0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020AE9E73770&gt;
+
+    def test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets(runtime, tmp_path, monkeypatch):
+        project = RemoteProject(runtime, tmp_path, monkeypatch)
+    
+        async def run():
+            try:
+                await project.start()
+                first = await project.send_and_complete(request_id='before-rotation')
+                await project.close_session(first['scope']['session_id'])
+                review = await asyncio.to_thread(project.work().authorization_review)
+                assert review['can_issue']
+                old_key = project.key
+                lane = project.control.execution.lanes[project.binding['binding_id']]
+                old_ticket = lane.ticket.ticket
+                frame = deepcopy(project.receipt_frames[-1])
+                receipt_url = '/v1/runtime/operations/' + frame['operation_id'] + '/receipts'
+                async with httpx.AsyncClient(base_url=project.origin) as wire:
+                    replay = await wire.post(receipt_url, json=frame, headers={'Authorization': 'Bearer ' + old_ticket})
+                    assert replay.status_code == 200 and replay.json()['reused'], replay.text
+                original_root = deepcopy(remote_setup.load(project.store, 'renewal-root'))
+                original_binding = deepcopy(project.rows('execution_bindings'))
+                original_commits = deepcopy(project.rows('connection_setup_commits'))
+                original_proposals = deepcopy(project.rows('execution_proposals'))
+                me = await project.rotate(monkeypatch)
+                assert (me.server_id, me.agent_id) == (project.server_id, project.agent_id)
+                async with httpx.AsyncClient(base_url=project.origin) as wire:
+                    refused = await wire.get('/v1/connections/me', headers={'Authorization': 'Bearer ' + old_key})
+                    assert refused.status_code == 401
+                    stale = await wire.post(receipt_url, json=frame, headers={'Authorization': 'Bearer ' + old_ticket})
+                    assert stale.status_code in (401, 403), stale.text
+                with pytest.raises(ConnectionError) as changed:
+                    await asyncio.to_thread(project.work().authorize, approval=review['review_revision'])
+                assert changed.value.code == 'CONFLICT' and not changed.value.possible_effect
+                assert project.rows('connection_authorization_receipts') == []
+                assert len(project.rows('runtime_execution_grants')) == 1
+                args = build_parser().parse_args(['connect', '--project', str(project.project)])
+                reused = await connect.run_connect(args, project.output, project.root)
+                assert reused['saved'], reused
+                assert project.rows('execution_bindings') == original_binding
+                assert project.rows('connection_setup_commits') == original_commits
+                assert project.rows('execution_proposals') == original_proposals
+                assert remote_setup.load(project.store, 'renewal-root') == original_root
+                assert len(project.probes) == 1 and len(project.native.opened) == 1
+                assert project.store.load().identity_by_alias('project').credential_epoch == me.credential_epoch
+                assert original_root['handoff']['bootstrap']['credential_epoch'] &lt; me.credential_epoch
+                refreshed = await asyncio.to_thread(project.work().authorization_review)
+                assert refreshed['can_issue'] and refreshed['current_grants'][0]['state'] == 'superseded'
+                receipt = await asyncio.to_thread(project.work().authorize, approval=refreshed['review_revision'])
+                assert receipt['state'] == 'authorization_committed'
+                await project.eventually(lambda: project.control.status()['execution_ready'] and
+                    project.control.execution.lanes[project.binding['binding_id']].identity.credential_epoch == me.credential_epoch)
+                second = await project.send_and_complete(request_id='after-rotation-explicit')
+                assert second['scope']['session_id'] != first['scope']['session_id']
+                leases = project.rows('execution_leases')
+                assert {row['grant_id'] for row in leases if row['session_id'] == second['scope']['session_id']} == {receipt['result']['grant']['grant_id']}
+                project.assert_redacted()
+            finally:
+                await project.close()
+    
+&gt;       asyncio.run(run())
+
+tests\execution_r4\test_remote_renewal.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_remote_renewal.py:130: in run
+    second = await project.send_and_complete(request_id='after-rotation-explicit')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;remote_renewal_helpers.RemoteProject object at 0x0000020AE406EC10&gt;
+request_id = 'after-rotation-explicit'
+
+    async def send_and_complete(self, *, request_id):
+        flow = self.work()
+        operation = await asyncio.to_thread(flow.submit, 'Explicit synthetic work', new_session=True,
+            client_intent_id=request_id)
+&gt;       assert operation.get('state') != 'blocked', operation
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: {'state': 'blocked', 'client_intent_id': 'after-rotation-explicit', 'blockers': ['inventory_not_fresh']}
+
+tests\execution_r4\remote_renewal_helpers.py:236: AssertionError</failure></testcase></testsuite></testsuites>
