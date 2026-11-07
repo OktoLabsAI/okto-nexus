@@ -1,0 +1,53 @@
+{
+  "review": "finite static review of pure M1 token collector",
+  "created_at": "2026-11-07T14:29:57.530736+00:00",
+  "inputs": {
+    "token_collector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-token-collector-a_vy2tgw\\token_collector.py",
+      "sha256": "2838acff19c2096b02b1f481a067fc35a5b7c0ba9fb5afbc5925d0a97e4d6d0c"
+    },
+    "test_token_collector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-token-collector-a_vy2tgw\\test_token_collector.py",
+      "sha256": "c6a1cfd811bdf4d2f4b0d911fbc993d33464a76141cf3a4f7e3c10451b6bdbd5"
+    },
+    "initial.xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-token-collector-a_vy2tgw\\initial.xml",
+      "sha256": "018e52cd1603cbb00f039a250def912de0a0c2cfc431cef4bf20f7c17a832d0d"
+    },
+    "initial-result.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-token-collector-a_vy2tgw\\initial-result.json",
+      "sha256": "ba6d1fbbb0ea6dc722ddda51413d113f0c0ffe2fd2bbd4ddc6c279f83c602cf8"
+    }
+  },
+  "retained_tests": {
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "qualification": "synthetic pure Core translation and accounting; report read, no tests rerun"
+  },
+  "confirmed_by_reading": [
+    "Six reservations are global across reserve/prearm and setup/work stages.",
+    "Prearm persists the exclusive logical reservation before a session/stream exists; retries do not authorize another dispatch.",
+    "Operation binding and settlement include stream namespace. Conflicting usage-operation identity latches a fault.",
+    "Unknown/malformed pages, replay conflicts, counter regression, missing turn start/terminal/usage and replay backlog block new reservation.",
+    "High-water accounting accepts observed usage without claiming final billing or a nonexistent final native marker; asynchronous preventive threshold100000 and tolerance700000 remain distinct.",
+    "No I/O/native/credential/dispatch behavior exists inside collector; persistence/CAS/recovery remain controller responsibilities."
+  ],
+  "findings": [
+    {
+      "id": "COLLECTOR-RETIRED-RESERVATION",
+      "severity": "blocker",
+      "path": "token_collector.py",
+      "problem": "reserve accepts an enrolled stream after it was retired by explicit same-thread handover.",
+      "reproduction_by_reading": "Settle one request on stream A; enroll the same native thread at epochB and observe its empty caught-up page (existing handover helper path). reserve(new_request, stream=A) passes global summary and returns dispatch_permitted=True. Any subsequent new event on A is rejected as RETIRED_STREAM_ADVANCED; events on B cannot settle a request scoped to A.",
+      "minimal_fix": "Refuse a new reservation on retired streams, without dispatch. Preserve duplicate request semantics and other stream admission gates."
+    }
+  ],
+  "limits": [
+    "No new tests, CLI, provider, service, or credential access; only source/XML/hash reads.",
+    "Isolated setup:test journal capture is not qualified by these39tests; separate instrument/integration remains necessary and explicitly pending.",
+    "No durability/CAS driver or real response-loss recovery was executed.",
+    "No hard billing cap or native final-usage guarantee is asserted."
+  ]
+}

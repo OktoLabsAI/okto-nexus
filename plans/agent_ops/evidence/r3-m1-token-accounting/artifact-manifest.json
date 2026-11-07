@@ -1,0 +1,101 @@
+{
+  "files": {
+    "close_milestone.py": {
+      "bytes": 7714,
+      "sha256": "1c5bb57347e4259862f6d20701af48fd261c56134b99ffc7c31838e9693ea9b8"
+    },
+    "m1-codex-campaign-proposal-v6.json": {
+      "bytes": 36815,
+      "sha256": "d7afd629a71a50ee05360c513a77e7371edeb33268806307c921dd52010c939e"
+    },
+    "milestone.md": {
+      "bytes": 1562,
+      "sha256": "87712bc8790ff3c066f4ee47281ee833b92ae6666ec90d7116cd4109beb65f5f"
+    },
+    "preparation/artifact-manifest.json": {
+      "bytes": 2611,
+      "sha256": "de6df5e92bbb7e56c208382016e641acbf4c437b3ed5ac74153068f2e1e1b722"
+    },
+    "preparation/changes.json": {
+      "bytes": 704,
+      "sha256": "74cfee7ad1f4025e616e14093ad2c7869d2d23383737689bdbbe6ae19eed0366"
+    },
+    "preparation/curate_final.py": {
+      "bytes": 3750,
+      "sha256": "53d1fb2bcdd25f9874ab8a4f67a886dd387a867d29cb708b5190ff53ef979198"
+    },
+    "preparation/final-qualification.json": {
+      "bytes": 682,
+      "sha256": "27ea5010d98fd3d717e735f578d738ab2e66fd882c84a7a6151d3a50658fab8f"
+    },
+    "preparation/final-result.json": {
+      "bytes": 964,
+      "sha256": "0db99818ca0a5811edbd1d7635cfe9ff390f318ba86e3c4fb99aa24b4cc788b2"
+    },
+    "preparation/final.log": {
+      "bytes": 101,
+      "sha256": "3c24dee16160f83b61d887058b1cc62ec8e553cdb2b3b02db0ed23d281660669"
+    },
+    "preparation/final.xml": {
+      "bytes": 5713,
+      "sha256": "9f334b21ba58e684fc2ef34fb7fb2b7b3a038ad08ffc2bac30c1e676e5b0c9db"
+    },
+    "preparation/grounding.json": {
+      "bytes": 9167,
+      "sha256": "1bb3fd7289e9d56be72b2bb064df69dfb1fefc37da8044b7418d2d0351d5f021"
+    },
+    "preparation/initial/initial-result.json": {
+      "bytes": 965,
+      "sha256": "ba6d1fbbb0ea6dc722ddda51413d113f0c0ffe2fd2bbd4ddc6c279f83c602cf8"
+    },
+    "preparation/initial/initial.log": {
+      "bytes": 101,
+      "sha256": "c63096f1258886343fd8ea950d1d53e86fcacc1a670fe44cbd30f4ddbc6b0cdd"
+    },
+    "preparation/initial/initial.xml": {
+      "bytes": 5583,
+      "sha256": "018e52cd1603cbb00f039a250def912de0a0c2cfc431cef4bf20f7c17a832d0d"
+    },
+    "preparation/initial/run_tests.py": {
+      "bytes": 2319,
+      "sha256": "6f8b0c36a33a0d25518b101901adb76dbe1c5ec42ce0c71525893eb6477bf9b8"
+    },
+    "preparation/initial/test_token_collector.py": {
+      "bytes": 19820,
+      "sha256": "c6a1cfd811bdf4d2f4b0d911fbc993d33464a76141cf3a4f7e3c10451b6bdbd5"
+    },
+    "preparation/initial/token_collector.py": {
+      "bytes": 21921,
+      "sha256": "2838acff19c2096b02b1f481a067fc35a5b7c0ba9fb5afbc5925d0a97e4d6d0c"
+    },
+    "preparation/README.md": {
+      "bytes": 5909,
+      "sha256": "0c266f35f74b6868931ff08b5b0fff4f6b55efc6ffad97548ea5b4e4a0218171"
+    },
+    "preparation/run_tests.py": {
+      "bytes": 2319,
+      "sha256": "6f8b0c36a33a0d25518b101901adb76dbe1c5ec42ce0c71525893eb6477bf9b8"
+    },
+    "preparation/schema-extract.json": {
+      "bytes": 2113,
+      "sha256": "a5dd1d93fb5123a3df40aead1ae97cf09acfaddae6d48aa157cbd205bc3adc62"
+    },
+    "preparation/test_token_collector.py": {
+      "bytes": 20548,
+      "sha256": "9308e428b406231e2c487ac5ee15b305cf6c0cf3b0cd1e94e88c9f55ef5c4534"
+    },
+    "preparation/token_collector.py": {
+      "bytes": 22011,
+      "sha256": "10584c1675b0a6cd8f586b3b62fd9694eb5c7ac0433854f991e81c8f7eb5d574"
+    },
+    "initial-review.json": {
+      "bytes": 3330,
+      "sha256": "8a3a33e210aeab27de20484db28907c9ecb24b1f39054bddb3676d44816504ca"
+    },
+    "final-review.json": {
+      "bytes": 1875,
+      "sha256": "e9373fbebd4ad9fd1ef38140996dc03e75625a08484e99b0630869ccf66ea74a"
+    }
+  },
+  "scope": "Pure accounting preparation, not full live campaign control"
+}

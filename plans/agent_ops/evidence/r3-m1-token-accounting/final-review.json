@@ -1,0 +1,34 @@
+{
+  "review": "narrow final correction check for token collector",
+  "status": "NO_REMAINING_BLOCKER_IN_REVIEWED_PURE_COLLECTOR",
+  "prior_review_path": "review.json",
+  "prior_review_sha256": "8a3a33e210aeab27de20484db28907c9ecb24b1f39054bddb3676d44816504ca",
+  "manifest_sha256": "de6df5e92bbb7e56c208382016e641acbf4c437b3ed5ac74153068f2e1e1b722",
+  "module_sha256": "10584c1675b0a6cd8f586b3b62fd9694eb5c7ac0433854f991e81c8f7eb5d574",
+  "test_sha256": "9308e428b406231e2c487ac5ee15b305cf6c0cf3b0cd1e94e88c9f55ef5c4534",
+  "xml_sha256": "9f334b21ba58e684fc2ef34fb7fb2b7b3a038ad08ffc2bac30c1e676e5b0c9db",
+  "manifest_files_verified": 18,
+  "resolved_finding": {
+    "id": "COLLECTOR-RETIRED-RESERVATION",
+    "resolution": "reserve returns unchanged copied state and dispatch=False for retired stream before a new request can be created. Existing duplicate request semantics are preserved.",
+    "guard_lines": [
+      311,
+      312
+    ],
+    "test": "test_retired_stream_cannot_reserve_after_explicit_epoch_handover",
+    "assertions": "old stream refused without consuming a reservation or setting current_request; current stream remains eligible"
+  },
+  "retained_final_results": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "new_executions_by_reviewer": 0
+  },
+  "limits": [
+    "Only the two-line guard delta, directed regression, XML and artifact hashes were rechecked. No repeated general audit or native/test execution.",
+    "Initial39PASS evidence is preserved; final40 includes those cases and one new regression, not79unique.",
+    "Setup:test isolated journal capture and real controller persistence/CAS/response-loss integration are still not qualified by this pure module.",
+    "Observed high-water is not final billing; no hard cap or nonexistent final marker required or promised."
+  ]
+}

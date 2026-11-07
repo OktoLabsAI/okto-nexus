@@ -1,0 +1,21 @@
+{
+  "reason": "Retired streams reject observation progress and must never admit new work.",
+  "semantic_delta": "reserve returns unchanged state and dispatch False when selected stream is retired",
+  "api_changed": false,
+  "initial_source": {
+    "sha256": "2838acff19c2096b02b1f481a067fc35a5b7c0ba9fb5afbc5925d0a97e4d6d0c",
+    "bytes": 21921
+  },
+  "final_source": {
+    "sha256": "10584c1675b0a6cd8f586b3b62fd9694eb5c7ac0433854f991e81c8f7eb5d574",
+    "bytes": 22011
+  },
+  "new_test": "test_retired_stream_cannot_reserve_after_explicit_epoch_handover",
+  "initial_preserved": true,
+  "final_counts": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

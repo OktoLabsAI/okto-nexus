@@ -1,0 +1,25 @@
+{
+  "status": "PURE_PREPARATION_QUALIFIED",
+  "counts": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "initial_counts": {
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_or_provider_campaign": "NOT_RUN",
+  "complete_campaign_runner": false,
+  "first_setup_usage_observation": "SEPARATE_CONTROLLER_INTEGRATION_REQUIRED",
+  "qualification_runs": [
+    "initial/initial.xml",
+    "final.xml"
+  ],
+  "source_unchanged_since_final_tests": true,
+  "real_native_payloads_retained": false,
+  "observed_total_semantics": "minimum known observed cumulative usage; not final billing or hard cap"
+}

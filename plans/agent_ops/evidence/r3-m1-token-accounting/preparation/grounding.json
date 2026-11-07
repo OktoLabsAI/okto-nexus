@@ -1,0 +1,203 @@
+{
+  "sources": [
+    {
+      "repository": "okto_labs_okto_nexus",
+      "path": "src/okto_nexus/application/execution_event_views.py",
+      "purpose": "read_execution_events:13; resolved contiguous committed prefix",
+      "sha256": "d9368565a574769dcb05c0051b85bdfc1b3ab922fbe74c949fde262586b24057",
+      "bytes": 4706
+    },
+    {
+      "repository": "okto_labs_okto_nexus",
+      "path": "src/okto_nexus/application/execution_session_views.py",
+      "purpose": "canonical twelve-field scope",
+      "sha256": "7d8b5415a45ba7261b8a35a091128772a7046fbdaf37684a15b33bb887ee6caf",
+      "bytes": 8777
+    },
+    {
+      "repository": "okto_labs_okto_nexus",
+      "path": "src/okto_nexus/application/execution_event_artifacts.py",
+      "purpose": "resolve_event hydrates payload before public replay",
+      "sha256": "88f8626fefc33baf74e03393904bd8da418b591441ff8090363d9cbab7850839",
+      "bytes": 8603
+    },
+    {
+      "repository": "okto_labs_okto_nexus",
+      "path": "src/okto_nexus/application/terminal_work.py",
+      "purpose": "binding:29, observe:233; six pre-start binding fields",
+      "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "bytes": 21125
+    },
+    {
+      "repository": "okto_labs_okto_nexus",
+      "path": "src/okto_nexus/application/connection_test.py",
+      "purpose": "run:143; private setup journal, no public usage stream integration",
+      "sha256": "27cc8917cc476b7dc213214e768828806d36062d19a8fb32a1b1297aee99a3a8",
+      "bytes": 14751
+    },
+    {
+      "repository": "okto_labs_okto_nexus",
+      "path": "tests/execution_r4/test_canonical_event_views.py",
+      "purpose": "existing source assertions, not rerun here",
+      "sha256": "c8e8613e1c2e793575a80818807fd153366fc2606f5592e62ac6542bd54057d1",
+      "bytes": 10249
+    },
+    {
+      "repository": "okto_labs_okto_nexus",
+      "path": "tests/execution_r4/test_event_artifacts.py",
+      "purpose": "existing artifact integrity/hydration assertions, not rerun here",
+      "sha256": "a51cb08bc7b9c3f46b21e25f18b78b78e9e6f0a175dd510ad7c1ddbfb7b8cf68",
+      "bytes": 5811
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "path": "src/nexus_connector_core/models.py",
+      "purpose": "RuntimeEvent:253",
+      "sha256": "8f4d23ee6eb1fa55b0e59fd7ba83b4cd4b1c70e2f58224b641d98d6685f10506",
+      "bytes": 13653,
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\models.py",
+      "installed_digest": {
+        "sha256": "8f4d23ee6eb1fa55b0e59fd7ba83b4cd4b1c70e2f58224b641d98d6685f10506",
+        "bytes": 13653
+      },
+      "source_equals_installed": true
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "path": "src/nexus_connector_core/native/event_ingest.py",
+      "purpose": "translate_native_event:29; pure translator used by these tests",
+      "sha256": "2cbf5281c165b7c5569dda5894f7da1e912247f1d193257830d10913ed2be916",
+      "bytes": 3360,
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\event_ingest.py",
+      "installed_digest": {
+        "sha256": "2cbf5281c165b7c5569dda5894f7da1e912247f1d193257830d10913ed2be916",
+        "bytes": 3360
+      },
+      "source_equals_installed": true
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "path": "src/nexus_connector_core/native/adapter_types.py",
+      "purpose": "HarnessEvent synthetic test inputs",
+      "sha256": "3ff8331d88348afdd0a89e0c5535a20b4a0d207e06f1445d89475c8c1a39eb67",
+      "bytes": 8995,
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapter_types.py",
+      "installed_digest": {
+        "sha256": "3ff8331d88348afdd0a89e0c5535a20b4a0d207e06f1445d89475c8c1a39eb67",
+        "bytes": 8995
+      },
+      "source_equals_installed": true
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "path": "src/nexus_connector_core/native/adapters/codex.py",
+      "purpose": "_push_event:1286 retains native payload and identities",
+      "sha256": "6b6d2f87df8bac2e15e8eff6015c9d4d012126a38d9023703c143ad27c5bc78c",
+      "bytes": 92126,
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapters\\codex.py",
+      "installed_digest": {
+        "sha256": "6b6d2f87df8bac2e15e8eff6015c9d4d012126a38d9023703c143ad27c5bc78c",
+        "bytes": 92126
+      },
+      "source_equals_installed": true
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "path": "src/nexus_connector_core/native/runtime_bridge.py",
+      "purpose": "start/terminal operation correlation; usage may have null operation",
+      "sha256": "9b25fdd47b80da79f3e933bc4daeabac7158dfcf0f39239a2a8b78786fed75af",
+      "bytes": 64006,
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\runtime_bridge.py",
+      "installed_digest": {
+        "sha256": "9b25fdd47b80da79f3e933bc4daeabac7158dfcf0f39239a2a8b78786fed75af",
+        "bytes": 64006
+      },
+      "source_equals_installed": true
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "path": "src/nexus_connector_core/native/redaction.py",
+      "purpose": "scrubbing preserves tokenUsage counter field names",
+      "sha256": "f2913754ee329b79f45162df35656429b60798779f978d4a7089e0ad25b613a1",
+      "bytes": 6795,
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\redaction.py",
+      "installed_digest": {
+        "sha256": "f2913754ee329b79f45162df35656429b60798779f978d4a7089e0ad25b613a1",
+        "bytes": 6795
+      },
+      "source_equals_installed": true
+    },
+    {
+      "repository": "okto-nexus-connector-core",
+      "path": "src/nexus_connector_core/native/codex_app_server_0_157_0.schemas.json",
+      "purpose": "bundled three token-usage schema definitions",
+      "sha256": "2719fccd25a97a7ce355497ca5e9123a63f6dce7f9f83724a5b73fd927811f59",
+      "bytes": 618802,
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\codex_app_server_0_157_0.schemas.json",
+      "installed_digest": {
+        "sha256": "2719fccd25a97a7ce355497ca5e9123a63f6dce7f9f83724a5b73fd927811f59",
+        "bytes": 618802
+      },
+      "source_equals_installed": true
+    }
+  ],
+  "existing_tests_inventory": [
+    {
+      "node": "tests/execution_r4/test_canonical_event_views.py::test_mcp_rest_and_r4_event_replay_share_committed_history",
+      "line": 38,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_canonical_event_views.py::test_event_replay_rejects_foreign_scope_and_invalid_queries",
+      "line": 67,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_canonical_event_views.py::test_unbound_terminal_is_retained_without_authorizing_a_broadcast",
+      "line": 86,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_canonical_event_views.py::test_event_replay_bounds_bytes_and_detects_corrupted_storage",
+      "line": 113,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_canonical_event_views.py::test_replay_does_not_expose_durable_events_above_contiguous_watermark",
+      "line": 132,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_canonical_event_views.py::test_public_replay_omits_operational_request_without_a_display",
+      "line": 156,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_event_artifacts.py::test_store_before_ack_replay_and_integrity",
+      "line": 22,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_event_artifacts.py::test_chunk_conflicts_and_foreign_authority",
+      "line": 42,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_event_artifacts.py::test_store_failure_keeps_replay_and_quota_is_reported",
+      "line": 53,
+      "executed_in_this_preparation": false
+    },
+    {
+      "node": "tests/execution_r4/test_event_artifacts.py::test_embedded_large_event_reaches_terminal_history",
+      "line": 74,
+      "executed_in_this_preparation": false
+    }
+  ],
+  "normative_policy": {
+    "preventive_tokens": 100000,
+    "operational_tolerance": 700000,
+    "max_productive_reservations_including_setup": 6,
+    "requires_final_usage_flag": false
+  },
+  "setup_public_stream_integration": "NOT_IMPLEMENTED_BY_THIS_PROTOTYPE"
+}

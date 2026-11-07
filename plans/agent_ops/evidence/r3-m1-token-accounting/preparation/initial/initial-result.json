@@ -1,0 +1,27 @@
+{
+  "exit_code": 0,
+  "elapsed_seconds": 1.4819439999992028,
+  "core_version": "0.0.14",
+  "core_import": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+  "python": "3.13.1",
+  "isolated_interpreter": true,
+  "environment_keys": [
+    "APPDATA",
+    "COMSPEC",
+    "HOME",
+    "LOCALAPPDATA",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD",
+    "SYSTEMROOT",
+    "TEMP",
+    "TMP",
+    "USERPROFILE",
+    "WINDIR"
+  ],
+  "scope": "pure synthetic translation and deterministic accounting; no native/provider/HTTP",
+  "input_hashes_before": {
+    "token_collector.py": "2838acff19c2096b02b1f481a067fc35a5b7c0ba9fb5afbc5925d0a97e4d6d0c",
+    "test_token_collector.py": "c6a1cfd811bdf4d2f4b0d911fbc993d33464a76141cf3a4f7e3c10451b6bdbd5",
+    "run_tests.py": "6f8b0c36a33a0d25518b101901adb76dbe1c5ec42ce0c71525893eb6477bf9b8"
+  },
+  "input_hashes_unchanged": true
+}
