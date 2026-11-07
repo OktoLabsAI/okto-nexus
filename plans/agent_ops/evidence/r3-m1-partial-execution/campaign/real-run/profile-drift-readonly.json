@@ -1,0 +1,27 @@
+{
+  "state": "done",
+  "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+  "binding_id": "bind_cf0ff70a153f08d5ff18ea6e30c71215",
+  "selection": {
+    "client": "codex",
+    "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+    "workspace_id": null,
+    "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+    "provider_home": "C:/Users/jpamb/.codex"
+  },
+  "connection": {
+    "binding_id": "bind_cf0ff70a153f08d5ff18ea6e30c71215",
+    "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+    "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+    "workspace_id": "wsr_33d3e0539fc61d33cc7d8fe8c47c00f1",
+    "adapter_id": "codex_app_server",
+    "execution_location": "local"
+  },
+  "folders": {
+    "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+    "provider_home": "C:\\Users\\jpamb\\.codex",
+    "secret_bindings": {}
+  },
+  "read_only": true,
+  "new_provider_dispatch": false
+}

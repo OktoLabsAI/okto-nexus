@@ -1,0 +1,301 @@
+{
+  "files": {
+    "campaign/executed-instrumentation/m1_cleanup_observe.py": {
+      "bytes": 1931,
+      "sha256": "8343b6287b09891b25e1a4236085e0ada3828692688b54d706fbc19f51c600a3"
+    },
+    "campaign/executed-instrumentation/m1_close_local.py": {
+      "bytes": 2432,
+      "sha256": "36cc5fb2dcb75f402232764625fa77c036b7b7d5614ed5ad1446f7a96796b621"
+    },
+    "campaign/executed-instrumentation/m1_core_metadata_projection.py": {
+      "bytes": 2890,
+      "sha256": "63100de7fb90fa2632da334198e662b222c911651e47f57fbd5f39a57f9a99e3"
+    },
+    "campaign/executed-instrumentation/m1_drift_incident.py": {
+      "bytes": 2855,
+      "sha256": "1eca30583fba9a1774244a23ddc69cdf095788d0b57e88979e20923ff8ac0a50"
+    },
+    "campaign/executed-instrumentation/m1_execution_preflight.py": {
+      "bytes": 3221,
+      "sha256": "6b004425b80e19dec2b96e9e9e18504fb549ebddd904205155878578ad012663"
+    },
+    "campaign/executed-instrumentation/m1_generation_projection.py": {
+      "bytes": 1778,
+      "sha256": "ff1ac7c0a74244d986fd6ee69a26ec2cedbf330b61533a55d0d1ce7a8ad9684a"
+    },
+    "campaign/executed-instrumentation/m1_local_plan.py": {
+      "bytes": 1102,
+      "sha256": "0235a70c409bace0211509257cebae428f70be26ce318dd42d9dca32bfc86537"
+    },
+    "campaign/executed-instrumentation/m1_local_setup.py": {
+      "bytes": 4965,
+      "sha256": "9118f8489cace6826d6324d5fe083ea021b3bccdd1535b237622fd5aafe14d82"
+    },
+    "campaign/executed-instrumentation/m1_observe_drain.py": {
+      "bytes": 5164,
+      "sha256": "a33bfe1f89fa0d497ab3bed6eaa7d0db8e1f67484b9f28996cd11a4905fc6043"
+    },
+    "campaign/executed-instrumentation/m1_observe_interruption.py": {
+      "bytes": 2070,
+      "sha256": "a90ef82c78cebeb0f96a0bd46a84b5e9ae0c82e6a6364765bf4d9c5c4700970a"
+    },
+    "campaign/executed-instrumentation/m1_prepare_corrected_pin.py": {
+      "bytes": 1463,
+      "sha256": "c980b4fd8ee60fa7d87526a544dc7299b794ba27b6ae3739a8057cb52c47f018"
+    },
+    "campaign/executed-instrumentation/m1_profile_drift_readonly.py": {
+      "bytes": 1151,
+      "sha256": "b0d31bd703d8a622ff4fda55b97b2c091453abe09e9fffa27d00c6ff684ca98f"
+    },
+    "campaign/executed-instrumentation/m1_real_lifecycle.py": {
+      "bytes": 3584,
+      "sha256": "9597dfa0768a0161374c9c95e32e896a3f0f9b96bb065d5c6340ad0a7b038085"
+    },
+    "campaign/executed-instrumentation/m1_real_work.py": {
+      "bytes": 12784,
+      "sha256": "c0903937d3ce737764200ebcaa6ab9d1f6ec364b03a68c1d2ce51a2a6bd9a1f3"
+    },
+    "campaign/executed-instrumentation/m1_release_corrected_client.py": {
+      "bytes": 2407,
+      "sha256": "7695c4933325eab3bfd67b00829dd64f080ee85a1f0848c9ee38ab1ffab4920f"
+    },
+    "campaign/executed-instrumentation/m1_setup_metadata_readonly.py": {
+      "bytes": 1579,
+      "sha256": "0aa640b440d96f6c563c82da2fd44dc0b5428d319cbb839cf978aa017c16cccd"
+    },
+    "campaign/manifest.json": {
+      "bytes": 12894,
+      "sha256": "5528af0d21e8fe524082c90a8d2b583258839da543147fe1d5f739410844873e"
+    },
+    "campaign/publication-fix-preparation/initial-9/input-hashes-after.json": {
+      "bytes": 641,
+      "sha256": "6b5eae97774b3619cf2435e3a2532c922d33ea559f3b11ea7563d01abef98787"
+    },
+    "campaign/publication-fix-preparation/initial-9/input-hashes-before.json": {
+      "bytes": 641,
+      "sha256": "6b5eae97774b3619cf2435e3a2532c922d33ea559f3b11ea7563d01abef98787"
+    },
+    "campaign/publication-fix-preparation/initial-9/prepared_m1_real_work.py": {
+      "bytes": 13196,
+      "sha256": "2789a423af308ecb8c24c40ea72140ff508febfd78f9288a13f795945f165eb1"
+    },
+    "campaign/publication-fix-preparation/initial-9/publication.py": {
+      "bytes": 1676,
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    "campaign/publication-fix-preparation/initial-9/results.xml": {
+      "bytes": 1284,
+      "sha256": "19d95c11c9a0ea406508974e84721515af2cf28249a635fe4df2edede21bc9d1"
+    },
+    "campaign/publication-fix-preparation/initial-9/status.json": {
+      "bytes": 173,
+      "sha256": "460fd266ba63a7cf9675ca3b58896074cd539c601f019006fa600b2bafca0ec6"
+    },
+    "campaign/publication-fix-preparation/initial-9/test_publication.py": {
+      "bytes": 2746,
+      "sha256": "34f5f32bd59a7abc242bea78c01bd9d68a80bafdb8964ebe1ca9fea06aad6117"
+    },
+    "campaign/publication-fix-preparation/input-hashes-after.json": {
+      "bytes": 641,
+      "sha256": "59dad09e4321d435fc19d9142580f4028344311ba2fe90b0f999fb9750bdb656"
+    },
+    "campaign/publication-fix-preparation/input-hashes-before.json": {
+      "bytes": 641,
+      "sha256": "59dad09e4321d435fc19d9142580f4028344311ba2fe90b0f999fb9750bdb656"
+    },
+    "campaign/publication-fix-preparation/original_m1_real_work.py": {
+      "bytes": 12784,
+      "sha256": "c0903937d3ce737764200ebcaa6ab9d1f6ec364b03a68c1d2ce51a2a6bd9a1f3"
+    },
+    "campaign/publication-fix-preparation/prepare.py": {
+      "bytes": 1791,
+      "sha256": "184c3c49cd6354157b5d89620f68a8d2cb4b1741aff20da31d6cb36777a3b2a8"
+    },
+    "campaign/publication-fix-preparation/prepared_m1_real_work.py": {
+      "bytes": 13210,
+      "sha256": "a6bcb65037f547061f5fbb551e942e98ed687ae51715f7505b9fe074812246f5"
+    },
+    "campaign/publication-fix-preparation/publication.py": {
+      "bytes": 1676,
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    "campaign/publication-fix-preparation/pytest.ini": {
+      "bytes": 9,
+      "sha256": "8250d20f42b419af40706490ead78aabab9feba93eab09a3f626e3de5256e1f4"
+    },
+    "campaign/publication-fix-preparation/results.xml": {
+      "bytes": 1420,
+      "sha256": "f92ea344d3219fd59cf1b59f52d9e573ba59a2dd967db2d7f2511ea7af54b5b0"
+    },
+    "campaign/publication-fix-preparation/run_tests.py": {
+      "bytes": 886,
+      "sha256": "c7254931c7891a96ef4209bf5e5dda20ddb566d808e760093d9138857501f4ad"
+    },
+    "campaign/publication-fix-preparation/status.json": {
+      "bytes": 173,
+      "sha256": "460fd266ba63a7cf9675ca3b58896074cd539c601f019006fa600b2bafca0ec6"
+    },
+    "campaign/publication-fix-preparation/test_publication.py": {
+      "bytes": 4563,
+      "sha256": "e6c54757b1b635f96a1171b27c961265868435120c9f53b83f9d0b8b4a1a8cba"
+    },
+    "campaign/README.md": {
+      "bytes": 2794,
+      "sha256": "a96173e8f1dcd4a3b984edd7ccdf089df1129cca8cd0634c693c143d2991bc66"
+    },
+    "campaign/real-run/authorization.json": {
+      "bytes": 182,
+      "sha256": "a792e347caf8ba8fc73ef8bddb38fd2c3e1f2852c53af349d0a05ad1e696f18c"
+    },
+    "campaign/real-run/cleanup-service-status.json": {
+      "bytes": 3219,
+      "sha256": "8ae8c7921b95bc94665a5f3588f53abeb5ff66f26648a95dbba1a6d9fdc0746e"
+    },
+    "campaign/real-run/client-runtime-pin.json": {
+      "bytes": 1342,
+      "sha256": "248e2bff8b746e8db3ffb4bad760d46c59818063cc4e5dd6d193ff187e4d8eff"
+    },
+    "campaign/real-run/client-runtime-pin.prepared.json": {
+      "bytes": 1012,
+      "sha256": "4eddea73c3116e0ee66a947a442a7a04aca2a1db0d961f2b77afc1107ee43799"
+    },
+    "campaign/real-run/core-reconciliation-metadata.json": {
+      "bytes": 2879,
+      "sha256": "a25152d141d0cc2090dd3e3d1d789ffca0aa29b61a02cce94ebc74d67874a2bb"
+    },
+    "campaign/real-run/corrected-client-readonly-resume.json": {
+      "bytes": 304,
+      "sha256": "27443b941bbffb6bc5b86e8b6306caa07f6702bfe4573a1f7c0145dde3a536d9"
+    },
+    "campaign/real-run/drain-observation-120s.json": {
+      "bytes": 65422,
+      "sha256": "60777498d339ee5e68151813dee1fa3fe9479f3fc68909528137c89036d612d1"
+    },
+    "campaign/real-run/final-accounting-coverage-v2.json": {
+      "bytes": 2824,
+      "sha256": "1f75bca88b44d3cf1fafbe7233cf86f7d25f9b97c2ea9020bd35235bfcc4059d"
+    },
+    "campaign/real-run/final-accounting-coverage.json": {
+      "bytes": 2585,
+      "sha256": "efce1e02da9a2fc7cf0b41d246847db63f976fc8092c97687073b824adfd953c"
+    },
+    "campaign/real-run/force-recovery-proposal.json": {
+      "bytes": 4028,
+      "sha256": "d9e8b53dbbadcd991e170d801aa5483d875d982ee4a5627656994239b73a8261"
+    },
+    "campaign/real-run/generation-reconciliation-metadata.json": {
+      "bytes": 3486,
+      "sha256": "1d51345f6ba8703183f5688451da57de3f6d63c980eabb63403a46e9729a62d3"
+    },
+    "campaign/real-run/interrupted-live-accounting-publication.json": {
+      "bytes": 406,
+      "sha256": "ee69496d16d78c1f7b343e6ee6d6bb45be99a961536f7699b692a58d1212142a"
+    },
+    "campaign/real-run/interruption-observed.json": {
+      "bytes": 917,
+      "sha256": "2e24bb246287429ecafffe7cfb7d99bd4ebf64c2ca358d61e98c7a03c0bbea1c"
+    },
+    "campaign/real-run/lifecycle-nexus-install.json": {
+      "bytes": 430,
+      "sha256": "86535c4e60576adeab5e80adc327b27cfaa1c319841651a293f3b62512979652"
+    },
+    "campaign/real-run/lifecycle-nexus-start.json": {
+      "bytes": 426,
+      "sha256": "029fb546dbee1c0c2ec378cd7ce64fa59c896b48436e90b1fd5a92c7082f41e2"
+    },
+    "campaign/real-run/lifecycle-nexus-stop.json": {
+      "bytes": 428,
+      "sha256": "ce9baaa30abdf0116f2a2c2713231e682786deb3327d18bfff5f731eaebf1bce"
+    },
+    "campaign/real-run/live-accounting.json": {
+      "bytes": 406,
+      "sha256": "69a037e1fb3d93105a56f1dd7b9aafd9dc1ea07c3996184caf4201fc1db2fa72"
+    },
+    "campaign/real-run/local-close-result.json": {
+      "bytes": 964,
+      "sha256": "79c67d090d7d31c160dd506be5b05e42eb4bea38277f2857d5b56ef13e27063f"
+    },
+    "campaign/real-run/local-close-selected.json": {
+      "bytes": 146,
+      "sha256": "283a4a34a038d3c3151ab38c7f221265374ed78b1ba2ef7f777b65c18ac234a8"
+    },
+    "campaign/real-run/local-plan.json": {
+      "bytes": 7195,
+      "sha256": "37f2fedb0b12a4dfb0883e7069213fa6e4bf3824fca7c1400f07c015d820ea37"
+    },
+    "campaign/real-run/local-setup-dispatch.json": {
+      "bytes": 210,
+      "sha256": "2108cbf859b0bb83394a20263a90efca8fb9e7703b9ed55d1eb5ed75e44570f5"
+    },
+    "campaign/real-run/local-setup-result.json": {
+      "bytes": 1706,
+      "sha256": "c57060f266b6957b4aaa8367ef6eaed4b66cc8f71fe9d819edd5789fb00bf0a8"
+    },
+    "campaign/real-run/m1-local-work-01-dispatch-selection.json": {
+      "bytes": 1600,
+      "sha256": "f23fd8b2948cb5bff0f2acbf79d537b5cd419eedafc95ebd9e1d59b3727f5d5e"
+    },
+    "campaign/real-run/m1-local-work-01-runner-error.json": {
+      "bytes": 1512,
+      "sha256": "45c8341d405bc4183d29574ef66b6496baf6ac470737e74bc1064ab28a4cd5b2"
+    },
+    "campaign/real-run/preflight.json": {
+      "bytes": 3453,
+      "sha256": "9161e138c711de2a41c0a22fee91be6440d88e8f9ed4972ac1a8acce0fea56bc"
+    },
+    "campaign/real-run/process-nexus-install.json": {
+      "bytes": 88,
+      "sha256": "f66c541375f7ced684e3ec1d573f788cadf5e5cf4e48ae4517b82220811a27c3"
+    },
+    "campaign/real-run/process-nexus-start.json": {
+      "bytes": 86,
+      "sha256": "c45034da6fa2e8b505e3b84d63db8c2ca8ef939e394f7db3b21acca62d24d7f4"
+    },
+    "campaign/real-run/process-nexus-stop.json": {
+      "bytes": 85,
+      "sha256": "8bfac2dca2dd1f81b4d0a68d4102fcf9e736147447bdd06a7b56d99651330a5f"
+    },
+    "campaign/real-run/profile-drift-incident.json": {
+      "bytes": 1634,
+      "sha256": "0b7f599515b935930d40976768ff7423e4b12434dc2eaf37cd5083369d4515e4"
+    },
+    "campaign/real-run/profile-drift-readonly.json": {
+      "bytes": 1147,
+      "sha256": "53cdc86567e707c2911a6396898e93d79ceb0823aef606c7acc5f1f8beacdf4b"
+    },
+    "campaign/real-run/setup-native-metadata.json": {
+      "bytes": 1565,
+      "sha256": "ed6e786d1edd8ec6002076cedf4e385c88e843d29c5455554ef16ba54eb71419"
+    },
+    "campaign/real-run/stop-timeout-receipt.json": {
+      "bytes": 1443,
+      "sha256": "522ef714c02a184fe22c2bd1b18932686655c52148552078d7f89d44f0907696"
+    },
+    "campaign/reviews/m1-force-proposal-review.json": {
+      "bytes": 4436,
+      "sha256": "38abe206aba8d4ff4d049c1b9490da425d412615f6e212298c25aa038e37333a"
+    },
+    "campaign/reviews/m1-publication-helper-review.json": {
+      "bytes": 3635,
+      "sha256": "0ea36a4e3dd300d92ed4a6d050a91f6e983aa5bd62f1b05f03294c9a170ade78"
+    },
+    "campaign/reviews/m1-work-and-client-path-review.json": {
+      "bytes": 2495,
+      "sha256": "773bd42698a85c9744ca3158a3fa230829d809d2f61b0c74da73a0b0d01172e2"
+    },
+    "campaign/summary.json": {
+      "bytes": 3377,
+      "sha256": "3c30c5a3d2baa7a3d7d4741ad68dd38dbdbe00abdb6a7ae7ca829c62a5a4b6eb"
+    },
+    "milestone.md": {
+      "bytes": 2787,
+      "sha256": "5460d13e4ded627e9437eeb7948f2175442e272254e8dba8f7ade345438a06c9"
+    },
+    "publication-helper-final-addendum.json": {
+      "bytes": 2723,
+      "sha256": "77a22c1e094b67259b20e91bff95a359cdafa27f5df683451b890d2bb395fb67"
+    }
+  },
+  "scope": "Incomplete real M1 execution, preserved fault and exact pending containment; helper preparation only"
+}

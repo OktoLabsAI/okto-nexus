@@ -1,0 +1,73 @@
+{
+  "session_claims": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+      "reconciliation_pending": 1,
+      "release_id": null,
+      "release_digest": null
+    }
+  ],
+  "streams": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "stream_epoch": "stream_2a5235dfa48ad2955623d64e76aeb82f",
+      "next_sequence": 35,
+      "acked_sequence": 34,
+      "compacted_sequence": 0
+    }
+  ],
+  "operations": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_32901beea4895474c9de947aaf55cedd",
+      "stage": "CANCELLED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_75d6c4b30bb5fc5e00e3a3c5b83e3305",
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_18574bfd8a2826fabeec204cd59b9fd7",
+      "stage": "SUCCEEDED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    }
+  ],
+  "server_python": "C:/Users/jpamb/AppData/Local/Temp/r3-campaign-refresh-0ssbo8pb/native/venv/Scripts/pythonw.exe",
+  "server_site_packages": "C:/Users/jpamb/AppData/Local/Temp/r3-campaign-refresh-0ssbo8pb/native/venv/Lib/site-packages",
+  "historical_pins": {
+    "nexus_wheel": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+    "core_wheel": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a"
+  },
+  "note": "Read-only fixed columns; no event bodies or private native transcript/config. Process STOPPED/core_release_pending false came from GET service, not this claim schema."
+}

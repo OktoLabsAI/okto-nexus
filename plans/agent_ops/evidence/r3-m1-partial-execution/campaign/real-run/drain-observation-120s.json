@@ -1,0 +1,1853 @@
+{
+  "started": 1794069298.3274968,
+  "finished": 1794069419.2756379,
+  "observation_seconds": 120.94814205169678,
+  "expected_generation": "188be445d44e96d483336ee424008e56",
+  "expected_pid": 45144,
+  "verified_birth": 134385414258428432,
+  "final_status": {
+    "component": "server",
+    "instance_id": "svc_f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+    "installed_version": "0.3.3",
+    "active_version": "0.3.3",
+    "generation": "188be445d44e96d483336ee424008e56",
+    "state": "stopping",
+    "ready_for_queries": true,
+    "work_state": "not_checked",
+    "reason": "RUNTIME_DRAINING",
+    "next_action": "Repeat stop to observe this drain; start cannot reopen admission.",
+    "effective_configuration": {
+      "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home",
+      "database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home\\nexus.db",
+      "bind_host": "127.0.0.1",
+      "port": 64507
+    },
+    "shutdown": {
+      "state": "DRAINING_PENDING",
+      "deadline_monotonic": 562462.2539556,
+      "phase": "waiting",
+      "force_requested": false,
+      "safety_shutdown": false,
+      "force_available": true,
+      "resources": [
+        {
+          "reason": "SESSION_RECONCILIATION_PENDING",
+          "outcome": "UNKNOWN",
+          "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+          "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "owner": "embedded-core",
+          "store_retained": true
+        },
+        {
+          "owner": "embedded-core",
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "reason": "CORE_UNKNOWN",
+          "outcome": "pending",
+          "store_retained": true
+        },
+        {
+          "owner": "handoff-notices",
+          "resource_id": "notice-writer",
+          "outcome": "pending",
+          "store_retained": true
+        },
+        {
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "outcome": "unknown",
+          "store_retained": true,
+          "process_state": "STOPPED",
+          "core_release_pending": false,
+          "owner": "embedded",
+          "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+        },
+        {
+          "owner": "legacy",
+          "resource_id": "runtime-owner",
+          "outcome": "unknown",
+          "store_retained": true
+        }
+      ],
+      "error_codes": []
+    },
+    "admission": "closed",
+    "supervisor": "windows-task-scheduler",
+    "protocol_revision": 1,
+    "storage_initialized": true,
+    "pid": 45144,
+    "user_service": {
+      "name": "OktoNexus-server-f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+      "state": 4,
+      "enabled": true,
+      "last_result": 267009,
+      "start_at_login": true,
+      "available_before_login": false,
+      "available_after_logout": false,
+      "definition_digest": "ebaff7b4de4649e868fce01bddceb44f8c24b1626c4915b0d370d1dd576f8d3f"
+    }
+  },
+  "transitions": [
+    {
+      "observed_at": 1794069298.9985569,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069307.4541955,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069308.6368983,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069323.0011017,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069325.408969,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069327.7870295,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069328.9987109,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069335.051854,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069336.2193804,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069352.924762,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069354.0906036,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069363.6007965,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069364.7655272,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069367.146189,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069369.5743349,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069374.333724,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069375.5223513,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069377.9130607,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069379.1212816,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069388.7091956,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069389.8806293,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069400.7581716,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069402.010911,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069408.1877356,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069409.3983731,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069413.1576188,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "drain-observer",
+            "resource_id": "retained-read",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    },
+    {
+      "observed_at": 1794069414.3756897,
+      "state": "stopping",
+      "generation": "188be445d44e96d483336ee424008e56",
+      "pid": 45144,
+      "pid_exists": true,
+      "birth": 134385414258428432,
+      "admission": "closed",
+      "shutdown": {
+        "state": "DRAINING_PENDING",
+        "deadline_monotonic": 562462.2539556,
+        "phase": "waiting",
+        "force_requested": false,
+        "safety_shutdown": false,
+        "force_available": true,
+        "resources": [
+          {
+            "reason": "SESSION_RECONCILIATION_PENDING",
+            "outcome": "UNKNOWN",
+            "opening_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "owner": "embedded-core",
+            "store_retained": true
+          },
+          {
+            "owner": "embedded-core",
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "reason": "CORE_UNKNOWN",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "owner": "handoff-notices",
+            "resource_id": "notice-writer",
+            "outcome": "pending",
+            "store_retained": true
+          },
+          {
+            "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+            "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+            "outcome": "unknown",
+            "store_retained": true,
+            "process_state": "STOPPED",
+            "core_release_pending": false,
+            "owner": "embedded",
+            "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b"
+          },
+          {
+            "owner": "legacy",
+            "resource_id": "runtime-owner",
+            "outcome": "unknown",
+            "store_retained": true
+          }
+        ],
+        "error_codes": []
+      }
+    }
+  ],
+  "core_metadata": {
+    "owned-slots.db": {
+      "slots": [
+        {
+          "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+          "released": 1
+        }
+      ]
+    },
+    "session-ef244ce98fccbe3be1dc54013ba7dc75abcde017ba84fcc06c29438903cefd99.db": {
+      "slots": [],
+      "operations": [
+        {
+          "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+          "stage": "SUBMITTED",
+          "possible_effect": 1,
+          "retry_safe": 0,
+          "error_code": null
+        },
+        {
+          "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "operation_id": "op_32901beea4895474c9de947aaf55cedd",
+          "stage": "CANCELLED",
+          "possible_effect": 1,
+          "retry_safe": 0,
+          "error_code": null
+        },
+        {
+          "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "operation_id": "op_75d6c4b30bb5fc5e00e3a3c5b83e3305",
+          "stage": "SUBMITTED",
+          "possible_effect": 1,
+          "retry_safe": 0,
+          "error_code": null
+        },
+        {
+          "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+          "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+          "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+          "operation_id": "op_18574bfd8a2826fabeec204cd59b9fd7",
+          "stage": "SUCCEEDED",
+          "possible_effect": 1,
+          "retry_safe": 0,
+          "error_code": null
+        }
+      ]
+    }
+  },
+  "mutations": 0,
+  "force_executed": false,
+  "uninstall_executed": false
+}

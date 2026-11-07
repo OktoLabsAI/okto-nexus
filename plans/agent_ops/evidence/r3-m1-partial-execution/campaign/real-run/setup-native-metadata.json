@@ -1,0 +1,66 @@
+{
+  "source": "owned standalone setup journal fixed metadata projections only",
+  "native_methods": [
+    {
+      "native_type": "account/rateLimits/updated",
+      "events": 1
+    },
+    {
+      "native_type": "core/harness_configuration",
+      "events": 1
+    },
+    {
+      "native_type": "item/agentMessage/delta",
+      "events": 1
+    },
+    {
+      "native_type": "item/completed",
+      "events": 2
+    },
+    {
+      "native_type": "item/started",
+      "events": 2
+    },
+    {
+      "native_type": "mcpServer/startupStatus/updated",
+      "events": 20
+    },
+    {
+      "native_type": "thread/started",
+      "events": 1
+    },
+    {
+      "native_type": "thread/status/changed",
+      "events": 2
+    },
+    {
+      "native_type": "thread/tokenUsage/updated",
+      "events": 1
+    },
+    {
+      "native_type": "turn/completed",
+      "events": 1
+    },
+    {
+      "native_type": "turn/started",
+      "events": 1
+    }
+  ],
+  "reported_native_policy_fields": {
+    "$.payload.model": [],
+    "$.payload.modelProvider": [],
+    "$.payload.approvalPolicy": [],
+    "$.payload.sandbox": [],
+    "$.payload.thread.model": [
+      "gpt-6-astra"
+    ],
+    "$.payload.thread.modelProvider": [
+      "openai"
+    ],
+    "$.payload.thread.approvalPolicy": [],
+    "$.payload.thread.sandbox": []
+  },
+  "missing_fields_mean": "not reported in this event projection, not inferred from personal configuration",
+  "personal_config_read": false,
+  "instructions_or_transcripts_collected": false
+}

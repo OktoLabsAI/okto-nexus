@@ -1,0 +1,44 @@
+{
+  "error_type": "PermissionError",
+  "containment_error_type": null,
+  "summary": {
+    "known_observed_tokens": 45843,
+    "reserved_requests": 2,
+    "current": [
+      "m1-local-work-01"
+    ],
+    "can_admit": false,
+    "reasons": [
+      "CAMPAIGN_RUNNER_EXCEPTION",
+      "SERIAL_REQUEST_UNSETTLED",
+      "TURN_TERMINAL_MISSING"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "request": {
+    "kind": "work",
+    "lane": "local",
+    "stage": "useful_work",
+    "operation": "op_32901beea4895474c9de947aaf55cedd",
+    "session": "ses_e8ddc66adc041a490d97a2419778e90c",
+    "stream": "[\"srv_5a02d4e235c6f532d56f1009516c9f6b\",\"exe_73883c04aeca5110dd9212baff8c08a1\",\"ses_e8ddc66adc041a490d97a2419778e90c\",\"stream_2a5235dfa48ad2955623d64e76aeb82f\"]",
+    "recover": false,
+    "scope": {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "binding_id": "bind_cf0ff70a153f08d5ff18ea6e30c71215",
+      "agent_id": "m1-local",
+      "workspace_id": "wsr_33d3e0539fc61d33cc7d8fe8c47c00f1",
+      "workspace_binding_id": "wxb_4edf202c7cf5e6c2b7b47e512028347b"
+    },
+    "started": 1794068836.3634036,
+    "settled": false,
+    "stop_selected": {
+      "reason": "OBSERVATION_UNKNOWN",
+      "action": "interrupt"
+    }
+  },
+  "stop_wrapper_exits": [],
+  "scope": "No automatic retry; a selected canonical control is not a termination receipt."
+}

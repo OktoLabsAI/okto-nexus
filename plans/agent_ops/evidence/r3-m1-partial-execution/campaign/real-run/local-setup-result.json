@@ -1,0 +1,47 @@
+{
+  "started": 1794068014.414463,
+  "finished": 1794068069.7147334,
+  "cli_exit": 3,
+  "reported_state": "refused",
+  "reported_code": "PROFILE_DRIFT",
+  "summary": {
+    "known_observed_tokens": 22775,
+    "reserved_requests": 1,
+    "current": [],
+    "can_admit": true,
+    "reasons": [],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "monitor": {
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home\\connection-tests",
+    "home_identity": [
+      14764524303808498864,
+      18014398511791284
+    ],
+    "prior_journals": [],
+    "journal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home\\connection-tests\\e02660ec245d404ebdcecd7b15ad489e\\journal.db",
+    "journal_identity": [
+      14764524303808498864,
+      17169973581659603
+    ],
+    "cursor": 33,
+    "high_water": 22775,
+    "thread": "01a1b6c9-cf0b-7421-9676-a4510f18d0e7",
+    "turn": "01a1b6c9-e1a0-7ca3-8941-a88025d0dc17",
+    "started": true,
+    "terminal": true,
+    "usage_seen": true,
+    "caught_up": true,
+    "result_stage": "SUCCEEDED",
+    "close_stage": "SUBMITTED",
+    "owned_slot_released": true
+  },
+  "stop_selected": null,
+  "stop_wrapper_exits": [],
+  "maximum_poll_start_interval_seconds": 0.2910088999196887,
+  "poll_count": 240,
+  "output_sha256": "38722bb9936c9a2bc58ff442e2036306ddd1d05b33d5302e3d4e6ff819e8ed40",
+  "native_effective_policy": "not yet established by canonical setup review; inherited settings preserved"
+}

@@ -1,0 +1,38 @@
+{
+  "reviewer": "coordination_review",
+  "kind": "finite_readonly_review",
+  "reviewed_at": "2026-11-07",
+  "scope": [
+    "M1 work runner fixes after b6ab6583",
+    "client-only absolute-path separator comparison"
+  ],
+  "conclusion": "No concrete blocker found in the specified deltas.",
+  "checks": [
+    "Work runner blocks a new native decision after stop_selected, collector fault, or 100000 observed tokens; per-lane decision count also consults the retained decision journal.",
+    "Decision response loss is reconciled through GET approval detail and GET decision receipt, including after the approval leaves pending. Receipt ID, approval key, request hash, client intent and CONFIRMED state are compared; no recovery POST is issued.",
+    "Final runner additionally requires qualification_status QUALIFIED and root_execution_release exactly true in its client pin.",
+    "The client path fix only compares absolute strings with host-native slash normalization. It does not resolve paths, inspect provider home, fold case, or collapse dot-dot.",
+    "The added source regression asserts Finish followed by GET-only resume without additional probe/turn/database changes, and rejects different, relative, dot-dot and missing canonical provider homes.",
+    "Keeping original Server and an independently qualified corrected client does not expand the accepted tasks, homes, requests, lifecycle actions or provider policy."
+  ],
+  "limits": [
+    "Static review only; reviewer executed no tests, native CLI, provider, service, task or credential operation.",
+    "Source test execution and installed client qualification are owned by root; their success is not inferred by this review.",
+    "No promise of hard token billing cap, process termination on requested stop, or completed M1 outcome.",
+    "Historical runner versions and evidence remain unchanged."
+  ],
+  "inputs": [
+    {
+      "path": "C:/Users/jpamb/AppData/Local/Temp/m1_real_work.py",
+      "sha256": "c0903937d3ce737764200ebcaa6ab9d1f6ec364b03a68c1d2ce51a2a6bd9a1f3"
+    },
+    {
+      "path": "D:/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/application/terminal_connection.py",
+      "sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787"
+    },
+    {
+      "path": "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_terminal_connect.py",
+      "sha256": "77adf155ced78114983e85445c8426b85cdd3b5352ffa3a2bcb19f92f17d2c0c"
+    }
+  ]
+}

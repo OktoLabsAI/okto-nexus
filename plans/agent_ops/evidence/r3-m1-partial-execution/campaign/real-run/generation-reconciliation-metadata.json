@@ -1,0 +1,92 @@
+{
+  "session_open_generations": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+      "connection_generation": 2,
+      "owner_generation": 1
+    }
+  ],
+  "operation_actions": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "operation_id": "op_18574bfd8a2826fabeec204cd59b9fd7",
+      "action": "runtime.close",
+      "terminal_event_expected": 0
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "operation_id": "op_32901beea4895474c9de947aaf55cedd",
+      "action": "turn.submit",
+      "terminal_event_expected": 1
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "operation_id": "op_75d6c4b30bb5fc5e00e3a3c5b83e3305",
+      "action": "turn.interrupt",
+      "terminal_event_expected": 0
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+      "action": "runtime.open",
+      "terminal_event_expected": 0
+    }
+  ],
+  "execution_sessions": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "owner_generation": 1,
+      "open_operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+      "stream_epoch": "stream_2a5235dfa48ad2955623d64e76aeb82f",
+      "lifecycle_state": "CLOSED"
+    }
+  ],
+  "execution_operations": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+      "action": "runtime.open",
+      "admission_state": "DISPATCHED",
+      "expected_session_owner_generation": 1
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_32901beea4895474c9de947aaf55cedd",
+      "action": "turn.submit",
+      "admission_state": "RESOLVED_TERMINAL",
+      "expected_session_owner_generation": 1
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_75d6c4b30bb5fc5e00e3a3c5b83e3305",
+      "action": "turn.interrupt",
+      "admission_state": "DISPATCHED",
+      "expected_session_owner_generation": 1
+    },
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_18574bfd8a2826fabeec204cd59b9fd7",
+      "action": "runtime.close",
+      "admission_state": "RESOLVED_TERMINAL",
+      "expected_session_owner_generation": 1
+    }
+  ],
+  "read_only": true
+}

@@ -1,0 +1,36 @@
+{
+  "read_only": true,
+  "summary": {
+    "known_observed_tokens": 45843,
+    "reserved_requests": 2,
+    "current": [],
+    "can_admit": false,
+    "reasons": [
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "work": {
+    "operation_id": "op_32901beea4895474c9de947aaf55cedd",
+    "executor_stage": "CANCELLED",
+    "admission_state": "RESOLVED_TERMINAL",
+    "possible_effect": true,
+    "error": null
+  },
+  "control": {
+    "operation_id": "op_75d6c4b30bb5fc5e00e3a3c5b83e3305",
+    "executor_stage": "SUBMITTED",
+    "admission_state": "DISPATCHED",
+    "possible_effect": true,
+    "error": null
+  },
+  "request_settled": true,
+  "stop_selected": {
+    "action": "interrupt",
+    "reason": "OBSERVATION_UNKNOWN"
+  },
+  "report_exists": false,
+  "new_productive_dispatches": 0,
+  "repeated_controls": 0
+}

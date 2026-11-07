@@ -1,0 +1,45 @@
+{
+  "kind": "finite_readonly_publication_helper_addendum",
+  "reviewer": "coordination_review",
+  "supersedes_finding": "PREPARED_RUNNER_SIBLING_PATH in m1-publication-helper-review.json",
+  "conclusion": "The concrete callback-path issue is resolved in the prepared runner. No remaining blocker found in this narrowly reviewed delta.",
+  "checks": [
+    "The stop callback now uses the explicit original C:/Users/jpamb/AppData/Local/Temp/m1_real_lifecycle.py path, independent of the prepared runner directory.",
+    "publication.py bytes are unchanged from the prior reviewed helper.",
+    "The additional Windows test opens only its own tmp_path/live.json with CreateFileW sharing flags READ|WRITE and without FILE_SHARE_DELETE; replace fails while the HANDLE remains open.",
+    "The test asserts canonical poll result remains accessible, publication delay is bounded, the old file remains intact, and after CloseHandle the next poll publishes the latest snapshot.",
+    "The initial nine-case XML is retained byte-for-byte under initial-9; the final XML records ten cases, zero failures/errors/skips."
+  ],
+  "tests": {
+    "retained_final": 10,
+    "reviewer_executed": 0,
+    "qualification": "Nine pure simulated unit cases plus one real Windows file-sharing fault on a disposable test file. Prepared runner and provider campaign were not executed."
+  },
+  "limits": [
+    "This does not establish the cause of the original Windows access error.",
+    "No authorization to run force or new productive work; current campaign fault remains unchanged.",
+    "No claim of hard OS latency bound, final billing or service reconciliation cleanup."
+  ],
+  "inputs": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\test_publication.py",
+      "sha256": "e6c54757b1b635f96a1171b27c961265868435120c9f53b83f9d0b8b4a1a8cba"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\prepared_m1_real_work.py",
+      "sha256": "a6bcb65037f547061f5fbb551e942e98ed687ae51715f7505b9fe074812246f5"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\results.xml",
+      "sha256": "f92ea344d3219fd59cf1b59f52d9e573ba59a2dd967db2d7f2511ea7af54b5b0"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\initial-9\\results.xml",
+      "sha256": "19d95c11c9a0ea406508974e84721515af2cf28249a635fe4df2edede21bc9d1"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "time": 1794068890.0604506,
+  "summary": {
+    "known_observed_tokens": 45843,
+    "reserved_requests": 2,
+    "current": [
+      "m1-local-work-01"
+    ],
+    "can_admit": false,
+    "reasons": [
+      "SERIAL_REQUEST_UNSETTLED",
+      "TURN_TERMINAL_MISSING"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "active_request": "m1-local-work-01"
+}

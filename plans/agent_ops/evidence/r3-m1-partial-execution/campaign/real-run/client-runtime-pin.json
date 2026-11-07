@@ -1,0 +1,20 @@
+{
+  "qualification_status": "QUALIFIED",
+  "root_execution_release": true,
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-path-fix-8rktvrtc\\venv",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-path-fix-8rktvrtc\\venv\\Scripts\\python.exe",
+  "terminal_connection_sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787",
+  "wheel_sha256": "fdb8f37866f5332244a6916d6e6eaac433cd317d4ed2792a81bd4a3f426b49c2",
+  "server_remains_original_pinned_package": true,
+  "historical_server_nexus_wheel_sha256": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+  "client_payload_delta": "Only application/terminal_connection.py changed among 691 Nexus files; parent qualification record is authoritative.",
+  "core_and_connector": "Historical payloads unchanged: Core166 / Connector124.",
+  "service_actions_added": 0,
+  "setup_replay": false,
+  "original_profile_modified": false,
+  "prepared_at": 1794068640.1771646,
+  "qualification.json_sha256": "54483f8d7052801748496f9f2e2642388a7c904d5d13fd2bfa6028aaf876fff4",
+  "package-proof.json_sha256": "996b1991a4fa9aa7126c8ce08ad4b6638a6e1920ff37240c59673def3808ea68",
+  "released_at": 1794068827.9193459,
+  "release_basis": "Explicit root release after source14 and installed14 passed; original Server package retained."
+}

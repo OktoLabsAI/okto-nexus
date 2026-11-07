@@ -1,0 +1,66 @@
+{
+  "known_observed_minimum": 45843,
+  "private_faults": [
+    "CAMPAIGN_RUNNER_EXCEPTION"
+  ],
+  "admissions": 2,
+  "setup": {
+    "m1-local-setup": {
+      "high_water": 22775,
+      "cursor": 33,
+      "started": true,
+      "terminal": true,
+      "usage_seen": true,
+      "caught_up": true,
+      "result_stage": "SUCCEEDED",
+      "close_stage": "SUBMITTED",
+      "owned_slot_released": true
+    }
+  },
+  "streams": {
+    "[\"srv_5a02d4e235c6f532d56f1009516c9f6b\",\"exe_73883c04aeca5110dd9212baff8c08a1\",\"ses_e8ddc66adc041a490d97a2419778e90c\",\"stream_2a5235dfa48ad2955623d64e76aeb82f\"]": {
+      "scope": {
+        "agent_id": "m1-local",
+        "authorization_revision": 2,
+        "binding_id": "bind_cf0ff70a153f08d5ff18ea6e30c71215",
+        "binding_revision": 1,
+        "configuration_revision": 2,
+        "credential_epoch": 1,
+        "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+        "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+        "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+        "session_owner_generation": 1,
+        "workspace_binding_id": "wxb_4edf202c7cf5e6c2b7b47e512028347b",
+        "workspace_id": "wsr_33d3e0539fc61d33cc7d8fe8c47c00f1"
+      },
+      "epoch": "stream_2a5235dfa48ad2955623d64e76aeb82f",
+      "cursor": 34,
+      "watermark": 34,
+      "gap": false,
+      "page_seen": true,
+      "retired": false,
+      "native_thread_id": null
+    }
+  },
+  "turns": {
+    "[\"[\\\"srv_5a02d4e235c6f532d56f1009516c9f6b\\\",\\\"exe_73883c04aeca5110dd9212baff8c08a1\\\",\\\"01a1b6d6-649c-7e93-9d24-8d4648516545\\\"]\",\"01a1b6d6-6b40-7981-be6d-3897cc3017e8\"]": {
+      "operation_id": "op_32901beea4895474c9de947aaf55cedd",
+      "stream": "[\"srv_5a02d4e235c6f532d56f1009516c9f6b\",\"exe_73883c04aeca5110dd9212baff8c08a1\",\"ses_e8ddc66adc041a490d97a2419778e90c\",\"stream_2a5235dfa48ad2955623d64e76aeb82f\"]",
+      "started": true,
+      "terminal": true,
+      "usage_seen": true,
+      "high_water": null,
+      "turn_id": "01a1b6d6-6b40-7981-be6d-3897cc3017e8",
+      "state": null
+    }
+  },
+  "threads": {
+    "[\"srv_5a02d4e235c6f532d56f1009516c9f6b\",\"exe_73883c04aeca5110dd9212baff8c08a1\",\"01a1b6d6-649c-7e93-9d24-8d4648516545\"]": {
+      "high_water": 23068,
+      "baseline_total": null,
+      "baseline_basis": "confirmed_fresh_thread",
+      "native_thread_id": "01a1b6d6-649c-7e93-9d24-8d4648516545"
+    }
+  },
+  "note": "Metadata projections only. These observations are not billed/final usage. No private frames copied."
+}

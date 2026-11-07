@@ -1,0 +1,60 @@
+{
+  "kind": "finite_readonly_publication_helper_review",
+  "reviewer": "coordination_review",
+  "conclusion": "The pure helper has no concrete blocker in the reviewed retry/error-boundary behavior. The prepared runner requires the deployment-path issue below to be resolved before direct execution from its new folder.",
+  "verified": [
+    "Only PermissionError with winerror 5 or 32 from live-accounting publication is retried.",
+    "Elapsed retry delay budget is at most 80ms per publication call. The module explicitly does not claim a hard deadline on a blocked OS file call.",
+    "On persistent selected publication errors, the snapshot is deferred with in-memory diagnostics and the next canonical poll remains possible.",
+    "controller.poll(), observation and private checkpoint writes execute outside the publication catch. Other publication errors propagate to the existing fail-closed handler.",
+    "The prepared delta does not clear faults, alter reservations/decision guards, authorize new work, repeat dispatch or change the actual campaign."
+  ],
+  "finding": {
+    "code": "PREPARED_RUNNER_SIBLING_PATH",
+    "severity": "execution_blocker_if_run_from_prepared_directory",
+    "location": "prepared_m1_real_work.py: stop_owner",
+    "evidence": "The existing callback uses Path(__file__).with_name('m1_real_lifecycle.py'), while the prepared directory contains no such sibling. Import of m1_real_lifecycle separately uses the Temp root.",
+    "minimal_resolution": "Keep the final runner in the original location with the reviewed lifecycle sibling, or resolve the exact already pinned lifecycle module path. Do not run a relocated candidate with the missing callback script.",
+    "status": "Reported to root and ac03_review; no edits or execution by reviewer."
+  },
+  "retained_tests": {
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 0.098,
+    "reviewer_executed": false,
+    "qualification": "Pure unit fault injection; prepared runner not executed. This does not qualify provider/campaign integration."
+  },
+  "limits": [
+    "No product/checkpoint/campaign edits by reviewer.",
+    "Current campaign fault and authorization fences remain in force.",
+    "No claim that the observed Windows error was caused by a reader or that publication retry fixes service reconciliation UNKNOWN."
+  ],
+  "inputs": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\test_publication.py",
+      "sha256": "34f5f32bd59a7abc242bea78c01bd9d68a80bafdb8964ebe1ca9fea06aad6117"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\prepared_m1_real_work.py",
+      "sha256": "2789a423af308ecb8c24c40ea72140ff508febfd78f9288a13f795945f165eb1"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\original_m1_real_work.py",
+      "sha256": "c0903937d3ce737764200ebcaa6ab9d1f6ec364b03a68c1d2ce51a2a6bd9a1f3"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\results.xml",
+      "sha256": "19d95c11c9a0ea406508974e84721515af2cf28249a635fe4df2edede21bc9d1"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\status.json",
+      "sha256": "460fd266ba63a7cf9675ca3b58896074cd539c601f019006fa600b2bafca0ec6"
+    }
+  ]
+}

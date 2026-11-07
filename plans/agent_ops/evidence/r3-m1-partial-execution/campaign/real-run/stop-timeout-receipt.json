@@ -1,0 +1,38 @@
+{
+  "component": "server",
+  "instance_id": "svc_f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+  "installed_version": "0.3.3",
+  "active_version": "0.3.3",
+  "generation": "188be445d44e96d483336ee424008e56",
+  "state": "stopping",
+  "ready_for_queries": true,
+  "work_state": "not_checked",
+  "reason": "RUNTIME_DRAINING",
+  "next_action": "Drain remains pending. Inspect status; an explicit stop --force --expected-generation is required to escalate.",
+  "effective_configuration": {
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home",
+    "database": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home\\nexus.db",
+    "bind_host": "127.0.0.1",
+    "port": 64507
+  },
+  "shutdown": {
+    "state": "UNCONFIRMED",
+    "resources": []
+  },
+  "storage_initialized": true,
+  "admission": "closed",
+  "supervisor": "windows-task-scheduler",
+  "pid": 45144,
+  "protocol_revision": 1,
+  "user_service": {
+    "name": "OktoNexus-server-f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+    "state": 4,
+    "enabled": true,
+    "last_result": 267009,
+    "start_at_login": true,
+    "available_before_login": false,
+    "available_after_logout": false,
+    "definition_digest": "ebaff7b4de4649e868fce01bddceb44f8c24b1626c4915b0d370d1dd576f8d3f"
+  },
+  "wait_timed_out": true
+}

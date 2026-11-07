@@ -1,0 +1,81 @@
+{
+  "status": "PASS_READ_ONLY_PREFLIGHT",
+  "proposal_sha256": "a5a01d1dd858e18645b020b4b604d09a8becab61c34b288ec524c34392da4371",
+  "packages": {
+    "nexus": {
+      "files": 691,
+      "wheel_sha256": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+      "module_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\okto_nexus"
+    },
+    "connector": {
+      "files": 124,
+      "wheel_sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "module_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\okto_nexus_connector"
+    },
+    "core": {
+      "files": 166,
+      "wheel_sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+      "module_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\nexus_connector_core"
+    }
+  },
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-28dba74f7a03c7977c1bbf2521215167dcd4a6b91ef6bc4cee3c215ac60d9103",
+      "absent": true
+    }
+  },
+  "paths": {
+    "campaign_root": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign",
+      "absent": true
+    },
+    "server_home": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home",
+      "absent": true
+    },
+    "operator_home": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\operator-home",
+      "absent": true
+    },
+    "connector_state": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\connector-state",
+      "absent": true
+    },
+    "local_project": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+      "absent": true
+    },
+    "remote_project": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\connector-project",
+      "absent": true
+    },
+    "private_evidence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\private",
+      "absent": true
+    },
+    "public_evidence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public",
+      "absent": true
+    },
+    "local_deliverables": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\local",
+      "absent": true
+    },
+    "remote_deliverables": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\connector",
+      "absent": true
+    }
+  },
+  "port": 64507,
+  "port_available": true,
+  "native_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+  "controller_manifest_sha256": "fa7c7a5d40a6fbf514c34b63c75144d95a4aa8f7ff90067fdb97c24304d95961",
+  "provider_files_read": false,
+  "provider_processes": 0,
+  "service_mutations": 0,
+  "authorization": "Root relayed explicit user execution approval for v7 on this turn."
+}

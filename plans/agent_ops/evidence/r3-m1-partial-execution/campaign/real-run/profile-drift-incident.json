@@ -1,0 +1,36 @@
+{
+  "recorded_at": 1794068179.9940696,
+  "classification": "PRODUCT_FALSE_PROFILE_DRIFT_WINDOWS_PATH_SEPARATORS",
+  "installed_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py",
+  "installed_source_sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63",
+  "source_lines": "TerminalConnection.observe lines 172-175",
+  "predicate_results": {
+    "binding_present": true,
+    "execution_location_local": true,
+    "adapter_matches": true,
+    "workspace_selection_absent_or_equal": true,
+    "candidate_matches": true,
+    "project_raw_matches": true,
+    "provider_raw_matches": false,
+    "provider_windows_lexical_matches": true
+  },
+  "native_setup_terminal": "SUCCEEDED",
+  "observed_tokens_minimum": 22775,
+  "global_reserved_requests": 1,
+  "poll_max_seconds": 0.2910088999196887,
+  "setup_profile_state": "done",
+  "finish_saved": true,
+  "binding_state": "APPROVED",
+  "campaign_state": "SAFE_PENDING_NO_NEW_ADMISSIONS",
+  "productive_work_started": false,
+  "connector_installed": false,
+  "setup_replayed": false,
+  "profile_mutated_for_recovery": false,
+  "native_setup_close_stage": "SUBMITTED",
+  "owned_slot_released": true,
+  "limits": [
+    "Native setup is a real charged inference; observed counter is not billed or final.",
+    "No local useful task, native decision, continuity or Connector M1 result was qualified.",
+    "Original pinned package and retained receipts must remain attributable; any corrected package needs explicit review."
+  ]
+}

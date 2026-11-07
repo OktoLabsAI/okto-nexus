@@ -1,0 +1,188 @@
+{
+  "review": {
+    "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+    "selection": {
+      "agent": "m1-local",
+      "client": "codex",
+      "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+      "label": "local-project",
+      "workspace_id": null,
+      "binding_id": null,
+      "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+      "provider_home": "C:/Users/jpamb/.codex",
+      "create_agent": true,
+      "display_name": "Codex \u2014 local-project"
+    },
+    "request": {
+      "client_intent_id": "connect_79905394bc334c63b24fdc76a8a4db8d",
+      "agent_id": "m1-local",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "workspace_id": null,
+      "binding_id": null,
+      "agent_creation": {
+        "display_name": "Codex \u2014 local-project",
+        "defaults_hash": "sha256:6324ab87d77e9be205e191bec96469118655aff30133a27f6948d3d513c77663"
+      },
+      "broadcast_handoff_auto_claim": false,
+      "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+      "inventory_revision": "sha256:47059aba6a9a94bf29cff0d6c26e8176c006e3a9bd4bfc00dc69c85686a2bfb2",
+      "baseline": {
+        "execution_revision": 0,
+        "runtime_revision": 0,
+        "defaults_revision": 1,
+        "binding_revision": null,
+        "endpoint_revision": null
+      },
+      "project_preset": {
+        "id": "project-generalist",
+        "revision": 1
+      },
+      "configuration": {
+        "format": "okto-nexus-connection",
+        "version": 1,
+        "adapter_id": "codex_app_server",
+        "execution_location": "local",
+        "runtime_enabled": true,
+        "session_policy": "per_sender",
+        "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+        "workspace_label": "local-project",
+        "provider_home": "C:/Users/jpamb/.codex",
+        "secret_bindings": {},
+        "alias": "local-project",
+        "harness_settings": {},
+        "automatic_reply": true,
+        "tool_access": "ask",
+        "authorization": {
+          "minutes": 60,
+          "no_expiry": false,
+          "actions": 20,
+          "unlimited_actions": false
+        }
+      },
+      "native_decision_policy": {
+        "expected_revision": "d12feadf80aa4865fd892cced7d77d352bd66e34744ee9f805756f9e7f2b15cd",
+        "initialize": true
+      }
+    },
+    "version_check_required": true,
+    "effects": [
+      "Create this project identity at Finish with the reviewed coordination permissions; no global administration is granted.",
+      "Use the selected agent and project workspace through the existing managed connection.",
+      "Allow authorized sessions and eligible Nexus messages for 60 minutes and at most 20 runtime actions.",
+      "Keep native tool decisions and existing model/project instructions; no sandbox settings are replaced.",
+      "The connection test opens the harness and requests a model response; provider usage may be charged.",
+      "Finish saves the connection and execution grant. It does not submit a project task.",
+      "Enable Server-wide human review (feature_hitl) at Finish for native decisions and matching coordination approval rules. Each decision still requires its authorized recipient; no permission is approved automatically.",
+      "Automatic handoff claiming is disabled for this new identity; work still requires canonical authorization."
+    ],
+    "identity_creation": {
+      "role": "Project assistant",
+      "permissions": {
+        "messages": {
+          "send_direct": true,
+          "send_broadcast": false,
+          "send_channel": true
+        },
+        "handoffs": {
+          "create": true,
+          "work": true,
+          "cancel": true
+        },
+        "channels": {
+          "create": false
+        },
+        "artifacts": {
+          "put": true
+        },
+        "events": {
+          "read": true
+        },
+        "observations": {
+          "manage_self": false,
+          "publish": false
+        },
+        "identity": {
+          "update_profile": true,
+          "update_capabilities": false
+        },
+        "workspaces": {
+          "list": true,
+          "include_paths": false
+        },
+        "shared_md": {
+          "render": true
+        },
+        "health": {
+          "read": true
+        },
+        "experimental": {
+          "memory_write": false,
+          "memory_read": false,
+          "memory_search": false
+        },
+        "limits": {
+          "messages_per_minute": 60,
+          "max_recipients": 10
+        }
+      },
+      "defaults_hash": "sha256:6324ab87d77e9be205e191bec96469118655aff30133a27f6948d3d513c77663",
+      "display_name": "Codex \u2014 local-project"
+    },
+    "review_revision": "482b7be79c36b8b8ea09d9d2a7a9536e26370bb203e70c762182532ca0b250be",
+    "review_request": {
+      "client_intent_id": "connect_79905394bc334c63b24fdc76a8a4db8d",
+      "agent_id": "m1-local",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "workspace_id": null,
+      "binding_id": null,
+      "agent_creation": {
+        "display_name": "Codex \u2014 local-project",
+        "defaults_hash": "sha256:6324ab87d77e9be205e191bec96469118655aff30133a27f6948d3d513c77663"
+      },
+      "broadcast_handoff_auto_claim": false,
+      "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+      "inventory_revision": "sha256:47059aba6a9a94bf29cff0d6c26e8176c006e3a9bd4bfc00dc69c85686a2bfb2",
+      "baseline": {
+        "execution_revision": 0,
+        "runtime_revision": 0,
+        "defaults_revision": 1,
+        "binding_revision": null,
+        "endpoint_revision": null
+      },
+      "project_preset": {
+        "id": "project-generalist",
+        "revision": 1
+      },
+      "configuration": {
+        "format": "okto-nexus-connection",
+        "version": 1,
+        "adapter_id": "codex_app_server",
+        "execution_location": "local",
+        "runtime_enabled": true,
+        "session_policy": "per_sender",
+        "workspace_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+        "workspace_label": "local-project",
+        "provider_home": "C:/Users/jpamb/.codex",
+        "secret_bindings": {},
+        "alias": "local-project",
+        "harness_settings": {},
+        "automatic_reply": true,
+        "tool_access": "ask",
+        "authorization": {
+          "minutes": 60,
+          "no_expiry": false,
+          "actions": 20,
+          "unlimited_actions": false
+        }
+      },
+      "native_decision_policy": {
+        "expected_revision": "d12feadf80aa4865fd892cced7d77d352bd66e34744ee9f805756f9e7f2b15cd",
+        "initialize": true
+      }
+    },
+    "state": "review",
+    "format": 1
+  },
+  "capture_encoding": "cp1252",
+  "wrapper_utf8_decode_failed_after_process_exit": true
+}

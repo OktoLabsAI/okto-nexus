@@ -1,0 +1,64 @@
+{
+  "kind": "finite_readonly_force_proposal_review",
+  "reviewer": "coordination_review",
+  "reviewed_at": "2026-11-07",
+  "status": "NO_BLOCKER_IN_PROPOSAL_AUTHORIZATION_REQUIRED",
+  "conclusion": "The proposed canonical force stop is narrowly scoped and reviewable. It has not been authorized by the earlier v7 scope, which explicitly excluded force; this review does not execute or authorize it.",
+  "verified_by_reading": [
+    "Useful operation is CANCELLED/RESOLVED_TERMINAL; the separate close operation is SUCCEEDED/RESOLVED_TERMINAL and session lifecycle CLOSED.",
+    "The public Core metadata projection reports the exact opening operation owned slot released=1. This does not clear session reconciliation UNKNOWN.",
+    "Observed minimum is 22775 setup + 23068 work = 45843 tokens with two reservations. Work start/terminal/usage_seen and cursor=watermark=34, gap=false are recorded; this is not billed/final usage.",
+    "The 120.948-second observation retains the same PID, process birth and generation, admission closed, DRAINING_PENDING, force_available true, force_requested false.",
+    "Proposal uses the original installed client and exact selected home/loopback origin, service stop --force --expected-generation with a 45-second observation timeout.",
+    "Uninstall is the already planned exact user-service operation and remains conditional on confirmed owner exit. No new start, generic kill, other task, checkpoint reset or provider request is proposed."
+  ],
+  "authorization_scope": {
+    "additional_action": "One canonical forced stop of the reviewed Nexus M1 service generation.",
+    "task_name": "OktoNexus-server-f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+    "generation": "188be445d44e96d483336ee424008e56",
+    "pid": 45144,
+    "birth_100ns": 134385414258428430,
+    "home": "C:/Users/jpamb/AppData/Local/Temp/r3-campaign-refresh-0ssbo8pb/m1-campaign/nexus-home",
+    "origin": "http://127.0.0.1:64507",
+    "consequence": "Forced containment may terminate retained resources while historical reconciliation remains UNKNOWN; it does not convert uncertain records to success.",
+    "afterward": "Only after confirmed owner exit, complete the already planned uninstall and preserve journals, checkpoints, faults and evidence.",
+    "on_scope_mismatch": "Abort; do not substitute another generation, kill by name/port or start a replacement."
+  },
+  "limits": [
+    "No reviewer commands touched tasks/processes, personal configuration, credentials, provider or runtime controls.",
+    "The review uses closed public artifacts plus source inspection, not an independent live status query.",
+    "No force outcome, service process exit, native billing total or M1 completion is asserted."
+  ],
+  "inputs": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public\\force-recovery-proposal.json",
+      "sha256": "d9e8b53dbbadcd991e170d801aa5483d875d982ee4a5627656994239b73a8261"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public\\drain-observation-120s.json",
+      "sha256": "60777498d339ee5e68151813dee1fa3fe9479f3fc68909528137c89036d612d1"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public\\local-close-result.json",
+      "sha256": "79c67d090d7d31c160dd506be5b05e42eb4bea38277f2857d5b56ef13e27063f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public\\final-accounting-coverage.json",
+      "sha256": "efce1e02da9a2fc7cf0b41d246847db63f976fc8092c97687073b824adfd953c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public\\interruption-observed.json",
+      "sha256": "2e24bb246287429ecafffe7cfb7d99bd4ebf64c2ca358d61e98c7a03c0bbea1c"
+    }
+  ],
+  "source_inputs": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\cli\\service.py",
+      "sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\server_shutdown.py",
+      "sha256": "c521b76f6573a9503c4dde0064f190d4bc213dbc6dbb9ac901e8b5920b8a7013"
+    }
+  ]
+}

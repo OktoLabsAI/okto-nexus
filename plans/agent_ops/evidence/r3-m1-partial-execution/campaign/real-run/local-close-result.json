@@ -1,0 +1,38 @@
+{
+  "operation": {
+    "operation_id": "op_18574bfd8a2826fabeec204cd59b9fd7",
+    "executor_stage": "SUCCEEDED",
+    "admission_state": "RESOLVED_TERMINAL",
+    "possible_effect": true,
+    "error": null
+  },
+  "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+  "runtime_lifecycle_state": "CLOSED",
+  "summary": {
+    "known_observed_tokens": 45843,
+    "reserved_requests": 2,
+    "current": [],
+    "can_admit": false,
+    "reasons": [
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "productive_replay": false,
+  "response_loss_driver": {
+    "admissions": [
+      {
+        "lane": "local",
+        "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+        "phase": "confirmed",
+        "target": "m1-local-work-01"
+      }
+    ],
+    "blocked": false,
+    "campaign_id": "m1-v7",
+    "decisions": [],
+    "faults": {},
+    "format": 1
+  }
+}

@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T16:32:23.563800+00:00",
+  "updated_at": "2026-11-07T16:45:06.389789+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -660,7 +660,8 @@
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "rtk proxy .venv/Scripts/python.exe scripts/measure_agent_ops_baseline.py"
+        "rtk proxy .venv/Scripts/python.exe scripts/measure_agent_ops_baseline.py",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ],
       "result": "Inventário e alvo inicial existem. A medição explícita instalação→primeira sessão útil ainda falta; 7,811s mede apenas liveness HTTP.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1471,7 +1472,8 @@
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ],
       "result": "Drain/força explícita/autoridade atual/timeout pendente e retenção de recursos estão comprovados. O novo T22 prova filho real e parada cooperativa, não logout/shutdown externo.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -3363,7 +3365,8 @@
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ],
       "result": "IDs/revisões/recibos, etapas honestas, resposta perdida e ausência de replay estão provados. A cláusula própria de primeira solicitação real acompanhada conforme DX20 não foi qualificada.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -4955,7 +4958,8 @@
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
-        "tests/execution_r4/test_project_dashboard.py"
+        "tests/execution_r4/test_project_dashboard.py",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ],
       "result": "Preset versionado, identidade/workspace/autoridade, configuração conservadora e Finish são implementados e exercitados. A configuração efetiva no processo real é exigência textual explícita.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -5441,7 +5445,8 @@
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ],
       "result": "Fachada canônica de trabalho/continuação/decisões/resultados/reopen e segurança de retry está exercitada. Caminho padrão qualificado real segue ausente.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -7239,11 +7244,15 @@
         "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
         "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ],
       "remaining": "Actual external logout/shutdown bounded persistence remains unqualified.",
       "remaining_kind": "real_external_shutdown",
-      "result": "Installed CLI/HTTP/Core drain preserves admitted work and does not force on timeout. Explicit force is generation-bound and requires an existing expired drain. Supervisor stop intent precedes containment; actual external logout/shutdown remains pending."
+      "result": "Installed CLI/HTTP/Core drain preserves admitted work and does not force on timeout. Explicit force is generation-bound and requires an existing expired drain. Supervisor stop intent precedes containment; actual external logout/shutdown remains pending.",
+      "subscopes": {
+        "actual_m1_wait_timeout_does_not_force": "VERIFIED"
+      }
     },
     "SVC-T22": {
       "requirement": "Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente.",
@@ -8901,14 +8910,15 @@
     },
     "DX-T39": {
       "requirement": "Pacote instalado, rota local padrão: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissão, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem edição manual de configuração.",
-      "status": "NOT_RUN",
+      "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ],
-      "result": "Existe fluxo terminal completo com pergunta/resposta/resultado e retorno, mas sua execução usa peer nativo sintético. O literal pede trabalho real na rota local padrão instalada.",
+      "result": "Real installed local setup completed, then one useful work was cancelled after diagnostic publication failed. Same IDs recovered by GET; session CLOSED, no report, native decision or continuation. Original fault retained; full local M1 remains unqualified.",
       "remaining": "Campanha M1 local instalada: trabalho real autorizado, acompanhamento, pergunta/permissão representativa, resposta, resultado correlacionado e continuação terminal; sem dashboard/config manual, com provider explicitamente autorizado.",
       "remaining_kind": "real_campaign_not_run",
       "qualification_limit": "Não concatenar initialize, fake native e testes de configuração em uma campanha real.",
@@ -11982,7 +11992,7 @@
       ]
     },
     "m1_codex_real": {
-      "status": "EXECUTING_WITH_QUALIFIED_CLIENT_FIX",
+      "status": "M1_PARTIAL_REAL_EXECUTION_ENDED_WITH_PERMANENT_CONTROLLER_FAULT_AND_PENDING_SERVICE_CONTAINMENT",
       "harness": "Codex CLI",
       "account_selection": "already authenticated CLI account",
       "total_token_limit": 700000,
@@ -12016,14 +12026,34 @@
         "status": "SYNTHETIC_INSTALLED_VERIFIED",
         "final_unique_passes": 14,
         "evidence": "plans/agent_ops/evidence/r3-m1-controller/artifact-manifest.json",
-        "real_campaign_executed": false
+        "real_campaign_executed": true
       },
       "execution_authorization": "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json",
       "native_authenticated_context_used": true,
       "direct_agent_personal_credential_read": false,
-      "observed_tokens": 22775,
-      "reserved_productive_requests": 1,
-      "client_path_fix": "plans/agent_ops/evidence/r3-m1-path-normalization/qualification.json"
+      "observed_tokens": 45843,
+      "reserved_productive_requests": 2,
+      "client_path_fix": "plans/agent_ops/evidence/r3-m1-path-normalization/qualification.json",
+      "execution_evidence": "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
+      "controller_fault": "CAMPAIGN_RUNNER_EXCEPTION",
+      "new_admissions_blocked": true,
+      "work_status": "CANCELLED",
+      "useful_result_delivered": false,
+      "connector_campaign_executed": false,
+      "cleanup_confirmed": false,
+      "pending_service": {
+        "pid": 45144,
+        "generation": "188be445d44e96d483336ee424008e56",
+        "state": "DRAINING_PENDING",
+        "admission": "closed"
+      },
+      "force_authorized": false,
+      "force_proposal": "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/force-recovery-proposal.json",
+      "publication_fix_preparation": {
+        "final_unique_tests": 10,
+        "provider_executed": false,
+        "evidence": "plans/agent_ops/evidence/r3-m1-partial-execution/publication-helper-final-addendum.json"
+      }
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -13138,6 +13168,15 @@
       "summary": "24unique approved lifecycle actions PASS across2Windows user tasks; both removed, ownerexit/portfree confirmed,981payloads unchanged. Two instrumentation resumptions preserved without effect replay. Only SVC-T07 fully promoted; remaining OS/provider clauses stay open.",
       "evidence": [
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Real M1 partial execution and retained containment request",
+      "status": "IN_PROGRESS",
+      "summary": "2admissions/45843observed tokens; useful work CANCELLED, closeSUCCEEDED/sessionCLOSED, no result/decision/Connector. Diagnostic publication fault retained. Ordinary service stop remains UNKNOWN after120s; exact force proposal pending explicit authorization. Prepared diagnostic helper10PASS, never reran provider.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
       ]
     }
   ]

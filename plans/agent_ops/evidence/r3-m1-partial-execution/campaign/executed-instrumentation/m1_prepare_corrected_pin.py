@@ -1,0 +1,19 @@
+from pathlib import Path
+import hashlib,json,time
+root=Path('C:/Users/jpamb/AppData/Local/Temp/r3-campaign-refresh-0ssbo8pb/m1-campaign')
+prefix=Path('C:/Users/jpamb/AppData/Local/Temp/m1-path-fix-8rktvrtc/venv')
+source=prefix/'Lib/site-packages/okto_nexus/application/terminal_connection.py'
+sha=hashlib.sha256(source.read_bytes()).hexdigest()
+assert sha=='4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787'
+value={'qualification_status':'PREPARED_AWAITING_INSTALLED_CHECKS','root_execution_release':False,
+       'python_prefix':str(prefix),'python':str(prefix/'Scripts/python.exe'),
+       'terminal_connection_sha256':sha,'wheel_sha256':'fdb8f37866f5332244a6916d6e6eaac433cd317d4ed2792a81bd4a3f426b49c2',
+       'server_remains_original_pinned_package':True,
+       'historical_server_nexus_wheel_sha256':'cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad',
+       'client_payload_delta':'Only application/terminal_connection.py changed among 691 Nexus files; parent qualification record is authoritative.',
+       'core_and_connector':'Historical payloads unchanged: Core166 / Connector124.',
+       'service_actions_added':0,'setup_replay':False,'original_profile_modified':False,'prepared_at':time.time()}
+path=root/'public/client-runtime-pin.prepared.json'
+assert not path.exists()
+path.write_text(json.dumps(value,indent=2))
+print(json.dumps({'prepared_pin':str(path),'qualification_status':value['qualification_status']}))
