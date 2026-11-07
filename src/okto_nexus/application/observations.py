@@ -6,6 +6,7 @@ Only auxiliary state, quotas and private observational events are written.
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 import json
+import time
 
 from ..domain.observation_tokens import (
     generate_observation_token, hash_observation_token, is_well_formed_observation_token,
@@ -18,7 +19,10 @@ from .observation_ingress import ObservationIngress
 
 
 def _time(value):
-    return datetime.fromisoformat(value.replace('Z', '+00:00')).astimezone(timezone.utc)
+    parsed = datetime.fromisoformat(value.replace('Z', '+00:00'))
+    if parsed.tzinfo is None:
+        raise ValueError('Observation timestamps require an explicit timezone.')
+    return parsed.astimezone(timezone.utc)
 
 
 def _stamp(value):
@@ -315,6 +319,9 @@ class ObservationService:
                         target=json.dumps({'strategy': 'direct', 'agent_id': facts['source']['agent_id']}),
                         payload=dict(receipt, state=report.state, evidence=report.evidence,
                             source_id=report.source_id, reason_code=report.reason_code,
+                            observed_at=report.observed_at,
+                            source_revision=facts['source']['revision'],
+                            publisher_token_id=facts['token']['token_id'],
                             completion_ref=report.current_completion_ref if completion else None,
                             observational_only=True))
                 receipts.append(dict(receipt, replayed=False))
@@ -347,8 +354,86 @@ class ObservationService:
                     observed_at=now, feature_enabled=config.feature_observations)
 
     @staticmethod
+    def _refresh(items, now):
+        deadline = _time(now) + timedelta(seconds=15)
+        for item in items:
+            head = item['last_report']
+            if item['freshness'] == 'current' and head is not None:
+                deadline = min(deadline, _time(head['valid_until']))
+        return dict(next_refresh_at=deadline.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
+                    refresh_after_seconds=max(0.0, (deadline - _time(now)).total_seconds()))
+
+    def get_instance(self, *, context, observed_instance_id):
+        check.identity(observed_instance_id, 'observed_instance_id')
+        with self.factory.unit_of_work(write=False) as uow:
+            operator, actor_id = self._actor(uow, context)
+            row = self.repo.get_current(uow, observed_instance_id=observed_instance_id,
+                                       agent_id=None if operator else actor_id)
+            if row is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, 'Observation instance is unavailable.', {})
+            now, config = _stamp(self.clock.now_iso()), deepcopy(self.config)
+            item = self._project(row, now, config)
+        return dict(item=item, observed_at=now, feature_enabled=config.feature_observations,
+                    **self._refresh([item], now))
+
+    def summary(self, *, context, agent_id=None, workspace_id=None, source_id=None):
+        deadline = time.monotonic() + 5.0
+        filters = {key: value for key, value in dict(agent_id=agent_id,
+            workspace_id=workspace_id, source_id=source_id).items() if value is not None}
+        for value in filters.values():
+            check.identity(value)
+        with self.factory.unit_of_work(write=False) as uow:
+            operator, actor_id = self._actor(uow, context)
+            if not operator:
+                if agent_id is not None and agent_id != actor_id:
+                    _denied()
+                agent_id = actor_id
+            if source_id is not None:
+                self._source(uow, context, source_id)
+            now, config = _stamp(self.clock.now_iso()), deepcopy(self.config)
+            rows = self.repo.all_current(uow, agent_id=agent_id, workspace_id=workspace_id, source_id=source_id)
+            items = [self._project(row, now, config) for row in rows]
+            if time.monotonic() >= deadline:
+                raise OktoNexusError('OBSERVATION_QUERY_BUDGET', 'Observation summary exceeded its processing budget.', {})
+        def empty():
+            return dict(total_instances=0,
+                activity=dict(working=0, idle=0, blocked=0, unknown=0),
+                freshness=dict(current=0, stale=0, unknown=0, unavailable=0))
+        total, groups = empty(), {}
+        for item in items:
+            group = groups.setdefault(item['agent_id'], dict(agent_id=item['agent_id'], **empty()))
+            for target in (total, group):
+                target['total_instances'] += 1
+                target['activity'][item['activity_state']] += 1
+                target['freshness'][item['freshness']] += 1
+        if time.monotonic() >= deadline:
+            raise OktoNexusError('OBSERVATION_QUERY_BUDGET', 'Observation summary exceeded its processing budget.', {})
+        return dict(version=1, filters=filters, feature_enabled=config.feature_observations,
+            observed_at=now, **total, agents=[groups[key] for key in sorted(groups)],
+            **self._refresh(items, now))
+
+    @staticmethod
+    def _head_expired(head, now, *, allow_unproven=False):
+        """Validate temporal facts once even when only historical metadata is needed."""
+        expired = False
+        if head is not None:
+            received, valid_until = _time(head['received_at']), _time(head['valid_until'])
+            if valid_until <= received:
+                raise ValueError('Observation receipt timestamps are inconsistent.')
+            if head['observed_at'] is None and not allow_unproven:
+                raise ValueError('Observation time is missing.')
+            if head['observed_at'] is not None:
+                _time(head['observed_at'])
+            if head.get('last_completion_received_at') is not None:
+                _time(head['last_completion_received_at'])
+            expired = valid_until <= _time(now)
+        return expired
+
+    @staticmethod
     def _project(row, now, config):
+        now = _stamp(now)
         instance, source, agent, head = (row[key] for key in ('instance', 'source', 'agent', 'head'))
+        expired = ObservationService._head_expired(head, now, allow_unproven=row.get('historical_unproven', False))
         unavailable = (not config.feature_observations or not source['enabled'] or source['revoked_at']
             or not agent['is_active'] or agent.get('deleted_at') or not agent.get('api_key_hash')
             or not PermissionSet(agent['permissions']).allows('observations', 'publish')
@@ -356,7 +441,7 @@ class ObservationService:
             or head is not None and (row['publisher_revoked'] or head['source_revision'] != source['revision']
                 or head['generation'] != instance['generation']))
         freshness = ('unavailable' if unavailable else 'unknown' if head is None
-                     else 'stale' if head['valid_until'] <= now else 'current')
+                     else 'stale' if expired else 'current')
         source_received_at = row.get('source_last_received_at')
         return dict(observed_instance_id=instance['observed_instance_id'], source_id=source['source_id'],
             agent_id=source['agent_id'], workspace_id=instance['workspace_id'], generation=instance['generation'],

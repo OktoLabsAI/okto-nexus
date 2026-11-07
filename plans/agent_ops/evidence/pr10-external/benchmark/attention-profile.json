@@ -1,0 +1,4626 @@
+{
+  "started_at": "2026-11-07T02:53:52.390636+00:00",
+  "scope": "Read-only source profiler of synthetic 4096-instance DB",
+  "notes": [
+    "cProfile adds overhead and can alter where the fixed 5-second query budget interrupts.",
+    "SQLite driver self time approximates native SQL work excluding profiled Python callbacks; it is not a complete engine profiler.",
+    "Cumulative function times overlap and must not be added.",
+    "No query text, bound values, credential hashes, payloads or database files are retained."
+  ],
+  "cases": [
+    {
+      "kind": "external_blocked",
+      "elapsed_ms": 5030.932200024836,
+      "outcome": {
+        "ok": false,
+        "error": {
+          "type": "OktoNexusError",
+          "code": "ATTENTION_QUERY_BUDGET"
+        }
+      },
+      "total_profiled_ms": 5030.016400000001,
+      "sqlite_driver_self_ms_approx": 1205.7956,
+      "top_cumulative": [
+        {
+          "file": "okto_nexus/application/attention.py",
+          "line": 45,
+          "function": "read",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0275,
+          "cumulative_ms": 5029.9746000000005
+        },
+        {
+          "file": "okto_nexus/application/attention.py",
+          "line": 23,
+          "function": "_snapshot",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0931,
+          "cumulative_ms": 5029.9471
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 137,
+          "function": "snapshot",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0432,
+          "cumulative_ms": 5013.931700000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+          "primitive_calls": 3,
+          "total_calls": 3,
+          "self_ms": 1196.982,
+          "cumulative_ms": 4968.2982
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 60,
+          "function": "project",
+          "primitive_calls": 3330,
+          "total_calls": 3330,
+          "self_ms": 67.8343,
+          "cumulative_ms": 2050.3592
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention_external.py",
+          "line": 16,
+          "function": "_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 75.3576,
+          "cumulative_ms": 1715.9672
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 26,
+          "function": "project",
+          "primitive_calls": 3329,
+          "total_calls": 3329,
+          "self_ms": 56.2197,
+          "cumulative_ms": 1429.2533
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 38,
+          "function": "canonical",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 45.22950000000001,
+          "cumulative_ms": 1056.7915
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 106.23060000000001,
+          "cumulative_ms": 1011.5620000000001
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "function": "loads",
+          "primitive_calls": 19713,
+          "total_calls": 19713,
+          "self_ms": 95.50590000000001,
+          "cumulative_ms": 960.3097
+        },
+        {
+          "file": "encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 70.4361,
+          "cumulative_ms": 884.8868000000001
+        },
+        {
+          "file": "decoder.py",
+          "line": 340,
+          "function": "decode",
+          "primitive_calls": 19713,
+          "total_calls": 19713,
+          "self_ms": 161.7749,
+          "cumulative_ms": 831.7438000000001
+        },
+        {
+          "file": "encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 777.7691000000001,
+          "cumulative_ms": 777.7691000000001
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 8,
+          "function": "_item",
+          "primitive_calls": 882,
+          "total_calls": 882,
+          "self_ms": 21.1449,
+          "cumulative_ms": 621.0022
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 415,
+          "function": "_project",
+          "primitive_calls": 3329,
+          "total_calls": 3329,
+          "self_ms": 228.06520000000003,
+          "cumulative_ms": 616.9643
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 47,
+          "function": "current_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 125.65210000000002,
+          "cumulative_ms": 615.5791
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 70,
+          "function": "occurrence",
+          "primitive_calls": 882,
+          "total_calls": 882,
+          "self_ms": 60.376400000000004,
+          "cumulative_ms": 599.8573
+        },
+        {
+          "file": "decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 19713,
+          "total_calls": 19713,
+          "self_ms": 521.0138000000001,
+          "cumulative_ms": 521.0138000000001
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 62,
+          "function": "identity",
+          "primitive_calls": 8821,
+          "total_calls": 8821,
+          "self_ms": 25.553600000000003,
+          "cumulative_ms": 260.5085
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.any>",
+          "primitive_calls": 5293,
+          "total_calls": 5293,
+          "self_ms": 85.41640000000001,
+          "cumulative_ms": 238.8066
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 131,
+          "function": "_head",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 51.135,
+          "cumulative_ms": 202.44620000000003
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 21,
+          "function": "_time",
+          "primitive_calls": 24135,
+          "total_calls": 24135,
+          "self_ms": 95.45660000000001,
+          "cumulative_ms": 193.3706
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 42,
+          "function": "digest",
+          "primitive_calls": 1764,
+          "total_calls": 1764,
+          "self_ms": 14.0563,
+          "cumulative_ms": 189.07110000000003
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 65,
+          "function": "<genexpr>",
+          "primitive_calls": 98809,
+          "total_calls": 98809,
+          "self_ms": 109.33670000000001,
+          "cumulative_ms": 150.41850000000002
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 121,
+          "function": "_agent",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 41.2487,
+          "cumulative_ms": 150.16219999999998
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 46,
+          "function": "instant",
+          "primitive_calls": 11069,
+          "total_calls": 11069,
+          "self_ms": 76.421,
+          "cumulative_ms": 134.2855
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 58,
+          "function": "stamp",
+          "primitive_calls": 4411,
+          "total_calls": 4411,
+          "self_ms": 13.186000000000002,
+          "cumulative_ms": 127.08940000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 112,
+          "function": "_source",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 28.817400000000003,
+          "cumulative_ms": 122.9218
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'isoformat' of 'datetime.datetime' objects>",
+          "primitive_calls": 7741,
+          "total_calls": 7741,
+          "self_ms": 122.1085,
+          "cumulative_ms": 122.1085
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 28,
+          "function": "_stamp",
+          "primitive_calls": 3329,
+          "total_calls": 3329,
+          "self_ms": 15.5615,
+          "cumulative_ms": 121.47440000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'match' of 're.Pattern' objects>",
+          "primitive_calls": 39477,
+          "total_calls": 39477,
+          "self_ms": 94.96940000000001,
+          "cumulative_ms": 94.96940000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 63776,
+          "total_calls": 63776,
+          "self_ms": 61.17620000000001,
+          "cumulative_ms": 61.17620000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'replace' of 'str' objects>",
+          "primitive_calls": 38542,
+          "total_calls": 38542,
+          "self_ms": 57.813500000000005,
+          "cumulative_ms": 57.813500000000005
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method fromisoformat>",
+          "primitive_calls": 35204,
+          "total_calls": 35204,
+          "self_ms": 52.38660000000001,
+          "cumulative_ms": 52.38660000000001
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1349,
+          "function": "_find_and_load",
+          "primitive_calls": 3,
+          "total_calls": 8,
+          "self_ms": 0.21430000000000002,
+          "cumulative_ms": 49.97670000000001
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1304,
+          "function": "_find_and_load_unlocked",
+          "primitive_calls": 3,
+          "total_calls": 8,
+          "self_ms": 0.16250000000000003,
+          "cumulative_ms": 49.481500000000004
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 911,
+          "function": "_load_unlocked",
+          "primitive_calls": 3,
+          "total_calls": 8,
+          "self_ms": 0.11530000000000001,
+          "cumulative_ms": 46.6867
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 1020,
+          "function": "exec_module",
+          "primitive_calls": 3,
+          "total_calls": 8,
+          "self_ms": 0.09580000000000001,
+          "cumulative_ms": 46.1656
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astimezone' of 'datetime.datetime' objects>",
+          "primitive_calls": 35204,
+          "total_calls": 35204,
+          "self_ms": 46.059000000000005,
+          "cumulative_ms": 46.059000000000005
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 43,
+          "function": "_relation",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_ms": 0.19440000000000002,
+          "cumulative_ms": 45.606500000000004
+        },
+        {
+          "file": "contextlib.py",
+          "line": 136,
+          "function": "__enter__",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0143,
+          "cumulative_ms": 45.5343
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.next>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0188,
+          "cumulative_ms": 45.52
+        },
+        {
+          "file": "__init__.py",
+          "line": 71,
+          "function": "import_module",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_ms": 0.0193,
+          "cumulative_ms": 45.2837
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1375,
+          "function": "_gcd_import",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_ms": 0.019700000000000002,
+          "cumulative_ms": 45.2623
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.ord>",
+          "primitive_calls": 94442,
+          "total_calls": 94442,
+          "self_ms": 41.10530000000001,
+          "cumulative_ms": 41.10530000000001
+        }
+      ],
+      "top_self": [
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+          "primitive_calls": 3,
+          "total_calls": 3,
+          "self_ms": 1196.982,
+          "cumulative_ms": 4968.2982
+        },
+        {
+          "file": "encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 777.7691000000001,
+          "cumulative_ms": 777.7691000000001
+        },
+        {
+          "file": "decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 19713,
+          "total_calls": 19713,
+          "self_ms": 521.0138000000001,
+          "cumulative_ms": 521.0138000000001
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 415,
+          "function": "_project",
+          "primitive_calls": 3329,
+          "total_calls": 3329,
+          "self_ms": 228.06520000000003,
+          "cumulative_ms": 616.9643
+        },
+        {
+          "file": "decoder.py",
+          "line": 340,
+          "function": "decode",
+          "primitive_calls": 19713,
+          "total_calls": 19713,
+          "self_ms": 161.7749,
+          "cumulative_ms": 831.7438000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 47,
+          "function": "current_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 125.65210000000002,
+          "cumulative_ms": 615.5791
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'isoformat' of 'datetime.datetime' objects>",
+          "primitive_calls": 7741,
+          "total_calls": 7741,
+          "self_ms": 122.1085,
+          "cumulative_ms": 122.1085
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 65,
+          "function": "<genexpr>",
+          "primitive_calls": 98809,
+          "total_calls": 98809,
+          "self_ms": 109.33670000000001,
+          "cumulative_ms": 150.41850000000002
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 106.23060000000001,
+          "cumulative_ms": 1011.5620000000001
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "function": "loads",
+          "primitive_calls": 19713,
+          "total_calls": 19713,
+          "self_ms": 95.50590000000001,
+          "cumulative_ms": 960.3097
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 21,
+          "function": "_time",
+          "primitive_calls": 24135,
+          "total_calls": 24135,
+          "self_ms": 95.45660000000001,
+          "cumulative_ms": 193.3706
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'match' of 're.Pattern' objects>",
+          "primitive_calls": 39477,
+          "total_calls": 39477,
+          "self_ms": 94.96940000000001,
+          "cumulative_ms": 94.96940000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.any>",
+          "primitive_calls": 5293,
+          "total_calls": 5293,
+          "self_ms": 85.41640000000001,
+          "cumulative_ms": 238.8066
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 46,
+          "function": "instant",
+          "primitive_calls": 11069,
+          "total_calls": 11069,
+          "self_ms": 76.421,
+          "cumulative_ms": 134.2855
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention_external.py",
+          "line": 16,
+          "function": "_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 75.3576,
+          "cumulative_ms": 1715.9672
+        },
+        {
+          "file": "encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 70.4361,
+          "cumulative_ms": 884.8868000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 60,
+          "function": "project",
+          "primitive_calls": 3330,
+          "total_calls": 3330,
+          "self_ms": 67.8343,
+          "cumulative_ms": 2050.3592
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 63776,
+          "total_calls": 63776,
+          "self_ms": 61.17620000000001,
+          "cumulative_ms": 61.17620000000001
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 70,
+          "function": "occurrence",
+          "primitive_calls": 882,
+          "total_calls": 882,
+          "self_ms": 60.376400000000004,
+          "cumulative_ms": 599.8573
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'replace' of 'str' objects>",
+          "primitive_calls": 38542,
+          "total_calls": 38542,
+          "self_ms": 57.813500000000005,
+          "cumulative_ms": 57.813500000000005
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 26,
+          "function": "project",
+          "primitive_calls": 3329,
+          "total_calls": 3329,
+          "self_ms": 56.2197,
+          "cumulative_ms": 1429.2533
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method fromisoformat>",
+          "primitive_calls": 35204,
+          "total_calls": 35204,
+          "self_ms": 52.38660000000001,
+          "cumulative_ms": 52.38660000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 131,
+          "function": "_head",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 51.135,
+          "cumulative_ms": 202.44620000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astimezone' of 'datetime.datetime' objects>",
+          "primitive_calls": 35204,
+          "total_calls": 35204,
+          "self_ms": 46.059000000000005,
+          "cumulative_ms": 46.059000000000005
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 38,
+          "function": "canonical",
+          "primitive_calls": 9189,
+          "total_calls": 9189,
+          "self_ms": 45.22950000000001,
+          "cumulative_ms": 1056.7915
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 121,
+          "function": "_agent",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 41.2487,
+          "cumulative_ms": 150.16219999999998
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.ord>",
+          "primitive_calls": 94442,
+          "total_calls": 94442,
+          "self_ms": 41.10530000000001,
+          "cumulative_ms": 41.10530000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 50047,
+          "total_calls": 50047,
+          "self_ms": 41.0854,
+          "cumulative_ms": 41.0854
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 35542,
+          "total_calls": 35560,
+          "self_ms": 35.480000000000004,
+          "cumulative_ms": 35.499100000000006
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'update' of 'dict' objects>",
+          "primitive_calls": 8206,
+          "total_calls": 8206,
+          "self_ms": 32.210100000000004,
+          "cumulative_ms": 32.210100000000004
+        }
+      ],
+      "aggregate_query_plan": [
+        {
+          "id": 3,
+          "parent": 0,
+          "detail": "MATERIALIZE filtered"
+        },
+        {
+          "id": 6,
+          "parent": 3,
+          "detail": "MATERIALIZE viewing"
+        },
+        {
+          "id": 9,
+          "parent": 6,
+          "detail": "MATERIALIZE occurrences"
+        },
+        {
+          "id": 12,
+          "parent": 9,
+          "detail": "MATERIALIZE projected"
+        },
+        {
+          "id": 14,
+          "parent": 12,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 15,
+          "parent": 14,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 18,
+          "parent": 15,
+          "detail": "MATERIALIZE facts"
+        },
+        {
+          "id": 21,
+          "parent": 18,
+          "detail": "MATERIALIZE selected"
+        },
+        {
+          "id": 32,
+          "parent": 21,
+          "detail": "SCAN s"
+        },
+        {
+          "id": 37,
+          "parent": 21,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_agents_1 (agent_id=?)"
+        },
+        {
+          "id": 42,
+          "parent": 21,
+          "detail": "SEARCH i USING INDEX observation_instances_source (source_id=?)"
+        },
+        {
+          "id": 51,
+          "parent": 21,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_observation_heads_1 (observed_instance_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 59,
+          "parent": 21,
+          "detail": "SEARCH t USING INDEX sqlite_autoindex_observation_tokens_1 (token_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 84,
+          "parent": 21,
+          "detail": "CORRELATED SCALAR SUBQUERY 1"
+        },
+        {
+          "id": 89,
+          "parent": 84,
+          "detail": "SEARCH w USING COVERING INDEX sqlite_autoindex_observation_source_workspaces_1 (source_id=?)"
+        },
+        {
+          "id": 134,
+          "parent": 18,
+          "detail": "MATERIALIZE continuity"
+        },
+        {
+          "id": 143,
+          "parent": 134,
+          "detail": "SEARCH i USING COVERING INDEX observation_instances_source (source_id=?)"
+        },
+        {
+          "id": 147,
+          "parent": 134,
+          "detail": "LIST SUBQUERY 3"
+        },
+        {
+          "id": 151,
+          "parent": 147,
+          "detail": "SCAN selected"
+        },
+        {
+          "id": 160,
+          "parent": 147,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 168,
+          "parent": 134,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_observation_heads_1 (observed_instance_id=?)"
+        },
+        {
+          "id": 210,
+          "parent": 18,
+          "detail": "SCAN v"
+        },
+        {
+          "id": 223,
+          "parent": 18,
+          "detail": "SEARCH c USING AUTOMATIC COVERING INDEX (source_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 310,
+          "parent": 15,
+          "detail": "SCAN v"
+        },
+        {
+          "id": 312,
+          "parent": 15,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_observation_attention_anchors_1 (observed_instance_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 341,
+          "parent": 14,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 344,
+          "parent": 341,
+          "detail": "MATERIALIZE completion_provenance"
+        },
+        {
+          "id": 347,
+          "parent": 344,
+          "detail": "MATERIALIZE completions"
+        },
+        {
+          "id": 351,
+          "parent": 347,
+          "detail": "SCAN e USING INDEX observation_completion_publisher"
+        },
+        {
+          "id": 357,
+          "parent": 347,
+          "detail": "LIST SUBQUERY 6"
+        },
+        {
+          "id": 360,
+          "parent": 357,
+          "detail": "SCAN selected"
+        },
+        {
+          "id": 400,
+          "parent": 344,
+          "detail": "SCAN e"
+        },
+        {
+          "id": 420,
+          "parent": 344,
+          "detail": "SEARCH v USING AUTOMATIC COVERING INDEX (source_id=? AND observed_instance_id=? AND agent_id=? AND workspace_id=?)"
+        },
+        {
+          "id": 499,
+          "parent": 341,
+          "detail": "SCAN e"
+        },
+        {
+          "id": 501,
+          "parent": 341,
+          "detail": "SEARCH t USING INDEX sqlite_autoindex_observation_tokens_1 (token_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 543,
+          "parent": 9,
+          "detail": "SCAN projected"
+        },
+        {
+          "id": 545,
+          "parent": 9,
+          "detail": "SCAN json_each VIRTUAL TABLE INDEX 1:"
+        },
+        {
+          "id": 562,
+          "parent": 6,
+          "detail": "SCAN o"
+        },
+        {
+          "id": 564,
+          "parent": 6,
+          "detail": "SEARCH p USING INDEX sqlite_autoindex_attention_preferences_1 (principal=? AND attention_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 593,
+          "parent": 3,
+          "detail": "SCAN viewing"
+        },
+        {
+          "id": 613,
+          "parent": 0,
+          "detail": "SCAN filtered"
+        }
+      ]
+    },
+    {
+      "kind": "external_completion_unseen",
+      "elapsed_ms": 5025.598599982914,
+      "outcome": {
+        "ok": false,
+        "error": {
+          "type": "OktoNexusError",
+          "code": "ATTENTION_QUERY_BUDGET"
+        }
+      },
+      "total_profiled_ms": 5025.4901,
+      "sqlite_driver_self_ms_approx": 1144.2107,
+      "top_cumulative": [
+        {
+          "file": "okto_nexus/application/attention.py",
+          "line": 45,
+          "function": "read",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0132,
+          "cumulative_ms": 5025.4156
+        },
+        {
+          "file": "okto_nexus/application/attention.py",
+          "line": 23,
+          "function": "_snapshot",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.07890000000000001,
+          "cumulative_ms": 5025.4024
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 137,
+          "function": "snapshot",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.04340000000000001,
+          "cumulative_ms": 5013.5244
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+          "primitive_calls": 3,
+          "total_calls": 3,
+          "self_ms": 1134.8204,
+          "cumulative_ms": 5013.1362
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 60,
+          "function": "project",
+          "primitive_calls": 3866,
+          "total_calls": 3866,
+          "self_ms": 79.1394,
+          "cumulative_ms": 2331.6104
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 26,
+          "function": "project",
+          "primitive_calls": 3865,
+          "total_calls": 3865,
+          "self_ms": 63.91530000000001,
+          "cumulative_ms": 1618.8046
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention_external.py",
+          "line": 16,
+          "function": "_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 53.2531,
+          "cumulative_ms": 1541.6167
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "function": "loads",
+          "primitive_calls": 20249,
+          "total_calls": 20249,
+          "self_ms": 102.7584,
+          "cumulative_ms": 995.5621000000001
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 38,
+          "function": "canonical",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 33.707,
+          "cumulative_ms": 984.1721000000001
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 105.2512,
+          "cumulative_ms": 950.4651
+        },
+        {
+          "file": "decoder.py",
+          "line": 340,
+          "function": "decode",
+          "primitive_calls": 20249,
+          "total_calls": 20249,
+          "self_ms": 183.42660000000004,
+          "cumulative_ms": 859.4952000000001
+        },
+        {
+          "file": "encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 73.8542,
+          "cumulative_ms": 826.3475
+        },
+        {
+          "file": "encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 721.1496000000001,
+          "cumulative_ms": 721.1496000000001
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 415,
+          "function": "_project",
+          "primitive_calls": 3865,
+          "total_calls": 3865,
+          "self_ms": 257.99,
+          "cumulative_ms": 699.9625000000001
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 8,
+          "function": "_item",
+          "primitive_calls": 1016,
+          "total_calls": 1016,
+          "self_ms": 16.4215,
+          "cumulative_ms": 677.88
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 70,
+          "function": "occurrence",
+          "primitive_calls": 1016,
+          "total_calls": 1016,
+          "self_ms": 58.313900000000004,
+          "cumulative_ms": 661.4585000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 47,
+          "function": "current_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 107.3133,
+          "cumulative_ms": 600.2623
+        },
+        {
+          "file": "decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 20249,
+          "total_calls": 20249,
+          "self_ms": 534.8827,
+          "cumulative_ms": 534.8827
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 62,
+          "function": "identity",
+          "primitive_calls": 10161,
+          "total_calls": 10161,
+          "self_ms": 36.7715,
+          "cumulative_ms": 302.18710000000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.any>",
+          "primitive_calls": 6097,
+          "total_calls": 6097,
+          "self_ms": 100.82350000000001,
+          "cumulative_ms": 269.029
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 21,
+          "function": "_time",
+          "primitive_calls": 28021,
+          "total_calls": 28021,
+          "self_ms": 121.308,
+          "cumulative_ms": 222.0849
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 131,
+          "function": "_head",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 59.3074,
+          "cumulative_ms": 215.16590000000002
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 42,
+          "function": "digest",
+          "primitive_calls": 2032,
+          "total_calls": 2032,
+          "self_ms": 13.9086,
+          "cumulative_ms": 201.3502
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 46,
+          "function": "instant",
+          "primitive_calls": 12811,
+          "total_calls": 12811,
+          "self_ms": 106.51600000000002,
+          "cumulative_ms": 180.0404
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 65,
+          "function": "<genexpr>",
+          "primitive_calls": 113817,
+          "total_calls": 113817,
+          "self_ms": 117.93390000000001,
+          "cumulative_ms": 165.38940000000002
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 121,
+          "function": "_agent",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 28.8135,
+          "cumulative_ms": 143.4794
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 58,
+          "function": "stamp",
+          "primitive_calls": 5081,
+          "total_calls": 5081,
+          "self_ms": 16.2214,
+          "cumulative_ms": 137.9394
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 28,
+          "function": "_stamp",
+          "primitive_calls": 3865,
+          "total_calls": 3865,
+          "self_ms": 17.0923,
+          "cumulative_ms": 129.6219
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'isoformat' of 'datetime.datetime' objects>",
+          "primitive_calls": 8947,
+          "total_calls": 8947,
+          "self_ms": 121.3811,
+          "cumulative_ms": 121.3811
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 112,
+          "function": "_source",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 34.2709,
+          "cumulative_ms": 121.06770000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'match' of 're.Pattern' objects>",
+          "primitive_calls": 40498,
+          "total_calls": 40498,
+          "self_ms": 87.56,
+          "cumulative_ms": 87.56
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 73792,
+          "total_calls": 73792,
+          "self_ms": 74.45030000000001,
+          "cumulative_ms": 74.45030000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method fromisoformat>",
+          "primitive_calls": 40832,
+          "total_calls": 40832,
+          "self_ms": 64.5902,
+          "cumulative_ms": 64.5902
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'replace' of 'str' objects>",
+          "primitive_calls": 44698,
+          "total_calls": 44698,
+          "self_ms": 58.3447,
+          "cumulative_ms": 58.3447
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astimezone' of 'datetime.datetime' objects>",
+          "primitive_calls": 40832,
+          "total_calls": 40832,
+          "self_ms": 50.732000000000006,
+          "cumulative_ms": 50.732000000000006
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.ord>",
+          "primitive_calls": 108736,
+          "total_calls": 108736,
+          "self_ms": 47.45550000000001,
+          "cumulative_ms": 47.45550000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 53092,
+          "total_calls": 53092,
+          "self_ms": 39.6185,
+          "cumulative_ms": 39.6185
+        },
+        {
+          "file": "okto_nexus/domain/permissions.py",
+          "line": 264,
+          "function": "allows",
+          "primitive_calls": 3865,
+          "total_calls": 3865,
+          "self_ms": 24.7472,
+          "cumulative_ms": 36.834900000000005
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'end' of 're.Match' objects>",
+          "primitive_calls": 40498,
+          "total_calls": 40498,
+          "self_ms": 33.5944,
+          "cumulative_ms": 33.5944
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 38142,
+          "total_calls": 38142,
+          "self_ms": 31.9619,
+          "cumulative_ms": 31.9619
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'update' of 'dict' objects>",
+          "primitive_calls": 8193,
+          "total_calls": 8193,
+          "self_ms": 28.829400000000003,
+          "cumulative_ms": 28.829400000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _hashlib.openssl_sha256>",
+          "primitive_calls": 2032,
+          "total_calls": 2032,
+          "self_ms": 26.743500000000004,
+          "cumulative_ms": 26.743500000000004
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 50,
+          "function": "interrupt",
+          "primitive_calls": 4662,
+          "total_calls": 4662,
+          "self_ms": 17.419,
+          "cumulative_ms": 22.712200000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'startswith' of 'str' objects>",
+          "primitive_calls": 20251,
+          "total_calls": 20251,
+          "self_ms": 20.447300000000002,
+          "cumulative_ms": 20.447300000000002
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 418,
+          "function": "<genexpr>",
+          "primitive_calls": 19325,
+          "total_calls": 19325,
+          "self_ms": 19.1766,
+          "cumulative_ms": 19.1766
+        }
+      ],
+      "top_self": [
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+          "primitive_calls": 3,
+          "total_calls": 3,
+          "self_ms": 1134.8204,
+          "cumulative_ms": 5013.1362
+        },
+        {
+          "file": "encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 721.1496000000001,
+          "cumulative_ms": 721.1496000000001
+        },
+        {
+          "file": "decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 20249,
+          "total_calls": 20249,
+          "self_ms": 534.8827,
+          "cumulative_ms": 534.8827
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 415,
+          "function": "_project",
+          "primitive_calls": 3865,
+          "total_calls": 3865,
+          "self_ms": 257.99,
+          "cumulative_ms": 699.9625000000001
+        },
+        {
+          "file": "decoder.py",
+          "line": 340,
+          "function": "decode",
+          "primitive_calls": 20249,
+          "total_calls": 20249,
+          "self_ms": 183.42660000000004,
+          "cumulative_ms": 859.4952000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'isoformat' of 'datetime.datetime' objects>",
+          "primitive_calls": 8947,
+          "total_calls": 8947,
+          "self_ms": 121.3811,
+          "cumulative_ms": 121.3811
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 21,
+          "function": "_time",
+          "primitive_calls": 28021,
+          "total_calls": 28021,
+          "self_ms": 121.308,
+          "cumulative_ms": 222.0849
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 65,
+          "function": "<genexpr>",
+          "primitive_calls": 113817,
+          "total_calls": 113817,
+          "self_ms": 117.93390000000001,
+          "cumulative_ms": 165.38940000000002
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 47,
+          "function": "current_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 107.3133,
+          "cumulative_ms": 600.2623
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 46,
+          "function": "instant",
+          "primitive_calls": 12811,
+          "total_calls": 12811,
+          "self_ms": 106.51600000000002,
+          "cumulative_ms": 180.0404
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 105.2512,
+          "cumulative_ms": 950.4651
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "function": "loads",
+          "primitive_calls": 20249,
+          "total_calls": 20249,
+          "self_ms": 102.7584,
+          "cumulative_ms": 995.5621000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.any>",
+          "primitive_calls": 6097,
+          "total_calls": 6097,
+          "self_ms": 100.82350000000001,
+          "cumulative_ms": 269.029
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'match' of 're.Pattern' objects>",
+          "primitive_calls": 40498,
+          "total_calls": 40498,
+          "self_ms": 87.56,
+          "cumulative_ms": 87.56
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 60,
+          "function": "project",
+          "primitive_calls": 3866,
+          "total_calls": 3866,
+          "self_ms": 79.1394,
+          "cumulative_ms": 2331.6104
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 73792,
+          "total_calls": 73792,
+          "self_ms": 74.45030000000001,
+          "cumulative_ms": 74.45030000000001
+        },
+        {
+          "file": "encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 73.8542,
+          "cumulative_ms": 826.3475
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method fromisoformat>",
+          "primitive_calls": 40832,
+          "total_calls": 40832,
+          "self_ms": 64.5902,
+          "cumulative_ms": 64.5902
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 26,
+          "function": "project",
+          "primitive_calls": 3865,
+          "total_calls": 3865,
+          "self_ms": 63.91530000000001,
+          "cumulative_ms": 1618.8046
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 131,
+          "function": "_head",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 59.3074,
+          "cumulative_ms": 215.16590000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'replace' of 'str' objects>",
+          "primitive_calls": 44698,
+          "total_calls": 44698,
+          "self_ms": 58.3447,
+          "cumulative_ms": 58.3447
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 70,
+          "function": "occurrence",
+          "primitive_calls": 1016,
+          "total_calls": 1016,
+          "self_ms": 58.313900000000004,
+          "cumulative_ms": 661.4585000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention_external.py",
+          "line": 16,
+          "function": "_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 53.2531,
+          "cumulative_ms": 1541.6167
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astimezone' of 'datetime.datetime' objects>",
+          "primitive_calls": 40832,
+          "total_calls": 40832,
+          "self_ms": 50.732000000000006,
+          "cumulative_ms": 50.732000000000006
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.ord>",
+          "primitive_calls": 108736,
+          "total_calls": 108736,
+          "self_ms": 47.45550000000001,
+          "cumulative_ms": 47.45550000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 53092,
+          "total_calls": 53092,
+          "self_ms": 39.6185,
+          "cumulative_ms": 39.6185
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 62,
+          "function": "identity",
+          "primitive_calls": 10161,
+          "total_calls": 10161,
+          "self_ms": 36.7715,
+          "cumulative_ms": 302.18710000000004
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 112,
+          "function": "_source",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 34.2709,
+          "cumulative_ms": 121.06770000000002
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 38,
+          "function": "canonical",
+          "primitive_calls": 9993,
+          "total_calls": 9993,
+          "self_ms": 33.707,
+          "cumulative_ms": 984.1721000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'end' of 're.Match' objects>",
+          "primitive_calls": 40498,
+          "total_calls": 40498,
+          "self_ms": 33.5944,
+          "cumulative_ms": 33.5944
+        }
+      ],
+      "aggregate_query_plan": [
+        {
+          "id": 3,
+          "parent": 0,
+          "detail": "MATERIALIZE filtered"
+        },
+        {
+          "id": 6,
+          "parent": 3,
+          "detail": "MATERIALIZE viewing"
+        },
+        {
+          "id": 9,
+          "parent": 6,
+          "detail": "MATERIALIZE occurrences"
+        },
+        {
+          "id": 12,
+          "parent": 9,
+          "detail": "MATERIALIZE projected"
+        },
+        {
+          "id": 14,
+          "parent": 12,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 15,
+          "parent": 14,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 18,
+          "parent": 15,
+          "detail": "MATERIALIZE facts"
+        },
+        {
+          "id": 21,
+          "parent": 18,
+          "detail": "MATERIALIZE selected"
+        },
+        {
+          "id": 32,
+          "parent": 21,
+          "detail": "SCAN s"
+        },
+        {
+          "id": 37,
+          "parent": 21,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_agents_1 (agent_id=?)"
+        },
+        {
+          "id": 42,
+          "parent": 21,
+          "detail": "SEARCH i USING INDEX observation_instances_source (source_id=?)"
+        },
+        {
+          "id": 51,
+          "parent": 21,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_observation_heads_1 (observed_instance_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 59,
+          "parent": 21,
+          "detail": "SEARCH t USING INDEX sqlite_autoindex_observation_tokens_1 (token_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 84,
+          "parent": 21,
+          "detail": "CORRELATED SCALAR SUBQUERY 1"
+        },
+        {
+          "id": 89,
+          "parent": 84,
+          "detail": "SEARCH w USING COVERING INDEX sqlite_autoindex_observation_source_workspaces_1 (source_id=?)"
+        },
+        {
+          "id": 134,
+          "parent": 18,
+          "detail": "MATERIALIZE continuity"
+        },
+        {
+          "id": 143,
+          "parent": 134,
+          "detail": "SEARCH i USING COVERING INDEX observation_instances_source (source_id=?)"
+        },
+        {
+          "id": 147,
+          "parent": 134,
+          "detail": "LIST SUBQUERY 3"
+        },
+        {
+          "id": 151,
+          "parent": 147,
+          "detail": "SCAN selected"
+        },
+        {
+          "id": 160,
+          "parent": 147,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 168,
+          "parent": 134,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_observation_heads_1 (observed_instance_id=?)"
+        },
+        {
+          "id": 210,
+          "parent": 18,
+          "detail": "SCAN v"
+        },
+        {
+          "id": 223,
+          "parent": 18,
+          "detail": "SEARCH c USING AUTOMATIC COVERING INDEX (source_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 310,
+          "parent": 15,
+          "detail": "SCAN v"
+        },
+        {
+          "id": 312,
+          "parent": 15,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_observation_attention_anchors_1 (observed_instance_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 341,
+          "parent": 14,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 344,
+          "parent": 341,
+          "detail": "MATERIALIZE completion_provenance"
+        },
+        {
+          "id": 347,
+          "parent": 344,
+          "detail": "MATERIALIZE completions"
+        },
+        {
+          "id": 351,
+          "parent": 347,
+          "detail": "SCAN e USING INDEX observation_completion_publisher"
+        },
+        {
+          "id": 357,
+          "parent": 347,
+          "detail": "LIST SUBQUERY 6"
+        },
+        {
+          "id": 360,
+          "parent": 357,
+          "detail": "SCAN selected"
+        },
+        {
+          "id": 400,
+          "parent": 344,
+          "detail": "SCAN e"
+        },
+        {
+          "id": 420,
+          "parent": 344,
+          "detail": "SEARCH v USING AUTOMATIC COVERING INDEX (source_id=? AND observed_instance_id=? AND agent_id=? AND workspace_id=?)"
+        },
+        {
+          "id": 499,
+          "parent": 341,
+          "detail": "SCAN e"
+        },
+        {
+          "id": 501,
+          "parent": 341,
+          "detail": "SEARCH t USING INDEX sqlite_autoindex_observation_tokens_1 (token_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 543,
+          "parent": 9,
+          "detail": "SCAN projected"
+        },
+        {
+          "id": 545,
+          "parent": 9,
+          "detail": "SCAN json_each VIRTUAL TABLE INDEX 1:"
+        },
+        {
+          "id": 562,
+          "parent": 6,
+          "detail": "SCAN o"
+        },
+        {
+          "id": 564,
+          "parent": 6,
+          "detail": "SEARCH p USING INDEX sqlite_autoindex_attention_preferences_1 (principal=? AND attention_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 593,
+          "parent": 3,
+          "detail": "SCAN viewing"
+        },
+        {
+          "id": 613,
+          "parent": 0,
+          "detail": "SCAN filtered"
+        }
+      ]
+    },
+    {
+      "kind": "all",
+      "elapsed_ms": 5042.221099953167,
+      "outcome": {
+        "ok": false,
+        "error": {
+          "type": "OktoNexusError",
+          "code": "ATTENTION_QUERY_BUDGET"
+        }
+      },
+      "total_profiled_ms": 5042.028500000001,
+      "sqlite_driver_self_ms_approx": 1402.8325000000002,
+      "top_cumulative": [
+        {
+          "file": "okto_nexus/application/attention.py",
+          "line": 45,
+          "function": "read",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.011000000000000001,
+          "cumulative_ms": 5042.0514
+        },
+        {
+          "file": "okto_nexus/application/attention.py",
+          "line": 23,
+          "function": "_snapshot",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.22440000000000002,
+          "cumulative_ms": 5042.0404
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 137,
+          "function": "snapshot",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0466,
+          "cumulative_ms": 5025.432000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+          "primitive_calls": 43,
+          "total_calls": 43,
+          "self_ms": 1388.7205000000001,
+          "cumulative_ms": 4897.0547
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 60,
+          "function": "project",
+          "primitive_calls": 3316,
+          "total_calls": 3316,
+          "self_ms": 78.1575,
+          "cumulative_ms": 1932.775
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention_external.py",
+          "line": 16,
+          "function": "_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 48.822,
+          "cumulative_ms": 1570.9201
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 26,
+          "function": "project",
+          "primitive_calls": 3315,
+          "total_calls": 3315,
+          "self_ms": 48.689,
+          "cumulative_ms": 1335.0600000000002
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "function": "loads",
+          "primitive_calls": 19702,
+          "total_calls": 19702,
+          "self_ms": 98.1829,
+          "cumulative_ms": 959.7352
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 38,
+          "function": "canonical",
+          "primitive_calls": 9167,
+          "total_calls": 9167,
+          "self_ms": 28.506600000000002,
+          "cumulative_ms": 925.7352000000001
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 9176,
+          "total_calls": 9176,
+          "self_ms": 90.3761,
+          "cumulative_ms": 897.4540000000001
+        },
+        {
+          "file": "decoder.py",
+          "line": 340,
+          "function": "decode",
+          "primitive_calls": 19702,
+          "total_calls": 19702,
+          "self_ms": 160.809,
+          "cumulative_ms": 826.4317000000001
+        },
+        {
+          "file": "encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 9176,
+          "total_calls": 9176,
+          "self_ms": 88.30590000000001,
+          "cumulative_ms": 788.1837
+        },
+        {
+          "file": "encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 9176,
+          "total_calls": 9176,
+          "self_ms": 667.8104000000001,
+          "cumulative_ms": 667.8104000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 47,
+          "function": "current_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 116.14160000000001,
+          "cumulative_ms": 605.6786000000001
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 8,
+          "function": "_item",
+          "primitive_calls": 878,
+          "total_calls": 878,
+          "self_ms": 14.1197,
+          "cumulative_ms": 592.97
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 70,
+          "function": "occurrence",
+          "primitive_calls": 878,
+          "total_calls": 878,
+          "self_ms": 57.55820000000001,
+          "cumulative_ms": 578.8503000000001
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 415,
+          "function": "_project",
+          "primitive_calls": 3315,
+          "total_calls": 3315,
+          "self_ms": 207.2641,
+          "cumulative_ms": 575.245
+        },
+        {
+          "file": "decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 19702,
+          "total_calls": 19702,
+          "self_ms": 525.5490000000001,
+          "cumulative_ms": 525.5490000000001
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 62,
+          "function": "identity",
+          "primitive_calls": 8781,
+          "total_calls": 8781,
+          "self_ms": 24.937800000000003,
+          "cumulative_ms": 247.92610000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.any>",
+          "primitive_calls": 5269,
+          "total_calls": 5269,
+          "self_ms": 67.8793,
+          "cumulative_ms": 225.9583
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 131,
+          "function": "_head",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 59.1783,
+          "cumulative_ms": 216.26820000000004
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 42,
+          "function": "digest",
+          "primitive_calls": 1756,
+          "total_calls": 1756,
+          "self_ms": 12.942200000000001,
+          "cumulative_ms": 189.1302
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 21,
+          "function": "_time",
+          "primitive_calls": 24034,
+          "total_calls": 24034,
+          "self_ms": 94.4026,
+          "cumulative_ms": 182.54670000000002
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 65,
+          "function": "<genexpr>",
+          "primitive_calls": 98361,
+          "total_calls": 98361,
+          "self_ms": 109.30440000000002,
+          "cumulative_ms": 155.5739
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 43,
+          "function": "_relation",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_ms": 0.4844,
+          "cumulative_ms": 132.9322
+        },
+        {
+          "file": "contextlib.py",
+          "line": 136,
+          "function": "__enter__",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.0067,
+          "cumulative_ms": 132.8175
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.next>",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_ms": 0.020600000000000004,
+          "cumulative_ms": 132.8108
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 121,
+          "function": "_agent",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 30.1396,
+          "cumulative_ms": 130.28340000000003
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 112,
+          "function": "_source",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 27.9689,
+          "cumulative_ms": 128.5823
+        },
+        {
+          "file": "__init__.py",
+          "line": 71,
+          "function": "import_module",
+          "primitive_calls": 12,
+          "total_calls": 12,
+          "self_ms": 0.098,
+          "cumulative_ms": 123.295
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1375,
+          "function": "_gcd_import",
+          "primitive_calls": 12,
+          "total_calls": 12,
+          "self_ms": 0.0878,
+          "cumulative_ms": 123.1834
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1349,
+          "function": "_find_and_load",
+          "primitive_calls": 12,
+          "total_calls": 17,
+          "self_ms": 0.38220000000000004,
+          "cumulative_ms": 122.994
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1304,
+          "function": "_find_and_load_unlocked",
+          "primitive_calls": 8,
+          "total_calls": 13,
+          "self_ms": 0.29140000000000005,
+          "cumulative_ms": 121.6041
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 46,
+          "function": "instant",
+          "primitive_calls": 11021,
+          "total_calls": 11021,
+          "self_ms": 70.7693,
+          "cumulative_ms": 118.9423
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 58,
+          "function": "stamp",
+          "primitive_calls": 4391,
+          "total_calls": 4391,
+          "self_ms": 15.310200000000002,
+          "cumulative_ms": 117.7552
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 28,
+          "function": "_stamp",
+          "primitive_calls": 3315,
+          "total_calls": 3315,
+          "self_ms": 14.463400000000002,
+          "cumulative_ms": 114.29360000000001
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 911,
+          "function": "_load_unlocked",
+          "primitive_calls": 8,
+          "total_calls": 13,
+          "self_ms": 0.2044,
+          "cumulative_ms": 111.2227
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 1020,
+          "function": "exec_module",
+          "primitive_calls": 8,
+          "total_calls": 13,
+          "self_ms": 0.1651,
+          "cumulative_ms": 109.7937
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'isoformat' of 'datetime.datetime' objects>",
+          "primitive_calls": 7707,
+          "total_calls": 7707,
+          "self_ms": 105.1885,
+          "cumulative_ms": 105.1885
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'match' of 're.Pattern' objects>",
+          "primitive_calls": 39500,
+          "total_calls": 39500,
+          "self_ms": 90.8585,
+          "cumulative_ms": 90.8585
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 1093,
+          "function": "get_code",
+          "primitive_calls": 13,
+          "total_calls": 13,
+          "self_ms": 0.5699000000000001,
+          "cumulative_ms": 73.8613
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 1214,
+          "function": "get_data",
+          "primitive_calls": 13,
+          "total_calls": 13,
+          "self_ms": 0.2456,
+          "cumulative_ms": 62.520100000000006
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 63714,
+          "total_calls": 63714,
+          "self_ms": 62.514399999999995,
+          "cumulative_ms": 62.514399999999995
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _io.open_code>",
+          "primitive_calls": 13,
+          "total_calls": 13,
+          "self_ms": 58.879,
+          "cumulative_ms": 58.879
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 480,
+          "function": "_call_with_frames_removed",
+          "primitive_calls": 16,
+          "total_calls": 26,
+          "self_ms": 0.15130000000000002,
+          "cumulative_ms": 56.6644
+        }
+      ],
+      "top_self": [
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+          "primitive_calls": 43,
+          "total_calls": 43,
+          "self_ms": 1388.7205000000001,
+          "cumulative_ms": 4897.0547
+        },
+        {
+          "file": "encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 9176,
+          "total_calls": 9176,
+          "self_ms": 667.8104000000001,
+          "cumulative_ms": 667.8104000000001
+        },
+        {
+          "file": "decoder.py",
+          "line": 351,
+          "function": "raw_decode",
+          "primitive_calls": 19702,
+          "total_calls": 19702,
+          "self_ms": 525.5490000000001,
+          "cumulative_ms": 525.5490000000001
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 415,
+          "function": "_project",
+          "primitive_calls": 3315,
+          "total_calls": 3315,
+          "self_ms": 207.2641,
+          "cumulative_ms": 575.245
+        },
+        {
+          "file": "decoder.py",
+          "line": 340,
+          "function": "decode",
+          "primitive_calls": 19702,
+          "total_calls": 19702,
+          "self_ms": 160.809,
+          "cumulative_ms": 826.4317000000001
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 47,
+          "function": "current_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 116.14160000000001,
+          "cumulative_ms": 605.6786000000001
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 65,
+          "function": "<genexpr>",
+          "primitive_calls": 98361,
+          "total_calls": 98361,
+          "self_ms": 109.30440000000002,
+          "cumulative_ms": 155.5739
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'isoformat' of 'datetime.datetime' objects>",
+          "primitive_calls": 7707,
+          "total_calls": 7707,
+          "self_ms": 105.1885,
+          "cumulative_ms": 105.1885
+        },
+        {
+          "file": "__init__.py",
+          "line": 299,
+          "function": "loads",
+          "primitive_calls": 19702,
+          "total_calls": 19702,
+          "self_ms": 98.1829,
+          "cumulative_ms": 959.7352
+        },
+        {
+          "file": "okto_nexus/application/observations.py",
+          "line": 21,
+          "function": "_time",
+          "primitive_calls": 24034,
+          "total_calls": 24034,
+          "self_ms": 94.4026,
+          "cumulative_ms": 182.54670000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'match' of 're.Pattern' objects>",
+          "primitive_calls": 39500,
+          "total_calls": 39500,
+          "self_ms": 90.8585,
+          "cumulative_ms": 90.8585
+        },
+        {
+          "file": "__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 9176,
+          "total_calls": 9176,
+          "self_ms": 90.3761,
+          "cumulative_ms": 897.4540000000001
+        },
+        {
+          "file": "encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 9176,
+          "total_calls": 9176,
+          "self_ms": 88.30590000000001,
+          "cumulative_ms": 788.1837
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention.py",
+          "line": 60,
+          "function": "project",
+          "primitive_calls": 3316,
+          "total_calls": 3316,
+          "self_ms": 78.1575,
+          "cumulative_ms": 1932.775
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 46,
+          "function": "instant",
+          "primitive_calls": 11021,
+          "total_calls": 11021,
+          "self_ms": 70.7693,
+          "cumulative_ms": 118.9423
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.any>",
+          "primitive_calls": 5269,
+          "total_calls": 5269,
+          "self_ms": 67.8793,
+          "cumulative_ms": 225.9583
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 63714,
+          "total_calls": 63714,
+          "self_ms": 62.514399999999995,
+          "cumulative_ms": 62.514399999999995
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 131,
+          "function": "_head",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 59.1783,
+          "cumulative_ms": 216.26820000000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method _io.open_code>",
+          "primitive_calls": 13,
+          "total_calls": 13,
+          "self_ms": 58.879,
+          "cumulative_ms": 58.879
+        },
+        {
+          "file": "okto_nexus/domain/attention.py",
+          "line": 70,
+          "function": "occurrence",
+          "primitive_calls": 878,
+          "total_calls": 878,
+          "self_ms": 57.55820000000001,
+          "cumulative_ms": 578.8503000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'replace' of 'str' objects>",
+          "primitive_calls": 38400,
+          "total_calls": 38400,
+          "self_ms": 52.4014,
+          "cumulative_ms": 52.4014
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/attention_external.py",
+          "line": 16,
+          "function": "_facts",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 48.822,
+          "cumulative_ms": 1570.9201
+        },
+        {
+          "file": "okto_nexus/application/attention_external.py",
+          "line": 26,
+          "function": "project",
+          "primitive_calls": 3315,
+          "total_calls": 3315,
+          "self_ms": 48.689,
+          "cumulative_ms": 1335.0600000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.ord>",
+          "primitive_calls": 93970,
+          "total_calls": 93970,
+          "self_ms": 46.26950000000001,
+          "cumulative_ms": 46.26950000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 50131,
+          "total_calls": 50131,
+          "self_ms": 44.964800000000004,
+          "cumulative_ms": 44.964800000000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method fromisoformat>",
+          "primitive_calls": 35055,
+          "total_calls": 35055,
+          "self_ms": 44.1924,
+          "cumulative_ms": 44.1924
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astimezone' of 'datetime.datetime' objects>",
+          "primitive_calls": 35055,
+          "total_calls": 35055,
+          "self_ms": 39.852700000000006,
+          "cumulative_ms": 39.852700000000006
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'end' of 're.Match' objects>",
+          "primitive_calls": 39404,
+          "total_calls": 39404,
+          "self_ms": 35.3226,
+          "cumulative_ms": 35.3226
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'update' of 'dict' objects>",
+          "primitive_calls": 8202,
+          "total_calls": 8202,
+          "self_ms": 34.8242,
+          "cumulative_ms": 34.8242
+        },
+        {
+          "file": "okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+          "line": 121,
+          "function": "_agent",
+          "primitive_calls": 4096,
+          "total_calls": 4096,
+          "self_ms": 30.1396,
+          "cumulative_ms": 130.28340000000003
+        }
+      ],
+      "aggregate_query_plan": [
+        {
+          "id": 3,
+          "parent": 0,
+          "detail": "MATERIALIZE filtered"
+        },
+        {
+          "id": 6,
+          "parent": 3,
+          "detail": "MATERIALIZE viewing"
+        },
+        {
+          "id": 9,
+          "parent": 6,
+          "detail": "MATERIALIZE occurrences"
+        },
+        {
+          "id": 12,
+          "parent": 9,
+          "detail": "MATERIALIZE projected"
+        },
+        {
+          "id": 14,
+          "parent": 12,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 15,
+          "parent": 14,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 18,
+          "parent": 15,
+          "detail": "MATERIALIZE requests"
+        },
+        {
+          "id": 21,
+          "parent": 18,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 56,
+          "parent": 15,
+          "detail": "MATERIALIZE live_requests"
+        },
+        {
+          "id": 62,
+          "parent": 56,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 72,
+          "parent": 56,
+          "detail": "SEARCH ap USING INDEX sqlite_autoindex_approvals_1 (approval_id=?)"
+        },
+        {
+          "id": 108,
+          "parent": 15,
+          "detail": "MATERIALIZE ranked_leases"
+        },
+        {
+          "id": 111,
+          "parent": 108,
+          "detail": "CO-ROUTINE (subquery-120)"
+        },
+        {
+          "id": 114,
+          "parent": 111,
+          "detail": "MATERIALIZE session_keys"
+        },
+        {
+          "id": 119,
+          "parent": 114,
+          "detail": "SCAN live_requests"
+        },
+        {
+          "id": 131,
+          "parent": 114,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 138,
+          "parent": 111,
+          "detail": "SCAN k"
+        },
+        {
+          "id": 140,
+          "parent": 111,
+          "detail": "SEARCH l USING INDEX sqlite_autoindex_execution_leases_1 (server_id=? AND executor_id=? AND session_id=?)"
+        },
+        {
+          "id": 182,
+          "parent": 111,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 224,
+          "parent": 108,
+          "detail": "SCAN (subquery-120)"
+        },
+        {
+          "id": 321,
+          "parent": 15,
+          "detail": "MATERIALIZE ranked_receipts"
+        },
+        {
+          "id": 324,
+          "parent": 321,
+          "detail": "CO-ROUTINE (subquery-121)"
+        },
+        {
+          "id": 327,
+          "parent": 324,
+          "detail": "MATERIALIZE source_keys"
+        },
+        {
+          "id": 332,
+          "parent": 327,
+          "detail": "SCAN live_requests"
+        },
+        {
+          "id": 344,
+          "parent": 327,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 351,
+          "parent": 324,
+          "detail": "SCAN k"
+        },
+        {
+          "id": 353,
+          "parent": 324,
+          "detail": "SEARCH rr USING INDEX sqlite_autoindex_execution_receipts_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 386,
+          "parent": 324,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 419,
+          "parent": 321,
+          "detail": "SCAN (subquery-121)"
+        },
+        {
+          "id": 496,
+          "parent": 15,
+          "detail": "MATERIALIZE runtime_facts"
+        },
+        {
+          "id": 499,
+          "parent": 496,
+          "detail": "MATERIALIZE agent_facts"
+        },
+        {
+          "id": 502,
+          "parent": 499,
+          "detail": "MATERIALIZE actors"
+        },
+        {
+          "id": 505,
+          "parent": 502,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 506,
+          "parent": 505,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 509,
+          "parent": 506,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 516,
+          "parent": 505,
+          "detail": "UNION USING TEMP B-TREE"
+        },
+        {
+          "id": 523,
+          "parent": 516,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 525,
+          "parent": 516,
+          "detail": "SEARCH s USING INDEX sqlite_autoindex_execution_sessions_1 (server_id=? AND executor_id=? AND session_id=?)"
+        },
+        {
+          "id": 535,
+          "parent": 516,
+          "detail": "SEARCH op USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 555,
+          "parent": 505,
+          "detail": "UNION USING TEMP B-TREE"
+        },
+        {
+          "id": 556,
+          "parent": 555,
+          "detail": "SCAN CONSTANT ROW"
+        },
+        {
+          "id": 559,
+          "parent": 555,
+          "detail": "SCALAR SUBQUERY 6"
+        },
+        {
+          "id": 564,
+          "parent": 559,
+          "detail": "SCAN live_requests"
+        },
+        {
+          "id": 591,
+          "parent": 499,
+          "detail": "SCAN x"
+        },
+        {
+          "id": 593,
+          "parent": 499,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_agents_1 (agent_id=?)"
+        },
+        {
+          "id": 600,
+          "parent": 499,
+          "detail": "SEARCH ro USING INDEX sqlite_autoindex_agent_runtime_overrides_1 (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 608,
+          "parent": 499,
+          "detail": "SEARCH pe USING INDEX sqlite_autoindex_agent_runtime_policy_epochs_1 (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 630,
+          "parent": 499,
+          "detail": "CORRELATED SCALAR SUBQUERY 9"
+        },
+        {
+          "id": 633,
+          "parent": 630,
+          "detail": "CO-ROUTINE (subquery-8)"
+        },
+        {
+          "id": 637,
+          "parent": 633,
+          "detail": "SEARCH cm USING INDEX sqlite_autoindex_agent_connection_methods_1 (agent_id=?)"
+        },
+        {
+          "id": 652,
+          "parent": 630,
+          "detail": "SCAN (subquery-8)"
+        },
+        {
+          "id": 668,
+          "parent": 499,
+          "detail": "CORRELATED SCALAR SUBQUERY 11"
+        },
+        {
+          "id": 671,
+          "parent": 668,
+          "detail": "CO-ROUTINE (subquery-10)"
+        },
+        {
+          "id": 675,
+          "parent": 671,
+          "detail": "SEARCH ep USING INDEX idx_endpoint_selection (agent_id=?)"
+        },
+        {
+          "id": 702,
+          "parent": 671,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 712,
+          "parent": 668,
+          "detail": "SCAN (subquery-10)"
+        },
+        {
+          "id": 728,
+          "parent": 499,
+          "detail": "CORRELATED SCALAR SUBQUERY 13"
+        },
+        {
+          "id": 731,
+          "parent": 728,
+          "detail": "CO-ROUTINE (subquery-12)"
+        },
+        {
+          "id": 738,
+          "parent": 731,
+          "detail": "SEARCH ep USING INDEX idx_endpoint_selection (agent_id=?)"
+        },
+        {
+          "id": 744,
+          "parent": 731,
+          "detail": "SEARCH rp USING INDEX sqlite_autoindex_runtime_profiles_1 (profile_id=?)"
+        },
+        {
+          "id": 766,
+          "parent": 731,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 767,
+          "parent": 731,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 777,
+          "parent": 728,
+          "detail": "SCAN (subquery-12)"
+        },
+        {
+          "id": 793,
+          "parent": 499,
+          "detail": "CORRELATED SCALAR SUBQUERY 15"
+        },
+        {
+          "id": 799,
+          "parent": 793,
+          "detail": "SEARCH xp USING INDEX sqlite_autoindex_agent_execution_policies_1 (agent_id=?)"
+        },
+        {
+          "id": 847,
+          "parent": 496,
+          "detail": "MATERIALIZE endpoint_bindings"
+        },
+        {
+          "id": 858,
+          "parent": 847,
+          "detail": "SEARCH i USING INTEGER PRIMARY KEY (rowid=?)"
+        },
+        {
+          "id": 861,
+          "parent": 847,
+          "detail": "SEARCH b USING INDEX idx_execution_bindings_executor (server_id=?)"
+        },
+        {
+          "id": 866,
+          "parent": 847,
+          "detail": "SEARCH e USING INDEX sqlite_autoindex_execution_executors_1 (server_id=? AND executor_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 874,
+          "parent": 847,
+          "detail": "USE TEMP B-TREE FOR GROUP BY"
+        },
+        {
+          "id": 926,
+          "parent": 496,
+          "detail": "SCAN ep"
+        },
+        {
+          "id": 939,
+          "parent": 496,
+          "detail": "SEARCH af USING AUTOMATIC COVERING INDEX (agent_id=?)"
+        },
+        {
+          "id": 943,
+          "parent": 496,
+          "detail": "SEARCH rp USING INDEX sqlite_autoindex_runtime_profiles_1 (profile_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 963,
+          "parent": 496,
+          "detail": "SEARCH eb USING AUTOMATIC COVERING INDEX (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1011,
+          "parent": 496,
+          "detail": "CORRELATED SCALAR SUBQUERY 20"
+        },
+        {
+          "id": 1014,
+          "parent": 1011,
+          "detail": "CO-ROUTINE (subquery-19)"
+        },
+        {
+          "id": 1018,
+          "parent": 1014,
+          "detail": "SEARCH g USING INDEX idx_runtime_grant_actor (actor_agent_id=? AND endpoint_id=? AND revoked_at=?)"
+        },
+        {
+          "id": 1022,
+          "parent": 1014,
+          "detail": "LIST SUBQUERY 18"
+        },
+        {
+          "id": 1025,
+          "parent": 1022,
+          "detail": "SCAN actors"
+        },
+        {
+          "id": 1064,
+          "parent": 1014,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 1074,
+          "parent": 1011,
+          "detail": "SCAN (subquery-19)"
+        },
+        {
+          "id": 1112,
+          "parent": 15,
+          "detail": "MATERIALIZE recipient_bindings"
+        },
+        {
+          "id": 1123,
+          "parent": 1112,
+          "detail": "SEARCH i USING INTEGER PRIMARY KEY (rowid=?)"
+        },
+        {
+          "id": 1126,
+          "parent": 1112,
+          "detail": "SEARCH b USING INDEX sqlite_autoindex_execution_bindings_2 (server_id=?)"
+        },
+        {
+          "id": 1131,
+          "parent": 1112,
+          "detail": "SEARCH ep USING INDEX sqlite_autoindex_agent_endpoints_1 (endpoint_id=?)"
+        },
+        {
+          "id": 1178,
+          "parent": 15,
+          "detail": "MATERIALIZE stream_failures"
+        },
+        {
+          "id": 1189,
+          "parent": 1178,
+          "detail": "SCAN s USING INDEX sqlite_autoindex_execution_sessions_1"
+        },
+        {
+          "id": 1199,
+          "parent": 1178,
+          "detail": "SEARCH w USING INDEX sqlite_autoindex_execution_event_watermarks_1 (server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?)"
+        },
+        {
+          "id": 1220,
+          "parent": 1178,
+          "detail": "SEARCH e USING INDEX sqlite_autoindex_execution_event_ingress_1 (server_id=? AND executor_id=? AND session_id=? AND stream_epoch=? AND sequence<?)"
+        },
+        {
+          "id": 1261,
+          "parent": 1178,
+          "detail": "SEARCH k USING AUTOMATIC COVERING INDEX (session_id=? AND executor_id=? AND server_id=?)"
+        },
+        {
+          "id": 1325,
+          "parent": 15,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 1327,
+          "parent": 15,
+          "detail": "SEARCH ap USING INDEX sqlite_autoindex_approvals_1 (approval_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1335,
+          "parent": 15,
+          "detail": "SEARCH turn USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1347,
+          "parent": 15,
+          "detail": "SEARCH x USING INDEX sqlite_autoindex_execution_domain_deliveries_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1359,
+          "parent": 15,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_delivery_outbox_1 (operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1367,
+          "parent": 15,
+          "detail": "SEARCH msg USING INDEX sqlite_autoindex_messages_1 (message_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1385,
+          "parent": 15,
+          "detail": "SEARCH live USING AUTOMATIC COVERING INDEX (canonical_request_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1392,
+          "parent": 15,
+          "detail": "SEARCH s USING INDEX sqlite_autoindex_execution_sessions_1 (server_id=? AND executor_id=? AND session_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1406,
+          "parent": 15,
+          "detail": "SEARCH b USING INDEX sqlite_autoindex_execution_bindings_3 (server_id=? AND executor_id=? AND binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1418,
+          "parent": 15,
+          "detail": "SEARCH ep USING INDEX sqlite_autoindex_agent_endpoints_1 (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1426,
+          "parent": 15,
+          "detail": "SEARCH subject USING INDEX sqlite_autoindex_agents_1 (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1434,
+          "parent": 15,
+          "detail": "SEARCH ex USING INDEX sqlite_autoindex_execution_executors_1 (server_id=? AND executor_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1444,
+          "parent": 15,
+          "detail": "SEARCH wb USING INDEX sqlite_autoindex_execution_workspace_bindings_2 (server_id=? AND executor_id=? AND workspace_binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1456,
+          "parent": 15,
+          "detail": "SEARCH real USING INDEX sqlite_autoindex_execution_realizations_1 (server_id=? AND executor_id=? AND realization_ref=?) LEFT-JOIN"
+        },
+        {
+          "id": 1468,
+          "parent": 15,
+          "detail": "SEARCH opening USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1480,
+          "parent": 15,
+          "detail": "SEARCH ci USING INDEX sqlite_autoindex_execution_client_intents_2 (server_id=? AND intent_id>? AND intent_id<?) LEFT-JOIN"
+        },
+        {
+          "id": 1500,
+          "parent": 15,
+          "detail": "SEARCH dispatch USING INDEX sqlite_autoindex_execution_dispatch_outbox_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1512,
+          "parent": 15,
+          "detail": "SEARCH rev USING INDEX sqlite_autoindex_execution_agent_revisions_1 (server_id=? AND agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1529,
+          "parent": 15,
+          "detail": "BLOOM FILTER ON latest (server_id=? AND executor_id=? AND session_id=? AND position=?)"
+        },
+        {
+          "id": 1555,
+          "parent": 15,
+          "detail": "SEARCH latest USING AUTOMATIC PARTIAL COVERING INDEX (server_id=? AND executor_id=? AND session_id=? AND position=?) LEFT-JOIN"
+        },
+        {
+          "id": 1570,
+          "parent": 15,
+          "detail": "BLOOM FILTER ON previous (server_id=? AND executor_id=? AND session_id=? AND lease_serial=?)"
+        },
+        {
+          "id": 1592,
+          "parent": 15,
+          "detail": "SEARCH previous USING AUTOMATIC COVERING INDEX (server_id=? AND executor_id=? AND session_id=? AND lease_serial=?) LEFT-JOIN"
+        },
+        {
+          "id": 1613,
+          "parent": 15,
+          "detail": "BLOOM FILTER ON receipt (server_id=? AND executor_id=? AND operation_id=? AND position=?)"
+        },
+        {
+          "id": 1630,
+          "parent": 15,
+          "detail": "SEARCH receipt USING AUTOMATIC PARTIAL COVERING INDEX (server_id=? AND executor_id=? AND operation_id=? AND position=?) LEFT-JOIN"
+        },
+        {
+          "id": 1654,
+          "parent": 15,
+          "detail": "SEARCH runtime USING AUTOMATIC COVERING INDEX (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1670,
+          "parent": 15,
+          "detail": "SEARCH subject_facts USING AUTOMATIC COVERING INDEX (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1686,
+          "parent": 15,
+          "detail": "SEARCH initiator USING AUTOMATIC COVERING INDEX (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1705,
+          "parent": 15,
+          "detail": "SEARCH operator USING AUTOMATIC PARTIAL COVERING INDEX (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1724,
+          "parent": 15,
+          "detail": "SEARCH recipient_binding USING AUTOMATIC COVERING INDEX (agent_id=? AND binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1756,
+          "parent": 15,
+          "detail": "SEARCH delegated USING AUTOMATIC COVERING INDEX (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1764,
+          "parent": 15,
+          "detail": "SEARCH containment USING INDEX sqlite_autoindex_execution_session_containment_1 (server_id=? AND executor_id=? AND session_id=? AND owner_generation=?) LEFT-JOIN"
+        },
+        {
+          "id": 1786,
+          "parent": 15,
+          "detail": "BLOOM FILTER ON failure (server_id=? AND executor_id=? AND session_id=? AND owner_generation=?)"
+        },
+        {
+          "id": 1798,
+          "parent": 15,
+          "detail": "SEARCH failure USING AUTOMATIC COVERING INDEX (server_id=? AND executor_id=? AND session_id=? AND owner_generation=?) LEFT-JOIN"
+        },
+        {
+          "id": 1813,
+          "parent": 15,
+          "detail": "SEARCH recovery USING INDEX sqlite_autoindex_execution_agent_recovery_1 (server_id=? AND executor_id=? AND agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1828,
+          "parent": 15,
+          "detail": "SEARCH lane USING INDEX sqlite_autoindex_execution_control_lanes_1 (server_id=? AND executor_id=? AND binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 1843,
+          "parent": 15,
+          "detail": "SEARCH ticket USING INDEX sqlite_autoindex_execution_link_tickets_1 (ticket_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 2219,
+          "parent": 14,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 2220,
+          "parent": 2219,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 2221,
+          "parent": 2220,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 2223,
+          "parent": 2221,
+          "detail": "SCAN h"
+        },
+        {
+          "id": 2264,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 2272,
+          "parent": 2264,
+          "detail": "SCAN o"
+        },
+        {
+          "id": 2280,
+          "parent": 2264,
+          "detail": "SEARCH x USING INDEX sqlite_autoindex_execution_dispatch_outbox_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 2287,
+          "parent": 2264,
+          "detail": "SEARCH r USING INDEX sqlite_autoindex_execution_receipts_1 (server_id=? AND executor_id=? AND operation_id=? AND receipt_revision=?) LEFT-JOIN"
+        },
+        {
+          "id": 2293,
+          "parent": 2264,
+          "detail": "CORRELATED SCALAR SUBQUERY 29"
+        },
+        {
+          "id": 2298,
+          "parent": 2293,
+          "detail": "SEARCH l USING COVERING INDEX sqlite_autoindex_execution_receipts_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 2350,
+          "parent": 2264,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_attention_operation_epochs_1 (source_type=? AND source_id=?)"
+        },
+        {
+          "id": 2395,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 2402,
+          "parent": 2395,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_attention_operation_epochs_1 (source_type=?)"
+        },
+        {
+          "id": 2407,
+          "parent": 2395,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_message_deliveries_1 (delivery_id=?)"
+        },
+        {
+          "id": 2417,
+          "parent": 2395,
+          "detail": "SEARCH m USING INDEX sqlite_autoindex_messages_1 (message_id=?)"
+        },
+        {
+          "id": 2445,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 2454,
+          "parent": 2445,
+          "detail": "SEARCH p USING INDEX attention_pending_recovery (status=?)"
+        },
+        {
+          "id": 2459,
+          "parent": 2445,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_message_deliveries_1 (delivery_id=?)"
+        },
+        {
+          "id": 2476,
+          "parent": 2445,
+          "detail": "CORRELATED SCALAR SUBQUERY 39"
+        },
+        {
+          "id": 2480,
+          "parent": 2476,
+          "detail": "SEARCH o USING COVERING INDEX sqlite_autoindex_delivery_outbox_2 (delivery_id=?)"
+        },
+        {
+          "id": 2489,
+          "parent": 2445,
+          "detail": "SEARCH m USING INDEX sqlite_autoindex_messages_1 (message_id=?)"
+        },
+        {
+          "id": 2497,
+          "parent": 2445,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_attention_operation_epochs_1 (source_type=? AND source_id=?)"
+        },
+        {
+          "id": 2528,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 2538,
+          "parent": 2528,
+          "detail": "SCAN o"
+        },
+        {
+          "id": 2547,
+          "parent": 2528,
+          "detail": "CORRELATED SCALAR SUBQUERY 41"
+        },
+        {
+          "id": 2552,
+          "parent": 2547,
+          "detail": "SEARCH idle USING INDEX sqlite_autoindex_one_shot_slots_2 (call_id=?)"
+        },
+        {
+          "id": 2575,
+          "parent": 2528,
+          "detail": "SEARCH x USING INDEX sqlite_autoindex_execution_dispatch_outbox_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 2614,
+          "parent": 2528,
+          "detail": "SEARCH e USING INDEX sqlite_autoindex_execution_executors_1 (server_id=? AND executor_id=?)"
+        },
+        {
+          "id": 2628,
+          "parent": 2528,
+          "detail": "SEARCH r USING INDEX sqlite_autoindex_execution_receipts_1 (server_id=? AND executor_id=? AND operation_id=? AND receipt_revision=?) LEFT-JOIN"
+        },
+        {
+          "id": 2634,
+          "parent": 2528,
+          "detail": "CORRELATED SCALAR SUBQUERY 29"
+        },
+        {
+          "id": 2639,
+          "parent": 2634,
+          "detail": "SEARCH l USING COVERING INDEX sqlite_autoindex_execution_receipts_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 2687,
+          "parent": 2528,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_attention_operation_epochs_1 (source_type=? AND source_id=?)"
+        },
+        {
+          "id": 2738,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 2742,
+          "parent": 2738,
+          "detail": "SCAN h"
+        },
+        {
+          "id": 2763,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 32"
+        },
+        {
+          "id": 2769,
+          "parent": 2763,
+          "detail": "SEARCH edge USING COVERING INDEX sqlite_autoindex_handoff_dependencies_1 (handoff_id=?)"
+        },
+        {
+          "id": 2774,
+          "parent": 2763,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 2792,
+          "parent": 2738,
+          "detail": "SEARCH creator USING INDEX sqlite_autoindex_agents_1 (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 2801,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 33"
+        },
+        {
+          "id": 2805,
+          "parent": 2801,
+          "detail": "SCAN candidate"
+        },
+        {
+          "id": 2859,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 31"
+        },
+        {
+          "id": 2870,
+          "parent": 2859,
+          "detail": "SEARCH edge USING COVERING INDEX sqlite_autoindex_handoff_dependencies_1 (handoff_id=?)"
+        },
+        {
+          "id": 2875,
+          "parent": 2859,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 2893,
+          "parent": 2859,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 2907,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 31"
+        },
+        {
+          "id": 2918,
+          "parent": 2907,
+          "detail": "SEARCH edge USING COVERING INDEX sqlite_autoindex_handoff_dependencies_1 (handoff_id=?)"
+        },
+        {
+          "id": 2923,
+          "parent": 2907,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 2941,
+          "parent": 2907,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 2956,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 31"
+        },
+        {
+          "id": 2967,
+          "parent": 2956,
+          "detail": "SEARCH edge USING COVERING INDEX sqlite_autoindex_handoff_dependencies_1 (handoff_id=?)"
+        },
+        {
+          "id": 2972,
+          "parent": 2956,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 2990,
+          "parent": 2956,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 3004,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 31"
+        },
+        {
+          "id": 3015,
+          "parent": 3004,
+          "detail": "SEARCH edge USING COVERING INDEX sqlite_autoindex_handoff_dependencies_1 (handoff_id=?)"
+        },
+        {
+          "id": 3020,
+          "parent": 3004,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 3038,
+          "parent": 3004,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 3051,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 31"
+        },
+        {
+          "id": 3062,
+          "parent": 3051,
+          "detail": "SEARCH edge USING COVERING INDEX sqlite_autoindex_handoff_dependencies_1 (handoff_id=?)"
+        },
+        {
+          "id": 3067,
+          "parent": 3051,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 3085,
+          "parent": 3051,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 3099,
+          "parent": 2738,
+          "detail": "CORRELATED SCALAR SUBQUERY 31"
+        },
+        {
+          "id": 3110,
+          "parent": 3099,
+          "detail": "SEARCH edge USING COVERING INDEX sqlite_autoindex_handoff_dependencies_1 (handoff_id=?)"
+        },
+        {
+          "id": 3115,
+          "parent": 3099,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 3133,
+          "parent": 3099,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 3159,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 3164,
+          "parent": 3159,
+          "detail": "SCAN m USING INDEX runtime_result_pending_cleanup"
+        },
+        {
+          "id": 3177,
+          "parent": 3159,
+          "detail": "SEARCH r USING INDEX sqlite_autoindex_runtime_results_1 (result_id=?)"
+        },
+        {
+          "id": 3212,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 3215,
+          "parent": 3212,
+          "detail": "MATERIALIZE references_only"
+        },
+        {
+          "id": 3218,
+          "parent": 3215,
+          "detail": "MATERIALIZE selected"
+        },
+        {
+          "id": 3221,
+          "parent": 3218,
+          "detail": "SCAN a"
+        },
+        {
+          "id": 3230,
+          "parent": 3218,
+          "detail": "CORRELATED SCALAR SUBQUERY 46"
+        },
+        {
+          "id": 3234,
+          "parent": 3230,
+          "detail": "SEARCH n USING COVERING INDEX sqlite_autoindex_execution_native_requests_1 (canonical_request_id=?)"
+        },
+        {
+          "id": 3289,
+          "parent": 3215,
+          "detail": "SCAN a"
+        },
+        {
+          "id": 3331,
+          "parent": 3212,
+          "detail": "SCAN a"
+        },
+        {
+          "id": 3333,
+          "parent": 3212,
+          "detail": "SEARCH i USING INTEGER PRIMARY KEY (rowid=?) LEFT-JOIN"
+        },
+        {
+          "id": 3338,
+          "parent": 3212,
+          "detail": "SEARCH c USING INDEX idx_coordination_requests_approval (server_id=? AND approval_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 3348,
+          "parent": 3212,
+          "detail": "SEARCH p USING INDEX sqlite_autoindex_execution_proposals_1 (proposal_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 3366,
+          "parent": 3212,
+          "detail": "SEARCH l USING INDEX sqlite_autoindex_runtime_native_approvals_2 (approval_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 3599,
+          "parent": 2220,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 3600,
+          "parent": 3599,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 3601,
+          "parent": 3600,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 3603,
+          "parent": 3601,
+          "detail": "CO-ROUTINE episodes"
+        },
+        {
+          "id": 3604,
+          "parent": 3603,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 3605,
+          "parent": 3604,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 3609,
+          "parent": 3605,
+          "detail": "MATERIALIZE native_groups"
+        },
+        {
+          "id": 3612,
+          "parent": 3609,
+          "detail": "MATERIALIZE ordered_native"
+        },
+        {
+          "id": 3615,
+          "parent": 3612,
+          "detail": "MATERIALIZE linked_native"
+        },
+        {
+          "id": 3628,
+          "parent": 3615,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 3650,
+          "parent": 3615,
+          "detail": "SEARCH p USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 3675,
+          "parent": 3615,
+          "detail": "SEARCH m USING INDEX sqlite_autoindex_execution_domain_deliveries_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 3691,
+          "parent": 3615,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_delivery_outbox_1 (operation_id=?)"
+        },
+        {
+          "id": 3702,
+          "parent": 3615,
+          "detail": "SEARCH b USING INDEX sqlite_autoindex_runtime_handoff_bindings_1 (operation_id=?)"
+        },
+        {
+          "id": 3711,
+          "parent": 3615,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 3748,
+          "parent": 3612,
+          "detail": "SCAN linked_native"
+        },
+        {
+          "id": 3771,
+          "parent": 3612,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 3787,
+          "parent": 3609,
+          "detail": "SCAN ordered_native"
+        },
+        {
+          "id": 3789,
+          "parent": 3609,
+          "detail": "USE TEMP B-TREE FOR GROUP BY"
+        },
+        {
+          "id": 3851,
+          "parent": 3605,
+          "detail": "SCAN native_groups"
+        },
+        {
+          "id": 3858,
+          "parent": 3604,
+          "detail": "UNION USING TEMP B-TREE"
+        },
+        {
+          "id": 3861,
+          "parent": 3858,
+          "detail": "MATERIALIZE terminal_handoffs"
+        },
+        {
+          "id": 3864,
+          "parent": 3861,
+          "detail": "SCAN h"
+        },
+        {
+          "id": 3926,
+          "parent": 3858,
+          "detail": "SCAN terminal_handoffs"
+        },
+        {
+          "id": 3948,
+          "parent": 3601,
+          "detail": "SCAN k"
+        },
+        {
+          "id": 3951,
+          "parent": 3601,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_handoffs_1 (handoff_id=?)"
+        },
+        {
+          "id": 3957,
+          "parent": 3601,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_attention_operation_epochs_1 (source_type=? AND source_id=?)"
+        },
+        {
+          "id": 3969,
+          "parent": 3601,
+          "detail": "BLOOM FILTER ON t (handoff_id=? AND claim_epoch=?)"
+        },
+        {
+          "id": 3983,
+          "parent": 3601,
+          "detail": "SEARCH t USING AUTOMATIC COVERING INDEX (handoff_id=? AND claim_epoch=?) LEFT-JOIN"
+        },
+        {
+          "id": 3996,
+          "parent": 3601,
+          "detail": "BLOOM FILTER ON n (handoff_id=? AND claim_epoch=?)"
+        },
+        {
+          "id": 4007,
+          "parent": 3601,
+          "detail": "SEARCH n USING AUTOMATIC COVERING INDEX (handoff_id=? AND claim_epoch=?) LEFT-JOIN"
+        },
+        {
+          "id": 4048,
+          "parent": 3600,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 4052,
+          "parent": 4048,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 4075,
+          "parent": 4048,
+          "detail": "CORRELATED SCALAR SUBQUERY 58"
+        },
+        {
+          "id": 4090,
+          "parent": 4075,
+          "detail": "SEARCH n USING AUTOMATIC COVERING INDEX (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4101,
+          "parent": 4048,
+          "detail": "SEARCH p USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4131,
+          "parent": 3600,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 4132,
+          "parent": 4131,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 4133,
+          "parent": 4132,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 4136,
+          "parent": 4133,
+          "detail": "SEARCH d USING INDEX idx_runtime_outbox_pending (status=?)"
+        },
+        {
+          "id": 4173,
+          "parent": 4133,
+          "detail": "CORRELATED SCALAR SUBQUERY 61"
+        },
+        {
+          "id": 4177,
+          "parent": 4173,
+          "detail": "SEARCH released USING COVERING INDEX sqlite_autoindex_execution_delivery_releases_1 (domain_operation_id=?)"
+        },
+        {
+          "id": 4187,
+          "parent": 4133,
+          "detail": "CORRELATED SCALAR SUBQUERY 62"
+        },
+        {
+          "id": 4192,
+          "parent": 4187,
+          "detail": "SEARCH claim USING INDEX sqlite_autoindex_message_deliveries_1 (delivery_id=?)"
+        },
+        {
+          "id": 4209,
+          "parent": 4133,
+          "detail": "CORRELATED SCALAR SUBQUERY 63"
+        },
+        {
+          "id": 4213,
+          "parent": 4209,
+          "detail": "SEARCH h USING COVERING INDEX sqlite_autoindex_runtime_handoff_bindings_1 (operation_id=?)"
+        },
+        {
+          "id": 4223,
+          "parent": 4133,
+          "detail": "CORRELATED SCALAR SUBQUERY 64"
+        },
+        {
+          "id": 4230,
+          "parent": 4223,
+          "detail": "SEARCH x USING INDEX execution_domain_delivery_source (domain_operation_id=?)"
+        },
+        {
+          "id": 4236,
+          "parent": 4223,
+          "detail": "SEARCH q USING INDEX sqlite_autoindex_execution_dispatch_outbox_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4277,
+          "parent": 4132,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 4281,
+          "parent": 4277,
+          "detail": "SCAN o"
+        },
+        {
+          "id": 4293,
+          "parent": 4277,
+          "detail": "CORRELATED SCALAR SUBQUERY 66"
+        },
+        {
+          "id": 4297,
+          "parent": 4293,
+          "detail": "SEARCH r USING COVERING INDEX sqlite_autoindex_execution_receipts_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4309,
+          "parent": 4277,
+          "detail": "CORRELATED SCALAR SUBQUERY 67"
+        },
+        {
+          "id": 4315,
+          "parent": 4309,
+          "detail": "SEARCH x USING INDEX sqlite_autoindex_execution_domain_deliveries_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4322,
+          "parent": 4309,
+          "detail": "SEARCH h USING COVERING INDEX sqlite_autoindex_runtime_handoff_bindings_1 (operation_id=?)"
+        },
+        {
+          "id": 4330,
+          "parent": 4277,
+          "detail": "SEARCH q USING INDEX sqlite_autoindex_execution_dispatch_outbox_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4367,
+          "parent": 4132,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 4370,
+          "parent": 4367,
+          "detail": "MATERIALIZE requests"
+        },
+        {
+          "id": 4373,
+          "parent": 4370,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 4408,
+          "parent": 4367,
+          "detail": "MATERIALIZE live_requests"
+        },
+        {
+          "id": 4414,
+          "parent": 4408,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 4424,
+          "parent": 4408,
+          "detail": "SEARCH ap USING INDEX sqlite_autoindex_approvals_1 (approval_id=?)"
+        },
+        {
+          "id": 4460,
+          "parent": 4367,
+          "detail": "MATERIALIZE ranked_leases"
+        },
+        {
+          "id": 4463,
+          "parent": 4460,
+          "detail": "CO-ROUTINE (subquery-131)"
+        },
+        {
+          "id": 4466,
+          "parent": 4463,
+          "detail": "MATERIALIZE session_keys"
+        },
+        {
+          "id": 4471,
+          "parent": 4466,
+          "detail": "SCAN live_requests"
+        },
+        {
+          "id": 4483,
+          "parent": 4466,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 4490,
+          "parent": 4463,
+          "detail": "SCAN k"
+        },
+        {
+          "id": 4492,
+          "parent": 4463,
+          "detail": "SEARCH l USING INDEX sqlite_autoindex_execution_leases_1 (server_id=? AND executor_id=? AND session_id=?)"
+        },
+        {
+          "id": 4534,
+          "parent": 4463,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 4576,
+          "parent": 4460,
+          "detail": "SCAN (subquery-131)"
+        },
+        {
+          "id": 4673,
+          "parent": 4367,
+          "detail": "MATERIALIZE ranked_receipts"
+        },
+        {
+          "id": 4676,
+          "parent": 4673,
+          "detail": "CO-ROUTINE (subquery-132)"
+        },
+        {
+          "id": 4679,
+          "parent": 4676,
+          "detail": "MATERIALIZE source_keys"
+        },
+        {
+          "id": 4684,
+          "parent": 4679,
+          "detail": "SCAN live_requests"
+        },
+        {
+          "id": 4696,
+          "parent": 4679,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 4703,
+          "parent": 4676,
+          "detail": "SCAN k"
+        },
+        {
+          "id": 4705,
+          "parent": 4676,
+          "detail": "SEARCH rr USING INDEX sqlite_autoindex_execution_receipts_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4738,
+          "parent": 4676,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 4771,
+          "parent": 4673,
+          "detail": "SCAN (subquery-132)"
+        },
+        {
+          "id": 4848,
+          "parent": 4367,
+          "detail": "MATERIALIZE runtime_facts"
+        },
+        {
+          "id": 4851,
+          "parent": 4848,
+          "detail": "MATERIALIZE agent_facts"
+        },
+        {
+          "id": 4854,
+          "parent": 4851,
+          "detail": "MATERIALIZE actors"
+        },
+        {
+          "id": 4857,
+          "parent": 4854,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 4858,
+          "parent": 4857,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 4861,
+          "parent": 4858,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 4868,
+          "parent": 4857,
+          "detail": "UNION USING TEMP B-TREE"
+        },
+        {
+          "id": 4875,
+          "parent": 4868,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 4877,
+          "parent": 4868,
+          "detail": "SEARCH s USING INDEX sqlite_autoindex_execution_sessions_1 (server_id=? AND executor_id=? AND session_id=?)"
+        },
+        {
+          "id": 4887,
+          "parent": 4868,
+          "detail": "SEARCH op USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 4907,
+          "parent": 4857,
+          "detail": "UNION USING TEMP B-TREE"
+        },
+        {
+          "id": 4908,
+          "parent": 4907,
+          "detail": "SCAN CONSTANT ROW"
+        },
+        {
+          "id": 4911,
+          "parent": 4907,
+          "detail": "SCALAR SUBQUERY 74"
+        },
+        {
+          "id": 4916,
+          "parent": 4911,
+          "detail": "SCAN live_requests"
+        },
+        {
+          "id": 4943,
+          "parent": 4851,
+          "detail": "SCAN x"
+        },
+        {
+          "id": 4945,
+          "parent": 4851,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_agents_1 (agent_id=?)"
+        },
+        {
+          "id": 4952,
+          "parent": 4851,
+          "detail": "SEARCH ro USING INDEX sqlite_autoindex_agent_runtime_overrides_1 (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 4960,
+          "parent": 4851,
+          "detail": "SEARCH pe USING INDEX sqlite_autoindex_agent_runtime_policy_epochs_1 (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 4982,
+          "parent": 4851,
+          "detail": "CORRELATED SCALAR SUBQUERY 77"
+        },
+        {
+          "id": 4985,
+          "parent": 4982,
+          "detail": "CO-ROUTINE (subquery-76)"
+        },
+        {
+          "id": 4989,
+          "parent": 4985,
+          "detail": "SEARCH cm USING INDEX sqlite_autoindex_agent_connection_methods_1 (agent_id=?)"
+        },
+        {
+          "id": 5004,
+          "parent": 4982,
+          "detail": "SCAN (subquery-76)"
+        },
+        {
+          "id": 5020,
+          "parent": 4851,
+          "detail": "CORRELATED SCALAR SUBQUERY 79"
+        },
+        {
+          "id": 5023,
+          "parent": 5020,
+          "detail": "CO-ROUTINE (subquery-78)"
+        },
+        {
+          "id": 5027,
+          "parent": 5023,
+          "detail": "SEARCH ep USING INDEX idx_endpoint_selection (agent_id=?)"
+        },
+        {
+          "id": 5054,
+          "parent": 5023,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 5064,
+          "parent": 5020,
+          "detail": "SCAN (subquery-78)"
+        },
+        {
+          "id": 5080,
+          "parent": 4851,
+          "detail": "CORRELATED SCALAR SUBQUERY 81"
+        },
+        {
+          "id": 5083,
+          "parent": 5080,
+          "detail": "CO-ROUTINE (subquery-80)"
+        },
+        {
+          "id": 5090,
+          "parent": 5083,
+          "detail": "SEARCH ep USING INDEX idx_endpoint_selection (agent_id=?)"
+        },
+        {
+          "id": 5096,
+          "parent": 5083,
+          "detail": "SEARCH rp USING INDEX sqlite_autoindex_runtime_profiles_1 (profile_id=?)"
+        },
+        {
+          "id": 5118,
+          "parent": 5083,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 5119,
+          "parent": 5083,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 5129,
+          "parent": 5080,
+          "detail": "SCAN (subquery-80)"
+        },
+        {
+          "id": 5145,
+          "parent": 4851,
+          "detail": "CORRELATED SCALAR SUBQUERY 83"
+        },
+        {
+          "id": 5151,
+          "parent": 5145,
+          "detail": "SEARCH xp USING INDEX sqlite_autoindex_agent_execution_policies_1 (agent_id=?)"
+        },
+        {
+          "id": 5199,
+          "parent": 4848,
+          "detail": "MATERIALIZE endpoint_bindings"
+        },
+        {
+          "id": 5210,
+          "parent": 5199,
+          "detail": "SEARCH i USING INTEGER PRIMARY KEY (rowid=?)"
+        },
+        {
+          "id": 5213,
+          "parent": 5199,
+          "detail": "SEARCH b USING INDEX idx_execution_bindings_executor (server_id=?)"
+        },
+        {
+          "id": 5218,
+          "parent": 5199,
+          "detail": "SEARCH e USING INDEX sqlite_autoindex_execution_executors_1 (server_id=? AND executor_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5226,
+          "parent": 5199,
+          "detail": "USE TEMP B-TREE FOR GROUP BY"
+        },
+        {
+          "id": 5278,
+          "parent": 4848,
+          "detail": "SCAN ep"
+        },
+        {
+          "id": 5291,
+          "parent": 4848,
+          "detail": "SEARCH af USING AUTOMATIC COVERING INDEX (agent_id=?)"
+        },
+        {
+          "id": 5295,
+          "parent": 4848,
+          "detail": "SEARCH rp USING INDEX sqlite_autoindex_runtime_profiles_1 (profile_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5315,
+          "parent": 4848,
+          "detail": "SEARCH eb USING AUTOMATIC COVERING INDEX (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5363,
+          "parent": 4848,
+          "detail": "CORRELATED SCALAR SUBQUERY 88"
+        },
+        {
+          "id": 5366,
+          "parent": 5363,
+          "detail": "CO-ROUTINE (subquery-87)"
+        },
+        {
+          "id": 5370,
+          "parent": 5366,
+          "detail": "SEARCH g USING INDEX idx_runtime_grant_actor (actor_agent_id=? AND endpoint_id=? AND revoked_at=?)"
+        },
+        {
+          "id": 5374,
+          "parent": 5366,
+          "detail": "LIST SUBQUERY 86"
+        },
+        {
+          "id": 5377,
+          "parent": 5374,
+          "detail": "SCAN actors"
+        },
+        {
+          "id": 5416,
+          "parent": 5366,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        },
+        {
+          "id": 5426,
+          "parent": 5363,
+          "detail": "SCAN (subquery-87)"
+        },
+        {
+          "id": 5464,
+          "parent": 4367,
+          "detail": "MATERIALIZE recipient_bindings"
+        },
+        {
+          "id": 5475,
+          "parent": 5464,
+          "detail": "SEARCH i USING INTEGER PRIMARY KEY (rowid=?)"
+        },
+        {
+          "id": 5478,
+          "parent": 5464,
+          "detail": "SEARCH b USING INDEX sqlite_autoindex_execution_bindings_2 (server_id=?)"
+        },
+        {
+          "id": 5483,
+          "parent": 5464,
+          "detail": "SEARCH ep USING INDEX sqlite_autoindex_agent_endpoints_1 (endpoint_id=?)"
+        },
+        {
+          "id": 5530,
+          "parent": 4367,
+          "detail": "MATERIALIZE stream_failures"
+        },
+        {
+          "id": 5541,
+          "parent": 5530,
+          "detail": "SCAN s USING INDEX sqlite_autoindex_execution_sessions_1"
+        },
+        {
+          "id": 5551,
+          "parent": 5530,
+          "detail": "SEARCH w USING INDEX sqlite_autoindex_execution_event_watermarks_1 (server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?)"
+        },
+        {
+          "id": 5572,
+          "parent": 5530,
+          "detail": "SEARCH e USING INDEX sqlite_autoindex_execution_event_ingress_1 (server_id=? AND executor_id=? AND session_id=? AND stream_epoch=? AND sequence<?)"
+        },
+        {
+          "id": 5613,
+          "parent": 5530,
+          "detail": "SEARCH k USING AUTOMATIC COVERING INDEX (session_id=? AND executor_id=? AND server_id=?)"
+        },
+        {
+          "id": 5677,
+          "parent": 4367,
+          "detail": "SCAN r"
+        },
+        {
+          "id": 5679,
+          "parent": 4367,
+          "detail": "SEARCH ap USING INDEX sqlite_autoindex_approvals_1 (approval_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5687,
+          "parent": 4367,
+          "detail": "SEARCH turn USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5699,
+          "parent": 4367,
+          "detail": "SEARCH x USING INDEX sqlite_autoindex_execution_domain_deliveries_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5711,
+          "parent": 4367,
+          "detail": "SEARCH d USING INDEX sqlite_autoindex_delivery_outbox_1 (operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5719,
+          "parent": 4367,
+          "detail": "SEARCH msg USING INDEX sqlite_autoindex_messages_1 (message_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5737,
+          "parent": 4367,
+          "detail": "SEARCH live USING AUTOMATIC COVERING INDEX (canonical_request_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5744,
+          "parent": 4367,
+          "detail": "SEARCH s USING INDEX sqlite_autoindex_execution_sessions_1 (server_id=? AND executor_id=? AND session_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5758,
+          "parent": 4367,
+          "detail": "SEARCH b USING INDEX sqlite_autoindex_execution_bindings_3 (server_id=? AND executor_id=? AND binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5770,
+          "parent": 4367,
+          "detail": "SEARCH ep USING INDEX sqlite_autoindex_agent_endpoints_1 (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5778,
+          "parent": 4367,
+          "detail": "SEARCH subject USING INDEX sqlite_autoindex_agents_1 (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5786,
+          "parent": 4367,
+          "detail": "SEARCH ex USING INDEX sqlite_autoindex_execution_executors_1 (server_id=? AND executor_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5796,
+          "parent": 4367,
+          "detail": "SEARCH wb USING INDEX sqlite_autoindex_execution_workspace_bindings_2 (server_id=? AND executor_id=? AND workspace_binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5808,
+          "parent": 4367,
+          "detail": "SEARCH real USING INDEX sqlite_autoindex_execution_realizations_1 (server_id=? AND executor_id=? AND realization_ref=?) LEFT-JOIN"
+        },
+        {
+          "id": 5820,
+          "parent": 4367,
+          "detail": "SEARCH opening USING INDEX sqlite_autoindex_execution_operations_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5832,
+          "parent": 4367,
+          "detail": "SEARCH ci USING INDEX sqlite_autoindex_execution_client_intents_2 (server_id=? AND intent_id>? AND intent_id<?) LEFT-JOIN"
+        },
+        {
+          "id": 5852,
+          "parent": 4367,
+          "detail": "SEARCH dispatch USING INDEX sqlite_autoindex_execution_dispatch_outbox_1 (server_id=? AND executor_id=? AND operation_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5864,
+          "parent": 4367,
+          "detail": "SEARCH rev USING INDEX sqlite_autoindex_execution_agent_revisions_1 (server_id=? AND agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 5881,
+          "parent": 4367,
+          "detail": "BLOOM FILTER ON latest (server_id=? AND executor_id=? AND session_id=? AND position=?)"
+        },
+        {
+          "id": 5907,
+          "parent": 4367,
+          "detail": "SEARCH latest USING AUTOMATIC PARTIAL COVERING INDEX (server_id=? AND executor_id=? AND session_id=? AND position=?) LEFT-JOIN"
+        },
+        {
+          "id": 5922,
+          "parent": 4367,
+          "detail": "BLOOM FILTER ON previous (server_id=? AND executor_id=? AND session_id=? AND lease_serial=?)"
+        },
+        {
+          "id": 5944,
+          "parent": 4367,
+          "detail": "SEARCH previous USING AUTOMATIC COVERING INDEX (server_id=? AND executor_id=? AND session_id=? AND lease_serial=?) LEFT-JOIN"
+        },
+        {
+          "id": 5965,
+          "parent": 4367,
+          "detail": "BLOOM FILTER ON receipt (server_id=? AND executor_id=? AND operation_id=? AND position=?)"
+        },
+        {
+          "id": 5982,
+          "parent": 4367,
+          "detail": "SEARCH receipt USING AUTOMATIC PARTIAL COVERING INDEX (server_id=? AND executor_id=? AND operation_id=? AND position=?) LEFT-JOIN"
+        },
+        {
+          "id": 6006,
+          "parent": 4367,
+          "detail": "SEARCH runtime USING AUTOMATIC COVERING INDEX (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6022,
+          "parent": 4367,
+          "detail": "SEARCH subject_facts USING AUTOMATIC COVERING INDEX (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6038,
+          "parent": 4367,
+          "detail": "SEARCH initiator USING AUTOMATIC COVERING INDEX (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6057,
+          "parent": 4367,
+          "detail": "SEARCH operator USING AUTOMATIC PARTIAL COVERING INDEX (agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6076,
+          "parent": 4367,
+          "detail": "SEARCH recipient_binding USING AUTOMATIC COVERING INDEX (agent_id=? AND binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6108,
+          "parent": 4367,
+          "detail": "SEARCH delegated USING AUTOMATIC COVERING INDEX (endpoint_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6116,
+          "parent": 4367,
+          "detail": "SEARCH containment USING INDEX sqlite_autoindex_execution_session_containment_1 (server_id=? AND executor_id=? AND session_id=? AND owner_generation=?) LEFT-JOIN"
+        },
+        {
+          "id": 6138,
+          "parent": 4367,
+          "detail": "BLOOM FILTER ON failure (server_id=? AND executor_id=? AND session_id=? AND owner_generation=?)"
+        },
+        {
+          "id": 6150,
+          "parent": 4367,
+          "detail": "SEARCH failure USING AUTOMATIC COVERING INDEX (server_id=? AND executor_id=? AND session_id=? AND owner_generation=?) LEFT-JOIN"
+        },
+        {
+          "id": 6165,
+          "parent": 4367,
+          "detail": "SEARCH recovery USING INDEX sqlite_autoindex_execution_agent_recovery_1 (server_id=? AND executor_id=? AND agent_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6180,
+          "parent": 4367,
+          "detail": "SEARCH lane USING INDEX sqlite_autoindex_execution_control_lanes_1 (server_id=? AND executor_id=? AND binding_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 6195,
+          "parent": 4367,
+          "detail": "SEARCH ticket USING INDEX sqlite_autoindex_execution_link_tickets_1 (ticket_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 7164,
+          "parent": 4367,
+          "detail": "CORRELATED SCALAR SUBQUERY 96"
+        },
+        {
+          "id": 7170,
+          "parent": 7164,
+          "detail": "SCAN o"
+        },
+        {
+          "id": 7416,
+          "parent": 7164,
+          "detail": "SEARCH q USING INDEX sqlite_autoindex_execution_dispatch_outbox_1 (server_id=? AND executor_id=? AND operation_id=?)"
+        },
+        {
+          "id": 7802,
+          "parent": 4132,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 7803,
+          "parent": 7802,
+          "detail": "COMPOUND QUERY"
+        },
+        {
+          "id": 7804,
+          "parent": 7803,
+          "detail": "LEFT-MOST SUBQUERY"
+        },
+        {
+          "id": 7807,
+          "parent": 7804,
+          "detail": "MATERIALIZE facts"
+        },
+        {
+          "id": 7810,
+          "parent": 7807,
+          "detail": "MATERIALIZE selected"
+        },
+        {
+          "id": 7821,
+          "parent": 7810,
+          "detail": "SCAN s"
+        },
+        {
+          "id": 7826,
+          "parent": 7810,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_agents_1 (agent_id=?)"
+        },
+        {
+          "id": 7831,
+          "parent": 7810,
+          "detail": "SEARCH i USING INDEX observation_instances_source (source_id=?)"
+        },
+        {
+          "id": 7840,
+          "parent": 7810,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_observation_heads_1 (observed_instance_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 7848,
+          "parent": 7810,
+          "detail": "SEARCH t USING INDEX sqlite_autoindex_observation_tokens_1 (token_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 7873,
+          "parent": 7810,
+          "detail": "CORRELATED SCALAR SUBQUERY 99"
+        },
+        {
+          "id": 7878,
+          "parent": 7873,
+          "detail": "SEARCH w USING COVERING INDEX sqlite_autoindex_observation_source_workspaces_1 (source_id=?)"
+        },
+        {
+          "id": 7923,
+          "parent": 7807,
+          "detail": "MATERIALIZE continuity"
+        },
+        {
+          "id": 7932,
+          "parent": 7923,
+          "detail": "SEARCH i USING COVERING INDEX observation_instances_source (source_id=?)"
+        },
+        {
+          "id": 7936,
+          "parent": 7923,
+          "detail": "LIST SUBQUERY 101"
+        },
+        {
+          "id": 7940,
+          "parent": 7936,
+          "detail": "SCAN selected"
+        },
+        {
+          "id": 7949,
+          "parent": 7936,
+          "detail": "USE TEMP B-TREE FOR DISTINCT"
+        },
+        {
+          "id": 7957,
+          "parent": 7923,
+          "detail": "SEARCH h USING INDEX sqlite_autoindex_observation_heads_1 (observed_instance_id=?)"
+        },
+        {
+          "id": 7999,
+          "parent": 7807,
+          "detail": "SCAN v"
+        },
+        {
+          "id": 8012,
+          "parent": 7807,
+          "detail": "SEARCH c USING AUTOMATIC COVERING INDEX (source_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 8099,
+          "parent": 7804,
+          "detail": "SCAN v"
+        },
+        {
+          "id": 8101,
+          "parent": 7804,
+          "detail": "SEARCH a USING INDEX sqlite_autoindex_observation_attention_anchors_1 (observed_instance_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 8130,
+          "parent": 7803,
+          "detail": "UNION ALL"
+        },
+        {
+          "id": 8133,
+          "parent": 8130,
+          "detail": "MATERIALIZE completion_provenance"
+        },
+        {
+          "id": 8136,
+          "parent": 8133,
+          "detail": "MATERIALIZE completions"
+        },
+        {
+          "id": 8140,
+          "parent": 8136,
+          "detail": "SCAN e USING INDEX observation_completion_publisher"
+        },
+        {
+          "id": 8146,
+          "parent": 8136,
+          "detail": "LIST SUBQUERY 104"
+        },
+        {
+          "id": 8149,
+          "parent": 8146,
+          "detail": "SCAN selected"
+        },
+        {
+          "id": 8189,
+          "parent": 8133,
+          "detail": "SCAN e"
+        },
+        {
+          "id": 8209,
+          "parent": 8133,
+          "detail": "SEARCH v USING AUTOMATIC COVERING INDEX (source_id=? AND observed_instance_id=? AND agent_id=? AND workspace_id=?)"
+        },
+        {
+          "id": 8288,
+          "parent": 8130,
+          "detail": "SCAN e"
+        },
+        {
+          "id": 8290,
+          "parent": 8130,
+          "detail": "SEARCH t USING INDEX sqlite_autoindex_observation_tokens_1 (token_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 8332,
+          "parent": 3600,
+          "detail": "SCAN projected"
+        },
+        {
+          "id": 8334,
+          "parent": 3600,
+          "detail": "SCAN json_each VIRTUAL TABLE INDEX 1:"
+        },
+        {
+          "id": 8351,
+          "parent": 3599,
+          "detail": "SCAN o"
+        },
+        {
+          "id": 8353,
+          "parent": 3599,
+          "detail": "SEARCH p USING INDEX sqlite_autoindex_attention_preferences_1 (principal=? AND attention_id=?) LEFT-JOIN"
+        },
+        {
+          "id": 8382,
+          "parent": 2220,
+          "detail": "SCAN viewing"
+        },
+        {
+          "id": 8399,
+          "parent": 2219,
+          "detail": "SCAN filtered"
+        }
+      ]
+    }
+  ],
+  "finished_at": "2026-11-07T02:54:07.807476+00:00",
+  "factory_closed": true
+}

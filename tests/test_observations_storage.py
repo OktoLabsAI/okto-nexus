@@ -87,7 +87,10 @@ def test_upgrade_163_additive_no_seed_authority_and_repository_wiring(tmp_config
         with factory.unit_of_work() as uow:
             seed(uow)
         before = snapshot(factory)
-        assert MigrationRunner(factory).apply() == [164]
+        expected = sorted(int(path.name.split('_')[0]) for path in _default_migrations_dir().glob('*.sql')
+                          if int(path.name.split('_')[0]) > 163)
+        assert expected[:2] == [164, 165]
+        assert MigrationRunner(factory).apply() == expected
         after = snapshot(factory)
         for name in before:
             if name != 'schema_migrations':

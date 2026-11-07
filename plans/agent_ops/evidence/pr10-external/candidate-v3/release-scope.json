@@ -1,0 +1,27 @@
+{
+  "candidate_wheels": [
+    "48eee2b5136f40ed3f37e4df73896d8d4d91bbc064d2cf918d2dfa85c461292d",
+    "ed6223c0de0d333e7fd108175d1f15dd0a4e72c8e489782ac9869e0284f9a245",
+    "a5d040eb7bce0deffdbf24f3506000eb5e493e9f36d8cf2116b7057e57746d7c"
+  ],
+  "counts": {
+    "python": 497,
+    "migrations": 165,
+    "static": 7,
+    "total": 672
+  },
+  "changed_v1_to_v2": [
+    "adapters/outbound/sqlite/attention.py",
+    "adapters/outbound/sqlite/attention_external.py",
+    "application/attention_external.py",
+    "application/observations.py"
+  ],
+  "changed_v2_to_v3": [
+    "adapters/outbound/sqlite/attention.py"
+  ],
+  "unchanged_static_assets": 7,
+  "migrations_unchanged_between_candidates": true,
+  "current_source_and_final_installed_bytes_verified": true,
+  "browser_scope": "Real browser campaign used V1; all frontend assets unchanged through V3. Four backend files changed and affected contracts are separately requalified.",
+  "pure_correlation_scope": "Domain only; unchanged since V1 and not OBS12 acceptance."
+}

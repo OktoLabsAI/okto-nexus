@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="26" time="191.042" timestamp="2026-11-06T23:17:43.927160-03:00" hostname="Alienware_m15"><testcase classname="tests.test_observation_summary_http" name="test_read_endpoints_require_canonical_read_authority[missing-summary]" time="10.078" /><testcase classname="tests.test_observation_summary_http" name="test_read_endpoints_require_canonical_read_authority[missing-detail]" time="6.582" /><testcase classname="tests.test_observation_summary_http" name="test_read_endpoints_require_canonical_read_authority[publisher-summary]" time="6.495" /><testcase classname="tests.test_observation_summary_http" name="test_read_endpoints_require_canonical_read_authority[publisher-detail]" time="5.840" /><testcase classname="tests.test_observation_summary_http" name="test_read_endpoints_require_canonical_read_authority[invalid-summary]" time="6.046" /><testcase classname="tests.test_observation_summary_http" name="test_read_endpoints_require_canonical_read_authority[invalid-detail]" time="6.215" /><testcase classname="tests.test_observation_summary_http" name="test_summary_and_exact_inspection_share_current_facts_without_writes" time="6.349" /><testcase classname="tests.test_observation_summary_http" name="test_complete_summary_is_independent_of_bounded_instance_page" time="6.588" /><testcase classname="tests.test_observation_summary_http" name="test_self_scope_cannot_inspect_or_count_another_agent" time="7.824" /><testcase classname="tests.test_observation_summary_http" name="test_operator_filters_use_the_same_complete_relation" time="8.234" /><testcase classname="tests.test_observation_summary_http" name="test_expiry_changes_projection_without_declaring_idle_or_writing" time="5.790" /><testcase classname="tests.test_observation_summary_http" name="test_disabled_or_revoked_observation_is_historical_not_current[feature]" time="5.514" /><testcase classname="tests.test_observation_summary_http" name="test_disabled_or_revoked_observation_is_historical_not_current[source]" time="7.760" /><testcase classname="tests.test_observation_summary_http" name="test_disabled_or_revoked_observation_is_historical_not_current[token]" time="5.966" /><testcase classname="tests.test_observation_summary_http" name="test_disabled_or_revoked_observation_is_historical_not_current[agent]" time="5.993" /><testcase classname="tests.test_observation_summary_http" name="test_rotation_cannot_return_old_occupant_as_current" time="7.758" /><testcase classname="tests.test_observation_summary_http" name="test_summary_rejects_pagination_or_ambiguous_filters[limit=1]" time="6.567" /><testcase classname="tests.test_observation_summary_http" name="test_summary_rejects_pagination_or_ambiguous_filters[after=x]" time="6.196" /><testcase classname="tests.test_observation_summary_http" name="test_summary_rejects_pagination_or_ambiguous_filters[agent_id=a&amp;agent_id=b]" time="5.692" /><testcase classname="tests.test_observation_summary_http" name="test_summary_rejects_pagination_or_ambiguous_filters[unknown=1]" time="6.160" /><testcase classname="tests.test_observation_summary_http" name="test_detail_rejects_query_and_unknown_reference" time="6.370" /><testcase classname="tests.test_observation_summary_http" name="test_read_storage_failure_is_not_an_empty_summary_or_leaked_error[summary]" time="6.401" /><testcase classname="tests.test_observation_summary_http" name="test_read_storage_failure_is_not_an_empty_summary_or_leaked_error[detail]" time="5.404" /><testcase classname="tests.test_observation_summary_http" name="test_repeated_completion_stays_observational_and_text_stays_data" time="5.969" /><testcase classname="tests.execution_r4.test_external_observation_isolation" name="test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]" time="13.255"><failure message="assert 2 == 1">observed_runtime = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10571/test_ex...ocals&gt;.NativeFactory object at 0x0000018CFA7ED160&gt;, &lt;function observed_runtime.&lt;locals&gt;.publish at 0x0000018CFC32E020&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000018CF7CC10F0&gt;
+disable_observations = False
+
+    @pytest.mark.parametrize('disable_observations', [False, True])
+    def test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work(observed_runtime, monkeypatch, disable_observations):
+        setup, binding, native, publish = observed_runtime
+        deps, _, client, headers, *_ = setup
+        for state in ('working', 'blocked', 'idle'):
+            response = publish(state)
+            assert response.status_code == 200, response.text
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            for table in ('messages', 'message_deliveries', 'delivery_outbox', 'execution_operations',
+                          'execution_sessions', 'handoffs', 'approvals'):
+                assert uow.connection.execute('SELECT count(*) FROM ' + table).fetchone()[0] == 0, table
+        assert native.opens == 0
+        if disable_observations:
+            deps.config.feature_observations = False
+            assert publish('blocked').status_code == 409
+        first = send(setup, monkeypatch)
+        assert first['ok'], first
+        turn = current_turn(setup)
+        wait_receipt(setup, turn, stages=('SUBMITTED',))
+        second = send(setup, monkeypatch)
+        assert second['ok'], second
+        assert native.opens == 1 and len(native.native.sent) == 1
+    
+        if not disable_observations:
+            response = publish('idle', current_completion_ref='terminal-done-is-not-work-result')
+            assert response.status_code == 200, response.text
+            response = client.get('/api/v1/attention?kind=external_completion_unseen', headers=headers['operator'])
+            assert response.status_code == 200, response.text
+            items = response.json()['data']['items']
+            assert len(items) == 1 and items[0]['allowed_actions'] == ['inspect_external_observation']
+            item = items[0]
+            response = client.post('/api/v1/attention/' + item['attention_id'] + '/seen', headers=headers['operator'],
+                json=dict(source_revision=item['source_revision'], preference_revision=item['seen_state']['revision'], seen=True))
+            assert response.status_code == 200, response.text
+        response = client.get(MANAGEMENT + '/summary', headers=headers['operator'])
+        assert response.status_code == 200, response.text
+        assert response.json()['data']['activity']['unknown' if disable_observations else 'idle'] == 1
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            receipts = uow.connection.execute('SELECT stage FROM execution_receipts WHERE operation_id=? '
+                'ORDER BY receipt_revision DESC LIMIT 1', (turn['operation_id'],)).fetchone()
+            assert receipts[0] == 'SUBMITTED'
+&gt;           assert uow.connection.execute("SELECT count(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+E           assert 2 == 1
+
+tests\execution_r4\test_external_observation_isolation.py:114: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_external_observation_isolation" name="test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]" time="9.593"><failure message="assert 2 == 1">observed_runtime = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10571/test_ex...ocals&gt;.NativeFactory object at 0x0000018CF54F4980&gt;, &lt;function observed_runtime.&lt;locals&gt;.publish at 0x0000018CFAB8C680&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000018CFCB0DD30&gt;
+disable_observations = True
+
+    @pytest.mark.parametrize('disable_observations', [False, True])
+    def test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work(observed_runtime, monkeypatch, disable_observations):
+        setup, binding, native, publish = observed_runtime
+        deps, _, client, headers, *_ = setup
+        for state in ('working', 'blocked', 'idle'):
+            response = publish(state)
+            assert response.status_code == 200, response.text
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            for table in ('messages', 'message_deliveries', 'delivery_outbox', 'execution_operations',
+                          'execution_sessions', 'handoffs', 'approvals'):
+                assert uow.connection.execute('SELECT count(*) FROM ' + table).fetchone()[0] == 0, table
+        assert native.opens == 0
+        if disable_observations:
+            deps.config.feature_observations = False
+            assert publish('blocked').status_code == 409
+        first = send(setup, monkeypatch)
+        assert first['ok'], first
+        turn = current_turn(setup)
+        wait_receipt(setup, turn, stages=('SUBMITTED',))
+        second = send(setup, monkeypatch)
+        assert second['ok'], second
+        assert native.opens == 1 and len(native.native.sent) == 1
+    
+        if not disable_observations:
+            response = publish('idle', current_completion_ref='terminal-done-is-not-work-result')
+            assert response.status_code == 200, response.text
+            response = client.get('/api/v1/attention?kind=external_completion_unseen', headers=headers['operator'])
+            assert response.status_code == 200, response.text
+            items = response.json()['data']['items']
+            assert len(items) == 1 and items[0]['allowed_actions'] == ['inspect_external_observation']
+            item = items[0]
+            response = client.post('/api/v1/attention/' + item['attention_id'] + '/seen', headers=headers['operator'],
+                json=dict(source_revision=item['source_revision'], preference_revision=item['seen_state']['revision'], seen=True))
+            assert response.status_code == 200, response.text
+        response = client.get(MANAGEMENT + '/summary', headers=headers['operator'])
+        assert response.status_code == 200, response.text
+        assert response.json()['data']['activity']['unknown' if disable_observations else 'idle'] == 1
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            receipts = uow.connection.execute('SELECT stage FROM execution_receipts WHERE operation_id=? '
+                'ORDER BY receipt_revision DESC LIMIT 1', (turn['operation_id'],)).fetchone()
+            assert receipts[0] == 'SUBMITTED'
+&gt;           assert uow.connection.execute("SELECT count(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+E           assert 2 == 1
+
+tests\execution_r4\test_external_observation_isolation.py:114: AssertionError</failure></testcase></testsuite></testsuites>

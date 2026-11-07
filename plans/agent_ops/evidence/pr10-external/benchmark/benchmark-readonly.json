@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "phase": "read-only",
+  "started_at": "2026-11-07T02:51:30.798675+00:00",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.13.1",
+  "scope": "Synthetic source checkout benchmark, real SQLite/WAL and application services; no HTTP server, lifespan, harness discovery or provider.",
+  "quotas": {
+    "observation_source_rate_per_minute": 6000,
+    "observation_source_burst": 1024,
+    "observation_agent_rate_per_minute": 60000,
+    "observation_agent_burst": 4096,
+    "observation_installation_rate_per_minute": 600000,
+    "observation_installation_burst": 16384,
+    "observation_max_sources_per_agent": 1024,
+    "observation_max_sources": 4096,
+    "observation_max_instances": 4096,
+    "observation_max_tokens_per_source": 64,
+    "observation_max_events": 20000
+  },
+  "repetitions": 4,
+  "measurement_notes": [
+    "Warm pooled connection; per-operation first sample and later samples are retained separately.",
+    "Latency includes SQL trace counting overhead; no SQL text or parameters are retained.",
+    "SELECT/CTE count excludes transaction open/close and does not count SQLite internal plan steps.",
+    "Seeded registration uses repository contracts in one UoW per cardinality; publication uses real authenticated ObservationService.publish.",
+    "SSE measurement uses the actual generator and SQLite in-process, not HTTP transport or browser.",
+    "The private database contains synthetic credential hashes and must not be collected as evidence."
+  ],
+  "stages": [
+    {
+      "instances": 4096,
+      "reads": {
+        "observation_list_200": {
+          "samples": [
+            {
+              "elapsed_ms": 51.32169998250902,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            },
+            {
+              "elapsed_ms": 40.928800008259714,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            },
+            {
+              "elapsed_ms": 37.72560000652447,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            },
+            {
+              "elapsed_ms": 41.6757000493817,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 41.30225002882071,
+          "minimum_ms": 37.72560000652447,
+          "maximum_ms": 51.32169998250902
+        },
+        "observation_detail": {
+          "samples": [
+            {
+              "elapsed_ms": 2.708999963942915,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            },
+            {
+              "elapsed_ms": 2.368199988268316,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            },
+            {
+              "elapsed_ms": 2.2785000037401915,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            },
+            {
+              "elapsed_ms": 2.1225999807938933,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 2.3233499960042536,
+          "minimum_ms": 2.1225999807938933,
+          "maximum_ms": 2.708999963942915
+        },
+        "observation_summary": {
+          "samples": [
+            {
+              "elapsed_ms": 896.3125000009313,
+              "cpu_ms": 796.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 955.1487000426278,
+              "cpu_ms": 812.5,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 896.9959999667481,
+              "cpu_ms": 812.5,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 932.8970999922603,
+              "cpu_ms": 828.125,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 914.9465499795042,
+          "minimum_ms": 896.3125000009313,
+          "maximum_ms": 955.1487000426278
+        },
+        "attention_all_kinds_50": {
+          "samples": [
+            {
+              "elapsed_ms": 5057.871200027876,
+              "cpu_ms": 4609.375,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            },
+            {
+              "elapsed_ms": 5066.942700010259,
+              "cpu_ms": 4500.0,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            },
+            {
+              "elapsed_ms": 5070.2433999977075,
+              "cpu_ms": 3812.5,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            },
+            {
+              "elapsed_ms": 5062.90199997602,
+              "cpu_ms": 3281.25,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            }
+          ],
+          "successful_samples": 0,
+          "median_ms": null,
+          "minimum_ms": null,
+          "maximum_ms": null
+        },
+        "attention_external_blocked_50": {
+          "samples": [
+            {
+              "elapsed_ms": 5071.467100002337,
+              "cpu_ms": 4125.0,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5077.543799998239,
+              "cpu_ms": 4375.0,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5059.7296000341885,
+              "cpu_ms": 3421.875,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5079.8523999983445,
+              "cpu_ms": 4484.375,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            }
+          ],
+          "successful_samples": 0,
+          "median_ms": null,
+          "minimum_ms": null,
+          "maximum_ms": null
+        },
+        "attention_external_completion_50": {
+          "samples": [
+            {
+              "elapsed_ms": 5088.427500042599,
+              "cpu_ms": 4109.375,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5072.833399986848,
+              "cpu_ms": 3781.25,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5068.4675999800675,
+              "cpu_ms": 3843.75,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5085.9224000014365,
+              "cpu_ms": 4203.125,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            }
+          ],
+          "successful_samples": 0,
+          "median_ms": null,
+          "minimum_ms": null,
+          "maximum_ms": null
+        }
+      }
+    }
+  ],
+  "storage_initial": {
+    "database_bytes": 13086720,
+    "wal_bytes": 0,
+    "shm_bytes": 32768,
+    "page_count": 3195,
+    "page_size": 4096,
+    "freelist_count": 0,
+    "rows": {
+      "observation_sources": 41,
+      "observation_instances": 4096,
+      "observation_tokens": 42,
+      "observation_heads": 4096,
+      "observation_attention_anchors": 4096,
+      "observation_rate_buckets": 50,
+      "events": 4198,
+      "attention_preferences": 0
+    },
+    "observation_events": {
+      "observation.activity": 3174,
+      "observation.completion": 1024
+    }
+  },
+  "storage_final_open": {
+    "database_bytes": 13086720,
+    "wal_bytes": 0,
+    "shm_bytes": 0,
+    "page_count": 3195,
+    "page_size": 4096,
+    "freelist_count": 0,
+    "rows": {
+      "observation_sources": 41,
+      "observation_instances": 4096,
+      "observation_tokens": 42,
+      "observation_heads": 4096,
+      "observation_attention_anchors": 4096,
+      "observation_rate_buckets": 50,
+      "events": 4198,
+      "attention_preferences": 0
+    },
+    "observation_events": {
+      "observation.activity": 3174,
+      "observation.completion": 1024
+    }
+  },
+  "status": "COMPLETED_WITH_RECORDED_MEASUREMENTS",
+  "finished_at": "2026-11-07T02:52:36.612933+00:00",
+  "factory_closed": true,
+  "storage_closed_file_bytes": {
+    "database": 13086720,
+    "wal": 0,
+    "shm": 0
+  }
+}

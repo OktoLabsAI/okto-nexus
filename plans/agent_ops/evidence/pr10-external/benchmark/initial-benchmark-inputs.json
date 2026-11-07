@@ -1,0 +1,35 @@
+{
+  "scope": "Source service/SQLite measurements, initial and V2 candidates; no DB/bearers retained",
+  "files": [
+    {
+      "path": "benchmark.py",
+      "bytes": 20128,
+      "sha256": "608cc92c955ca5249d50f19c3fc883457d064a55b8af39769276e922103e01f4"
+    },
+    {
+      "path": "profile_attention.py",
+      "bytes": 5169,
+      "sha256": "21e3e9246b329d6aa3ec059157f9af430c8ebd64cc713c72a55eddb09a6546ff"
+    },
+    {
+      "path": "benchmark-grow.json",
+      "bytes": 69328,
+      "sha256": "576a6db9d4965be1ab3f0cb078bf3e405a609e065d3e0e3869efdd0fee05b423"
+    },
+    {
+      "path": "benchmark-readonly.json",
+      "bytes": 16406,
+      "sha256": "849f24358b57b66349e8a4808026641f92b1e3bcf40aa8b37ead6cf71c7bfb37"
+    },
+    {
+      "path": "attention-profile.json",
+      "bytes": 139458,
+      "sha256": "f020152bc29d93c29c53c464f53dd60e59e7d5d838f8289515132837effab5d8"
+    },
+    {
+      "path": "benchmark-readonly-optimized.json",
+      "bytes": 16884,
+      "sha256": "f054a556aa924f5f85b20d7d18399322cdcd79bdcf91ded111dd644501deb2ff"
+    }
+  ]
+}

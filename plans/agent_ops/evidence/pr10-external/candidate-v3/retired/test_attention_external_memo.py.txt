@@ -1,0 +1,154 @@
+"""Request-local external reuse stays bounded and cannot retain authority."""
+import sqlite3
+from types import SimpleNamespace
+
+import pytest
+
+from okto_nexus.adapters.outbound.sqlite import attention as query_module
+from okto_nexus.adapters.outbound.sqlite import attention_external as external_adapter
+from okto_nexus.adapters.outbound.sqlite.attention import SqliteAttentionQueries
+from okto_nexus.application import attention_external as external_application
+from okto_nexus.domain.attention import normalize_filters
+from test_attention_external import external as _external_fixture
+from test_attention_external_query import mixed
+from test_observation_service import OPERATOR, obs as _obs_fixture, publish
+
+external, obs = _external_fixture, _obs_fixture
+NOW = '2026-01-01T00:00:00.000000Z'
+
+
+class FunctionConnection:
+    """Observe callback registration while still executing real SQLite SQL."""
+    def __init__(self):
+        self.connection = sqlite3.connect(':memory:')
+        self.functions = {}
+        self.callbacks = []
+
+    def create_function(self, name, arity, function, **kwargs):
+        self.functions[name] = function
+        if name == 'nexus_attention_project_v1' and function is not None:
+            self.callbacks.append(function)
+        return self.connection.create_function(name, arity, function, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self.connection, name)
+
+
+@pytest.fixture
+def callbacks(monkeypatch):
+    connection = FunctionConnection()
+    queries = SqliteAttentionQueries()
+    calls, clock = [], [0.0]
+    def project(value, observed_at, policy):
+        calls.append((value, observed_at, policy))
+        return []
+    monkeypatch.setattr(external_application, 'project', project)
+    monkeypatch.setattr(external_adapter, 'decode_facts', lambda value: value)
+    monkeypatch.setattr(query_module, 'time', SimpleNamespace(monotonic=lambda: clock[0]))
+    def relation(policy=None):
+        return queries._relation(SimpleNamespace(connection=connection),
+            filters=normalize_filters(dict(kind='external_blocked')),
+            now=NOW, config=policy, access=None, context=None)
+    yield SimpleNamespace(connection=connection, queries=queries, calls=calls, clock=clock, relation=relation)
+    connection.close()
+
+
+def test_memo_key_contains_facts_and_observation_time(callbacks):
+    env = callbacks
+    with env.relation():
+        project = env.connection.callbacks[-1]
+        assert project('external', '{"source":1}', NOW) == '[]'
+        assert project('external', '{"source":1}', NOW) == '[]'
+        assert project('external', '{"source":2}', NOW) == '[]'
+        assert project('external', '{"source":1}', '2026-01-01T00:00:01.000000Z') == '[]'
+    assert len(env.calls) == 3
+
+
+@pytest.mark.parametrize('bound', ['entries', 'bytes'])
+def test_memo_cap_does_not_change_results_or_discard_uncached_facts(callbacks, bound):
+    env = callbacks
+    facts = ['{"source":1}', '{"source":2}']
+    if bound == 'entries':
+        env.queries.EXTERNAL_MEMO_ENTRIES = 1
+    else:
+        env.queries.EXTERNAL_MEMO_BYTES = len(facts[0].encode()) + len(NOW.encode()) + len('[]'.encode())
+    with env.relation():
+        project = env.connection.callbacks[-1]
+        for value in facts + facts:
+            assert project('external', value, NOW) == '[]'
+    assert [value for value, _, _ in env.calls] == [{'source': 1}, {'source': 2}, {'source': 2}]
+
+
+def test_deadline_is_checked_before_serving_a_memo_hit(callbacks):
+    env = callbacks
+    with env.relation():
+        project = env.connection.callbacks[-1]
+        assert project('external', '{"source":1}', NOW) == '[]'
+        env.clock[0] = 5.0
+        with pytest.raises(TimeoutError):
+            project('external', '{"source":1}', NOW)
+    assert len(env.calls) == 1
+    assert env.queries.QUERY_SECONDS == 5.0
+
+
+@pytest.mark.parametrize('exceptional', [False, True])
+def test_exit_unregisters_callbacks_and_next_relation_uses_new_policy(callbacks, exceptional):
+    env = callbacks
+    class Interrupted(Exception):
+        pass
+    try:
+        with env.relation('first-policy'):
+            env.connection.callbacks[-1]('external', '{"source":1}', NOW)
+            if exceptional:
+                raise Interrupted
+    except Interrupted:
+        pass
+    assert env.connection.functions and all(value is None for value in env.connection.functions.values())
+    with pytest.raises(sqlite3.OperationalError):
+        env.connection.execute("SELECT nexus_attention_project_v1('external','{}',?)", (NOW,)).fetchone()
+    with env.relation('second-policy'):
+        env.connection.callbacks[-1]('external', '{"source":1}', NOW)
+    assert [policy for _, _, policy in env.calls] == ['first-policy', 'second-policy']
+
+
+def test_aggregate_and_page_share_projection_but_next_read_does_not(external, monkeypatch):
+    env = external
+    publish(env, state='blocked')
+    calls = []
+    original = external_application.project
+    def project(*args):
+        calls.append(1)
+        return original(*args)
+    monkeypatch.setattr(external_application, 'project', project)
+    first = env.attention.read(context=OPERATOR, filters=dict(kind='external_blocked'))
+    assert first['total'] == len(first['items']) == 1 and len(calls) == 1
+    second = env.attention.read(context=OPERATOR, filters=dict(kind='external_blocked'))
+    assert second == first and len(calls) == 2
+
+
+def test_memo_and_no_memo_return_identical_items_counts_cursors_and_preferences(external, monkeypatch):
+    env = external
+    mixed(env)
+    initial = env.attention.read(context=OPERATOR, filters=dict(state='all'), limit=200)
+    completion = next(item for item in initial['items'] if item['kind'] == 'external_completion_unseen')
+    env.attention.mark_seen(context=OPERATOR, attention_id=completion['attention_id'],
+        source_revision=completion['source_revision'], preference_revision=0)
+    expected = env.attention.read(context=OPERATOR, filters=dict(state='all'), limit=200)
+    monkeypatch.setattr(SqliteAttentionQueries, 'EXTERNAL_MEMO_ENTRIES', 0)
+    actual = env.attention.read(context=OPERATOR, filters=dict(state='all'), limit=200)
+    assert actual == expected
+    assert any(item['seen_state']['seen'] for item in actual['items'])
+
+
+def test_preferences_and_revocation_are_fresh_between_cached_queries(external):
+    env = external
+    publish(env, state='blocked')
+    first = env.attention.read(context=OPERATOR, filters=dict(kind='external_blocked'))['items'][0]
+    env.attention.mark_seen(context=OPERATOR, attention_id=first['attention_id'],
+        source_revision=first['source_revision'], preference_revision=0)
+    second = env.attention.read(context=OPERATOR, filters=dict(kind='external_blocked'))['items'][0]
+    assert second['seen_state']['seen'] and second['active']
+    env.service.revoke_token(context=OPERATOR, source_id=env.source['source_id'], token_id=env.credential['token_id'])
+    assert env.attention.read(context=OPERATOR, filters=dict(kind='external_blocked'))['items'] == []
+    unavailable = env.attention.read(context=OPERATOR, filters=dict(kind='external_blocked', state='all'))['items'][0]
+    assert unavailable['freshness'] == 'unavailable' and unavailable['active'] is False

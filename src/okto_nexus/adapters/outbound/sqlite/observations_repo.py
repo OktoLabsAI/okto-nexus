@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import math
+import sqlite3
+import time
 
 from ....errors import ErrorCode, OktoNexusError
 
@@ -25,6 +27,34 @@ _ORPHAN_BUCKET = """(b.scope_kind='source' AND NOT EXISTS
 _SOURCE = """SELECT s.*, COALESCE((SELECT json_group_array(workspace_id) FROM
     (SELECT workspace_id FROM observation_source_workspaces WHERE source_id=s.source_id
      ORDER BY workspace_id)), '[]') AS allowed_workspace_ids FROM observation_sources s"""
+_COMPLETION_REFERENCE = """EXISTS(SELECT 1 FROM events e WHERE e.type='observation.completion'
+    AND json_extract(e.payload,'$.publisher_token_id')=t.token_id)"""
+
+# Shared facts for paged reads, exact inspection, full aggregation and attention.
+# None of the credential/permission facts in this relation are public DTO fields.
+CURRENT_FACTS_SQL = """SELECT i.*,s.agent_id,s.source_kind,s.registration_ref,s.registration_hash,
+    s.revision,s.enabled,s.revoked_at,s.created_at AS source_created_at,s.updated_at AS source_updated_at,
+    (SELECT json_group_array(workspace_id) FROM observation_source_workspaces w
+     WHERE w.source_id=s.source_id) AS allowed_workspace_ids,
+    a.is_active,a.api_key_hash,a.deleted_at,a.permissions,h.generation AS head_generation,h.source_revision,
+    h.publisher_token_id,h.sequence,h.report_hash,h.received_at,h.valid_until,h.report_json,
+    h.last_completion_ref,h.last_completion_received_at,t.revoked_at AS publisher_revoked_at
+    FROM observation_instances i JOIN observation_sources s USING(source_id)
+    JOIN agents a ON a.agent_id=s.agent_id LEFT JOIN observation_heads h USING(observed_instance_id)
+    LEFT JOIN observation_tokens t ON t.token_id=h.publisher_token_id"""
+
+
+def current_facts(row, *, source_last_received_at=None):
+    """Detach one private facts row; authorization/projection remain in application."""
+    instance = {key: row[key] for key in ('observed_instance_id', 'source_id', 'workspace_id',
+        'external_instance_ref', 'generation', 'created_at', 'updated_at')}
+    source = _source({key: row[key] for key in ('source_id', 'agent_id', 'source_kind',
+        'registration_ref', 'registration_hash', 'revision', 'enabled', 'revoked_at', 'allowed_workspace_ids')})
+    source.update(created_at=row['source_created_at'], updated_at=row['source_updated_at'])
+    return dict(instance=instance, source=source, agent=_agent(row),
+        head=_head(dict(row, generation=row['head_generation'])),
+        publisher_revoked=row['publisher_revoked_at'] is not None,
+        source_last_received_at=source_last_received_at)
 
 
 def _fail(code, reason):
@@ -264,7 +294,8 @@ class SqliteObservationRepo:
             _fail(ErrorCode.CONFLICT, 'OBSERVATION_TOKEN_SCOPE_CHANGED')
         self._prune_tokens(uow, now=now, limit=100, source_id=source_id)
         live, unreferenced = uow.connection.execute('SELECT coalesce(sum(revoked_at IS NULL AND expires_at>?),0),'
-            'coalesce(sum(NOT EXISTS(SELECT 1 FROM observation_heads h WHERE h.publisher_token_id=t.token_id)),0) '
+            'coalesce(sum(NOT EXISTS(SELECT 1 FROM observation_heads h WHERE h.publisher_token_id=t.token_id) '
+            'AND NOT ' + _COMPLETION_REFERENCE + '),0) '
             'FROM observation_tokens t WHERE source_id=?', (now, source_id)).fetchone()
         if live >= _positive(max_live, 'max_live', 64) or unreferenced >= max_live:
             _fail(ErrorCode.QUOTA_EXCEEDED, 'OBSERVATION_TOKEN_CAPACITY')
@@ -406,49 +437,76 @@ class SqliteObservationRepo:
             'last_refill_us=excluded.last_refill_us,full_at_us=excluded.full_at_us', staged)
         return dict(allowed=True, retry_after_seconds=0)
 
-    def list_current(self, uow, *, agent_id=None, workspace_id=None, source_id=None, after=None, limit=100):
+    def _current(self, uow, *, agent_id=None, workspace_id=None, source_id=None,
+                 observed_instance_id=None, after=None, limit=100):
         # One page-bounded SELECT. No expiry updates, credential touch or event.
-        rows = uow.connection.execute('SELECT i.*,s.agent_id,s.source_kind,s.registration_ref,s.registration_hash,'
-            's.revision,s.enabled,s.revoked_at,s.created_at AS source_created_at,s.updated_at AS source_updated_at,'
-            "(SELECT json_group_array(workspace_id) FROM observation_source_workspaces w WHERE w.source_id=s.source_id) AS allowed_workspace_ids,"
-            'a.is_active,a.api_key_hash,a.deleted_at,a.permissions,h.generation AS head_generation,h.source_revision,'
-            'h.publisher_token_id,h.sequence,h.report_hash,h.received_at,h.valid_until,h.report_json,'
-            'h.last_completion_ref,h.last_completion_received_at,'
-            't.revoked_at AS publisher_revoked_at FROM observation_instances i JOIN observation_sources s USING(source_id) '
-            'JOIN agents a ON a.agent_id=s.agent_id LEFT JOIN observation_heads h USING(observed_instance_id) '
-            'LEFT JOIN observation_tokens t ON t.token_id=h.publisher_token_id '
-            'WHERE (? IS NULL OR s.agent_id=?) AND (? IS NULL OR i.workspace_id=?) AND (? IS NULL OR i.source_id=?) '
+        rows = uow.connection.execute(CURRENT_FACTS_SQL +
+            ' WHERE (? IS NULL OR s.agent_id=?) AND (? IS NULL OR i.workspace_id=?) AND (? IS NULL OR i.source_id=?) '
+            'AND (? IS NULL OR i.observed_instance_id=?) '
             'AND (? IS NULL OR i.observed_instance_id>?) ORDER BY i.observed_instance_id LIMIT ?',
-            (agent_id, agent_id, workspace_id, workspace_id, source_id, source_id, after, after, _positive(limit, 'limit', 201))).fetchall()
+            (agent_id, agent_id, workspace_id, workspace_id, source_id, source_id,
+             observed_instance_id, observed_instance_id, after, after, _positive(limit, 'limit', 65537))).fetchall()
         # Aggregate only sources present on this page, across their instances;
         # an old instance cannot make an actively reporting source look silent.
         sources = sorted({row['source_id'] for row in rows})
-        continuity = {} if not sources else {row['source_id']: row['last_received_at'] for row in uow.connection.execute(
-            'SELECT i.source_id,max(h.received_at) AS last_received_at FROM observation_instances i '
-            'JOIN observation_heads h USING(observed_instance_id) WHERE i.source_id IN (' + ','.join('?' for _ in sources) +
-            ') GROUP BY i.source_id', sources)}
-        result = []
-        for row in rows:
-            instance = {key: row[key] for key in ('observed_instance_id', 'source_id', 'workspace_id', 'external_instance_ref', 'generation', 'created_at', 'updated_at')}
-            source = _source({key: row[key] for key in ('source_id', 'agent_id', 'source_kind', 'registration_ref', 'registration_hash', 'revision', 'enabled', 'revoked_at', 'allowed_workspace_ids')})
-            source.update(created_at=row['source_created_at'], updated_at=row['source_updated_at'])
-            head = _head(dict(row, generation=row['head_generation']))
-            result.append(dict(instance=instance, source=source, agent=_agent(row), head=head,
-                               publisher_revoked=row['publisher_revoked_at'] is not None,
-                               source_last_received_at=continuity.get(row['source_id'])))
-        return result
+        if len(sources) <= 201:
+            continuity = {} if not sources else {row['source_id']: row['last_received_at'] for row in uow.connection.execute(
+                'SELECT i.source_id,max(h.received_at) AS last_received_at FROM observation_instances i '
+                'JOIN observation_heads h USING(observed_instance_id) WHERE i.source_id IN (' + ','.join('?' for _ in sources) +
+                ') GROUP BY i.source_id', sources)}
+        else:
+            continuity = {row['source_id']: row['last_received_at'] for row in uow.connection.execute(
+                'SELECT i.source_id,max(h.received_at) AS last_received_at FROM observation_instances i '
+                'JOIN observation_heads h USING(observed_instance_id) JOIN observation_sources s USING(source_id) '
+                'WHERE (? IS NULL OR s.agent_id=?) AND (? IS NULL OR i.source_id=?) GROUP BY i.source_id',
+                (agent_id, agent_id, source_id, source_id))}
+        return [current_facts(row, source_last_received_at=continuity.get(row['source_id'])) for row in rows]
+
+    def list_current(self, uow, *, agent_id=None, workspace_id=None, source_id=None, after=None, limit=100):
+        return self._current(uow, agent_id=agent_id, workspace_id=workspace_id, source_id=source_id,
+                             after=after, limit=_positive(limit, 'limit', 201))
+
+    def get_current(self, uow, *, observed_instance_id, agent_id=None):
+        rows = self._current(uow, observed_instance_id=observed_instance_id, agent_id=agent_id, limit=1)
+        return rows[0] if rows else None
+
+    def all_current(self, uow, *, agent_id=None, workspace_id=None, source_id=None):
+        # The installation admission ceiling is 65536, independent of a later
+        # lower config value. Never report a partial aggregate as complete.
+        deadline = time.monotonic() + 5.0
+        expired = False
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() >= deadline
+            return int(expired)
+        uow.connection.set_progress_handler(interrupt, 1000)
+        try:
+            rows = self._current(uow, agent_id=agent_id, workspace_id=workspace_id, source_id=source_id, limit=65537)
+            if interrupt():
+                raise OktoNexusError('OBSERVATION_QUERY_BUDGET', 'Observation summary exceeded its processing budget.', {})
+        except sqlite3.Error:
+            if expired:
+                raise OktoNexusError('OBSERVATION_QUERY_BUDGET', 'Observation summary exceeded its processing budget.', {}) from None
+            raise
+        finally:
+            uow.connection.set_progress_handler(None, 0)
+        if len(rows) > 65536:
+            _fail(ErrorCode.DB_ERROR, 'OBSERVATION_AGGREGATE_LIMIT')
+        return rows
 
     def _prune_tokens(self, uow, *, now, limit, source_id=None):
         return uow.connection.execute('DELETE FROM observation_tokens WHERE token_id IN '
             '(SELECT t.token_id FROM observation_tokens t WHERE (? IS NULL OR source_id=?) '
             'AND (expires_at<=? OR revoked_at IS NOT NULL) AND NOT EXISTS '
             '(SELECT 1 FROM observation_heads h WHERE h.publisher_token_id=t.token_id) '
+            'AND NOT ' + _COMPLETION_REFERENCE + ' '
             'ORDER BY expires_at,token_id LIMIT ?)', (source_id, source_id, now, limit)).rowcount
 
     def count_prunable(self, uow, *, now):
         now = _stamp(now)
         tokens = uow.connection.execute('SELECT count(*) FROM observation_tokens t WHERE (expires_at<=? OR revoked_at IS NOT NULL) '
-            'AND NOT EXISTS(SELECT 1 FROM observation_heads h WHERE h.publisher_token_id=t.token_id)', (now,)).fetchone()[0]
+            'AND NOT EXISTS(SELECT 1 FROM observation_heads h WHERE h.publisher_token_id=t.token_id) '
+            'AND NOT ' + _COMPLETION_REFERENCE, (now,)).fetchone()[0]
         buckets = uow.connection.execute('SELECT count(*) FROM observation_rate_buckets b WHERE ' + _ORPHAN_BUCKET).fetchone()[0]
         return dict(tokens=tokens, rate_buckets=buckets)
 

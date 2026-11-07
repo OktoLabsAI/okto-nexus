@@ -67,6 +67,29 @@ test('exact operation and cleanup inspection send no productive action', async (
   });
 });
 
+test('external summary, bounded page and exact instance inspection are passive and scoped', async () => {
+  await capture(async requests => {
+    const controller = new AbortController();
+    await api.externalObservationSummary({agent_id: 'agent / 1', workspace_id: 'work&one', source_id: 'source/1'}, controller.signal);
+    await api.externalObservations({agent_id: 'agent / 1', workspace_id: 'work&one', after: 'instance/?previous', limit: 20}, controller.signal);
+    await api.externalObservation('instance/selected', controller.signal);
+    const summary = new URL(requests[0].url, 'https://nexus.test');
+    assert.equal(summary.pathname, '/api/v1/observations/summary');
+    assert.equal(summary.searchParams.get('workspace_id'), 'work&one');
+    assert.equal(summary.searchParams.get('source_id'), 'source/1');
+    assert.equal(summary.searchParams.has('limit'), false);
+    const page = new URL(requests[1].url, 'https://nexus.test');
+    assert.equal(page.pathname, '/api/v1/observations');
+    assert.equal(page.searchParams.get('after'), 'instance/?previous');
+    assert.equal(page.searchParams.get('limit'), '20');
+    assert.equal(requests[2].url, '/api/v1/observations/instances/instance%2Fselected');
+    for (const request of requests) {
+      assert.equal(request.init.method, undefined); assert.equal(request.init.body, undefined);
+      assert.equal(request.init.signal, controller.signal); assert.equal(request.init.cache, 'no-store');
+    }
+  });
+});
+
 test('a late unauthorized response from an aborted scope cannot expire a newer session', async () => {
   const oldFetch = globalThis.fetch, oldWindow = globalThis.window;
   const events = [];

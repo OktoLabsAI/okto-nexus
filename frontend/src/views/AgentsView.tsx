@@ -2,6 +2,10 @@ import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
 import { displayName, otherMetadata, identityMetadata } from '../projectIdentity';
 import { AgentRuntimeAdministration } from '../components/AgentRuntimeAdministration';
 import { OneShotActivity } from '../components/OneShotActivity';
+import { ExternalAgentActivity } from '../components/ExternalObservations';
+import { useObservationRead } from '../hooks/useObservationRead';
+import { observationRefreshSeconds } from '../observationPresentation';
+import type { ObservationFilters } from '../observationTypes';
 import { AgentActionModal, AgentModalFooter, ModalCancelButton } from '../components/AgentActionModal';
 import { RuntimeRecovery } from "../components/RuntimeRecovery";
 // Agents & API keys (spec S2 / FR5): the AgentsModal mirror. The freshly
@@ -91,6 +95,9 @@ export function AgentsView({
 }) {
   const { confirm, dialog } = useConfirm({agentModal: true});
   const [tab, setTab] = useState<"agents" | "presets">("agents");
+  const observationFilters: ObservationFilters = workspace === 'all' ? {} : { workspace_id: workspace };
+  const observations = useObservationRead(tab === 'agents' ? observationFilters : null,
+    api.externalObservationSummary, observationRefreshSeconds);
   const [agents, setAgents] = useState<AgentRow[]>([]);
   const [presets, setPresets] = useState<PresetsPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -670,6 +677,7 @@ export function AgentsView({
         {/* ------------------------------------------------------------ */}
         {/* Agents tab — responsive card grid (4-col at 2xl)              */}
         {/* ------------------------------------------------------------ */}
+        {tab === 'agents' && observations.state.error && <p role="status" className="px-4 text-xs text-surface-600 dark:text-surface-400">{observations.state.error}</p>}
         {tab === "agents" && (
           <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 p-4"
@@ -729,6 +737,7 @@ export function AgentsView({
                         {agent.is_active ? "active" : "inactive"}
                       </span>
                     </div>
+                    <ExternalAgentActivity key={`${agent.agent_id}:${workspace}`} agentId={agent.agent_id} workspace={workspace} summary={observations.state} />
                     <div className="mt-auto pt-1 flex items-center gap-1">
                       <button
                         className={`${ICON_BTN} ${showEdit ? ICON_BTN_ACTIVE : ""}`}

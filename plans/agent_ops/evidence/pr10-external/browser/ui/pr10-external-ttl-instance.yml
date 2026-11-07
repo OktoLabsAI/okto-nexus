@@ -1,0 +1,262 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Agents
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces"
+        - option "Workspace 1"
+        - option "Workspace 2" [selected]
+      - generic [ref=e13]: ● Live
+      - button "Refresh Agents" [ref=e629] [cursor=pointer]
+      - button [ref=e19] [cursor=pointer]
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - heading "Observability" [level=3] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - button "Attention 0 need action, 4 to watch" [ref=e943] [cursor=pointer]:
+              - generic [ref=e34]: Attention
+              - generic "0 need action, 4 to watch" [ref=e944]: "4"
+          - listitem [ref=e35]:
+            - button "Graph" [ref=e36] [cursor=pointer]
+          - listitem [ref=e45]:
+            - button "Messages" [ref=e46] [cursor=pointer]
+          - listitem [ref=e51]:
+            - button "Handoffs" [ref=e52] [cursor=pointer]
+          - listitem [ref=e56]:
+            - button "Meta-harness" [ref=e57] [cursor=pointer]
+          - listitem [ref=e62]:
+            - button "Events" [ref=e63] [cursor=pointer]
+          - listitem [ref=e67]:
+            - button "Artifacts" [ref=e68] [cursor=pointer]
+          - listitem [ref=e74]:
+            - button "Workspaces" [ref=e75] [cursor=pointer]
+          - listitem [ref=e79]:
+            - button "Agents" [ref=e80] [cursor=pointer]
+          - listitem [ref=e87]:
+            - button "Registry" [ref=e88] [cursor=pointer]
+          - listitem [ref=e94]:
+            - button "Policies" [ref=e95] [cursor=pointer]
+          - listitem [ref=e99]:
+            - button "Guardrails" [ref=e100] [cursor=pointer]
+          - listitem [ref=e104]:
+            - button "Communication" [ref=e105] [cursor=pointer]
+          - listitem [ref=e109]:
+            - button "Approvals" [ref=e110] [cursor=pointer]
+          - listitem [ref=e115]:
+            - button "Runtimes" [ref=e116] [cursor=pointer]
+          - listitem [ref=e121]:
+            - button "Execution log" [ref=e122] [cursor=pointer]
+    - main [ref=e126]:
+      - generic [ref=e632]:
+        - generic [ref=e633]:
+          - generic [ref=e634]:
+            - button "Agents" [ref=e635] [cursor=pointer]
+            - button "Permission presets" [ref=e636] [cursor=pointer]
+          - button "New agent" [ref=e637] [cursor=pointer]
+        - generic [ref=e639]:
+          - generic [ref=e640]:
+            - generic "operator" [ref=e643]
+            - generic [ref=e644]: operator · no key
+            - generic [ref=e645]: last seen never
+            - generic [ref=e646]:
+              - 'generic "exe_21fd24b2ca9174704abab2a827ea9d03: Not configured · Last contact: never" [ref=e647]': Local · Not configured
+              - generic "Effective permissions" [ref=e648]: Full access
+              - generic [ref=e649]: active
+            - generic [ref=e650]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e651] [cursor=pointer]
+              - button "Permissions" [ref=e655] [cursor=pointer]
+              - button "Tags & outbound audience" [ref=e659] [cursor=pointer]
+              - button "Communication style (how the agent should communicate)" [ref=e664] [cursor=pointer]
+              - button "Connections for operator" [ref=e667] [cursor=pointer]
+              - button "Regenerate key" [ref=e672] [cursor=pointer]
+              - button "Deactivate" [ref=e676] [cursor=pointer]
+              - generic "Reserved operator cannot be deleted" [ref=e679]
+          - generic [ref=e683]:
+            - generic "pr10-observed-a" [ref=e686]
+            - generic [ref=e687]: — · key issued
+            - generic [ref=e688]: last seen never
+            - generic [ref=e689]:
+              - 'generic "exe_21fd24b2ca9174704abab2a827ea9d03: Not configured · Last contact: never" [ref=e690]': Local · Not configured
+              - generic "Effective permissions" [ref=e691]: custom · 20/20
+              - generic [ref=e692]: active
+            - region "External activity for pr10-observed-a" [ref=e938]:
+              - paragraph [ref=e939]: External activity
+              - paragraph [ref=e940]: 1 working; 1 awaiting input; 3 activity unknown (2 expired; 1 without a report)
+              - paragraph [ref=e941]: Activity reports only; presence and capacity are shown separately.
+              - button "Hide external instances" [expanded] [active] [ref=e945] [cursor=pointer]
+              - generic [ref=e946]:
+                - paragraph [ref=e947]: 5 instance records on this page. These records do not define the complete agent total.
+                - list [ref=e948]:
+                  - listitem [ref=e949]:
+                    - region "External instance obs_inst_0000000000000003" [ref=e950]:
+                      - generic [ref=e951]:
+                        - generic [ref=e952]: Activity unknown
+                        - generic [ref=e953]: Report expired
+                        - generic [ref=e954]: Custom integration
+                        - generic [ref=e955]: Inferred evidence
+                      - generic [ref=e956]:
+                        - generic [ref=e957]:
+                          - term [ref=e958]: Source
+                          - definition [ref=e959]: obs_src_0000000000000001
+                        - generic [ref=e960]:
+                          - term [ref=e961]: Instance · generation 3
+                          - definition [ref=e962]: obs_inst_0000000000000003
+                        - generic [ref=e963]:
+                          - term [ref=e964]: Workspace
+                          - definition [ref=e965]:
+                            - text: Workspace 2
+                            - generic [ref=e966]: pr10-workspace-a
+                        - generic [ref=e967]:
+                          - term [ref=e968]: Source instance reference
+                          - definition [ref=e969]: pr10-working
+                        - generic [ref=e970]:
+                          - term [ref=e971]: Observed at
+                          - definition [ref=e972]: 06/11/2026, 23:51:14
+                        - generic [ref=e973]:
+                          - term [ref=e974]: Valid until
+                          - definition [ref=e975]: 06/11/2026, 23:51:59
+                  - listitem [ref=e976]:
+                    - region "External instance obs_inst_0000000000000005" [ref=e977]:
+                      - generic [ref=e978]:
+                        - generic [ref=e979]: Awaiting input
+                        - generic [ref=e980]: Current report
+                        - generic [ref=e981]: Custom integration
+                        - generic [ref=e982]: Inferred evidence
+                      - generic [ref=e983]:
+                        - generic [ref=e984]:
+                          - term [ref=e985]: Source
+                          - definition [ref=e986]: obs_src_0000000000000001
+                        - generic [ref=e987]:
+                          - term [ref=e988]: Instance · generation 5
+                          - definition [ref=e989]: obs_inst_0000000000000005
+                        - generic [ref=e990]:
+                          - term [ref=e991]: Workspace
+                          - definition [ref=e992]:
+                            - text: Workspace 2
+                            - generic [ref=e993]: pr10-workspace-a
+                        - generic [ref=e994]:
+                          - term [ref=e995]: Source instance reference
+                          - definition [ref=e996]: javascript:alert(1) · <unsafe> · bloqueado
+                        - generic [ref=e997]:
+                          - term [ref=e998]: Observed at
+                          - definition [ref=e999]: 06/11/2026, 23:34:44
+                        - generic [ref=e1000]:
+                          - term [ref=e1001]: Valid until
+                          - definition [ref=e1002]: 07/11/2026, 00:34:44
+                  - listitem [ref=e1003]:
+                    - region "External instance obs_inst_0000000000000007" [ref=e1004]:
+                      - generic [ref=e1005]:
+                        - generic [ref=e1006]: Working
+                        - generic [ref=e1007]: Current report
+                        - generic [ref=e1008]: Custom integration
+                        - generic [ref=e1009]: Inferred evidence
+                      - generic [ref=e1010]:
+                        - generic [ref=e1011]:
+                          - term [ref=e1012]: Source
+                          - definition [ref=e1013]: obs_src_0000000000000001
+                        - generic [ref=e1014]:
+                          - term [ref=e1015]: Instance · generation 7
+                          - definition [ref=e1016]: obs_inst_0000000000000007
+                        - generic [ref=e1017]:
+                          - term [ref=e1018]: Workspace
+                          - definition [ref=e1019]:
+                            - text: Workspace 2
+                            - generic [ref=e1020]: pr10-workspace-a
+                        - generic [ref=e1021]:
+                          - term [ref=e1022]: Source instance reference
+                          - definition [ref=e1023]: pr10-complete
+                        - generic [ref=e1024]:
+                          - term [ref=e1025]: Observed at
+                          - definition [ref=e1026]: 06/11/2026, 23:46:42
+                        - generic [ref=e1027]:
+                          - term [ref=e1028]: Valid until
+                          - definition [ref=e1029]: 07/11/2026, 00:46:42
+                  - listitem [ref=e1030]:
+                    - region "External instance obs_inst_0000000000000009" [ref=e1031]:
+                      - generic [ref=e1032]:
+                        - generic [ref=e1033]: Activity unknown
+                        - generic [ref=e1034]: Report expired
+                        - generic [ref=e1035]: Custom integration
+                        - generic [ref=e1036]: Inferred evidence
+                      - generic [ref=e1037]:
+                        - generic [ref=e1038]:
+                          - term [ref=e1039]: Source
+                          - definition [ref=e1040]: obs_src_0000000000000001
+                        - generic [ref=e1041]:
+                          - term [ref=e1042]: Instance · generation 9
+                          - definition [ref=e1043]: obs_inst_0000000000000009
+                        - generic [ref=e1044]:
+                          - term [ref=e1045]: Workspace
+                          - definition [ref=e1046]:
+                            - text: Workspace 2
+                            - generic [ref=e1047]: pr10-workspace-a
+                        - generic [ref=e1048]:
+                          - term [ref=e1049]: Source instance reference
+                          - definition [ref=e1050]: pr10-stale
+                        - generic [ref=e1051]:
+                          - term [ref=e1052]: Observed at
+                          - definition [ref=e1053]: 06/11/2026, 23:34:50
+                        - generic [ref=e1054]:
+                          - term [ref=e1055]: Valid until
+                          - definition [ref=e1056]: 06/11/2026, 23:34:52
+                  - listitem [ref=e1057]:
+                    - region "External instance obs_inst_000000000000000b" [ref=e1058]:
+                      - generic [ref=e1059]:
+                        - generic [ref=e1060]: Activity unknown
+                        - generic [ref=e1061]: No report received
+                        - generic [ref=e1062]: Custom integration
+                        - generic [ref=e1063]: No activity evidence
+                      - generic [ref=e1064]:
+                        - generic [ref=e1065]:
+                          - term [ref=e1066]: Source
+                          - definition [ref=e1067]: obs_src_0000000000000001
+                        - generic [ref=e1068]:
+                          - term [ref=e1069]: Instance · generation 11
+                          - definition [ref=e1070]: obs_inst_000000000000000b
+                        - generic [ref=e1071]:
+                          - term [ref=e1072]: Workspace
+                          - definition [ref=e1073]:
+                            - text: Workspace 2
+                            - generic [ref=e1074]: pr10-workspace-a
+                        - generic [ref=e1075]:
+                          - term [ref=e1076]: Source instance reference
+                          - definition [ref=e1077]: pr10-empty
+                        - generic [ref=e1078]:
+                          - term [ref=e1079]: Observed at
+                          - definition [ref=e1080]: Not recorded
+                        - generic [ref=e1081]:
+                          - term [ref=e1082]: Valid until
+                          - definition [ref=e1083]: Not recorded
+                - button "Refresh instances" [ref=e1085] [cursor=pointer]
+            - generic [ref=e698]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e699] [cursor=pointer]
+              - button "Permissions" [ref=e703] [cursor=pointer]
+              - button "Tags & outbound audience" [ref=e707] [cursor=pointer]
+              - button "Communication style (how the agent should communicate)" [ref=e712] [cursor=pointer]
+              - button "Connections for pr10-observed-a" [ref=e715] [cursor=pointer]
+              - button "Steer (direct message as operator)" [ref=e720] [cursor=pointer]
+              - button "Regenerate key" [ref=e725] [cursor=pointer]
+              - button "Deactivate" [ref=e729] [cursor=pointer]
+              - button "Delete agent" [ref=e732] [cursor=pointer]
+          - generic [ref=e736]:
+            - generic "pr10-observed-b" [ref=e739]
+            - generic [ref=e740]: — · key issued
+            - generic [ref=e741]: last seen never
+            - generic [ref=e742]:
+              - 'generic "exe_21fd24b2ca9174704abab2a827ea9d03: Not configured · Last contact: never" [ref=e743]': Local · Not configured
+              - generic "Effective permissions" [ref=e744]: custom · 20/20
+              - generic [ref=e745]: active
+            - generic [ref=e751]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e752] [cursor=pointer]
+              - button "Permissions" [ref=e756] [cursor=pointer]
+              - button "Tags & outbound audience" [ref=e760] [cursor=pointer]
+              - button "Communication style (how the agent should communicate)" [ref=e765] [cursor=pointer]
+              - button "Connections for pr10-observed-b" [ref=e768] [cursor=pointer]
+              - button "Steer (direct message as operator)" [ref=e773] [cursor=pointer]
+              - button "Regenerate key" [ref=e778] [cursor=pointer]
+              - button "Deactivate" [ref=e782] [cursor=pointer]
+              - button "Delete agent" [ref=e785] [cursor=pointer]

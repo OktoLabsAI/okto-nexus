@@ -7,6 +7,7 @@ import type {
   AttentionFilters, AttentionPage, AttentionPageQuery, AttentionPreferenceResponse,
   AttentionSeenRequest, AttentionSnoozeRequest, AttentionSummary,
 } from './attentionTypes';
+import type { ObservationDetail, ObservationFilters, ObservationPage, ObservationPageQuery, ObservationSummary } from './observationTypes';
 
 export interface Envelope<T> {
   ok: boolean;
@@ -1211,6 +1212,12 @@ function attentionQuery(query: AttentionPageQuery): string {
 }
 
 export const api = {
+  externalObservations: (query: ObservationPageQuery = {}, signal?: AbortSignal) =>
+    call<ObservationPage>(`/api/v1/observations${attentionQuery(query)}`, {signal, cache: 'no-store'}),
+  externalObservationSummary: (filters: ObservationFilters = {}, signal?: AbortSignal) =>
+    call<ObservationSummary>(`/api/v1/observations/summary${attentionQuery(filters)}`, {signal, cache: 'no-store'}),
+  externalObservation: (id: string, signal?: AbortSignal) =>
+    call<ObservationDetail>(`/api/v1/observations/instances/${encodeURIComponent(id)}`, {signal, cache: 'no-store'}),
   attention: (query: AttentionPageQuery = {}, signal?: AbortSignal) =>
     call<AttentionPage>(`/api/v1/attention${attentionQuery(query)}`, {signal, cache: 'no-store'}),
   attentionSummary: (filters: AttentionFilters = {}, signal?: AbortSignal) =>

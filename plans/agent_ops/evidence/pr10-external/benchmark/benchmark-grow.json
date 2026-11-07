@@ -1,0 +1,2342 @@
+{
+  "schema_version": 1,
+  "phase": "grow",
+  "started_at": "2026-11-07T02:49:12.957192+00:00",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.13.1",
+  "scope": "Synthetic source checkout benchmark, real SQLite/WAL and application services; no HTTP server, lifespan, harness discovery or provider.",
+  "quotas": {
+    "observation_source_rate_per_minute": 6000,
+    "observation_source_burst": 1024,
+    "observation_agent_rate_per_minute": 60000,
+    "observation_agent_burst": 4096,
+    "observation_installation_rate_per_minute": 600000,
+    "observation_installation_burst": 16384,
+    "observation_max_sources_per_agent": 1024,
+    "observation_max_sources": 4096,
+    "observation_max_instances": 4096,
+    "observation_max_tokens_per_source": 64,
+    "observation_max_events": 20000
+  },
+  "repetitions": 4,
+  "measurement_notes": [
+    "Warm pooled connection; per-operation first sample and later samples are retained separately.",
+    "Latency includes SQL trace counting overhead; no SQL text or parameters are retained.",
+    "SELECT/CTE count excludes transaction open/close and does not count SQLite internal plan steps.",
+    "Seeded registration uses repository contracts in one UoW per cardinality; publication uses real authenticated ObservationService.publish.",
+    "SSE measurement uses the actual generator and SQLite in-process, not HTTP transport or browser.",
+    "The private database contains synthetic credential hashes and must not be collected as evidence."
+  ],
+  "stages": [
+    {
+      "instances": 1,
+      "started_at": "2026-11-07T02:49:13.820743+00:00",
+      "storage_before": {
+        "database_bytes": 2445312,
+        "wal_bytes": 78312,
+        "shm_bytes": 32768,
+        "page_count": 597,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 0,
+          "observation_instances": 0,
+          "observation_tokens": 0,
+          "observation_heads": 0,
+          "observation_attention_anchors": 0,
+          "observation_rate_buckets": 0,
+          "events": 0,
+          "attention_preferences": 0
+        },
+        "observation_events": {}
+      },
+      "registration_seed_ms": 11.264399974606931,
+      "initial_ingestion": [
+        {
+          "elapsed_ms": 8.197400020435452,
+          "cpu_ms": 0.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 15,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 7,
+              "SELECT": 15
+            },
+            "trace_events": 23
+          },
+          "reports": 1
+        }
+      ],
+      "initial_ingestion_reports_per_second": 121.98989893223232,
+      "storage_after_ingestion": {
+        "database_bytes": 2445312,
+        "wal_bytes": 284312,
+        "shm_bytes": 32768,
+        "page_count": 597,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 1,
+          "observation_instances": 1,
+          "observation_tokens": 1,
+          "observation_heads": 1,
+          "observation_attention_anchors": 1,
+          "observation_rate_buckets": 3,
+          "events": 1,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 1
+        }
+      },
+      "reads": {
+        "observation_list_200": {
+          "samples": [
+            {
+              "elapsed_ms": 2.0367999677546322,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 912
+            },
+            {
+              "elapsed_ms": 1.8298999639227986,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 912
+            },
+            {
+              "elapsed_ms": 1.8358000088483095,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 912
+            },
+            {
+              "elapsed_ms": 1.7669000080786645,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 912
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 1.832849986385554,
+          "minimum_ms": 1.7669000080786645,
+          "maximum_ms": 2.0367999677546322
+        },
+        "observation_detail": {
+          "samples": [
+            {
+              "elapsed_ms": 1.9346000044606626,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 968
+            },
+            {
+              "elapsed_ms": 2.598399994894862,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 968
+            },
+            {
+              "elapsed_ms": 2.1084999898448586,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 968
+            },
+            {
+              "elapsed_ms": 1.9386999774724245,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 968
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 2.0235999836586416,
+          "minimum_ms": 1.9346000044606626,
+          "maximum_ms": 2.598399994894862
+        },
+        "observation_summary": {
+          "samples": [
+            {
+              "elapsed_ms": 1.9480999908410013,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 544
+            },
+            {
+              "elapsed_ms": 2.0545999868772924,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 544
+            },
+            {
+              "elapsed_ms": 1.9398000440560281,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 544
+            },
+            {
+              "elapsed_ms": 1.8985000206157565,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 544
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 1.9439500174485147,
+          "minimum_ms": 1.8985000206157565,
+          "maximum_ms": 2.0545999868772924
+        },
+        "attention_all_kinds_50": {
+          "samples": [
+            {
+              "elapsed_ms": 444.55090002156794,
+              "cpu_ms": 187.5,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2226
+            },
+            {
+              "elapsed_ms": 210.95059998333454,
+              "cpu_ms": 156.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2226
+            },
+            {
+              "elapsed_ms": 225.07210000185296,
+              "cpu_ms": 171.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2226
+            },
+            {
+              "elapsed_ms": 213.40469998540357,
+              "cpu_ms": 171.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2226
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 219.23839999362826,
+          "minimum_ms": 210.95059998333454,
+          "maximum_ms": 444.55090002156794
+        },
+        "attention_external_blocked_50": {
+          "samples": [
+            {
+              "elapsed_ms": 21.2908000103198,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2252
+            },
+            {
+              "elapsed_ms": 18.396600033156574,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2252
+            },
+            {
+              "elapsed_ms": 16.366600000765175,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2252
+            },
+            {
+              "elapsed_ms": 18.555199960246682,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 1,
+              "total_matching": 1,
+              "has_more": false,
+              "response_json_bytes": 2252
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 18.475899996701628,
+          "minimum_ms": 16.366600000765175,
+          "maximum_ms": 21.2908000103198
+        },
+        "attention_external_completion_50": {
+          "samples": [
+            {
+              "elapsed_ms": 16.72730001155287,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 0,
+              "total_matching": 0,
+              "has_more": false,
+              "response_json_bytes": 530
+            },
+            {
+              "elapsed_ms": 18.39129999279976,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 0,
+              "total_matching": 0,
+              "has_more": false,
+              "response_json_bytes": 530
+            },
+            {
+              "elapsed_ms": 16.639099980238825,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 0,
+              "total_matching": 0,
+              "has_more": false,
+              "response_json_bytes": 530
+            },
+            {
+              "elapsed_ms": 14.7199000348337,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 0,
+              "total_matching": 0,
+              "has_more": false,
+              "response_json_bytes": 530
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 16.683199995895848,
+          "minimum_ms": 14.7199000348337,
+          "maximum_ms": 18.39129999279976
+        }
+      },
+      "fresh_update_batch": {
+        "elapsed_ms": 6.239400012418628,
+        "cpu_ms": 0.0,
+        "ok": true,
+        "queries": {
+          "select_or_cte": 15,
+          "statement_classes": {
+            "DELETE": 1,
+            "INSERT": 7,
+            "SELECT": 15
+          },
+          "trace_events": 23
+        },
+        "reports": 1
+      },
+      "storage_after_measurement": {
+        "database_bytes": 2445312,
+        "wal_bytes": 337872,
+        "shm_bytes": 32768,
+        "page_count": 597,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 1,
+          "observation_instances": 1,
+          "observation_tokens": 1,
+          "observation_heads": 1,
+          "observation_attention_anchors": 1,
+          "observation_rate_buckets": 3,
+          "events": 2,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 2
+        }
+      },
+      "finished_at": "2026-11-07T02:49:15.139177+00:00"
+    },
+    {
+      "instances": 200,
+      "started_at": "2026-11-07T02:49:15.144498+00:00",
+      "storage_before": {
+        "database_bytes": 2445312,
+        "wal_bytes": 337872,
+        "shm_bytes": 32768,
+        "page_count": 597,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 1,
+          "observation_instances": 1,
+          "observation_tokens": 1,
+          "observation_heads": 1,
+          "observation_attention_anchors": 1,
+          "observation_rate_buckets": 3,
+          "events": 2,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 2
+        }
+      },
+      "registration_seed_ms": 64.20670001534745,
+      "initial_ingestion": [
+        {
+          "elapsed_ms": 144.55879997694865,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 799,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 399,
+              "SELECT": 799
+            },
+            "trace_events": 1199
+          },
+          "reports": 99
+        },
+        {
+          "elapsed_ms": 163.53160003200173,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        }
+      ],
+      "initial_ingestion_reports_per_second": 645.9143160391197,
+      "storage_after_ingestion": {
+        "database_bytes": 2445312,
+        "wal_bytes": 1236032,
+        "shm_bytes": 32768,
+        "page_count": 722,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 2,
+          "observation_instances": 200,
+          "observation_tokens": 3,
+          "observation_heads": 200,
+          "observation_attention_anchors": 200,
+          "observation_rate_buckets": 5,
+          "events": 201,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 151,
+          "observation.completion": 50
+        }
+      },
+      "reads": {
+        "observation_list_200": {
+          "samples": [
+            {
+              "elapsed_ms": 40.18710000673309,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 163807
+            },
+            {
+              "elapsed_ms": 33.1669999868609,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 163807
+            },
+            {
+              "elapsed_ms": 34.33449997100979,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 163807
+            },
+            {
+              "elapsed_ms": 33.714800025336444,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 163807
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 34.02464999817312,
+          "minimum_ms": 33.1669999868609,
+          "maximum_ms": 40.18710000673309
+        },
+        "observation_detail": {
+          "samples": [
+            {
+              "elapsed_ms": 2.3864000104367733,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            },
+            {
+              "elapsed_ms": 2.1031000069342554,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            },
+            {
+              "elapsed_ms": 1.9515999592840672,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            },
+            {
+              "elapsed_ms": 1.9155999762006104,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 2.0273499831091613,
+          "minimum_ms": 1.9155999762006104,
+          "maximum_ms": 2.3864000104367733
+        },
+        "observation_summary": {
+          "samples": [
+            {
+              "elapsed_ms": 37.60300000431016,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 200,
+              "has_more": false,
+              "response_json_bytes": 748
+            },
+            {
+              "elapsed_ms": 38.40750001836568,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 200,
+              "has_more": false,
+              "response_json_bytes": 748
+            },
+            {
+              "elapsed_ms": 41.31480003707111,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 200,
+              "has_more": false,
+              "response_json_bytes": 748
+            },
+            {
+              "elapsed_ms": 37.94260002905503,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 200,
+              "has_more": false,
+              "response_json_bytes": 748
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 38.175050023710355,
+          "minimum_ms": 37.60300000431016,
+          "maximum_ms": 41.31480003707111
+        },
+        "attention_all_kinds_50": {
+          "samples": [
+            {
+              "elapsed_ms": 601.9604000030085,
+              "cpu_ms": 484.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 50,
+              "total_matching": 99,
+              "has_more": true,
+              "response_json_bytes": 87791
+            },
+            {
+              "elapsed_ms": 606.8650000379421,
+              "cpu_ms": 484.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 50,
+              "total_matching": 99,
+              "has_more": true,
+              "response_json_bytes": 87791
+            },
+            {
+              "elapsed_ms": 552.6228999951854,
+              "cpu_ms": 484.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 50,
+              "total_matching": 99,
+              "has_more": true,
+              "response_json_bytes": 87791
+            },
+            {
+              "elapsed_ms": 617.1894000144675,
+              "cpu_ms": 484.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 43,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 2
+                },
+                "trace_events": 43
+              },
+              "returned_items": 50,
+              "total_matching": 99,
+              "has_more": true,
+              "response_json_bytes": 87791
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 604.4127000204753,
+          "minimum_ms": 552.6228999951854,
+          "maximum_ms": 617.1894000144675
+        },
+        "attention_external_blocked_50": {
+          "samples": [
+            {
+              "elapsed_ms": 371.0469999932684,
+              "cpu_ms": 328.125,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 49,
+              "total_matching": 49,
+              "has_more": false,
+              "response_json_bytes": 85587
+            },
+            {
+              "elapsed_ms": 455.95309999771416,
+              "cpu_ms": 390.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 49,
+              "total_matching": 49,
+              "has_more": false,
+              "response_json_bytes": 85587
+            },
+            {
+              "elapsed_ms": 415.50760000245646,
+              "cpu_ms": 328.125,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 49,
+              "total_matching": 49,
+              "has_more": false,
+              "response_json_bytes": 85587
+            },
+            {
+              "elapsed_ms": 389.6985999890603,
+              "cpu_ms": 343.75,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 49,
+              "total_matching": 49,
+              "has_more": false,
+              "response_json_bytes": 85587
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 402.6030999957584,
+          "minimum_ms": 371.0469999932684,
+          "maximum_ms": 455.95309999771416
+        },
+        "attention_external_completion_50": {
+          "samples": [
+            {
+              "elapsed_ms": 351.98130004573613,
+              "cpu_ms": 312.5,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 50,
+              "total_matching": 50,
+              "has_more": false,
+              "response_json_bytes": 90428
+            },
+            {
+              "elapsed_ms": 496.522500005085,
+              "cpu_ms": 312.5,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 50,
+              "total_matching": 50,
+              "has_more": false,
+              "response_json_bytes": 90428
+            },
+            {
+              "elapsed_ms": 449.6993999928236,
+              "cpu_ms": 406.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 50,
+              "total_matching": 50,
+              "has_more": false,
+              "response_json_bytes": 90428
+            },
+            {
+              "elapsed_ms": 497.3789000068791,
+              "cpu_ms": 312.5,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 3,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 2
+                },
+                "trace_events": 3
+              },
+              "returned_items": 50,
+              "total_matching": 50,
+              "has_more": false,
+              "response_json_bytes": 90428
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 473.1109499989543,
+          "minimum_ms": 351.98130004573613,
+          "maximum_ms": 497.3789000068791
+        }
+      },
+      "fresh_update_batch": {
+        "elapsed_ms": 170.8494999911636,
+        "cpu_ms": 140.625,
+        "ok": true,
+        "queries": {
+          "select_or_cte": 807,
+          "statement_classes": {
+            "DELETE": 1,
+            "INSERT": 403,
+            "SELECT": 807
+          },
+          "trace_events": 1211
+        },
+        "reports": 100
+      },
+      "storage_after_measurement": {
+        "database_bytes": 2445312,
+        "wal_bytes": 1532672,
+        "shm_bytes": 32768,
+        "page_count": 747,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 2,
+          "observation_instances": 200,
+          "observation_tokens": 3,
+          "observation_heads": 200,
+          "observation_attention_anchors": 200,
+          "observation_rate_buckets": 5,
+          "events": 301,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 251,
+          "observation.completion": 50
+        }
+      },
+      "finished_at": "2026-11-07T02:49:21.919374+00:00"
+    },
+    {
+      "instances": 4096,
+      "started_at": "2026-11-07T02:49:21.922775+00:00",
+      "storage_before": {
+        "database_bytes": 2445312,
+        "wal_bytes": 1532672,
+        "shm_bytes": 32768,
+        "page_count": 747,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 2,
+          "observation_instances": 200,
+          "observation_tokens": 3,
+          "observation_heads": 200,
+          "observation_attention_anchors": 200,
+          "observation_rate_buckets": 5,
+          "events": 301,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 251,
+          "observation.completion": 50
+        }
+      },
+      "registration_seed_ms": 1025.4300000378862,
+      "initial_ingestion": [
+        {
+          "elapsed_ms": 200.4301999695599,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 172.28960001375526,
+          "cpu_ms": 171.875,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 176.02360004093498,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 151.82389999972656,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 141.70819998253137,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 132.93789996532723,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 142.8514000144787,
+          "cpu_ms": 109.375,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 193.22110002394766,
+          "cpu_ms": 187.5,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 133.38389998534694,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 119.9604999856092,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 135.48029999947175,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 225.25850002421066,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 205.47410001745448,
+          "cpu_ms": 171.875,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 184.05929999426007,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 153.11970002949238,
+          "cpu_ms": 156.25,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 184.80980000458658,
+          "cpu_ms": 93.75,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 141.86189998872578,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 136.14369998686016,
+          "cpu_ms": 93.75,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 137.32709997566417,
+          "cpu_ms": 109.375,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 168.54819998843595,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 176.4623000053689,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 174.87599997548386,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 142.14169996557757,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 172.39530000369996,
+          "cpu_ms": 171.875,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 187.470700009726,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 169.3799999775365,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 162.93240000959486,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 175.4687000066042,
+          "cpu_ms": 109.375,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 160.4065999854356,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 128.3283000229858,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 152.38980000140145,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 178.70140000013635,
+          "cpu_ms": 125.0,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 175.19300000276417,
+          "cpu_ms": 156.25,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 201.21250004740432,
+          "cpu_ms": 171.875,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 186.035200022161,
+          "cpu_ms": 171.875,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 182.7033999725245,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 144.77150002494454,
+          "cpu_ms": 140.625,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 164.4810000434518,
+          "cpu_ms": 156.25,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 807,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 403,
+              "SELECT": 807
+            },
+            "trace_events": 1211
+          },
+          "reports": 100
+        },
+        {
+          "elapsed_ms": 207.16480002738535,
+          "cpu_ms": 171.875,
+          "ok": true,
+          "queries": {
+            "select_or_cte": 775,
+            "statement_classes": {
+              "DELETE": 1,
+              "INSERT": 387,
+              "SELECT": 775
+            },
+            "trace_events": 1163
+          },
+          "reports": 96
+        }
+      ],
+      "initial_ingestion_reports_per_second": 601.306251392336,
+      "storage_after_ingestion": {
+        "database_bytes": 12308480,
+        "wal_bytes": 4420792,
+        "shm_bytes": 32768,
+        "page_count": 3194,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 41,
+          "observation_instances": 4096,
+          "observation_tokens": 42,
+          "observation_heads": 4096,
+          "observation_attention_anchors": 4096,
+          "observation_rate_buckets": 50,
+          "events": 4197,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 3173,
+          "observation.completion": 1024
+        }
+      },
+      "reads": {
+        "observation_list_200": {
+          "samples": [
+            {
+              "elapsed_ms": 58.75740002375096,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164480
+            },
+            {
+              "elapsed_ms": 47.6695999968797,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164480
+            },
+            {
+              "elapsed_ms": 45.120300026610494,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164480
+            },
+            {
+              "elapsed_ms": 42.04239998944104,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164480
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 46.394950011745095,
+          "minimum_ms": 42.04239998944104,
+          "maximum_ms": 58.75740002375096
+        },
+        "observation_detail": {
+          "samples": [
+            {
+              "elapsed_ms": 2.771599974948913,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            },
+            {
+              "elapsed_ms": 2.5602999958209693,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            },
+            {
+              "elapsed_ms": 2.3968000314198434,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            },
+            {
+              "elapsed_ms": 2.2524999803863466,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 947
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 2.4785500136204064,
+          "minimum_ms": 2.2524999803863466,
+          "maximum_ms": 2.771599974948913
+        },
+        "observation_summary": {
+          "samples": [
+            {
+              "elapsed_ms": 1035.185500048101,
+              "cpu_ms": 921.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 991.7847000178881,
+              "cpu_ms": 859.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 1103.8462999858893,
+              "cpu_ms": 906.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 1127.6414000312798,
+              "cpu_ms": 906.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 1069.5159000169951,
+          "minimum_ms": 991.7847000178881,
+          "maximum_ms": 1127.6414000312798
+        },
+        "attention_all_kinds_50": {
+          "samples": [
+            {
+              "elapsed_ms": 5129.236200009473,
+              "cpu_ms": 4265.625,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            },
+            {
+              "elapsed_ms": 5306.217400007881,
+              "cpu_ms": 3359.375,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            },
+            {
+              "elapsed_ms": 5280.12630000012,
+              "cpu_ms": 1812.5,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            },
+            {
+              "elapsed_ms": 5264.773899980355,
+              "cpu_ms": 3171.875,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 41,
+                "statement_classes": {
+                  "SELECT": 40,
+                  "WITH": 1
+                },
+                "trace_events": 41
+              }
+            }
+          ],
+          "successful_samples": 0,
+          "median_ms": null,
+          "minimum_ms": null,
+          "maximum_ms": null
+        },
+        "attention_external_blocked_50": {
+          "samples": [
+            {
+              "elapsed_ms": 5209.471100009978,
+              "cpu_ms": 2703.125,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5070.227399992291,
+              "cpu_ms": 3453.125,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5066.66569999652,
+              "cpu_ms": 4140.625,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5043.422500020824,
+              "cpu_ms": 4406.25,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "WITH": 2
+                },
+                "trace_events": 2
+              }
+            }
+          ],
+          "successful_samples": 0,
+          "median_ms": null,
+          "minimum_ms": null,
+          "maximum_ms": null
+        },
+        "attention_external_completion_50": {
+          "samples": [
+            {
+              "elapsed_ms": 5100.846899964381,
+              "cpu_ms": 4343.75,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5086.9682999909855,
+              "cpu_ms": 4609.375,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "WITH": 2
+                },
+                "trace_events": 2
+              }
+            },
+            {
+              "elapsed_ms": 5177.8607000014745,
+              "cpu_ms": 3750.0,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            },
+            {
+              "elapsed_ms": 5100.1820000237785,
+              "cpu_ms": 2890.625,
+              "ok": false,
+              "error": {
+                "type": "OktoNexusError",
+                "code": "ATTENTION_QUERY_BUDGET"
+              },
+              "queries": {
+                "select_or_cte": 1,
+                "statement_classes": {
+                  "WITH": 1
+                },
+                "trace_events": 1
+              }
+            }
+          ],
+          "successful_samples": 0,
+          "median_ms": null,
+          "minimum_ms": null,
+          "maximum_ms": null
+        }
+      },
+      "fresh_update_batch": {
+        "elapsed_ms": 285.18619999522343,
+        "cpu_ms": 171.875,
+        "ok": true,
+        "queries": {
+          "select_or_cte": 807,
+          "statement_classes": {
+            "DELETE": 1,
+            "INSERT": 303,
+            "SELECT": 807
+          },
+          "trace_events": 1111
+        },
+        "reports": 100
+      },
+      "storage_after_measurement": {
+        "database_bytes": 13082624,
+        "wal_bytes": 127752,
+        "shm_bytes": 32768,
+        "page_count": 3195,
+        "page_size": 4096,
+        "freelist_count": 0,
+        "rows": {
+          "observation_sources": 41,
+          "observation_instances": 4096,
+          "observation_tokens": 42,
+          "observation_heads": 4096,
+          "observation_attention_anchors": 4096,
+          "observation_rate_buckets": 50,
+          "events": 4197,
+          "attention_preferences": 0
+        },
+        "observation_events": {
+          "observation.activity": 3173,
+          "observation.completion": 1024
+        }
+      },
+      "finished_at": "2026-11-07T02:50:36.684622+00:00"
+    }
+  ],
+  "storage_initial": {
+    "database_bytes": 2445312,
+    "wal_bytes": 78312,
+    "shm_bytes": 32768,
+    "page_count": 597,
+    "page_size": 4096,
+    "freelist_count": 0,
+    "rows": {
+      "observation_sources": 0,
+      "observation_instances": 0,
+      "observation_tokens": 0,
+      "observation_heads": 0,
+      "observation_attention_anchors": 0,
+      "observation_rate_buckets": 0,
+      "events": 0,
+      "attention_preferences": 0
+    },
+    "observation_events": {}
+  },
+  "sse": {
+    "status": "MEASURED_IN_PROCESS_GENERATOR",
+    "not_tcp_or_browser": true,
+    "poll_seconds": 0.01,
+    "invalidation_ms": 3.7594999885186553,
+    "queries": {
+      "select_or_cte": 2,
+      "statement_classes": {
+        "SELECT": 2
+      },
+      "trace_events": 2
+    },
+    "frames": [
+      {
+        "bytes": 116,
+        "event": "attention-reset",
+        "data_keys": [
+          "clear",
+          "event_cursor",
+          "reason",
+          "version"
+        ],
+        "reason": "snapshot_required"
+      },
+      {
+        "bytes": 121,
+        "event": "attention-invalidated",
+        "data_keys": [
+          "clear",
+          "event_cursor",
+          "reason",
+          "version"
+        ],
+        "reason": "canonical_change"
+      }
+    ]
+  },
+  "storage_final_open": {
+    "database_bytes": 13082624,
+    "wal_bytes": 185432,
+    "shm_bytes": 32768,
+    "page_count": 3195,
+    "page_size": 4096,
+    "freelist_count": 0,
+    "rows": {
+      "observation_sources": 41,
+      "observation_instances": 4096,
+      "observation_tokens": 42,
+      "observation_heads": 4096,
+      "observation_attention_anchors": 4096,
+      "observation_rate_buckets": 50,
+      "events": 4198,
+      "attention_preferences": 0
+    },
+    "observation_events": {
+      "observation.activity": 3174,
+      "observation.completion": 1024
+    }
+  },
+  "status": "COMPLETED_WITH_RECORDED_MEASUREMENTS",
+  "finished_at": "2026-11-07T02:50:41.094955+00:00",
+  "factory_closed": true,
+  "storage_closed_file_bytes": {
+    "database": 13086720,
+    "wal": 0,
+    "shm": 0
+  }
+}

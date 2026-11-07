@@ -1,0 +1,923 @@
+{
+  "schema_version": 1,
+  "collection_phase": "closed_qualified_milestone",
+  "final_artifact_manifest": "plans/agent_ops/evidence/pr10-external/artifact-manifest.json",
+  "acceptance_claim": "OBS11 Windows installed, synthetic peers and UI. OBS12 wiring, real providers/clients/native service and full R3 remain open.",
+  "artifact_policy": {
+    "explicit_allowlist_only": true,
+    "copied_original_bytes": true,
+    "private_files_not_read_copied_or_hashed": [
+      "browser-fixture-private.json",
+      "databases",
+      "bearer files"
+    ],
+    "scope": "Closed source/frontend/installed reports, exact package proofs, build/qualification drivers, safe browser artifacts and exact trace resources, all benchmark candidates and retired tests. The manifest binds the entire evidence directory. No database, private bearer file or wheel is collected."
+  },
+  "retained_inputs": [
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-backend-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-backend-initial.xml",
+      "bytes": 5019,
+      "sha256": "e6e501cc936c96d37e3154cccb1dc26b97af8dd093cdfda8cc9a66c881430f07",
+      "original_sha256": "e6e501cc936c96d37e3154cccb1dc26b97af8dd093cdfda8cc9a66c881430f07",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-backend-regression.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-backend-regression.xml",
+      "bytes": 28863,
+      "sha256": "d614cc5c11c76067b37061070dcafb66e9edb73cfa6f6ff3b5d5e4dba6603cae",
+      "original_sha256": "d614cc5c11c76067b37061070dcafb66e9edb73cfa6f6ff3b5d5e4dba6603cae",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-http-runtime-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-http-runtime-initial.xml",
+      "bytes": 11047,
+      "sha256": "eaa38cec1141d799ec34066b974c067711686e5fae91e1876611ffa08dfe73eb",
+      "original_sha256": "eaa38cec1141d799ec34066b974c067711686e5fae91e1876611ffa08dfe73eb",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-runtime-final.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-runtime-final.xml",
+      "bytes": 603,
+      "sha256": "e82b8f19f8ed7cfef249af641a4ada1b062fd70b5c442e90aaad2fe6c365306e",
+      "original_sha256": "e82b8f19f8ed7cfef249af641a4ada1b062fd70b5c442e90aaad2fe6c365306e",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-observation-correlation-domain-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-observation-correlation-domain-initial.xml",
+      "bytes": 15513,
+      "sha256": "d192eb19929aab290b1e8f597fb2078773382c121a0bb7c799fe2d429d3d379b",
+      "original_sha256": "d192eb19929aab290b1e8f597fb2078773382c121a0bb7c799fe2d429d3d379b",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/frontend/pr10a-frontend-all-final.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10a-frontend-all-final.xml",
+      "bytes": 26947,
+      "sha256": "3c5d0e482ed59e9242dfb30a183bde4f39a8d0499b2c5e591f10524a2f5394b6",
+      "original_sha256": "3c5d0e482ed59e9242dfb30a183bde4f39a8d0499b2c5e591f10524a2f5394b6",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/frontend/pr10a-frontend-focused-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10a-frontend-focused-initial.xml",
+      "bytes": 12877,
+      "sha256": "9ef72841c9ca34aec161d02281faa1134d8e9760f957b8d7192e81c3d4512937",
+      "original_sha256": "9ef72841c9ca34aec161d02281faa1134d8e9760f957b8d7192e81c3d4512937",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/pr10-external-installed-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified\\pr10-external-installed-initial.xml",
+      "bytes": 25597,
+      "sha256": "75895d5387f81e9d0962bb1558cee2756e1558373e5746043c5758cbaf35b45c",
+      "original_sha256": "75895d5387f81e9d0962bb1558cee2756e1558373e5746043c5758cbaf35b45c",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/installed-qualification.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified\\installed-qualification.json",
+      "bytes": 364854,
+      "sha256": "d4eb46d3514206ff366cfb4dd507ddeb2d35f9fa9d5e049fe4256df3c2ddef3f",
+      "original_sha256": "d4eb46d3514206ff366cfb4dd507ddeb2d35f9fa9d5e049fe4256df3c2ddef3f",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/package-proof.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified\\package-proof.json",
+      "bytes": 225186,
+      "sha256": "e6d2879864f60100f0c5e42b811e55b049efbeb0a404d1fcd5179b4655fcbba8",
+      "original_sha256": "e6d2879864f60100f0c5e42b811e55b049efbeb0a404d1fcd5179b4655fcbba8",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/build_release_initial.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\build_release_initial.py",
+      "bytes": 3820,
+      "sha256": "2477e98db2d4e88b1ab8d634e3dec8c6e49398d4cee7fb520807ef515221041c",
+      "original_sha256": "2477e98db2d4e88b1ab8d634e3dec8c6e49398d4cee7fb520807ef515221041c",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/build_release.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\build_release.py",
+      "bytes": 3938,
+      "sha256": "c28c0b8fe86271b678e6584e1122a42bf9488dc3eb908b5057ecdbec9b4da11d",
+      "original_sha256": "c28c0b8fe86271b678e6584e1122a42bf9488dc3eb908b5057ecdbec9b4da11d",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/qualify_installed.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualify_installed.py",
+      "bytes": 3821,
+      "sha256": "de9a370e507583944c3afce3b7551a94dd4420cedc5b90bf9c4a75f8a54e5976",
+      "original_sha256": "de9a370e507583944c3afce3b7551a94dd4420cedc5b90bf9c4a75f8a54e5976",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-query-optimization-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-query-optimization-initial.xml",
+      "bytes": 12689,
+      "sha256": "a01ca601c6950d74fa2342c6c7b4ccda503777e0d834fbb98cf4e4301567e5da",
+      "original_sha256": "a01ca601c6950d74fa2342c6c7b4ccda503777e0d834fbb98cf4e4301567e5da",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/package-proof.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v2\\package-proof.json",
+      "bytes": 225198,
+      "sha256": "84c7f147e437cc55bdb53e5ea73319c2b565a37a641e621d62ac5dcbb4b94c62",
+      "original_sha256": "84c7f147e437cc55bdb53e5ea73319c2b565a37a641e621d62ac5dcbb4b94c62",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/build_release_v2.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\build_release_v2.py",
+      "bytes": 3941,
+      "sha256": "65dde6258df460e1fcdedfcf9c751ee232a16d0ee951aa939d6fde3f98929595",
+      "original_sha256": "65dde6258df460e1fcdedfcf9c751ee232a16d0ee951aa939d6fde3f98929595",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v2.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualify_installed_v2.py",
+      "bytes": 3882,
+      "sha256": "5490c07fb82e244f155e5ad7db336ea7215617094691d758c488d02c724225ad",
+      "original_sha256": "5490c07fb82e244f155e5ad7db336ea7215617094691d758c488d02c724225ad",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-query-memo-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-query-memo-initial.xml",
+      "bytes": 4700,
+      "sha256": "217a281e988fbc8309f2efd850af14d0ab887afd08d1965b41a1a68888191b68",
+      "original_sha256": "217a281e988fbc8309f2efd850af14d0ab887afd08d1965b41a1a68888191b68",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-repeat-probe.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-repeat-probe.xml",
+      "bytes": 395,
+      "sha256": "937b64464adc7752a2dea815cc05659300434075fd84e8db4a977c57b58c41c9",
+      "original_sha256": "937b64464adc7752a2dea815cc05659300434075fd84e8db4a977c57b58c41c9",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-repeat-probe.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-repeat-probe.json",
+      "bytes": 376,
+      "sha256": "36816b60e757a97fa4882d7d84497829476a7ab38dc09cb83758a673c79912e1",
+      "original_sha256": "36816b60e757a97fa4882d7d84497829476a7ab38dc09cb83758a673c79912e1",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/pr10-probe-external-repeat.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-probe-external-repeat.py",
+      "bytes": 2103,
+      "sha256": "7e6d42a3157ad0078284e192e843c6748a5cd7f8a6dad97e26fdb6369fd5f686",
+      "original_sha256": "7e6d42a3157ad0078284e192e843c6748a5cd7f8a6dad97e26fdb6369fd5f686",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/build_release_v3.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\build_release_v3.py",
+      "bytes": 3941,
+      "sha256": "703e0328b46658462390f13d6c40d922145caeb9981b83e35ab4817fe2d7218e",
+      "original_sha256": "703e0328b46658462390f13d6c40d922145caeb9981b83e35ab4817fe2d7218e",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v3.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualify_installed_v3.py",
+      "bytes": 3850,
+      "sha256": "7b264b1034612bb3bcbc61f056418e252cd85c747c746a99d4115ad6a90830c0",
+      "original_sha256": "7b264b1034612bb3bcbc61f056418e252cd85c747c746a99d4115ad6a90830c0",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/collect_final.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\collect_final.py",
+      "bytes": 7058,
+      "sha256": "57eed5473e326e2547171594a0d4c4f0a8ef61308269ed0925e587e1ed357cdd",
+      "original_sha256": "57eed5473e326e2547171594a0d4c4f0a8ef61308269ed0925e587e1ed357cdd",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-attention-single-relation-initial.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-attention-single-relation-initial.xml",
+      "bytes": 5142,
+      "sha256": "b6cffd31c9aece712f7e0a28d45c4629443bf430cecea3b437d7c51f3704ccde",
+      "original_sha256": "b6cffd31c9aece712f7e0a28d45c4629443bf430cecea3b437d7c51f3704ccde",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v3/package-proof.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v3\\package-proof.json",
+      "bytes": 225198,
+      "sha256": "e28eb9e7584816c42044d5005e6e5c8a8c962814f2fdf14920111e1ec2193180",
+      "original_sha256": "e28eb9e7584816c42044d5005e6e5c8a8c962814f2fdf14920111e1ec2193180",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v3/retired/test_attention_external_memo.py.txt",
+      "original_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_attention_external_memo.py",
+      "original_source_retired": true,
+      "bytes": 7237,
+      "sha256": "e517bcd6cdcaa07deea693fb5177ccf8fa5b1b76340389f5041f3f44ec8b7c43",
+      "original_sha256": "e517bcd6cdcaa07deea693fb5177ccf8fa5b1b76340389f5041f3f44ec8b7c43",
+      "exact_original_bytes": true,
+      "credential_pattern_matches": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/package-proof.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v4\\package-proof.json",
+      "bytes": 225198,
+      "sha256": "ddd365dd3b41acb6f27b3cc5dc8c869e053f618fc3676fdc3b55e6662c3d7c36",
+      "original_sha256": "ddd365dd3b41acb6f27b3cc5dc8c869e053f618fc3676fdc3b55e6662c3d7c36",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/build_release_v4.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\build_release_v4.py",
+      "bytes": 3941,
+      "sha256": "90c40edee60a4ffec93328d02fae5600de8b306199c41add33d9eab56cf676d9",
+      "original_sha256": "90c40edee60a4ffec93328d02fae5600de8b306199c41add33d9eab56cf676d9",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v4.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualify_installed_v4.py",
+      "bytes": 4096,
+      "sha256": "0cb943ea8695c6313c2ef7fc67df165b5f8220ffb7cec985f27d5e582cf85241",
+      "original_sha256": "0cb943ea8695c6313c2ef7fc67df165b5f8220ffb7cec985f27d5e582cf85241",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/collect_release_v4.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\collect_release_v4.py",
+      "bytes": 7508,
+      "sha256": "91202ebc39f385e9b2c6d1a84fb1ce102e939c32e0ca8784353791cd1ba83699",
+      "original_sha256": "91202ebc39f385e9b2c6d1a84fb1ce102e939c32e0ca8784353791cd1ba83699",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v2\\pr10-external-installed-final.xml",
+      "bytes": 16882,
+      "sha256": "3d11d98e1c64069265d54a164fa7949d2f741839b8793e353a096c46bcaed93c",
+      "original_sha256": "3d11d98e1c64069265d54a164fa7949d2f741839b8793e353a096c46bcaed93c",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed-qualification.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v2\\installed-qualification.json",
+      "bytes": 368476,
+      "sha256": "a102709b9b62134520a3f63c08958599621c6741be9d92b95dc18528cfc0eb6b",
+      "original_sha256": "a102709b9b62134520a3f63c08958599621c6741be9d92b95dc18528cfc0eb6b",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v4\\pr10-external-installed-final.xml",
+      "bytes": 46943,
+      "sha256": "8fdca0e3c475036b7bab2978d7159b74f9b72c61d2cd81e1312470693e8c48f1",
+      "original_sha256": "8fdca0e3c475036b7bab2978d7159b74f9b72c61d2cd81e1312470693e8c48f1",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed-qualification.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v4\\installed-qualification.json",
+      "bytes": 372035,
+      "sha256": "072264f8508d30c1a9472ded8efc5e06927b6faf70180bd1ae35c349287127b5",
+      "original_sha256": "072264f8508d30c1a9472ded8efc5e06927b6faf70180bd1ae35c349287127b5",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/test_attention_authority.py.txt",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v4\\tests\\test_attention_authority.py",
+      "bytes": 45737,
+      "sha256": "25c574abca73d901e77024569e775cec09e1bf8031a2cb442329c134ff985b70",
+      "original_sha256": "25c574abca73d901e77024569e775cec09e1bf8031a2cb442329c134ff985b70",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/followup/installed.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v4-followup\\pr10-external-installed-final.xml",
+      "bytes": 377,
+      "sha256": "0ecb841d2135a65d3e6e3e01c589e11055d94b23ccd5ed2218b1bd7e66480869",
+      "original_sha256": "0ecb841d2135a65d3e6e3e01c589e11055d94b23ccd5ed2218b1bd7e66480869",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/followup/installed-qualification.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v4-followup\\installed-qualification.json",
+      "bytes": 345066,
+      "sha256": "269d5b431fde76294f27f617c4c32e6816d0d01ab62c16e2b0e19fc1fd34dbfe",
+      "original_sha256": "269d5b431fde76294f27f617c4c32e6816d0d01ab62c16e2b0e19fc1fd34dbfe",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/followup/test_attention_authority.py.txt",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualified-v4-followup\\tests\\test_attention_authority.py",
+      "bytes": 45803,
+      "sha256": "1d0067da18e8ac0df39f194f42819451371fc1e172f5d2a6a93b0f082e9c2818",
+      "original_sha256": "1d0067da18e8ac0df39f194f42819451371fc1e172f5d2a6a93b0f082e9c2818",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v4_followup.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\qualify_installed_v4_followup.py",
+      "bytes": 3820,
+      "sha256": "a071604c5fb2b3c09c84abc69d9ec635dc6b06e535aab30e6b3d88c2844f9a84",
+      "original_sha256": "a071604c5fb2b3c09c84abc69d9ec635dc6b06e535aab30e6b3d88c2844f9a84",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/collect_qualified_followup.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\collect_qualified_followup.py",
+      "bytes": 9079,
+      "sha256": "0735debb42bbbfe1be7e3782cc4a282985e6542007fd1266a7e8044680ada20c",
+      "original_sha256": "0735debb42bbbfe1be7e3782cc4a282985e6542007fd1266a7e8044680ada20c",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source-authority-migration.xml",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\authority-migration-source.xml",
+      "bytes": 397,
+      "sha256": "6e0997307ed2d4d4d41bc6c2ceb921a4937e8b4eeee5cf488c4750694888c16e",
+      "original_sha256": "6e0997307ed2d4d4d41bc6c2ceb921a4937e8b4eeee5cf488c4750694888c16e",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-single-query.json",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10a-benchmark-62d6a4cfee\\benchmark-readonly-single-query.json",
+      "bytes": 17000,
+      "sha256": "fb76987c0c4e9b092a90314529c0afa307275d4ed1410d701d121d137a5614a0",
+      "original_sha256": "fb76987c0c4e9b092a90314529c0afa307275d4ed1410d701d121d137a5614a0",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/diagnostics/wheel-build.log",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\wheel-build.log",
+      "bytes": 1618,
+      "sha256": "13b9029d238e32622fc31af99154d8587a7b09a2573f4cb1a96517cc1b836410",
+      "original_sha256": "13b9029d238e32622fc31af99154d8587a7b09a2573f4cb1a96517cc1b836410",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/close_milestone.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\close_milestone.py",
+      "bytes": 9549,
+      "sha256": "269fbc1fcecbc331d3e723b41783ffbba5cad508380ea306843378e1f0f15e6b",
+      "original_sha256": "269fbc1fcecbc331d3e723b41783ffbba5cad508380ea306843378e1f0f15e6b",
+      "exact_original_bytes": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/verify_artifacts.py",
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\verify_artifacts.py",
+      "bytes": 4495,
+      "sha256": "fc659d0d0837c9168a35290fe8d4508d1647ea7e7a061181e4d683086fbfc7c4",
+      "original_sha256": "fc659d0d0837c9168a35290fe8d4508d1647ea7e7a061181e4d683086fbfc7c4",
+      "exact_original_bytes": true
+    }
+  ],
+  "reports": [
+    {
+      "id": "backend_initial",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-backend-initial.xml",
+      "sha256": "e6e501cc936c96d37e3154cccb1dc26b97af8dd093cdfda8cc9a66c881430f07",
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 31,
+      "classes": {
+        "tests.test_attention_external": 28,
+        "tests.test_attention_external_upgrade": 3
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "backend_regression",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-backend-regression.xml",
+      "sha256": "d614cc5c11c76067b37061070dcafb66e9edb73cfa6f6ff3b5d5e4dba6603cae",
+      "tests": 195,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 195,
+      "classes": {
+        "tests.test_attention_external": 35,
+        "tests.test_attention_external_upgrade": 3,
+        "tests.test_observation_service": 24,
+        "tests.test_observations_storage": 39,
+        "tests.test_observation_retention": 10,
+        "tests.test_observation_http": 12,
+        "tests.test_attention_engine_bounds": 3,
+        "tests.test_attention_api": 42,
+        "tests.test_attention_stream": 20,
+        "tests.test_attention_storage": 7
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "http_runtime_initial",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-http-runtime-initial.xml",
+      "sha256": "eaa38cec1141d799ec34066b974c067711686e5fae91e1876611ffa08dfe73eb",
+      "tests": 26,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 24,
+      "classes": {
+        "tests.test_observation_summary_http": 24,
+        "tests.execution_r4.test_external_observation_isolation": 2
+      },
+      "failures_detail": [
+        {
+          "case_id": "execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+          "issues": [
+            {
+              "type": "failure",
+              "message": "assert 2 == 1"
+            }
+          ]
+        },
+        {
+          "case_id": "execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+          "issues": [
+            {
+              "type": "failure",
+              "message": "assert 2 == 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "runtime_final",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-runtime-final.xml",
+      "sha256": "e82b8f19f8ed7cfef249af641a4ada1b062fd70b5c442e90aaad2fe6c365306e",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 2,
+      "classes": {
+        "tests.execution_r4.test_external_observation_isolation": 2
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "correlation_domain",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-observation-correlation-domain-initial.xml",
+      "sha256": "d192eb19929aab290b1e8f597fb2078773382c121a0bb7c799fe2d429d3d379b",
+      "tests": 91,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 91,
+      "classes": {
+        "tests.test_observation_correlation_domain": 91
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "frontend_final",
+      "path": "plans/agent_ops/evidence/pr10-external/frontend/pr10a-frontend-all-final.xml",
+      "sha256": "3c5d0e482ed59e9242dfb30a183bde4f39a8d0499b2c5e591f10524a2f5394b6",
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 121,
+      "classes": {
+        "test": 121
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "frontend_initial",
+      "path": "plans/agent_ops/evidence/pr10-external/frontend/pr10a-frontend-focused-initial.xml",
+      "sha256": "9ef72841c9ca34aec161d02281faa1134d8e9760f957b8d7192e81c3d4512937",
+      "tests": 52,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 51,
+      "classes": {
+        "test": 52
+      },
+      "failures_detail": [
+        {
+          "case_id": "frontend/tests/attentionPresentation.test.mjs::all canonical kinds have distinct human labels, without echoing unknown codes",
+          "issues": [
+            {
+              "type": "failure",
+              "message": "Expected values to be strictly equal:\n\n16 !== 13"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "installed_initial",
+      "path": "plans/agent_ops/evidence/pr10-external/installed/pr10-external-installed-initial.xml",
+      "sha256": "75895d5387f81e9d0962bb1558cee2756e1558373e5746043c5758cbaf35b45c",
+      "tests": 158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 158,
+      "classes": {
+        "tests.test_import_boundary": 3,
+        "tests.test_attention_external": 35,
+        "tests.test_attention_external_upgrade": 3,
+        "tests.test_observation_summary_http": 24,
+        "tests.test_observation_correlation_domain": 91,
+        "tests.execution_r4.test_external_observation_isolation": 2
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "backend_query_optimization_final",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-query-optimization-initial.xml",
+      "sha256": "a01ca601c6950d74fa2342c6c7b4ccda503777e0d834fbb98cf4e4301567e5da",
+      "tests": 81,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 81,
+      "classes": {
+        "tests.test_attention_external_query": 16,
+        "tests.test_attention_external": 35,
+        "tests.test_attention_external_upgrade": 3,
+        "tests.test_attention_engine_bounds": 3,
+        "tests.test_observation_service": 24
+      },
+      "failures_detail": [],
+      "run_scope": "Focused source regression after the query optimization; package installation qualification remains separate."
+    },
+    {
+      "id": "backend_query_memo_final",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-query-memo-initial.xml",
+      "sha256": "217a281e988fbc8309f2efd850af14d0ab887afd08d1965b41a1a68888191b68",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 28,
+      "classes": {
+        "tests.test_attention_external_memo": 9,
+        "tests.test_attention_external_query": 16,
+        "tests.test_attention_engine_bounds": 3
+      },
+      "failures_detail": [],
+      "scope_status": "Historical superseded implementation: nine memo-specific cases were retired and do not qualify the current source tree.",
+      "retired_current_tree_cases": [
+        "test_attention_external_memo::test_aggregate_and_page_share_projection_but_next_read_does_not",
+        "test_attention_external_memo::test_deadline_is_checked_before_serving_a_memo_hit",
+        "test_attention_external_memo::test_exit_unregisters_callbacks_and_next_relation_uses_new_policy[False]",
+        "test_attention_external_memo::test_exit_unregisters_callbacks_and_next_relation_uses_new_policy[True]",
+        "test_attention_external_memo::test_memo_and_no_memo_return_identical_items_counts_cursors_and_preferences",
+        "test_attention_external_memo::test_memo_cap_does_not_change_results_or_discard_uncached_facts[bytes]",
+        "test_attention_external_memo::test_memo_cap_does_not_change_results_or_discard_uncached_facts[entries]",
+        "test_attention_external_memo::test_memo_key_contains_facts_and_observation_time",
+        "test_attention_external_memo::test_preferences_and_revocation_are_fresh_between_cached_queries"
+      ]
+    },
+    {
+      "id": "external_repeat_probe",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-repeat-probe.xml",
+      "sha256": "937b64464adc7752a2dea815cc05659300434075fd84e8db4a977c57b58c41c9",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "classes": {
+        "tests.test_attention_external": 1
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "backend_single_relation_final",
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-attention-single-relation-initial.xml",
+      "sha256": "b6cffd31c9aece712f7e0a28d45c4629443bf430cecea3b437d7c51f3704ccde",
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 31,
+      "classes": {
+        "tests.test_attention_snapshot_query": 12,
+        "tests.test_attention_external_query": 16,
+        "tests.test_attention_engine_bounds": 3
+      },
+      "failures_detail": []
+    },
+    {
+      "id": "installed_candidate-v2",
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed.xml",
+      "sha256": "3d11d98e1c64069265d54a164fa7949d2f741839b8793e353a096c46bcaed93c",
+      "tests": 110,
+      "passed": 110,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "id": "installed_final_initial",
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+      "sha256": "8fdca0e3c475036b7bab2978d7159b74f9b72c61d2cd81e1312470693e8c48f1",
+      "tests": 292,
+      "passed": 291,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "id": "installed_final_followup",
+      "path": "plans/agent_ops/evidence/pr10-external/final/followup/installed.xml",
+      "sha256": "0ecb841d2135a65d3e6e3e01c589e11055d94b23ccd5ed2218b1bd7e66480869",
+      "tests": 1,
+      "passed": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "id": "authority_migration_final",
+      "path": "plans/agent_ops/evidence/pr10-external/source-authority-migration.xml",
+      "sha256": "6e0997307ed2d4d4d41bc6c2ceb921a4937e8b4eeee5cf488c4750694888c16e",
+      "tests": 1,
+      "passed": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "overlap_policy": {
+    "identity": "Python classname without leading tests. + testcase name; frontend relative file + testcase name.",
+    "counts_are_not_summed_across_reruns": true,
+    "source_final_selection": [
+      "backend_regression",
+      "http_runtime_initial",
+      "runtime_final",
+      "correlation_domain",
+      "backend_query_optimization_final",
+      "backend_single_relation_final",
+      "authority_migration_final"
+    ],
+    "source_successful_unique_cases": 341,
+    "source_failed_cases_superseded_by_final_runtime": 2,
+    "source_case_breakdown": {
+      "backend_regression": 195,
+      "http_summary_detail": 24,
+      "canonical_runtime_isolation": 2,
+      "correlation_pure_domain_only": 91,
+      "query_optimization_new": 16,
+      "single_relation_new": 12,
+      "portable_authority_upgrade": 1
+    },
+    "correlation_domain_scope": "Pure contract tests only; no persisted correlation or canonical read-model integration is certified.",
+    "source_implementation_backend_cases": 66,
+    "initial_backend_overlap_with_regression": 31,
+    "frontend_final_unique_cases": 121,
+    "frontend_initial_overlap_with_final": 51,
+    "frontend_renamed_expanded_case": {
+      "before": "frontend/tests/attentionPresentation.test.mjs::all canonical kinds have distinct human labels, without echoing unknown codes",
+      "after": "frontend/tests/attentionPresentation.test.mjs::canonical and external kinds have distinct human labels, without echoing unknown codes"
+    },
+    "frontend_initial_cases_not_added_to_final_count": true,
+    "installed_cases": 158,
+    "installed_behavioral_overlap_with_source": 155,
+    "installed_only_guards": [
+      "test_import_boundary::test_domain_and_application_do_not_import_infrastructure",
+      "test_import_boundary::test_inner_layers_have_files",
+      "test_import_boundary::test_replay_core_modules_are_in_scope_and_clean"
+    ],
+    "installed_cases_not_added_to_source_count": true,
+    "frontend_counts_separate_from_python": true,
+    "query_optimization_overlap_with_previous_source": 65,
+    "query_optimization_new_cases": 16,
+    "query_optimization_rerun_cases": 81,
+    "source_implementation_backend_cases_before_query_optimization": 38,
+    "query_memo_overlap_with_previous_source": 19,
+    "query_memo_new_cases": 9,
+    "query_memo_rerun_cases": 28,
+    "synthetic_probe_cases": 1,
+    "synthetic_probe_overlap_with_source": 1,
+    "synthetic_probe_not_added_to_source_count": true,
+    "source_historical_successful_unique_cases": 350,
+    "source_retired_cases_not_qualifying_current_tree": [
+      "test_attention_external_memo::test_aggregate_and_page_share_projection_but_next_read_does_not",
+      "test_attention_external_memo::test_deadline_is_checked_before_serving_a_memo_hit",
+      "test_attention_external_memo::test_exit_unregisters_callbacks_and_next_relation_uses_new_policy[False]",
+      "test_attention_external_memo::test_exit_unregisters_callbacks_and_next_relation_uses_new_policy[True]",
+      "test_attention_external_memo::test_memo_and_no_memo_return_identical_items_counts_cursors_and_preferences",
+      "test_attention_external_memo::test_memo_cap_does_not_change_results_or_discard_uncached_facts[bytes]",
+      "test_attention_external_memo::test_memo_cap_does_not_change_results_or_discard_uncached_facts[entries]",
+      "test_attention_external_memo::test_memo_key_contains_facts_and_observation_time",
+      "test_attention_external_memo::test_preferences_and_revocation_are_fresh_between_cached_queries"
+    ],
+    "historical_source_case_breakdown_before_single_relation": {
+      "backend_regression": 195,
+      "http_summary_detail": 24,
+      "canonical_runtime_isolation": 2,
+      "correlation_pure_domain_only": 91,
+      "query_optimization_new": 16,
+      "query_memo_new": 9
+    },
+    "single_relation_overlap_with_previous_source": 19,
+    "single_relation_new_cases": 12,
+    "single_relation_rerun_cases": 31,
+    "installed_distinct_cases_all_candidates": 431,
+    "installed_final_candidate_cases": 292,
+    "installed_v2_candidate_cases": 110,
+    "installed_v3_cases": 0,
+    "installed_final_initial_passed": 291,
+    "installed_final_initial_failed": 1,
+    "installed_final_corrected_passed": 1,
+    "installed_final_qualification": "291 passing cases in the broad run plus the corrected migration case; original XMLs are separate, never synthesized into one green run.",
+    "installed_reruns_not_summed": true
+  },
+  "diagnostics": [
+    {
+      "kind": "initial_runtime_test_failure",
+      "reports": [
+        "http_runtime_initial",
+        "runtime_final"
+      ],
+      "factual_xml": "Both runtime variants failed assert 2 == 1; the latest first-operation receipt was still SUBMITTED.",
+      "explanation_source": "Coordinator message and retained initial XML.",
+      "explanation": "The fixture had already admitted a second turn.submit row in QUEUED state before external observations. The test was corrected to compare admitted operation identities before/after and prove that the queued second operation was not executed. The corrected two-case run passed."
+    },
+    {
+      "kind": "initial_frontend_test_failure",
+      "reports": [
+        "frontend_initial",
+        "frontend_final"
+      ],
+      "factual_xml": "The focused run had one assertion failure: 16 !== 13 for the count of distinct attention kind labels.",
+      "explanation": "Three external kinds were added. The label test was renamed from all canonical kinds to canonical and external kinds in the same file. The final all-tests report has 121 successful cases; 51 initial testcase identities match literally, and this one renamed/expanded case is tracked separately without adding it to the final count."
+    },
+    {
+      "kind": "initial_build_failure",
+      "source_log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10-external-installed-xb13pb6_\\wheel-build.log",
+      "log_copied": true,
+      "source_log_sha256": "13b9029d238e32622fc31af99154d8587a7b09a2573f4cb1a96517cc1b836410",
+      "source_log_bytes": 1618,
+      "factual_log": "BackendUnavailable: Cannot import 'setuptools.build_meta'; ModuleNotFoundError: No module named 'setuptools'.",
+      "explanation": "The initial build environment lacked setuptools. A later detached qualified build produced the wheel and exact source/wheel/installed byte proof retained here. No product defect is inferred from the missing build dependency.",
+      "retained_log": "plans/agent_ops/evidence/pr10-external/diagnostics/wheel-build.log"
+    },
+    {
+      "kind": "initial_lint_diagnostic",
+      "artifact": "Tool output only; not an XML test report.",
+      "explanation": "Ruff initially flagged the imported pytest obs fixture being shadowed by its injected parameter (F811). The fixture annotation was corrected; the final affected-file Ruff checks passed."
+    },
+    {
+      "kind": "aggregate_page_external_repeat_probe",
+      "reports": [
+        "external_repeat_probe",
+        "backend_query_memo_final"
+      ],
+      "factual_probe": "One synthetic blocked instance projected once for the aggregate and once again for the page before the memo change.",
+      "subsequent_change": "The external serialized projection is reused only within one relation. It is bounded by 8192 entries and 32 MiB of retained UTF-8 facts/results, not total RSS; deadline checks precede cache hits and the memo is cleared on exit.",
+      "validation": "The 28-case follow-up passed, including nine new tests of key/time identity, entry/byte limits, deadline checks, callback cleanup, aggregate/page reuse, output equivalence, preferences and revocation across requests."
+    },
+    {
+      "kind": "single_relation_replaces_memo",
+      "reports": [
+        "backend_query_memo_final",
+        "backend_single_relation_final"
+      ],
+      "implementation": "Counts, revision, deadlines and the ordered limit-plus-one JSON page now consume the same materialized CTEs in one read-only statement. Event cursor metadata is read separately in the same UoW. No cache or temporary table remains.",
+      "budget": "The 5-second limit is unchanged, including a final check that refuses a snapshot if its last callback crossed the deadline before another SQLite progress notification.",
+      "qualification": "31 current-tree cases passed: 12 new functional cases and 19 repeats. Nine retired memo cases remain historical only; current successful unique source identities are 340, with 349 historical successful identities including the retired cases."
+    },
+    {
+      "kind": "installed_authority_upgrade_test_checkout_dependency",
+      "reports": [
+        "installed_final_initial",
+        "installed_final_followup",
+        "authority_migration_final"
+      ],
+      "factual_xml": "The broad V4 run passed 291 cases and failed one with FileNotFoundError for checkout-relative migration SQL.",
+      "correction": "The test now reads importlib.resources from the imported package and expects migrations 162,163,164,165. Its backfill, privacy and immutable-161 assertions are preserved. The focused source and installed runs each pass one case.",
+      "scope": "No production, wheel, frontend or migration bytes changed. All original failure XML, proof and copied test bytes are retained."
+    }
+  ],
+  "package_candidate": {
+    "wheel_sha256": "48eee2b5136f40ed3f37e4df73896d8d4d91bbc064d2cf918d2dfa85c461292d",
+    "counts": {
+      "python": 497,
+      "migrations": 165,
+      "static": 7,
+      "total": 672
+    },
+    "source_unchanged_during_build": true,
+    "exact_relative_sets_equal": true,
+    "all_raw_bytes_equal": true
+  },
+  "optimized_package_candidate": {
+    "generation": 2,
+    "wheel_sha256": "ed6223c0de0d333e7fd108175d1f15dd0a4e72c8e489782ac9869e0284f9a245",
+    "counts": {
+      "python": 497,
+      "migrations": 165,
+      "static": 7,
+      "total": 672
+    },
+    "source_unchanged_during_build": true,
+    "exact_relative_sets_equal": true,
+    "all_raw_bytes_equal": true,
+    "package_proof": "plans/agent_ops/evidence/pr10-external/candidate-v2/package-proof.json",
+    "release_scope": "plans/agent_ops/evidence/pr10-external/candidate-v2/release-scope.json",
+    "release_scope_sha256": "23a868fa8a35922ebc0f90fa77d7c1ab528a16853495f8341725d08826b137ba",
+    "final_installed_qualification_claim": false,
+    "benchmark_acceptance": false,
+    "superseded_reason": "V2 filtered blocked/completion queries passed at 4096 instances; the all-kinds query still exceeded the unchanged 5-second budget."
+  },
+  "memo_package_candidate": {
+    "generation": 3,
+    "wheel_sha256": "a5d040eb7bce0deffdbf24f3506000eb5e493e9f36d8cf2116b7057e57746d7c",
+    "package_proof": "plans/agent_ops/evidence/pr10-external/candidate-v3/package-proof.json",
+    "final_installed_qualification_claim": false,
+    "benchmark_acceptance": false,
+    "superseded_reason": "The all-kinds 4096-instance read succeeded once in four attempts and exceeded the unchanged 5-second budget in three attempts. The memo was removed in favor of one SQL statement for counts and page."
+  },
+  "final_benchmark": {
+    "observation_list_200": {
+      "median_ms": 46.09845002414659,
+      "maximum_ms": 52.28590004844591,
+      "successful_samples": 4
+    },
+    "observation_detail": {
+      "median_ms": 2.653550007380545,
+      "maximum_ms": 7.080500014126301,
+      "successful_samples": 4
+    },
+    "observation_summary": {
+      "median_ms": 858.9624000014737,
+      "maximum_ms": 1456.5328999888152,
+      "successful_samples": 4
+    },
+    "attention_all_kinds_50": {
+      "median_ms": 3223.496150021674,
+      "maximum_ms": 3725.2530999830924,
+      "successful_samples": 4
+    },
+    "attention_external_blocked_50": {
+      "median_ms": 1227.2479500097688,
+      "maximum_ms": 1261.4128999994136,
+      "successful_samples": 4
+    },
+    "attention_external_completion_50": {
+      "median_ms": 1438.5838500165846,
+      "maximum_ms": 1496.2601999868639,
+      "successful_samples": 4
+    }
+  },
+  "final_package": {
+    "wheel_sha256": "280c0e0cca2b02ae0fa69443ed44889609988f4432af928d839013c2618bf035",
+    "counts": {
+      "python": 497,
+      "migrations": 165,
+      "static": 7,
+      "total": 672
+    },
+    "package_proof": "plans/agent_ops/evidence/pr10-external/final/package-proof.json",
+    "release_scope": "plans/agent_ops/evidence/pr10-external/final/release-scope.json"
+  }
+}

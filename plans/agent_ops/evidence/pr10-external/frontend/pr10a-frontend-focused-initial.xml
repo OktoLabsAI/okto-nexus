@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="attention page and summary preserve scoped filters and opaque cursor" time="0.092496" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionApi.test.mjs"/>
+	<testcase name="viewing preferences and canonical approvals send their separate revision fences" time="0.005995" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionApi.test.mjs"/>
+	<testcase name="exact operation and cleanup inspection send no productive action" time="0.002452" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionApi.test.mjs"/>
+	<testcase name="external summary, bounded page and exact instance inspection are passive and scoped" time="0.003719" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionApi.test.mjs"/>
+	<testcase name="a late unauthorized response from an aborted scope cannot expire a newer session" time="0.003842" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionApi.test.mjs"/>
+	<testcase name="external inspection uses the exact instance and preserves the historical completion separately" time="0.007949" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="external reports never resolve canonical approval, execution or task controls" time="0.001819" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="external source, identity, generation and context mismatch refuse the selection" time="0.012835" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="all thirteen actions resolve exact existing canonical records" time="0.001147" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="manual and mirrored handoff results keep handoff and execution references distinct" time="0.000535" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="disconnected work uses its emitted execution_operation, not its internal executor episode anchor" time="0.001517" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="runtime recovery opens its original message without requiring an execution or session" time="0.001012" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="minimal references emitted by every other collector retain their canonical navigation" time="0.000907" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="missing scope and unavailable actions never select a first session or another record" time="0.000743" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="opening every target only invokes canonical inspection methods, including cleanup inspect" time="0.001472" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="empty, duplicate or out-of-scope handoff and delivery responses fail closed" time="0.001886" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="all execution scope fields and maintenance receipt references are revalidated" time="0.001198" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="original approval and message scope are checked, and unavailable target performs no API call" time="0.000852" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="historical execution is read by exact operation without enumerating current sessions" time="0.000354" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="authorization failures propagate without fallback, retry or retaining another record" time="0.000576" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="each canonical inspection forwards its cancellation signal" time="0.000535" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="generic decisions send the reviewed revision and never retry a conflict" time="0.000722" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="missing or invalid approval revision cannot submit a decision" time="0.000767" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="same revision preserves native draft identity; native revision, digest and CAS changes reset it" time="0.045763" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionNavigation.test.mjs"/>
+	<testcase name="all canonical kinds have distinct human labels, without echoing unknown codes" time="0.006029" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs" failure="Expected values to be strictly equal:&#10;&#10;16 !== 13&#10;">
+		<failure type="testCodeFailure" message="Expected values to be strictly equal:&#10;&#10;16 !== 13">
+[Error [ERR_TEST_FAILURE]: Expected values to be strictly equal:
+
+16 !== 13
+] {
+  code: 'ERR_TEST_FAILURE',
+  failureType: 'testCodeFailure',
+  cause: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  16 !== 13
+  
+      at TestContext.&lt;anonymous> (file:///D:/Projetos/Techridy/okto_labs_okto_nexus/frontend/tests/attentionPresentation.test.mjs:26:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 16,
+    expected: 13,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+}
+		</failure>
+	</testcase>
+	<testcase name="primary action opens only an allowed canonical control" time="0.001036" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="history descriptions follow source resolution, never seen or snooze preferences" time="0.001002" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="expired, resolved or stale sources prefer inspection instead of decision controls" time="0.000676" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="source names are plain known labels, including prototype-like unknown values" time="0.000643" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="external attention exposes inspection only and preserves observational wording" time="0.000659" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="protected or differently scoped snapshots are never presented" time="0.000777" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="matching page retains its own filtered counts and never substitutes global summary" time="0.000541" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="selecting snoozed includes inactive occurrences and keeps the current scope" time="0.003317" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="age handles timezone offsets, future timestamps and invalid dates without negative ages" time="0.001060" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="snooze presets emit bounded UTC deadlines without a source mutation" time="0.004090" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="focus stays on its record or moves to the next surviving row, then the previous row or heading" time="0.000786" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\attentionPresentation.test.mjs"/>
+	<testcase name="complete aggregate retains mixed instances and unavailable evidence separately" time="0.007687" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationPresentation.test.mjs"/>
+	<testcase name="only current observations display reported activity; stale never becomes idle" time="0.000979" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationPresentation.test.mjs"/>
+	<testcase name="next refresh uses the Server clock and the earliest current report TTL" time="0.001080" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationPresentation.test.mjs"/>
+	<testcase name="expired, absent or invalid freshness deadlines cannot assert current activity" time="0.000890" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationPresentation.test.mjs"/>
+	<testcase name="one summary request serves a scope and bursts coalesce without parallel reads" time="0.009190" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="changing workspace or page clears the prior result before loading" time="0.002221" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="late responses and authorization errors from an old scope do not change the new scope" time="0.009228" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="subsecond TTL marks the snapshot stale before the refresh response arrives" time="0.002636" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="network transit consumes freshness instead of extending the Server TTL" time="0.001462" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="transient failure retains only explicitly stale data and uses a bounded retry" time="0.002389" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="a hung refresh times out, aborts its request and never keeps old data current" time="0.001564" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="current authorization loss clears protected data and stops automatic polling" time="0.002160" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="missing endpoint and changed generation clear the selected report without fallback" time="0.002724" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="disabled publishing keeps explicitly unavailable history consultable and can refresh" time="0.002124" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="collapsed panels and disposed readers cancel requests and never publish late results" time="0.001166" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<testcase name="zero and invalid refresh durations remain stale and do not cause a tight loop" time="0.001518" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\observationReader.test.mjs"/>
+	<!-- tests 52 -->
+	<!-- suites 0 -->
+	<!-- pass 51 -->
+	<!-- fail 1 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 2586.3307 -->
+</testsuites>

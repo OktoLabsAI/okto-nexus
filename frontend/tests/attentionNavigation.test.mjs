@@ -12,6 +12,45 @@ const occurrence = (source_type, action, values = {}) => ({source_type, source_i
   message_id:'message',result_id:'result',...values});
 const target = (source, action, values) => attentionTarget(occurrence(source, action, values), action);
 
+const externalItem = () => ({source_type: 'external_observation', source_id: 'instance', agent_id: 'peer', workspace_id: 'workspace',
+  kind: 'external_completion_unseen', allowed_actions: ['inspect_external_observation'], external_observation: {
+    observed_instance_id: 'instance', source_id: 'source', generation: 7, agent_id: 'peer', workspace_id: 'workspace',
+    observational_only: true, last_report: {current_completion_ref: 'original-completion'},
+  }});
+
+test('external inspection uses the exact instance and preserves the historical completion separately', async () => {
+  const item = externalItem();
+  const selection = attentionTarget(item, 'inspect_external_observation');
+  assert.deepEqual(selection, {kind: 'external_observation', id: 'instance', source: 'source', generation: 7, agent: 'peer', workspace: 'workspace'});
+  const calls = [], controller = new AbortController();
+  const response = await readAttentionReference({externalObservation: async (...args) => {
+    calls.push(args); return {item: {...item.external_observation, last_report: {current_completion_ref: 'new-completion'}}};
+  }}, selection, controller.signal);
+  assert.deepEqual(calls, [['instance', controller.signal]]);
+  assert.equal(response.record.item.last_report.current_completion_ref, 'new-completion');
+  assert.equal(item.external_observation.last_report.current_completion_ref, 'original-completion');
+});
+
+test('external reports never resolve canonical approval, execution or task controls', () => {
+  const item = externalItem();
+  for (const action of ['decide_approval', 'decide_native', 'respond_native', 'verify_handoff', 'inspect_operation', 'inspect_result', 'review_authority']) {
+    assert.equal(attentionTarget({...item, allowed_actions: [action]}, action).kind, 'unavailable');
+  }
+  assert.equal(attentionTarget({...item, external_observation: undefined}, 'inspect_external_observation').kind, 'unavailable');
+});
+
+test('external source, identity, generation and context mismatch refuse the selection', async () => {
+  const item = externalItem(), selection = attentionTarget(item, 'inspect_external_observation');
+  for (const field of ['source_id', 'observed_instance_id', 'agent_id', 'workspace_id', 'generation', 'observational_only']) {
+    const changed = {...item.external_observation, [field]: field === 'generation' ? 8 : field === 'observational_only' ? false : 'other'};
+    await assert.rejects(readAttentionReference({externalObservation: async () => ({item: changed})}, selection), {code: 'OBSERVATION_SELECTION_CHANGED'});
+  }
+  for (const generation of [0, -1, 1.2, Number.MAX_SAFE_INTEGER + 1]) {
+    assert.equal(attentionTarget({...item, external_observation: {...item.external_observation, generation}}, 'inspect_external_observation').kind, 'unavailable');
+    await assert.rejects(readAttentionReference({}, {...selection, generation}), {code: 'OBSERVATION_SELECTION_CHANGED'});
+  }
+});
+
 test('all thirteen actions resolve exact existing canonical records', () => {
   const cases = [
     ['approval','inspect_approval','approval'], ['approval','decide_approval','approval'],

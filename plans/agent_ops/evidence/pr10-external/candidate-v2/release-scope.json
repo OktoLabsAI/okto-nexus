@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "comparison": "Pre-optimization V1 candidate versus optimized V2 candidate",
+  "final_artifact_manifest": false,
+  "final_installed_qualification_claim": false,
+  "proof_inputs": [
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/package-proof.json",
+      "sha256": "e6d2879864f60100f0c5e42b811e55b049efbeb0a404d1fcd5179b4655fcbba8"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/package-proof.json",
+      "sha256": "84c7f147e437cc55bdb53e5ea73319c2b565a37a641e621d62ac5dcbb4b94c62"
+    }
+  ],
+  "v1_wheel_sha256": "48eee2b5136f40ed3f37e4df73896d8d4d91bbc064d2cf918d2dfa85c461292d",
+  "v2_wheel_sha256": "ed6223c0de0d333e7fd108175d1f15dd0a4e72c8e489782ac9869e0284f9a245",
+  "exact_relative_sets_equal": true,
+  "file_count": 672,
+  "changed_production_file_count": 4,
+  "unchanged_production_file_count": 668,
+  "added_files": [],
+  "removed_files": [],
+  "changed_production_files": [
+    {
+      "path": "adapters/outbound/sqlite/attention.py",
+      "v1_sha256": "23d10ddad9545a90c64c21133bcb84c5762bb6c148bec11a0cda269dfffcb1b9",
+      "v2_sha256": "41975603c21bd1787bf0676ada9dae3d84454b52e156d9e5ed1bf272f93edd82"
+    },
+    {
+      "path": "adapters/outbound/sqlite/attention_external.py",
+      "v1_sha256": "a4a420149680206186c43ec3fc721aad6024c955966ec7ee8e4d2f0b386c4ce8",
+      "v2_sha256": "3d3f553ecdbe07076c95b0406b3a40ec68c9b295f1f77dab8ec19ce0c4039bfb"
+    },
+    {
+      "path": "application/attention_external.py",
+      "v1_sha256": "5632c7682d63f052c0d3bc7d68bb8557902401c183e3b9c568dbb0722546a820",
+      "v2_sha256": "7388696f1af4f2b307adc54415d1c5588ad53ba40042c2aa40ca71cd7b8642dc"
+    },
+    {
+      "path": "application/observations.py",
+      "v1_sha256": "19ae1b0e02fc5a3623c1558b7428f47b2352f3f2fc77dddf66233e9af2531b4d",
+      "v2_sha256": "c697b44b792dead8b8dbdb2c1c41ddc5dc5f332362ec6e58f4f8315a4c39e900"
+    }
+  ],
+  "unchanged_static_file_count": 7,
+  "unchanged_static_files": [
+    {
+      "path": "adapters/inbound/http/static/assets/index-C1ejzFJK.css",
+      "sha256": "fb5bbec53610c308ad79a43b89a5be15a0c387ddea6b5fbfc792f8daca7af63d"
+    },
+    {
+      "path": "adapters/inbound/http/static/assets/index-kTkLvZ6j.js",
+      "sha256": "6ba3599be49642e3d63fb5c3c83ef1b9c09d2b446b9a7be0ff5e6ff64018bf0b"
+    },
+    {
+      "path": "adapters/inbound/http/static/index.html",
+      "sha256": "85f05718f2fc7c7806008490661e1fe5b5c7aab655229402056acd96a690e74c"
+    },
+    {
+      "path": "adapters/inbound/http/static/logos/nexus-icon.svg",
+      "sha256": "4277cfc79cc6c93758ccab6b3a2c6fd20f589e1a9b19e2a6869337678d908a06"
+    },
+    {
+      "path": "adapters/inbound/http/static/logos/nexus-wordmark-dark.svg",
+      "sha256": "f14089eff53d1296b9ae656953382906827e00dd34b83809dda02f15c8d6c0ef"
+    },
+    {
+      "path": "adapters/inbound/http/static/logos/nexus-wordmark-light.svg",
+      "sha256": "db7e842fa889ec6b9310eb6a02f16bbdf12d919f3a3e1afb9a5d22a72ceb3242"
+    },
+    {
+      "path": "adapters/inbound/http/static/logos/oktolabs-icon.svg",
+      "sha256": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+    }
+  ],
+  "core_wheel_unchanged": true,
+  "pyproject_unchanged": true,
+  "each_candidate_source_wheel_installed_bytes_equal": true,
+  "proof_scope": "Package byte equality and exact release delta only; no final installed test or benchmark acceptance is asserted."
+}

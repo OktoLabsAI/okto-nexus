@@ -8,6 +8,7 @@ export type AttentionTarget =
   | {kind: 'execution'; agent: string; executor: string; operation: string; session: string | null; workspace: string | null}
   | {kind: 'delivery'; operation: string; workspace: string; agent: string | null}
   | {kind: 'maintenance'; id: string; result: string | null; workspace: string | null; agent: string | null}
+  | {kind: 'external_observation'; id: string; source: string; generation: number; workspace: string; agent: string}
   | {kind: 'unavailable'; reason: string};
 
 const unavailable = (reason: string): AttentionTarget => ({kind: 'unavailable', reason});
@@ -16,6 +17,19 @@ const reference = (value: string | null): value is string => typeof value === 's
 /** Resolve explicit canonical references only. This function never executes a command. */
 export function attentionTarget(item: AttentionOccurrence, action: AttentionAction): AttentionTarget {
   if (!item.allowed_actions.includes(action)) return unavailable('This action is no longer offered. Refresh attention.');
+  if (action === 'inspect_external_observation') {
+    const observation = item.external_observation;
+    return item.source_type === 'external_observation' && observation?.observational_only === true &&
+      observation.observed_instance_id === item.source_id && observation.agent_id === item.agent_id &&
+      observation.workspace_id === item.workspace_id && reference(observation.source_id) &&
+      reference(item.source_id) && reference(item.agent_id) && reference(item.workspace_id) &&
+      Number.isSafeInteger(observation.generation) && observation.generation > 0
+      ? {kind: 'external_observation', id: item.source_id, source: observation.source_id,
+        generation: observation.generation, workspace: item.workspace_id, agent: item.agent_id}
+      : unavailable('The exact external instance reference is unavailable. Refresh the observation.');
+  }
+  // External reports never navigate to canonical decision or execution controls.
+  if (item.source_type === 'external_observation' || item.kind?.startsWith('external_')) return unavailable('External observations only allow inspection in their source environment.');
   const approval = ['approval', 'execution_native_request'].includes(item.source_type);
   const handoff = ['handoff', 'handoff_result'].includes(item.source_type);
   if (['inspect_approval', 'respond_native', 'decide_native', 'decide_approval'].includes(action)) {
@@ -56,11 +70,23 @@ export function approvalReviewKey(detail: Pick<ApprovalDetail, 'approval_id' | '
 }
 
 type AttentionReadApi = Pick<typeof canonicalApi, 'approvalDetail' | 'handoffs' | 'message' |
-  'agentRuntimeExecution' | 'runtimeOperationInspection' | 'inspectRuntimeMaintenance'>;
+  'agentRuntimeExecution' | 'runtimeOperationInspection' | 'inspectRuntimeMaintenance' | 'externalObservation'>;
 
 /** Only existing canonical inspection methods are accepted; opening never submits work. */
 export async function readAttentionReference(api: AttentionReadApi, target: AttentionTarget, signal?: AbortSignal) {
   switch (target.kind) {
+    case 'external_observation': {
+      if (!Number.isSafeInteger(target.generation) || target.generation <= 0)
+        throw Object.assign(new Error('The selected generation cannot be verified.'), {code: 'OBSERVATION_SELECTION_CHANGED'});
+      const record = await api.externalObservation(target.id, signal);
+      const item = record.item;
+      if (item.observational_only !== true || item.observed_instance_id !== target.id || item.source_id !== target.source ||
+          item.generation !== target.generation || item.agent_id !== target.agent || item.workspace_id !== target.workspace) {
+        throw Object.assign(new Error('The external instance no longer matches the selected generation and scope.'),
+          {code: 'OBSERVATION_SELECTION_CHANGED'});
+      }
+      return {kind: target.kind, record};
+    }
     case 'approval': {
       const record = await api.approvalDetail(target.id, signal);
       if (record.approval_id !== target.id || (target.workspace && record.workspace_id !== target.workspace))

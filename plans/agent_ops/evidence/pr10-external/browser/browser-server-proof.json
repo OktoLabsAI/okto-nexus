@@ -1,0 +1,340 @@
+{
+  "tables": 146,
+  "unchanged": true,
+  "changed": [],
+  "summary": {
+    "version": 1,
+    "filters": {},
+    "feature_enabled": true,
+    "observed_at": "2026-11-07T03:04:01.947718Z",
+    "total_instances": 6,
+    "activity": {
+      "working": 2,
+      "idle": 0,
+      "blocked": 0,
+      "unknown": 4
+    },
+    "freshness": {
+      "current": 2,
+      "stale": 2,
+      "unknown": 2,
+      "unavailable": 0
+    },
+    "agents": [
+      {
+        "agent_id": "pr10-observed-a",
+        "total_instances": 5,
+        "activity": {
+          "working": 1,
+          "idle": 0,
+          "blocked": 0,
+          "unknown": 4
+        },
+        "freshness": {
+          "current": 1,
+          "stale": 2,
+          "unknown": 2,
+          "unavailable": 0
+        }
+      },
+      {
+        "agent_id": "pr10-observed-b",
+        "total_instances": 1,
+        "activity": {
+          "working": 1,
+          "idle": 0,
+          "blocked": 0,
+          "unknown": 0
+        },
+        "freshness": {
+          "current": 1,
+          "stale": 0,
+          "unknown": 0,
+          "unavailable": 0
+        }
+      }
+    ],
+    "next_refresh_at": "2026-11-07T03:04:16.947718Z",
+    "refresh_after_seconds": 15.0
+  },
+  "attention": {
+    "total": 4,
+    "snapshot_revision": "10b4ef0af5d75090b3c3ac7fb91f8ef5c78aeaa46293cb30d29475ebc03b8b3b",
+    "counts": {
+      "action_required": 0,
+      "watch": 4,
+      "priority": {
+        "10": 4,
+        "20": 0,
+        "30": 0
+      },
+      "unseen": 3,
+      "snoozed": 0
+    },
+    "event_cursor": 7,
+    "event_low_watermark": 1,
+    "version": 1,
+    "filters": {
+      "state": "all",
+      "seen": "all"
+    },
+    "items": [
+      {
+        "active": true,
+        "agent_id": "pr10-observed-a",
+        "allowed_actions": [
+          "inspect_external_observation"
+        ],
+        "attention_id": "att_2c8d78901e8407722301d2eaf3501887cceb3af4c6433ba321cba0ca4f40f0ec",
+        "category": "watch",
+        "executor_id": null,
+        "external_observation": {
+          "activity_state": "idle",
+          "agent_id": "pr10-observed-a",
+          "canonical_session_ref": null,
+          "external_instance_ref": "pr10-complete",
+          "freshness": "current",
+          "generation": 7,
+          "last_report": {
+            "current_completion_ref": "pr10-completion-1",
+            "evidence": "inferred",
+            "last_completion_received_at": "2026-11-07T02:34:47.938103Z",
+            "last_completion_ref": "pr10-completion-1",
+            "observed_at": "2026-11-07T02:34:46.094521Z",
+            "reason_code": null,
+            "reason_text": null,
+            "received_at": "2026-11-07T02:34:47.938103Z",
+            "sequence": 1,
+            "state": "idle",
+            "valid_until": "2026-11-07T03:34:46.094521Z"
+          },
+          "observational_only": true,
+          "observed_instance_id": "obs_inst_0000000000000007",
+          "source_continuity": "delayed",
+          "source_id": "obs_src_0000000000000001",
+          "source_kind": "custom",
+          "source_last_received_at": "2026-11-07T02:51:16.431193Z",
+          "source_revision": 1,
+          "workspace_id": "pr10-workspace-a"
+        },
+        "first_detected_at": "2026-11-07T02:34:47.938103+00:00",
+        "freshness": "current",
+        "kind": "external_completion_unseen",
+        "last_changed_at": "2026-11-07T02:34:47.938103+00:00",
+        "message_id": null,
+        "next_change_at": "2026-11-07T03:34:46.094521+00:00",
+        "operation_id": null,
+        "priority": 10,
+        "resolution": "resolved",
+        "result_id": null,
+        "seen_state": {
+          "revision": 0,
+          "seen": false,
+          "seen_at": null,
+          "snoozed": false,
+          "snoozed_until": null
+        },
+        "session_id": null,
+        "severity": "info",
+        "source_id": "obs_inst_0000000000000007",
+        "source_revision": "89b3b47b0bf2de9295e8803b1ac843b24785e5fed62f36f4e34ca35763f6223c",
+        "source_type": "external_observation",
+        "summary_code": "external_completion_unseen",
+        "workspace_id": "pr10-workspace-a"
+      },
+      {
+        "active": false,
+        "agent_id": "pr10-observed-a",
+        "allowed_actions": [
+          "inspect_external_observation"
+        ],
+        "attention_id": "att_d505cc86687ac63b66d477259a73e1dcd3edb12d438254efc4f7f80cf6654502",
+        "category": "watch",
+        "executor_id": null,
+        "external_observation": {
+          "activity_state": "idle",
+          "agent_id": "pr10-observed-a",
+          "canonical_session_ref": null,
+          "external_instance_ref": "pr10-complete",
+          "freshness": "current",
+          "generation": 7,
+          "last_report": {
+            "current_completion_ref": "pr10-completion-2",
+            "evidence": "inferred",
+            "last_completion_received_at": "2026-11-07T02:34:50.930088Z",
+            "last_completion_ref": "pr10-completion-2",
+            "observed_at": "2026-11-07T02:34:49.615747Z",
+            "reason_code": null,
+            "reason_text": null,
+            "received_at": "2026-11-07T02:34:50.930088Z",
+            "sequence": 3,
+            "state": "idle",
+            "valid_until": "2026-11-07T03:34:49.615747Z"
+          },
+          "observational_only": true,
+          "observed_instance_id": "obs_inst_0000000000000007",
+          "source_continuity": "delayed",
+          "source_id": "obs_src_0000000000000001",
+          "source_kind": "custom",
+          "source_last_received_at": "2026-11-07T02:51:16.431193Z",
+          "source_revision": 1,
+          "workspace_id": "pr10-workspace-a"
+        },
+        "first_detected_at": "2026-11-07T02:34:50.930088+00:00",
+        "freshness": "current",
+        "kind": "external_completion_unseen",
+        "last_changed_at": "2026-11-07T02:34:50.930088+00:00",
+        "message_id": null,
+        "next_change_at": "2026-11-07T03:34:49.615747+00:00",
+        "operation_id": null,
+        "priority": 10,
+        "resolution": "resolved",
+        "result_id": null,
+        "seen_state": {
+          "revision": 1,
+          "seen": true,
+          "seen_at": "2026-11-07T02:48:05.755573+00:00",
+          "snoozed": false,
+          "snoozed_until": null
+        },
+        "session_id": null,
+        "severity": "info",
+        "source_id": "obs_inst_0000000000000007",
+        "source_revision": "2bacfc7f235710768ac1019413034bc9ae59bb3d4f3d109e0071b6bf24fb2e67",
+        "source_type": "external_observation",
+        "summary_code": "external_completion_unseen",
+        "workspace_id": "pr10-workspace-a"
+      },
+      {
+        "active": true,
+        "agent_id": "pr10-observed-a",
+        "allowed_actions": [
+          "inspect_external_observation"
+        ],
+        "attention_id": "att_79af9e8ad03dfef625476ecb61f6d251c5508f7e0f4eb418370d5781d309b2b4",
+        "category": "watch",
+        "executor_id": null,
+        "external_observation": {
+          "activity_state": "unknown",
+          "agent_id": "pr10-observed-a",
+          "canonical_session_ref": null,
+          "external_instance_ref": "pr10-stale",
+          "freshness": "stale",
+          "generation": 9,
+          "last_report": {
+            "current_completion_ref": null,
+            "evidence": "inferred",
+            "last_completion_received_at": null,
+            "last_completion_ref": null,
+            "observed_at": "2026-11-07T02:34:50.947124Z",
+            "reason_code": null,
+            "reason_text": null,
+            "received_at": "2026-11-07T02:34:52.430581Z",
+            "sequence": 1,
+            "state": "working",
+            "valid_until": "2026-11-07T02:34:52.947124Z"
+          },
+          "observational_only": true,
+          "observed_instance_id": "obs_inst_0000000000000009",
+          "source_continuity": "delayed",
+          "source_id": "obs_src_0000000000000001",
+          "source_kind": "custom",
+          "source_last_received_at": "2026-11-07T02:51:16.431193Z",
+          "source_revision": 1,
+          "workspace_id": "pr10-workspace-a"
+        },
+        "first_detected_at": "2026-11-07T02:34:52.947124+00:00",
+        "freshness": "stale",
+        "kind": "external_observation_stale",
+        "last_changed_at": "2026-11-07T02:34:52.947124+00:00",
+        "message_id": null,
+        "next_change_at": null,
+        "operation_id": null,
+        "priority": 10,
+        "resolution": "open",
+        "result_id": null,
+        "seen_state": {
+          "revision": 0,
+          "seen": false,
+          "seen_at": null,
+          "snoozed": false,
+          "snoozed_until": null
+        },
+        "session_id": null,
+        "severity": "warning",
+        "source_id": "obs_inst_0000000000000009",
+        "source_revision": "3fba693a539d460d5b184f9231e8262dcadc3fcc52d4a8869cc50bda3ba75e7a",
+        "source_type": "external_observation",
+        "summary_code": "external_observation_stale",
+        "workspace_id": "pr10-workspace-a"
+      },
+      {
+        "active": true,
+        "agent_id": "pr10-observed-a",
+        "allowed_actions": [
+          "inspect_external_observation"
+        ],
+        "attention_id": "att_c30c1e19cb6c0095e395e6020d41c135641b7a9d42c161bc3f0b7c9f0c5dc16a",
+        "category": "watch",
+        "executor_id": null,
+        "external_observation": {
+          "activity_state": "unknown",
+          "agent_id": "pr10-observed-a",
+          "canonical_session_ref": null,
+          "external_instance_ref": "pr10-working",
+          "freshness": "stale",
+          "generation": 3,
+          "last_report": {
+            "current_completion_ref": null,
+            "evidence": "inferred",
+            "last_completion_received_at": null,
+            "last_completion_ref": null,
+            "observed_at": "2026-11-07T02:51:14.078615Z",
+            "reason_code": null,
+            "reason_text": null,
+            "received_at": "2026-11-07T02:51:16.431193Z",
+            "sequence": 2,
+            "state": "working",
+            "valid_until": "2026-11-07T02:51:59.078615Z"
+          },
+          "observational_only": true,
+          "observed_instance_id": "obs_inst_0000000000000003",
+          "source_continuity": "delayed",
+          "source_id": "obs_src_0000000000000001",
+          "source_kind": "custom",
+          "source_last_received_at": "2026-11-07T02:51:16.431193Z",
+          "source_revision": 1,
+          "workspace_id": "pr10-workspace-a"
+        },
+        "first_detected_at": "2026-11-07T02:51:59.078615+00:00",
+        "freshness": "stale",
+        "kind": "external_observation_stale",
+        "last_changed_at": "2026-11-07T02:51:59.078615+00:00",
+        "message_id": null,
+        "next_change_at": null,
+        "operation_id": null,
+        "priority": 10,
+        "resolution": "open",
+        "result_id": null,
+        "seen_state": {
+          "revision": 0,
+          "seen": false,
+          "seen_at": null,
+          "snoozed": false,
+          "snoozed_until": null
+        },
+        "session_id": null,
+        "severity": "warning",
+        "source_id": "obs_inst_0000000000000003",
+        "source_revision": "c8749c6766b0913e55705395cd706942ac9797dcc5045525c7fbd0ec469208ba",
+        "source_type": "external_observation",
+        "summary_code": "external_observation_stale",
+        "workspace_id": "pr10-workspace-a"
+      }
+    ],
+    "next_cursor": null,
+    "observed_at": "2026-11-07T03:04:01.966383+00:00",
+    "next_refresh_at": "2026-11-07T03:04:16.966383+00:00",
+    "refresh_after_seconds": 15.0
+  }
+}

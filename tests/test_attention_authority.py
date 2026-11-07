@@ -514,18 +514,19 @@ def test_reset_discards_authority_tombstones_but_preserves_retained_config_count
 def test_migration_161_to_162_backfills_metadata_only_and_never_changes_161(conn_factory, tmp_path):
     from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
     from okto_nexus.adapters.outbound.sqlite.attention_authority import ANCHOR_SCHEMA_SQL
+    from importlib.resources import files
     import hashlib
-    source = Path(__file__).parents[1] / 'src/okto_nexus/migrations'
+    source = files('okto_nexus').joinpath('migrations')
     previous = tmp_path / 'previous'
     previous.mkdir()
     digest = hashlib.sha256((source / '161_attention_preferences.sql').read_bytes()).hexdigest()
-    for path in source.glob('*.sql'):
-        if int(path.name.split('_')[0]) <= 161:
+    for path in source.iterdir():
+        if path.name.endswith('.sql') and int(path.name.split('_')[0]) <= 161:
             (previous / path.name).write_bytes(path.read_bytes())
     MigrationRunner(conn_factory, previous).apply()
     with conn_factory.unit_of_work() as uow:
         uow.connection.execute("INSERT INTO agents(agent_id,api_key_hash,metadata,created_at) VALUES('retained','private-key-digest','{\"private\":true}','2026-01-01T00:00:00Z')")
-    assert MigrationRunner(conn_factory).apply() == [162, 163]
+    assert MigrationRunner(conn_factory).apply() == [162, 163, 164, 165]
     with conn_factory.unit_of_work(write=False) as uow:
         anchor = dict(uow.connection.execute("SELECT * FROM attention_operation_epochs WHERE source_type='authority_agents'").fetchone())
         assert anchor['episode'] == 1 and anchor['state'] == 'present'

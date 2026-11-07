@@ -4,6 +4,7 @@ import type { AttentionAction, AttentionCategory, AttentionFilters, AttentionKin
 import { attentionActionLabels, attentionAge, attentionDescription, attentionKinds, attentionSnoozeUntil, attentionSourceLabel, changeAttentionFilter, nextAttentionFocus, primaryAttentionAction, visibleAttentionPage } from '../attentionPresentation';
 import { PageContainer } from '../components/PageContainer';
 import { useWorkspaceName } from '../components/WorkspaceNames';
+import { observationSourceLabels } from '../observationPresentation';
 
 const inputClass = 'w-full rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent-500';
 const focusClass = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-surface-900';
@@ -33,7 +34,9 @@ function AttentionCard({ item, pending, editable, onSeen, onSnooze, onOpen }: {
   const action = primaryAttentionAction(item);
   const titleId = `${item.attention_id}-title`;
   const controlsDisabled = pending || !editable;
-  const freshness = { current: 'Current source', stale: 'Source has changed', unavailable: 'Source unavailable' }[item.freshness];
+  const freshness = item.external_observation
+    ? !editable ? 'Snapshot out of date' : { current: 'Current report', stale: 'Report expired', unavailable: 'Observation unavailable' }[item.freshness]
+    : { current: 'Current source', stale: 'Source has changed', unavailable: 'Source unavailable' }[item.freshness];
   return <article aria-labelledby={titleId} aria-busy={pending} className="rounded-xl border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-900 p-4 sm:p-5">
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div className="min-w-0 flex-1">
@@ -57,6 +60,11 @@ function AttentionCard({ item, pending, editable, onSeen, onSnooze, onOpen }: {
       {item.operation_id && item.operation_id !== item.source_id && <div><dt className="text-surface-500 dark:text-surface-400">Operation</dt><dd className="font-mono break-all mt-0.5">{item.operation_id}</dd></div>}
       {item.executor_id && item.executor_id !== item.source_id && <div><dt className="text-surface-500 dark:text-surface-400">Execution host</dt><dd className="font-mono break-all mt-0.5">{item.executor_id}</dd></div>}
     </dl>
+    {item.external_observation && <div className="mt-3 text-xs space-y-1 text-surface-600 dark:text-surface-400">
+      <p>{observationSourceLabels[item.external_observation.source_kind] ?? 'External source'} · {item.external_observation.last_report?.evidence === 'inferred' ? 'Inferred evidence' : item.external_observation.last_report ? 'Reported evidence' : 'No activity evidence'} · Generation {item.external_observation.generation}</p>
+      <p className="break-all">Source: <span className="font-mono">{item.external_observation.source_id}</span></p>
+      <p>External activity does not confirm task success, presence or available capacity.</p>
+    </div>}
     {item.seen_state.snoozed && item.seen_state.snoozed_until && <p className="mt-3 text-xs text-surface-500 dark:text-surface-400">Hidden from active attention until <time dateTime={item.seen_state.snoozed_until}>{fullTime(item.seen_state.snoozed_until)}</time>.</p>}
     <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-surface-100 dark:border-surface-800">
       {action ? <button type="button" className={`btn btn-primary ${focusClass}`} onClick={() => onOpen(item, action)} data-testid={`attention-open-${item.attention_id}`}>

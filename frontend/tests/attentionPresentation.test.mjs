@@ -22,9 +22,9 @@ try {
 const { attentionKinds, attentionActionLabels, attentionDescription, primaryAttentionAction,
   attentionAge, attentionSnoozeUntil, visibleAttentionPage, changeAttentionFilter, nextAttentionFocus, attentionSourceLabel } = presentation;
 
-test('all canonical kinds have distinct human labels, without echoing unknown codes', () => {
-  assert.equal(Object.keys(attentionKinds).length, 13);
-  assert.equal(new Set(Object.values(attentionKinds).map(value => value.title)).size, 13);
+test('canonical and external kinds have distinct human labels, without echoing unknown codes', () => {
+  assert.equal(Object.keys(attentionKinds).length, 16);
+  assert.equal(new Set(Object.values(attentionKinds).map(value => value.title)).size, 16);
   for (const kind of Object.keys(attentionKinds)) {
     const value = attentionDescription({ kind });
     assert.ok(value.title.length > 0 && value.reason.length > 0);
@@ -75,6 +75,18 @@ test('source names are plain known labels, including prototype-like unknown valu
   for (const source of ['<script>bad</script>', '__proto__', 'constructor', 'toString', 'future']) {
     assert.equal(attentionSourceLabel(source), 'Source record');
   }
+});
+
+test('external attention exposes inspection only and preserves observational wording', () => {
+  for (const kind of ['external_blocked', 'external_completion_unseen', 'external_observation_stale']) {
+    assert.equal(primaryAttentionAction({kind, source_type: 'external_observation', resolution: 'open', freshness: 'current',
+      allowed_actions: ['decide_approval', 'verify_handoff', 'inspect_external_observation']}), 'inspect_external_observation');
+    assert.equal(primaryAttentionAction({kind, resolution: 'open', freshness: 'current', allowed_actions: ['decide_approval']}), null);
+  }
+  assert.match(attentionDescription({kind: 'external_blocked'}).reason, /not an approval request/);
+  assert.match(attentionDescription({kind: 'external_completion_unseen', resolution: 'resolved'}).reason, /does not confirm/);
+  assert.match(attentionDescription({kind: 'external_observation_stale', resolution: 'expired'}).reason, /does not mean idle or offline/);
+  assert.equal(attentionSourceLabel('external_observation'), 'Observed external instance');
 });
 
 test('protected or differently scoped snapshots are never presented', () => {

@@ -1,6 +1,8 @@
 # Vite preserves source HTML newlines in the packaged entrypoint.
 frontend/index.html text eol=lf
 src/okto_nexus/adapters/inbound/http/static/index.html text eol=lf
+# Generated bundles contain upstream shader strings; preserve their build bytes.
+src/okto_nexus/adapters/inbound/http/static/assets/*.js -whitespace
 # Retained qualification hashes describe exact report bytes on every platform.
 plans/agent_ops/evidence/pr06-attention-*.xml text eol=lf
 # PR-07 artifact manifests retain raw browser and test report byte hashes.
@@ -13,3 +15,5 @@ plans/agent_ops/evidence/pr08-observations/** -text
 # PR-09 retains exact report bytes, including original CRLF and diagnostic spaces.
 plans/agent_ops/evidence/pr09-herdr/** -text -whitespace
 plans/agent_ops/evidence/pr09-herdr*.json -text -whitespace
+# PR-10 retains original qualification bytes for raw-file and staged-blob hashes.
+plans/agent_ops/evidence/pr10-external/** -text -whitespace

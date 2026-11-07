@@ -9,6 +9,7 @@ import {AgentRuntimeAdministration} from './AgentRuntimeAdministration';
 import {MessageDetail} from './MessageDetailModal';
 import {RuntimePolicy} from './RuntimePolicy';
 import {RuntimeRecovery} from './RuntimeRecovery';
+import {ExternalObservationInspection} from './ExternalObservations';
 
 export function AttentionInspection({item, action, onClose, onChanged, refreshKey}: {
   item: AttentionOccurrence; action: AttentionAction; onClose: () => void; onChanged: () => void; refreshKey?: string;
@@ -43,10 +44,12 @@ export function AttentionInspection({item, action, onClose, onChanged, refreshKe
   return <AgentActionModal title="Attention · original record" wide onClose={onClose} testId="attention-inspection"
     guardChanges={authority || recovery || ['approval', 'handoff', 'execution'].includes(target.kind)}>
     <div className="space-y-4 min-w-0">
-      <p className="text-xs text-surface-500 break-all">{item.source_type} · {item.source_id}</p>
+      {target.kind !== 'external_observation' && <p className="text-xs text-surface-500 break-all">{item.source_type} · {item.source_id}</p>}
       {target.kind === 'unavailable' && <p role="status">{target.reason}</p>}
       {loading && <p role="status">Loading canonical record…</p>}
       {error && <p role="alert">{error}</p>}
+      {target.kind === 'external_observation' && <ExternalObservationInspection key={targetKey} target={target} refreshKey={refreshKey}
+        completionEpisode={item.kind === 'external_completion_unseen' ? item.external_observation : undefined} />}
       {target.kind === 'approval' && <ApprovalInspection key={targetKey} approvalId={target.id} workspace={target.workspace}
         allowDecision={target.decide && item.freshness === 'current' && item.resolution === 'open'} onChanged={onChanged} refreshKey={refreshKey} />}
       {target.kind === 'handoff' && <HandoffInspection key={targetKey} handoffId={target.id} workspace={target.workspace}

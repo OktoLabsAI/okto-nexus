@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-06",
+  "updated_at": "2026-11-07T04:15:52+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -426,7 +426,7 @@
       ]
     },
     "PR-10": {
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "dependencies": [
         "PR-03",
         "PR-04",
@@ -436,7 +436,16 @@
         "PR-08",
         "PR-09"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/browser/browser-results.json",
+        "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-single-query.json",
+        "plans/agent_ops/evidence/pr10-external/final/package-proof.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+        "plans/agent_ops/evidence/pr10-external/final/followup/installed.xml",
+        "plans/agent_ops/evidence/pr10-external/artifact-manifest.json"
+      ]
     }
   },
   "tasks": {
@@ -1850,13 +1859,16 @@
         "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
-        "plans/agent_ops/evidence/pr03-project-doctor.md"
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
+        "plans/agent_ops/evidence/pr02-upgrade.md",
+        "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+        "plans/agent_ops/evidence/pr10-ledger-reconciliation.md"
       ],
-      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "result": "Connector connect/configure now offer login startup in the same local connection confirmation, with a secret-free instance/context review and an independent durable host checkpoint before native effects. Existing installer/lifecycle contracts perform drain, install or enable, and supervised readiness before remote onboarding continues. Resume preserves the original request and refuses conflicting choices; reconnect preserves later disablement/removal. Operator approval remains the separate authority for remote execution. 74 focused source tests passed before the final JSON-mode guard; 152 Connector and 104 Nexus tests passed against the final installed artifacts. DX-T37 review/decline is verified for the declared Windows contract with injected native effects; actual login/logout/crash/credential qualification and full productive M1 remain open. Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.\n\n2026-11-07 documentary reconciliation: the earlier statement that controlled upgrades and passive diagnostics beyond logs remained unimplemented is superseded by the retained reviewed-upgrade and project-doctor evidence. pr02-upgrade-installed.xml records 200 passing cases, including actual replacements between disposable installed environments; Task Scheduler update effects were injected and Core native XML checks were validate-only. Existing installed passive project-diagnostic subscopes remain verified. This is historical contract evidence, not qualification of the current PR-10 wheel or actual login/logout/crash/credential/provider campaigns; task status and the existing native-campaign authorization state are unchanged.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Actual user-service/login/logout/crash/credential/provider campaigns NOT_RUN; legacy POSIX installers remain unqualified for the R3 instance contract.",
-        "Remaining controls and passive diagnostics beyond service logs, general definition reconciliation UX, detached pre-spawn recovery and controlled upgrades remain open.",
+        "Remaining controls, general definition reconciliation UX and detached pre-spawn recovery retain their previously recorded open limits. Passive diagnostics beyond service logs and controlled environment upgrades are implemented with historical installed evidence. Actual native Task Scheduler upgrade/lifecycle and productive M1/M2 qualification remain open.",
         "Native Task Scheduler has no atomic fingerprint-conditional mutation against external editors; unconfirmed existing tasks are not adopted.",
         "Server/Connector login review contracts use injected native effects; actual Windows login/logout/crash/credential qualification remains open.",
         "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1."
@@ -3236,9 +3248,10 @@
         "plans/agent_ops/evidence/pr04-participant-removal-source.xml",
         "plans/agent_ops/evidence/pr04-participant-removal-vault-source.xml",
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
-        "plans/agent_ops/evidence/pr04-participant-removal.md"
+        "plans/agent_ops/evidence/pr04-participant-removal.md",
+        "plans/agent_ops/evidence/pr10-ledger-reconciliation.md"
       ],
-      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open.\n\nOptional participant cooperation now reviews and separately consents to a directed exchange and then a handoff, using existing canonical MCP requests and durable IDs. Passive reply metadata verifies exact parent/peer/workspace/delivery and receipt or successful native-publication provenance; handoff proof requires exact claim generation and canonical result. Lost responses/process death recover the same IDs; prior consent with a missing request checkpoint permits inspection only and cannot renew a replay window. Historical status/plans and doctor are passive, while current failed revalidation yields UNKNOWN without deleting retained proof. 440 distinct installed cases passed, with one manual A/B campaign skipped. Initial source/installed failures and their fixes are retained. Final wheel has 460 Python files, seven static assets and 160 migrations matching source; only the facade and CLI differ from the broad candidate, with affected cases revalidated. Real HTTP/MCP/SQLite/process behavior is qualified between synthetic identities only; real external-client/provider cooperation, productive M1/M2 and full R3 remain open. Core/Connector are unchanged.",
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open.\n\nOptional participant cooperation now reviews and separately consents to a directed exchange and then a handoff, using existing canonical MCP requests and durable IDs. Passive reply metadata verifies exact parent/peer/workspace/delivery and receipt or successful native-publication provenance; handoff proof requires exact claim generation and canonical result. Lost responses/process death recover the same IDs; prior consent with a missing request checkpoint permits inspection only and cannot renew a replay window. Historical status/plans and doctor are passive, while current failed revalidation yields UNKNOWN without deleting retained proof. 440 distinct installed cases passed, with one manual A/B campaign skipped. Initial source/installed failures and their fixes are retained. Final wheel has 460 Python files, seven static assets and 160 migrations matching source; only the facade and CLI differ from the broad candidate, with affected cases revalidated. Real HTTP/MCP/SQLite/process behavior is qualified between synthetic identities only; real external-client/provider cooperation, productive M1/M2 and full R3 remain open. Core/Connector are unchanged.\n\n2026-11-07 documentary reconciliation: participant_client_validation is IMPLEMENTED for the existing participant validation path, replacing the stale NOT_STARTED subfield. The retained participant-doctor installed XML has 55 passing cases, including passive inspection, independent file/authentication diagnosis, revoked-key refusal and actual TCP MCP negotiation without participation/work inference. This historical evidence does not qualify the current PR-10 wheel, interactive clients, OS-vault/client end-to-end use or productive real-client/provider cooperation. Existing narrower verified subscopes and open gates are unchanged; task status remains IN_PROGRESS.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Managed-project diagnosis only; participant configuration/authentication, MCP/cooperation smoke, real OS vault/TLS, real providers and native user-service campaigns remain unqualified. Synthetic peer readiness/results do not complete productive M1.",
@@ -3252,7 +3265,7 @@
         "canonical_work_diagnostics_without_replay": "VERIFIED",
         "remote_metadata_without_vault_or_network": "VERIFIED",
         "explicit_bounded_operator_get_checks": "VERIFIED",
-        "participant_client_validation": "NOT_STARTED",
+        "participant_client_validation": "IMPLEMENTED",
         "participant_mcp_and_cooperation_checks": "IMPLEMENTED",
         "cross_host_diagnostic_contract": "IN_PROGRESS",
         "participant_passive_diagnostics_windows": "VERIFIED",
@@ -4028,7 +4041,7 @@
     },
     "DX-13": {
       "title": "caminho gerenciado",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-03",
         "PR-04"
@@ -4038,12 +4051,40 @@
         "PR-02",
         "PR-03"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "frontend/src/components/AgentConnectionsPanel.tsx",
+        "frontend/src/connectionConfiguration.ts",
+        "frontend/src/runtimeApi.ts",
+        "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
+        "src/okto_nexus/application/connection_setup.py",
+        "src/okto_nexus/application/participant_setup.py",
+        "src/okto_nexus/application/terminal_connection.py",
+        "../okto-nexus-connector-core/src/nexus_connector_core/connection_configuration.py",
+        "plans/agent_ops/evidence/pr10-dx13-reconciliation.md"
+      ],
+      "tests": [
+        "tests/execution_r4/test_connection_setup.py",
+        "tests/execution_r4/test_connection_setup_recovery.py",
+        "tests/execution_r4/test_participant_init.py",
+        "tests/execution_r4/test_terminal_connect.py",
+        "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+        "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "plans/agent_ops/evidence/pr03-project-dashboard-browser.json",
+        "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml"
+      ],
+      "result": "Documentary reconciliation of existing PR-03/PR-04 reuse: dashboard and terminal share canonical Connections/Test/Finish and durable receipts; automatic_reply remains normalized rather than independently configurable; adding/reconnecting an external participant preserves the existing managed runtime, bindings, endpoints, grants and policies. Retained installed reports verify the named contracts (112 passed; 148 passed/8 browser skips; 36 passed; 80 passed, overlapping suites), and the recorded real-browser campaign verifies the stored managed configuration. No new tests or production changes were made for this reconciliation. PR-03/PR-04, M1/M2 and full R3 acceptance remain open.",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "limitations": [
+        "Historical installed tests use synthetic native/provider effects, and participant-init uses a synthetic vault. Browser evidence uses a real installed backend with synthetic harness checks; no real-provider qualification is inferred.",
+        "The preset installed suite includes eight skipped browser cases; repeated suites are not summed into a unique-case total. This reconciliation is not a fresh qualification of the PR-10 wheel.",
+        "Real productive local/remote M1, real-client cooperation, remote identity provisioning and native service campaigns retain their existing independent gates. No other task or milestone status is changed."
+      ],
+      "subscopes": {
+        "managed_connections_and_finish_reuse": "VERIFIED",
+        "managed_automatic_reply_normalization": "VERIFIED",
+        "participant_preserves_existing_managed_runtime": "VERIFIED"
+      }
     },
     "DX-14": {
       "title": "Connector",
@@ -5881,7 +5922,7 @@
     },
     "OBS-11": {
       "title": "projeÃ§Ã£o",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-10"
       ],
@@ -5894,16 +5935,43 @@
         "PR-08",
         "PR-09"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "src/okto_nexus/application/attention_external.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention_external.py",
+        "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+        "src/okto_nexus/migrations/165_external_attention.sql",
+        "frontend/src/components/ExternalObservations.tsx",
+        "frontend/src/hooks/useObservationRead.ts",
+        "frontend/src/views/AgentsView.tsx",
+        "docs/external-observations.md"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/browser/browser-results.json",
+        "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-single-query.json",
+        "plans/agent_ops/evidence/pr10-external/final/package-proof.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+        "plans/agent_ops/evidence/pr10-external/final/followup/installed.xml",
+        "plans/agent_ops/evidence/pr10-external/artifact-manifest.json"
+      ],
+      "result": "Three external watch kinds, exact inspection and complete agent summaries are qualified. Current source coverage has 341 distinct cases; frontend has 121 passes. Final non-editable V4 package qualified 292 installed cases (291 broad passes plus one corrected migration rerun); 431 distinct installed cases across candidates are not additive to source. Real Chrome/HTTP/SQLite with synthetic peers and final 4096-instance measurement passed. OBS12 wiring, joint R3 and real provider/client/native-service acceptance remain open.",
+      "platform": "Windows; installed Nexus 0.3.3/Core 0.0.14, real Chrome and synthetic identities/native factory.",
+      "limitations": [
+        "Real providers/clients/native user services and joint R3 remain unqualified here.",
+        "The 4096-instance result is four samples per operation, not a general latency guarantee.",
+        "Corrupt relevant observation facts fail the shared projection honestly."
+      ],
+      "subscopes": {
+        "source_contracts": "VERIFIED",
+        "frontend_and_initial_installed_browser": "VERIFIED",
+        "v4_source_measurement": "VERIFIED",
+        "v4_installed_regression": "VERIFIED"
+      }
     },
     "OBS-12": {
       "title": "fontes concorrentes",
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "milestones": [
         "PR-10"
       ],
@@ -5916,12 +5984,21 @@
         "PR-08",
         "PR-09"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
+      "files": [
+        "src/okto_nexus/domain/observation_correlation.py",
+        "tests/test_observation_correlation_domain.py"
+      ],
+      "tests": [
+        "plans/agent_ops/evidence/pr10-external/reports.json"
+      ],
+      "result": "Pure evidence/digest/fence foundation passes 91 domain cases. Persisted mapping, authorized proof acquisition and canonical precedence are not wired; public correlation remains null. Temporary host/store prototypes are separate work and are not integration acceptance.",
       "platform": null,
       "limitations": [],
-      "subscopes": {}
+      "subscopes": {
+        "pure_evidence_contract": "VERIFIED",
+        "authorized_mapping_and_native_proof": "NOT_STARTED",
+        "canonical_precedence_projection": "NOT_STARTED"
+      }
     }
   },
   "scenarios": {
@@ -8690,9 +8767,15 @@
       "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml"
       ],
-      "result": "Passive expiry produces stale/unknown activity; whole canonical-table snapshots remain unchanged."
+      "result": "Passive expiry produces stale/unknown activity; whole canonical-table snapshots remain unchanged.",
+      "subscopes": {
+        "browser_expiry_and_activity_summary": "VERIFIED"
+      }
     },
     "OB-10": {
       "requirement": "RevogaÃ§Ã£o de fonte/credencial/identidade impede novos reportes/renovaÃ§Ã£o.",
@@ -8765,18 +8848,30 @@
       "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml"
       ],
-      "result": "Observed completion writes auxiliary state/private event only; canonical tables remain unchanged."
+      "result": "Observed completion writes auxiliary state/private event only; canonical tables remain unchanged.",
+      "subscopes": {
+        "installed_canonical_queue_isolation": "VERIFIED"
+      }
     },
     "OB-16": {
       "requirement": "Reporte blocked nÃ£o gera aprovaÃ§Ã£o canÃ´nica nem permite responder via token observador.",
       "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml"
       ],
-      "result": "Observed blocked does not create canonical approval or widen publisher authority."
+      "result": "Observed blocked does not create canonical approval or widen publisher authority.",
+      "subscopes": {
+        "installed_canonical_queue_isolation": "VERIFIED"
+      }
     },
     "OB-17": {
       "requirement": "Fonte Herdr desconecta e volta: snapshot reconcilia sem replay produtivo.",
@@ -8824,14 +8919,19 @@
     },
     "OB-21": {
       "requirement": "Fonte maliciosa nÃ£o injeta HTML, URL executÃ¡vel, prompt, comando ou logs secretos na UI.",
-      "status": "NOT_RUN",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml"
       ],
       "subscopes": {
-        "closed_bounded_payload_and_sanitized_http_errors": "VERIFIED"
-      }
+        "closed_bounded_payload_and_sanitized_http_errors": "VERIFIED",
+        "real_browser_untrusted_text_and_trace_audit": "VERIFIED"
+      },
+      "result": "Closed payloads and escaped plain-text browser rendering reject active HTML/URLs; no generated command or prompt action. Real browser trace contains no credential headers; private bearer files are excluded."
     },
     "OB-22": {
       "requirement": "Observador Herdr nÃ£o chama prompt/start/send-keys/focus/kill.",
@@ -8871,11 +8971,15 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml"
       ],
       "result": "OBS opt-in/off is independent of native/runtime/MCP configuration; authorized historical reads survive and project unavailable.",
       "subscopes": {
-        "pr08_server_contract": "VERIFIED"
+        "pr08_server_contract": "VERIFIED",
+        "installed_core_synthetic_factory_and_browser_off": "VERIFIED"
       }
     },
     "RG-01": {
@@ -10166,6 +10270,57 @@
       "evidence": [
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "PR-09 committed and pushed as add07318. OBS-11 backend/UI/HTTP qualification work started; OBS-12 evidence and authorization design reviewed separately. Fixed scope and pending real campaigns unchanged.",
+      "evidence": []
+    },
+    {
+      "date": "2026-11-06",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "Documentary reconciliation verifies DX-13's existing PR-03/PR-04 managed Connections/Finish reuse, automatic_reply normalization and preservation of managed runtime when adding an external participant. Retained installed/browser evidence was reviewed without new campaigns or production edits. No other task/milestone status, fixed-plan inventory or real M1/M2/service gate changed.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr10-dx13-reconciliation.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "OBS11 source/UI/browser and final volume measurement recorded. Four package candidates and failed initial measurements retained. V4 broader installed regression is running; OBS12 wiring and full R3 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/browser/browser-results.json",
+        "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-single-query.json",
+        "plans/agent_ops/evidence/pr10-external/final/package-proof.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "Documentary reconciliation updates only DX-07 participant_client_validation and SVC-12 controlled-upgrade/passive-diagnostic claims using retained installed reports (55 and 200 passes, not a combined unique-case total). Both task-level statuses remain IN_PROGRESS. Latest OBS-11/12 progress, DX-13, fixed inventories/hash, milestones, M1/M2 and real-campaign authorization/gates are unchanged; no new tests or campaigns were run.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr10-ledger-reconciliation.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "OBS11 qualified: final V4 installed 292 passes, 341 current source cases, 121 frontend passes, real browser and 24/24 volume samples. OBS12 and full R3 remain open; no real-provider/client/service acceptance inferred.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+        "plans/agent_ops/evidence/pr10-external/final/followup/installed.xml",
+        "plans/agent_ops/evidence/pr10-external/artifact-manifest.json"
       ]
     }
   ]

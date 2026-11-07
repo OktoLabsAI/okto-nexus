@@ -1,0 +1,223 @@
+- generic [active]:
+  - generic:
+    - generic:
+      - banner:
+        - button
+        - generic: / Attention
+        - generic:
+          - combobox
+          - generic: ● Live
+          - button
+          - generic:
+            - button
+      - generic:
+        - complementary:
+          - generic:
+            - navigation:
+              - heading [level=3]: Observability
+              - list:
+                - listitem:
+                  - button:
+                    - generic: Attention
+                    - generic: "3"
+                - listitem:
+                  - button:
+                    - generic: Graph
+                - listitem:
+                  - button:
+                    - generic: Messages
+                - listitem:
+                  - button:
+                    - generic: Handoffs
+                - listitem:
+                  - button:
+                    - generic: Meta-harness
+                - listitem:
+                  - button:
+                    - generic: Events
+                - listitem:
+                  - button:
+                    - generic: Artifacts
+                - listitem:
+                  - button:
+                    - generic: Workspaces
+                - listitem:
+                  - button:
+                    - generic: Agents
+                - listitem:
+                  - button:
+                    - generic: Registry
+                - listitem:
+                  - button:
+                    - generic: Policies
+                - listitem:
+                  - button:
+                    - generic: Guardrails
+                - listitem:
+                  - button:
+                    - generic: Communication
+                - listitem:
+                  - button:
+                    - generic: Approvals
+                - listitem:
+                  - button:
+                    - generic: Runtimes
+                - listitem:
+                  - button:
+                    - generic: Execution log
+        - main:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - heading [level=1]: Attention
+                    - paragraph: Review pending decisions, blocked work and results.
+                  - button: Refresh
+                - group:
+                  - generic: Filter attention
+                  - generic:
+                    - text: Agent ID
+                    - textbox:
+                      - /placeholder: All agents
+                  - generic:
+                    - text: Category
+                    - combobox
+                  - generic:
+                    - text: Kind
+                    - combobox
+                  - generic:
+                    - text: State
+                    - combobox
+                  - generic:
+                    - text: Priority
+                    - combobox
+                  - generic:
+                    - text: Viewing state
+                    - combobox
+                - paragraph: Seen only records that you reviewed an item. Snooze hides attention temporarily; it does not approve, pause or resolve work.
+                - generic:
+                  - paragraph:
+                    - strong: "3"
+                    - text: matching items · 3 shown
+                  - paragraph:
+                    - time: Snapshot just now
+                    - text: · Live updates
+                - region:
+                  - heading [level=2]:
+                    - text: Watch
+                    - generic: "3"
+                  - list:
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Standard priority
+                              - generic [aria-hidden]: ·
+                              - generic: Current report
+                              - generic: Resolved at source
+                            - heading [level=3]: External completion observed
+                            - paragraph: An external source observed a completion. This does not confirm a Nexus task result or successful handoff.
+                          - time: 19m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: pr10-observed-a
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 2
+                              - generic: pr10-workspace-a
+                          - generic:
+                            - term: Observed external instance
+                            - definition: obs_inst_0000000000000007
+                        - generic:
+                          - paragraph: Custom integration · Inferred evidence · Generation 7
+                          - paragraph: "Source: obs_src_0000000000000001"
+                          - paragraph: External activity does not confirm task success, presence or available capacity.
+                        - generic:
+                          - button: Inspect external observation
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for External completion observed, obs_inst_0000000000000007
+                            - combobox
+                            - button: Snooze
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Standard priority
+                              - generic [aria-hidden]: ·
+                              - generic: Report expired
+                            - heading [level=3]: External report expired
+                            - paragraph: This external report is no longer current. The instance activity is unknown; expiry does not mean idle or offline.
+                          - time: 19m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: pr10-observed-a
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 2
+                              - generic: pr10-workspace-a
+                          - generic:
+                            - term: Observed external instance
+                            - definition: obs_inst_0000000000000009
+                        - generic:
+                          - paragraph: Custom integration · Inferred evidence · Generation 9
+                          - paragraph: "Source: obs_src_0000000000000001"
+                          - paragraph: External activity does not confirm task success, presence or available capacity.
+                        - generic:
+                          - button: Inspect external observation
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for External report expired, obs_inst_0000000000000009
+                            - combobox
+                            - button: Snooze
+                    - listitem:
+                      - article:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Standard priority
+                              - generic [aria-hidden]: ·
+                              - generic: Report expired
+                            - heading [level=3]: External report expired
+                            - paragraph: This external report is no longer current. The instance activity is unknown; expiry does not mean idle or offline.
+                          - time: 2m ago
+                        - generic:
+                          - generic:
+                            - term: Agent
+                            - definition: pr10-observed-a
+                          - generic:
+                            - term: Workspace
+                            - definition:
+                              - text: Workspace 2
+                              - generic: pr10-workspace-a
+                          - generic:
+                            - term: Observed external instance
+                            - definition: obs_inst_0000000000000003
+                        - generic:
+                          - paragraph: Custom integration · Inferred evidence · Generation 3
+                          - paragraph: "Source: obs_src_0000000000000001"
+                          - paragraph: External activity does not confirm task success, presence or available capacity.
+                        - generic:
+                          - button: Inspect external observation
+                          - button: Mark seen
+                          - generic:
+                            - generic: Snooze duration for External report expired, obs_inst_0000000000000003
+                            - combobox
+                            - button: Snooze
+  - dialog [ref=e1296]:
+    - banner [ref=e1297]:
+      - heading "Attention · original record" [level=2] [ref=e1298]
+      - button "Expand modal" [ref=e1299] [cursor=pointer]
+      - button "Close modal" [ref=e1305] [cursor=pointer]
+    - region "External observation inspection" [ref=e1311]:
+      - heading "Inspect in the source environment" [level=3] [ref=e1312]
+      - paragraph [ref=e1313]: Use the source and instance references below to locate the observed environment. Nexus only displays its reports here.
+      - alert [ref=e1349]: This instance no longer matches the selected generation and scope. Refresh the source list.
+      - button "Refresh observation" [ref=e1348] [cursor=pointer]

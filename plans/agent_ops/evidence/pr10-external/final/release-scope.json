@@ -1,0 +1,34 @@
+{
+  "candidate_wheels": [
+    "48eee2b5136f40ed3f37e4df73896d8d4d91bbc064d2cf918d2dfa85c461292d",
+    "ed6223c0de0d333e7fd108175d1f15dd0a4e72c8e489782ac9869e0284f9a245",
+    "a5d040eb7bce0deffdbf24f3506000eb5e493e9f36d8cf2116b7057e57746d7c",
+    "280c0e0cca2b02ae0fa69443ed44889609988f4432af928d839013c2618bf035"
+  ],
+  "counts": {
+    "python": 497,
+    "migrations": 165,
+    "static": 7,
+    "total": 672
+  },
+  "production_changes_by_candidate": [
+    [
+      "adapters/outbound/sqlite/attention.py",
+      "adapters/outbound/sqlite/attention_external.py",
+      "application/attention_external.py",
+      "application/observations.py"
+    ],
+    [
+      "adapters/outbound/sqlite/attention.py"
+    ],
+    [
+      "adapters/outbound/sqlite/attention.py"
+    ]
+  ],
+  "unchanged_static_assets": 7,
+  "unchanged_migrations": 165,
+  "current_source_and_final_installed_bytes_verified": true,
+  "browser_scope": "V1 real-browser campaign; frontend assets unchanged through V4. Changed backend contracts are separately requalified.",
+  "retired_memo_scope": "V3 was measured but never functionally tested installed. Its memo and nine private tests were removed; original sources/reports retained as historical evidence.",
+  "correlation_scope": "Pure domain only; no OBS12 wiring/precedence acceptance."
+}

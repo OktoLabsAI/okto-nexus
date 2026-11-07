@@ -1,0 +1,505 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/attention-profile.json",
+      "bytes": 139458,
+      "sha256": "f020152bc29d93c29c53c464f53dd60e59e7d5d838f8289515132837effab5d8"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-grow.json",
+      "bytes": 69328,
+      "sha256": "576a6db9d4965be1ab3f0cb078bf3e405a609e065d3e0e3869efdd0fee05b423"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-memo.json",
+      "bytes": 16941,
+      "sha256": "36066ef7e49048b109c287a008fb637a36a87190062f4eb1eb2a0aac36768d68"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-optimized.json",
+      "bytes": 16884,
+      "sha256": "f054a556aa924f5f85b20d7d18399322cdcd79bdcf91ded111dd644501deb2ff"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-single-query-context.json",
+      "bytes": 746,
+      "sha256": "93b19292230fb3ad4abb4686fa929272987644fedac05e6a6acc31da44271793"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly-single-query.json",
+      "bytes": 17000,
+      "sha256": "fb76987c0c4e9b092a90314529c0afa307275d4ed1410d701d121d137a5614a0"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark-readonly.json",
+      "bytes": 16406,
+      "sha256": "849f24358b57b66349e8a4808026641f92b1e3bcf40aa8b37ead6cf71c7bfb37"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/benchmark.py",
+      "bytes": 20128,
+      "sha256": "608cc92c955ca5249d50f19c3fc883457d064a55b8af39769276e922103e01f4"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/initial-benchmark-inputs.json",
+      "bytes": 1098,
+      "sha256": "c42f6b589ea8b3c0865410a6eb159a2ca15d536f9198fc10591b2f74fbaf0529"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/benchmark/profile_attention.py",
+      "bytes": 5169,
+      "sha256": "21e3e9246b329d6aa3ec059157f9af430c8ebd64cc713c72a55eddb09a6546ff"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/browser-canonical-before.json",
+      "bytes": 19733,
+      "sha256": "87add9db1c15788fe93b503277520f9c17149bafa43dbe153298f5d2146a48e0"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/browser-fixture-metadata.json",
+      "bytes": 4035,
+      "sha256": "32c90cccf116df1b29233d0ba700a3840c3403d2edf4384774e6d9741d3fdf4c"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/browser-results.json",
+      "bytes": 207049,
+      "sha256": "18cf9cf61a15eddda3bca78fde169aa2138825ca5c37db41f491bb9bd3265b84"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/browser-server-proof.json",
+      "bytes": 11876,
+      "sha256": "f03daf83304c686d88c3a69d8df8b5f1b56092750172c416ad00a56939966db7"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/playwright-trace.zip",
+      "bytes": 24116724,
+      "sha256": "f2aa60c8f15f30ac059cecc142f7aab63f8868ee6a517a29ce1100ced61f7bbb"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/scripts/browser_fixture.py",
+      "bytes": 8193,
+      "sha256": "194e3746cb27c6d91a9af7a32e705c3553f7e5c261c3fccea7848bd5fba677bd"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/scripts/curate_browser.py",
+      "bytes": 8106,
+      "sha256": "3316d2c23dac411a21270331f5b4db91afc9bfb15bfb0a2acd200bb9eeef0a69"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/scripts/server_entry.py",
+      "bytes": 2375,
+      "sha256": "0ea5940eb31261e3921fb4dc4fcac9dd7a264ca5aeb8f057738c0b9ab0682b6a"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/scripts/start_server.py",
+      "bytes": 2587,
+      "sha256": "d6928fcc61956a82b07a13de097892e9a1c6fac8cf11c6f8d0622a7625adb09d"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/scripts/stop_server.py",
+      "bytes": 2385,
+      "sha256": "200b96c4125ecd99a402230e0d62305b5f61f0bd536fe05e1d700b9175df9071"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/server-cleanup.json",
+      "bytes": 624,
+      "sha256": "c82117434e29227436acf961cec094e94679efec4419ffe2f1fa2e2d8582ebd4"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/server-import-proof.json",
+      "bytes": 41153,
+      "sha256": "dd2164bf9c6bd2ddea9bf525a2afbbb617cf82aa5777e78cea2027c93ce79bea"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/console-2026-11-07T02-36-18-282Z.log",
+      "bytes": 626,
+      "sha256": "a74ef19ea03b31edde211ea3ad576f3619bf06b3fac082ee821b199b54cb41c0"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/page-2026-11-07T02-44-05-482Z.yml",
+      "bytes": 15190,
+      "sha256": "ee2087dd265fe8b7bec43e0fe8f59008663ffa770610790354bdcb69e46678c3"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/page-2026-11-07T02-44-38-629Z.yml",
+      "bytes": 13893,
+      "sha256": "653728df117fca5347a5626a60f754860d3cdd200f7a9d217104cbc3f274e639"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/page-2026-11-07T02-46-12-560Z.yml",
+      "bytes": 14408,
+      "sha256": "941e8954be958f6578b0ae3b258b623c3639462c9adfed2f3b887d6bb0039b30"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/page-2026-11-07T02-46-53-065Z.yml",
+      "bytes": 14410,
+      "sha256": "4cbe2375950a6530e7a73a106b97fdcfa96e93f9eadff081f96a3bd34395a77c"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/page-2026-11-07T02-48-35-077Z.yml",
+      "bytes": 6998,
+      "sha256": "8c23f950949d7cdf314385ae142f1d30836d3877026be30f7105202550b3f0d4"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/page-2026-11-07T03-02-56-954Z.yml",
+      "bytes": 15272,
+      "sha256": "8473d2dde80e6a7a1eef55b33d43c78248bd9cce1431f150f8ec618389e2a41d"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-after-escape.yml",
+      "bytes": 15194,
+      "sha256": "bf8228eb9276bb3e8ebcae1cf3d3387aea4e506015250195facbe988d2c87f64"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-agents.png",
+      "bytes": 80759,
+      "sha256": "f5f4d19d5a861e6199f3670ba2082cf6fc9af9831698f4c2cf6b0b79c6c1dc30"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-before-generation.yml",
+      "bytes": 15278,
+      "sha256": "9a48ad9443cde2390d51cf0242c63fe018942c99406fd536067122988d4b5b64"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-before-read-failure.yml",
+      "bytes": 6774,
+      "sha256": "88035dc0d26b814f729f46dd90f1ddf49c44a6078747d2863f34260831f1fd39"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-blocked.png",
+      "bytes": 74767,
+      "sha256": "3d0f63fbae5666bcb5c85d25eddee1e4e33af3f83edf006b92a6117554ece1ae"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-dark-narrow.png",
+      "bytes": 61923,
+      "sha256": "0a2bf55ef85ea5800ffabd920c7e8edd4d7d4e66c75b83c0b5d6149df8e280da"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-dark-narrow.yml",
+      "bytes": 6680,
+      "sha256": "6ce07632ec317967eb3ea9eaddcd4de527ca10364d8ebf3ca116ef71a71b0ca0"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-feature-off-attention.yml",
+      "bytes": 6221,
+      "sha256": "b0a869e77ff7a54a5af4396a9fa4baf999c49d20bb739b9e9b58371d4f944f79"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-feature-off.yml",
+      "bytes": 6227,
+      "sha256": "fa74ef82cc9c8d1daeebbff57128a7e8611dc3355427d744e3c416fde1011ec2"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-generation-fence.yml",
+      "bytes": 10029,
+      "sha256": "cc67bfd9e56a85a29543be8ee9091f1879e135a5e550ba9a5bc8d48f5b054c2d"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-off-agents-final.yml",
+      "bytes": 6592,
+      "sha256": "f08eec1065a8947dd576710bfe109de286a524298a1303905470d4a40b7f7f9d"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-off-attention-final.yml",
+      "bytes": 5372,
+      "sha256": "9fd25ae3f38b4ed5fba8dfdc1ef7d1f9f357369e6a42aa3a547a7d31e3e5ab83"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-one-completion-seen.yml",
+      "bytes": 12797,
+      "sha256": "02f99991498b31bae007dc86dca375de8d063601c64ebcfc73b5dd0cb74c9197"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-post-generation.yml",
+      "bytes": 12817,
+      "sha256": "cad900302d306b1d22dae1188301246101ed94a4c6d5a0cf6b419c81d060e652"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-read-recovered.yml",
+      "bytes": 6686,
+      "sha256": "7e04e7507c24f08daaa69c7379bb98367cab3bd98ad3327a3d13008615c3da28"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-retained-completion.png",
+      "bytes": 89116,
+      "sha256": "31cb5876f1f5fcacdccd4783595101378ff175f6bdefeb92b41ad01e520d06c7"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-summary-403.yml",
+      "bytes": 6368,
+      "sha256": "a133dd0616c7e2f53f5f927ded13e767fea2e16c98edd9133d03d812faf638a3"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-ttl-expired.yml",
+      "bytes": 6627,
+      "sha256": "d03a849485a2d44fb64763c91f767e617c2222dcde9f0182ecbfa4cac2826afc"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-ttl-instance.yml",
+      "bytes": 15180,
+      "sha256": "640b66e32f3b2182e551a828fe30db904724ad56aaaf691bb6b5e01c9169f0a9"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-workspace-a.yml",
+      "bytes": 6627,
+      "sha256": "d03a849485a2d44fb64763c91f767e617c2222dcde9f0182ecbfa4cac2826afc"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/browser/ui/pr10-external-workspace-b.yml",
+      "bytes": 6417,
+      "sha256": "bee853f92c4d87b617071277ff40f7b7ff3777be4ad6f2895e8f1b2519fa23a6"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed-qualification.json",
+      "bytes": 368476,
+      "sha256": "a102709b9b62134520a3f63c08958599621c6741be9d92b95dc18528cfc0eb6b"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed.xml",
+      "bytes": 16882,
+      "sha256": "3d11d98e1c64069265d54a164fa7949d2f741839b8793e353a096c46bcaed93c"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/package-proof.json",
+      "bytes": 225198,
+      "sha256": "84c7f147e437cc55bdb53e5ea73319c2b565a37a641e621d62ac5dcbb4b94c62"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/release-scope.json",
+      "bytes": 3422,
+      "sha256": "23a868fa8a35922ebc0f90fa77d7c1ab528a16853495f8341725d08826b137ba"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v3/package-proof.json",
+      "bytes": 225198,
+      "sha256": "e28eb9e7584816c42044d5005e6e5c8a8c962814f2fdf14920111e1ec2193180"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v3/release-scope.json",
+      "bytes": 1049,
+      "sha256": "23a01266d5ac409de5d02badb3bdeb249a1a4a3bd9acc7e77bca99632104ddfa"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/candidate-v3/retired/test_attention_external_memo.py.txt",
+      "bytes": 7237,
+      "sha256": "e517bcd6cdcaa07deea693fb5177ccf8fa5b1b76340389f5041f3f44ec8b7c43"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/diagnostics/wheel-build.log",
+      "bytes": 1618,
+      "sha256": "13b9029d238e32622fc31af99154d8587a7b09a2573f4cb1a96517cc1b836410"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/followup/installed-qualification.json",
+      "bytes": 345066,
+      "sha256": "269d5b431fde76294f27f617c4c32e6816d0d01ab62c16e2b0e19fc1fd34dbfe"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/followup/installed.xml",
+      "bytes": 377,
+      "sha256": "0ecb841d2135a65d3e6e3e01c589e11055d94b23ccd5ed2218b1bd7e66480869"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/followup/test_attention_authority.py.txt",
+      "bytes": 45803,
+      "sha256": "1d0067da18e8ac0df39f194f42819451371fc1e172f5d2a6a93b0f082e9c2818"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed-qualification.json",
+      "bytes": 372035,
+      "sha256": "072264f8508d30c1a9472ded8efc5e06927b6faf70180bd1ae35c349287127b5"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+      "bytes": 46943,
+      "sha256": "8fdca0e3c475036b7bab2978d7159b74f9b72c61d2cd81e1312470693e8c48f1"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/test_attention_authority.py.txt",
+      "bytes": 45737,
+      "sha256": "25c574abca73d901e77024569e775cec09e1bf8031a2cb442329c134ff985b70"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/package-proof.json",
+      "bytes": 225198,
+      "sha256": "ddd365dd3b41acb6f27b3cc5dc8c869e053f618fc3676fdc3b55e6662c3d7c36"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/final/release-scope.json",
+      "bytes": 1337,
+      "sha256": "90d940794e135da01dc16f3c26f80fe85ada625a5f3aabd4eed75129ead81ef9"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/frontend/pr10a-frontend-all-final.xml",
+      "bytes": 26947,
+      "sha256": "3c5d0e482ed59e9242dfb30a183bde4f39a8d0499b2c5e591f10524a2f5394b6"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/frontend/pr10a-frontend-focused-initial.xml",
+      "bytes": 12877,
+      "sha256": "9ef72841c9ca34aec161d02281faa1134d8e9760f957b8d7192e81c3d4512937"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/build_release.py",
+      "bytes": 3938,
+      "sha256": "c28c0b8fe86271b678e6584e1122a42bf9488dc3eb908b5057ecdbec9b4da11d"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/build_release_initial.py",
+      "bytes": 3820,
+      "sha256": "2477e98db2d4e88b1ab8d634e3dec8c6e49398d4cee7fb520807ef515221041c"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/installed-qualification.json",
+      "bytes": 364854,
+      "sha256": "d4eb46d3514206ff366cfb4dd507ddeb2d35f9fa9d5e049fe4256df3c2ddef3f"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/package-proof.json",
+      "bytes": 225186,
+      "sha256": "e6d2879864f60100f0c5e42b811e55b049efbeb0a404d1fcd5179b4655fcbba8"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/pr10-external-installed-initial.xml",
+      "bytes": 25597,
+      "sha256": "75895d5387f81e9d0962bb1558cee2756e1558373e5746043c5758cbaf35b45c"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/installed/qualify_installed.py",
+      "bytes": 3821,
+      "sha256": "de9a370e507583944c3afce3b7551a94dd4420cedc5b90bf9c4a75f8a54e5976"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/reports.json",
+      "bytes": 46506,
+      "sha256": "79300c92d8057015e5f1e71331ca047c93569fd0c30aaaf0f00e008e52912043"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/build_release_v2.py",
+      "bytes": 3941,
+      "sha256": "65dde6258df460e1fcdedfcf9c751ee232a16d0ee951aa939d6fde3f98929595"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/build_release_v3.py",
+      "bytes": 3941,
+      "sha256": "703e0328b46658462390f13d6c40d922145caeb9981b83e35ab4817fe2d7218e"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/build_release_v4.py",
+      "bytes": 3941,
+      "sha256": "90c40edee60a4ffec93328d02fae5600de8b306199c41add33d9eab56cf676d9"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/close_milestone.py",
+      "bytes": 9549,
+      "sha256": "269fbc1fcecbc331d3e723b41783ffbba5cad508380ea306843378e1f0f15e6b"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/collect_final.py",
+      "bytes": 7058,
+      "sha256": "57eed5473e326e2547171594a0d4c4f0a8ef61308269ed0925e587e1ed357cdd"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/collect_qualified_followup.py",
+      "bytes": 9079,
+      "sha256": "0735debb42bbbfe1be7e3782cc4a282985e6542007fd1266a7e8044680ada20c"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/collect_release_v4.py",
+      "bytes": 7508,
+      "sha256": "91202ebc39f385e9b2c6d1a84fb1ce102e939c32e0ca8784353791cd1ba83699"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/pr10-probe-external-repeat.py",
+      "bytes": 2103,
+      "sha256": "7e6d42a3157ad0078284e192e843c6748a5cd7f8a6dad97e26fdb6369fd5f686"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v2.py",
+      "bytes": 3882,
+      "sha256": "5490c07fb82e244f155e5ad7db336ea7215617094691d758c488d02c724225ad"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v3.py",
+      "bytes": 3850,
+      "sha256": "7b264b1034612bb3bcbc61f056418e252cd85c747c746a99d4115ad6a90830c0"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v4.py",
+      "bytes": 4096,
+      "sha256": "0cb943ea8695c6313c2ef7fc67df165b5f8220ffb7cec985f27d5e582cf85241"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/qualify_installed_v4_followup.py",
+      "bytes": 3820,
+      "sha256": "a071604c5fb2b3c09c84abc69d9ec635dc6b06e535aab30e6b3d88c2844f9a84"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/scripts/verify_artifacts.py",
+      "bytes": 4495,
+      "sha256": "fc659d0d0837c9168a35290fe8d4508d1647ea7e7a061181e4d683086fbfc7c4"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-attention-single-relation-initial.xml",
+      "bytes": 5142,
+      "sha256": "b6cffd31c9aece712f7e0a28d45c4629443bf430cecea3b437d7c51f3704ccde"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-backend-initial.xml",
+      "bytes": 5019,
+      "sha256": "e6e501cc936c96d37e3154cccb1dc26b97af8dd093cdfda8cc9a66c881430f07"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-backend-regression.xml",
+      "bytes": 28863,
+      "sha256": "d614cc5c11c76067b37061070dcafb66e9edb73cfa6f6ff3b5d5e4dba6603cae"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-http-runtime-initial.xml",
+      "bytes": 11047,
+      "sha256": "eaa38cec1141d799ec34066b974c067711686e5fae91e1876611ffa08dfe73eb"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-query-memo-initial.xml",
+      "bytes": 4700,
+      "sha256": "217a281e988fbc8309f2efd850af14d0ab887afd08d1965b41a1a68888191b68"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-query-optimization-initial.xml",
+      "bytes": 12689,
+      "sha256": "a01ca601c6950d74fa2342c6c7b4ccda503777e0d834fbb98cf4e4301567e5da"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-repeat-probe.json",
+      "bytes": 376,
+      "sha256": "36816b60e757a97fa4882d7d84497829476a7ab38dc09cb83758a673c79912e1"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-repeat-probe.xml",
+      "bytes": 395,
+      "sha256": "937b64464adc7752a2dea815cc05659300434075fd84e8db4a977c57b58c41c9"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-runtime-final.xml",
+      "bytes": 603,
+      "sha256": "e82b8f19f8ed7cfef249af641a4ada1b062fd70b5c442e90aaad2fe6c365306e"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source/pr10-observation-correlation-domain-initial.xml",
+      "bytes": 15513,
+      "sha256": "d192eb19929aab290b1e8f597fb2078773382c121a0bb7c799fe2d429d3d379b"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr10-external/source-authority-migration.xml",
+      "bytes": 397,
+      "sha256": "6e0997307ed2d4d4d41bc6c2ceb921a4937e8b4eeee5cf488c4750694888c16e"
+    }
+  ],
+  "files_sha256": "1e3c51c717b2f397118117cb78ccd2da40b0d6094a9c292ac99b8c4157ddbdb8",
+  "archive_scope": "All files under pr10-external except this manifest; retired candidates retained and labeled. No database, private credential file or wheel is included.",
+  "browser_trace_entries": 950,
+  "browser_credential_header_requests": 0,
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+}

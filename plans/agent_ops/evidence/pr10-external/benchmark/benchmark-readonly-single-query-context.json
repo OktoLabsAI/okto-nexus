@@ -1,0 +1,18 @@
+{
+  "artifact": "benchmark-readonly-single-query.json",
+  "source": "Root campaign coordination messages",
+  "no_concurrent_campaigns": [
+    "source tests",
+    "installed tests",
+    "build",
+    "browser"
+  ],
+  "concurrent_light_work": "Root collected package/artifact metadata and hashes (approximately 5 seconds command wall time) and read documentation. This is not a dedicated-machine or absolute zero-load measurement.",
+  "same_fixture": true,
+  "fixture_refresh_performed": false,
+  "ttl_seconds": 3600,
+  "initial_publication_window_utc": "2026-11-07T02:49:12Z to 2026-11-07T02:50:41Z",
+  "budget_seconds": 5,
+  "started_at": "2026-11-07T03:42:53.483977+00:00",
+  "finished_at": "2026-11-07T03:43:22.457523+00:00"
+}

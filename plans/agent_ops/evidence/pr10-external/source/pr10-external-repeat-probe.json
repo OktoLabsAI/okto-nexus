@@ -1,0 +1,13 @@
+{
+  "synthetic_instances": 1,
+  "pytest_exit_code": 0,
+  "external_project_calls_by_phase": {
+    "aggregate": 1,
+    "page": 1
+  },
+  "external_project_milliseconds_by_phase": {
+    "aggregate": 0.5633999826386571,
+    "page": 0.5629000370390713
+  },
+  "instrumentation_scope": "One source checkout test; no benchmark fixture, provider or personal data read."
+}

@@ -365,7 +365,9 @@ blocking and completion changes produce private `observation.*` events in the
 existing event store. Existing retention maintenance (`admin prune`, including
 dry-run and bounded startup pruning) cleans OBS history and obsolete credentials
 and buckets. Live instance sequence/hash barriers are retained after TTL expiry.
-Tokens referenced by heads remain until their evidence is replaced or retired.
+Tokens referenced by heads or retained completion events remain until those
+references are replaced, retired or pruned. This preserves revocation evidence
+without retaining the raw bearer.
 
 A history reset preserving agents retains source approval configuration but
 removes observation instances, tokens and heads. Re-registration issues new
@@ -373,4 +375,52 @@ instance IDs and larger generations. The installation generation counter
 survives both reset modes; an old credential/report cannot cross the reset.
 
 This Server contract requires no Herdr installation or Connector daemon.
-The optional Herdr observer and attention integration are separate milestones.
+The optional [Herdr observer](herdr-observer.md) publishes through the same
+restricted ingress.
+
+## Attention and external activity
+
+When attention is enabled, external reports can produce three observational
+occurrences. `external_blocked` describes a current report of blocked activity;
+its only action is to inspect the instance in its source environment.
+`external_completion_unseen` retains a reported completion reference until seen,
+subject to event retention. It is not a Nexus result, successful handoff or
+permission to start another turn. `external_observation_stale` indicates that a
+previous report expired; it does not declare the process idle or dead.
+
+Repeated reports within one continuous blocked episode preserve seen/snooze.
+A renewed block after an expiry gap is a new episode. Completion references
+use their retained event identity, so two completions between dashboard reads
+remain separate occurrences. Historical events lacking original provenance
+remain unavailable rather than receiving invented evidence during upgrade.
+Marking an occurrence seen or snoozed changes only Nexus viewing preferences;
+it does not mark Herdr as seen or alter the observed application.
+
+The Agents view shows external instances separately from canonical presence
+and capacity. Its aggregate counts cover the complete authorized scope, while
+the expanded instance list is paginated. Only current observations contribute
+working/idle/blocked activity; expired, absent or unavailable reports contribute
+unknown activity. A failed or overdue refresh marks the snapshot out of date.
+
+Canonical read credentials use these additional metadata endpoints:
+
+- `GET /api/v1/observations/summary` accepts optional `agent_id`, `workspace_id`
+  and `source_id` filters. It returns complete activity/freshness counts and
+  per-agent totals in one read snapshot, plus a refresh deadline. It does not
+  accept pagination; inability to complete the read returns an error.
+- `GET /api/v1/observations/instances/{observed_instance_id}` returns the exact
+  current instance projection and refresh deadline. The inspector verifies the
+  selected source, agent, workspace and generation before showing it. A removed
+  or inaccessible instance returns 404; a changed generation requires selecting
+  the new instance explicitly.
+
+An authorized self-manager sees only its own sources. Publisher tokens cannot
+read either endpoint. Reads never renew reports, open sessions or repair state.
+With OBS disabled, history remains readable with unknown activity and no active
+external attention occurrences. Canonical coordination continues independently.
+
+The completion inspector retains the selected historical reference separately
+from the latest instance report. Source-provided references and explanations
+are displayed as text, never executed as commands or opened as links. Existing
+observations remain separate from canonical sessions until an explicitly
+authorized, evidenced correlation is established; equal names are insufficient.

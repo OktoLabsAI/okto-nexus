@@ -1,15 +1,17 @@
-// Version 1 of the canonical operator attention API. Cursors remain opaque.
+import type { ExternalObservation } from './observationTypes';
+// Version 1 of the operator attention API. Cursors remain opaque.
 export type AttentionKind =
   | 'native_permission_pending' | 'native_question_pending' | 'question_waiting_for_agent'
   | 'verification_pending' | 'execution_outcome_unknown' | 'delivery_parked'
   | 'runtime_recovery_attention' | 'execution_authority_blocking'
   | 'executor_disconnected_with_work' | 'handoff_unclaimed_aged' | 'result_unseen'
-  | 'cleanup_attention' | 'approval_pending';
+  | 'cleanup_attention' | 'approval_pending'
+  | 'external_blocked' | 'external_completion_unseen' | 'external_observation_stale';
 export type AttentionAction =
   | 'inspect_approval' | 'respond_native' | 'decide_native' | 'inspect_handoff'
   | 'verify_handoff' | 'inspect_operation' | 'inspect_recovery' | 'review_authority'
   | 'inspect_executor' | 'inspect_result' | 'inspect_cleanup' | 'inspect_delivery'
-  | 'decide_approval';
+  | 'decide_approval' | 'inspect_external_observation';
 export type AttentionCategory = 'action_required' | 'watch';
 export type AttentionPriority = 10 | 20 | 30;
 export type AttentionResolution = 'open' | 'resolved' | 'expired';
@@ -46,6 +48,7 @@ export interface AttentionOccurrence {
   active: boolean;
   next_change_at: string | null;
   seen_state: AttentionSeenState;
+  external_observation?: ExternalObservation;
 }
 export interface AttentionFilters {
   workspace_id?: string;

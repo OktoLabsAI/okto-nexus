@@ -1,0 +1,275 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Attention
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+        - option "Workspace 1"
+        - option "Workspace 2"
+      - generic [ref=e13]: ● Live
+      - button "Refresh Attention" [ref=e298] [cursor=pointer]
+      - button [ref=e19] [cursor=pointer]
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - heading "Observability" [level=3] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - button "Attention 0 need action, 4 to watch" [active] [ref=e259] [cursor=pointer]:
+              - generic [ref=e34]: Attention
+              - generic "0 need action, 4 to watch" [ref=e260]: "4"
+          - listitem [ref=e35]:
+            - button "Graph" [ref=e36] [cursor=pointer]
+          - listitem [ref=e45]:
+            - button "Messages" [ref=e46] [cursor=pointer]
+          - listitem [ref=e51]:
+            - button "Handoffs" [ref=e52] [cursor=pointer]
+          - listitem [ref=e56]:
+            - button "Meta-harness" [ref=e57] [cursor=pointer]
+          - listitem [ref=e62]:
+            - button "Events" [ref=e63] [cursor=pointer]
+          - listitem [ref=e67]:
+            - button "Artifacts" [ref=e68] [cursor=pointer]
+          - listitem [ref=e74]:
+            - button "Workspaces" [ref=e75] [cursor=pointer]
+          - listitem [ref=e79]:
+            - button "Agents" [ref=e80] [cursor=pointer]
+          - listitem [ref=e87]:
+            - button "Registry" [ref=e88] [cursor=pointer]
+          - listitem [ref=e94]:
+            - button "Policies" [ref=e95] [cursor=pointer]
+          - listitem [ref=e99]:
+            - button "Guardrails" [ref=e100] [cursor=pointer]
+          - listitem [ref=e104]:
+            - button "Communication" [ref=e105] [cursor=pointer]
+          - listitem [ref=e109]:
+            - button "Approvals" [ref=e110] [cursor=pointer]
+          - listitem [ref=e115]:
+            - button "Runtimes" [ref=e116] [cursor=pointer]
+          - listitem [ref=e121]:
+            - button "Execution log" [ref=e122] [cursor=pointer]
+    - main [ref=e126]:
+      - generic [ref=e301]:
+        - generic [ref=e302]:
+          - generic [ref=e303]:
+            - heading "Attention" [level=1] [ref=e304]
+            - paragraph [ref=e308]: Review pending decisions, blocked work and results.
+          - button "Refresh attention" [ref=e309] [cursor=pointer]: Refresh
+        - group "Filter attention" [ref=e315]:
+          - generic [ref=e317]:
+            - text: Agent ID
+            - textbox "Agent ID" [ref=e318]:
+              - /placeholder: All agents
+          - generic [ref=e319]:
+            - text: Category
+            - combobox "Category" [ref=e320]:
+              - option "All categories" [selected]
+              - option "Needs action"
+              - option "Watch"
+          - generic [ref=e321]:
+            - text: Kind
+            - combobox "Kind" [ref=e322]:
+              - option "All kinds" [selected]
+              - option "Approval awaiting review"
+              - option "Runtime permission requested"
+              - option "Runtime question for the operator"
+              - option "Question waiting for an agent"
+              - option "Handoff awaiting verification"
+              - option "Execution outcome unknown"
+              - option "Delivery needs attention"
+              - option "Runtime recovery needs attention"
+              - option "Execution authorization changed"
+              - option "Execution host disconnected"
+              - option "Handoff still unclaimed"
+              - option "Result ready to inspect"
+              - option "Cleanup needs inspection"
+              - option "External instance awaiting input"
+              - option "External completion observed"
+              - option "External report expired"
+          - generic [ref=e323]:
+            - text: State
+            - combobox "State" [ref=e324]:
+              - option "Active attention" [selected]
+              - option "Open at source"
+              - option "Resolved at source"
+              - option "Expired"
+              - option "All states"
+          - generic [ref=e325]:
+            - text: Priority
+            - combobox "Priority" [ref=e326]:
+              - option "All priorities" [selected]
+              - option "High"
+              - option "Medium"
+              - option "Standard"
+          - generic [ref=e327]:
+            - text: Viewing state
+            - combobox "Viewing state" [ref=e328]:
+              - option "Seen and unseen" [selected]
+              - option "Unseen"
+              - option "Seen"
+              - option "Snoozed"
+        - paragraph [ref=e329]: Seen only records that you reviewed an item. Snooze hides attention temporarily; it does not approve, pause or resolve work.
+        - generic [ref=e330]:
+          - paragraph [ref=e331]:
+            - strong [ref=e332]: "4"
+            - text: matching items · 4 shown
+          - paragraph [ref=e333]:
+            - time [ref=e334]: Snapshot just now
+            - text: · Live updates
+        - region [ref=e335]:
+          - heading "Watch 4 matching items" [level=2] [ref=e336]:
+            - text: Watch
+            - generic "4 matching items" [ref=e337]: "4"
+          - list [ref=e338]:
+            - listitem [ref=e339]:
+              - article [ref=e340]:
+                - generic [ref=e341]:
+                  - generic [ref=e342]:
+                    - generic [ref=e343]:
+                      - generic [ref=e344]: Medium priority
+                      - generic [aria-hidden] [ref=e345]: ·
+                      - generic [ref=e346]: Current report
+                    - heading "External instance awaiting input" [level=3] [ref=e347]
+                    - paragraph [ref=e348]: An external source reports a blocked instance. Inspect it in its source environment; this report is not an approval request.
+                  - time [ref=e349]: 9m ago
+                - generic [ref=e350]:
+                  - generic [ref=e351]:
+                    - term [ref=e352]: Agent
+                    - definition [ref=e353]: pr10-observed-a
+                  - generic [ref=e354]:
+                    - term [ref=e355]: Workspace
+                    - definition [ref=e356]:
+                      - text: Workspace 2
+                      - generic [ref=e357]: pr10-workspace-a
+                  - generic [ref=e358]:
+                    - term [ref=e359]: Observed external instance
+                    - definition [ref=e360]: obs_inst_0000000000000005
+                - generic [ref=e361]:
+                  - paragraph [ref=e362]: Custom integration · Inferred evidence · Generation 5
+                  - paragraph [ref=e363]: "Source: obs_src_0000000000000001"
+                  - paragraph [ref=e364]: External activity does not confirm task success, presence or available capacity.
+                - generic [ref=e365]:
+                  - button "Inspect external observation" [ref=e366] [cursor=pointer]
+                  - 'button "Mark seen: External instance awaiting input, obs_inst_0000000000000005" [ref=e370] [cursor=pointer]': Mark seen
+                  - generic [ref=e374]:
+                    - generic [ref=e375]: Snooze duration for External instance awaiting input, obs_inst_0000000000000005
+                    - combobox "Snooze duration for External instance awaiting input, obs_inst_0000000000000005" [ref=e376]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: External instance awaiting input, obs_inst_0000000000000005" [ref=e377] [cursor=pointer]': Snooze
+            - listitem [ref=e381]:
+              - article [ref=e382]:
+                - generic [ref=e383]:
+                  - generic [ref=e384]:
+                    - generic [ref=e385]:
+                      - generic [ref=e386]: Standard priority
+                      - generic [aria-hidden] [ref=e387]: ·
+                      - generic [ref=e388]: Current report
+                      - generic [ref=e389]: Resolved at source
+                    - heading "External completion observed" [level=3] [ref=e390]
+                    - paragraph [ref=e391]: An external source observed a completion. This does not confirm a Nexus task result or successful handoff.
+                  - time [ref=e392]: 9m ago
+                - generic [ref=e393]:
+                  - generic [ref=e394]:
+                    - term [ref=e395]: Agent
+                    - definition [ref=e396]: pr10-observed-a
+                  - generic [ref=e397]:
+                    - term [ref=e398]: Workspace
+                    - definition [ref=e399]:
+                      - text: Workspace 2
+                      - generic [ref=e400]: pr10-workspace-a
+                  - generic [ref=e401]:
+                    - term [ref=e402]: Observed external instance
+                    - definition [ref=e403]: obs_inst_0000000000000007
+                - generic [ref=e404]:
+                  - paragraph [ref=e405]: Custom integration · Inferred evidence · Generation 7
+                  - paragraph [ref=e406]: "Source: obs_src_0000000000000001"
+                  - paragraph [ref=e407]: External activity does not confirm task success, presence or available capacity.
+                - generic [ref=e408]:
+                  - button "Inspect external observation" [ref=e409] [cursor=pointer]
+                  - 'button "Mark seen: External completion observed, obs_inst_0000000000000007" [ref=e413] [cursor=pointer]': Mark seen
+                  - generic [ref=e417]:
+                    - generic [ref=e418]: Snooze duration for External completion observed, obs_inst_0000000000000007
+                    - combobox "Snooze duration for External completion observed, obs_inst_0000000000000007" [ref=e419]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: External completion observed, obs_inst_0000000000000007" [ref=e420] [cursor=pointer]': Snooze
+            - listitem [ref=e424]:
+              - article [ref=e425]:
+                - generic [ref=e426]:
+                  - generic [ref=e427]:
+                    - generic [ref=e428]:
+                      - generic [ref=e429]: Standard priority
+                      - generic [aria-hidden] [ref=e430]: ·
+                      - generic [ref=e431]: Current report
+                      - generic [ref=e432]: Resolved at source
+                    - heading "External completion observed" [level=3] [ref=e433]
+                    - paragraph [ref=e434]: An external source observed a completion. This does not confirm a Nexus task result or successful handoff.
+                  - time [ref=e435]: 9m ago
+                - generic [ref=e436]:
+                  - generic [ref=e437]:
+                    - term [ref=e438]: Agent
+                    - definition [ref=e439]: pr10-observed-a
+                  - generic [ref=e440]:
+                    - term [ref=e441]: Workspace
+                    - definition [ref=e442]:
+                      - text: Workspace 2
+                      - generic [ref=e443]: pr10-workspace-a
+                  - generic [ref=e444]:
+                    - term [ref=e445]: Observed external instance
+                    - definition [ref=e446]: obs_inst_0000000000000007
+                - generic [ref=e447]:
+                  - paragraph [ref=e448]: Custom integration · Inferred evidence · Generation 7
+                  - paragraph [ref=e449]: "Source: obs_src_0000000000000001"
+                  - paragraph [ref=e450]: External activity does not confirm task success, presence or available capacity.
+                - generic [ref=e451]:
+                  - button "Inspect external observation" [ref=e452] [cursor=pointer]
+                  - 'button "Mark seen: External completion observed, obs_inst_0000000000000007" [ref=e456] [cursor=pointer]': Mark seen
+                  - generic [ref=e460]:
+                    - generic [ref=e461]: Snooze duration for External completion observed, obs_inst_0000000000000007
+                    - combobox "Snooze duration for External completion observed, obs_inst_0000000000000007" [ref=e462]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: External completion observed, obs_inst_0000000000000007" [ref=e463] [cursor=pointer]': Snooze
+            - listitem [ref=e467]:
+              - article [ref=e468]:
+                - generic [ref=e469]:
+                  - generic [ref=e470]:
+                    - generic [ref=e471]:
+                      - generic [ref=e472]: Standard priority
+                      - generic [aria-hidden] [ref=e473]: ·
+                      - generic [ref=e474]: Report expired
+                    - heading "External report expired" [level=3] [ref=e475]
+                    - paragraph [ref=e476]: This external report is no longer current. The instance activity is unknown; expiry does not mean idle or offline.
+                  - time [ref=e477]: 9m ago
+                - generic [ref=e478]:
+                  - generic [ref=e479]:
+                    - term [ref=e480]: Agent
+                    - definition [ref=e481]: pr10-observed-a
+                  - generic [ref=e482]:
+                    - term [ref=e483]: Workspace
+                    - definition [ref=e484]:
+                      - text: Workspace 2
+                      - generic [ref=e485]: pr10-workspace-a
+                  - generic [ref=e486]:
+                    - term [ref=e487]: Observed external instance
+                    - definition [ref=e488]: obs_inst_0000000000000009
+                - generic [ref=e489]:
+                  - paragraph [ref=e490]: Custom integration · Inferred evidence · Generation 9
+                  - paragraph [ref=e491]: "Source: obs_src_0000000000000001"
+                  - paragraph [ref=e492]: External activity does not confirm task success, presence or available capacity.
+                - generic [ref=e493]:
+                  - button "Inspect external observation" [ref=e494] [cursor=pointer]
+                  - 'button "Mark seen: External report expired, obs_inst_0000000000000009" [ref=e498] [cursor=pointer]': Mark seen
+                  - generic [ref=e502]:
+                    - generic [ref=e503]: Snooze duration for External report expired, obs_inst_0000000000000009
+                    - combobox "Snooze duration for External report expired, obs_inst_0000000000000009" [ref=e504]:
+                      - option "15 minutes"
+                      - option "1 hour" [selected]
+                      - option "1 day"
+                    - 'button "Snooze: External report expired, obs_inst_0000000000000009" [ref=e505] [cursor=pointer]': Snooze

@@ -6,7 +6,7 @@ import json
 import sqlite3
 import time
 
-from ....domain.attention import canonical, with_preferences
+from ....domain.attention import canonical, stamp, with_preferences
 from ....errors import ErrorCode, OktoNexusError
 
 
@@ -17,6 +17,7 @@ _FAMILIES = {
     'approvals': {'approval_pending'},
     'results': {'result_unseen'},
     'authority': {'execution_authority_blocking'},
+    'external': {'external_blocked', 'external_completion_unseen', 'external_observation_stale'},
 }
 
 
@@ -42,7 +43,7 @@ class SqliteAttentionQueries:
     @contextmanager
     def _relation(self, uow, *, filters, now, config, access, context):
         conn = uow.connection
-        sources, policies, projectors, functions = [], {}, {}, []
+        sources, policies, projectors, decoders, functions = [], {}, {}, {}, []
         deadline = time.monotonic() + self.QUERY_SECONDS
         expired = False
 
@@ -59,7 +60,10 @@ class SqliteAttentionQueries:
         def project(family, facts, observed_at):
             if interrupt():
                 raise TimeoutError
-            return canonical(projectors[family](json.loads(facts), observed_at, policies[family]))
+            value = json.loads(facts)
+            if family in decoders:
+                value = decoders[family](value)
+            return canonical(projectors[family](value, observed_at, policies[family]))
 
         def preferences(item, seen, snooze, revision, observed_at):
             return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
@@ -80,6 +84,8 @@ class SqliteAttentionQueries:
                     extra['check_budget'] = check_budget
                 policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
                 projectors[family] = application.project
+                if hasattr(adapter, 'decode_facts'):
+                    decoders[family] = adapter.decode_facts
                 functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
             registered = True
             conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
@@ -87,7 +93,8 @@ class SqliteAttentionQueries:
             conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
             for name, arity, function in functions:
                 conn.create_function(name, arity, function, deterministic=True)
-            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'))
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'),
+                          external_kind=filters.get('kind'), external_now=stamp(now).replace('+00:00', 'Z'))
             clauses = []
             for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
                 if name in filters:
@@ -118,6 +125,9 @@ class SqliteAttentionQueries:
                 raise OktoNexusError('ATTENTION_QUERY_BUDGET',
                     'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
             yield relation, params
+            # A final Python callback may cross the deadline before SQLite's
+            # next progress notification. Do not return that late snapshot.
+            check_budget()
         except sqlite3.Error as error:
             if expired:
                 raise OktoNexusError('ATTENTION_QUERY_BUDGET',
@@ -136,6 +146,22 @@ class SqliteAttentionQueries:
     def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
         with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
             conn = uow.connection
+            params['page_limit'] = limit + 1 if limit else 0
+            clause = ''
+            if after is not None:
+                params.update(after_priority=after['after'][0], after_first=after['after'][1], after_id=after['after'][2])
+                clause = '''WHERE json_extract(item,'$.priority')<:after_priority OR
+                    (json_extract(item,'$.priority')=:after_priority AND
+                     (json_extract(item,'$.first_detected_at')>:after_first OR
+                      (json_extract(item,'$.first_detected_at')=:after_first AND
+                       json_extract(item,'$.attention_id')>:after_id)))'''
+            # Totals and the ordered page consume one materialized relation.
+            # The scalar page aggregate preserves empty/zero-limit snapshots
+            # without executing source projections a second time.
+            page = 'SELECT item FROM filtered ' + clause + '''
+                ORDER BY json_extract(item,'$.priority') DESC,
+                         json_extract(item,'$.first_detected_at'),json_extract(item,'$.attention_id')
+                LIMIT :page_limit'''
             aggregate = conn.execute(sql + '''SELECT COUNT(*) AS total,
                 COUNT(DISTINCT json_extract(item,'$.attention_id')) AS unique_episodes,
                 nexus_attention_set_digest_v1(item) AS revision,
@@ -147,7 +173,8 @@ class SqliteAttentionQueries:
                 SUM(json_extract(item,'$.seen_state.seen')=0) AS unseen,
                 SUM(json_extract(item,'$.seen_state.snoozed')=1) AS snoozed,
                 (SELECT MIN(CASE WHEN json_extract(item,'$.next_change_at')>:now
-                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at
+                    THEN json_extract(item,'$.next_change_at') END) FROM viewing) AS next_change_at,
+                (SELECT json_group_array(json(item)) FROM (''' + page + ''')) AS page_items
                 FROM filtered''', params).fetchone()
             if aggregate['unique_episodes'] != aggregate['total']:
                 raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention source returned duplicate episode references.', {})
@@ -155,21 +182,7 @@ class SqliteAttentionQueries:
             if after is not None and after['snapshot_revision'] != revision:
                 raise OktoNexusError(ErrorCode.CONFLICT, 'Attention changed while paging. Refresh the snapshot.',
                                      {'reason': 'ATTENTION_SNAPSHOT_CHANGED'})
-            rows = []
-            if limit:
-                params['page_limit'] = limit + 1
-                clause = ''
-                if after is not None:
-                    params.update(after_priority=after['after'][0], after_first=after['after'][1], after_id=after['after'][2])
-                    clause = '''WHERE json_extract(item,'$.priority')<:after_priority OR
-                        (json_extract(item,'$.priority')=:after_priority AND
-                         (json_extract(item,'$.first_detected_at')>:after_first OR
-                          (json_extract(item,'$.first_detected_at')=:after_first AND
-                           json_extract(item,'$.attention_id')>:after_id)))'''
-                rows = [json.loads(row[0]) for row in conn.execute(sql + 'SELECT item FROM filtered ' + clause + '''
-                    ORDER BY json_extract(item,'$.priority') DESC,
-                             json_extract(item,'$.first_detected_at'),json_extract(item,'$.attention_id')
-                    LIMIT :page_limit''', params)]
+            rows = json.loads(aggregate['page_items'])
             cursor = conn.execute("SELECT COALESCE((SELECT seq FROM sqlite_sequence WHERE name='events'),0),"
                                   '(SELECT MIN(event_id) FROM events)').fetchone()
             return dict(items=rows, total=aggregate['total'],

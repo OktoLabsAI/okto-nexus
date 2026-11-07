@@ -458,3 +458,36 @@ O wheel de entrega remove apenas uma linha vazia final; equivalência sintática
 - As duas Herdr foram encerradas canonicamente, com saída dos processos próprios confirmada. Nexus terminou `DRAINED`, sem recursos/erros, e seu PID saiu; a sondagem TCP não conectou. Nenhum serviço pessoal ou provedor foi usado.
 - **PR-09 IMPLEMENTED; OBS-05…10 VERIFIED no escopo Windows/local declarado.** PR-10, campanhas reais pendentes de M1/M2/serviços e aceite integral R3 continuam abertos. Core/Connector sem alterações; hash do plano e conjuntos fixos de IDs preservados.
 - [Evidências e limites](plans/agent_ops/evidence/pr09-herdr.md), [manifesto de 142 artefatos](plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json) e [uso do observador](docs/herdr-observer.md).
+
+## 2026-11-06 — PR-10: projeção externa em implementação
+
+- PR-09 commitado e enviado em `add07318`, com 142 artefatos conferidos também no índice do Git. Connector e Core permanecem sincronizados, sem mudanças nesse marco.
+- OBS-11 em implementação: ocorrências externas, resumo completo por agente, inspeção de instância e interface com origem, atualidade e limitação explícitas. Os testes HTTP novos ainda não foram executados.
+- OBS-12 em revisão do mecanismo de evidência/autorização para correlação. Instâncias existentes continuam separadas; `canonical_session_ref=null` não comprova a precedência exigida para instâncias correlacionadas.
+- PR-10 e o aceite integral R3 permanecem abertos. O bootstrap de identidade remota e as campanhas reais de M1/M2/serviço continuam pendentes; nenhuma evidência sintética foi promovida a qualificação real.
+
+## 2026-11-06 — PR-10: reconciliação documental de DX-13
+
+- **DX-13 VERIFIED por reuso já demonstrado em PR-03/PR-04:** dashboard e terminal usam Connections/Test/Finish e seus recibos canônicos; `automatic_reply` continua normalizado, sem opção independente; adicionar/reconectar participante externo preserva runtime, bindings, endpoints, grants e políticas do agente existente.
+- Relatórios instalados retidos confirmam os casos pertinentes: terminal connect **112 passes**; preset evolution **148 passes e 8 skips de browser**; participante Nexus **36 passes**; Connector **80 passes**. Há sobreposição entre suítes; estes números não são somados. A campanha de navegador existente mostrou a configuração gerenciada salva, sem reaplicar Finish ao abrir/fechar Connections.
+- Esta revisão documental não executou testes/campanhas nem alterou produção. As provas usam efeitos nativos/provider sintéticos e, no participante inicial, vault sintético; não qualificam provider real nem o wheel atual de PR-10. PR-03/PR-04, M1/M2, bootstrap remoto, campanhas nativas e aceite integral R3 mantêm seus status e limites anteriores.
+- Somente a tarefa DX-13 e uma entrada de histórico foram reconciliadas no JSON. Plano, demais tarefas e inventários permanecem intactos. [Referências, casos e limites](plans/agent_ops/evidence/pr10-dx13-reconciliation.md).
+
+## 2026-11-07 — PR-10: qualificação de observações externas
+
+OBS-11 implementado: três tipos de acompanhamento, inspeção exata e resumo completo por agente. Há 340 casos fonte atuais e 121 casos frontend aprovados; as campanhas instaladas iniciais de 158 e 110 casos se sobrepõem. O browser real confirmou as transições com dados sintéticos, mantendo 146 tabelas canônicas inalteradas. A consulta única passou nas 24 amostras finais com 4.096 instâncias (atenção completa: mediana 3,22 s; máximo 3,73 s), preservando o limite de cinco segundos. A regressão instalada ampliada da wheel V4 está em execução. Resultados anteriores e limites foram preservados em [evidências PR-10](plans/agent_ops/evidence/pr10-external.md).
+
+OBS-12 possui somente o contrato puro de evidência/digest/fences (91 casos); associação persistida e precedência canônica continuam pendentes. PR-10, campanhas reais e R3 permanecem em andamento, com o inventário e o hash do plano preservados.
+
+## 2026-11-07 — PR-10: reconciliação documental de DX-07 e SVC-12
+
+- O subcampo `participant_client_validation` de DX-07 passa de NOT_STARTED para **IMPLEMENTED**, limitado ao caminho existente de validação do participante. O XML histórico do doctor registra **55 passes**, sem falhas/erros/skips, incluindo inspeção passiva, drift separado de autenticação, revogação e MCP TCP sem inferir participação ou trabalho.
+- SVC-12 passa a distinguir upgrades controlados e diagnósticos já implementados das campanhas nativas ainda abertas. O XML histórico de upgrades registra **200 passes**, sem falhas/erros/skips, incluindo substituição real entre ambientes instalados descartáveis; efeitos de Task Scheduler foram injetados. Os dois totais não são somados nem qualificam o wheel atual.
+- DX-07 e SVC-12 continuam **IN_PROGRESS**. Clientes/provedores reais, contrato diagnóstico entre hosts, login/logout/crash/credenciais e demais campanhas nativas mantêm seus limites. Nenhum marco, M1/M2, autorização ou inventário foi alterado; DX-13 e o progresso de OBS-11/12 foram preservados.
+- Revisão documental com leitura nominal dos XMLs, comparação semântica do JSON e checker de escopo; nenhum teste ou serviço foi executado. [Evidências e limites](plans/agent_ops/evidence/pr10-ledger-reconciliation.md).
+
+## 2026-11-07 — PR-10a: OBS-11 qualificado
+
+A wheel V4 qualificou 292 casos: 291 passaram na regressão ampliada e um teste antigo de migração, que dependia do checkout, passou após correção em execução focal. O relatório original com a falha permanece retido. Os relatórios instalados dos candidatos somam 431 identidades distintas, sem somar reexecuções. Os 341 casos fonte atuais, 121 casos frontend, browser real com dados sintéticos e 24/24 amostras de volume sustentam OBS-11 como VERIFIED. As evidências preservam as falhas iniciais, candidatos substituídos e limites da campanha. Manifesto e verificador vinculam os bytes retidos aos arquivos staged antes do commit.
+
+OBS-12, PR-10 completo, campanhas reais e regressão conjunta R3 continuam pendentes. OB-19 permanece NOT_RUN e OB-24 IN_PROGRESS. Não houve qualificação nova de provider, cliente MCP real ou serviço nativo. Detalhes: [PR-10](plans/agent_ops/evidence/pr10-external.md).

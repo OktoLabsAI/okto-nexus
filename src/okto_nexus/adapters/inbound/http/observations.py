@@ -65,7 +65,7 @@ def _query(request, allowed):
 
 def _error(exc):
     if isinstance(exc, OktoNexusError):
-        status = {'FEATURE_DISABLED': 409, 'OBSERVATION_BUSY': 503}.get(exc.code)
+        status = {'FEATURE_DISABLED': 409, 'OBSERVATION_BUSY': 503, 'OBSERVATION_QUERY_BUDGET': 503}.get(exc.code)
         response = (_err(status, exc.code, exc.message, exc.details) if status else _map_error(exc))
         if exc.code in ('OBSERVATION_BUSY', ErrorCode.QUOTA_EXCEEDED):
             response.headers['Retry-After'] = str(max(1, (exc.details or {}).get('retry_after_seconds', 1)))
@@ -102,6 +102,14 @@ def management_router():
     @router.get('/observations')
     async def read(request: Request):
         return await _call(request, 'read', query={'agent_id', 'workspace_id', 'source_id', 'after', 'limit'})
+
+    @router.get('/observations/summary')
+    async def summary(request: Request):
+        return await _call(request, 'summary', query={'agent_id', 'workspace_id', 'source_id'})
+
+    @router.get('/observations/instances/{observed_instance_id}')
+    async def instance(request: Request, observed_instance_id: str):
+        return await _call(request, 'get_instance', observed_instance_id=observed_instance_id)
 
     @router.get('/observations/sources')
     async def sources(request: Request):

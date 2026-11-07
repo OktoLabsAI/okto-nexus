@@ -1,0 +1,533 @@
+{
+  "schema_version": 1,
+  "phase": "read-only",
+  "started_at": "2026-11-07T03:42:53.483977+00:00",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.13.1",
+  "scope": "Synthetic source checkout benchmark, real SQLite/WAL and application services; no HTTP server, lifespan, harness discovery or provider.",
+  "quotas": {
+    "observation_source_rate_per_minute": 6000,
+    "observation_source_burst": 1024,
+    "observation_agent_rate_per_minute": 60000,
+    "observation_agent_burst": 4096,
+    "observation_installation_rate_per_minute": 600000,
+    "observation_installation_burst": 16384,
+    "observation_max_sources_per_agent": 1024,
+    "observation_max_sources": 4096,
+    "observation_max_instances": 4096,
+    "observation_max_tokens_per_source": 64,
+    "observation_max_events": 20000
+  },
+  "repetitions": 4,
+  "measurement_notes": [
+    "Warm pooled connection; per-operation first sample and later samples are retained separately.",
+    "Latency includes SQL trace counting overhead; no SQL text or parameters are retained.",
+    "SELECT/CTE count excludes transaction open/close and does not count SQLite internal plan steps.",
+    "Seeded registration uses repository contracts in one UoW per cardinality; publication uses real authenticated ObservationService.publish.",
+    "SSE measurement uses the actual generator and SQLite in-process, not HTTP transport or browser.",
+    "The private database contains synthetic credential hashes and must not be collected as evidence."
+  ],
+  "stages": [
+    {
+      "instances": 4096,
+      "reads": {
+        "observation_list_200": {
+          "samples": [
+            {
+              "elapsed_ms": 52.28590004844591,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            },
+            {
+              "elapsed_ms": 42.77570004342124,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            },
+            {
+              "elapsed_ms": 49.421200004871935,
+              "cpu_ms": 31.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            },
+            {
+              "elapsed_ms": 42.43179998593405,
+              "cpu_ms": 46.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 200,
+              "total_matching": null,
+              "has_more": true,
+              "response_json_bytes": 164680
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 46.09845002414659,
+          "minimum_ms": 42.43179998593405,
+          "maximum_ms": 52.28590004844591
+        },
+        "observation_detail": {
+          "samples": [
+            {
+              "elapsed_ms": 7.080500014126301,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            },
+            {
+              "elapsed_ms": 2.4027000181376934,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            },
+            {
+              "elapsed_ms": 2.1791000035591424,
+              "cpu_ms": 15.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            },
+            {
+              "elapsed_ms": 2.904399996623397,
+              "cpu_ms": 0.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 1,
+              "total_matching": null,
+              "has_more": false,
+              "response_json_bytes": 948
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 2.653550007380545,
+          "minimum_ms": 2.1791000035591424,
+          "maximum_ms": 7.080500014126301
+        },
+        "observation_summary": {
+          "samples": [
+            {
+              "elapsed_ms": 1456.5328999888152,
+              "cpu_ms": 843.75,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 803.8921999977902,
+              "cpu_ms": 734.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 822.3613000009209,
+              "cpu_ms": 781.25,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            },
+            {
+              "elapsed_ms": 895.5635000020266,
+              "cpu_ms": 859.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 2
+                },
+                "trace_events": 2
+              },
+              "returned_items": 0,
+              "total_matching": 4096,
+              "has_more": false,
+              "response_json_bytes": 1916
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 858.9624000014737,
+          "minimum_ms": 803.8921999977902,
+          "maximum_ms": 1456.5328999888152
+        },
+        "attention_all_kinds_50": {
+          "samples": [
+            {
+              "elapsed_ms": 3725.2530999830924,
+              "cpu_ms": 2609.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 42,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 1
+                },
+                "trace_events": 42
+              },
+              "returned_items": 50,
+              "total_matching": 2096,
+              "has_more": true,
+              "response_json_bytes": 88216
+            },
+            {
+              "elapsed_ms": 2985.320500039961,
+              "cpu_ms": 2578.125,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 42,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 1
+                },
+                "trace_events": 42
+              },
+              "returned_items": 50,
+              "total_matching": 2096,
+              "has_more": true,
+              "response_json_bytes": 88216
+            },
+            {
+              "elapsed_ms": 2804.1498999809846,
+              "cpu_ms": 2515.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 42,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 1
+                },
+                "trace_events": 42
+              },
+              "returned_items": 50,
+              "total_matching": 2096,
+              "has_more": true,
+              "response_json_bytes": 88216
+            },
+            {
+              "elapsed_ms": 3461.671800003387,
+              "cpu_ms": 2734.375,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 42,
+                "statement_classes": {
+                  "SELECT": 41,
+                  "WITH": 1
+                },
+                "trace_events": 42
+              },
+              "returned_items": 50,
+              "total_matching": 2096,
+              "has_more": true,
+              "response_json_bytes": 88216
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 3223.496150021674,
+          "minimum_ms": 2804.1498999809846,
+          "maximum_ms": 3725.2530999830924
+        },
+        "attention_external_blocked_50": {
+          "samples": [
+            {
+              "elapsed_ms": 1189.4557000487112,
+              "cpu_ms": 1125.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1072,
+              "has_more": true,
+              "response_json_bytes": 88274
+            },
+            {
+              "elapsed_ms": 1261.4128999994136,
+              "cpu_ms": 1140.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1072,
+              "has_more": true,
+              "response_json_bytes": 88274
+            },
+            {
+              "elapsed_ms": 1223.4211000031792,
+              "cpu_ms": 1046.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1072,
+              "has_more": true,
+              "response_json_bytes": 88274
+            },
+            {
+              "elapsed_ms": 1231.0748000163585,
+              "cpu_ms": 890.625,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1072,
+              "has_more": true,
+              "response_json_bytes": 88274
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 1227.2479500097688,
+          "minimum_ms": 1189.4557000487112,
+          "maximum_ms": 1261.4128999994136
+        },
+        "attention_external_completion_50": {
+          "samples": [
+            {
+              "elapsed_ms": 1392.0280000311323,
+              "cpu_ms": 1171.875,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1024,
+              "has_more": true,
+              "response_json_bytes": 90968
+            },
+            {
+              "elapsed_ms": 1496.2601999868639,
+              "cpu_ms": 1250.0,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1024,
+              "has_more": true,
+              "response_json_bytes": 90968
+            },
+            {
+              "elapsed_ms": 1425.5204999935813,
+              "cpu_ms": 1062.5,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1024,
+              "has_more": true,
+              "response_json_bytes": 90968
+            },
+            {
+              "elapsed_ms": 1451.647200039588,
+              "cpu_ms": 1093.75,
+              "ok": true,
+              "queries": {
+                "select_or_cte": 2,
+                "statement_classes": {
+                  "SELECT": 1,
+                  "WITH": 1
+                },
+                "trace_events": 2
+              },
+              "returned_items": 50,
+              "total_matching": 1024,
+              "has_more": true,
+              "response_json_bytes": 90968
+            }
+          ],
+          "successful_samples": 4,
+          "median_ms": 1438.5838500165846,
+          "minimum_ms": 1392.0280000311323,
+          "maximum_ms": 1496.2601999868639
+        }
+      }
+    }
+  ],
+  "storage_initial": {
+    "database_bytes": 13086720,
+    "wal_bytes": 0,
+    "shm_bytes": 32768,
+    "page_count": 3195,
+    "page_size": 4096,
+    "freelist_count": 0,
+    "rows": {
+      "observation_sources": 41,
+      "observation_instances": 4096,
+      "observation_tokens": 42,
+      "observation_heads": 4096,
+      "observation_attention_anchors": 4096,
+      "observation_rate_buckets": 50,
+      "events": 4198,
+      "attention_preferences": 0
+    },
+    "observation_events": {
+      "observation.activity": 3174,
+      "observation.completion": 1024
+    }
+  },
+  "storage_final_open": {
+    "database_bytes": 13086720,
+    "wal_bytes": 0,
+    "shm_bytes": 32768,
+    "page_count": 3195,
+    "page_size": 4096,
+    "freelist_count": 0,
+    "rows": {
+      "observation_sources": 41,
+      "observation_instances": 4096,
+      "observation_tokens": 42,
+      "observation_heads": 4096,
+      "observation_attention_anchors": 4096,
+      "observation_rate_buckets": 50,
+      "events": 4198,
+      "attention_preferences": 0
+    },
+    "observation_events": {
+      "observation.activity": 3174,
+      "observation.completion": 1024
+    }
+  },
+  "status": "COMPLETED_WITH_RECORDED_MEASUREMENTS",
+  "finished_at": "2026-11-07T03:43:22.457523+00:00",
+  "factory_closed": true,
+  "storage_closed_file_bytes": {
+    "database": 13086720,
+    "wal": 0,
+    "shm": 0
+  }
+}

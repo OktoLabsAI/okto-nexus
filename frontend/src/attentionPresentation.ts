@@ -14,6 +14,9 @@ export const attentionKinds: Record<AttentionKind, { title: string; reason: stri
   handoff_unclaimed_aged: { title: 'Handoff still unclaimed', reason: 'This open handoff has remained unclaimed beyond the configured threshold.' },
   result_unseen: { title: 'Result ready to inspect', reason: 'A canonical result is available for inspection.' },
   cleanup_attention: { title: 'Cleanup needs inspection', reason: 'A cleanup attempt has not been confirmed. Inspect its existing maintenance record.' },
+  external_blocked: { title: 'External instance awaiting input', reason: 'An external source reports a blocked instance. Inspect it in its source environment; this report is not an approval request.' },
+  external_completion_unseen: { title: 'External completion observed', reason: 'An external source observed a completion. This does not confirm a Nexus task result or successful handoff.' },
+  external_observation_stale: { title: 'External report expired', reason: 'This external report is no longer current. The instance activity is unknown; expiry does not mean idle or offline.' },
 };
 
 export const attentionActionLabels: Record<AttentionAction, string> = {
@@ -22,18 +25,20 @@ export const attentionActionLabels: Record<AttentionAction, string> = {
   inspect_recovery: 'Inspect recovery', review_authority: 'Review authorization', inspect_executor: 'Open execution host',
   inspect_result: 'Inspect result', inspect_cleanup: 'Inspect cleanup', inspect_delivery: 'Inspect delivery',
   decide_approval: 'Review approval',
+  inspect_external_observation: 'Inspect external observation',
 };
 
 const actionOrder: AttentionAction[] = [
   'respond_native', 'decide_native', 'decide_approval', 'verify_handoff', 'inspect_cleanup',
   'inspect_result', 'inspect_recovery', 'review_authority', 'inspect_delivery',
-  'inspect_executor', 'inspect_approval', 'inspect_handoff', 'inspect_operation',
+  'inspect_executor', 'inspect_approval', 'inspect_handoff', 'inspect_operation', 'inspect_external_observation',
 ];
 const reviewActions = new Set<AttentionAction>(['respond_native', 'decide_native', 'decide_approval', 'verify_handoff', 'review_authority']);
 
 export function attentionDescription(item: Pick<AttentionOccurrence, 'kind'> & Partial<Pick<AttentionOccurrence, 'resolution'>>) {
   const description = Object.hasOwn(attentionKinds, item.kind) ? attentionKinds[item.kind]
     : { title: 'Attention item', reason: 'Inspect the original record for its current state.' };
+  if (item.kind.startsWith('external_')) return description;
   if (item.resolution === 'expired') return { ...description, reason: 'This request has expired. Inspect the original record for its history.' };
   if (item.resolution === 'resolved' && item.kind !== 'result_unseen') {
     return { ...description, reason: 'This episode is resolved at its source. Inspect the original record for its history.' };
@@ -41,7 +46,9 @@ export function attentionDescription(item: Pick<AttentionOccurrence, 'kind'> & P
   return description;
 }
 
-export function primaryAttentionAction(item: Pick<AttentionOccurrence, 'allowed_actions' | 'resolution' | 'freshness'>): AttentionAction | null {
+export function primaryAttentionAction(item: Pick<AttentionOccurrence, 'allowed_actions' | 'resolution' | 'freshness'> & Partial<Pick<AttentionOccurrence, 'source_type' | 'kind'>>): AttentionAction | null {
+  if (item.source_type === 'external_observation' || item.kind?.startsWith('external_'))
+    return item.allowed_actions.includes('inspect_external_observation') ? 'inspect_external_observation' : null;
   return actionOrder.find(action => item.allowed_actions.includes(action)
     && (item.resolution === 'open' && item.freshness === 'current' || !reviewActions.has(action))) ?? null;
 }
@@ -95,6 +102,7 @@ export function attentionSourceLabel(source: string): string {
     message_delivery: 'Message delivery', runtime_pending_delivery: 'Recovery record',
     execution_executor: 'Execution host', execution_result: 'Execution result',
     runtime_result: 'Runtime result', runtime_result_maintenance: 'Cleanup record',
+    external_observation: 'Observed external instance',
   };
   return Object.hasOwn(labels, source) ? labels[source] : 'Source record';
 }

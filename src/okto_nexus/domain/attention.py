@@ -15,6 +15,7 @@ KINDS = frozenset({
     'runtime_recovery_attention', 'execution_authority_blocking',
     'executor_disconnected_with_work', 'handoff_unclaimed_aged', 'result_unseen',
     'cleanup_attention', 'approval_pending',
+    'external_blocked', 'external_completion_unseen', 'external_observation_stale',
 })
 CATEGORIES = frozenset({'action_required', 'watch'})
 SEVERITIES = frozenset({'info', 'warning', 'error'})
@@ -25,6 +26,7 @@ ACTIONS = frozenset({
     'inspect_approval', 'respond_native', 'decide_native', 'inspect_handoff',
     'verify_handoff', 'inspect_operation', 'inspect_recovery', 'review_authority',
     'inspect_executor', 'inspect_result', 'inspect_cleanup', 'inspect_delivery', 'decide_approval',
+    'inspect_external_observation',
 })
 FILTERS = frozenset({'workspace_id', 'agent_id', 'category', 'kind', 'state', 'priority', 'seen'})
 
@@ -133,7 +135,8 @@ def with_preferences(item, *, seen_at=None, snoozed_until=None, revision=0, now)
     result['seen_state'] = dict(seen=seen, seen_at=seen_at, snoozed=snoozed,
                                 snoozed_until=snoozed_until, revision=revision)
     # Seeing a result ends its notification, never the work or its resolution.
-    result['active'] = item['active'] and not snoozed and not (item['kind'] == 'result_unseen' and seen)
+    result['active'] = item['active'] and not snoozed and not (
+        item['kind'] in {'result_unseen', 'external_completion_unseen'} and seen)
     if snoozed:
         result['next_change_at'] = min(filter(None, (result.get('next_change_at'), stamp(snoozed_until))))
     return result

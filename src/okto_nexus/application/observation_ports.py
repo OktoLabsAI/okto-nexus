@@ -87,6 +87,14 @@ class ObservationRepo(Protocol):
                      workspace_id: str | None = None, source_id: str | None = None,
                      after: str | None = None, limit: int = 100) -> list[dict]: ...
 
+    def get_current(self, uow: UnitOfWork, *, observed_instance_id: str,
+                    agent_id: str | None = None) -> dict | None: ...
+
+    def all_current(self, uow: UnitOfWork, *, agent_id: str | None = None,
+                    workspace_id: str | None = None, source_id: str | None = None) -> list[dict]:
+        """All selected facts, or an error; never a partial aggregate/page."""
+        ...
+
     def count_prunable(self, uow: UnitOfWork, *, now: str) -> dict: ...
 
     def prune(self, uow: UnitOfWork, *, now: str, limit: int = 500) -> dict:
