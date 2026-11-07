@@ -1102,3 +1102,15 @@ Não houve execução, acesso a cofre ou promoção de cenário/critério. O pla
 permanece igual; M1 v8 continua congelada e aguardando a aprovação solicitada.
 
 Evidência: `plans/agent_ops/evidence/r3-remaining-service-scope/root-review.json`.
+
+## 2026-11-07 — reconciliação final do resumo SVC-05
+
+O resumo corrente de SVC-05 ainda negava a execução da campanha real, embora
+seu subscope finito já estivesse VERIFIED. Corrigido para a prova retida de
+24 ações em duas tarefas Windows, com remoção e dados preservados. O subscope
+geral passa de NOT_RUN a PARTIAL; a tarefa permanece IN_PROGRESS. Enable
+repetido, definição alterada externamente e login real continuam pendentes.
+Não houve nova execução nem promoção de cenário ou critério. A campanha M1 v8
+permanece aguardando a autorização específica já solicitada.
+
+Evidência: `plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json`.

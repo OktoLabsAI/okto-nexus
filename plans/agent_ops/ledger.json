@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T20:25:47.520233+00:00",
+  "updated_at": "2026-11-07T20:30:09.924777+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -1223,10 +1223,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite. Remaining: Real two-task Windows campaign not executed; login and other OSes have separate unqualified scope. Windows definition validation is not installation.",
+      "result": "Scoped lifecycle and definition ownership contracts are implemented. The completed Windows campaign performed 24 unique actions on two real tasks, removed them and retained their homes. This is partial qualification, not full SVC-05 acceptance.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Real two-task Windows campaign not executed; login and other OSes have separate unqualified scope. Windows definition validation is not installation."
+        "The real 24-action Windows campaign qualified two empty user tasks and cleanup. Repeated enable, external-definition preservation and actual login remain unqualified; other platforms retain their separate explicit qualification limits."
       ],
       "subscopes": {
         "windows_definition_contract": "VERIFIED",
@@ -1234,7 +1234,7 @@
         "server_windows_host_adapter": "IMPLEMENTED",
         "native_host_preflight_without_registration": "VERIFIED",
         "ownership_and_revision_conflicts_isolated": "VERIFIED",
-        "actual_user_service_campaign": "NOT_RUN",
+        "actual_user_service_campaign": "PARTIAL",
         "connector_windows_host_integration": "IMPLEMENTED",
         "connector_native_worker_preflight": "VERIFIED",
         "selected_enable_disable_hosts": "IMPLEMENTED",
@@ -1254,10 +1254,12 @@
       },
       "reconciliation": {
         "current_implementation": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite.",
-        "remaining": "Real two-task Windows campaign not executed; login and other OSes have separate unqualified scope. Windows definition validation is not installation.",
+        "remaining": "The real 24-action Windows campaign qualified two empty user tasks and cleanup. Repeated enable, external-definition preservation and actual login remain unqualified; other platforms retain their separate explicit qualification limits.",
         "remaining_kind": "authorized_native_campaign_pending",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
+        "current_campaign_evidence": "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "current_campaign_sha256": "25dce3110f39319a5dc53c4aca2ba6585e6c41a118e9b4b34e26946b84471a6a"
       }
     },
     "SVC-06": {
@@ -13367,6 +13369,15 @@
       "summary": "Correct two stale remaining_kind values and map the actual service/OS observations still required. No service/provider/OS effects or acceptance promotions; M1 v8 remains frozen awaiting approval.",
       "evidence": [
         "plans/agent_ops/evidence/r3-remaining-service-scope/root-review.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "SVC-05 real-campaign summary reconciliation",
+      "status": "PARTIAL_QUALIFICATION_RECONCILED",
+      "summary": "Replace stale not-executed wording with the retained 24-action real Windows result. SVC-05 remains IN_PROGRESS; no new execution or scenario/criterion promotion. M1 v8 authorization remains pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ]
     }
   ]
