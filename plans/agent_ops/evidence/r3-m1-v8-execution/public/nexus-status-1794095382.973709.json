@@ -1,0 +1,21 @@
+{
+  "component": "server",
+  "instance_id": "svc_23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+  "generation": "ded1d1b5e508ee6c6440bdff65af5240",
+  "state": "ready",
+  "ready_for_queries": true,
+  "reason": null,
+  "pid": 9760,
+  "process_started_at": null,
+  "user_service": {
+    "name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+    "state": 4,
+    "enabled": true,
+    "last_result": 267009,
+    "start_at_login": true,
+    "available_before_login": false,
+    "available_after_logout": false,
+    "definition_digest": "5ae56d921ce9c391d0db65c8027317fa7cc0dd9503c49ffaca7c87afb1830134"
+  },
+  "observed_at": "2026-11-07T23:49:42.973545+00:00"
+}

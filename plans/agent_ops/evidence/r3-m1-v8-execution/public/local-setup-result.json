@@ -1,0 +1,77 @@
+{
+  "started": 1794095433.8569188,
+  "finished": 1794095476.3568933,
+  "cli_exit": 3,
+  "reported_state": "unconfirmed",
+  "reported_code": "OUTCOME_UNKNOWN",
+  "summary": {
+    "known_observed_tokens": 45843,
+    "new_observed_tokens": 0,
+    "carry_in_tokens": 45843,
+    "reserved_requests": 3,
+    "new_reserved_requests": 1,
+    "policy": {
+      "revision": 8,
+      "carry_in_admissions": 2,
+      "carry_in_tokens": 45843,
+      "max_cumulative_admissions": 8,
+      "max_new_admissions": 6,
+      "preventive_cumulative_tokens": 200000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+      "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+      "predecessor_faults": [
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ]
+    },
+    "current": [
+      "m1v8-local-setup"
+    ],
+    "can_admit": false,
+    "reasons": [
+      "SERIAL_REQUEST_UNSETTLED",
+      "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "monitor": {
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home\\connection-tests",
+    "home_identity": [
+      14764524303808498864,
+      2814749770320863
+    ],
+    "prior_journals": [],
+    "journal": null,
+    "journal_identity": null,
+    "cursor": 0,
+    "high_water": 0,
+    "thread": null,
+    "turn": null,
+    "started": false,
+    "terminal": false,
+    "usage_seen": false,
+    "caught_up": false,
+    "result_stage": null,
+    "close_stage": null,
+    "owned_slot_released": false
+  },
+  "stop_selected": {
+    "reason": "OBSERVATION_UNKNOWN",
+    "action": "stop_owner"
+  },
+  "stop_wrapper_exits": [
+    0
+  ],
+  "maximum_poll_start_interval_seconds": 0.43036679993383586,
+  "poll_count": 175,
+  "publication_diagnostics": {
+    "attempts": 175,
+    "published_snapshots": 175
+  },
+  "output_sha256": "1b0a39daf60c528b590435221285348af8188dd74bc8d8a1a4e812c2a79d76cd"
+}

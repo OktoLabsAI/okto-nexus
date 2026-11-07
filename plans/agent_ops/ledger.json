@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T23:41:49.885452+00:00",
+  "updated_at": "2026-11-07T23:56:58.551009+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12304,7 +12304,7 @@
       ]
     },
     "r3_m1_v8_execution": {
-      "status": "AUTHORIZED_NOT_STARTED",
+      "status": "PARTIAL_EXECUTION_CLOSED_NO_M1_ACCEPTANCE",
       "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
       "approval_sha256": "9b9db35fd62fab3afa55c17ca0a7b8df8e0426d3645eb464c819dd7d54017a61",
       "policy": {
@@ -12318,11 +12318,24 @@
         "deadline_seconds": 120
       },
       "evidence": [
-        "plans/agent_ops/evidence/r3-m1-v8-authorization/authorization.json"
+        "plans/agent_ops/evidence/r3-m1-v8-authorization/authorization.json",
+        "plans/agent_ops/evidence/r3-m1-v8-execution/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-v8-execution/artifact-manifest.json"
       ],
       "new_productive_admissions": 0,
-      "service_actions": 0,
-      "service_force_authorized": false
+      "service_actions": 4,
+      "service_force_authorized": false,
+      "productive_admissions_status": "NOT_CONFIRMED_CHECK_SUBMITTED",
+      "new_reserved_admissions": 1,
+      "new_observed_tokens": 0,
+      "final_or_billed_usage": false,
+      "force_used": false,
+      "replay_used": false,
+      "normal_stop": "DRAINED",
+      "tasks_removed": true,
+      "connector_started": false,
+      "acceptance_promoted": false,
+      "remaining": "Read-only diagnosis of check_submitted failure; original M1 criteria remain unmet."
     }
   },
   "history": [
@@ -13408,6 +13421,15 @@
       "summary": "User replied pode seguir to the exact v8 terms. Carry-in and predecessor fault preserved; no new effects yet.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v8-authorization/authorization.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "M1 v8 installation and contained partial execution",
+      "status": "PARTIAL_EXECUTION_CLOSED_NO_M1_ACCEPTANCE",
+      "summary": "Installed982 payloads; first setup stopped at check_submitted/OUTCOME_UNKNOWN. Controller selected normal stop, DRAINED and exact task removed. No force/replay, no M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v8-execution/qualification.json"
       ]
     }
   ]

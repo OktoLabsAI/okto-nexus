@@ -1,0 +1,19 @@
+{
+  "format": "okto.base06.installation-reservation",
+  "revision": 1,
+  "status": "RESERVED_INCOMPLETE",
+  "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+  "approval_sha256": "9b9db35fd62fab3afa55c17ca0a7b8df8e0426d3645eb464c819dd7d54017a61",
+  "proposal_revision": 8,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign",
+  "artifact_pins": {
+    "script_sha256": "c7b4ff53aac0ac0c121557320b146d5536775fc20f2b388e0a2af2b334c5955e",
+    "requirements_sha256": "86526f256478d173e74a535b918714988aac60abee1c5736f577e5bd6eb65f0c",
+    "dependency_manifest_sha256": "f4270ca418ced7faff9cb982f8ac9e21f6b09d0f3394b0321f1c4a48187008d0"
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv",
+  "reserved_at_utc": "2026-11-07T23:43:41.987684+00:00",
+  "possible_effect": true,
+  "retry_allowed": false
+}

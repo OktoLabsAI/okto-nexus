@@ -1,0 +1,113 @@
+{
+  "status": "PARTIAL_EXECUTION_CLOSED_NO_M1_ACCEPTANCE",
+  "files": {
+    "drivers/invoke_m1_v8_approved.py": {
+      "sha256": "2d25ae781c3696060a866ef8795f27d048a612c4f3187007667b05282211bbbf",
+      "bytes": 2494
+    },
+    "drivers/m1_v8_cleanup_proof.py": {
+      "sha256": "0cc60c04a0241b03f8e2efbd986a1f658dd9060762bcf6c7df0d00cfb47fa676",
+      "bytes": 2945
+    },
+    "drivers/m1_v8_status.py": {
+      "sha256": "ab7a8cfb8bf922b3547821f4cc2ae8b5f32e7dbb30d640c305f30168ab5f52a4",
+      "bytes": 829
+    },
+    "installation-reserved.json": {
+      "sha256": "570833f7f98057aa11f4e36ff2d325bdb159c75c6c65fbdf80a2ed5da3028fb9",
+      "bytes": 1029
+    },
+    "installation-result.json": {
+      "sha256": "dfc0348dcf7bc458d7ab4a03b3521add31dc081214cb795714238eefd5f26743",
+      "bytes": 3560
+    },
+    "milestone.md": {
+      "sha256": "8396a066b20d2a7db52045948900fb2365e771079ad884594b6838cf8489b62e",
+      "bytes": 1190
+    },
+    "profile-projection.json": {
+      "sha256": "f716173614fdc8bffb043c56c429138ca89556620739625cefd75f13841a81aa",
+      "bytes": 512
+    },
+    "public/authorization-reference.json": {
+      "sha256": "28b6eac8918367846ddb1d5015ca35f08147c850b290c19b8383f73219ef8364",
+      "bytes": 245
+    },
+    "public/cleanup-nexus.json": {
+      "sha256": "52fc94b2a1e85123f1adef3f02841a10f2a368c4d3a18a294fdba612d9fbf860",
+      "bytes": 1176
+    },
+    "public/final-cleanup-verification.json": {
+      "sha256": "9d5f546cc64bc622e5775a3ecd3ac98a4c0dc7f707909a581bde35436dc988a8",
+      "bytes": 292
+    },
+    "public/lifecycle-nexus-install-result.json": {
+      "sha256": "54f5da325fe3dde752b30f60783f8d856ec0af417ed3532302b7efa2cf9969a6",
+      "bytes": 430
+    },
+    "public/lifecycle-nexus-install.json": {
+      "sha256": "898a851e964021bb1186718db09c3c78d6c37cc1bb848a10672e14741b800599",
+      "bytes": 1150
+    },
+    "public/lifecycle-nexus-start-result.json": {
+      "sha256": "5d8c49b5ce887e70aa5818df2fd5ffbfa2582aaa3decc861b1a414275d807cf2",
+      "bytes": 429
+    },
+    "public/lifecycle-nexus-start.json": {
+      "sha256": "46f2a8b92a1d626b62597ed22eab1d0605302301bd280228d162bc26f4360274",
+      "bytes": 1105
+    },
+    "public/lifecycle-nexus-stop-result.json": {
+      "sha256": "d69777ae643fd3eeb6854e83522d53b20bbb42f2ec632d1a2eea4da9744c5f7e",
+      "bytes": 427
+    },
+    "public/lifecycle-nexus-stop.json": {
+      "sha256": "7ab64aec8351785c3b421b796388c66935588b7bed89d7b0a06353ea80580180",
+      "bytes": 1104
+    },
+    "public/lifecycle-nexus-uninstall-result.json": {
+      "sha256": "ae3b98094dabda80e3b38350a3e7ab759a0b75bfd1e7ff6d75891416a8249860",
+      "bytes": 432
+    },
+    "public/lifecycle-nexus-uninstall.json": {
+      "sha256": "eaf7de2d8ca5f140fe77bd63a64373825f89eddc058a64dd34eac089dce04cfb",
+      "bytes": 1127
+    },
+    "public/live-accounting.json": {
+      "sha256": "351ab3af377bb4d703cf96d909843d5fa875bb723a8463e07f012852e076f01a",
+      "bytes": 1115
+    },
+    "public/local-setup-dispatch.json": {
+      "sha256": "5956d61209eeac6963c5cb296b94671a7e1b0d756de0b4051cb7e3814eb3eb4f",
+      "bytes": 212
+    },
+    "public/local-setup-result.json": {
+      "sha256": "39767e4a0b1628b9fd0b11e06fb05179dfaad204cbc9e5f9ddb57db397b46ba7",
+      "bytes": 2272
+    },
+    "public/nexus-status-1794095382.973709.json": {
+      "sha256": "a12657b42be3f63e95500f92d499272ff86c7db2913c4418d328226f3c66b23a",
+      "bytes": 733
+    },
+    "public/process-nexus-install.json": {
+      "sha256": "3325e892f2924a2edecffb2a790c590f399142cb02c5bab60f9c8807800c026b",
+      "bytes": 102
+    },
+    "public/process-nexus-start.json": {
+      "sha256": "a3f3b907def321607347a5b295845952e220790ac01f84cd9cb6ba42ddf48bb7",
+      "bytes": 100
+    },
+    "public/process-nexus-stop.json": {
+      "sha256": "3e0b49870fa4bf671697aa09839784c4922048215bd85e8bc6ca61c9f5d80954",
+      "bytes": 99
+    },
+    "public/process-nexus-uninstall.json": {
+      "sha256": "acee2a193c496a03a4497b84312fe3c357b9bcede21d669e9a407645af00a219",
+      "bytes": 105
+    },
+    "qualification.json": {
+      "sha256": "b117029513a7b281d4fc94961ef2ada094ccbd7ce0bdbdde2a389247ce890594",
+      "bytes": 1484
+    }
+  }
+}

@@ -1120,3 +1120,19 @@ e inferência ainda não foram executados neste checkpoint. A autorização excl
 força de serviço, logout/reboot e replay; não encerra nenhum aceite do plano.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v8-authorization/authorization.json`.
+
+## 2026-11-07 — M1 v8 executada parcialmente e contida
+
+Instalação offline verificada: 982 arquivos, imports e pip check. O start
+excedeu a janela inicial, mas status posterior confirmou a mesma geração ready.
+O setup local retornou OUTCOME_UNKNOWN ainda em check_submitted; não houve
+resultado útil. Uma admissão foi reservada preventivamente, sem admissão
+produtiva confirmada e sem novos tokens observados. Não é declaração de billing.
+
+O controlador bloqueou novas chamadas e parou normalmente o Nexus. DRAINED,
+saída do PID, locks livres e tarefa parada foram conferidos; uninstall removeu
+a tarefa e a porta ficou livre. Dados preservados, Connector não iniciado.
+Quatro ações de serviço, sem force/replay. Esta campanha está encerrada e
+não pode ser reiniciada; o diagnóstico de leitura prossegue. Nenhum aceite promovido.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v8-execution/qualification.json`.

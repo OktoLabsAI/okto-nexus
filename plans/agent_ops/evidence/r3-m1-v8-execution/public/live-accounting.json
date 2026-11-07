@@ -1,0 +1,38 @@
+{
+  "time": 1794095476.3354967,
+  "summary": {
+    "known_observed_tokens": 45843,
+    "new_observed_tokens": 0,
+    "carry_in_tokens": 45843,
+    "reserved_requests": 3,
+    "new_reserved_requests": 1,
+    "policy": {
+      "revision": 8,
+      "carry_in_admissions": 2,
+      "carry_in_tokens": 45843,
+      "max_cumulative_admissions": 8,
+      "max_new_admissions": 6,
+      "preventive_cumulative_tokens": 200000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+      "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+      "predecessor_faults": [
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ]
+    },
+    "current": [
+      "m1v8-local-setup"
+    ],
+    "can_admit": false,
+    "reasons": [
+      "SERIAL_REQUEST_UNSETTLED",
+      "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "active_request": "m1v8-local-setup"
+}

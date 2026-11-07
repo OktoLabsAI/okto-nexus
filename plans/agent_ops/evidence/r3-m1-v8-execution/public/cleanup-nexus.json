@@ -1,0 +1,35 @@
+{
+  "task_name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+  "owned_pid_birth_exit_confirmed": true,
+  "task_stopped_confirmed": true,
+  "force_used": false,
+  "observed_at": "2026-11-07T23:53:37.900952+00:00",
+  "pid": 9760,
+  "generation": "ded1d1b5e508ee6c6440bdff65af5240",
+  "birth_token": null,
+  "birth_observed": false,
+  "retained_handle": false,
+  "exit_proof_method": "previously_owned_nonzero_pid_now_absent",
+  "exit_proof_limit": "No historical birth comparison or signaled handle is claimed. Absence of the previously owned nonzero PID proves that no process with any birth at that PID survives at observation.",
+  "open_process_error": 87,
+  "cim": {
+    "process_count": 0,
+    "query_succeeded": true
+  },
+  "guards_held": [
+    false,
+    false
+  ],
+  "status": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER"
+  },
+  "task_state": 3,
+  "task_digest": "5ae56d921ce9c391d0db65c8027317fa7cc0dd9503c49ffaca7c87afb1830134",
+  "shutdown": {
+    "revision": 1,
+    "generation": "ded1d1b5e508ee6c6440bdff65af5240",
+    "state": "DRAINED"
+  },
+  "service_exit_observed": true
+}
