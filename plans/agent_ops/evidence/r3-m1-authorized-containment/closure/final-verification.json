@@ -1,0 +1,35 @@
+{
+  "recorded_at": 1794071311.7232833,
+  "original_pid": 45144,
+  "original_pid_absent": true,
+  "nexus_task_absent": true,
+  "connector_task_absent": true,
+  "port64507_available": true,
+  "admissions": 2,
+  "known_observed_token_minimum": 45843,
+  "final_billed_usage": false,
+  "controller_faults_preserved": [
+    "CAMPAIGN_RUNNER_EXCEPTION"
+  ],
+  "additional_provider_admissions": 0,
+  "post_containment_event_streams": [
+    {
+      "stream_epoch": "stream_2a5235dfa48ad2955623d64e76aeb82f",
+      "next_sequence": 35,
+      "acked_sequence": 34,
+      "compacted_sequence": 0
+    }
+  ],
+  "post_containment_claims": [
+    {
+      "server_id": "srv_5a02d4e235c6f532d56f1009516c9f6b",
+      "executor_id": "exe_73883c04aeca5110dd9212baff8c08a1",
+      "session_id": "ses_e8ddc66adc041a490d97a2419778e90c",
+      "operation_id": "op_cc1e03ba2cd0d34ed3ab8de46cfedfda",
+      "reconciliation_pending": 1,
+      "release_id": null,
+      "release_digest": null
+    }
+  ],
+  "history_preserved": "Earlier UNKNOWN drain receipts and partial milestone ec8f2a5d remain immutable; successful containment does not promote cooperative drain or M1 acceptance."
+}

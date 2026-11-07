@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T17:10:57.041053+00:00",
+  "updated_at": "2026-11-07T17:13:49.406462+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11999,7 +11999,7 @@
       ]
     },
     "m1_codex_real": {
-      "status": "M1_PARTIAL_REAL_EXECUTION_ENDED_WITH_PERMANENT_CONTROLLER_FAULT_AND_PENDING_SERVICE_CONTAINMENT",
+      "status": "PARTIAL_REAL_CAMPAIGN_CLOSED_NO_M1_ACCEPTANCE",
       "harness": "Codex CLI",
       "account_selection": "already authenticated CLI account",
       "total_token_limit": 700000,
@@ -12047,20 +12047,22 @@
       "work_status": "CANCELLED",
       "useful_result_delivered": false,
       "connector_campaign_executed": false,
-      "cleanup_confirmed": false,
-      "pending_service": {
-        "pid": 45144,
-        "generation": "188be445d44e96d483336ee424008e56",
-        "state": "DRAINING_PENDING",
-        "admission": "closed"
-      },
-      "force_authorized": false,
+      "cleanup_confirmed": true,
+      "pending_service": null,
+      "force_authorized": true,
       "force_proposal": "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/force-recovery-proposal.json",
       "publication_fix_preparation": {
         "final_unique_tests": 10,
         "provider_executed": false,
         "evidence": "plans/agent_ops/evidence/r3-m1-partial-execution/publication-helper-final-addendum.json"
-      }
+      },
+      "force_executed": true,
+      "force_executions": 1,
+      "force_authorization_quote": "Autorizar essa parada forçada",
+      "containment_evidence": "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/summary.json",
+      "additional_provider_admissions_during_cleanup": 0,
+      "m1_accepted": false,
+      "data_and_history_preserved": true
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -12191,7 +12193,11 @@
       "live_m1_hotpatch": false,
       "provider_admissions": 0,
       "acceptance_promoted": false,
-      "evidence": "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
+      "evidence": "plans/agent_ops/evidence/r3-released-session-drain/qualification.json",
+      "consumer_commits": {
+        "nexus": "f44ca088375056459228941fe02f3d40b0abc6ce",
+        "connector": "c100002259439c0f8252e494ad3f61dafcd9ab7b"
+      }
     }
   },
   "history": [
@@ -13212,6 +13218,15 @@
       "summary": "Core local proof fixes false orphan-claim drain after confirmed release without history rewrites.59Core/18Nexus/26Connector installed PASS; same host regression REDold/GREENnew. Identical Core wheel pinned by both consumers; no live hotpatch or new provider use.",
       "evidence": [
         "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Explicitly authorized M1 containment and cleanup",
+      "status": "COMPLETED",
+      "summary": "User authorized one generation-bound force. Original PID exit confirmed, then owned task uninstalled; port64507free and ConnectorM1neverinstalled. No extra inference;2admissions/45843observed preserved, fault/claim history retained. Cleanup complete, M1 partial.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/summary.json"
       ]
     }
   ]

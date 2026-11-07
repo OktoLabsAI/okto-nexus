@@ -1,0 +1,73 @@
+{
+  "files": {
+    "closure/approved-force-proposal.json": {
+      "bytes": 4028,
+      "sha256": "d9e8b53dbbadcd991e170d801aa5483d875d982ee4a5627656994239b73a8261"
+    },
+    "closure/authorization.json": {
+      "bytes": 489,
+      "sha256": "c918fd38f175820c9cc727e5155b69852c81526a01721dce79bc864dd26a5831"
+    },
+    "closure/execute_force.py": {
+      "bytes": 6266,
+      "sha256": "5774dca2a6b35da811c21045c96f4ddbe9d0a2e419d0897ac3cbc00572474580"
+    },
+    "closure/exit-observation.json": {
+      "bytes": 1426,
+      "sha256": "9a86dcd5a9aa304ac39b0dbef0a03344bd3be9c55afc2097e0c192cf1dcbc53d"
+    },
+    "closure/final-verification.json": {
+      "bytes": 1190,
+      "sha256": "20d242f094a80ecaeebfe76af1d1728183c5b99c57d4cae1fd72b3cdef3f6dc7"
+    },
+    "closure/force-process.json": {
+      "bytes": 57,
+      "sha256": "1d438034c883c4853edfa4595e9cf8522539292e950227e38bf1e5b310f84305"
+    },
+    "closure/force-receipt.json": {
+      "bytes": 1402,
+      "sha256": "2f9530ddd3a6b62f45243a59b7c9adf7da97f452288aa690eb2422caba0451d1"
+    },
+    "closure/force-reservation.json": {
+      "bytes": 1112,
+      "sha256": "f6df85d7cd046e32ae556844447ed528e55643b645f024129be539031d188e24"
+    },
+    "closure/historical-package-proof.json": {
+      "bytes": 845,
+      "sha256": "3276311c328a40c6c48974bbc4e07792c3ddc1b144deedc11339a55bf6bcd1fd"
+    },
+    "closure/lifecycle-nexus-uninstall.json": {
+      "bytes": 432,
+      "sha256": "f07a4624d8e7b0c919a69fd198fb6400a8563fc638244e4ec1f349b8b7fd7811"
+    },
+    "closure/manifest.json": {
+      "bytes": 2422,
+      "sha256": "87e7241a764ac0de5b8aec69306617e82ffc5a22ab656636a119c0daa2207337"
+    },
+    "closure/preflight.json": {
+      "bytes": 3606,
+      "sha256": "9f80fd5b463d10a5e71ebd98610de794248d528ecfc3e1c4ee70863d28bdd7d1"
+    },
+    "closure/process-nexus-uninstall.json": {
+      "bytes": 89,
+      "sha256": "28bd6111416d44e59e6151e5c1e0838e0647a7c8effbf0f38fc88842f67345b6"
+    },
+    "closure/README.md": {
+      "bytes": 1394,
+      "sha256": "04a9ccfc304ec9e03ec221ac5c69eec3574cf4de9142c10554efd8ce44f6fca0"
+    },
+    "closure/summary.json": {
+      "bytes": 875,
+      "sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b"
+    },
+    "closure/verify_and_curate.py": {
+      "bytes": 6401,
+      "sha256": "37539a17bc69b837e8288dcc7e52674b2bb17ab7bf05df343e0d43d81456a765"
+    },
+    "milestone.md": {
+      "bytes": 1468,
+      "sha256": "7a0650d3bdbe055162e1b4396d9b951138db422631a1a50320fbb199ffb52a66"
+    }
+  },
+  "scope": "Authorized single-generation forced containment and confirmed task removal, without productive M1 acceptance"
+}

@@ -1,0 +1,22 @@
+{
+  "status": "AUTHORIZED_CONTAINMENT_COMPLETED_AND_OWNED_TASK_REMOVED",
+  "force_executions": 1,
+  "force_cli_exit": 0,
+  "uninstall_executions": 1,
+  "uninstall_cli_exit": 0,
+  "original_pid_absent": true,
+  "owned_task_absent": true,
+  "connector_task_never_installed": true,
+  "port64507_available": true,
+  "historical_server_packages_unchanged": true,
+  "hotpatch": false,
+  "additional_provider_admissions": 0,
+  "total_admissions": 2,
+  "known_observed_token_minimum": 45843,
+  "permanent_controller_fault_preserved": true,
+  "cooperative_drain_qualified_by_this_force": false,
+  "m1_accepted": false,
+  "prior_partial_milestone": "ec8f2a5d",
+  "separate_core_fix_not_installed_live": "830f7ce",
+  "scope": "One user-authorized generation-CAS force with task/PID/birth/digest/package/deadline verification; uninstall only after confirmed exit."
+}
