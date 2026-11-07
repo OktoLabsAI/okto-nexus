@@ -1,0 +1,1427 @@
+{
+  "format": "r3-nine-implemented-readonly-audit.v1",
+  "nexus_head": "412f47056308782e2a5a1f748be9f59c6fd0bf7a",
+  "plan_path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "ledger_sha256": "ae458c991f55eabda727b4968abeab34d735682da712bee08a45a8649cca8959",
+  "scope": "Exactly nine tasks with IMPLEMENTED status at 412f4705; task-level recommendations only.",
+  "method": "Read literal plan paragraphs, current named source/test oracles and retained installed XML. Parse the named PASS cases and preserve historical campaign scope; never infer qualification from totals or milestone association.",
+  "no_test_runs": true,
+  "no_service_or_provider_start": true,
+  "no_credentials_read": true,
+  "no_checkout_or_ledger_edits": true,
+  "recommendations_applied": false,
+  "tasks": [
+    {
+      "id": "BASE-06",
+      "ledger_status": "IMPLEMENTED",
+      "title": "lifecycle e primeiro uso reais",
+      "literal": [
+        {
+          "line": 245,
+          "text": "**BASE-06 — lifecycle e primeiro uso reais.** Localizar entrypoints foreground/background, arquivos de configuração, diretórios de dados, locks/PIDs, gerenciadores de serviço, vault, descoberta de harnesses, startup/shutdown, reconciliação e empacotamento nos três repositórios. Registrar a matriz real de plataformas e escolher um harness já suportado para a primeira campanha local e remota. Medir as etapas atuais entre instalação e primeira sessão útil. Não presumir ausência de daemon porque o fluxo atual exige um comando manual."
+        }
+      ],
+      "recommendation": "IMPLEMENTED",
+      "conclusion": "Inventário e alvo inicial existem. A medição explícita instalação→primeira sessão útil ainda falta; 7,811s mede apenas liveness HTTP.",
+      "minimal_remaining_evidence": "Medir as etapas de primeiro uso útil no harness suportado e contexto escolhidos; preservar os tempos e pré-requisitos reais. Nenhuma nova infraestrutura de lifecycle é pedida.",
+      "gate_analysis": "Cláusula própria da linha245, não M1 herdado por associação. Pode integrar a mesma campanha M1 autorizada, sem campanha redundante.",
+      "stale_or_overbroad_limit": "Não substituir esta medida por quantidade de testes, initialize MCP ou resultado de peer sintético.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "Installation-to-first-useful-provider-session/full result/native interaction timing remains NOT_RUN; liveness and synthetic cycles do not replace it."
+      ],
+      "sources": [],
+      "proofs": [
+        {
+          "path": "plans/agent_ops/evidence/baseline-startup.json",
+          "cold_empty_home_http_liveness_seconds": 7.811,
+          "provider_invocations": 0,
+          "missing_measurement": "Installation-to-first-useful-harness-session/result"
+        }
+      ]
+    },
+    {
+      "id": "SVC-07",
+      "ledger_status": "IMPLEMENTED",
+      "title": "parada controlada",
+      "literal": [
+        {
+          "line": 325,
+          "text": "**SVC-07 — parada controlada.** Implementar política explícita de drain: bloquear novas admissões do escopo, persistir estado, aguardar operações em andamento conforme contrato e prazo, e só então encerrar. Se o prazo expirar, informar trabalhos ainda ativos/incertos e permitir decisão explícita de força; não converter timeout em sucesso ou cancelamento automático. Cancelar um pedido de parada e reabrir admissão exige transição clara e autorizada."
+        },
+        {
+          "line": 327,
+          "text": "No fluxo solicitado pelo CLI, concluir o drain pela aplicação antes de pedir stop ao supervisor; não iniciar uma contagem de encerramento forçado do SO enquanto a interface ainda promete aguardar uma decisão do usuário. Coordenar os prazos e a política de processos filhos com o gerenciador escolhido. Quando o encerramento vier de fora — logout, shutdown, administrador ou falha — aplicar persistência/encerramento dentro do prazo disponível e registrar estado incerto para reconciliação posterior; não prometer que todo término externo pode ser impedido."
+        },
+        {
+          "line": 329,
+          "text": "Solicitar drain pelo canal autorizado existente e manter disponíveis as operações necessárias para terminar trabalho já admitido: resultados, decisões autorizadas e reconciliação. Bloquear novas admissões produtivas, sem derrubar prematuramente os canais usados pelas operações em andamento. Um connect concorrente informa que a instância está parando; não cancela o drain nem inicia outra instância. Informar o alcance da parada quando vários projetos compartilham o mesmo serviço."
+        }
+      ],
+      "recommendation": "IMPLEMENTED",
+      "conclusion": "Drain/força explícita/autoridade atual/timeout pendente e retenção de recursos estão comprovados. O novo T22 prova filho real e parada cooperativa, não logout/shutdown externo.",
+      "minimal_remaining_evidence": "Qualificar a cláusula de encerramento externo da linha327 no contexto de gerenciador escolhido, com persistência/estado incerto e reconciliação honestos. O alcance real SVC-T21 permanece aberto.",
+      "gate_analysis": "A pendência é external-shutdown/service context; trabalho pago de provedor, preset M1 e participação M2 não são gates deste contrato.",
+      "stale_or_overbroad_limit": "Não descrever force como ausente. Não promover encerramento externo usando T22 ou signal.raise_signal no processo controlado.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "Actual registered user-service and external logout/shutdown context remain unqualified; synthetic peers do not qualify real provider work."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/bootstrap/server_shutdown.py",
+          "symbol": "ServerShutdownCoordinator",
+          "line": 14
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/bootstrap/runtime_host.py",
+          "symbol": "EmbeddedRuntimeHost",
+          "line": 24
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E01",
+          "cases": [
+            "E01:1",
+            "E01:2",
+            "E01:3",
+            "E01:4",
+            "E01:5",
+            "E01:6",
+            "E01:7"
+          ],
+          "meaning": "Timeout retains owner/admission fence; force is explicit/current-generation/expired-drain bound; cancelled observation and changed revision cannot manufacture quiescence; safety escalation is distinct."
+        },
+        {
+          "evidence": "E01",
+          "cases": [
+            "E01:8",
+            "E01:9"
+          ],
+          "meaning": "Real disposable serve process receives signal.raise_signal from its test-owned control pipe; HTTP and uncertainty remain until inventory release. This does not observe actual OS logout/shutdown."
+        },
+        {
+          "evidence": "E02",
+          "cases": [
+            "E02:1"
+          ],
+          "meaning": "Current T22: real Core-owned child, claim/slot retained while restart pending; one effect, explicit close, child exit0 and Server DRAINED. No external-shutdown or owner-death-survival claim."
+        }
+      ]
+    },
+    {
+      "id": "DX-04",
+      "ledger_status": "IMPLEMENTED",
+      "title": "credenciais",
+      "literal": [
+        {
+          "line": 409,
+          "text": "**DX-04 — credenciais.** Importar a chave existente por prompt oculto, stdin ou referência de ambiente autorizada. Usar cofre do sistema quando disponível; fallback em arquivo restrito depende de consentimento explícito e política. Não criar chave permanente nova nem rotacionar a existente como efeito colateral de init."
+        },
+        {
+          "line": 411,
+          "text": "Referência de ambiente no arquivo não basta: garantir e testar como o processo real do harness obtém o valor. Não dizer “pronto” se o launcher/GUI não herdar a variável. Não imprimir `export TOKEN=segredo`; explicar a instalação segura necessária. Exportações portáveis continuam sem chaves, grants ativos, caminhos e recibos de teste do host de origem."
+        },
+        {
+          "line": 413,
+          "text": "Autenticação deve usar header Bearer. Selecionar a origem explicitamente, não seguir redirecionamento para enviar credencial a outro host. Respeitar a política de transporte atual do Server, alertar sobre plaintext e não afrouxá-la automaticamente. Corrigir o placeholder antigo do onboarding sem quebrar compatibilidade de clientes legados por mudança incidental."
+        }
+      ],
+      "recommendation": "IMPLEMENTED",
+      "conclusion": "Importação protegida, vault, isolamento do ambiente filho, Bearer/origem e negativos estão provados separadamente. Não há prova da ligação completa pelo ParticipantLaunch distribuído até cliente real.",
+      "minimal_remaining_evidence": "Exercitar o launcher suportado com perfil isolado, chave sintética existente e mecanismo protegido; observar autenticação do processo real e o negativo sem referência. Cofre pode conter apenas credencial sintética. Um turno pago não é requisito dessa prova.",
+      "gate_analysis": "Gate concreto de entrega/consumo da credencial. GUI/TUI não suportada e cooperação/handoff pertencem a seus escopos; não exigir M1/M2 integral para DX04.",
+      "stale_or_overbroad_limit": "412f4705 prova clientes reais com token recebido por helper programático, sem vault/ParticipantLaunch. Não resolve esta integração e não deve ser rotulado como launcher Claude/Codex.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "Linha 411 exige testar como o processo real do harness obtém o valor: ainda falta juntar cofre do SO real, launcher distribuído e cliente real na mesma campanha.",
+        "GUI/TUI herança/reload e cooperação canônica de cliente real não foram qualificados; resultados atuais devem continuar UNKNOWN quando não observados."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/participant.py",
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/outbound/participant_client.py",
+          "symbol": "ParticipantVault",
+          "line": 73,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/participant_launch.py",
+          "symbol": "apply",
+          "line": 69,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/outbound/participant_process.py",
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "frontend/src/participantGuide.ts",
+          "symbol": "buildParticipantGuide",
+          "line": 40,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/outbound/participant_process.py",
+          "symbol": "launch_context",
+          "line": 32
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E03",
+          "cases": [
+            "E03:1"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_participant_init.py",
+            "symbol": "test_cli_never_falls_back_to_echoing_key",
+            "line": 228
+          }
+        },
+        {
+          "evidence": "E03",
+          "cases": [
+            "E03:2"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_participant_init.py",
+            "symbol": "test_actual_http_redirect_does_not_forward_bearer",
+            "line": 279
+          }
+        },
+        {
+          "evidence": "E03",
+          "cases": [
+            "E03:3"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_participant_launch.py",
+            "symbol": "test_real_subprocess_receives_reference_without_parent_mutation",
+            "line": 203
+          }
+        },
+        {
+          "evidence": "E04",
+          "cases": [
+            "E04:1"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_participant_removal.py",
+            "symbol": "test_windows_participant_vault_compensation_and_absent_replay",
+            "line": 310
+          }
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-launch-native.json",
+          "versions": [
+            [
+              "claude",
+              "2.1.317"
+            ],
+            [
+              "codex",
+              "0.166.0"
+            ]
+          ],
+          "scope": "Retained native protocol-mode present/absent-reference cases using generated Core config and installed environment/context helpers; dummy provider credentials, no turn. Not ParticipantLaunch.apply plus OS vault end-to-end.",
+          "version_boundary": "Claude Code2.1.317 and Codex0.166.0 only. --no-daemon is an intentional current product fence and prior help/schema were inspected in that campaign. No new native command was executed; no inference about other versions."
+        }
+      ],
+      "client_barrier": {
+        "participant_launch": "ParticipantLaunch._setup rejects generic; only claude/codex are in participant_process.ADAPTERS.",
+        "codex": "launch_context uses --no-daemon, selected loaded config path and current client context. It refuses silent shared-daemon fallback.",
+        "inspector_fastmcp": "412f4705 helpers construct the real distributed clients and pass fixture token in memory/pipe. They are not supported by this foreground launcher; do not mislabel a wrapper as Claude/Codex.",
+        "safe_next_step": "Plan a selected supported native-client startup with disposable config/trust and synthetic Nexus key, no model turn. Effective context/trust still requires review; no execution is authorized by this audit."
+      },
+      "contract_oracles": "Chave nunca é ecoada; redirect HTTP real não encaminha Bearer; subprocesso recebe referência sem mudar o ambiente pai; vault Windows compensa e repete remoção ausente sem nova chave."
+    },
+    {
+      "id": "DX-15",
+      "ledger_status": "IMPLEMENTED",
+      "title": "connect como entrada principal",
+      "literal": [
+        {
+          "line": 430,
+          "text": "**DX-15 — connect como entrada principal.** Implementar a fachada que resolve perfil/topologia, chama SVC para iniciar/reutilizar o serviço local apropriado e conduz o setup pelo terminal. Usar os serviços e autorizações atuais; não duplicar o Finish gerenciado. Aplicar o preset de DX-18/19 e encaminhar diretamente ao percurso de trabalho de DX-20. O dashboard é uma opção durante todo o uso padrão; seus links não substituem controles de terminal necessários a decisões rotineiras. Instalações já configuradas reutilizam o vínculo e não repetem o wizard. Política organizacional preexistente que imponha outro canal permanece válida e é diagnosticada separadamente."
+        },
+        {
+          "line": 436,
+          "text": "O fluxo padrão do terminal é: executar `connect` na pasta → confirmar o resumo necessário → trabalhar com o agente e acompanhar o resultado. Não há um passo “abra o dashboard para terminar de configurar”. Uma política ou falha real pode exigir intervenção adicional, mas não acrescentar perguntas apenas para reproduzir conceitos internos. No host do Connector, integrar seu CLI existente ao percurso, apontando para o Server remoto configurado; decisões de operador podem ocorrer em outro terminal autenticado, sem transportar sua credencial para esse host."
+        }
+      ],
+      "recommendation": "VERIFIED",
+      "conclusion": "Fachada resolve topologia, inicia/reutiliza serviço, usa revisão/Finish/preset canônicos e entra no trabalho somente após configuração. Reconnect mantém binding/identidade e não repete wizard/efeitos.",
+      "minimal_remaining_evidence": null,
+      "gate_analysis": "Retirar M1 inteiro como gate deste contrato de encaminhamento. DX17/18/20 e DX-T39/T40/T43 continuam abertos nos seus próprios alcances; não declarar provider ou serviço registrado qualificado.",
+      "stale_or_overbroad_limit": "Subscopes genéricos de renovação IN_PROGRESS são superados pela renovação HTTP/IPC/WSS e rotação já verificadas. Não reimplementar esse fluxo.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "M1 real instalado, local e via Connector: serviço persistente + preset + trabalho/decisão/resultado/reabertura, sem dashboard e sem configuração manual; não executado.",
+        "Campanhas nativas de início no login/SVC permanecem separadas; seleção/recusa da opção já tem prova de contrato."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+          "symbol": "run_connect",
+          "line": 120,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_connection.py",
+          "symbol": "review",
+          "line": 45,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/remote_terminal_setup.py",
+          "symbol": "RemoteProjectSetup",
+          "line": 19,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Connector",
+          "path": "src/okto_nexus_connector/cli/commands/connect.py",
+          "symbol": "run_connect",
+          "line": 57,
+          "unchanged_since_prior_audit": true
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:1"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/test_terminal_connect_process.py",
+            "symbol": "test_connect_starts_reuses_and_leaves_service_owned_until_explicit_stop",
+            "line": 12
+          }
+        },
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:2"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_connect.py",
+            "symbol": "test_interactive_connect_enters_work_only_after_configuration",
+            "line": 197
+          }
+        },
+        {
+          "evidence": "E06",
+          "cases": [
+            "E06:1"
+          ],
+          "test_source": {
+            "repository": "Connector",
+            "path": "tests/unit/test_connect_reuse.py",
+            "symbol": "test_bare_connect_reuses_project_and_current_authority_without_rewrite",
+            "line": 69
+          }
+        },
+        {
+          "evidence": "E07",
+          "cases": [
+            "E07:1",
+            "E07:2",
+            "E07:3",
+            "E07:4",
+            "E07:5",
+            "E07:6"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_remote_setup_integration.py",
+            "symbol": "test_operator_and_connector_cli_complete_same_root_once",
+            "line": 51
+          }
+        }
+      ],
+      "contract_oracles": "Connect deixa processo serviço ativo e reutiliza PID/geração; entrada em work exige checkpoint done; Connector reread usa binding atual sem rewrite/reprepare; mesma raiz conclui Finish uma vez sob perdas/rereview."
+    },
+    {
+      "id": "DX-16",
+      "ledger_status": "IMPLEMENTED",
+      "title": "descoberta e revisão mínima",
+      "literal": [
+        {
+          "line": 432,
+          "text": "**DX-16 — descoberta e revisão mínima.** Detectar pasta atual e executáveis suportados no host correto; a existência no PATH é descoberta, não qualificação nem login confirmado. Reutilizar a escolha anterior ou pré-selecionar uma recomendação válida; havendo ambiguidade material, pedir somente a escolha necessária. Mostrar projeto/workspace, harness, identidade sugerida ou reutilizada, efeito de execução e mudanças de configuração em um resumo revisável. Permitir escolher início no login nessa mesma revisão, sem tornar instalação de serviço um pré-requisito. A autorização já válida é reutilizada; criação de agente, ampliação de escopo e autorização de execução são ações explícitas nos serviços existentes, reunidas na mesma revisão quando o operador possui autoridade."
+        }
+      ],
+      "recommendation": "VERIFIED",
+      "conclusion": "Descoberta/recomendação passiva, escolha única sob ambiguidade, resumo de efeitos/limites e consentimento antes dos efeitos estão provados. O requisito explicitamente separa PATH de qualificação/login.",
+      "minimal_remaining_evidence": null,
+      "gate_analysis": "Não herdar prontidão de provedor/instalação nova M1 como gate da descoberta/revisão. Manter candidatos sintéticos e ausência de login confirmado declarados.",
+      "stale_or_overbroad_limit": "A limitação atual exige configuração efetiva de harness real que pertence a DX18/DX-T43. A opção de início no login não torna registro de serviço pré-requisito desta revisão.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "Campanha de instalação nova com harness/provedor realmente prontos e configuração efetiva no host local/remoto; os testes de recomendação atuais usam inventário/candidatos sintéticos e não confirmam login."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_connection.py",
+          "symbol": "review",
+          "line": 45,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Connector",
+          "path": "src/okto_nexus_connector/cli/commands/connect.py",
+          "symbol": "_choose_harness",
+          "line": 225,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Connector",
+          "path": "src/okto_nexus_connector/cli/commands/configure_local.py",
+          "symbol": "configure_local",
+          "line": 72,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/remote_terminal_setup.py",
+          "symbol": "review",
+          "line": 39,
+          "unchanged_since_prior_audit": true
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E08",
+          "cases": [
+            "E08:1"
+          ],
+          "test_source": {
+            "repository": "Connector",
+            "path": "tests/unit/test_connect_project_review.py",
+            "symbol": "test_one_detected_installation_is_recommended_without_executing_or_prompting",
+            "line": 34
+          }
+        },
+        {
+          "evidence": "E08",
+          "cases": [
+            "E08:2"
+          ],
+          "test_source": {
+            "repository": "Connector",
+            "path": "tests/unit/test_connect_project_review.py",
+            "symbol": "test_material_ambiguity_asks_once_and_preserves_exact_candidate",
+            "line": 49
+          }
+        },
+        {
+          "evidence": "E08",
+          "cases": [
+            "E08:3"
+          ],
+          "test_source": {
+            "repository": "Connector",
+            "path": "tests/unit/test_connect_project_review.py",
+            "symbol": "test_one_project_review_submits_existing_canonical_defaults",
+            "line": 145
+          }
+        },
+        {
+          "evidence": "E09",
+          "cases": [
+            "E09:1"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_identity.py",
+            "symbol": "test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations",
+            "line": 219
+          }
+        }
+      ],
+      "contract_oracles": "Uma candidata recomenda sem subprocesso/pergunta; ambiguidade pergunta uma vez e preserva candidata; resumo precede efeitos e inclui limites; identidade/configuração persistem no reconnect."
+    },
+    {
+      "id": "DX-17",
+      "ledger_status": "IMPLEMENTED",
+      "title": "progresso, retomada e primeira sessão",
+      "literal": [
+        {
+          "line": 434,
+          "text": "**DX-17 — progresso, retomada e primeira sessão.** Preservar `setup_run_id`, revisões e recibos do fluxo atual. Mostrar etapas verificáveis: serviço pronto → identidade/vínculo autorizado → configuração aplicada → harness/sessão pronta → interação disponível no terminal. Se ocorrer perda de resposta, consultar o mesmo setup antes de repetir. Distinguir “serviço disponível”, “cliente precisa recarregar”, “aguardando aprovação” e “sessão pronta”; nenhum deles equivale a tarefa concluída. Login de provedor ausente exige instrução concreta no contexto do usuário, sem tentar autenticar uma pessoa dentro do daemon. Depois da conexão, permitir a primeira solicitação real e seu acompanhamento conforme DX-20; o smoke continua opcional e consentido. Não enviar trabalho automaticamente."
+        },
+        {
+          "line": 436,
+          "text": "O fluxo padrão do terminal é: executar `connect` na pasta → confirmar o resumo necessário → trabalhar com o agente e acompanhar o resultado. Não há um passo “abra o dashboard para terminar de configurar”. Uma política ou falha real pode exigir intervenção adicional, mas não acrescentar perguntas apenas para reproduzir conceitos internos. No host do Connector, integrar seu CLI existente ao percurso, apontando para o Server remoto configurado; decisões de operador podem ocorrer em outro terminal autenticado, sem transportar sua credencial para esse host."
+        }
+      ],
+      "recommendation": "IMPLEMENTED",
+      "conclusion": "IDs/revisões/recibos, etapas honestas, resposta perdida e ausência de replay estão provados. A cláusula própria de primeira solicitação real acompanhada conforme DX20 não foi qualificada.",
+      "minimal_remaining_evidence": "Percurso real de primeira solicitação/estado/decisão/resultado no harness selecionado, local e via Connector aplicável, reutilizando os controles existentes. Nenhum novo histórico ou protocolo é necessário.",
+      "gate_analysis": "Ligação expressa da linha434 a DX20; não promover com initialize ou peer sintético. Reusar a campanha M1, sem repetir seus casos puros já verdes.",
+      "stale_or_overbroad_limit": "Não listar recovery/renovação ou todo restart como ausência de produto. T23/T24 agora qualificam crash/retorno real Server com trabalho nativo anterior fechado.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "Primeira solicitação real, progresso/decisão/resultado e reencontro após restart com provider efetivo no serviço local e no Connector; sessões/peers sintéticos não são M1."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_connection.py",
+          "symbol": "observe",
+          "line": 160,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/remote_terminal_setup.py",
+          "symbol": "recover_review",
+          "line": 97,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_work.py",
+          "symbol": "resume",
+          "line": 186,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/project_diagnostics.py",
+          "symbol": "inspect_project",
+          "line": 114,
+          "unchanged_since_prior_audit": true
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:3",
+            "E05:4",
+            "E05:5"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_connect.py",
+            "symbol": "test_response_loss_resumes_without_repeating_native_effects",
+            "line": 87
+          }
+        },
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:6"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_connect.py",
+            "symbol": "test_submitted_test_with_lost_cache_is_not_replayed",
+            "line": 102
+          }
+        },
+        {
+          "evidence": "E10",
+          "cases": [
+            "E10:1"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_project_diagnostics.py",
+            "symbol": "test_ready_session_open_is_not_a_productive_result",
+            "line": 96
+          }
+        },
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:7",
+            "E05:8"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_work.py",
+            "symbol": "test_lost_submission_response_recovers_same_work_without_duplicate_dispatch",
+            "line": 82
+          }
+        },
+        {
+          "evidence": "E02",
+          "cases": [
+            "E02:2",
+            "E02:3",
+            "E02:4"
+          ],
+          "meaning": "Real Server owner death/replacement and Connector return retain identity/binding/limits and do not replay prior completed work. Previous native session is closed; peers are synthetic. Not first-useful-provider qualification."
+        }
+      ],
+      "contract_oracles": "Perda em check/test/Finish recupera o mesmo efeito; cache perdido não reenvia teste; sessão pronta não equivale a resultado; mesma submissão recupera operação sem redispatch."
+    },
+    {
+      "id": "DX-08",
+      "ledger_status": "IMPLEMENTED",
+      "title": "smoke de cooperação",
+      "literal": [
+        {
+          "line": 460,
+          "text": "**DX-08 — smoke de cooperação.** Oferecer teste opcional com correlação própria. Validar primeiro uma troca dirigida e depois um handoff explicitamente consentido. O resultado válido é a cadeia canônica observada, não a presença de uma string na resposta do modelo. Não mudar o teste gerenciado `NEXUS_CONNECTION_OK` para prometer o que ele não prova."
+        }
+      ],
+      "recommendation": "IMPLEMENTED",
+      "conclusion": "Consentimentos separados e cadeia canônica do smoke têm provas de contrato. 412f4705 acrescenta troca dirigida/reconnect com Inspector/FastMCP reais; handoff via fachada opcional ainda não está qualificado.",
+      "minimal_remaining_evidence": "Concluir a campanha já em preparação de handoff com consentimento separado, cliente real, claim e resultado canônicos exatos observados pela fachada. Não presumir PASS enquanto em implementação.",
+      "gate_analysis": "Não há requisito de marcador de modelo ou inferência paga. O literal exige a cadeia canônica; M1 não é gate.",
+      "stale_or_overbroad_limit": "A limitação antiga sobre ausência de modelo real é mais ampla que o literal. Preservar NEXUS_CONNECTION_OK e não promovê-lo a cooperação.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "Complete the optional separately consented handoff smoke with the qualified external clients. The plan requires the canonical chain, not a model-generated marker; no paid-provider requirement is inferred for DX08 itself."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_cooperation.py",
+          "symbol": "review_exchange",
+          "line": 153,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_cooperation.py",
+          "symbol": "review_handoff",
+          "line": 297,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_cooperation.py",
+          "symbol": "_handoff_evidence",
+          "line": 320,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/cooperation.py",
+          "unchanged_since_prior_audit": true
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E11",
+          "cases": [
+            "E11:1"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_cooperation_cli.py",
+            "symbol": "test_separate_consents_canonical_reply_after_other_session_ack_and_claim_result",
+            "line": 123
+          }
+        },
+        {
+          "evidence": "E11",
+          "cases": [
+            "E11:2",
+            "E11:3"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_cooperation_cli.py",
+            "symbol": "test_text_or_unrelated_reply_cannot_qualify_exchange",
+            "line": 184
+          }
+        },
+        {
+          "evidence": "E11",
+          "cases": [
+            "E11:4"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/test_terminal_cooperation.py",
+            "symbol": "test_exchange_consent_never_authorizes_handoff",
+            "line": 228
+          }
+        },
+        {
+          "evidence": "E11",
+          "cases": [
+            "E11:5",
+            "E11:6",
+            "E11:7",
+            "E11:8",
+            "E11:9",
+            "E11:10",
+            "E11:11",
+            "E11:12",
+            "E11:13"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/test_terminal_cooperation.py",
+            "symbol": "test_completion_requires_exact_scope_peer_claim_and_result",
+            "line": 376
+          }
+        },
+        {
+          "evidence": "E12",
+          "cases": [
+            "E12:1"
+          ],
+          "meaning": "Inspector0.21.2/SDK1.29 and FastMCP2.14.7/SDK1.30: real TCP useful sessions, directed request/reply+ack, reconnect with same identities/sessions. No handoff smoke, model or vault/launcher proof.",
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_two_existing_mcp_clients.py",
+            "symbol": "test_inspector_and_fastmcp_participate_and_reconnect_without_duplicate_identity",
+            "line": 284
+          }
+        }
+      ],
+      "work_in_progress": "Parent reports source2/2 PASS (participation plus handoff), with installed session39625 still running. Those files/results are deliberately excluded from this finite audit; no installed PASS is inferred. Recommendation is conditional on closing that separate campaign.",
+      "contract_oracles": "Troca não autoriza handoff; peer/parent/escopo/claim/resultado exatos são exigidos; texto legado ou unrelated reply não qualificam."
+    },
+    {
+      "id": "DX-18",
+      "ledger_status": "IMPLEMENTED",
+      "title": "preset generalista de projeto",
+      "literal": [
+        {
+          "line": 524,
+          "text": "**DX-18 — preset generalista de projeto.** Definir um preset pequeno e versionado, resolvido para a configuração comum do produto antes da aplicação. Não introduzir um “modo simples” com armazenamento, autoridade ou executor próprios. O preset deve ser útil sem especialização posterior; nome, papel, ferramentas adicionais e políticas mais sofisticadas ficam disponíveis como ajustes opcionais."
+        },
+        {
+          "line": 531,
+          "text": "| Harness | Modelo, instruções do projeto, ferramentas e políticas já configurados e suportados na rota escolhida. | Validar a configuração efetiva no processo real; diferenças de launcher/serviço devem ser explicadas antes do uso. Não remover sandbox nem desabilitar decisões nativas. |"
+        },
+        {
+          "line": 532,
+          "text": "| Trabalho no projeto | Ler, editar e executar ferramentas conforme as permissões efetivas do harness e a autorização do usuário. | O preset não vira um assistente apenas de leitura, mas também não amplia automaticamente acesso a outros projetos, shell, rede ou credenciais. |"
+        },
+        {
+          "line": 533,
+          "text": "| Coordenação Nexus | Descoberta dos colaboradores visíveis, própria inbox, contexto autorizado, mensagens e participação em handoffs no workspace aprovado. | Mapear cada ação ao catálogo e aos contratos atuais; claim, resultados, destinatários e admissão continuam sujeitos às políticas canônicas. |"
+        },
+        {
+          "line": 534,
+          "text": "| Execução gerenciada | Permitir sessões para trabalho autorizado nesse projeto, incluindo solicitações elegíveis de colaboradores autorizados quando esse for o perfil aprovado. | Explicar esse efeito no resumo, usar grants/admissão atuais e respeitar revogação. Estar online não autoriza executar qualquer mensagem recebida. |"
+        },
+        {
+          "line": 535,
+          "text": "| Operação | Serviço sob demanda, controles pelo terminal e opção explícita de início no login. | O serviço continua independente do painel. Diagnóstico não inicia trabalho e o setup não dispara um turno produtivo. |"
+        },
+        {
+          "line": 537,
+          "text": "O agente deve receber identificação e instruções mínimas para usar a coordenação disponível, pelos mecanismos de configuração/contexto já suportados. Não reescrever a personalidade do harness nem sobrescrever instruções do projeto para impor uma persona Nexus. Instruções e descrições de ferramentas orientam comportamento; a autoridade é verificada pelos serviços, nunca pelo prompt."
+        }
+      ],
+      "recommendation": "IMPLEMENTED",
+      "conclusion": "Preset versionado, identidade/workspace/autoridade, configuração conservadora e Finish são implementados e exercitados. A configuração efetiva no processo real é exigência textual explícita.",
+      "minimal_remaining_evidence": "Comprovar instruções/modelo/ferramentas/limites efetivos no processo real lançado pelo serviço e utilidade do preset no trabalho autorizado, sem ampliar permissões ou substituir instruções.",
+      "gate_analysis": "Linha531 e utilidade da linha524 justificam a qualificação real. DX-T43 e M1 são pertinentes; não inferir prova de configuração efetiva a partir de serialização ou callback sintético.",
+      "stale_or_overbroad_limit": "Renovação remota/rotação/bootstrap não estão ausentes; limitar a pendência ao uso/configuração efetiva reais.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "Validar configuração efetiva no processo real lançado pelo serviço e demonstrar utilidade do preset com trabalho completo local/remoto, sem ampliar permissões ou substituir instruções; aceitação M1 ainda NOT_RUN."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/project_preset.py",
+          "symbol": "identity_defaults",
+          "line": 24,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/project_preset.py",
+          "symbol": "configuration",
+          "line": 36,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/project_preset.py",
+          "symbol": "effects",
+          "line": 44,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/remote_setup.py",
+          "symbol": "bootstrap",
+          "line": 149,
+          "unchanged_since_prior_audit": true
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E09",
+          "cases": [
+            "E09:2",
+            "E09:3"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_identity.py",
+            "symbol": "test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key",
+            "line": 35
+          }
+        },
+        {
+          "evidence": "E09",
+          "cases": [
+            "E09:4",
+            "E09:5"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_identity.py",
+            "symbol": "test_colliding_identity_is_never_adopted_or_modified",
+            "line": 114
+          }
+        },
+        {
+          "evidence": "E09",
+          "cases": [
+            "E09:6"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_identity.py",
+            "symbol": "test_late_finish_failure_rolls_back_identity_key_and_every_setup_object",
+            "line": 173
+          }
+        },
+        {
+          "evidence": "E07",
+          "cases": [
+            "E07:1",
+            "E07:2",
+            "E07:3",
+            "E07:4",
+            "E07:5",
+            "E07:6"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_remote_setup_integration.py",
+            "symbol": "test_operator_and_connector_cli_complete_same_root_once",
+            "line": 51
+          }
+        }
+      ],
+      "contract_oracles": "Finish cria apenas uma identidade revisada; recovery não gira chave; colisão não adota identidade; falha tardia rollback; bootstrap/filhos/revisão/Finish remoto permanecem correlacionados."
+    },
+    {
+      "id": "DX-20",
+      "ledger_status": "IMPLEMENTED",
+      "title": "ciclo cotidiano completo no terminal",
+      "literal": [
+        {
+          "line": 543,
+          "text": "**DX-20 — ciclo cotidiano completo no terminal.** Disponibilizar, no caminho padrão qualificado, solicitar trabalho e continuar a conversa, acompanhar o estado, responder a perguntas, aprovar ou recusar pedidos autorizados, obter resultado e reencontrar trabalho/sessão ao voltar. Preferir a interação nativa já suportada pelo harness; quando a rota gerenciada não a expuser, implementar a menor fachada CLI necessária sobre as operações, perguntas, decisões e consultas canônicas existentes. Não criar um histórico de conversa paralelo nem interpretar logs/prompts como comandos de controle."
+        },
+        {
+          "line": 545,
+          "text": "Cada decisão deve preservar principal autorizado, ID do pedido, revisão, validade, escopo, correlação e opções canônicas. Resposta livre enviada ao modelo não substitui endpoint de aprovação. Uma pergunta ao agente continua destinada ao agente; um terminal participante não toma decisões de operador. O operador pode usar outro CLI autenticado, sem distribuir suas credenciais ao Connector ou ao harness. Perguntas/permissões rotineiras do padrão precisam de uma apresentação no terminal; um link obrigatório para o painel não satisfaz esse requisito."
+        },
+        {
+          "line": 547,
+          "text": "Submissão e acompanhamento mantêm a identidade da requisição e da operação ou handoff. Antecipar da DX-09…11 somente a fachada, deduplicação, correlação e espera usadas por M1, reutilizando os recibos nativos comprovados quando suficientes. Não oferecer uma nova submissão com retry inseguro para depois corrigir na PR-05. Persistir a referência antes de transmitir quando o contrato permitir; uma resposta perdida leva a inspeção/recuperação do mesmo pedido. Se a versão não permitir recuperar o resultado com segurança, expor incerteza e não repetir produtivamente."
+        },
+        {
+          "line": 549,
+          "text": "Fechar o CLI encerra a observação, não cancela a execução pertencente ao serviço. Ao voltar, reencontrar perfil, `agent_id`, workspace e referências canônicas de conversa/trabalho; retomar a sessão quando isso for suportado. Se a sessão não puder ser retomada, apresentar o resultado/estado recuperado e a opção explícita de nova sessão com o contexto autorizado disponível, sem fingir continuidade nem repetir a tarefa anterior. Não prometer attach à TUI original, adoção de processo externo ou sobrevivência a reboot sem qualificação específica."
+        },
+        {
+          "line": 551,
+          "text": "Um adaptador que apenas inicia o processo, mas obriga o usuário a abrir o dashboard para trabalhar ou decidir pedidos normais, não qualifica a rota padrão de M1. Completar a fachada mínima ou escolher outra rota já suportada que cumpra o ciclo, mantendo os contratos de execução. O objetivo não exige desenvolver um multiplexer PTY. Colaboração usa os caminhos canônicos disponíveis no preset; expansão para outros clientes e comandos genéricos permanece em M2."
+        }
+      ],
+      "recommendation": "IMPLEMENTED",
+      "conclusion": "Fachada canônica de trabalho/continuação/decisões/resultados/reopen e segurança de retry está exercitada. Caminho padrão qualificado real segue ausente.",
+      "minimal_remaining_evidence": "Qualificar DX-T39/T40 e configuração efetiva DX-T43: trabalho, pergunta/permissão representativa, resultado correlacionado e reencontro no terminal sem dashboard/configuração manual.",
+      "gate_analysis": "O próprio ID exige caminho padrão qualificado, e a linha551 impede aceitar só processo/sessão pronta. M1 aqui é requisito próprio, não associação.",
+      "stale_or_overbroad_limit": "A limitação que lista DX-T45/T46/T47/T50 como pendentes está desatualizada: esses contratos já estão VERIFIED. Isso não encerra T39/T40/T43.",
+      "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+      "current_ledger_limitations": [
+        "DX-T39/T40/T43/T45/T46/T47/T50 no percurso padrão real instalado local e via Connector, com serviço persistente, provider autorizado, pergunta/permissão representativa, resultado e reabertura; campanha M1 não executada."
+      ],
+      "sources": [
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_work.py",
+          "symbol": "submit",
+          "line": 78,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_work.py",
+          "symbol": "observe",
+          "line": 233,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/application/terminal_work.py",
+          "symbol": "decide",
+          "line": 292,
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/work.py",
+          "unchanged_since_prior_audit": true
+        },
+        {
+          "repository": "Nexus",
+          "path": "src/okto_nexus/adapters/inbound/cli/native_input.py",
+          "unchanged_since_prior_audit": true
+        }
+      ],
+      "proofs": [
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:9"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_work.py",
+            "symbol": "test_interactive_cli_request_question_answer_result_and_return",
+            "line": 320
+          }
+        },
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:10",
+            "E05:11",
+            "E05:12"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_work.py",
+            "symbol": "test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile",
+            "line": 116
+          }
+        },
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:13",
+            "E05:14"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_work.py",
+            "symbol": "test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work",
+            "line": 248
+          }
+        },
+        {
+          "evidence": "E05",
+          "cases": [
+            "E05:15"
+          ],
+          "test_source": {
+            "repository": "Nexus",
+            "path": "tests/execution_r4/test_terminal_work.py",
+            "symbol": "test_send_result_reopen_continue_and_close_share_canonical_session",
+            "line": 58
+          }
+        }
+      ],
+      "contract_oracles": "Interação pergunta/resposta/resultado/retorno usa sessão canônica; decisão perdida recupera resultado sem persistir respostas no perfil; sair do observador não fecha ou interrompe trabalho; reopen não cria história paralela."
+    }
+  ],
+  "reconciliation": {
+    "complete_literal_contracts": [
+      "DX-15",
+      "DX-16"
+    ],
+    "retain_implemented": [
+      "BASE-06",
+      "SVC-07",
+      "DX-04",
+      "DX-08",
+      "DX-17",
+      "DX-18",
+      "DX-20"
+    ],
+    "remaining_categories": {
+      "real_first_use_or_effective_native_configuration": [
+        "BASE-06",
+        "DX-17",
+        "DX-18",
+        "DX-20"
+      ],
+      "actual_external_shutdown_context": [
+        "SVC-07"
+      ],
+      "supported_launcher_real_client_credential_chain": [
+        "DX-04"
+      ],
+      "external_client_optional_handoff_smoke": [
+        "DX-08"
+      ]
+    },
+    "documentary_repairs_only": [
+      "DX15/DX16: remove blanket M1 gate from task contract, preserve M1/DX17/18/20 and service platform gates separately.",
+      "DX15/17/18/20: stale generic renewal labels do not mean remote renewal/rotation is missing.",
+      "DX20: DX-T45/T46/T47/T50 are already VERIFIED contract predicates; pending real routes are T39/T40 and effective configuration T43.",
+      "DX04: no paid-model requirement; do not demand arbitrary GUI/TUI paths or DX08 cooperation to prove credential delivery.",
+      "DX08: model marker/paid inference is not required; only canonical separately consented chain can qualify."
+    ]
+  },
+  "current_installed_package_scope": {
+    "okto_nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-wheel-v1\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+      "files": 691
+    },
+    "nexus_connector_core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+      "files": 166
+    },
+    "okto_nexus_connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\vendor\\ci\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "files": 124
+    }
+  },
+  "limits": [
+    "This audit does not close M1/M2, service logon/logout/reboot, real providers or an unsupported GUI/TUI.",
+    "A contract VERIFIED recommendation is bounded to its stated behavior and retained evidence; no blanket platform/product acceptance follows.",
+    "Historical XMLs remain unchanged and failed/superseded runs are not rewritten or counted as PASS.",
+    "No assessment of the in-progress external-client handoff campaign is included."
+  ],
+  "evidence_catalog": [
+    {
+      "id": "E01",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-v1/canonical/tests.xml",
+      "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+      "cases": [
+        {
+          "id": "E01:1",
+          "name": "tests.test_service_drain_decision::test_timeout_does_not_start_shutdown_or_reopen_admission",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:2",
+          "name": "tests.test_service_drain_decision::test_force_requires_an_existing_expired_drain",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:3",
+          "name": "tests.test_service_drain_decision::test_cancelled_observer_keeps_drain_owned_and_control_available",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:4",
+          "name": "tests.test_service_drain_decision::test_service_force_checks_authority_generation_and_prior_drain",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:5",
+          "name": "tests.test_service_drain_decision::test_supervisor_latch_failure_prevents_even_explicit_force",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:6",
+          "name": "tests.test_service_drain_decision::test_core_revision_change_during_sql_read_invalidates_quiescent_proof",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:7",
+          "name": "tests.test_service_drain_decision::test_safety_shutdown_escalates_same_owner_without_operator_force",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:8",
+          "name": "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGINT]",
+          "status": "PASS"
+        },
+        {
+          "id": "E01:9",
+          "name": "tests.execution_r4.test_server_signal_shutdown::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGTERM]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "path": "plans/agent_ops/evidence/r3-service-restart-contracts/installed/canonical/tests.xml",
+      "sha256": "11ba150d558dc2c9c67dda795dd39b844e5dc1913897c9d34a2eab9bf930df09",
+      "cases": [
+        {
+          "id": "E02:1",
+          "name": "tests.execution_r4.test_service_surviving_child::test_restart_pending_keeps_real_connector_child_claim_and_slot",
+          "status": "PASS"
+        },
+        {
+          "id": "E02:2",
+          "name": "tests.execution_r4.test_service_restart_contracts::test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "PASS"
+        },
+        {
+          "id": "E02:3",
+          "name": "tests.execution_r4.test_service_restart_contracts::test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "PASS"
+        },
+        {
+          "id": "E02:4",
+          "name": "tests.execution_r4.test_service_restart_contracts::test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E03",
+      "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+      "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+      "cases": [
+        {
+          "id": "E03:1",
+          "name": "tests.execution_r4.test_participant_init::test_cli_never_falls_back_to_echoing_key",
+          "status": "PASS"
+        },
+        {
+          "id": "E03:2",
+          "name": "tests.execution_r4.test_participant_init::test_actual_http_redirect_does_not_forward_bearer",
+          "status": "PASS"
+        },
+        {
+          "id": "E03:3",
+          "name": "tests.execution_r4.test_participant_launch::test_real_subprocess_receives_reference_without_parent_mutation",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E04",
+      "path": "plans/agent_ops/evidence/pr04-participant-removal-installed-final.xml",
+      "sha256": "5391384983a8fff5bd3eb2fcfe845c69373ab513a62a8d1a4423486044cfb010",
+      "cases": [
+        {
+          "id": "E04:1",
+          "name": "tests.execution_r4.test_participant_removal::test_windows_participant_vault_compensation_and_absent_replay",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E05",
+      "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+      "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+      "cases": [
+        {
+          "id": "E05:1",
+          "name": "tests.test_terminal_connect_process::test_connect_starts_reuses_and_leaves_service_owned_until_explicit_stop",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:2",
+          "name": "tests.execution_r4.test_terminal_connect::test_interactive_connect_enters_work_only_after_configuration",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:3",
+          "name": "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[installations:check]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:4",
+          "name": "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[setup:test]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:5",
+          "name": "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[setup:finish]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:6",
+          "name": "tests.execution_r4.test_terminal_connect::test_submitted_test_with_lost_cache_is_not_replayed",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:7",
+          "name": "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[intents:resolve]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:8",
+          "name": "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[/runtime/operations]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:9",
+          "name": "tests.execution_r4.test_terminal_work::test_interactive_cli_request_question_answer_result_and_return",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:10",
+          "name": "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:11",
+          "name": "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:12",
+          "name": "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:13",
+          "name": "tests.execution_r4.test_terminal_work::test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work[KeyboardInterrupt]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:14",
+          "name": "tests.execution_r4.test_terminal_work::test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work[EOFError]",
+          "status": "PASS"
+        },
+        {
+          "id": "E05:15",
+          "name": "tests.execution_r4.test_terminal_work::test_send_result_reopen_continue_and_close_share_canonical_session",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E06",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+      "sha256": "4e815df851bcbe88525fa7f15197baf73d9650bff7da634458450894177a8a2f",
+      "cases": [
+        {
+          "id": "E06:1",
+          "name": "tests.unit.test_connect_reuse::test_bare_connect_reuses_project_and_current_authority_without_rewrite",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E07",
+      "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+      "sha256": "d72eab329cd690073f1485c6b1181bbea87c6d5a90e3d5cd2034ff116b9c1fd3",
+      "cases": [
+        {
+          "id": "E07:1",
+          "name": "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[none]",
+          "status": "PASS"
+        },
+        {
+          "id": "E07:2",
+          "name": "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[decision]",
+          "status": "PASS"
+        },
+        {
+          "id": "E07:3",
+          "name": "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[apply]",
+          "status": "PASS"
+        },
+        {
+          "id": "E07:4",
+          "name": "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[rereview]",
+          "status": "PASS"
+        },
+        {
+          "id": "E07:5",
+          "name": "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[local-rereview]",
+          "status": "PASS"
+        },
+        {
+          "id": "E07:6",
+          "name": "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[finish-race]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E08",
+      "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/connector/installed.xml",
+      "sha256": "ccc84e8181f20de83e36d871803a8acf3d1511b84734d9f632567ca586649adf",
+      "cases": [
+        {
+          "id": "E08:1",
+          "name": "tests.unit.test_connect_project_review::test_one_detected_installation_is_recommended_without_executing_or_prompting",
+          "status": "PASS"
+        },
+        {
+          "id": "E08:2",
+          "name": "tests.unit.test_connect_project_review::test_material_ambiguity_asks_once_and_preserves_exact_candidate",
+          "status": "PASS"
+        },
+        {
+          "id": "E08:3",
+          "name": "tests.unit.test_connect_project_review::test_one_project_review_submits_existing_canonical_defaults",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E09",
+      "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+      "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+      "cases": [
+        {
+          "id": "E09:1",
+          "name": "tests.execution_r4.test_terminal_identity::test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations",
+          "status": "PASS"
+        },
+        {
+          "id": "E09:2",
+          "name": "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False]",
+          "status": "PASS"
+        },
+        {
+          "id": "E09:3",
+          "name": "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True]",
+          "status": "PASS"
+        },
+        {
+          "id": "E09:4",
+          "name": "tests.execution_r4.test_terminal_identity::test_colliding_identity_is_never_adopted_or_modified[False]",
+          "status": "PASS"
+        },
+        {
+          "id": "E09:5",
+          "name": "tests.execution_r4.test_terminal_identity::test_colliding_identity_is_never_adopted_or_modified[True]",
+          "status": "PASS"
+        },
+        {
+          "id": "E09:6",
+          "name": "tests.execution_r4.test_terminal_identity::test_late_finish_failure_rolls_back_identity_key_and_every_setup_object",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E10",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+      "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+      "cases": [
+        {
+          "id": "E10:1",
+          "name": "tests.execution_r4.test_project_diagnostics::test_ready_session_open_is_not_a_productive_result",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E11",
+      "path": "plans/agent_ops/evidence/pr04-cooperation-facade-cli-installed.xml",
+      "sha256": "45476f332157f41dec5700d41e23ec3cfee9166f5f3b21d1f9a65480147c8569",
+      "cases": [
+        {
+          "id": "E11:1",
+          "name": "tests.execution_r4.test_cooperation_cli::test_separate_consents_canonical_reply_after_other_session_ack_and_claim_result[False]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:2",
+          "name": "tests.execution_r4.test_cooperation_cli::test_text_or_unrelated_reply_cannot_qualify_exchange[legacy-False]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:3",
+          "name": "tests.execution_r4.test_cooperation_cli::test_text_or_unrelated_reply_cannot_qualify_exchange[wrong_parent-False]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:4",
+          "name": "tests.test_terminal_cooperation::test_exchange_consent_never_authorizes_handoff",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:5",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change0]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:6",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change1]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:7",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change2]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:8",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change3]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:9",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change4]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:10",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change5]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:11",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change6]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:12",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change7]",
+          "status": "PASS"
+        },
+        {
+          "id": "E11:13",
+          "name": "tests.test_terminal_cooperation::test_completion_requires_exact_scope_peer_claim_and_result[change8]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "E12",
+      "path": "plans/agent_ops/evidence/r3-two-existing-mcp-clients/installed/canonical/tests.xml",
+      "sha256": "f2bea0439ba3d68538d2c5b33ec8ebc2d4d1367f5b80c3e340555b98b7efb042",
+      "cases": [
+        {
+          "id": "E12:1",
+          "name": "tests.execution_r4.test_two_existing_mcp_clients::test_inspector_and_fastmcp_participate_and_reconnect_without_duplicate_identity",
+          "status": "PASS"
+        }
+      ]
+    }
+  ],
+  "historical_scope_note": "Each named retained XML case was checked PASS. Historical installed campaigns qualify their original fixture/product scope; current source references are read-only anchors with hashes in input-manifest.json, not new executions. Counts are not summed as coverage."
+}

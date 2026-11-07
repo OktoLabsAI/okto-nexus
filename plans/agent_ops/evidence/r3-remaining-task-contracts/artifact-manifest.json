@@ -1,0 +1,33 @@
+{
+  "files": {
+    "audit/artifact-manifest.json": {
+      "sha256": "9f69eb63d048c9381476af2e353d2ef4242dc81a8466edb6db4fae38ce1f69cb",
+      "bytes": 881
+    },
+    "audit/build_audit.py": {
+      "sha256": "24c10bcaef01359892fce9b6f8622b69c44330bd2441695dd29e57dcbc09a9f0",
+      "bytes": 28049
+    },
+    "audit/input-manifest.json": {
+      "sha256": "31e19b3b0e7e325b21db22db39f1c7ff090ef96ccae327f31b9c47fe8af22503",
+      "bytes": 13860
+    },
+    "audit/matrix.json": {
+      "sha256": "e672f765ef70fb16548798f83d9b45b9bbbf758cb552b3f6c8cabd0de31ff5d2",
+      "bytes": 70817
+    },
+    "audit/summary.md": {
+      "sha256": "802ad2a7c148f503ec049801f9312f098c18d763a97ee67d37feeb01f7e3bca1",
+      "bytes": 3645
+    },
+    "close_milestone.py": {
+      "sha256": "f1d060e4b8e5c372b9e70923b087ec0371706809f6425bc4c957e52655b867ea",
+      "bytes": 4138
+    },
+    "milestone.md": {
+      "sha256": "c70a0d02e4e8d5c5aa61d8721e394d4d6f0b1b3489add67eb45a59564891369a",
+      "bytes": 675
+    }
+  },
+  "scope": "Original audit and later finite adjudication"
+}

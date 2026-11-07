@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T12:57:23.815973+00:00",
+  "updated_at": "2026-11-07T12:59:57.104083+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -657,13 +657,15 @@
         "plans/agent_ops/evidence/baseline-startup.json"
       ],
       "tests": [
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "rtk proxy .venv/Scripts/python.exe scripts/measure_agent_ops_baseline.py"
       ],
-      "result": "Three-repo lifecycle/storage/config/vault map and first Windows/codex_app_server target exist; disposable initial liveness 7.811s is recorded separately. Remaining: Installation-to-first-useful-provider-session/full result/native interaction timing remains NOT_RUN; liveness and synthetic cycles do not replace it.",
+      "result": "Inventário e alvo inicial existem. A medição explícita instalação→primeira sessão útil ainda falta; 7,811s mede apenas liveness HTTP.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Installation-to-first-useful-provider-session/full result/native interaction timing remains NOT_RUN; liveness and synthetic cycles do not replace it."
+        "Cláusula própria da linha245, não M1 herdado por associação. Pode integrar a mesma campanha M1 autorizada, sem campanha redundante."
       ],
       "subscopes": {
         "inventory": "VERIFIED",
@@ -676,6 +678,12 @@
         "remaining_kind": "real_provider_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+      },
+      "remaining_evidence": "Medir as etapas de primeiro uso útil no harness suportado e contexto escolhidos; preservar os tempos e pré-requisitos reais. Nenhuma nova infraestrutura de lifecycle é pedida.",
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "Não substituir esta medida por quantidade de testes, initialize MCP ou resultado de peer sintético."
       }
     },
     "SVC-01": {
@@ -1450,12 +1458,14 @@
         "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
         "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "result": "Cooperative drain delivered in Core and both hosts. 217 Core,194 Connector and247 Nexus installed unique contract cases pass; Nexus also passes45 isolation/recovery cases. New productive work is fenced, admitted authority/results/ACKs continue, timeout stays pending, explicit force checks current generation and expired drain, and unknown resources retain ownership. Real external shutdown/service/provider campaigns remain open.",
+      "result": "Drain/força explícita/autoridade atual/timeout pendente e retenção de recursos estão comprovados. O novo T22 prova filho real e parada cooperativa, não logout/shutdown externo.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Actual registered user-service and external logout/shutdown context remain unqualified; synthetic peers do not qualify real provider work."
+        "A pendência é external-shutdown/service context; trabalho pago de provedor, preset M1 e participação M2 não são gates deste contrato."
       ],
       "subscopes": {
         "local_canonical_shutdown_adapter": "VERIFIED",
@@ -1475,6 +1485,12 @@
         "remaining_kind": "real_campaign",
         "evidence": "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+      },
+      "remaining_evidence": "Qualificar a cláusula de encerramento externo da linha327 no contexto de gerenciador escolhido, com persistência/estado incerto e reconciliação honestos. O alcance real SVC-T21 permanece aberto.",
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "Não descrever force como ausente. Não promover encerramento externo usando T22 ou signal.raise_signal no processo controlado."
       }
     },
     "SVC-08": {
@@ -2410,13 +2426,14 @@
         "plans/agent_ops/evidence/pr04-participant-removal-vault-source.xml",
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
       ],
-      "result": "Importação protegida da chave existente; cofre escopado por perfil/setup; launcher fornece a referência só ao processo filho; Bearer para origem fixada sem redirects. Entrada pública do dashboard não inclui chave em comando/URL e não substitui entrega one-shot autorizada. Há provas separadas de vault Windows, processo filho e initialize real com env sintético; não existe a prova composta exigida. Sem novo defeito concreto de produto demonstrado.",
+      "result": "Importação protegida, vault, isolamento do ambiente filho, Bearer/origem e negativos estão provados separadamente. Não há prova da ligação completa pelo ParticipantLaunch distribuído até cliente real.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Linha 411 exige testar como o processo real do harness obtém o valor: ainda falta juntar cofre do SO real, launcher distribuído e cliente real na mesma campanha.",
-        "GUI/TUI herança/reload e cooperação canônica de cliente real não foram qualificados; resultados atuais devem continuar UNKNOWN quando não observados."
+        "Gate concreto de entrega/consumo da credencial. GUI/TUI não suportada e cooperação/handoff pertencem a seus escopos; não exigir M1/M2 integral para DX04."
       ],
       "subscopes": {
         "participant_existing_identity_review": "VERIFIED",
@@ -2449,11 +2466,17 @@
         "superseded_text": "actual_client_credential_resolution VERIFIED em alguns IDs é o subscope estreito de variável sintética/initialize; participant_os_vault_client_end_to_end continua NOT_RUN. Não tratá-los como equivalentes.",
         "current_scope": "Há provas separadas de vault Windows, processo filho e initialize real com env sintético; não existe a prova composta exigida. Sem novo defeito concreto de produto demonstrado.",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+      },
+      "remaining_evidence": "Exercitar o launcher suportado com perfil isolado, chave sintética existente e mecanismo protegido; observar autenticação do processo real e o negativo sem referência. Cofre pode conter apenas credencial sintética. Um turno pago não é requisito dessa prova.",
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "412f4705 prova clientes reais com token recebido por helper programático, sem vault/ParticipantLaunch. Não resolve esta integração e não deve ser rotulado como launcher Claude/Codex."
       }
     },
     "DX-15": {
       "title": "connect como entrada principal",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-03"
       ],
@@ -2685,13 +2708,14 @@
         "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
       ],
-      "result": "connect resolve perfil/projeto/topologia, inicia/reutiliza o dono apropriado e delega revisão/Finish; existente reusa binding sem wizard. Rotas locais, operador remoto e Connector compartilham preset e encaminham à CLI work. Fachada está entregue; falta qualificar o percurso padrão real ao qual este ID encaminha. Sem nova lacuna concreta de implementação encontrada.",
+      "result": "Fachada resolve topologia, inicia/reutiliza serviço, usa revisão/Finish/preset canônicos e entra no trabalho somente após configuração. Reconnect mantém binding/identidade e não repete wizard/efeitos.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "M1 real instalado, local e via Connector: serviço persistente + preset + trabalho/decisão/resultado/reabertura, sem dashboard e sem configuração manual; não executado.",
-        "Campanhas nativas de início no login/SVC permanecem separadas; seleção/recusa da opção já tem prova de contrato."
+        "Retirar M1 inteiro como gate deste contrato de encaminhamento. DX17/18/20 e DX-T39/T40/T43 continuam abertos nos seus próprios alcances; não declarar provider ou serviço registrado qualificado."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -2757,11 +2781,17 @@
         "superseded_text": "Bootstrap de identidade remota, revisão única, retomada, renovação e rotação já entregues; não os listar como produto ausente.",
         "current_scope": "Fachada está entregue; falta qualificar o percurso padrão real ao qual este ID encaminha. Sem nova lacuna concreta de implementação encontrada.",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+      },
+      "remaining_evidence": null,
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "Subscopes genéricos de renovação IN_PROGRESS são superados pela renovação HTTP/IPC/WSS e rotação já verificadas. Não reimplementar esse fluxo."
       }
     },
     "DX-16": {
       "title": "descoberta e revisão mínima",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-03"
       ],
@@ -2960,12 +2990,14 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-process.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
       ],
-      "result": "Resolução de projeto/candidato no host correto, recomendação única quando não ambígua e escolha pontual quando necessária. Revisão inclui identidade/workspace, configuração/efeitos, grants e início no login; PATH permanece somente descoberta. Contrato de descoberta/revisão está verificado; qualificação do caminho padrão com instalação real continua pendente no escopo R3.",
+      "result": "Descoberta/recomendação passiva, escolha única sob ambiguidade, resumo de efeitos/limites e consentimento antes dos efeitos estão provados. O requisito explicitamente separa PATH de qualificação/login.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Campanha de instalação nova com harness/provedor realmente prontos e configuração efetiva no host local/remoto; os testes de recomendação atuais usam inventário/candidatos sintéticos e não confirmam login."
+        "Não herdar prontidão de provedor/instalação nova M1 como gate da descoberta/revisão. Manter candidatos sintéticos e ausência de login confirmado declarados."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -3016,6 +3048,12 @@
         "superseded_text": "Não confundir escolha/revisão de início no login entregue com campanha real de login não executada.",
         "current_scope": "Contrato de descoberta/revisão está verificado; qualificação do caminho padrão com instalação real continua pendente no escopo R3.",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+      },
+      "remaining_evidence": null,
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "A limitação atual exige configuração efetiva de harness real que pertence a DX18/DX-T43. A opção de início no login não torna registro de serviço pré-requisito desta revisão."
       }
     },
     "DX-17": {
@@ -3292,12 +3330,14 @@
         "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
       ],
-      "result": "Setup/profile persiste IDs/revisões/recibos, observa resposta perdida, distingue estados e não reenvia teste incerto. Work guarda request/operation exatos; diagnóstico não confunde serviço, sessão e tarefa. Reconnect e renovação consultam autoridade atual. Retomada/proveniência foram exercitadas; a primeira sessão produtiva real obrigatória não foi qualificada.",
+      "result": "IDs/revisões/recibos, etapas honestas, resposta perdida e ausência de replay estão provados. A cláusula própria de primeira solicitação real acompanhada conforme DX20 não foi qualificada.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Primeira solicitação real, progresso/decisão/resultado e reencontro após restart com provider efetivo no serviço local e no Connector; sessões/peers sintéticos não são M1."
+        "Ligação expressa da linha434 a DX20; não promover com initialize ou peer sintético. Reusar a campanha M1, sem repetir seus casos puros já verdes."
       ],
       "subscopes": {
         "canonical_finish_receipt_recovery": "VERIFIED",
@@ -3373,6 +3413,12 @@
         "superseded_text": "terminal_grant_renewal e remote_terminal_grant_renewal genéricos ainda aparecem IN_PROGRESS apesar dos subscopes específicos VERIFIED. Consolidar sem fechar M1.",
         "current_scope": "Retomada/proveniência foram exercitadas; a primeira sessão produtiva real obrigatória não foi qualificada.",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+      },
+      "remaining_evidence": "Percurso real de primeira solicitação/estado/decisão/resultado no harness selecionado, local e via Connector aplicável, reutilizando os controles existentes. Nenhum novo histórico ou protocolo é necessário.",
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "Não listar recovery/renovação ou todo restart como ausência de produto. T23/T24 agora qualificam crash/retorno real Server com trabalho nativo anterior fechado."
       }
     },
     "DX-05": {
@@ -4875,13 +4921,15 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-process.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
         "tests/execution_r4/test_project_dashboard.py"
       ],
-      "result": "Preset project-generalist revision 1 resolve identidade/permissões/configuração para contratos comuns; defaults preservam modelo/instruções existentes, decisões nativas e limites de autorização. Novo agente/workspace só na revisão/Finish autorizados, sem associação por nome/pasta. Preset/autoridade estão implementados; a cláusula de configuração efetiva e utilidade real não é provada por serialização/configuração sintética.",
+      "result": "Preset versionado, identidade/workspace/autoridade, configuração conservadora e Finish são implementados e exercitados. A configuração efetiva no processo real é exigência textual explícita.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Validar configuração efetiva no processo real lançado pelo serviço e demonstrar utilidade do preset com trabalho completo local/remoto, sem ampliar permissões ou substituir instruções; aceitação M1 ainda NOT_RUN."
+        "Linha531 e utilidade da linha524 justificam a qualificação real. DX-T43 e M1 são pertinentes; não inferir prova de configuração efetiva a partir de serialização ou callback sintético."
       ],
       "subscopes": {
         "local_existing_identity_terminal_setup": "VERIFIED",
@@ -4925,6 +4973,12 @@
         "superseded_text": "remote_terminal_grant_renewal NOT_RUN é obsoleto para o contrato de renovação: os subscopes remote_grant_renewal_http_ipc_wss e rotation_completed_reuse já passaram. Não altera a pendência produtiva.",
         "current_scope": "Preset/autoridade estão implementados; a cláusula de configuração efetiva e utilidade real não é provada por serialização/configuração sintética.",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+      },
+      "remaining_evidence": "Comprovar instruções/modelo/ferramentas/limites efetivos no processo real lançado pelo serviço e utilidade do preset no trabalho autorizado, sem ampliar permissões ou substituir instruções.",
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "Renovação remota/rotação/bootstrap não estão ausentes; limitar a pendência ao uso/configuração efetiva reais."
       }
     },
     "DX-19": {
@@ -5354,12 +5408,14 @@
         "plans/agent_ops/evidence/pr03-terminal-work-observer-exit.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-work-source.xml",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
       ],
-      "result": "Fachada work usa operações/sessões/perguntas/decisões canônicas, preserva ator/revisão/escopo e resposta perdida. Sair interrompe só observação; reopen recupera IDs/resultados, sem attach/continuidade inventada ou envio automático. Produto/fachada e isolamento são exercitados com peer sintético; isso não substitui o caminho padrão qualificado explicitamente exigido pelo ID.",
+      "result": "Fachada canônica de trabalho/continuação/decisões/resultados/reopen e segurança de retry está exercitada. Caminho padrão qualificado real segue ausente.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "DX-T39/T40/T43/T45/T46/T47/T50 no percurso padrão real instalado local e via Connector, com serviço persistente, provider autorizado, pergunta/permissão representativa, resultado e reabertura; campanha M1 não executada."
+        "O próprio ID exige caminho padrão qualificado, e a linha551 impede aceitar só processo/sessão pronta. M1 aqui é requisito próprio, não associação."
       ],
       "subscopes": {
         "local_terminal_work_canonical_http_synthetic_peer": "VERIFIED",
@@ -5397,6 +5453,12 @@
         "superseded_text": "CLI de trabalho/decisões e renovação já existem. A pendência atual é campanha real, não construir outro histórico/orquestrador.",
         "current_scope": "Produto/fachada e isolamento são exercitados com peer sintético; isso não substitui o caminho padrão qualificado explicitamente exigido pelo ID.",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+      },
+      "remaining_evidence": "Qualificar DX-T39/T40 e configuração efetiva DX-T43: trabalho, pergunta/permissão representativa, resultado correlacionado e reencontro no terminal sem dashboard/configuração manual.",
+      "contract_reconciliation": {
+        "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "previous_overbroad_limit": "A limitação que lista DX-T45/T46/T47/T50 como pendentes está desatualizada: esses contratos já estão VERIFIED. Isso não encerra T39/T40/T43."
       }
     },
     "DX-21": {
@@ -11967,6 +12029,20 @@
         "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json",
         "plans/agent_ops/evidence/r3-two-mcp-cooperation/artifact-manifest.json"
       ]
+    },
+    "r3_remaining_task_contracts": {
+      "status": "VERIFIED",
+      "accepted": [
+        "DX-15",
+        "DX-16"
+      ],
+      "new_tests": 0,
+      "retained_pass_records_checked": 63,
+      "retained_xml_reports": 12,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json"
+      ]
     }
   },
   "history": [
@@ -12879,6 +12955,15 @@
       "summary": "DX08 verified with separately consented canonical handoff; AC03 helper extension requalified.2source+2installed PASS, one new case, no provider/product change.",
       "evidence": [
         "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Remaining task contract reconciliation",
+      "status": "VERIFIED",
+      "summary": "DX15/DX16 verified; six remaining implemented tasks retain their own concrete campaign gaps. Original nine-task audit preserves pendingDX08;4455b841 already qualifies it. No product/tests changed.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-remaining-task-contracts/milestone.md"
       ]
     }
   ]

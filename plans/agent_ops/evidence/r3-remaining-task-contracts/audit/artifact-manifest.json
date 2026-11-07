@@ -1,0 +1,29 @@
+{
+  "format": "public-allowlist.v1",
+  "artifacts": [
+    {
+      "path": "matrix.json",
+      "bytes": 70817,
+      "sha256": "e672f765ef70fb16548798f83d9b45b9bbbf758cb552b3f6c8cabd0de31ff5d2"
+    },
+    {
+      "path": "input-manifest.json",
+      "bytes": 13860,
+      "sha256": "31e19b3b0e7e325b21db22db39f1c7ff090ef96ccae327f31b9c47fe8af22503"
+    },
+    {
+      "path": "summary.md",
+      "bytes": 3645,
+      "sha256": "802ad2a7c148f503ec049801f9312f098c18d763a97ee67d37feeb01f7e3bca1"
+    },
+    {
+      "path": "build_audit.py",
+      "bytes": 28049,
+      "sha256": "24c10bcaef01359892fce9b6f8622b69c44330bd2441695dd29e57dcbc09a9f0"
+    }
+  ],
+  "contains": "Only public audit, exact source/evidence references and hashes; no copied database, profile, secret or process log.",
+  "input_count": 62,
+  "task_count": 9,
+  "tests_executed": 0
+}
