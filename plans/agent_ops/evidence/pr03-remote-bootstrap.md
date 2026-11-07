@@ -1,0 +1,48 @@
+# PR-03 — remote identity and reviewed project setup
+
+Status: implemented and verified for the Windows/loopback contract below. PR-03 and full R3 remain IN_PROGRESS.
+
+Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.
+
+## Delivered behavior
+
+- Connector exports a bounded, path-free draft before vault access, registration, probes or daemon startup. Private physical selections remain on that host.
+- The human operator reviews identity, permissions, workspace, installation, portable configuration, grant limits, native-decision policy and any previous-machine revocation. Existing identities retain their current permissions and key.
+- Partial bootstrap atomically creates only the authorized identity/workspace and key hash plus receipt. The plaintext key is returned once and the CLI delivers it only with three terminal streams; JSON, checkpoints and the public handoff never contain it. Lost plaintext is unavailable, never reissued or rotated by retry.
+- Authenticated subject recovery returns public metadata for the exact root; knowledge of the root is insufficient authority. Capability version, Server origin/ID, subject, current credential epoch, child map and draft revision are checked before credential import or continuation.
+- Prepare/realize/apply remain the existing R4 protocol. Only the exact reviewed root may prepare before remote execution policy is enabled; execution admission remains unchanged. Human comparison uses canonical metadata and the existing approval API. Finish commits configuration, policy and grant together.
+- Explicit local re-review preserves the active draft and immutable bootstrap while storing one pending amendment. New material choices receive a durable consent ID; Server issues new affected child IDs. Old requests keep their receipts and stop background continuation. CAS prevents delayed responses from overwriting a promoted selection.
+- If a prior Finish commits while an amendment is pending, authenticated recovery preserves that Finish and archives the unapplied amendment. A completed setup cannot be amended or recreate removed resources. Current revocation and changed credentials remain fences.
+- Server migration 167 is additive. Connector schema 17 preserves earlier records. The pure origin helper is shared inside Nexus without importing an outbound adapter into the application contract. Core has no change in this milestone.
+
+## Qualification
+
+| Installed package | Version | Tests | Files matched source/build/wheel/install | Wheel SHA-256 |
+|---|---|---:|---:|---|
+| Nexus | 0.3.3 | 187 | 690 | `978060cae47cdec0e95fa8931186b6e469ccbc98771cf0b28e5cf022abbf7053` |
+| Connector | 0.0.12 | 276 | 123 | `999048fe9e157ec7b146c762ade8238059c6b52ab8335762a4d07a2dfed6c60d` |
+| Core | 0.0.14 | compatibility exercised by both suites | unchanged vendored wheel | `5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb` |
+
+All declared installed test identities have a latest passing result, with no unresolved failure/error/skip, outside the checkouts. The Nexus first attempt had 186 passing cases and one failure because the test runner had not copied `plans/contratos/http-target.schema.json`; the same case passes after copying that supporting schema, against the unchanged wheel. The two closed XMLs remain separate: 188 observations, 187 unique identities. Connector passed all 276 cases in one run. Import guards verify every loaded Nexus, Connector and Core module comes from the candidate's site-packages; metadata verifies noneditable wheel installation. Exact commands, copied test hashes, module paths, dependency versions and XMLs are retained in the qualification reports. Source reports overlap and are not added to installed counts.
+
+Ruff reports no diagnostics in the 28 changed Nexus Python files and no introduced diagnostics in the 25 changed Connector Python files. Connector retains 69 pre-existing diagnostics in those files (the baseline had 71); these are not described as a clean repository-wide lint run. After installed qualification, the new Connector test file was formatted to remove 12 E701 diagnostics; its syntax tree was checked unchanged and product bytes were unchanged. `static/` retains the comparison and exact pre/post test hashes. Git diff whitespace checks pass.
+
+Final packaging correction: the staged whitespace check found two redundant CRLFs at EOF in `application/remote_setup_contract.py`. Only those bytes were removed; the retained AST and all other 689 Nexus file hashes are unchanged. Candidate-v3 contains the exact final 690 source files and reuses the already-qualified Connector and Core wheels. Its 35 Server/HTTP/guard cases pass outside the checkout. The broader 187-case qualification above used candidate-v1; these 35 overlapping final-package cases are not added as new identities. Candidate-v2 produced no wheel because the selected source-test interpreter lacked setuptools; its build log remains retained, and the standard build interpreter succeeded. See `candidate-v3/package-proof.json`, `candidate-v3/nexus/qualification.json` and `static/product-format-equivalence.json`. Final staged whitespace checks pass.
+
+The six joint cases cover normal setup, lost operator decision response, lost apply response, Server-side review drift, changed local project with a new realization, and a Finish arriving while a local amendment is pending. The final case models the delayed approved request through real HTTP without persisting its acknowledgement; it is not an OS-crash campaign. Every completed case retains one canonical identity/binding/grant/Finish, one installation probe and no productive task. Real control negotiation and heartbeat establish inventory readiness; no SQL readiness shortcut is used.
+
+Source regressions include 77 Server cases and 57 operator cases; later directed operator checks grow to 25 and the six joint identities are qualified across the initial/retest XMLs. Connector's final source union is 276 identities: 275 in regression and 55 in the focal report, with 54 overlaps. The final installed suites rerun their declared complete nodes against the final candidate. See `reports.json` for exact per-report totals.
+
+Initial failures remain retained: Server audit/fixture/wiring corrections; Connector fixture/schema expectations and recovered orphan-vault handling; the root fixture's material callback, real control/producer identity, and exact stale-handoff error expectation. The Connector broad regression's one failure was an older SimpleNamespace fixture missing the optional remote_setup field; the focal and installed runs include its correction. Read review also closed ignored operator startup flags, lost-authentication uncertainty, one-shot material messaging, previous-machine effects and exact seven-field Finish recovery. No initial XML was replaced.
+
+## Retention, recovery and limits
+
+Server allows 1,024 retained roots per operator and 32 reviews per root, each review at most 64 KiB. Capacity refusal precedes pointer changes; identical replay and recovery remain available. There is no automatic pruning or expiry. `keep_agents=True` reset preserves roots/reviews with identities and configuration; full reset removes them. Connector allows 32 retained roots, one pending local review, 16 history entries, 64 KiB per record and a 4 MiB state file, reserving room for a racing Finish receipt. Full capacity refuses new allocation instead of deleting recovery data.
+
+Bootstrap, vault and host effects are not a distributed transaction. No infinite idempotency or exactly-once external execution is claimed. The default protocol continues to treat host paths/digests as authenticated host claims, not independent OS proof. A changed concrete startup plan with startup still enabled uses existing service controls; a pending setup does not silently substitute it.
+
+Qualification uses a single Windows machine, loopback HTTP/WSS, synthetic executable bytes and probe/provider doubles, an isolated memory vault for operator sessions and a temporary restricted file vault for the agent. It does not qualify real TLS/two-host deployment, OS vault availability, login/logout/reboot/crash, provider work or MCP-client cooperation. No native service, personal provider credential, package registry publication or merge was performed.
+
+Rollback preserves canonical data: migration 167 is not destructively reversed, and reverting a binary does not revoke already committed grants or remove identities. Use the existing authorized configuration/revocation controls when those effects need to change. Keep the database and Connector state/vault for recovery. Do not delete state or choose a new root to retry an uncertain request.
+
+Usage: [remote project setup](../../../docs/remote-project-setup.md). Raw evidence: [artifact manifest](pr03-remote-bootstrap/artifact-manifest.json), [reports](pr03-remote-bootstrap/reports.json).

@@ -13,6 +13,7 @@ def build_router():
         'session_view', 'session_events', 'native_decision', 'native_decision_view',
         'native_input_requests',
         'project_preset_read',
+        'remote_setup_review', 'remote_setup_bootstrap', 'remote_setup_recover', 'remote_setup_materialization',
         'project_preset_update_read',
         'connection_setup_read', 'connection_setup_test', 'connection_setup_test_read', 'connection_setup_finish',
         'connection_setup_commit_read', 'connection_setup_recover',

@@ -1,0 +1,174 @@
+{
+  "scope": "DX18/19 Nexus Server source qualification; synthetic identities and inventory, real SQLite and TCP; no real provider/native-host campaign",
+  "reports": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\server-initial.xml",
+      "sha256": "9bfb08cf1b07bf588a7a3b183f01a7965bea37bd65da0e1c91a122d58be3961c",
+      "tests": 20,
+      "failure": 16,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\server-corrections.xml",
+      "sha256": "e28c3201c77242d1b0a0b4c70024ba9dae45df47ce96e1deca3b4998edc41bce",
+      "tests": 20,
+      "failure": 1,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\server-http-initial.xml",
+      "sha256": "1e0a722063caf80b0a4d042fe5a4b88dc8e727582f3163c9daad5966cc79895c",
+      "tests": 27,
+      "failure": 0,
+      "error": 7,
+      "skipped": 0
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\http-routing-corrections.xml",
+      "sha256": "45ecc4d8e6515188da8c60238489978a28a330172ce7d4943d6cb5ec36acd05c",
+      "tests": 7,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\guards-initial.xml",
+      "sha256": "e9d01b3663a1fcb2fa2cc2e20fd23fb815b20fbb07ce8cb3354d817ae7f7e627",
+      "tests": 8,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\import-boundary.xml",
+      "sha256": "35e228810e8b1f22bde568b41354c888e41d325076b190e8c116903f0abac8c9",
+      "tests": 3,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\machines-initial.xml",
+      "sha256": "e2b5a277dfa913cc01955146e2a355c5119e7b5a8b3b3945568d9b9101cdad87",
+      "tests": 31,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\epoch-initial.xml",
+      "sha256": "33d8e311b921e0975f55510a9bf4414e52e277b0058c0ccc50d88e2049990537",
+      "tests": 3,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    }
+  ],
+  "unique_latest_cases": 44,
+  "unique_latest_passed": 44,
+  "historical_executions": 119,
+  "production_frozen": true,
+  "current_files": [
+    {
+      "path": "src/okto_nexus/application/remote_setup.py",
+      "sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd"
+    },
+    {
+      "path": "src/okto_nexus/application/remote_setup_contract.py",
+      "sha256": "8a3dde259c49e2f882b7a7ddec6efd0a916edc75afda2fff596a9f2f0ea7db4b"
+    },
+    {
+      "path": "src/okto_nexus/application/remote_setup_ports.py",
+      "sha256": "96b78eb76c478aca5aa4c87c76febc388720b095fbc2677f5e6475ae087cb9d8"
+    },
+    {
+      "path": "src/okto_nexus/domain/server_origin.py",
+      "sha256": "245378a9877617f6a53030fb632e63a11eebf52b17910203b547ebd599c37fd5"
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/remote_setup_repo.py",
+      "sha256": "1b19d3ca2975ca3a7cc98c490378bd4aed79ca5c951f5cfeea6ff4ac332694d0"
+    },
+    {
+      "path": "src/okto_nexus/migrations/167_remote_setup.sql",
+      "sha256": "a5d64e6052e2480cddad8d9f8de443c70ec745995e8bfd669bf1b000676154f6"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/remote_setup.py",
+      "sha256": "451f36c07c7a3051686b7d2105c14fb3a24a0d58879f353a26955dc2ba35a85f"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/app.py",
+      "sha256": "31d7d4c65621d50814859126e49a20a820525cc5020ad4a9dba631b3118bb7bb"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
+      "sha256": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/connections_v1.py",
+      "sha256": "a243bd002d7549d930722216bd04ed33216dcc16f3b387a2823bd77ea42523be"
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
+      "sha256": "298f7c280d9ebb5309b68534a2d1655b97f3fb088a3dcef14a1cff93785adb13"
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/operator_client.py",
+      "sha256": "1a805c7cf076e65f8270ab900472005869a7ddc971fa80156ef4446d6888a9a2"
+    },
+    {
+      "path": "src/okto_nexus/application/execution_binding_proposals.py",
+      "sha256": "af4dd8b579095e2d9a55d13e67f2c6e9fe92d629b77d86f4d78056562543ccab"
+    },
+    {
+      "path": "src/okto_nexus/application/execution_binding_approvals.py",
+      "sha256": "e44e13531592e1538a6f6c5a31848101b822790ec854e729e8208261707fff95"
+    },
+    {
+      "path": "src/okto_nexus/application/execution_binding_setup.py",
+      "sha256": "f35ad036bad0178dfe93a75b38d1e686ef8e9dbdc3b07bceb6f6d6ebf15962b5"
+    },
+    {
+      "path": "src/okto_nexus/application/database_reset.py",
+      "sha256": "77691deb7f8a4a43cbf26607d43d5817a984a26a14c6a6c179960205cba58e0e"
+    },
+    {
+      "path": "src/okto_nexus/application/ports.py",
+      "sha256": "68c2343a70bf487b006fdaf67a426a4ebab3aabb3dbf692e72b0960226045010"
+    },
+    {
+      "path": "src/okto_nexus/bootstrap/dependencies.py",
+      "sha256": "1c0b51db0c8a2b3889ce368559eae0e893a20dcb3a3414e389dc270fa3219297"
+    },
+    {
+      "path": "tests/test_remote_setup_server.py",
+      "sha256": "bc695a67d8fdb9a1775eee0e584bd8738449d2821a578b0eb366237b76efbec0"
+    },
+    {
+      "path": "tests/test_remote_setup_http.py",
+      "sha256": "8a32c9fecdc517209d376a61e9545bb3a38bfa1dd2b6a881fb5b7879d8a822e9"
+    },
+    {
+      "path": "tests/test_remote_setup_guards.py",
+      "sha256": "345f686e1be32169838b29bd44bd457788ac8ae2dd6bf17a896e398ff6e1f6a2"
+    },
+    {
+      "path": "tests/test_remote_setup_machines.py",
+      "sha256": "49994bb4b71177b02d1931692841e91544d38104cb06c17dec7d7180f2195272"
+    },
+    {
+      "path": "tests/test_remote_setup_epoch.py",
+      "sha256": "e1e5ff58faa137b25fd7d01a3a5b497ddd40775cdad20a14601a2f00feaf1eba"
+    }
+  ],
+  "limitations": [
+    "Initial XMLs retained; current source hashes do not describe pre-correction executions.",
+    "server-initial: invalid audit keyword fixed in product. server-corrections: missing test preset_id fixed.",
+    "server-http-initial: new nested router incompatible with existing dashboard selection; routing fixed.",
+    "Only source qualification. Root owns cross-repository integration, installed package qualification and commit/push.",
+    "Existing machine test uses canonical Finish to create original grant and proves no changes until second Finish."
+  ]
+}

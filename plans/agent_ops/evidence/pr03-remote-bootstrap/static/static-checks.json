@@ -1,0 +1,1441 @@
+{
+  "okto_labs_okto_nexus": {
+    "files": [
+      "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "src/okto_nexus/adapters/inbound/cli/remote_setup_io.py",
+      "src/okto_nexus/adapters/inbound/http/app.py",
+      "src/okto_nexus/adapters/inbound/http/connections_v1.py",
+      "src/okto_nexus/adapters/inbound/http/dashboard_runtime.py",
+      "src/okto_nexus/adapters/inbound/http/remote_setup.py",
+      "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
+      "src/okto_nexus/adapters/outbound/operator_client.py",
+      "src/okto_nexus/adapters/outbound/sqlite/remote_setup_repo.py",
+      "src/okto_nexus/application/database_reset.py",
+      "src/okto_nexus/application/execution_binding_approvals.py",
+      "src/okto_nexus/application/execution_binding_proposals.py",
+      "src/okto_nexus/application/execution_binding_setup.py",
+      "src/okto_nexus/application/ports.py",
+      "src/okto_nexus/application/remote_setup.py",
+      "src/okto_nexus/application/remote_setup_contract.py",
+      "src/okto_nexus/application/remote_setup_ports.py",
+      "src/okto_nexus/application/remote_terminal_setup.py",
+      "src/okto_nexus/bootstrap/dependencies.py",
+      "src/okto_nexus/domain/server_origin.py",
+      "tests/execution_r4/test_remote_setup_integration.py",
+      "tests/execution_r4/test_remote_terminal_setup.py",
+      "tests/test_remote_setup_capacity.py",
+      "tests/test_remote_setup_epoch.py",
+      "tests/test_remote_setup_guards.py",
+      "tests/test_remote_setup_http.py",
+      "tests/test_remote_setup_machines.py",
+      "tests/test_remote_setup_server.py"
+    ],
+    "current_diagnostics": 0,
+    "baseline_diagnostics": 1,
+    "introduced_diagnostics": [],
+    "remaining": [],
+    "diff_check_passed": true,
+    "baseline_commit": "95e99c4393d6816cdfe93449242782c7ec0f8126"
+  },
+  "okto-nexus-connector": {
+    "files": [
+      "src/okto_nexus_connector/cli/commands/configure_local.py",
+      "src/okto_nexus_connector/cli/commands/connect.py",
+      "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+      "src/okto_nexus_connector/cli/commands/connect_setup.py",
+      "src/okto_nexus_connector/cli/commands/connect_setup_review.py",
+      "src/okto_nexus_connector/cli/main.py",
+      "src/okto_nexus_connector/identity/import_flow.py",
+      "src/okto_nexus_connector/services/background_onboarding.py",
+      "src/okto_nexus_connector/services/binding_onboarding.py",
+      "src/okto_nexus_connector/services/remote_setup.py",
+      "src/okto_nexus_connector/services/remote_setup_revision.py",
+      "src/okto_nexus_connector/storage/state_store.py",
+      "src/okto_nexus_connector/transport/https_client.py",
+      "tests/unit/test_background_onboarding.py",
+      "tests/unit/test_binding_onboarding.py",
+      "tests/unit/test_discovery_configuration.py",
+      "tests/unit/test_execution_selection.py",
+      "tests/unit/test_executor_registration.py",
+      "tests/unit/test_installation_observation.py",
+      "tests/unit/test_launch_configuration.py",
+      "tests/unit/test_r4_daemon_control.py",
+      "tests/unit/test_remote_setup.py",
+      "tests/unit/test_remote_setup_revision.py",
+      "tests/unit/test_runtime_admission.py",
+      "tests/unit/test_session_capability_owner.py"
+    ],
+    "current_diagnostics": 69,
+    "baseline_diagnostics": 71,
+    "introduced_diagnostics": [],
+    "remaining": [
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 35,
+          "row": 47
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+        "fix": null,
+        "location": {
+          "column": 34,
+          "row": 47
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 47,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 49,
+          "row": 49
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+        "fix": null,
+        "location": {
+          "column": 48,
+          "row": 49
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 49,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 37,
+          "row": 86
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+        "fix": null,
+        "location": {
+          "column": 36,
+          "row": 86
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 86,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 31,
+          "row": 181
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+        "fix": null,
+        "location": {
+          "column": 30,
+          "row": 181
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 181,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 96,
+          "row": 234
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+        "fix": null,
+        "location": {
+          "column": 95,
+          "row": 234
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 234,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 26,
+          "row": 235
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+        "fix": null,
+        "location": {
+          "column": 25,
+          "row": 235
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 235,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 41,
+          "row": 254
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+        "fix": null,
+        "location": {
+          "column": 40,
+          "row": 254
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 254,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 32,
+          "row": 47
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_binding_onboarding.py",
+        "fix": null,
+        "location": {
+          "column": 31,
+          "row": 47
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 47,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 30,
+          "row": 64
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_binding_onboarding.py",
+        "fix": null,
+        "location": {
+          "column": 29,
+          "row": 64
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 64,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 54,
+          "row": 18
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_discovery_configuration.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "from tests.unit.test_r4_daemon_control import eventually, dispose",
+              "end_location": {
+                "column": 75,
+                "row": 18
+              },
+              "location": {
+                "column": 1,
+                "row": 18
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_r4_daemon_control.control`"
+        },
+        "location": {
+          "column": 47,
+          "row": 18
+        },
+        "message": "`tests.unit.test_r4_daemon_control.control` imported but unused",
+        "noqa_row": 18,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 69,
+          "row": 119
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_discovery_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 62,
+          "row": 119
+        },
+        "message": "Redefinition of unused `control` from line 18: `control` redefined here",
+        "noqa_row": 119,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 79,
+          "row": 146
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_discovery_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 72,
+          "row": 146
+        },
+        "message": "Redefinition of unused `control` from line 18: `control` redefined here",
+        "noqa_row": 146,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 88,
+          "row": 212
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_discovery_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 81,
+          "row": 212
+        },
+        "message": "Redefinition of unused `control` from line 18: `control` redefined here",
+        "noqa_row": 212,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F841",
+        "end_location": {
+          "column": 17,
+          "row": 50
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_execution_selection.py",
+        "fix": {
+          "applicability": "unsafe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 20,
+                "row": 50
+              },
+              "location": {
+                "column": 5,
+                "row": 50
+              }
+            }
+          ],
+          "message": "Remove assignment to unused variable `acknowledged`"
+        },
+        "location": {
+          "column": 5,
+          "row": 50
+        },
+        "message": "Local variable `acknowledged` is assigned to but never used",
+        "noqa_row": 50,
+        "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 35,
+          "row": 108
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_executor_registration.py",
+        "fix": null,
+        "location": {
+          "column": 34,
+          "row": 108
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 108,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 43,
+          "row": 109
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_executor_registration.py",
+        "fix": null,
+        "location": {
+          "column": 42,
+          "row": 109
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 109,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 34,
+          "row": 110
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_executor_registration.py",
+        "fix": null,
+        "location": {
+          "column": 33,
+          "row": 110
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 110,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 36,
+          "row": 111
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_executor_registration.py",
+        "fix": null,
+        "location": {
+          "column": 35,
+          "row": 111
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 111,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 14,
+          "row": 112
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_executor_registration.py",
+        "fix": null,
+        "location": {
+          "column": 13,
+          "row": 112
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 112,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 63,
+          "row": 18
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_installation_observation.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 1,
+                "row": 19
+              },
+              "location": {
+                "column": 1,
+                "row": 18
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_discovery_configuration.registered`"
+        },
+        "location": {
+          "column": 53,
+          "row": 18
+        },
+        "message": "`tests.unit.test_discovery_configuration.registered` imported but unused",
+        "noqa_row": 18,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 54,
+          "row": 19
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_installation_observation.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "from tests.unit.test_r4_daemon_control import eventually, dispose",
+              "end_location": {
+                "column": 75,
+                "row": 19
+              },
+              "location": {
+                "column": 1,
+                "row": 19
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_r4_daemon_control.control`"
+        },
+        "location": {
+          "column": 47,
+          "row": 19
+        },
+        "message": "`tests.unit.test_r4_daemon_control.control` imported but unused",
+        "noqa_row": 19,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 20,
+          "row": 23
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_installation_observation.py",
+        "fix": null,
+        "location": {
+          "column": 10,
+          "row": 23
+        },
+        "message": "Redefinition of unused `registered` from line 18: `registered` redefined here",
+        "noqa_row": 23,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 73,
+          "row": 146
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_installation_observation.py",
+        "fix": null,
+        "location": {
+          "column": 63,
+          "row": 146
+        },
+        "message": "Redefinition of unused `registered` from line 18: `registered` redefined here",
+        "noqa_row": 146,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 85,
+          "row": 156
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_installation_observation.py",
+        "fix": null,
+        "location": {
+          "column": 78,
+          "row": 156
+        },
+        "message": "Redefinition of unused `control` from line 19: `control` redefined here",
+        "noqa_row": 156,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 19,
+          "row": 162
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_installation_observation.py",
+        "fix": null,
+        "location": {
+          "column": 9,
+          "row": 162
+        },
+        "message": "Redefinition of unused `registered` from line 18: `registered` redefined here",
+        "noqa_row": 162,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 92,
+          "row": 9
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 1,
+                "row": 10
+              },
+              "location": {
+                "column": 1,
+                "row": 9
+              }
+            }
+          ],
+          "message": "Remove unused import: `okto_nexus_connector.services.execution_selection.acknowledge_execution_binding`"
+        },
+        "location": {
+          "column": 63,
+          "row": 9
+        },
+        "message": "`okto_nexus_connector.services.execution_selection.acknowledge_execution_binding` imported but unused",
+        "noqa_row": 9,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 58,
+          "row": 14
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 1,
+                "row": 15
+              },
+              "location": {
+                "column": 1,
+                "row": 14
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_execution_selection.selection`"
+        },
+        "location": {
+          "column": 49,
+          "row": 14
+        },
+        "message": "`tests.unit.test_execution_selection.selection` imported but unused",
+        "noqa_row": 14,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 51,
+          "row": 15
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "from tests.unit.test_r4_execution import observed, failed",
+              "end_location": {
+                "column": 69,
+                "row": 15
+              },
+              "location": {
+                "column": 1,
+                "row": 15
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_r4_execution.execution`"
+        },
+        "location": {
+          "column": 42,
+          "row": 15
+        },
+        "message": "`tests.unit.test_r4_execution.execution` imported but unused",
+        "noqa_row": 15,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 86,
+          "row": 70
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 77,
+          "row": 70
+        },
+        "message": "Redefinition of unused `execution` from line 15: `execution` redefined here",
+        "noqa_row": 70,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 97,
+          "row": 70
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 88,
+          "row": 70
+        },
+        "message": "Redefinition of unused `selection` from line 14: `selection` redefined here",
+        "noqa_row": 70,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 18,
+          "row": 92
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 9,
+          "row": 92
+        },
+        "message": "Redefinition of unused `execution` from line 15: `execution` redefined here",
+        "noqa_row": 92,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 29,
+          "row": 92
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 20,
+          "row": 92
+        },
+        "message": "Redefinition of unused `selection` from line 14: `selection` redefined here",
+        "noqa_row": 92,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 18,
+          "row": 149
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 9,
+          "row": 149
+        },
+        "message": "Redefinition of unused `execution` from line 15: `execution` redefined here",
+        "noqa_row": 149,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 29,
+          "row": 149
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 20,
+          "row": 149
+        },
+        "message": "Redefinition of unused `selection` from line 14: `selection` redefined here",
+        "noqa_row": 149,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 73,
+          "row": 182
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 64,
+          "row": 182
+        },
+        "message": "Redefinition of unused `execution` from line 15: `execution` redefined here",
+        "noqa_row": 182,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 74,
+          "row": 193
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 65,
+          "row": 193
+        },
+        "message": "Redefinition of unused `execution` from line 15: `execution` redefined here",
+        "noqa_row": 193,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 85,
+          "row": 193
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 76,
+          "row": 193
+        },
+        "message": "Redefinition of unused `selection` from line 14: `selection` redefined here",
+        "noqa_row": 193,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 79,
+          "row": 221
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 70,
+          "row": 221
+        },
+        "message": "Redefinition of unused `execution` from line 15: `execution` redefined here",
+        "noqa_row": 221,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 90,
+          "row": 221
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_launch_configuration.py",
+        "fix": null,
+        "location": {
+          "column": 81,
+          "row": 221
+        },
+        "message": "Redefinition of unused `selection` from line 14: `selection` redefined here",
+        "noqa_row": 221,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 39,
+          "row": 300
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 38,
+          "row": 300
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 300,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 34,
+          "row": 304
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 33,
+          "row": 304
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 304,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 14,
+          "row": 305
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 13,
+          "row": 305
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 305,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 48,
+          "row": 364
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 47,
+          "row": 364
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 364,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 30,
+          "row": 400
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 29,
+          "row": 400
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 400,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 27,
+          "row": 401
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 26,
+          "row": 401
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 401,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 27,
+          "row": 402
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 26,
+          "row": 402
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 402,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 29,
+          "row": 403
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 28,
+          "row": 403
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 403,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 33,
+          "row": 404
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 32,
+          "row": 404
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 404,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 33,
+          "row": 405
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 32,
+          "row": 405
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 405,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 61,
+          "row": 414
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_r4_daemon_control.py",
+        "fix": null,
+        "location": {
+          "column": 60,
+          "row": 414
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 414,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 55,
+          "row": 10
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_runtime_admission.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 1,
+                "row": 11
+              },
+              "location": {
+                "column": 1,
+                "row": 10
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_binding_onboarding.binding`"
+        },
+        "location": {
+          "column": 48,
+          "row": 10
+        },
+        "message": "`tests.unit.test_binding_onboarding.binding` imported but unused",
+        "noqa_row": 10,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 59,
+          "row": 11
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_runtime_admission.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 1,
+                "row": 12
+              },
+              "location": {
+                "column": 1,
+                "row": 11
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_executor_onboarding.onboarding`"
+        },
+        "location": {
+          "column": 49,
+          "row": 11
+        },
+        "message": "`tests.unit.test_executor_onboarding.onboarding` imported but unused",
+        "noqa_row": 11,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 63,
+          "row": 12
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_runtime_admission.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 1,
+                "row": 13
+              },
+              "location": {
+                "column": 1,
+                "row": 12
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_executor_registration.registration`"
+        },
+        "location": {
+          "column": 51,
+          "row": 12
+        },
+        "message": "`tests.unit.test_executor_registration.registration` imported but unused",
+        "noqa_row": 12,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 26,
+          "row": 16
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_runtime_admission.py",
+        "fix": null,
+        "location": {
+          "column": 19,
+          "row": 16
+        },
+        "message": "Redefinition of unused `binding` from line 10: `binding` redefined here",
+        "noqa_row": 16,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 32,
+          "row": 41
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_runtime_admission.py",
+        "fix": null,
+        "location": {
+          "column": 31,
+          "row": 41
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 41,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "E701",
+        "end_location": {
+          "column": 31,
+          "row": 50
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_runtime_admission.py",
+        "fix": null,
+        "location": {
+          "column": 30,
+          "row": 50
+        },
+        "message": "Multiple statements on one line (colon)",
+        "noqa_row": 50,
+        "url": "https://docs.astral.sh/ruff/rules/multiple-statements-on-one-line-colon"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 58,
+          "row": 15
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "",
+              "end_location": {
+                "column": 1,
+                "row": 16
+              },
+              "location": {
+                "column": 1,
+                "row": 15
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_execution_selection.selection`"
+        },
+        "location": {
+          "column": 49,
+          "row": 15
+        },
+        "message": "`tests.unit.test_execution_selection.selection` imported but unused",
+        "noqa_row": 15,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F401",
+        "end_location": {
+          "column": 51,
+          "row": 16
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": {
+          "applicability": "safe",
+          "edits": [
+            {
+              "content": "from tests.unit.test_r4_execution import observed",
+              "end_location": {
+                "column": 61,
+                "row": 16
+              },
+              "location": {
+                "column": 1,
+                "row": 16
+              }
+            }
+          ],
+          "message": "Remove unused import: `tests.unit.test_r4_execution.execution`"
+        },
+        "location": {
+          "column": 42,
+          "row": 16
+        },
+        "message": "`tests.unit.test_r4_execution.execution` imported but unused",
+        "noqa_row": 16,
+        "url": "https://docs.astral.sh/ruff/rules/unused-import"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 20,
+          "row": 46
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 11,
+          "row": 46
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 46,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 79,
+          "row": 57
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 70,
+          "row": 57
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 57,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 69,
+          "row": 78
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 60,
+          "row": 78
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 78,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 85,
+          "row": 100
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 76,
+          "row": 100
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 100,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 77,
+          "row": 120
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 68,
+          "row": 120
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 120,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 81,
+          "row": 137
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 72,
+          "row": 137
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 137,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 71,
+          "row": 154
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 62,
+          "row": 154
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 154,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 79,
+          "row": 170
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 70,
+          "row": 170
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 170,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 75,
+          "row": 201
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 66,
+          "row": 201
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 201,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 78,
+          "row": 216
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 69,
+          "row": 216
+        },
+        "message": "Redefinition of unused `selection` from line 15: `selection` redefined here",
+        "noqa_row": 216,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      },
+      {
+        "cell": null,
+        "code": "F811",
+        "end_location": {
+          "column": 85,
+          "row": 239
+        },
+        "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_session_capability_owner.py",
+        "fix": null,
+        "location": {
+          "column": 76,
+          "row": 239
+        },
+        "message": "Redefinition of unused `execution` from line 16: `execution` redefined here",
+        "noqa_row": 239,
+        "url": "https://docs.astral.sh/ruff/rules/redefined-while-unused"
+      }
+    ],
+    "diff_check_passed": true,
+    "baseline_commit": "12d806f955aea84327dd3a33011016d0283ecc18"
+  }
+}

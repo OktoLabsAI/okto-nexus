@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="120.834" timestamp="2026-11-07T03:56:53.391098-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[none]" time="23.767" /><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[decision]" time="18.643" /><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[apply]" time="18.561" /><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[rereview]" time="20.757" /><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[local-rereview]" time="17.286"><failure message="AssertionError: assert 'OPERATION_CONFLICT' == 'REMOTE_SETUP_REVIEW_REQUIRED'&#10;  &#10;  - REMOTE_SETUP_REVIEW_REQUIRED&#10;  + OPERATION_CONFLICT">tests\execution_r4\test_remote_setup_integration.py:290: in test_operator_and_connector_cli_complete_same_root_once
+    asyncio.run(bounded())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_remote_setup_integration.py:285: in bounded
+    await run()
+tests\execution_r4\test_remote_setup_integration.py:218: in run
+    await revise_operator_and_host(revised_selection, original_bootstrap, original_children)
+tests\execution_r4\test_remote_setup_integration.py:272: in revise_operator_and_host
+    assert stale.value.code == 'REMOTE_SETUP_REVIEW_REQUIRED'
+E   AssertionError: assert 'OPERATION_CONFLICT' == 'REMOTE_SETUP_REVIEW_REQUIRED'
+E     
+E     - REMOTE_SETUP_REVIEW_REQUIRED
+E     + OPERATION_CONFLICT</failure></testcase><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[finish-race]" time="16.060" /></testsuite></testsuites>

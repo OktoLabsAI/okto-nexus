@@ -1,5 +1,6 @@
 """Project setup from the terminal, with a retained review and canonical receipt."""
 import argparse
+from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
@@ -37,6 +38,19 @@ def saved_selection(saved, args, project):
         supplied['display_name'] = args.name
     if args.project is not None or not args.profile:
         supplied['project'] = project
+    if args.remote_draft is not None:
+        from .remote_setup_io import read_draft
+        draft = read_draft(args.remote_draft)
+        if args.review_current and saved.get('kind') == 'remote_project_setup':
+            if saved['state'] == 'review_submitted' and draft != selection.get('remote_draft'):
+                raise ConnectionError('REVIEW_PENDING', 'Recover the pending review before changing its draft.')
+            selection['remote_draft'] = draft
+            from ....application.project_preset import CLIENTS
+            selection['client'] = next((name for name, adapter in CLIENTS.items()
+                if adapter == draft['installation']['adapter_id']), None)
+            selection['candidate_ref'] = draft['installation']['candidate_ref']
+        else:
+            supplied['remote_draft'] = draft
     if any(value is not None and value != selection.get(key) for key, value in supplied.items()):
         raise ConnectionError('PROFILE_CONFLICT', 'Explicit choices conflict with the saved profile. Use its existing choices or a new named profile.')
     return selection
@@ -46,7 +60,26 @@ def _display(value, as_json):
     if as_json:
         print(json.dumps(value, ensure_ascii=False))
         return
-    if value.get('state') == 'review':
+    if value.get('state') == 'review' and value.get('kind') == 'remote_project_setup':
+        from .remote_setup_io import display_review
+        display_review(value)
+    elif value.get('state') in ('awaiting_host', 'awaiting_finish', 'review_required') and value.get('setup_run_id'):
+        print('Remote setup: ' + value['state'] + ' | Agent: ' + value['agent_id'])
+        if value.get('handoff_path'):
+            print('Host handoff (no key): ' + value['handoff_path'])
+        if value['state'] == 'review_required':
+            print('The approved effects changed. Use --review-current to inspect the affected review before continuing.')
+        elif value['state'] == 'awaiting_finish':
+            print('Operator decision recorded. Resume the original Connector request to complete its canonical Finish.')
+        else:
+            print('Resume Connector connect with --setup-receipt on the execution host, then return to this same profile.')
+        if value.get('material_delivery') == 'delivered_once':
+            print('Use the canonical agent key already received. This command does not issue it again.')
+        elif value.get('material_status') == 'unavailable':
+            print('Identity and workspace are committed, but this client did not confirm receiving the one-shot key.')
+            print('The Server cannot recover its plaintext. Import a copy you retained, or inspect this partial setup; no rotation was performed.')
+        print('No project task was submitted.')
+    elif value.get('state') == 'review':
         request = value['request']
         config = request['configuration']
         print(f"Agent: {request['agent_id']} | Harness: {config['adapter_id']}")
@@ -95,6 +128,12 @@ def run_connect(argv):
         description='Review and connect this local project using the canonical managed setup.')
     parser.add_argument('--profile', help='saved local project profile name')
     parser.add_argument('--operator-profile', help='use this saved human operator profile on a remote Server')
+    parser.add_argument('--remote-draft', type=Path,
+        help='review a remote host draft exported by Connector connect --setup-draft')
+    parser.add_argument('--setup-receipt-output', type=Path,
+        help='export the public remote host handoff here (contains no key)')
+    parser.add_argument('--review-current', action='store_true',
+        help='explicitly refresh a pending remote setup review while retaining its original bootstrap')
     startup = parser.add_mutually_exclusive_group()
     startup.add_argument('--start-at-login', dest='start_at_login', action='store_true', default=None,
         help='include user login startup and controlled supervisor transition in this review')
@@ -118,21 +157,29 @@ def run_connect(argv):
     args, service_args = parser.parse_known_args(argv)
     if args.plan and args.approve:
         parser.error('--plan and --approve are mutually exclusive')
+    if args.review_current and args.approve:
+        parser.error('--review-current shows a new review; approve its exact revision in a later command')
     if args.agent and args.name:
         parser.error('--name is for a new identity; existing names are preserved')
     if not 0 < args.timeout <= 300:
         parser.error('--timeout must be greater than 0 and at most 300 seconds')
-    guard = None
+    guard = checkpoint = None
     try:
         from .terminal_target import resolve_terminal_target
         project, profile = project_profile(args.project, args.profile)
         service = resolve_terminal_target(service_args, profile, args.operator_profile, resolve_local_service)
-        if hasattr(service, 'operator_profile') and args.start_at_login:
+        if (args.remote_draft or args.setup_receipt_output or args.review_current) and not hasattr(service, 'operator_profile'):
+            raise ConnectionError('REMOTE_OPERATOR_REQUIRED', 'Remote host setup requires a saved human operator profile.')
+        if hasattr(service, 'operator_profile') and args.start_at_login is not None:
             raise ConnectionError('REMOTE_STARTUP_NOT_LOCAL', 'Choose startup on the execution host using its Connector; this operator client cannot install a remote Server service.')
         directory = service.adapter.home / 'terminal/profiles'
         target = directory / (profile + '.json')
-        save = lambda value: atomic_json(target, value)
+        def save(value):
+            nonlocal checkpoint
+            atomic_json(target, value)
+            checkpoint = deepcopy(value)
         prior = read_json(target) if target.exists() else None
+        checkpoint = prior
         status = None
         if (not args.plan and prior and prior.get('login_start_operation', {}).get('state') in ('pending', 'installed')):
             guard = ExclusiveFileLock(directory / (profile + '.guard'))
@@ -154,10 +201,12 @@ def run_connect(argv):
             guard = ExclusiveFileLock(directory / (profile + '.guard'))
             guard.acquire()
         saved = read_json(target) if target.exists() else None
+        checkpoint = saved
         if saved:
             selection = saved_selection(saved, args, project)
         else:
-            if hasattr(service, 'operator_profile') and (not args.agent or not args.binding_id or args.new_agent):
+            if (hasattr(service, 'operator_profile') and not args.remote_draft
+                    and (not args.agent or not args.binding_id or args.new_agent)):
                 raise ConnectionError('REMOTE_BINDING_REQUIRED', 'Select --agent and --binding-id for an existing approved remote connection. Connector onboarding remains on its execution host.')
             label = Path(project).name or 'Project'
             slug = re.sub(r'[^a-z0-9]+', '-', label.lower()).strip('-')[:40] or 'project'
@@ -167,6 +216,9 @@ def run_connect(argv):
                 provider_home=args.provider_home, create_agent=args.agent is None, display_name=args.name)
             if hasattr(service, 'operator_profile'):
                 selection['operator_profile'] = service.operator_profile
+                if args.remote_draft:
+                    from .remote_setup_io import read_draft
+                    selection['remote_draft'] = read_draft(args.remote_draft)
         existing_login = connect_login.selected(saved) if saved else selection.get('login_start')
         if args.start_at_login is False and existing_login:
             if saved['state'] == 'done' and saved.get('login_start_plan') and not saved.get('login_start_operation'):
@@ -187,18 +239,36 @@ def run_connect(argv):
             else:
                 selection['login_start'] = plan
                 saved = None
-        if hasattr(service, 'operator_profile'):
+        remote_setup = bool(selection.get('remote_draft'))
+        handoff_path = None
+        if remote_setup:
+            from ....application.remote_terminal_setup import RemoteProjectSetup
+            from .remote_setup_io import handoff_sink, material_sink
+            output = args.setup_receipt_output or directory / (profile + '.setup-handoff.json')
+            export, handoff_path = handoff_sink(output, selection['remote_draft']['setup_run_id'], as_json=args.json)
+            flow = RemoteProjectSetup(service.operator_http, save, origin=service.operator_http.base,
+                material_sink=material_sink(args.json), handoff_sink=export)
+        elif args.review_current or args.setup_receipt_output:
+            raise ConnectionError('REMOTE_DRAFT_REQUIRED', 'This profile does not contain a remote host setup draft.')
+        elif hasattr(service, 'operator_profile'):
             flow = RemoteTerminalConnection(service.operator_http, lambda value: atomic_json(target, value))
         else:
             flow = TerminalConnection(LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port),
                                       lambda value: atomic_json(target, value))
-        if not saved:
+        recovered_review = bool(remote_setup and saved and saved['state'] == 'review_submitted')
+        if recovered_review:
+            saved = flow.recover_review(saved)
+        elif args.review_current:
+            if not saved or saved['state'] == 'done':
+                raise ConnectionError('REMOTE_REVIEW_UNAVAILABLE', 'Select a pending remote setup profile to refresh its review.')
+            saved = flow.review(selection, previous=saved)
+        elif not saved:
             saved = flow.review(selection)
             if saved['state'] == 'configured':
                 saved = read_json(target)  # Reused bindings can still review local startup.
         if saved['state'] == 'done':
             result = flow.observe(saved)
-        elif args.plan:
+        elif args.plan or args.review_current or recovered_review:
             result = saved
         else:
             if connect_login.selected(saved):
@@ -208,7 +278,9 @@ def run_connect(argv):
                 _display(saved, args.json)
                 if args.json or not sys.stdin.isatty():
                     return 3
-                if input('Apply this review, including the model connection test? [y/N] ').strip().lower() != 'y':
+                prompt = ('Apply this remote project review? [y/N] ' if remote_setup
+                    else 'Apply this review, including the model connection test? [y/N] ')
+                if input(prompt).strip().lower() != 'y':
                     return 0
                 approval = saved['review_revision']
             result = flow.apply(saved, approval=approval, timeout=args.timeout)
@@ -235,6 +307,8 @@ def run_connect(argv):
                     else:
                         result['login_start'] = dict(operation_state=saved['login_start_operation']['state'],
                             current_user_service=(transition or status).get('user_service'))
+        if handoff_path and result.get('handoff'):
+            result['handoff_path'] = handoff_path
         _display(result, args.json)
         if result['state'] == 'configured' and not args.plan and not args.json and not args.no_chat and sys.stdin.isatty():
             from .work import interactive_work
@@ -243,10 +317,13 @@ def run_connect(argv):
     except KeyboardInterrupt:
         return 130  # The service and any submitted test retain ownership.
     except (ConnectionError, OktoNexusError, LockBusy, OSError, ValueError, KeyError, TypeError) as error:
-        _display({'state': 'unconfirmed' if getattr(error, 'possible_effect', False) else 'refused',
+        pending_effect = (isinstance(checkpoint, dict) and checkpoint.get('kind') == 'remote_project_setup'
+            and checkpoint.get('state') in ('bootstrap_submitted', 'decision_submitted'))
+        possible_effect = bool(getattr(error, 'possible_effect', False) or pending_effect)
+        _display({'state': 'unconfirmed' if possible_effect else 'refused',
                   'code': getattr(error, 'code', 'PROFILE_BUSY' if isinstance(error, LockBusy) else 'CONFIG_ERROR'),
                   'message': getattr(error, 'message', getattr(error, 'action', 'Inspect the selected service and saved profile before continuing.')),
-                  'possible_effect': getattr(error, 'possible_effect', False)}, args.json)
+                  'possible_effect': possible_effect}, args.json)
         return 3
     finally:
         if guard is not None:

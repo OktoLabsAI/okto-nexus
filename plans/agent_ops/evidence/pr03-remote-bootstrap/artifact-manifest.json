@@ -1,0 +1,324 @@
+{
+  "format": 1,
+  "file_count": 79,
+  "aggregate_sha256": "482da0d5ce080dd6f967cf55e3e1659a3e213f8f7c38dbc40889f453761fe0a1",
+  "algorithm": "sha256 of canonical JSON files map (sort_keys,compact separators)",
+  "files": {
+    "candidate-v1/connector/installed.xml": {
+      "size": 38643,
+      "sha256": "ccc84e8181f20de83e36d871803a8acf3d1511b84734d9f632567ca586649adf"
+    },
+    "candidate-v1/connector/qualification.json": {
+      "size": 51796,
+      "sha256": "0415792ce376f81b4db58067e1f7827f11446b20f7b043773ae6be5d61f91003"
+    },
+    "candidate-v1/nexus/installed.xml": {
+      "size": 30375,
+      "sha256": "d72eab329cd690073f1485c6b1181bbea87c6d5a90e3d5cd2034ff116b9c1fd3"
+    },
+    "candidate-v1/nexus/qualification.json": {
+      "size": 198700,
+      "sha256": "0abce40dd5ff7df0826b68c44cf69c37dfdd46ae61b9df3073cd4fb0e3d0a230"
+    },
+    "candidate-v1/nexus-schema-focal/installed.xml": {
+      "size": 379,
+      "sha256": "857a86673f795da996c7c6d145f33d3e01165f66e7e9c860e473beb8a8dd3dd2"
+    },
+    "candidate-v1/nexus-schema-focal/qualification.json": {
+      "size": 186511,
+      "sha256": "d6218f831d48529e8be56e339d9797f3e0bc288803992e4a7f2c2386e180d62f"
+    },
+    "candidate-v1/okto_nexus-build.log": {
+      "size": 206599,
+      "sha256": "c7ac51586d3e0c6457a62cd7e27674bee04bac23a0731ee36e65ecb9714e73b4"
+    },
+    "candidate-v1/okto_nexus_connector-build.log": {
+      "size": 39489,
+      "sha256": "f8fbc2372738b944c61b8acd0d0a4b9e323cce0fd5e71efbb1e6ad28a08915e0"
+    },
+    "candidate-v1/package-proof.json": {
+      "size": 96315,
+      "sha256": "eb226f7bd2c03a411c526de9fdb1ae348f0802489e3fbe17a06579670198c7ca"
+    },
+    "candidate-v1/venv-create.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "candidate-v1/wheel-install.log": {
+      "size": 571,
+      "sha256": "b2b4f5a82133149c1526a3c13242c71a8c96b5a63727b4f180b7bc45d23c358b"
+    },
+    "candidate-v2/okto_nexus-build.log": {
+      "size": 1618,
+      "sha256": "13b9029d238e32622fc31af99154d8587a7b09a2573f4cb1a96517cc1b836410"
+    },
+    "candidate-v3/nexus/installed.xml": {
+      "size": 5174,
+      "sha256": "99193233c05e14eae36adde80189a00b954516411e572cf12604dca21e4f43cd"
+    },
+    "candidate-v3/nexus/qualification.json": {
+      "size": 188114,
+      "sha256": "fdeb9f96f075e99bb2c397ca48ca3cc4c3b8405f347cb1d1e6f0777f4d3ed334"
+    },
+    "candidate-v3/okto_nexus-build.log": {
+      "size": 206599,
+      "sha256": "3366a53db471bf0ff073dabcfb7d2d488da797df06f484080593c2586f94e6fa"
+    },
+    "candidate-v3/okto_nexus_connector-build.log": {
+      "size": 116,
+      "sha256": "08a320ddb81deb7a30c323c2d5d715ec99f05af261dbac09e41d3647da48bccd"
+    },
+    "candidate-v3/package-proof.json": {
+      "size": 96315,
+      "sha256": "afeb71eedeca522e07fabbc507e672ccb3ade4e24b409d3485156e6960eb3cdb"
+    },
+    "candidate-v3/venv-create.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "candidate-v3/wheel-install.log": {
+      "size": 571,
+      "sha256": "5e03e148f99dab69548711723f1fb4b7cddd5f3c3cb3ec0579276c0f186483bf"
+    },
+    "drivers/append_final_candidate.py": {
+      "size": 8140,
+      "sha256": "103b8c6e44525a86618e8244094cf39c0c80ace7d638c306b63947f6cb136f2e"
+    },
+    "drivers/build_candidate.py": {
+      "size": 3350,
+      "sha256": "6e4e034b795084e4250fc025811784af6e0253f60d54ca1baaf53bbcd5881a7c"
+    },
+    "drivers/build_candidate_final.py": {
+      "size": 3861,
+      "sha256": "b21d3e3b7a6be711f2684e83d95ca0de47f7ff83b04535d248bb4f081dd581ce"
+    },
+    "drivers/changed-paths.json": {
+      "size": 3229,
+      "sha256": "6ae2175dec2aac4174d3f2697fd45f1b91a0995f53ecee52ea8d8d92843bb938"
+    },
+    "drivers/close_milestone.py": {
+      "size": 18448,
+      "sha256": "0f56c2e3fedb2f939fb5d3ee008d65bedcfb02d407a88e8067d6d47dbc2e1806"
+    },
+    "drivers/collect_evidence.py": {
+      "size": 5593,
+      "sha256": "c67bb7b5ba14fada0865aba708cc09f5b085e8df2d314749dc9d08337839b476"
+    },
+    "drivers/connector-nodes.json": {
+      "size": 1510,
+      "sha256": "ebee73086a3ec0017d5a360d786fa504cf76a6525281e11186d8312b601f300f"
+    },
+    "drivers/finalize_whitespace.py": {
+      "size": 1119,
+      "sha256": "263783de4ea79dc23e6807ba3df76dff929f0bdbbf55d8e1f421bf6d3ca7c7ba"
+    },
+    "drivers/format_new_test.py": {
+      "size": 902,
+      "sha256": "9d96b583e06cb9da23d26c514b2c34f43c5829ad931cfa582d77c7458de3bb53"
+    },
+    "drivers/manifest_evidence.py": {
+      "size": 1626,
+      "sha256": "a0675f6964728cde81006581162faf7cd32d5b24cee5f970c146d98789140826"
+    },
+    "drivers/nexus-final-nodes.json": {
+      "size": 91,
+      "sha256": "df62729ea5542f1106459bffa14501b5e1b5eee07d498403d097981e5cef3c7d"
+    },
+    "drivers/nexus-schema-focal-nodes.json": {
+      "size": 106,
+      "sha256": "4aa377b77c05c2de9f4998bf48be37a2f7982f535d7d94d9b242ff210f1c0667"
+    },
+    "drivers/qualify_candidate.py": {
+      "size": 4823,
+      "sha256": "3a903597d51959e40c05e6e3194fd6ed04624b76cd258ca7d3b3b0f617ec999c"
+    },
+    "drivers/qualify_candidate_initial.py": {
+      "size": 4353,
+      "sha256": "e35f4ffaf3f4772058d761ff3da02e37c0f2d218fc541f5376cfa826038465ae"
+    },
+    "drivers/static_checks.py": {
+      "size": 2060,
+      "sha256": "8d577ec691883626293e4b5808f5d6ccd9a62108a8e0fc2805fdd71caf686c76"
+    },
+    "reports-initial.json": {
+      "size": 30811,
+      "sha256": "d37a4c8bd7ba6d563474d035b11e827808e6d5728507eeba94abf2585fda444f"
+    },
+    "reports.json": {
+      "size": 32010,
+      "sha256": "bbcb9542668ad9dae11dd77f40cd54a1597baf409f5abe94a39211b848596470"
+    },
+    "source/connector/dx1819-connector-guided-final.xml": {
+      "size": 22480,
+      "sha256": "0a68b4714c460d0151161acb557c67e1599e519f1be60177bebdbb3361e2bba6"
+    },
+    "source/connector/dx1819-connector-guided-retest.xml": {
+      "size": 966,
+      "sha256": "f3e812c49bc30b73a82695099da1e3b4a1f4a521d11d1046a706d38ff8c6b797"
+    },
+    "source/connector/dx1819-connector-import-schema-final.xml": {
+      "size": 14617,
+      "sha256": "7a5a35cd6aeeb2cd8f5714c9f8429b3e8ee98576959cc64ec4d7ca0985f9644f"
+    },
+    "source/connector/dx1819-connector-initial.xml": {
+      "size": 123020,
+      "sha256": "dae16056eb0ca08ee4db2fca74579706f21dbb9ae70de6fe51eec0c43dcf063f"
+    },
+    "source/connector/dx1819-connector-local-review-focused-final.xml": {
+      "size": 8294,
+      "sha256": "0e326fdd87c2b1fa386a4d3caee41b4aaf612c402d1d8f8ef5027252989e44e8"
+    },
+    "source/connector/dx1819-connector-local-review-initial.xml": {
+      "size": 11035,
+      "sha256": "dc56e4a0893bb996d98667515989cd655903cec3fe76642fed48fd76802f6195"
+    },
+    "source/connector/dx1819-connector-local-review-race-final.xml": {
+      "size": 2835,
+      "sha256": "b576b6a0f6462f206b4996d152ab42f6fa812bce934bd4049f2c98bea45f1854"
+    },
+    "source/connector/dx1819-connector-local-review-regression-final.xml": {
+      "size": 41691,
+      "sha256": "3e0d879f3124876c5ebaafbe2065adef3b8472d71d277781a8d246494867bc04"
+    },
+    "source/connector/dx1819-connector-retest.xml": {
+      "size": 4965,
+      "sha256": "d149b7ff934cb1bada275e14d4c032b2949493a202d61c7a7ef0cbdff439d71d"
+    },
+    "source/connector/dx1819-connector-review-map-initial.xml": {
+      "size": 23851,
+      "sha256": "da1c3fd7217a70b185841958c6d06dfefe0d2224aa10620ab4ad36396ce27931"
+    },
+    "source/connector/qualification-nodes.json": {
+      "size": 1535,
+      "sha256": "5aca10326acedf4889d3ed2780d716db8e4b02f6d41d4dfe2c188081fdcc8bb7"
+    },
+    "source/connector/reports.json": {
+      "size": 4864,
+      "sha256": "9c4d1eebb1650d25c38c63c57070baab116d9f09769b570e09fe58f3ae22b40a"
+    },
+    "source/operator/dx1819-integrated-control.xml": {
+      "size": 2867,
+      "sha256": "debfd4147fa64cdf863f92436494bb3bd236cc83289d78b42fc48daa9081fd73"
+    },
+    "source/operator/dx1819-integrated-initial.xml": {
+      "size": 1271,
+      "sha256": "93b95f890229f22caab0ec28ad5624637b500abbf8ca69c22ec91c1039052756"
+    },
+    "source/operator/dx1819-integrated-local-review-retest.xml": {
+      "size": 416,
+      "sha256": "1ddedeb38fd08c174dcaddc26f003ca4576668f5f03abb9886ab7795b19c1f2c"
+    },
+    "source/operator/dx1819-integrated-producer.xml": {
+      "size": 723,
+      "sha256": "a97c8464e1573b80119afda5270ba2d816092429d450d91f37f16795cca11f49"
+    },
+    "source/operator/dx1819-integrated-reviews-initial.xml": {
+      "size": 2470,
+      "sha256": "ea8274a897f3e2b2a8f5cadfc5c522b6cc4c301d20918c83a50005b2606f05ff"
+    },
+    "source/operator/dx1819-integrated-sink-correction.xml": {
+      "size": 1384,
+      "sha256": "fe409af53dd913ab41ea57d2d1b7df27fbf592d1377b189e70617dacb8b1911d"
+    },
+    "source/operator/dx1819-operator-auth-uncertainty.xml": {
+      "size": 4372,
+      "sha256": "536ca33e2b5271d8d39ef146fa21decdcc267aa4fc28259250d7bfc96d4e4b87"
+    },
+    "source/operator/dx1819-operator-initial.xml": {
+      "size": 2172,
+      "sha256": "a47523400dfc738f8fb9090d4a2ee99bc4cd3570c976b2db12e50beba1e63420"
+    },
+    "source/operator/dx1819-operator-local-review.xml": {
+      "size": 3491,
+      "sha256": "8f35b2ca0e3f5f02f3cae74f5729f7e41678795763a476666aba72bd3b897ca7"
+    },
+    "source/operator/dx1819-operator-recovery-review.xml": {
+      "size": 3343,
+      "sha256": "df8f34d250064f91e43f0a4a504b538bdb4fd83a7088aa639316139b037ae855"
+    },
+    "source/operator/dx1819-operator-regression.xml": {
+      "size": 9473,
+      "sha256": "0f529ef964c54855feeef7f8b8fc7065c3a7d8a0a2c21f907aab02aa48771054"
+    },
+    "source/operator/dx1819-operator-review-display.xml": {
+      "size": 3491,
+      "sha256": "df1ce4d1ad5eb01ccb8b829cc69bc87c34899a07e89676ee7254801cb1088778"
+    },
+    "source/operator/dx1819-operator-startup-flags.xml": {
+      "size": 3858,
+      "sha256": "0736a7cc5468fbd62b50a19edae1257eea76ff1df2ba95f63cb11a8a6e7c308f"
+    },
+    "source/server/capacity-initial.xml": {
+      "size": 697,
+      "sha256": "3b601239714d07cae62150250ef512fe3c238b58664fcc63cf0489bde7611873"
+    },
+    "source/server/capacity-qualification.json": {
+      "size": 1467,
+      "sha256": "8a8c2f1854c344971faad510e2efe32f8b6198ba4d85716670ec64ab1f676d64"
+    },
+    "source/server/epoch-initial.xml": {
+      "size": 659,
+      "sha256": "33d8e311b921e0975f55510a9bf4414e52e277b0058c0ccc50d88e2049990537"
+    },
+    "source/server/guards-initial.xml": {
+      "size": 1394,
+      "sha256": "e9d01b3663a1fcb2fa2cc2e20fd23fb815b20fbb07ce8cb3354d817ae7f7e627"
+    },
+    "source/server/http-routing-corrections.xml": {
+      "size": 1248,
+      "sha256": "45ecc4d8e6515188da8c60238489978a28a330172ce7d4943d6cb5ec36acd05c"
+    },
+    "source/server/import-boundary.xml": {
+      "size": 596,
+      "sha256": "35e228810e8b1f22bde568b41354c888e41d325076b190e8c116903f0abac8c9"
+    },
+    "source/server/machines-initial.xml": {
+      "size": 4643,
+      "sha256": "e2b5a277dfa913cc01955146e2a355c5119e7b5a8b3b3945568d9b9101cdad87"
+    },
+    "source/server/qualification.json": {
+      "size": 6941,
+      "sha256": "ebe1f50ff9cb1c83b444ff3a6f473c394f2832d090a3ad94c2014a279a809c01"
+    },
+    "source/server/server-corrections.xml": {
+      "size": 4283,
+      "sha256": "e28c3201c77242d1b0a0b4c70024ba9dae45df47ce96e1deca3b4998edc41bce"
+    },
+    "source/server/server-http-initial.xml": {
+      "size": 21449,
+      "sha256": "1e0a722063caf80b0a4d042fe5a4b88dc8e727582f3163c9daad5966cc79895c"
+    },
+    "source/server/server-initial.xml": {
+      "size": 59375,
+      "sha256": "9bfb08cf1b07bf588a7a3b183f01a7965bea37bd65da0e1c91a122d58be3961c"
+    },
+    "source/server/server-regression-initial.xml": {
+      "size": 11980,
+      "sha256": "7a259df4c4fe947c9be925ec49dbb923cb7ab33001e2cbabbf6fe96275afcd09"
+    },
+    "source/server/server-regression.json": {
+      "size": 1046,
+      "sha256": "87928c16239aca03d1d3d1755ac960dbc6d92453f087db503a086b5c54fbe6d8"
+    },
+    "static/connector-ruff-baseline-comparison.json": {
+      "size": 261,
+      "sha256": "b18043ca5e0f06805fae0edf395ef7c93ae35f0cf5808c99e7ae4d3e09253e5a"
+    },
+    "static/connector-ruff-initial.json": {
+      "size": 44358,
+      "sha256": "d883f4d567c0b5868b376d7a076ed9db64b2fa2627d3e62bc1139eaf0765c02b"
+    },
+    "static/product-format-equivalence.json": {
+      "size": 406,
+      "sha256": "c05d024b15b6f31b032c5bd0909960ad1bb7d4d076ebb78a4f69f67548da3ebb"
+    },
+    "static/static-checks.json": {
+      "size": 47720,
+      "sha256": "6ad5983d0d868b366a34c21e96c209914b55dd378a3ba9ec64cdcbba73a3f8e8"
+    },
+    "static/test-format-equivalence.json": {
+      "size": 389,
+      "sha256": "a8e2c950cccd4cfb8e04eab7e69e4b883bd7a111d2e0966d7dd64ab42fb32195"
+    }
+  }
+}

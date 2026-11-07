@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="53.433" timestamp="2026-11-07T03:31:59.151360-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[none]" time="47.730"><failure message="AssertionError: assert 'awaiting_inventory' == 'awaiting_operator_approval'&#10;  &#10;  - awaiting_operator_approval&#10;  + awaiting_inventory">tests\execution_r4\test_remote_setup_integration.py:196: in test_operator_and_connector_cli_complete_same_root_once
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_remote_setup_integration.py:160: in run
+    assert pending['status'] == 'awaiting_operator_approval'
+E   AssertionError: assert 'awaiting_inventory' == 'awaiting_operator_approval'
+E     
+E     - awaiting_operator_approval
+E     + awaiting_inventory</failure></testcase></testsuite></testsuites>

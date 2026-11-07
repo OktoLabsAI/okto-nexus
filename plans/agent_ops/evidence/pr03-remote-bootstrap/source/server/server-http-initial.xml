@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="7" failures="0" skipped="0" tests="27" time="31.265" timestamp="2026-11-07T03:23:48.492939-03:00" hostname="Alienware_m15"><testcase classname="tests.test_remote_setup_server" name="test_review_no_productive_effect_and_partial_bootstrap_is_atomic" time="2.484" /><testcase classname="tests.test_remote_setup_server" name="test_lost_response_recovers_same_references_never_key_or_rotation" time="0.135" /><testcase classname="tests.test_remote_setup_server" name="test_participant_and_revoked_principal_cannot_read_or_bootstrap" time="0.219" /><testcase classname="tests.test_remote_setup_server" name="test_review_retry_deduplicates_but_changed_body_needs_cas" time="0.134" /><testcase classname="tests.test_remote_setup_server" name="test_material_rereview_keeps_bootstrap_and_rotates_only_affected_children" time="0.108" /><testcase classname="tests.test_remote_setup_server" name="test_committed_root_cannot_adopt_another_scope[identity]" time="0.138" /><testcase classname="tests.test_remote_setup_server" name="test_committed_root_cannot_adopt_another_scope[workspace]" time="0.146" /><testcase classname="tests.test_remote_setup_server" name="test_committed_root_cannot_adopt_another_scope[connector]" time="0.174" /><testcase classname="tests.test_remote_setup_server" name="test_existing_identity_review_persists_real_epoch_and_rejects_rotation" time="0.154" /><testcase classname="tests.test_remote_setup_server" name="test_concurrent_same_root_creates_once_and_other_root_never_adopts" time="0.237" /><testcase classname="tests.test_remote_setup_server" name="test_failure_rolls_back_agent_workspace_epoch_and_checkpoint[False]" time="0.152" /><testcase classname="tests.test_remote_setup_server" name="test_failure_rolls_back_agent_workspace_epoch_and_checkpoint[True]" time="0.185" /><testcase classname="tests.test_remote_setup_server" name="test_recovery_reports_unavailable_or_changed_without_repair[credential]" time="0.123" /><testcase classname="tests.test_remote_setup_server" name="test_recovery_reports_unavailable_or_changed_without_repair[permissions]" time="0.115" /><testcase classname="tests.test_remote_setup_server" name="test_recovery_reports_unavailable_or_changed_without_repair[workspace]" time="0.126" /><testcase classname="tests.test_remote_setup_server" name="test_materialization_missing_is_readonly_and_never_success" time="0.108" /><testcase classname="tests.test_remote_setup_server" name="test_reset_preserves_review_only_with_its_identity_configuration[False]" time="0.122" /><testcase classname="tests.test_remote_setup_server" name="test_reset_preserves_review_only_with_its_identity_configuration[True]" time="0.099" /><testcase classname="tests.test_remote_setup_server" name="test_draft_rejects_secret_unknown_and_noninteger_version" time="0.086" /><testcase classname="tests.test_remote_setup_server" name="test_normalized_review_never_accepts_mutated_effects" time="0.081" /><testcase classname="tests.test_remote_setup_http" name="test_tcp_new_identity_metadata_pending_matches_and_one_canonical_finish" time="4.255"><error message="failed on setup with &quot;AttributeError: '_IncludedRouter' object has no attribute 'name'&quot;">fixturedef = &lt;FixtureDef argname='runtime' scope='function' baseid='tests/test_remote_setup_http.py'&gt;
+request = &lt;SubRequest 'runtime' for &lt;Function test_tcp_new_identity_metadata_pending_matches_and_one_canonical_finish&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr34_remediation.py:31: in runtime
+    yield from _runtime(tmp_path, request, monkeypatch)
+tests\test_pr34_remediation.py:96: in _runtime
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:954: in build_app
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: in build_router
+    router.routes.extend(route for route in source.routes if route.name in allowed)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x00000228C26295A0&gt;
+
+&gt;   router.routes.extend(route for route in source.routes if route.name in allowed)
+                                                             ^^^^^^^^^^
+E   AttributeError: '_IncludedRouter' object has no attribute 'name'
+
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: AttributeError</error></testcase><testcase classname="tests.test_remote_setup_http" name="test_tcp_new_review_fences_old_child_without_erasing_partial_receipts[False]" time="2.697"><error message="failed on setup with &quot;AttributeError: '_IncludedRouter' object has no attribute 'name'&quot;">fixturedef = &lt;FixtureDef argname='runtime' scope='function' baseid='tests/test_remote_setup_http.py'&gt;
+request = &lt;SubRequest 'runtime' for &lt;Function test_tcp_new_review_fences_old_child_without_erasing_partial_receipts[False]&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr34_remediation.py:31: in runtime
+    yield from _runtime(tmp_path, request, monkeypatch)
+tests\test_pr34_remediation.py:96: in _runtime
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:954: in build_app
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: in build_router
+    router.routes.extend(route for route in source.routes if route.name in allowed)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x00000228C254BDF0&gt;
+
+&gt;   router.routes.extend(route for route in source.routes if route.name in allowed)
+                                                             ^^^^^^^^^^
+E   AttributeError: '_IncludedRouter' object has no attribute 'name'
+
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: AttributeError</error></testcase><testcase classname="tests.test_remote_setup_http" name="test_tcp_new_review_fences_old_child_without_erasing_partial_receipts[True]" time="3.208"><error message="failed on setup with &quot;AttributeError: '_IncludedRouter' object has no attribute 'name'&quot;">fixturedef = &lt;FixtureDef argname='runtime' scope='function' baseid='tests/test_remote_setup_http.py'&gt;
+request = &lt;SubRequest 'runtime' for &lt;Function test_tcp_new_review_fences_old_child_without_erasing_partial_receipts[True]&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr34_remediation.py:31: in runtime
+    yield from _runtime(tmp_path, request, monkeypatch)
+tests\test_pr34_remediation.py:96: in _runtime
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:954: in build_app
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: in build_router
+    router.routes.extend(route for route in source.routes if route.name in allowed)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x00000228C2B837F0&gt;
+
+&gt;   router.routes.extend(route for route in source.routes if route.name in allowed)
+                                                             ^^^^^^^^^^
+E   AttributeError: '_IncludedRouter' object has no attribute 'name'
+
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: AttributeError</error></testcase><testcase classname="tests.test_remote_setup_http" name="test_tcp_recovery_is_passive_and_revocation_bypasses_warm_cache" time="3.192"><error message="failed on setup with &quot;AttributeError: '_IncludedRouter' object has no attribute 'name'&quot;">fixturedef = &lt;FixtureDef argname='runtime' scope='function' baseid='tests/test_remote_setup_http.py'&gt;
+request = &lt;SubRequest 'runtime' for &lt;Function test_tcp_recovery_is_passive_and_revocation_bypasses_warm_cache&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr34_remediation.py:31: in runtime
+    yield from _runtime(tmp_path, request, monkeypatch)
+tests\test_pr34_remediation.py:96: in _runtime
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:954: in build_app
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: in build_router
+    router.routes.extend(route for route in source.routes if route.name in allowed)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x00000228C2982770&gt;
+
+&gt;   router.routes.extend(route for route in source.routes if route.name in allowed)
+                                                             ^^^^^^^^^^
+E   AttributeError: '_IncludedRouter' object has no attribute 'name'
+
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: AttributeError</error></testcase><testcase classname="tests.test_remote_setup_http" name="test_tcp_strict_boundary_never_echoes_untrusted_payload[duplicate]" time="2.576"><error message="failed on setup with &quot;AttributeError: '_IncludedRouter' object has no attribute 'name'&quot;">fixturedef = &lt;FixtureDef argname='runtime' scope='function' baseid='tests/test_remote_setup_http.py'&gt;
+request = &lt;SubRequest 'runtime' for &lt;Function test_tcp_strict_boundary_never_echoes_untrusted_payload[duplicate]&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr34_remediation.py:31: in runtime
+    yield from _runtime(tmp_path, request, monkeypatch)
+tests\test_pr34_remediation.py:96: in _runtime
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:954: in build_app
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: in build_router
+    router.routes.extend(route for route in source.routes if route.name in allowed)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x00000228C2E9ADA0&gt;
+
+&gt;   router.routes.extend(route for route in source.routes if route.name in allowed)
+                                                             ^^^^^^^^^^
+E   AttributeError: '_IncludedRouter' object has no attribute 'name'
+
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: AttributeError</error></testcase><testcase classname="tests.test_remote_setup_http" name="test_tcp_strict_boundary_never_echoes_untrusted_payload[oversize]" time="2.594"><error message="failed on setup with &quot;AttributeError: '_IncludedRouter' object has no attribute 'name'&quot;">fixturedef = &lt;FixtureDef argname='runtime' scope='function' baseid='tests/test_remote_setup_http.py'&gt;
+request = &lt;SubRequest 'runtime' for &lt;Function test_tcp_strict_boundary_never_echoes_untrusted_payload[oversize]&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr34_remediation.py:31: in runtime
+    yield from _runtime(tmp_path, request, monkeypatch)
+tests\test_pr34_remediation.py:96: in _runtime
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:954: in build_app
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: in build_router
+    router.routes.extend(route for route in source.routes if route.name in allowed)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x00000228C3173820&gt;
+
+&gt;   router.routes.extend(route for route in source.routes if route.name in allowed)
+                                                             ^^^^^^^^^^
+E   AttributeError: '_IncludedRouter' object has no attribute 'name'
+
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: AttributeError</error></testcase><testcase classname="tests.test_remote_setup_http" name="test_tcp_strict_boundary_never_echoes_untrusted_payload[unknown]" time="2.608"><error message="failed on setup with &quot;AttributeError: '_IncludedRouter' object has no attribute 'name'&quot;">fixturedef = &lt;FixtureDef argname='runtime' scope='function' baseid='tests/test_remote_setup_http.py'&gt;
+request = &lt;SubRequest 'runtime' for &lt;Function test_tcp_strict_boundary_never_echoes_untrusted_payload[unknown]&gt;&gt;
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -&gt; object | None:
+        if (
+            fixturedef.argname == "event_loop_policy"
+            and fixturedef.func.__module__ != __name__
+        ):
+            warnings.warn(
+                PytestDeprecationWarning(_EVENT_LOOP_POLICY_FIXTURE_DEPRECATION_WARNING),
+            )
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+&gt;               return (yield)
+                        ^^^^^
+
+.venv\Lib\site-packages\pytest_asyncio\plugin.py:924: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_pr34_remediation.py:31: in runtime
+    yield from _runtime(tmp_path, request, monkeypatch)
+tests\test_pr34_remediation.py:96: in _runtime
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:954: in build_app
+    app.include_router(dashboard_runtime_router(), prefix="/api/v1/runtime-management")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: in build_router
+    router.routes.extend(route for route in source.routes if route.name in allowed)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+.0 = &lt;list_iterator object at 0x00000228C35F6050&gt;
+
+&gt;   router.routes.extend(route for route in source.routes if route.name in allowed)
+                                                             ^^^^^^^^^^
+E   AttributeError: '_IncludedRouter' object has no attribute 'name'
+
+src\okto_nexus\adapters\inbound\http\dashboard_runtime.py:27: AttributeError</error></testcase></testsuite></testsuites>

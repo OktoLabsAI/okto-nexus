@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="12" time="16.078" timestamp="2026-11-07T03:12:30.820984-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_remote_setup" name="test_document_boundary_rejects_duplicate_nonfinite_deep_or_large[oversized]" time="0.941" /><testcase classname="tests.unit.test_remote_setup" name="test_real_http_identity_scope_checked_before_vault_or_state[server_id-other]" time="1.251" /><testcase classname="tests.unit.test_remote_setup" name="test_real_http_identity_scope_checked_before_vault_or_state[agent_id-other]" time="0.868" /><testcase classname="tests.unit.test_remote_setup" name="test_real_http_identity_scope_checked_before_vault_or_state[credential_epoch-2]" time="0.932" /><testcase classname="tests.unit.test_remote_setup" name="test_real_http_identity_scope_checked_before_vault_or_state[credential_epoch-True]" time="0.957" /><testcase classname="tests.unit.test_remote_setup" name="test_lost_vault_ack_recovers_same_identity_without_remote_effects[False]" time="1.089" /><testcase classname="tests.unit.test_remote_setup" name="test_lost_vault_ack_recovers_same_identity_without_remote_effects[True]" time="1.026"><failure message="okto_nexus_connector.errors.ConnectorError: VALIDATION_ERROR (vault): namespace already stored; use replace">host = namespace(root=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10620/test_lost_vault_ack_recover...9d86563b24c193216942b9112b15337c5f10c6'}, output=&lt;okto_nexus_connector.cli.output.Output object at 0x000001E80ABBABE0&gt;)
+peer = &lt;tests.fakes.http_peer.FakeNexusHTTPPeer object at 0x000001E80AB1AF90&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001E80AC53BB0&gt;
+after_write = True
+
+    @pytest.mark.parametrize('after_write', [False, True])
+    async def test_lost_vault_ack_recovers_same_identity_without_remote_effects(host, peer, monkeypatch, after_write):
+        (host.root / 'vault').mkdir()
+        vault = RestrictedFileVault(host.root / 'vault', approved=True)
+        original = vault.store
+        def fail(namespace, key):
+            if after_write:
+                original(namespace, key)
+            raise OSError('synthetic vault acknowledgement lost')
+        monkeypatch.setattr(vault, 'store', fail)
+        expected = dict(server_id='srv_fake', agent_id='agent', credential_epoch=1)
+        async with NexusHTTPClient(peer.url) as http:
+            with pytest.raises(OSError):
+                await import_identity(http, vault, host.store, key=KEY, alias='worker', agent_hint='agent', expected_identity=expected)
+            assert host.store.load().identities == []
+            monkeypatch.setattr(vault, 'store', original)
+&gt;           imported = await import_identity(http, vault, host.store, key=KEY, alias='worker', agent_hint='agent', expected_identity=expected)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_remote_setup.py:209: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus_connector\identity\import_flow.py:196: in import_identity
+    handle = vault.store(namespace, key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus_connector.identity.vault.RestrictedFileVault object at 0x000001E80AB1AD50&gt;
+namespace = 'srv_fake/agent', secret = 'nxs_fixture_remote_key'
+
+    def store(self, namespace: str, secret: str) -&gt; str:
+        self._require_approval()
+        _validate(namespace, secret)
+        with self._locked():
+            data = self._load()
+            if namespace in data:
+&gt;               raise ConnectorError("VALIDATION_ERROR", "vault",
+                                     "namespace already stored; use replace")
+E               okto_nexus_connector.errors.ConnectorError: VALIDATION_ERROR (vault): namespace already stored; use replace
+
+src\okto_nexus_connector\identity\vault.py:171: ConnectorError</failure></testcase><testcase classname="tests.unit.test_remote_setup" name="test_continuation_pins_canonical_scope_and_child_ids_before_pipeline" time="2.288" /><testcase classname="tests.unit.test_remote_setup" name="test_pipeline_resumes_without_repeating_committed_children" time="2.714" /><testcase classname="tests.unit.test_remote_setup" name="test_binding_root_metadata_survives_lost_reply_and_cannot_change_on_retry" time="0.427" /><testcase classname="tests.unit.test_binding_onboarding" name="test_schema_nine_has_no_implicit_binding_intents" time="0.002" /><testcase classname="tests.unit.test_binding_onboarding" name="test_schema_eleven_binding_history_migrates_without_replacement_authority" time="0.464" /></testsuite></testsuites>

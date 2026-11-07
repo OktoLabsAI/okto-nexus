@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 from urllib.request import build_opener, ProxyHandler
 
 from ...application.terminal_connection import ConnectionError, PREFIX
+from ...domain.server_origin import normalize_server_origin
 from .provider_vault import open_backend
 from .service_manager.context import read_json, atomic_json
 from .service_manager.inspection import NoRedirect
@@ -18,21 +19,8 @@ COOKIE = 'nexus_operator_session'
 
 def server_origin(value):
     try:
-        parsed = urlsplit(value)
-        if (not isinstance(value, str) or any(ord(c) < 33 or ord(c) == 127 for c in value) or
-                parsed.scheme not in ('http', 'https') or not parsed.hostname or parsed.username is not None or
-                parsed.password is not None or parsed.path not in ('', '/') or parsed.query or parsed.fragment or
-                '\\' in value or parsed.port == 0):
-            raise ValueError()
-        host = parsed.hostname.encode('idna').decode('ascii').lower()
-        if parsed.scheme == 'http' and host not in ('localhost', '127.0.0.1', '::1'):
-            raise ValueError()
-        port = parsed.port
-        authority = '[' + host + ']' if ':' in host else host
-        if port and port != (443 if parsed.scheme == 'https' else 80):
-            authority += ':' + str(port)
-        return parsed.scheme + '://' + authority
-    except (ValueError, TypeError, UnicodeError, AttributeError):
+        return normalize_server_origin(value)
+    except ValueError:
         raise ConnectionError('SERVER_ORIGIN_INVALID', 'Use an HTTPS Server origin without credentials, path, query or fragment; HTTP is limited to loopback.') from None
 
 

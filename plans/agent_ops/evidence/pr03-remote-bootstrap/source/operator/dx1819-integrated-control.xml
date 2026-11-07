@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="18.925" timestamp="2026-11-07T03:35:40.061462-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[none]" time="14.787"><failure message="okto_nexus_connector.errors.ConnectorError: CONFLICT (inventory.publish): Publish through the current reconciled control channel.">tests\execution_r4\test_remote_setup_integration.py:218: in test_operator_and_connector_cli_complete_same_root_once
+    asyncio.run(bounded())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_remote_setup_integration.py:213: in bounded
+    await run()
+tests\execution_r4\test_remote_setup_integration.py:173: in run
+    pending = await connect.run_connect(host_args(), output, host)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect.py:65: in run_connect
+    return await run_setup(args, output, root, store)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect_setup.py:25: in run_setup
+    return await _resume(args, output, root, store)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\connect_setup.py:162: in _resume
+    result = await configure_local(wizard, output, root, store, identity, args.server, deepcopy(record['draft']['configuration']))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\okto-nexus-connector\src\okto_nexus_connector\cli\commands\configure_local.py:209: in configure_local
+    await ipc(root,'state.reload')
+tests\execution_r4\test_remote_setup_integration.py:161: in ipc
+    await http.publish_inventory(bootstrap.ticket, executor_id=bootstrap.executor.executor_id, snapshot=snapshot)
+..\okto-nexus-connector\src\okto_nexus_connector\transport\https_client.py:550: in publish_inventory
+    payload = await self._request(
+..\okto-nexus-connector\src\okto_nexus_connector\transport\https_client.py:380: in _request
+    raise _error_from(response)
+E   okto_nexus_connector.errors.ConnectorError: CONFLICT (inventory.publish): Publish through the current reconciled control channel.</failure></testcase></testsuite></testsuites>

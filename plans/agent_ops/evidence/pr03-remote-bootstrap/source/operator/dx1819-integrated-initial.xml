@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="16.134" timestamp="2026-11-07T03:31:26.397275-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_setup_integration" name="test_operator_and_connector_cli_complete_same_root_once[none]" time="11.534"><failure message="TypeError: test_operator_and_connector_cli_complete_same_root_once.&lt;locals&gt;.&lt;lambda&gt;() missing 1 required positional argument: 'receipt'">tests\execution_r4\test_remote_setup_integration.py:92: in test_operator_and_connector_cli_complete_same_root_once
+    result = flow.apply(document, approval=document['review_revision'], timeout=0)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\remote_terminal_setup.py:278: in apply
+    self._consume(document, response, allow_material=True)
+src\okto_nexus\application\remote_terminal_setup.py:198: in _consume
+    self.material_sink(material['api_key'])
+E   TypeError: test_operator_and_connector_cli_complete_same_root_once.&lt;locals&gt;.&lt;lambda&gt;() missing 1 required positional argument: 'receipt'</failure></testcase></testsuite></testsuites>

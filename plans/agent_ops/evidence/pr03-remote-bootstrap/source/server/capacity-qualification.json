@@ -1,0 +1,32 @@
+{
+  "scope": "DX18/19 retained remote setup capacity closure",
+  "source_delta": [
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/remote_setup_repo.py",
+      "before_sha256": "1b19d3ca2975ca3a7cc98c490378bd4aed79ca5c951f5cfeea6ff4ac332694d0",
+      "after_sha256": "3acadde2c039c6df3c803a479a220fb42ad2cdc1c00482ada4a8b49879e87d51"
+    }
+  ],
+  "test": {
+    "path": "tests\\test_remote_setup_capacity.py",
+    "sha256": "9f0bd99c32742547412c899da6783db1dbc37910bd1e2978ae6e296a955fe37b"
+  },
+  "report": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\capacity-initial.xml",
+    "sha256": "3b601239714d07cae62150250ef512fe3c238b58664fcc63cf0489bde7611873",
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "command": "rtk proxy .venv/Scripts/python.exe -B -X utf8 -m pytest -q tests/test_remote_setup_capacity.py --junitxml=C:/Users/jpamb/AppData/Local/Temp/dx1819-server-xvlrq8il/capacity-initial.xml",
+  "ruff": "PASS",
+  "production_frozen": true,
+  "limits": {
+    "roots_per_actor": 1024,
+    "revisions_per_root": 32,
+    "review_bytes": 65536
+  },
+  "retention": "No automatic pruning or TTL; keep_agents reset preserves roots/reviews with identities, full reset deletes both. Existing replay/recovery remains available at capacity.",
+  "previous_regression": "77/77PASS before this sole product delta; source snapshots and XMLs preserved separately."
+}

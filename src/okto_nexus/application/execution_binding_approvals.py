@@ -2,11 +2,28 @@
 
 from datetime import datetime, timezone
 import json
+from copy import deepcopy
 
 from ..errors import ErrorCode, OktoNexusError
 
 
 BINDING_APPROVAL_ACTION = "execution.binding.authorize"
+
+
+def public_review_facts(expected):
+    """Allowlisted canonical comparison metadata, excluding authority/key guards."""
+    keys = ('authorization_revision', 'configuration_revision', 'inventory_revision',
+        'realization_revision', 'root_proof_digest', 'workspace_revision', 'workspace_status',
+        'configuration_digest', 'alias', 'connection_configuration', 'project_preset',
+        'native_decision_policy', 'remote_machine_policy')
+    result = {key: deepcopy(expected[key]) for key in keys if key in expected}
+    if isinstance(expected.get('previous_machines'), list):
+        result['previous_machines'] = [{key: row[key] for key in ('binding_id', 'executor_id', 'endpoint_id',
+            'binding_revision', 'endpoint_revision', 'connector_id')} for row in expected['previous_machines']]
+    if isinstance(expected.get('remote_setup'), dict):
+        result['remote_setup'] = {key: expected['remote_setup'][key]
+            for key in ('setup_run_id', 'review_revision') if key in expected['remote_setup']}
+    return result
 
 
 class ExecutionBindingApprovals:
@@ -28,7 +45,7 @@ class ExecutionBindingApprovals:
                 row['proposal_revision'] != request['proposal_revision'] or
                 proposal['workspace_id'] != approval.workspace_id):
             raise OktoNexusError(ErrorCode.CONFLICT, 'The approval does not match the binding proposal.', {})
-        return dict(proposal=proposal, proposal_state=row['status'],
+        return dict(proposal=proposal, canonical_fields=public_review_facts(expected), proposal_state=row['status'],
             expired=datetime.fromisoformat(row['expires_at'].replace('Z', '+00:00')) <= datetime.now(timezone.utc))
 
     def decide(self, uow, approval, *, approved, response, context, decided_by, replay):
@@ -66,6 +83,8 @@ class ExecutionBindingApprovals:
                   "operator_proof_ref": approval.approval_id if approved else None}
         if not approved:
             return result
+        from ..adapters.outbound.sqlite.remote_setup_repo import require_current_proposal_root
+        require_current_proposal_root(uow, row=row, expected=expected)
         self.access.authorize(context, uow=uow, audit=False)
         if (row["status"] != "PREPARED" or not proposal["can_apply"] or
                 datetime.fromisoformat(row["expires_at"].replace("Z", "+00:00")) <= datetime.now(timezone.utc) or

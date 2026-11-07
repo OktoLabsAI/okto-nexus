@@ -41,9 +41,11 @@ The binding supplies the canonical executor, workspace and harness. The local
 current folder (or `--project`) identifies the operator's shortcut; it is not sent
 as a remote launch path. Existing host configuration is preserved. `--client`,
 `--workspace-id` and `--candidate-ref`, when provided, must match the binding.
-Creating a new remote identity and integrating remote installation discovery
-remain pending work in the unified terminal flow. Connector proposal approval
-is available below, using the original Connector onboarding request.
+For a new remote project, use the [two-terminal setup flow](remote-project-setup.md):
+the host exports a draft, this client reviews identity/workspace creation and
+delivers the agent key once, and the host resumes with the public handoff.
+Connector proposal approval is also available below for its existing onboarding
+requests.
 
 Later `connect` and `work` recover the saved operator topology before resolving
 local service startup. An unavailable Server, expired session, conflicting

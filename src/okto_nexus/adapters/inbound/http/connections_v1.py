@@ -60,6 +60,7 @@ class BindingPrepareRequest(BaseModel):
     adopt_endpoint_id: _Id | None = None
     connection_configuration: dict | None = None
     project_preset: dict | None = None
+    remote_setup: dict | None = None
     executor_id: _Id
     adapter_id: _Id
     candidate_ref: Annotated[str, Field(
@@ -160,6 +161,7 @@ def build_router() -> APIRouter:
         return JSONResponse({
             "server_id": server_id, "agent_id": agent.agent_id,
             "display_name": display[:4096], "permissions": allowed,
+            "capabilities": {"remote_setup": {"revision": 1, "draft_version": 1, "handoff_version": 1}},
             "revisions": {
                 "authorization": revisions.authorization,
                 "configuration": revisions.configuration,

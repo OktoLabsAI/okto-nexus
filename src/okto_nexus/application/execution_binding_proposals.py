@@ -105,7 +105,7 @@ def prepare_execution_binding(
         "client_intent_id", "executor_id", "adapter_id", "candidate_ref",
         "inventory_revision", "realization_ref", "workspace_id", "alias",
     }
-    allowed = required | {"agent_id_hint", "replace_binding_id", "adopt_endpoint_id", "connection_configuration", "project_preset"}
+    allowed = required | {"agent_id_hint", "replace_binding_id", "adopt_endpoint_id", "connection_configuration", "project_preset", "remote_setup"}
     if (not isinstance(request, Mapping) or not required <= set(request) or
             not set(request) <= allowed):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
@@ -185,9 +185,15 @@ def prepare_execution_binding(
         if realization is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND,
                                   "The realization was not found in this scope.", {})
-        from .agent_execution_policy import require_execution_location
-        require_execution_location(uow, agent_id=subject_agent_id,
-            executor_id=request["executor_id"], adapter_id=request["adapter_id"])
+        remote_setup = None
+        if request.get('remote_setup') is not None:
+            from ..adapters.outbound.sqlite.remote_setup_repo import validate_proposal_root
+            remote_setup = validate_proposal_root(uow, reference=request['remote_setup'],
+                request=request, server_id=server_id, subject_agent_id=subject_agent_id)
+        else:
+            from .agent_execution_policy import require_execution_location
+            require_execution_location(uow, agent_id=subject_agent_id,
+                executor_id=request["executor_id"], adapter_id=request["adapter_id"])
         if (realization["workspace_id"] != request["workspace_id"] or
                 realization["candidate_ref"] != request["candidate_ref"] or
                 realization["inventory_revision"] != request["inventory_revision"] or
@@ -313,6 +319,9 @@ def prepare_execution_binding(
         if project_review and not (operator or request_operator_proof):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, 'The project preset requires an operator review.', {})
         expected.update(project_review)
+        if remote_setup is not None:
+            expected['remote_setup'] = remote_setup
+
         if previous_machines:
             expected['previous_machines'] = previous_machines
             expected['remote_machine_policy'] = machine_policy
@@ -513,6 +522,10 @@ def _apply_execution_binding(
                                   "The binding proposal was already applied or revoked.", {})
         proposal = json.loads(row["proposal_json"])
         expected = json.loads(row["expected_revisions_json"])
+        from ..adapters.outbound.sqlite.remote_setup_repo import require_current_proposal_root
+        require_current_proposal_root(uow, row=row, expected=expected,
+            apply_intent_id=request['client_intent_id'])
+
         if (row["proposal_revision"] != request["proposal_revision"] or
                 row["diff_hash"] != request["approved_diff_hash"] or
                 not proposal["can_apply"] or

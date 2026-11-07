@@ -1,0 +1,13 @@
+{
+  "current": 81,
+  "baseline": 71,
+  "new_diagnostics": [
+    {
+      "file": "tests\\unit\\test_remote_setup.py",
+      "code": "E701",
+      "message": "Multiple statements on one line (colon)",
+      "count": 12
+    }
+  ],
+  "new_non_E701": 0
+}

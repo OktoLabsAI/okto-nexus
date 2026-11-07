@@ -511,3 +511,14 @@ A medição inicial preserva 86/90 sucessos e quatro recusas pelo orçamento de 
 Diagnóstico comum v1 verificado: Nexus 75 casos instalados; Connector 93 já publicados em `12d806f955aea84327dd3a33011016d0283ecc18`. São os mesmos casos fonte de cada repo, sem soma duplicada. O contrato compartilhado é declarativo; DX-07/DX-14 completos e campanhas reais entre hosts continuam em andamento. Core permanece sem alterações neste milestone.
 
 PR-10 integral e R3 continuam IN_PROGRESS. Bootstrap remoto, M1/M2 produtivos, campanhas de serviço/provedor/cliente e regressão conjunta permanecem abertos. Plano e inventários fixos preservados.
+
+
+## 2026-11-07 — PR-03: bootstrap remoto e revisão no mesmo setup
+
+O fluxo de identidade/workspace remoto foi implementado e qualificado: revisão humana, bootstrap parcial com chave exibida uma única vez, handoff autenticado, filhos R4, decisão canônica e Finish único. Revisões locais mantêm o bootstrap e o histórico, exigem nova confirmação material e recuperam um Finish anterior confirmado durante a revisão. Credencial atual, CAS e revogação continuam obrigatórios; nenhuma credencial administrativa chega ao host.
+
+Pacotes não editáveis fora dos checkouts: **Nexus 187/187 e Connector 276/276 passaram**. Os 690 arquivos Nexus e 123 Connector correspondem ao fonte/build/wheel/instalação. Core 0.0.14 inalterado. Os seis cenários conjuntos usam TCP/WSS reais e fixtures explícitas para instalação/provedor/cofre; não qualificam M1/M2 produtivos ou implantação em dois hosts. Falhas iniciais e retestes permanecem preservados, sem soma duplicada.
+
+Connector commit/push: `7091ef2ebbf4b47ee41e38ec6b6df8c56e583f3c`. O plano e os conjuntos fixos de 59 tarefas, 132 cenários, 28 invariantes e 17 critérios permanecem iguais. PR-03, PR-10 integral e R3 continuam IN_PROGRESS; serviços nativos, provedores/clientes reais, renovação remota e regressão conjunta integral continuam pendentes. [Evidências e limites](plans/agent_ops/evidence/pr03-remote-bootstrap.md).
+
+Pacote Nexus final: remoção apenas de duas quebras vazias no EOF, com AST equivalente; 35 testes instalados de contrato/HTTP/guards passaram novamente, sem somá-los aos 187 casos únicos. A evidência anterior e a tentativa de build sem setuptools foram preservadas.

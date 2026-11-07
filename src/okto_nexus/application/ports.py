@@ -23,6 +23,8 @@ import boundary test). The concrete connection type is referenced as ``Any``.
 
 from __future__ import annotations
 
+from .remote_setup_ports import RemoteSetupRepo
+
 from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
@@ -2971,6 +2973,7 @@ class Repos:
     comm_bindings: AgentCommBindingRepo | None = None
     approvals: ApprovalRepo | None = None
     poll_tokens: PollTokenRepo | None = None
+    remote_setup: RemoteSetupRepo | None = None
     observations: ObservationRepo | None = None
     observation_correlations: ObservationCorrelationRepo | None = None
     harness_sessions: HarnessSessionRepo | None = None

@@ -1,0 +1,20 @@
+{
+  "command": "rtk proxy .venv/Scripts/python.exe -B -X utf8 -m pytest -q tests/execution_r4/test_binding_operator.py tests/execution_r4/test_remote_project_policy.py tests/execution_r4/test_connection_setup.py tests/execution_r4/test_connection_setup_recovery.py tests/test_import_boundary.py --junitxml=C:/Users/jpamb/AppData/Local/Temp/dx1819-server-xvlrq8il/server-regression-initial.xml",
+  "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx1819-server-xvlrq8il\\server-regression-initial.xml",
+  "report_sha256": "7a259df4c4fe947c9be925ec49dbb923cb7ab33001e2cbabbf6fe96275afcd09",
+  "tests": 77,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "scope": [
+    "binding_operator",
+    "remote_project_policy",
+    "connection_setup",
+    "connection_setup_recovery",
+    "import_boundary"
+  ],
+  "unchanged_source_guard": "All23 files match qualification.json; before retention quota delta",
+  "limitations": [
+    "Source regression only. No provider or native-host campaign. Terminal/browser suites excluded."
+  ]
+}

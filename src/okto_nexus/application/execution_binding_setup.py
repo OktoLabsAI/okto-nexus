@@ -94,10 +94,13 @@ def finish_approved_configuration(deps, uow, *, row, expected, proposal, context
     scoped = ExecutionToolDependencies(deps, SetupTransaction(deps.connection_factory, uow))
     # Binding apply owns the real transaction. Defer the shared config refresh
     # to its outer wrapper, after this transaction actually commits.
-    _finish_setup(scoped, context, None, {}, dict(
+    result = _finish_setup(scoped, context, None, {}, dict(
         client_intent_id=proposal['proposal_id'] + '_setup',
         agent_id=proposal['agent_id'], executor_id=proposal['executor_id'],
         binding_id=proposal['binding_id'], workspace_id=proposal['workspace_id'],
         configuration=expected['connection_configuration'],
         **{key: expected[key] for key in ('project_preset', 'native_decision_policy') if key in expected},
         baseline=baseline(uow, proposal['agent_id'], proposal['binding_id'])), verified=None, settings=settings)
+
+    from ..adapters.outbound.sqlite.remote_setup_repo import record_finished_root
+    record_finished_root(uow, row=row, expected=expected, proposal=proposal, result=result)

@@ -1,0 +1,134 @@
+{
+  "reports": [
+    {
+      "file": "dx1819-connector-initial.xml",
+      "bytes": 123020,
+      "sha256": "dae16056eb0ca08ee4db2fca74579706f21dbb9ae70de6fe51eec0c43dcf063f",
+      "testcase_events": 189,
+      "unique_test_identities": 189,
+      "passed": 178,
+      "failure": 10,
+      "error": 1,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-retest.xml",
+      "bytes": 4965,
+      "sha256": "d149b7ff934cb1bada275e14d4c032b2949493a202d61c7a7ef0cbdff439d71d",
+      "testcase_events": 12,
+      "unique_test_identities": 12,
+      "passed": 11,
+      "failure": 1,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-import-schema-final.xml",
+      "bytes": 14617,
+      "sha256": "7a5a35cd6aeeb2cd8f5714c9f8429b3e8ee98576959cc64ec4d7ca0985f9644f",
+      "testcase_events": 105,
+      "unique_test_identities": 105,
+      "passed": 105,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-guided-final.xml",
+      "bytes": 22480,
+      "sha256": "0a68b4714c460d0151161acb557c67e1599e519f1be60177bebdbb3361e2bba6",
+      "testcase_events": 149,
+      "unique_test_identities": 149,
+      "passed": 148,
+      "failure": 1,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-guided-retest.xml",
+      "bytes": 966,
+      "sha256": "f3e812c49bc30b73a82695099da1e3b4a1f4a521d11d1046a706d38ff8c6b797",
+      "testcase_events": 5,
+      "unique_test_identities": 5,
+      "passed": 5,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-review-map-initial.xml",
+      "bytes": 23851,
+      "sha256": "da1c3fd7217a70b185841958c6d06dfefe0d2224aa10620ab4ad36396ce27931",
+      "testcase_events": 172,
+      "unique_test_identities": 172,
+      "passed": 172,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-local-review-initial.xml",
+      "bytes": 11035,
+      "sha256": "dc56e4a0893bb996d98667515989cd655903cec3fe76642fed48fd76802f6195",
+      "testcase_events": 76,
+      "unique_test_identities": 76,
+      "passed": 76,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-local-review-race-final.xml",
+      "bytes": 2835,
+      "sha256": "b576b6a0f6462f206b4996d152ab42f6fa812bce934bd4049f2c98bea45f1854",
+      "testcase_events": 17,
+      "unique_test_identities": 17,
+      "passed": 17,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-local-review-regression-final.xml",
+      "bytes": 41691,
+      "sha256": "3e0d879f3124876c5ebaafbe2065adef3b8472d71d277781a8d246494867bc04",
+      "testcase_events": 275,
+      "unique_test_identities": 275,
+      "passed": 274,
+      "failure": 1,
+      "error": 0,
+      "skipped": 0
+    },
+    {
+      "file": "dx1819-connector-local-review-focused-final.xml",
+      "bytes": 8294,
+      "sha256": "0e326fdd87c2b1fa386a4d3caee41b4aaf612c402d1d8f8ef5027252989e44e8",
+      "testcase_events": 55,
+      "unique_test_identities": 55,
+      "passed": 55,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    }
+  ],
+  "final_source_qualification": {
+    "base": "dx1819-connector-local-review-regression-final.xml",
+    "superseding_focused": "dx1819-connector-local-review-focused-final.xml",
+    "overlap": 54,
+    "unique_current_cases": 276,
+    "passed": 276,
+    "note": "The broad report retains one outdated SimpleNamespace fixture failure. The focused report supersedes it and includes the added startup-plan refusal case; counts are a union, never summed."
+  },
+  "failures_explained": [
+    "Initial: test /me path, vault fixture directory, schema expectations; Windows PYTEST_CURRENT_TEST oversized parameter ID caused setup/teardown errors.",
+    "Retest: orphan vault write acknowledgment loss exposed a product recovery gap, corrected by matching the exact authenticated key without replacing credentials.",
+    "Guided: server-required ordering was corrected before prompting for draft/import.",
+    "Final broad: background SimpleNamespace omitted new optional remote_setup; fixture now explicitly supplies None. The real dataclass and migration already contain it."
+  ],
+  "limits": [
+    "No model/provider execution was qualified; native, provider and daemon calls were explicit doubles.",
+    "Local review reserves recovery capacity; it does not prune old roots or receipts.",
+    "Changing the concrete startup plan while retaining the enabled boolean is refused before pending; existing service commands handle that change.",
+    "Root owns installed and real TCP/WSS integrated qualification, commits and push."
+  ]
+}

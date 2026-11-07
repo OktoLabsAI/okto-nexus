@@ -1119,4 +1119,6 @@ def build_router() -> APIRouter:
                     status_code=409, headers={'Cache-Control': 'no-store'})
             return runtime_error(error, 'connection.finish')
 
+    from .remote_setup import build_router as remote_setup_router
+    router.routes.extend(remote_setup_router(runtime_error).routes)
     return router

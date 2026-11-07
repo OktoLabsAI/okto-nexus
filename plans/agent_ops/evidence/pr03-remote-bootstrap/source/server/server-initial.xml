@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="16" skipped="0" tests="20" time="6.788" timestamp="2026-11-07T03:18:14.956735-03:00" hostname="Alienware_m15"><testcase classname="tests.test_remote_setup_server" name="test_review_no_productive_effect_and_partial_bootstrap_is_atomic" time="2.202"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+
+    def test_review_no_productive_effect_and_partial_bootstrap_is_atomic(env):
+        before = snapshot(env)
+        ref = reviewed(env)
+        after_review = snapshot(env)
+        assert {key for key in before if before[key] != after_review[key]} == {'remote_setup_runs', 'remote_setup_reviews'}
+&gt;       result = env.service.bootstrap(env.context, ref)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF69C8D950&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_lost_response_recovers_same_references_never_key_or_rotation" time="0.087"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+
+    def test_lost_response_recovers_same_references_never_key_or_rotation(env):
+        ref = reviewed(env)
+&gt;       initial = env.service.bootstrap(env.context, ref)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD1E990&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_participant_and_revoked_principal_cannot_read_or_bootstrap" time="0.243" /><testcase classname="tests.test_remote_setup_server" name="test_review_retry_deduplicates_but_changed_body_needs_cas" time="0.115" /><testcase classname="tests.test_remote_setup_server" name="test_material_rereview_keeps_bootstrap_and_rotates_only_affected_children" time="0.082"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+
+    def test_material_rereview_keeps_bootstrap_and_rotates_only_affected_children(env):
+        body = request()
+        original = env.service.review(env.context, body)['review']
+        ref = dict(setup_run_id='remote-one', review_revision=original['review_revision'])
+&gt;       boot = env.service.bootstrap(env.context, ref)['bootstrap']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6ACDB770&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_committed_root_cannot_adopt_another_scope[identity]" time="0.075"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+field = 'identity'
+
+    @pytest.mark.parametrize('field', ['identity', 'workspace', 'connector'])
+    def test_committed_root_cannot_adopt_another_scope(env, field):
+        body = request()
+        ref = reviewed(env)
+&gt;       env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD496A0&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_committed_root_cannot_adopt_another_scope[workspace]" time="0.085"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+field = 'workspace'
+
+    @pytest.mark.parametrize('field', ['identity', 'workspace', 'connector'])
+    def test_committed_root_cannot_adopt_another_scope(env, field):
+        body = request()
+        ref = reviewed(env)
+&gt;       env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD616A0&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_committed_root_cannot_adopt_another_scope[connector]" time="0.085"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+field = 'connector'
+
+    @pytest.mark.parametrize('field', ['identity', 'workspace', 'connector'])
+    def test_committed_root_cannot_adopt_another_scope(env, field):
+        body = request()
+        ref = reviewed(env)
+&gt;       env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6ACD2550&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_existing_identity_review_persists_real_epoch_and_rejects_rotation" time="0.158"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+
+    def test_existing_identity_review_persists_real_epoch_and_rejects_rotation(env):
+        auth = AgentKeyAuthService(env.deps.repos.agents, env.deps.clock)
+        with env.factory.unit_of_work() as uow:
+            env.deps.repos.agents.upsert(uow, agent_id='existing')
+            auth.issue_key(uow, agent_id='existing')
+        body = request(agent='existing')
+        body['identity']['mode'] = 'select'
+        review = env.service.review(env.context, body)['review']
+        assert review['selection']['credential'] == {'mode': 'reuse_existing', 'expected_epoch': 1}
+        with env.factory.unit_of_work() as uow:
+            assert uow.connection.execute("SELECT credential_epoch FROM execution_agent_revisions WHERE agent_id='existing'").fetchone()[0] == 1
+            auth.issue_key(uow, agent_id='existing')
+        ref = dict(setup_run_id='remote-one', review_revision=review['review_revision'])
+        before = snapshot(env)
+        with pytest.raises(OktoNexusError):
+            env.service.bootstrap(env.context, ref)
+        assert snapshot(env) == before
+        body['expected_review_revision'] = review['review_revision']
+        updated = env.service.review(env.context, body)['review']
+        assert updated['selection']['credential']['expected_epoch'] == 2
+&gt;       result = env.service.bootstrap(env.context, dict(ref, review_revision=updated['review_revision']))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6ACF1F50&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '8c98de87b6ed454df165cfb82d76edd674a9b30bd65f858fb0949e52c1c89e98'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_concurrent_same_root_creates_once_and_other_root_never_adopts" time="0.165"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+
+    def test_concurrent_same_root_creates_once_and_other_root_never_adopts(env):
+        ref = reviewed(env)
+        other_ref = reviewed(env, root='remote-two')
+        peer = compose(env.config.home_dir)
+        try:
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                futures = [pool.submit(service.bootstrap, env.context, ref) for service in (env.service, peer.service)]
+&gt;               results = [f.result(timeout=30) for f in futures]
+                           ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6ACE58B0&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_failure_rolls_back_agent_workspace_epoch_and_checkpoint[False]" time="0.094"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+commit_failure = False
+
+    @pytest.mark.parametrize('commit_failure', [False, True])
+    def test_failure_rolls_back_agent_workspace_epoch_and_checkpoint(env, commit_failure):
+        ref = reviewed(env)
+        with env.factory.unit_of_work() as uow:
+            if commit_failure:
+                uow.connection.execute('CREATE TABLE rollback_parent(id TEXT PRIMARY KEY)')
+                uow.connection.execute('CREATE TABLE rollback_child(id TEXT REFERENCES rollback_parent(id) DEFERRABLE INITIALLY DEFERRED)')
+                uow.connection.execute("CREATE TRIGGER injected_failure AFTER UPDATE OF bootstrap_json ON remote_setup_runs BEGIN INSERT INTO rollback_child VALUES('absent'); END")
+            else:
+                uow.connection.execute("CREATE TRIGGER injected_failure AFTER UPDATE OF bootstrap_json ON remote_setup_runs BEGIN SELECT RAISE(ABORT,'injected'); END")
+        before = snapshot(env)
+        with pytest.raises((sqlite3.DatabaseError, OktoNexusError)):
+&gt;           env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:248: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD073F0&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_failure_rolls_back_agent_workspace_epoch_and_checkpoint[True]" time="0.095"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+commit_failure = True
+
+    @pytest.mark.parametrize('commit_failure', [False, True])
+    def test_failure_rolls_back_agent_workspace_epoch_and_checkpoint(env, commit_failure):
+        ref = reviewed(env)
+        with env.factory.unit_of_work() as uow:
+            if commit_failure:
+                uow.connection.execute('CREATE TABLE rollback_parent(id TEXT PRIMARY KEY)')
+                uow.connection.execute('CREATE TABLE rollback_child(id TEXT REFERENCES rollback_parent(id) DEFERRABLE INITIALLY DEFERRED)')
+                uow.connection.execute("CREATE TRIGGER injected_failure AFTER UPDATE OF bootstrap_json ON remote_setup_runs BEGIN INSERT INTO rollback_child VALUES('absent'); END")
+            else:
+                uow.connection.execute("CREATE TRIGGER injected_failure AFTER UPDATE OF bootstrap_json ON remote_setup_runs BEGIN SELECT RAISE(ABORT,'injected'); END")
+        before = snapshot(env)
+        with pytest.raises((sqlite3.DatabaseError, OktoNexusError)):
+&gt;           env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:248: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD1B230&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_recovery_reports_unavailable_or_changed_without_repair[credential]" time="0.085"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+change = 'credential'
+
+    @pytest.mark.parametrize('change', ['credential', 'permissions', 'workspace'])
+    def test_recovery_reports_unavailable_or_changed_without_repair(env, change):
+        ref = reviewed(env)
+&gt;       boot = env.service.bootstrap(env.context, ref)['bootstrap']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AE36340&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_recovery_reports_unavailable_or_changed_without_repair[permissions]" time="0.081"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+change = 'permissions'
+
+    @pytest.mark.parametrize('change', ['credential', 'permissions', 'workspace'])
+    def test_recovery_reports_unavailable_or_changed_without_repair(env, change):
+        ref = reviewed(env)
+&gt;       boot = env.service.bootstrap(env.context, ref)['bootstrap']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6ACBB350&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_recovery_reports_unavailable_or_changed_without_repair[workspace]" time="0.092"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+change = 'workspace'
+
+    @pytest.mark.parametrize('change', ['credential', 'permissions', 'workspace'])
+    def test_recovery_reports_unavailable_or_changed_without_repair(env, change):
+        ref = reviewed(env)
+&gt;       boot = env.service.bootstrap(env.context, ref)['bootstrap']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_remote_setup_server.py:258: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD41CD0&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_materialization_missing_is_readonly_and_never_success" time="0.073"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+
+    def test_materialization_missing_is_readonly_and_never_success(env):
+        ref = reviewed(env)
+&gt;       env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:275: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD35390&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_reset_preserves_review_only_with_its_identity_configuration[False]" time="0.103"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+keep = False
+
+    @pytest.mark.parametrize('keep', [False, True])
+    def test_reset_preserves_review_only_with_its_identity_configuration(env, keep):
+        from okto_nexus.application.database_reset import clear_operational_history
+        ref = reviewed(env)
+&gt;       env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:288: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD37AC0&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_reset_preserves_review_only_with_its_identity_configuration[True]" time="0.087"><failure message="TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'">env = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...entication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None))
+keep = True
+
+    @pytest.mark.parametrize('keep', [False, True])
+    def test_reset_preserves_review_only_with_its_identity_configuration(env, keep):
+        from okto_nexus.application.database_reset import clear_operational_history
+        ref = reviewed(env)
+&gt;       env.service.bootstrap(env.context, ref)
+
+tests\test_remote_setup_server.py:288: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.remote_setup.RemoteSetupService object at 0x000001BF6AD311D0&gt;
+context = RuntimeRequestContext(actor_agent_id='operator', authentication_source='agent_key', trusted_local_operator=False, requ...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+body = {'setup_run_id': 'remote-one', 'review_revision': '6fcd1be6cd5ec3cbf86410d2fd4ffcb3f695bb9366a1eaba43801badddcbc5e9'}
+
+    def bootstrap(self, context, body):
+        ref = reference(body)
+        material = None
+        with self.deps.connection_factory.unit_of_work() as uow:
+            record = self._load(uow, context, ref)
+            if record['bootstrap'] is not None:
+                return self._envelope(uow, record)
+            selection = record['review']['selection']
+            identity, workspace = selection['identity'], selection['workspace']
+            agent_id = identity['agent_id']
+            if self.repo.server_id(uow) != selection['server_id']:
+                _conflict('SERVER_CHANGED')
+            if self.repo.baseline(uow, agent_id=agent_id) != selection['baseline']:
+                _conflict('BASELINE_CHANGED')
+            self.settings.validate_native_decisions(uow, selection['native_decision_policy'])
+            if identity['mode'] == 'create':
+                if self.repo.occupied_agent(uow, agent_id=agent_id):
+                    _conflict('AGENT_ID_OCCUPIED')
+                if identity_defaults() != selection['identity_snapshot']:
+                    _conflict('IDENTITY_DEFAULTS_CHANGED')
+            else:
+                agent = self._identity(uow, agent_id)
+                current = self.repo.credential(uow, agent_id=agent_id, persist=False)
+                if (effective_snapshot(agent) != selection['identity_snapshot']
+                        or current['credential_epoch'] != selection['credential']['expected_epoch']
+                        or current['anchored_epoch'] != current['credential_epoch']):
+                    _conflict('IDENTITY_CHANGED')
+            if workspace['mode'] == 'select':
+                self._workspace(uow, workspace['workspace_id'])
+&gt;           self.access.authorize_maintenance(context, uow=uow, action='remote_setup.bootstrap')
+E           TypeError: RuntimeAccessService.authorize_maintenance() got an unexpected keyword argument 'action'
+
+src\okto_nexus\application\remote_setup.py:168: TypeError</failure></testcase><testcase classname="tests.test_remote_setup_server" name="test_draft_rejects_secret_unknown_and_noninteger_version" time="0.087" /><testcase classname="tests.test_remote_setup_server" name="test_normalized_review_never_accepts_mutated_effects" time="0.086" /></testsuite></testsuites>

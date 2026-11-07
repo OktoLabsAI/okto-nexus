@@ -204,6 +204,12 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         """Classify exact read contracts, never a caller-controlled bypass header."""
         if request.method == 'GET' and path == '/v1/connections/participant':
             return True
+        if request.method == 'POST' and path in {
+                prefix + '/connections/remote-setup:' + action
+                for prefix in ('/v1', '/api/v1/runtime-management')
+                for action in ('review', 'bootstrap', 'recover', 'materialization')}:
+            # Current operator authority is revalidated inside the setup UoW.
+            return True
         if path == '/api/v1/observations' or path.startswith('/api/v1/observations/'):
             # Management commands revalidate the current canonical principal
             # in their own transaction; authentication itself records no activity.

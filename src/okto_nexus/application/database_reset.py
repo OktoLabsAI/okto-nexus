@@ -29,7 +29,7 @@ AGENT_CONFIGURATION_TABLES = frozenset({
     'execution_local_realizations', 'execution_local_observations',
     'execution_inventory_snapshots', 'execution_inventory_current',
     'execution_inventory_revalidation', 'execution_installation_succession',
-    'execution_proposals', 'connection_setup_commits',
+    'execution_proposals', 'connection_setup_commits', 'remote_setup_runs', 'remote_setup_reviews',
     'execution_link_tickets', 'execution_control_lanes', 'execution_connection_resumes',
     'workspaces', 'permission_presets', 'tag_keys', 'tag_values',
     'agent_policy_bindings', 'policies', 'policy_versions', 'governance_policies',
