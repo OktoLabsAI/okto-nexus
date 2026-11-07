@@ -1,0 +1,38 @@
+{
+  "result": "passed",
+  "herdr": {
+    "result": "stopped",
+    "canonical_stop": true,
+    "running": false,
+    "owned_processes_exited": [
+      21104,
+      33324,
+      43928,
+      45988,
+      46532,
+      48228,
+      53560,
+      54068
+    ]
+  },
+  "nexus": {
+    "pid": 33196,
+    "exited": true,
+    "canonical_response": {
+      "ok": true,
+      "data": {
+        "instance_id": "svc_159a3ec2178968eb90c6051b6882a0476fc6cb7b2eca4dd3f3a15dfe7ac6eca7",
+        "generation": "58db7b50733e0eacd7b6faba427a7fb3",
+        "shutdown": {
+          "state": "DRAINED",
+          "deadline_monotonic": 509227.607671,
+          "resources": [],
+          "error_codes": []
+        }
+      }
+    },
+    "tcp_connect_ex": 10035,
+    "tcp_accepting": false
+  },
+  "secondary_herdr": "Already canonically stopped in independent namespace campaign; all nine owned processes exited."
+}

@@ -1,0 +1,35 @@
+Split a pane
+
+Usage: herdr pane split [OPTIONS] [PANE_ID]
+
+Arguments:
+  [PANE_ID]
+          
+
+Options:
+      --pane <ID>
+          
+
+      --current
+          
+
+      --direction <DIRECTION>
+          [possible values: right, down]
+
+      --ratio <FLOAT>
+          
+
+      --cwd <PATH>
+          
+
+      --env <KEY=VALUE>
+          Set an environment variable for the launched process
+
+      --right-click <TARGET>
+          [possible values: herdr, pane]
+
+      --focus
+          
+
+      --no-focus
+

@@ -1,0 +1,8 @@
+{
+  "revision": 1,
+  "suite_result": {"tests": 321, "failures": 0, "errors": 0, "skipped": 0},
+  "observation": "The live console emitted a partial background socketserver thread traceback interleaved with progress dots, before the 44% marker. The visible frames were socketserver.process_request_thread -> finish_request -> BaseRequestHandler.__init__ -> http.server.handle -> handle_one_request. The exception type/message and final frame were not visible in the returned console output.",
+  "junit": "pr09-observation-installed-v2-initial.xml contains no failure, error, system-err or system-out elements.",
+  "inference_only": "The helper suite deliberately closes or times out TCP responses. A fixture-side disconnect is plausible, but the incomplete traceback does not establish its terminal cause.",
+  "action": "Original JUnit and qualification proof retained. No product/test change or broad rerun was made for this console observation."
+}

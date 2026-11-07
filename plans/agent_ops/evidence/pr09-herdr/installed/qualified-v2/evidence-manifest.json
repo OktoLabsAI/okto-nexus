@@ -1,0 +1,104 @@
+{
+  "revision": 2,
+  "scope": "V2 installed wheel; retained V1 Server unchanged outside the optional CLI transport",
+  "credential_policy": "Explicit allowlist only; bearer files excluded and never hashed",
+  "artifacts": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\prepare_v2.py",
+      "bytes": 2365,
+      "sha256": "59227b04580cafe8f65ec6ab7bf20bd1a22afdebe685f9e3b663613fb0ab04cf"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\build_release_v2.py",
+      "bytes": 5514,
+      "sha256": "344de4ed5b03c0c47f99ad34f11639652a11c8b1341ea49e0ca87e5a346523ad"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualify_installed_v2.py",
+      "bytes": 4397,
+      "sha256": "d45d641acf781d3c0d3890cbcadd9321db20ab9f4c7bc46a98086f7e1cbcffd6"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\verify_release.py",
+      "bytes": 1743,
+      "sha256": "d14f6a930890890c3d85568c176be3a18ede4485dfdc619c900b0e1f67d31f9a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\collect_proof_v2.py",
+      "bytes": 2537,
+      "sha256": "3a61dd110ba24b6fb2194764cb4225bc7cc8d7e17b7fbee4013d6565f9bece43"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\package-proof.json",
+      "bytes": 224721,
+      "sha256": "5b0c35203264486fe3f1bc143f77329c4cb18f853fe80f9ac4ddcdade763e332"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\installed-qualification.json",
+      "bytes": 26311,
+      "sha256": "8d3a55c94d6882e7facca5131a19f7cce1f46d6bceaca00848eab1dc61f40d47"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\pr09-observation-installed-v2-initial.xml",
+      "bytes": 46834,
+      "sha256": "d2194985f3bfe0740f422dbc8ddbc9bfde2db43cb08c398a8182cef63ddf0dbc",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "321",
+          "time": "31.473",
+          "timestamp": "2026-11-06T22:31:17.137937-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\verification-final.json",
+      "bytes": 269,
+      "sha256": "28d67bc63060530e79f17692924535e256efaeda75aaa8691ab59cfbd7ecc5b9"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\console-observation.json",
+      "bytes": 949,
+      "sha256": "7782620e53ae8dfe10e3d4d7ee83992013183f761e4e12ac0bd219425d824954"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\wheel-build.log",
+      "bytes": 200101,
+      "sha256": "2f59a5f9ce6920e4c7a56092b16e7f110e7261c0f9b1bcc0f77bd124b2046a00"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\venv-create.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\wheel-install.log",
+      "bytes": 387,
+      "sha256": "c56de70abf0604b96e4db08f40c4f15d430eb3a11403ac1247e5653048624b5a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\package-proof.json",
+      "bytes": 223893,
+      "sha256": "a29f8b2cc3aeacc6a9e99fa2743b57a318fa3c703290928ba0e23c5f7afdd2a4"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\real-http-smoke.json",
+      "bytes": 45971,
+      "sha256": "f6d7e438c6267f78c1465a6b03d207c77eb0743f2c766692e9525f889aa1a0bf"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\server-import-proof.json",
+      "bytes": 39320,
+      "sha256": "3e50d1cc7036962c079aaf9a7035275cc1854fbfd8ffe3698fb8eb51fd22664f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\evidence-manifest.json",
+      "bytes": 5988,
+      "sha256": "ed983e77b0629ac2b1e5b8a3dc5063071daff5f72e01040bc7449f32a2833eb1"
+    }
+  ]
+}

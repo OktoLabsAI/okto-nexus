@@ -1,0 +1,138 @@
+{
+  "revision": 1,
+  "scope": "PR09 installed wheel qualification and isolated real Nexus HTTP",
+  "credential_policy": "Only an explicit non-secret evidence allowlist; bearer files excluded and never hashed",
+  "excluded_private_files": [
+    "qualified/qualification-credential.json",
+    "qualified/qualification-herdr-credential.json"
+  ],
+  "artifacts": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\prepare.py",
+      "bytes": 6235,
+      "sha256": "0b060e894e00b7e6e9d0fde78d1b4a87197b52cffc8f1b6bc18572e6f04250d7"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\build_release.py",
+      "bytes": 4151,
+      "sha256": "aa3c3a16aeca4c3264d0f63faf0bd66fb341cce5db93041516d5dc523b7ba96a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualify_installed.py",
+      "bytes": 4391,
+      "sha256": "5320add9215f1615bc164eb9bb270738bd41851ae9c12f2782b37501226b3c17"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\verify_release.py",
+      "bytes": 1743,
+      "sha256": "d14f6a930890890c3d85568c176be3a18ede4485dfdc619c900b0e1f67d31f9a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\server_entry.py",
+      "bytes": 2480,
+      "sha256": "6b0e62dc2390df138888c8ad99a59ec52948c76b7342ba1f1b364d41f417da99"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\start_server.py",
+      "bytes": 2783,
+      "sha256": "5c9db6572483db0338dd72994fc5a3844cbb2416e91baeb13deee044461f9a91"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\stop_server.py",
+      "bytes": 1066,
+      "sha256": "1fdffe6a84ec18408b6a183af9c8020d2581ea8ec0fb29efb994ddedab94a7ed"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\smoke_http.py",
+      "bytes": 9728,
+      "sha256": "11c17ced03ae26c4281e80ef841b02d70950a28bb57d2a79eb02f97c5f7396aa"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualification_management.py",
+      "bytes": 5380,
+      "sha256": "8f3162a35f566b10e30177b29b19173bab2b32512d749cc037b25610ad4bef98"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\collect_proof.py",
+      "bytes": 2231,
+      "sha256": "c4e7ded92140350cdbbfc0a35abfd564c6e5316dacd181c6d09bb07f754b0800"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\preparation.json",
+      "bytes": 1465,
+      "sha256": "5b382964307e0401f141f04a635b50e0e5e46c9b8631447acda742d56307032a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\package-proof.json",
+      "bytes": 223893,
+      "sha256": "a29f8b2cc3aeacc6a9e99fa2743b57a318fa3c703290928ba0e23c5f7afdd2a4"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\installed-qualification.json",
+      "bytes": 25936,
+      "sha256": "4fe1959c261486140829a689ae9b82aa726e46d98944e98ce6b000f9865d3106"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\pr09-observation-installed-initial.xml",
+      "bytes": 46574,
+      "sha256": "46260ef8cbee2f1addea1b3737bad50500d720dc0cbe2d76caa3ada098f0a0c7",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "319",
+          "time": "33.684",
+          "timestamp": "2026-11-06T22:22:55.910611-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\real-http-smoke.json",
+      "bytes": 45971,
+      "sha256": "f6d7e438c6267f78c1465a6b03d207c77eb0743f2c766692e9525f889aa1a0bf"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\server-import-proof.json",
+      "bytes": 39320,
+      "sha256": "3e50d1cc7036962c079aaf9a7035275cc1854fbfd8ffe3698fb8eb51fd22664f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\server.json",
+      "bytes": 584,
+      "sha256": "3a0aa24b49c8ea58c63b26d515e9ed4f7881489da138bb6d419bbd0958a6e49a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\server-owner.json",
+      "bytes": 170,
+      "sha256": "99ab5de0191b8d8ecb126b6ffc4ff5e305ebb97c053015f3efdd9cbc025a1129"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\qualification-herdr-credential.metadata.json",
+      "bytes": 1232,
+      "sha256": "949b615fa2797256d2a7e561d5e238bac21482af73e4c42959ca466916f8eec1"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\verification-final.json",
+      "bytes": 217,
+      "sha256": "475469fd7d4e28bb8bca4e642f5ce1d2fb9e67b134e6374e44d8569a28313cbf"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\wheel-build.log",
+      "bytes": 200098,
+      "sha256": "8e0dccb8b97b790f754af810494530558984e9d6b5297a6dc941d154a6272274"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\venv-create.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\wheel-install.log",
+      "bytes": 384,
+      "sha256": "d34846a861c60d3399d2c2cf88b91e3b9502e174f8d968b725df278ed42330d6"
+    }
+  ]
+}

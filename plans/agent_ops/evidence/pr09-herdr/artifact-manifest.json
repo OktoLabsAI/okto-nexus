@@ -1,0 +1,1079 @@
+{
+  "schema_version": 1,
+  "source_unique_tests": 318,
+  "source_disjoint_reports": [
+    "pr09-observer-move-final.xml",
+    "pr09-observation-client-final.xml",
+    "pr09-herdr-model-windows-initial.xml",
+    "pr09-observation-journal-initial.xml",
+    "pr09-observe-cli-final.xml"
+  ],
+  "additional_http_only_cli_regression_tests": 2,
+  "combined_source_unique_tests": 320,
+  "installed_v1_tests": 319,
+  "installed_v2_tests": 321,
+  "installed_reruns_not_added_to_source_unique": true,
+  "installed_v2_wheel_sha256": "fe597e0e5a7256d6c3328382d4a046706cba3cc37f4e15e286afad54eab2d29d",
+  "credential_policy": "Private bearer files excluded and never hashed; only credential-shaped synthetic parametrized test IDs are redacted from retained XML.",
+  "artifacts": [
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/contract/schema.json",
+      "bytes": 272578,
+      "sha256": "9e2af207e9aa8183d4aeca5fde9cc48e7909bb40cdbd7cf21608a6d3ea78075b",
+      "original_sha256": "9e2af207e9aa8183d4aeca5fde9cc48e7909bb40cdbd7cf21608a6d3ea78075b",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/fixture-process-ready.json",
+      "bytes": 707,
+      "sha256": "50f0a6ee836d84416242e3560d2b0146cd7a776b52113fd615f5636332d0c073",
+      "original_sha256": "50f0a6ee836d84416242e3560d2b0146cd7a776b52113fd615f5636332d0c073",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/raw-blocked.json",
+      "bytes": 2303,
+      "sha256": "5662111346035de2d77d8be2ac4de005d18c7cb2116735fd4fe12219408321be",
+      "original_sha256": "5662111346035de2d77d8be2ac4de005d18c7cb2116735fd4fe12219408321be",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/raw-done.json",
+      "bytes": 3863,
+      "sha256": "bda55e25d18b5ee2dad87d3fc00328452511dbcd9b26b5bbf7e4100d7cc07f27",
+      "original_sha256": "bda55e25d18b5ee2dad87d3fc00328452511dbcd9b26b5bbf7e4100d7cc07f27",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/raw-idle-repeated.json",
+      "bytes": 2322,
+      "sha256": "f88a7c31a896d48700cfcd79add1d7f0a260477ba1380ec2b6b94f1feeae7efc",
+      "original_sha256": "f88a7c31a896d48700cfcd79add1d7f0a260477ba1380ec2b6b94f1feeae7efc",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/raw-idle.json",
+      "bytes": 2322,
+      "sha256": "f88a7c31a896d48700cfcd79add1d7f0a260477ba1380ec2b6b94f1feeae7efc",
+      "original_sha256": "f88a7c31a896d48700cfcd79add1d7f0a260477ba1380ec2b6b94f1feeae7efc",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/raw-renamed.json",
+      "bytes": 2357,
+      "sha256": "37b8699e3734c0ff7f2d13098fc374c0ef6e46fac5b5f1eb4afc0235bffeb0e8",
+      "original_sha256": "37b8699e3734c0ff7f2d13098fc374c0ef6e46fac5b5f1eb4afc0235bffeb0e8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/raw-working-again.json",
+      "bytes": 2338,
+      "sha256": "35930d7d2b941e25066bd4e04be1e6c4b4eef7e1ac93e7611f4d795cd57fc167",
+      "original_sha256": "35930d7d2b941e25066bd4e04be1e6c4b4eef7e1ac93e7611f4d795cd57fc167",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/snapshot-fixture-ready.json",
+      "bytes": 2265,
+      "sha256": "59c956d1e44a615bdde0f5c36bb302fc53344108169f75031c54fe98abcbb800",
+      "original_sha256": "59c956d1e44a615bdde0f5c36bb302fc53344108169f75031c54fe98abcbb800",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/snapshot-initial.json",
+      "bytes": 255,
+      "sha256": "c1d3196cad48388c123c4081fa75dffecbc1ec0764d5347f4599dda75b51f8d8",
+      "original_sha256": "c1d3196cad48388c123c4081fa75dffecbc1ec0764d5347f4599dda75b51f8d8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/fixtures/snapshot-working.json",
+      "bytes": 2303,
+      "sha256": "ea76d1f3a601139ac8443bcfd532363337a8c150bbb2569e85c59084c096bc68",
+      "original_sha256": "ea76d1f3a601139ac8443bcfd532363337a8c150bbb2569e85c59084c096bc68",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/Fixture.cs",
+      "bytes": 553,
+      "sha256": "110875cf462d1280e18197f7933f0bf3ca5816d2cd11a1b9b98cc12501096631",
+      "original_sha256": "110875cf462d1280e18197f7933f0bf3ca5816d2cd11a1b9b98cc12501096631",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/pr09-herdr-contract.py",
+      "bytes": 2057,
+      "sha256": "847be1120516ce38fb96c3135eb86d3a9bbb50c9b70b2d86210170e21b802939",
+      "original_sha256": "847be1120516ce38fb96c3135eb86d3a9bbb50c9b70b2d86210170e21b802939",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/pr09-herdr-done-campaign.py",
+      "bytes": 2130,
+      "sha256": "a0e7fd76aef0640aaf350ceeefe604a44ef212ce2707d2ae94a3d7577126be89",
+      "original_sha256": "a0e7fd76aef0640aaf350ceeefe604a44ef212ce2707d2ae94a3d7577126be89",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/pr09-herdr-fetch.py",
+      "bytes": 1670,
+      "sha256": "ad2093efee1c23160a912a2f6380fa76103d7295613d5f697e31a64ed172c4f8",
+      "original_sha256": "ad2093efee1c23160a912a2f6380fa76103d7295613d5f697e31a64ed172c4f8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/pr09-herdr-fixture-start.py",
+      "bytes": 1256,
+      "sha256": "a9c721a56698213503e2f9c758212e972bdbbb7af3f3f5983128bdc6774e5e7f",
+      "original_sha256": "a9c721a56698213503e2f9c758212e972bdbbb7af3f3f5983128bdc6774e5e7f",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/pr09-herdr-live-adapter.py",
+      "bytes": 1332,
+      "sha256": "b98d1e86e3a2340914abcaab3d7d5565937626fb0522ee233932261e5be67394",
+      "original_sha256": "b98d1e86e3a2340914abcaab3d7d5565937626fb0522ee233932261e5be67394",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/pr09-herdr-live.py",
+      "bytes": 2941,
+      "sha256": "db52d93f18ebae8a63d2a86aadd1307a4f1f227353af073a17885addd81812ac",
+      "original_sha256": "db52d93f18ebae8a63d2a86aadd1307a4f1f227353af073a17885addd81812ac",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/herdr-drivers/pr09-herdr-state-campaign.py",
+      "bytes": 3004,
+      "sha256": "f075de61e29dc5eb64e1e535a7be45cf648be41537a1a2faf02ebf0f42626595",
+      "original_sha256": "f075de61e29dc5eb64e1e535a7be45cf648be41537a1a2faf02ebf0f42626595",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/build_release.py",
+      "bytes": 4151,
+      "sha256": "aa3c3a16aeca4c3264d0f63faf0bd66fb341cce5db93041516d5dc523b7ba96a",
+      "original_sha256": "aa3c3a16aeca4c3264d0f63faf0bd66fb341cce5db93041516d5dc523b7ba96a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/build_release_v2.py",
+      "bytes": 5514,
+      "sha256": "344de4ed5b03c0c47f99ad34f11639652a11c8b1341ea49e0ca87e5a346523ad",
+      "original_sha256": "344de4ed5b03c0c47f99ad34f11639652a11c8b1341ea49e0ca87e5a346523ad",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/collect_proof.py",
+      "bytes": 2231,
+      "sha256": "c4e7ded92140350cdbbfc0a35abfd564c6e5316dacd181c6d09bb07f754b0800",
+      "original_sha256": "c4e7ded92140350cdbbfc0a35abfd564c6e5316dacd181c6d09bb07f754b0800",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/collect_proof_v2.py",
+      "bytes": 2537,
+      "sha256": "3a61dd110ba24b6fb2194764cb4225bc7cc8d7e17b7fbee4013d6565f9bece43",
+      "original_sha256": "3a61dd110ba24b6fb2194764cb4225bc7cc8d7e17b7fbee4013d6565f9bece43",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/drivers/cleanup_campaign.py",
+      "bytes": 2082,
+      "sha256": "ff483078c6abf9bb9a067fc67b42814cabc462513d73053b5ed8b832d2216b13",
+      "original_sha256": "ff483078c6abf9bb9a067fc67b42814cabc462513d73053b5ed8b832d2216b13",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/drivers/observer_disconnection_campaign.py",
+      "bytes": 4691,
+      "sha256": "c8c78ee0824033ac56b2a629eb580f8b2cc9f275cd5049fd53316d080904425d",
+      "original_sha256": "c8c78ee0824033ac56b2a629eb580f8b2cc9f275cd5049fd53316d080904425d",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/drivers/observer_entry.py",
+      "bytes": 1027,
+      "sha256": "dc6407218c876fa55340091745501147b432ec0afbe4372a8292ff907873b6ea",
+      "original_sha256": "dc6407218c876fa55340091745501147b432ec0afbe4372a8292ff907873b6ea",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/drivers/observer_event_proof.py",
+      "bytes": 2212,
+      "sha256": "7bef73ef757856b6fc437d65c9e4360f90091353948a05a4929be717ba92e98c",
+      "original_sha256": "7bef73ef757856b6fc437d65c9e4360f90091353948a05a4929be717ba92e98c",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/drivers/observer_live_campaign.py",
+      "bytes": 5979,
+      "sha256": "f3c5a0613ab9f40b0ea04a883ebf4011d243f22bd9f13a13074db662a594d407",
+      "original_sha256": "f3c5a0613ab9f40b0ea04a883ebf4011d243f22bd9f13a13074db662a594d407",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/drivers/observer_reconnect_prepare.py",
+      "bytes": 1709,
+      "sha256": "cfaa969e354549c2e3e7986fed9bebe6e81e45884c7b74a1942858b89e6a89b8",
+      "original_sha256": "cfaa969e354549c2e3e7986fed9bebe6e81e45884c7b74a1942858b89e6a89b8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/drivers/observer_replacement_campaign.py",
+      "bytes": 3503,
+      "sha256": "9eb0b23bf6e2c54e574825a8b9707caaf85c4e35932305648315c6c71c1bc296",
+      "original_sha256": "9eb0b23bf6e2c54e574825a8b9707caaf85c4e35932305648315c6c71c1bc296",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/preparation.json",
+      "bytes": 1465,
+      "sha256": "5b382964307e0401f141f04a635b50e0e5e46c9b8631447acda742d56307032a",
+      "original_sha256": "5b382964307e0401f141f04a635b50e0e5e46c9b8631447acda742d56307032a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/prepare.py",
+      "bytes": 6235,
+      "sha256": "0b060e894e00b7e6e9d0fde78d1b4a87197b52cffc8f1b6bc18572e6f04250d7",
+      "original_sha256": "0b060e894e00b7e6e9d0fde78d1b4a87197b52cffc8f1b6bc18572e6f04250d7",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/prepare_v2.py",
+      "bytes": 2365,
+      "sha256": "59227b04580cafe8f65ec6ab7bf20bd1a22afdebe685f9e3b663613fb0ab04cf",
+      "original_sha256": "59227b04580cafe8f65ec6ab7bf20bd1a22afdebe685f9e3b663613fb0ab04cf",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualification_management.py",
+      "bytes": 5380,
+      "sha256": "8f3162a35f566b10e30177b29b19173bab2b32512d749cc037b25610ad4bef98",
+      "original_sha256": "8f3162a35f566b10e30177b29b19173bab2b32512d749cc037b25610ad4bef98",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/console-observation.json",
+      "bytes": 949,
+      "sha256": "7782620e53ae8dfe10e3d4d7ee83992013183f761e4e12ac0bd219425d824954",
+      "original_sha256": "7782620e53ae8dfe10e3d4d7ee83992013183f761e4e12ac0bd219425d824954",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/evidence-manifest.json",
+      "bytes": 4551,
+      "sha256": "7c8e4df50ea94161aaafed19be88509df12a9db675dcc505633df932611227ea",
+      "original_sha256": "7c8e4df50ea94161aaafed19be88509df12a9db675dcc505633df932611227ea",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/installed-qualification.json",
+      "bytes": 26311,
+      "sha256": "8d3a55c94d6882e7facca5131a19f7cce1f46d6bceaca00848eab1dc61f40d47",
+      "original_sha256": "8d3a55c94d6882e7facca5131a19f7cce1f46d6bceaca00848eab1dc61f40d47",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/package-proof.json",
+      "bytes": 224721,
+      "sha256": "5b0c35203264486fe3f1bc143f77329c4cb18f853fe80f9ac4ddcdade763e332",
+      "original_sha256": "5b0c35203264486fe3f1bc143f77329c4cb18f853fe80f9ac4ddcdade763e332",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+      "bytes": 46792,
+      "sha256": "011bce74f9a80361357e68d050ab701950b13c0c3893ed59d7566c9c91ba368b",
+      "original_sha256": "d2194985f3bfe0740f422dbc8ddbc9bfde2db43cb08c398a8182cef63ddf0dbc",
+      "synthetic_test_credential_redactions": 1,
+      "tests": 321,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/venv-create.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/verification-final.json",
+      "bytes": 269,
+      "sha256": "28d67bc63060530e79f17692924535e256efaeda75aaa8691ab59cfbd7ecc5b9",
+      "original_sha256": "28d67bc63060530e79f17692924535e256efaeda75aaa8691ab59cfbd7ecc5b9",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/wheel-build.log",
+      "bytes": 200101,
+      "sha256": "2f59a5f9ce6920e4c7a56092b16e7f110e7261c0f9b1bcc0f77bd124b2046a00",
+      "original_sha256": "2f59a5f9ce6920e4c7a56092b16e7f110e7261c0f9b1bcc0f77bd124b2046a00",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/wheel-install.log",
+      "bytes": 387,
+      "sha256": "c56de70abf0604b96e4db08f40c4f15d430eb3a11403ac1247e5653048624b5a",
+      "original_sha256": "c56de70abf0604b96e4db08f40c4f15d430eb3a11403ac1247e5653048624b5a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/evidence-manifest.json",
+      "bytes": 5988,
+      "sha256": "ed983e77b0629ac2b1e5b8a3dc5063071daff5f72e01040bc7449f32a2833eb1",
+      "original_sha256": "ed983e77b0629ac2b1e5b8a3dc5063071daff5f72e01040bc7449f32a2833eb1",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/installed-qualification.json",
+      "bytes": 25936,
+      "sha256": "4fe1959c261486140829a689ae9b82aa726e46d98944e98ce6b000f9865d3106",
+      "original_sha256": "4fe1959c261486140829a689ae9b82aa726e46d98944e98ce6b000f9865d3106",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/package-proof.json",
+      "bytes": 223893,
+      "sha256": "a29f8b2cc3aeacc6a9e99fa2743b57a318fa3c703290928ba0e23c5f7afdd2a4",
+      "original_sha256": "a29f8b2cc3aeacc6a9e99fa2743b57a318fa3c703290928ba0e23c5f7afdd2a4",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/pr09-observation-installed-initial.xml",
+      "bytes": 46532,
+      "sha256": "8017e579d3b764ac2a612da308a1b9d3f3a3680e13dcf79d892c818e2625ba6b",
+      "original_sha256": "46260ef8cbee2f1addea1b3737bad50500d720dc0cbe2d76caa3ada098f0a0c7",
+      "synthetic_test_credential_redactions": 1,
+      "tests": 319,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/qualification-herdr-credential.metadata.json",
+      "bytes": 1232,
+      "sha256": "949b615fa2797256d2a7e561d5e238bac21482af73e4c42959ca466916f8eec1",
+      "original_sha256": "949b615fa2797256d2a7e561d5e238bac21482af73e4c42959ca466916f8eec1",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/real-http-smoke.json",
+      "bytes": 45971,
+      "sha256": "f6d7e438c6267f78c1465a6b03d207c77eb0743f2c766692e9525f889aa1a0bf",
+      "original_sha256": "f6d7e438c6267f78c1465a6b03d207c77eb0743f2c766692e9525f889aa1a0bf",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/server-import-proof.json",
+      "bytes": 39320,
+      "sha256": "3e50d1cc7036962c079aaf9a7035275cc1854fbfd8ffe3698fb8eb51fd22664f",
+      "original_sha256": "3e50d1cc7036962c079aaf9a7035275cc1854fbfd8ffe3698fb8eb51fd22664f",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/server-owner.json",
+      "bytes": 170,
+      "sha256": "99ab5de0191b8d8ecb126b6ffc4ff5e305ebb97c053015f3efdd9cbc025a1129",
+      "original_sha256": "99ab5de0191b8d8ecb126b6ffc4ff5e305ebb97c053015f3efdd9cbc025a1129",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/server.json",
+      "bytes": 584,
+      "sha256": "3a0aa24b49c8ea58c63b26d515e9ed4f7881489da138bb6d419bbd0958a6e49a",
+      "original_sha256": "3a0aa24b49c8ea58c63b26d515e9ed4f7881489da138bb6d419bbd0958a6e49a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/venv-create.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/verification-final.json",
+      "bytes": 217,
+      "sha256": "475469fd7d4e28bb8bca4e642f5ce1d2fb9e67b134e6374e44d8569a28313cbf",
+      "original_sha256": "475469fd7d4e28bb8bca4e642f5ce1d2fb9e67b134e6374e44d8569a28313cbf",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/wheel-build.log",
+      "bytes": 200098,
+      "sha256": "8e0dccb8b97b790f754af810494530558984e9d6b5297a6dc941d154a6272274",
+      "original_sha256": "8e0dccb8b97b790f754af810494530558984e9d6b5297a6dc941d154a6272274",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/wheel-install.log",
+      "bytes": 384,
+      "sha256": "d34846a861c60d3399d2c2cf88b91e3b9502e174f8d968b725df278ed42330d6",
+      "original_sha256": "d34846a861c60d3399d2c2cf88b91e3b9502e174f8d968b725df278ed42330d6",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualify_installed.py",
+      "bytes": 4391,
+      "sha256": "5320add9215f1615bc164eb9bb270738bd41851ae9c12f2782b37501226b3c17",
+      "original_sha256": "5320add9215f1615bc164eb9bb270738bd41851ae9c12f2782b37501226b3c17",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualify_installed_v2.py",
+      "bytes": 4397,
+      "sha256": "d45d641acf781d3c0d3890cbcadd9321db20ab9f4c7bc46a98086f7e1cbcffd6",
+      "original_sha256": "d45d641acf781d3c0d3890cbcadd9321db20ab9f4c7bc46a98086f7e1cbcffd6",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/server_entry.py",
+      "bytes": 2480,
+      "sha256": "6b0e62dc2390df138888c8ad99a59ec52948c76b7342ba1f1b364d41f417da99",
+      "original_sha256": "6b0e62dc2390df138888c8ad99a59ec52948c76b7342ba1f1b364d41f417da99",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/smoke_http.py",
+      "bytes": 9728,
+      "sha256": "11c17ced03ae26c4281e80ef841b02d70950a28bb57d2a79eb02f97c5f7396aa",
+      "original_sha256": "11c17ced03ae26c4281e80ef841b02d70950a28bb57d2a79eb02f97c5f7396aa",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/start_server.py",
+      "bytes": 2783,
+      "sha256": "5c9db6572483db0338dd72994fc5a3844cbb2416e91baeb13deee044461f9a91",
+      "original_sha256": "5c9db6572483db0338dd72994fc5a3844cbb2416e91baeb13deee044461f9a91",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/stop_server.py",
+      "bytes": 1066,
+      "sha256": "1fdffe6a84ec18408b6a183af9c8020d2581ea8ec0fb29efb994ddedab94a7ed",
+      "original_sha256": "1fdffe6a84ec18408b6a183af9c8020d2581ea8ec0fb29efb994ddedab94a7ed",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/verify_release.py",
+      "bytes": 1743,
+      "sha256": "d14f6a930890890c3d85568c176be3a18ede4485dfdc619c900b0e1f67d31f9a",
+      "original_sha256": "d14f6a930890890c3d85568c176be3a18ede4485dfdc619c900b0e1f67d31f9a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/cleanup.json",
+      "bytes": 207,
+      "sha256": "c06b2040a1a342d7ae4e3be13d82d5a114fdd0fdaefbd1a7a8ff79e6fcc47478",
+      "original_sha256": "c06b2040a1a342d7ae4e3be13d82d5a114fdd0fdaefbd1a7a8ff79e6fcc47478",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-command-audit.jsonl",
+      "bytes": 6078,
+      "sha256": "bbf42d4d180b6977cf999862ac895e47ee7bdf7e6f049f49bfdbca4e40993b6e",
+      "original_sha256": "bbf42d4d180b6977cf999862ac895e47ee7bdf7e6f049f49bfdbca4e40993b6e",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-disconnection-campaign.json",
+      "bytes": 743,
+      "sha256": "d514ff37552e868c132d31bb65146327fbc2e14eadb45e238f01c9518404a518",
+      "original_sha256": "d514ff37552e868c132d31bb65146327fbc2e14eadb45e238f01c9518404a518",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-event-proof.json",
+      "bytes": 43825,
+      "sha256": "0e7246ac3f2f134388838ddd6330b8753c02af8e876fb83fcd02043b01faba92",
+      "original_sha256": "0e7246ac3f2f134388838ddd6330b8753c02af8e876fb83fcd02043b01faba92",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-expiry.json",
+      "bytes": 1147,
+      "sha256": "00055b157c3fcc8e91a0d0850b53cb76a1fe61d63768c915452c7d92049e54c1",
+      "original_sha256": "00055b157c3fcc8e91a0d0850b53cb76a1fe61d63768c915452c7d92049e54c1",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-final-cleanup.json",
+      "bytes": 923,
+      "sha256": "0e7db5cf99c7c397f503a2e1578473c9413577851485295610e094bd55b61de3",
+      "original_sha256": "0e7db5cf99c7c397f503a2e1578473c9413577851485295610e094bd55b61de3",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-live-campaign.json",
+      "bytes": 27692,
+      "sha256": "2fc2a4bcc9648b03ef2c15252006553ec742035903ed891d00a1e41d3155c0a8",
+      "original_sha256": "2fc2a4bcc9648b03ef2c15252006553ec742035903ed891d00a1e41d3155c0a8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-move-final.json",
+      "bytes": 344,
+      "sha256": "773b70463d1de8cb359d7816924c389c035fd7a7b80e0392e33482abbd2b7b9b",
+      "original_sha256": "773b70463d1de8cb359d7816924c389c035fd7a7b80e0392e33482abbd2b7b9b",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-move-initial.json",
+      "bytes": 137,
+      "sha256": "6aa99e2df79a67102a3a5b209d6fd0d9c00e05cc3b3fa8d8bdab75fed8c9c0e3",
+      "original_sha256": "6aa99e2df79a67102a3a5b209d6fd0d9c00e05cc3b3fa8d8bdab75fed8c9c0e3",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-replacement-campaign.json",
+      "bytes": 553,
+      "sha256": "2e4fdcf893b071e86765d606b15dab0b8c6b09a6e7070fa48251d4d03f6ca797",
+      "original_sha256": "2e4fdcf893b071e86765d606b15dab0b8c6b09a6e7070fa48251d4d03f6ca797",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/state-campaign-with-done.json",
+      "bytes": 8045,
+      "sha256": "ee790de75d77d923b8ec4b6c59e91736b2256cc9a81213758046f56fc165a670",
+      "original_sha256": "ee790de75d77d923b8ec4b6c59e91736b2256cc9a81213758046f56fc165a670",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/collect_namespace.py",
+      "bytes": 2029,
+      "sha256": "f59ff405c5d2e9a8aedc29ea07e4afcdfa8288261b23216e1d366aeab941cef8",
+      "original_sha256": "f59ff405c5d2e9a8aedc29ea07e4afcdfa8288261b23216e1d366aeab941cef8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/config.toml",
+      "bytes": 226,
+      "sha256": "396d8df94bd465c1609e23f0395a7475bf17f4d41d2dabb5a4d698d8d11b7d4a",
+      "original_sha256": "396d8df94bd465c1609e23f0395a7475bf17f4d41d2dabb5a4d698d8d11b7d4a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/after-stop.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/after-stop.stdout.txt",
+      "bytes": 380,
+      "sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a",
+      "original_sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/before-start.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/before-start.stdout.txt",
+      "bytes": 380,
+      "sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a",
+      "original_sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/create-workspace-1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/create-workspace-1.stdout.txt",
+      "bytes": 680,
+      "sha256": "2414bc5b298e722685bd2a431fd091dbb23f8f7add56af12c91522a033280d41",
+      "original_sha256": "2414bc5b298e722685bd2a431fd091dbb23f8f7add56af12c91522a033280d41",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/create-workspace-2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/create-workspace-2.stdout.txt",
+      "bytes": 683,
+      "sha256": "a8b1d42b344dc8aa3775df558971a6a9ec0fdf1280d6922b604f10679a80b2c9",
+      "original_sha256": "a8b1d42b344dc8aa3775df558971a6a9ec0fdf1280d6922b604f10679a80b2c9",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-0.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-0.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "original_sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-1.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "original_sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-2.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "original_sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-3.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-3.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "original_sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-4.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-4.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "original_sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-5.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-5.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "original_sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-6.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-6.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "original_sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-7.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/detect-fixture-7.stdout.txt",
+      "bytes": 2641,
+      "sha256": "4cf0f9faff2e2670664d71c1db77fb6a4ae1c0246589e8a56463f51dba404883",
+      "original_sha256": "4cf0f9faff2e2670664d71c1db77fb6a4ae1c0246589e8a56463f51dba404883",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/namespace-evidence-manifest.json",
+      "bytes": 13606,
+      "sha256": "12e82c280e548c08551faa1553c8f3f7e2d270996c90299281b4d9ec6e308711",
+      "original_sha256": "12e82c280e548c08551faa1553c8f3f7e2d270996c90299281b4d9ec6e308711",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/namespace-proof.json",
+      "bytes": 29994,
+      "sha256": "dcf39e0f611b6f1c79c1df29d71b59132b577d2f3381f218c57bfd6fbdc79668",
+      "original_sha256": "dcf39e0f611b6f1c79c1df29d71b59132b577d2f3381f218c57bfd6fbdc79668",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/pane-split-help.txt",
+      "bytes": 501,
+      "sha256": "c135327016219f9de7a5d2672dda9ee10aaa9ae442f4951955e18bea2e331b64",
+      "original_sha256": "c135327016219f9de7a5d2672dda9ee10aaa9ae442f4951955e18bea2e331b64",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/preparation.json",
+      "bytes": 1797,
+      "sha256": "47dea0c07214a4a30cde029199fa31513bfcec9c45faef3ab389681a73507263",
+      "original_sha256": "47dea0c07214a4a30cde029199fa31513bfcec9c45faef3ab389681a73507263",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/server-stop-help.txt",
+      "bytes": 51,
+      "sha256": "42ab725bdb263fe0afce2cb783c2b76d293045b9c00266ac44ea2ad500fc3db8",
+      "original_sha256": "42ab725bdb263fe0afce2cb783c2b76d293045b9c00266ac44ea2ad500fc3db8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/server.stderr.txt",
+      "bytes": 588,
+      "sha256": "a05201bae2408287806d4a0d46333f01ba524e33521b9556c53cf074384f9b9f",
+      "original_sha256": "a05201bae2408287806d4a0d46333f01ba524e33521b9556c53cf074384f9b9f",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/server.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/split-w2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/split-w2.stdout.txt",
+      "bytes": 373,
+      "sha256": "744c60fc6437b3e771c57932c38309d21355cd88c0a0670f83ac63b6b146b5c7",
+      "original_sha256": "744c60fc6437b3e771c57932c38309d21355cd88c0a0670f83ac63b6b146b5c7",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/start-synthetic-fixture.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/start-synthetic-fixture.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/startup-0.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/startup-0.stdout.txt",
+      "bytes": 380,
+      "sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a",
+      "original_sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/startup-1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/startup-1.stdout.txt",
+      "bytes": 533,
+      "sha256": "180a62e8ebc0a865d51f82481ce6e1167f99cfc3158eb1f692d777eafe9f805f",
+      "original_sha256": "180a62e8ebc0a865d51f82481ce6e1167f99cfc3158eb1f692d777eafe9f805f",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/stop-secondary.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/stop-secondary.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/teardown-process-w1-p1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/teardown-process-w1-p1.stdout.txt",
+      "bytes": 414,
+      "sha256": "152df8b7c4808f6a7231041d08b1f47f1d5ad02066bbedb08c26a94ebbca52b8",
+      "original_sha256": "152df8b7c4808f6a7231041d08b1f47f1d5ad02066bbedb08c26a94ebbca52b8",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/teardown-process-w2-p1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/teardown-process-w2-p1.stdout.txt",
+      "bytes": 414,
+      "sha256": "11efd6d7e24418dc44fb07848dc671fb77984c8c2bbdee0b02d22540e7d2824d",
+      "original_sha256": "11efd6d7e24418dc44fb07848dc671fb77984c8c2bbdee0b02d22540e7d2824d",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/teardown-process-w2-p2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/teardown-process-w2-p2.stdout.txt",
+      "bytes": 798,
+      "sha256": "bff4429f5db5db2941665ca16fe83553e053936443125c1188dc429ad596cfc7",
+      "original_sha256": "bff4429f5db5db2941665ca16fe83553e053936443125c1188dc429ad596cfc7",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/evidence/workspace-create-help.txt",
+      "bytes": 266,
+      "sha256": "b2a3543bb7a8c0390091c8ae1adcd8dcb313be0618db7ef28210c3a7b7d623ae",
+      "original_sha256": "b2a3543bb7a8c0390091c8ae1adcd8dcb313be0618db7ef28210c3a7b7d623ae",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/prepare.py",
+      "bytes": 3039,
+      "sha256": "bac0fb697593b6b43179405c02d0aace3db2e28af79e91e79ace44195194120d",
+      "original_sha256": "bac0fb697593b6b43179405c02d0aace3db2e28af79e91e79ace44195194120d",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/qualify_namespace.py",
+      "bytes": 12318,
+      "sha256": "fa067150e8d4da6be17df511b83a45863d46e589a82e5be67edcf2d58678546c",
+      "original_sha256": "fa067150e8d4da6be17df511b83a45863d46e589a82e5be67edcf2d58678546c",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/work/Fixture.cs",
+      "bytes": 553,
+      "sha256": "110875cf462d1280e18197f7933f0bf3ca5816d2cd11a1b9b98cc12501096631",
+      "original_sha256": "110875cf462d1280e18197f7933f0bf3ca5816d2cd11a1b9b98cc12501096631",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/namespace/work/codex.exe",
+      "bytes": 4096,
+      "sha256": "e5d69cbce453e749c0deaa167447be670d1322345dd3fcd1bf97ff3ff6ae4fdf",
+      "original_sha256": "e5d69cbce453e749c0deaa167447be670d1322345dd3fcd1bf97ff3ff6ae4fdf",
+      "synthetic_test_credential_redactions": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-cli-http-regression.xml",
+      "bytes": 504,
+      "sha256": "af6cfe5ab7fe266527ab6b8e537b1239e2dbacf762ae666aa3174f2d56105f6e",
+      "original_sha256": "af6cfe5ab7fe266527ab6b8e537b1239e2dbacf762ae666aa3174f2d56105f6e",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-herdr-model-windows-initial.xml",
+      "bytes": 9642,
+      "sha256": "614f8a3cdf314b279536b1ef4633980202fa868918c45b6051e0c99dc1abdd1a",
+      "original_sha256": "614f8a3cdf314b279536b1ef4633980202fa868918c45b6051e0c99dc1abdd1a",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 67,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-herdr-transport-final.xml",
+      "bytes": 7263,
+      "sha256": "1dbc9f1806209fff4ff324ce9612efead0c2e31ee70e485d42df9ee407bedf08",
+      "original_sha256": "1dbc9f1806209fff4ff324ce9612efead0c2e31ee70e485d42df9ee407bedf08",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 51,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-herdr-transport-initial.xml",
+      "bytes": 6863,
+      "sha256": "d154193114e16f50900f15d94ed205933d3adb6a6e3a99147c4b88e94c14cba8",
+      "original_sha256": "d154193114e16f50900f15d94ed205933d3adb6a6e3a99147c4b88e94c14cba8",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 48,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-herdr-transport-move-final.xml",
+      "bytes": 7799,
+      "sha256": "18bffe25e74b7ccf35073b830de33dd85da0395dbfdc8789a214dec7350aa0eb",
+      "original_sha256": "18bffe25e74b7ccf35073b830de33dd85da0395dbfdc8789a214dec7350aa0eb",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 55,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-herdr-transport-review-final.xml",
+      "bytes": 7683,
+      "sha256": "ce37b29ea73daf5ee7ddf81ddaef13b5306482dcae42dc068dcd1acd680952dc",
+      "original_sha256": "ce37b29ea73daf5ee7ddf81ddaef13b5306482dcae42dc068dcd1acd680952dc",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 54,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observation-client-final.xml",
+      "bytes": 12231,
+      "sha256": "7dd2f2e169832547a4c61209c1c199a6d7d15ef4e70b11cf4318db167a06f1df",
+      "original_sha256": "7dd2f2e169832547a4c61209c1c199a6d7d15ef4e70b11cf4318db167a06f1df",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observation-client-initial.xml",
+      "bytes": 148975,
+      "sha256": "c3f2477112511de338717ff01edc0db5fb6f1564df0820d0f9ed1242ef2bf2ca",
+      "original_sha256": "c3f2477112511de338717ff01edc0db5fb6f1564df0820d0f9ed1242ef2bf2ca",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 70,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observation-journal-initial.xml",
+      "bytes": 5851,
+      "sha256": "f18503ecbe827d74d5eb1ff742fb30371580e4d54d8b11e507a1b1431460c064",
+      "original_sha256": "f18503ecbe827d74d5eb1ff742fb30371580e4d54d8b11e507a1b1431460c064",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 37,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observe-cli-final.xml",
+      "bytes": 6472,
+      "sha256": "bb8096a594f7e73ffa197cc05633c565b0bf835cc1221434c801acd873fd066f",
+      "original_sha256": "713c63687ad3f07509724dc4b03b9dccea4a7cb4d916a8c06686311c95aebc71",
+      "synthetic_test_credential_redactions": 1,
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observe-cli-initial.xml",
+      "bytes": 5750,
+      "sha256": "d2c8156e144f5bbf9c6144ccd4579b013645da129793ae7a4a0db49d51b9fad5",
+      "original_sha256": "44584b7992bdf513782a1f82b736cd909fdc04a4befca612a4ae2f201a3089eb",
+      "synthetic_test_credential_redactions": 1,
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observer-integration-initial.xml",
+      "bytes": 33246,
+      "sha256": "9a724b81e1f8e4d5c3cffae61edeadfc3a90034530f716c68fe1b6c6440a2c4f",
+      "original_sha256": "9a724b81e1f8e4d5c3cffae61edeadfc3a90034530f716c68fe1b6c6440a2c4f",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 228,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observer-integration-review.xml",
+      "bytes": 39983,
+      "sha256": "21e911d842d49cb57e0f97dd1b1f0cbb28c89d9b22d2233d676178ca515668db",
+      "original_sha256": "21e911d842d49cb57e0f97dd1b1f0cbb28c89d9b22d2233d676178ca515668db",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 273,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observer-move-final.xml",
+      "bytes": 13267,
+      "sha256": "4ef8da8c94f6994f948ba491506bfa26c7ec79ce79ca599556f63fe75e5cd459",
+      "original_sha256": "4ef8da8c94f6994f948ba491506bfa26c7ec79ce79ca599556f63fe75e5cd459",
+      "synthetic_test_credential_redactions": 0,
+      "tests": 95,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "aggregate_sha256": "1836dd6efe7d6b185f2189c439455acb62903bf70d9b4ff47e6e7c99563f5b3e"
+}

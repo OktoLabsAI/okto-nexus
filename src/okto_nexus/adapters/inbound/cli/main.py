@@ -22,6 +22,7 @@ Usage:
   okto-nexus message send [options]  Send conversation using a participant profile
   okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
   okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
   okto-nexus operator login|status|logout --profile NAME [options]
   okto-nexus operator approval APPROVAL_ID --profile NAME [options]
   okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
@@ -41,6 +42,9 @@ def main(argv: list[str] | None = None) -> int:
         print(_HELP)
         return 0
     command, rest = args[0], args[1:]
+    if command == 'observe':
+        from .observe import run_observe
+        return run_observe(rest)
     if command in ('message', 'handoff', 'request'):
         from .coordination import run_coordination
         return run_coordination(command, rest)

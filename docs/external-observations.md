@@ -70,6 +70,14 @@ never authenticates management requests.
    resolved by the Server. Issuance requires the represented agent's current
    explicit publish permission, including when an operator issues it.
 
+Management responses use the existing `{"ok": true, "data": ...}` envelope.
+Keep `data.source.source_id` and its current `revision`, then
+`data.instance.observed_instance_id` and its Server-issued `generation`. Token
+issuance returns `data.token` once and `data.credential` with its `token_id`,
+`expires_at`, and approved grants. Keep credential metadata separate from the
+secret. The numeric values and IDs above are placeholders, not values to infer
+from an agent name or external process.
+
 The returned opaque `nxobs_` token is shown once. Store it as a secret; the
 Server stores its SHA-256 hash only. It expires after 15 minutes. Pass it only
 as `Authorization: Bearer <token>` to the exact
@@ -141,6 +149,110 @@ success is returned. Storage errors never acknowledge an uncommitted report.
   backlog as current activity. A publisher that cannot prove continuity must
   obtain an authorized new generation instead of restarting sequence at one.
 
+## Use the publish-only Python helper
+
+`okto_nexus.observation_client` is included in the Nexus package and uses the
+Python standard library. It needs no Connector, framework, native runtime or
+background process. Complete registration and token issuance above before using
+it. The `nxobs_` credential authorizes only publication; it cannot authenticate
+MCP, native execution, management, token renewal or canonical agent operations.
+
+Persist a complete report before sending it. The saved document must contain the
+approved IDs and generation, its sequence, and the time of the actual
+observation. Keep the bearer outside that document. For example, with an
+explicitly chosen secret environment variable and a saved report:
+
+```python
+import json
+import os
+import sys
+
+from okto_nexus.observation_client import ObservationClient, ObservationClientError
+
+with open("saved-observation.json", encoding="utf-8") as saved:
+    pending_report = json.load(saved)
+
+try:
+    publisher = ObservationClient(
+        os.environ["NEXUS_SERVER_ORIGIN"],
+        token=os.environ["MY_OBSERVATION_PUBLISH_TOKEN"],
+        timeout=15,
+    )
+    acknowledged = publisher.publish(pending_report)
+except ObservationClientError as error:
+    print(json.dumps({
+        "code": error.code,
+        "status": error.status,
+        "outcome_unknown": error.outcome_unknown,
+        "retry_after_seconds": error.retry_after_seconds,
+    }), file=sys.stderr)
+    raise SystemExit(2) from None
+
+print(json.dumps(acknowledged))
+```
+
+`publish` accepts a single report dictionary, a list of 1–100 reports, or the
+saved `{"reports": [...]}` wrapper. It validates the closed schema, both input
+and canonical 4 KiB limits, and distinct instance IDs before network I/O. It
+never fills in generation, sequence or observed time, and never increments or
+resets them. A successful return is `{"receipts": [...]}` containing only the
+validated receipt fields listed above, in report order. The helper checks IDs,
+generation, sequence, canonical hash and receipt validity against the submitted
+report. It accepts a historical replay receipt whose expiry has already passed;
+that receipt does not make the observation fresh again.
+
+The runnable [stdin example](observation-client-example.py) uses the same API:
+
+```sh
+python docs/observation-client-example.py --origin https://nexus.example \
+  --token-env MY_OBSERVATION_PUBLISH_TOKEN < saved-observation.json
+```
+
+The argument names the environment variable; never substitute the bearer as an
+argument. The script prints validated receipt metadata on stdout and sanitized
+errors on stderr. The helper accepts HTTPS origins or loopback HTTP origins,
+without credentials, application paths, queries or fragments. It ignores
+environment proxies and does not use redirects, cookies or netrc credentials.
+Its finite timeout defaults to 15 seconds and may be set up to 30 seconds.
+
+### Preserve uncertainty and replay explicitly
+
+The helper makes one POST per `publish` call. It has no retry loop, scheduler,
+heartbeat, generation allocator or credential-renewal method. The caller owns
+durable sequence allocation per instance/generation and the saved payload across
+restart. Record a validated receipt before discarding that pending payload.
+
+If `outcome_unknown` is true, the Server may already have committed the report.
+Keep the same pending document. An explicit retry sends that exact intent with
+the same IDs, generation, sequence, observed time, TTL and contents. Do not
+increment the sequence, change the timestamp, rotate generation or create a new
+source merely to hide the uncertain result. Exact replay recovers the original
+receipt without extending its validity. If a later sequence has already been
+accepted, the old attempt conflicts; it cannot recover arbitrary historical
+receipts. Inspect the authorized current state and retained caller checkpoint.
+
+Replay grants no new authority. The Server rechecks the current token, source,
+agent, workspace and generation first. If a credential has expired, its
+replacement must be issued through the existing authorized management path;
+the pending document remains unchanged. A new credential does not revive a
+revoked source, restore removed permission or bypass a changed generation.
+
+| Result | Meaning and caller action |
+|---|---|
+| Local `REPORT_INVALID`, `TOKEN_INVALID`, `SERVER_ORIGIN_INVALID`, `TIMEOUT_INVALID` | No request was sent. Correct the local input before an explicit submission. |
+| HTTP 401 / `AUTH_FAILED` | The credential or authentication audience was refused. Use the authorized publish credential for this endpoint. |
+| HTTP 403 / `PERMISSION_DENIED` | Publication is unauthorized, including expired/revoked credentials, revoked source or identity, removed permission, or an unapproved scope. Stop publishing and inspect current authorization. |
+| HTTP 409 / `CONFLICT` | Generation or sequence/content may conflict; ingestion may also be disabled. Inspect the canonical source/instance state and original pending payload. Do not auto-reset or acquire new authority. |
+| HTTP 413 / `CONTENT_TOO_LARGE`, HTTP 422 / `VALIDATION_ERROR` | The request was refused. Fix the report or its size before explicitly submitting corrected input. |
+| HTTP 429 / `QUOTA_EXCEEDED` | Publication quota was exhausted. `retry_after_seconds`, when supplied, is advisory and capped at 3,600 seconds. The helper does not retry. |
+| HTTP 503 / `OBSERVATION_BUSY` | A recognized queue-saturation response refused admission; no automatic retry occurs. |
+| Generic HTTP 503 / `OBSERVATION_UNAVAILABLE`, transport loss, invalid receipt, or refused redirect | `outcome_unknown=true`. Preserve the pending payload; the response does not prove that no report committed. |
+
+`ObservationClientError` exposes `code`, `status`, `outcome_unknown`, and
+`retry_after_seconds`. Remote response text, supplied report contents and bearer
+values are not copied into those errors. A receipt acknowledges external
+telemetry only; it is never evidence that a handoff or model task succeeded.
+
 ## Read, renew, revoke and retire
 
 `GET /api/v1/observations` accepts `agent_id`, `workspace_id`, `source_id`, `after`
@@ -183,6 +295,46 @@ Agent deactivation, key replacement/removal, retirement, and effective changes
 to either explicit OBS permission permanently revoke outstanding tokens.
 Restoring an earlier key or permission does not revive them. Unrelated or
 no-op permission changes do not revoke them.
+
+To renew before the 15-minute credential expiry, authenticate as the operator or
+an authorized canonical self-manager and call
+`POST /api/v1/observations/sources/{source_id}/tokens` again. Use the current
+source revision and actual instance generations, for example:
+
+```json
+{
+  "expected_revision": 1,
+  "instance_grants": [
+    {"observed_instance_id": "returned-instance-id", "generation": 1}
+  ],
+  "replaces_token_id": "previous-credential-id"
+}
+```
+
+Retain the new `credential.token_id` and `expires_at`, install the new bearer in
+the publisher's secret channel, and construct a new `ObservationClient` with
+that bearer. Renewal preserves instance generation and sequence history. It does
+not resend observations or extend an existing receipt's TTL. Source revision or
+generation conflicts require reviewing the current authorized registration.
+After a lost issuance response, the raw new token cannot be recovered: use the
+canonical credential metadata list to revoke the uncertain credential and issue
+another explicitly authorized replacement.
+
+### Stop a publisher without inventing activity
+
+Shutdown stops publication. Do not synthesize `idle`, a completion reference or
+a claim that the observed process died. Preserve the instance identity,
+generation, last allocated sequence, pending payload and validated receipt so a
+restart can prove continuity. Stopping the observer is not evidence about the
+external process's state.
+
+An authorized manager may explicitly revoke the token or source, or retire the
+instance through the endpoints above. Those are separate management decisions;
+the helper performs none of them. Without revocation, observations become stale
+when their TTL expires and source continuity becomes delayed according to its
+diagnostic threshold. Revoked authority is projected as unavailable. Neither
+case changes canonical presence, releases runtime capacity, completes work or
+marks an external application as seen.
 
 ## Bounds and maintenance
 

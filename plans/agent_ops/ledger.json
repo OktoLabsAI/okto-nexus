@@ -416,11 +416,14 @@
       ]
     },
     "PR-09": {
-      "status": "NOT_STARTED",
+      "status": "IMPLEMENTED",
       "dependencies": [
         "PR-08"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+      ]
     },
     "PR-10": {
       "status": "NOT_STARTED",
@@ -5511,7 +5514,7 @@
       "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
       "limitations": [
         "No implicit canonical session correlation; uncorrelated external instances remain separate.",
-        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Herdr observer/helper is qualified in PR-09 for its explicit Windows/local scope; attention provenance/precedence remain PR-10.",
         "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
         "Configured ceilings are safety bounds, not measured production throughput.",
         "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
@@ -5554,7 +5557,7 @@
       "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
       "limitations": [
         "No implicit canonical session correlation; uncorrelated external instances remain separate.",
-        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Herdr observer/helper is qualified in PR-09 for its explicit Windows/local scope; attention provenance/precedence remain PR-10.",
         "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
         "Configured ceilings are safety bounds, not measured production throughput.",
         "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
@@ -5595,7 +5598,7 @@
       "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
       "limitations": [
         "No implicit canonical session correlation; uncorrelated external instances remain separate.",
-        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Herdr observer/helper is qualified in PR-09 for its explicit Windows/local scope; attention provenance/precedence remain PR-10.",
         "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
         "Configured ceilings are safety bounds, not measured production throughput.",
         "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
@@ -5644,7 +5647,7 @@
       "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
       "limitations": [
         "No implicit canonical session correlation; uncorrelated external instances remain separate.",
-        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Herdr observer/helper is qualified in PR-09 for its explicit Windows/local scope; attention provenance/precedence remain PR-10.",
         "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
         "Configured ceilings are safety bounds, not measured production throughput.",
         "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
@@ -5657,99 +5660,224 @@
     },
     "OBS-05": {
       "title": "empacotamento opcional",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-09"
       ],
       "dependencies": [
         "PR-08"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/herdr-observer.md",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+        "src/okto_nexus/adapters/inbound/cli/main.py",
+        "src/okto_nexus/adapters/inbound/cli/observe.py"
+      ],
+      "tests": [
+        "tests/test_observe_cli.py"
+      ],
+      "result": "Optional explicit observe herdr bind/run/status CLI; installed package and normal Server operation require no Herdr discovery, Connector, executor or startup hook.",
+      "platform": "Windows 11 x64; Herdr 0.9.5, protocol 22, schema_version 1",
+      "limitations": [
+        "Qualified only for Windows/local Herdr0.9.5 protocol22 and an explicitly approved direct process; known wrappers, remote and unqualified contracts are refused.",
+        "Observed processes and lifecycle hooks are synthetic; Herdr/Windows/installed Nexus/HTTP are real. This is not a real AI client, provider inference, native service or M1/M2 campaign.",
+        "Storage faults and abrupt process exit are qualified; physical disk exhaustion, power loss and POSIX branches are not.",
+        "Final V2 changes only the CLI Herdr transport; 667 other package files match the V1 real Nexus Server, whose import proof excludes that transport.",
+        "External attention/precedence and joint acceptance remain PR-10; no canonical session correlation is inferred."
+      ],
+      "subscopes": {
+        "source_contract": "VERIFIED",
+        "installed_qualification": "VERIFIED",
+        "real_windows_herdr_synthetic_occupant": "VERIFIED"
+      }
     },
     "OBS-06": {
       "title": "contrato real instalado",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-09"
       ],
       "dependencies": [
         "PR-08"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/herdr-observer.md",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+        "src/okto_nexus/adapters/outbound/observation/herdr.py"
+      ],
+      "tests": [
+        "tests/test_herdr_transport.py"
+      ],
+      "result": "Official real Windows Herdr 0.9.5 binary and installed schema pinned; live protocol22/schema1 compatibility checked, raw schema and sanitized fixtures retained; incompatible contract fails explicitly.",
+      "platform": "Windows 11 x64; Herdr 0.9.5, protocol 22, schema_version 1",
+      "limitations": [
+        "Qualified only for Windows/local Herdr0.9.5 protocol22 and an explicitly approved direct process; known wrappers, remote and unqualified contracts are refused.",
+        "Observed processes and lifecycle hooks are synthetic; Herdr/Windows/installed Nexus/HTTP are real. This is not a real AI client, provider inference, native service or M1/M2 campaign.",
+        "Storage faults and abrupt process exit are qualified; physical disk exhaustion, power loss and POSIX branches are not.",
+        "Final V2 changes only the CLI Herdr transport; 667 other package files match the V1 real Nexus Server, whose import proof excludes that transport.",
+        "External attention/precedence and joint acceptance remain PR-10; no canonical session correlation is inferred."
+      ],
+      "subscopes": {
+        "source_contract": "VERIFIED",
+        "installed_qualification": "VERIFIED",
+        "real_windows_herdr_synthetic_occupant": "VERIFIED"
+      }
     },
     "OBS-07": {
       "title": "identidade do ocupante",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-09"
       ],
       "dependencies": [
         "PR-08"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/herdr-observer.md",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+        "src/okto_nexus/adapters/outbound/observation/windows_identity.py",
+        "src/okto_nexus/domain/herdr_observations.py"
+      ],
+      "tests": [
+        "tests/test_herdr_observations.py",
+        "tests/test_herdr_windows_identity.py"
+      ],
+      "result": "Explicit namespace/session/pane/terminal plus approved process image, local-host hash, PID and creation FILETIME; held OS handle and metadata bracketing; real equal-pane namespaces, rename/move/replacement/restart qualified with mandatory reassociation on identity contradiction.",
+      "platform": "Windows 11 x64; Herdr 0.9.5, protocol 22, schema_version 1",
+      "limitations": [
+        "Qualified only for Windows/local Herdr0.9.5 protocol22 and an explicitly approved direct process; known wrappers, remote and unqualified contracts are refused.",
+        "Observed processes and lifecycle hooks are synthetic; Herdr/Windows/installed Nexus/HTTP are real. This is not a real AI client, provider inference, native service or M1/M2 campaign.",
+        "Storage faults and abrupt process exit are qualified; physical disk exhaustion, power loss and POSIX branches are not.",
+        "Final V2 changes only the CLI Herdr transport; 667 other package files match the V1 real Nexus Server, whose import proof excludes that transport.",
+        "External attention/precedence and joint acceptance remain PR-10; no canonical session correlation is inferred."
+      ],
+      "subscopes": {
+        "source_contract": "VERIFIED",
+        "installed_qualification": "VERIFIED",
+        "real_windows_herdr_synthetic_occupant": "VERIFIED"
+      }
     },
     "OBS-08": {
       "title": "leitura sem controle",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-09"
       ],
       "dependencies": [
         "PR-08"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/herdr-observer.md",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+        "src/okto_nexus/adapters/outbound/observation/herdr.py",
+        "src/okto_nexus/application/herdr_observer.py"
+      ],
+      "tests": [
+        "tests/test_herdr_transport.py",
+        "tests/test_herdr_observer.py"
+      ],
+      "result": "Fixed metadata-only CLI allowlist with bounded child I/O and filtered credentials/environment; 143 installed observer calls, 53 source state-campaign calls and 34 second-namespace calls audited without terminal read/control. All 147 canonical tables unchanged by OBS campaigns.",
+      "platform": "Windows 11 x64; Herdr 0.9.5, protocol 22, schema_version 1",
+      "limitations": [
+        "Qualified only for Windows/local Herdr0.9.5 protocol22 and an explicitly approved direct process; known wrappers, remote and unqualified contracts are refused.",
+        "Observed processes and lifecycle hooks are synthetic; Herdr/Windows/installed Nexus/HTTP are real. This is not a real AI client, provider inference, native service or M1/M2 campaign.",
+        "Storage faults and abrupt process exit are qualified; physical disk exhaustion, power loss and POSIX branches are not.",
+        "Final V2 changes only the CLI Herdr transport; 667 other package files match the V1 real Nexus Server, whose import proof excludes that transport.",
+        "External attention/precedence and joint acceptance remain PR-10; no canonical session correlation is inferred."
+      ],
+      "subscopes": {
+        "source_contract": "VERIFIED",
+        "installed_qualification": "VERIFIED",
+        "real_windows_herdr_synthetic_occupant": "VERIFIED"
+      }
     },
     "OBS-09": {
       "title": "semÃ¢ntica de tÃ©rmino",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-09"
       ],
       "dependencies": [
         "PR-08"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/herdr-observer.md",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+        "src/okto_nexus/application/herdr_observer.py",
+        "src/okto_nexus/domain/herdr_observations.py"
+      ],
+      "tests": [
+        "tests/test_herdr_observations.py",
+        "tests/test_herdr_observer.py"
+      ],
+      "result": "Initial idle/done establishes a baseline; later coherent completion sequence yields a stable inferred observational reference. Real done/repeated done retains Herdr seen state, emits one completion, and new generations invent none.",
+      "platform": "Windows 11 x64; Herdr 0.9.5, protocol 22, schema_version 1",
+      "limitations": [
+        "Qualified only for Windows/local Herdr0.9.5 protocol22 and an explicitly approved direct process; known wrappers, remote and unqualified contracts are refused.",
+        "Observed processes and lifecycle hooks are synthetic; Herdr/Windows/installed Nexus/HTTP are real. This is not a real AI client, provider inference, native service or M1/M2 campaign.",
+        "Storage faults and abrupt process exit are qualified; physical disk exhaustion, power loss and POSIX branches are not.",
+        "Final V2 changes only the CLI Herdr transport; 667 other package files match the V1 real Nexus Server, whose import proof excludes that transport.",
+        "External attention/precedence and joint acceptance remain PR-10; no canonical session correlation is inferred."
+      ],
+      "subscopes": {
+        "source_contract": "VERIFIED",
+        "installed_qualification": "VERIFIED",
+        "real_windows_herdr_synthetic_occupant": "VERIFIED"
+      }
     },
     "OBS-10": {
       "title": "exemplo mÃ­nimo",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-09"
       ],
       "dependencies": [
         "PR-08"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/external-observations.md",
+        "docs/herdr-observer.md",
+        "docs/observation-client-example.py",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+        "src/okto_nexus/adapters/outbound/observation/journal.py",
+        "src/okto_nexus/observation_client.py"
+      ],
+      "tests": [
+        "tests/test_observation_client.py",
+        "tests/test_observation_journal.py"
+      ],
+      "result": "Small publish-only helper and documented canonical registration/token/renew/revoke/shutdown flow; installed helper real HTTP and durable journal/CLI recovery qualified, including lost response, accumulated uncertainty and checkpoint failures.",
+      "platform": "Windows 11 x64; Herdr 0.9.5, protocol 22, schema_version 1",
+      "limitations": [
+        "Qualified only for Windows/local Herdr0.9.5 protocol22 and an explicitly approved direct process; known wrappers, remote and unqualified contracts are refused.",
+        "Observed processes and lifecycle hooks are synthetic; Herdr/Windows/installed Nexus/HTTP are real. This is not a real AI client, provider inference, native service or M1/M2 campaign.",
+        "Storage faults and abrupt process exit are qualified; physical disk exhaustion, power loss and POSIX branches are not.",
+        "Final V2 changes only the CLI Herdr transport; 667 other package files match the V1 real Nexus Server, whose import proof excludes that transport.",
+        "External attention/precedence and joint acceptance remain PR-10; no canonical session correlation is inferred."
+      ],
+      "subscopes": {
+        "source_contract": "VERIFIED",
+        "installed_qualification": "VERIFIED",
+        "real_windows_herdr_synthetic_occupant": "VERIFIED"
+      }
     },
     "OBS-11": {
       "title": "projeÃ§Ã£o",
@@ -8544,14 +8672,17 @@
     },
     "OB-08": {
       "requirement": "RelÃ³gios atrasado/futuro e backlog apÃ³s reconnect nÃ£o tornam dado antigo atual.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
-      "result": "Past backlog, future skew and policy bounds tested at domain/service/HTTP boundaries; observer reconnect implementation remains PR-09.",
+      "result": "Server clock/TTL contract plus current source snapshots on reconnect; explicit historical retry preserves original observed time, cannot renew validity, and never replays productive work.",
       "subscopes": {
-        "pr08_server_contract": "VERIFIED"
+        "pr08_server_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
       }
     },
     "OB-09": {
@@ -8583,24 +8714,50 @@
     },
     "OB-12": {
       "requirement": "InstÃ¢ncias Herdr diferentes com mesmo pane-id nÃ£o colidem.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_source_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
+      },
+      "result": "Two real Herdr sessions expose w2:p2 with distinct namespaces/terminal/process incarnations; crossed binding is refused. Domain cases also isolate otherwise identical pane metadata."
     },
     "OB-13": {
       "requirement": "Pane renomeado/movido/substituÃ­do respeita evidÃªncia de ocupante ou exige reassociaÃ§Ã£o.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_source_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
+      },
+      "result": "Actual pane rename preserves process binding; actual move permanently invalidates after the captured V1 classification fix; actual process replacement requires a new canonical generation and explicit selection."
     },
     "OB-14": {
       "requirement": "Done/idle de startup/switch sem completion_ref nÃ£o gera conclusÃ£o fictÃ­cia.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
       ],
-      "result": "Server idle/reason-only reports do not emit completion; real Herdr startup/switch normalization remains PR-09.",
+      "result": "Actual startup done and new-generation idle/done produce no completion; repeated real completion produces one observational event only.",
       "subscopes": {
-        "pr08_server_contract": "VERIFIED"
+        "pr08_server_contract": "VERIFIED",
+        "pr09_source_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
       }
     },
     "OB-15": {
@@ -8623,13 +8780,33 @@
     },
     "OB-17": {
       "requirement": "Fonte Herdr desconecta e volta: snapshot reconcilia sem replay produtivo.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_source_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
+      },
+      "result": "Actual Herdr stop/restart, process exit and fresh post-reconnect snapshot; no report/sequence advance while unavailable or after a changed occupant, with explicit reassociation required."
     },
     "OB-18": {
       "requirement": "Schema/versionamento incompatÃ­vel gera indisponibilidade explÃ­cita, sem campos adivinhados.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_source_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
+      },
+      "result": "Pinned installed schema/version, live compatibility and strict shapes; unsupported/malformed metadata tests refuse publication without guessed fields."
     },
     "OB-19": {
       "requirement": "Estado inferido nÃ£o sobrescreve evento canÃ´nico correlacionado do Core.",
@@ -8658,19 +8835,35 @@
     },
     "OB-22": {
       "requirement": "Observador Herdr nÃ£o chama prompt/start/send-keys/focus/kill.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_source_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
+      },
+      "result": "Audited real source/installed/second-namespace observer commands contain only version, schema, status, snapshot and process-info; fixture mutation driver is separate."
     },
     "OB-23": {
       "requirement": "Nexus sem Herdr instalado inicia, testa e opera normalmente.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
       ],
-      "result": "Server/package operates independently of Herdr; no Herdr discovery/API invocation or dependency is needed for this milestone.",
+      "result": "Real installed Nexus Server starts and operates with Herdr absent from its discovery/PATH and no Herdr imports/dependency; the optional CLI is lazily dispatched and separately qualified.",
       "subscopes": {
-        "pr08_server_contract": "VERIFIED"
+        "pr08_server_contract": "VERIFIED",
+        "pr09_source_contract": "VERIFIED",
+        "pr09_windows_installed_and_real_source": "VERIFIED"
       }
     },
     "OB-24": {
@@ -8708,7 +8901,13 @@
     "RG-05": {
       "requirement": "ReinÃ­cio/queda de rede com operaÃ§Ã£o incerta nÃ£o dispara replay por nenhum dos novos caminhos.",
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_optional_windows_observer_contract": "VERIFIED"
+      }
     },
     "RG-06": {
       "requirement": "Core importado sem sockets/processos/credenciais; dependÃªncias entre aplicaÃ§Ãµes continuam proibidas.",
@@ -8772,19 +8971,28 @@
         "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
         "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-init.md"
+        "plans/agent_ops/evidence/pr04-participant-init.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
         "shared_participant_contract_and_editor": "VERIFIED",
         "participant_init_review_apply_recovery_windows": "VERIFIED",
-        "participant_actual_harness_environment": "NOT_RUN"
+        "participant_actual_harness_environment": "NOT_RUN",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "RG-09": {
       "requirement": "Campanha usa homes/workspaces temporÃ¡rios e nÃ£o modifica contas/configuraÃ§Ãµes pessoais.",
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_optional_windows_observer_contract": "VERIFIED"
+      }
     },
     "RG-10": {
       "requirement": "ValidaÃ§Ã£o de browser usa o backend real; snapshot/string test nÃ£o substitui interaÃ§Ã£o.",
@@ -8817,11 +9025,14 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
-        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+        "external_observation_admission_and_passive_read_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "INV-02": {
@@ -8834,10 +9045,13 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED"
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "INV-03": {
@@ -8895,11 +9109,14 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
-        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+        "external_observation_admission_and_passive_read_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "INV-09": {
@@ -9097,10 +9314,13 @@
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
-        "pr08_external_observation_server_contract": "VERIFIED"
+        "pr08_external_observation_server_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "AC-03": {
@@ -9145,10 +9365,13 @@
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
-        "pr08_external_observation_server_contract": "VERIFIED"
+        "pr08_external_observation_server_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "AC-07": {
@@ -9168,11 +9391,14 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
-        "pr08_external_observation_server_contract": "VERIFIED"
+        "pr08_external_observation_server_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "AC-09": {
@@ -9187,11 +9413,14 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
-        "pr08_external_observation_server_contract": "VERIFIED"
+        "pr08_external_observation_server_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "AC-10": {
@@ -9206,11 +9435,14 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
-        "pr08_external_observation_server_contract": "VERIFIED"
+        "pr08_external_observation_server_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
       }
     },
     "AC-11": {
@@ -9231,7 +9463,13 @@
     "AC-14": {
       "requirement": "Restart, suspensÃ£o e queda de conexÃ£o preservam contratos de autoridade, ownership e incerteza, sem repetiÃ§Ã£o produtiva implÃ­cita.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+      ],
+      "subscopes": {
+        "pr09_optional_windows_observer_contract": "VERIFIED"
+      }
     },
     "AC-15": {
       "requirement": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnÃ³stico inicie daemon ou inferÃªncia.",
@@ -9257,6 +9495,40 @@
       "snapshot_sha256": "0ced0ecb8a4b9aebdb1893f3eb676b6019802bfd26ccc4e26fb6ed4bcab834a2",
       "native_preflight": "Selected task names absent; no registration or app state created",
       "limits": "Temporary isolated tasks only; no personal app state, provider, credential, logout or reboot"
+    },
+    "pr09_windows_herdr": {
+      "status": "VERIFIED",
+      "herdr_version": "0.9.5",
+      "protocol": 22,
+      "actual_components": [
+        "Windows process identity",
+        "Herdr",
+        "installed observer/helper",
+        "Nexus HTTP",
+        "SQLite"
+      ],
+      "synthetic_components": [
+        "observed process",
+        "lifecycle hooks",
+        "HTTP loss relay"
+      ],
+      "provider_inference": false,
+      "personal_services_modified": false,
+      "source_unique_tests": 318,
+      "installed_v2_tests": 321,
+      "real_observer_read_calls": {
+        "state_campaign": 53,
+        "installed_campaign": 143,
+        "namespace_campaign": 34
+      },
+      "canonical_tables_unchanged": 147,
+      "cleanup": "Both Herdr instances and observed processes stopped canonically; Nexus DRAINED and PID exited; TCP probe did not connect.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+      ],
+      "additional_http_only_cli_regression_tests": 2,
+      "combined_source_unique_tests": 320
     }
   },
   "history": [
@@ -9874,6 +10146,26 @@
         "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
         "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
         "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "milestone": "PR-09",
+      "status": "IN_PROGRESS",
+      "summary": "Optional observer/helper implemented; 316 unique source tests and pinned real Herdr read-only state campaign pass; isolated installed campaign in progress.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr-progress.md",
+        "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "milestone": "PR-09",
+      "status": "IMPLEMENTED",
+      "summary": "318 unique source/321 installed cases; pinned real Herdr metadata/namespace/move/replacement/restart and actual Nexus publication qualified. All temporary processes stopped; full R3 and PR-10 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
       ]
     }
   ]

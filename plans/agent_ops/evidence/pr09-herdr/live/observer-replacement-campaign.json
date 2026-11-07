@@ -1,0 +1,20 @@
+{
+  "result": "passed",
+  "generation": 9,
+  "source_id": "obs_src_0000000000000006",
+  "observed_instance_id": "obs_inst_0000000000000007",
+  "original_pid": 46324,
+  "replacement_pid": 52216,
+  "original_birth": 134384870609652051,
+  "sequence_before": 1,
+  "sequence_after": 1,
+  "invalidated": true,
+  "cli": {
+    "code": "HERDR_BINDING_CHANGED",
+    "status": "unavailable"
+  },
+  "new_generation_startup_completion_ref": null,
+  "actual_process_replacement": true,
+  "synthetic_process": true,
+  "provider_inference": false
+}

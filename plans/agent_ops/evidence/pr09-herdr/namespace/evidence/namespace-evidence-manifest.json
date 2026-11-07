@@ -1,0 +1,281 @@
+{
+  "revision": 1,
+  "result": "passed",
+  "scope": "OBS-12 two explicit real Herdr namespaces with equal pane IDs",
+  "package_proof": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\package-proof.json",
+  "package_proof_sha256": "5b0c35203264486fe3f1bc143f77329c4cb18f853fe80f9ac4ddcdade763e332",
+  "wheel_sha256": "fe597e0e5a7256d6c3328382d4a046706cba3cc37f4e15e286afad54eab2d29d",
+  "observer_module_sha256": "77e795ffbc97ea30648f38ec02e8ea0c004c54aaa3448b159222fb4c76da4699",
+  "runtime_session_snapshots_excluded": true,
+  "credentials_used": false,
+  "nexus_published": false,
+  "primary_server_stopped": false,
+  "secondary_canonical_stop_and_children_exit": true,
+  "artifacts": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\prepare.py",
+      "bytes": 3039,
+      "sha256": "bac0fb697593b6b43179405c02d0aace3db2e28af79e91e79ace44195194120d"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\qualify_namespace.py",
+      "bytes": 12318,
+      "sha256": "fa067150e8d4da6be17df511b83a45863d46e589a82e5be67edcf2d58678546c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\collect_namespace.py",
+      "bytes": 2029,
+      "sha256": "f59ff405c5d2e9a8aedc29ea07e4afcdfa8288261b23216e1d366aeab941cef8"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\config.toml",
+      "bytes": 226,
+      "sha256": "396d8df94bd465c1609e23f0395a7475bf17f4d41d2dabb5a4d698d8d11b7d4a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\work\\Fixture.cs",
+      "bytes": 553,
+      "sha256": "110875cf462d1280e18197f7933f0bf3ca5816d2cd11a1b9b98cc12501096631"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\work\\codex.exe",
+      "bytes": 4096,
+      "sha256": "e5d69cbce453e749c0deaa167447be670d1322345dd3fcd1bf97ff3ff6ae4fdf"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\after-stop.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\after-stop.stdout.txt",
+      "bytes": 380,
+      "sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\before-start.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\before-start.stdout.txt",
+      "bytes": 380,
+      "sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\create-workspace-1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\create-workspace-1.stdout.txt",
+      "bytes": 680,
+      "sha256": "2414bc5b298e722685bd2a431fd091dbb23f8f7add56af12c91522a033280d41"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\create-workspace-2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\create-workspace-2.stdout.txt",
+      "bytes": 683,
+      "sha256": "a8b1d42b344dc8aa3775df558971a6a9ec0fdf1280d6922b604f10679a80b2c9"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-0.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-0.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-1.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-2.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-3.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-3.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-4.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-4.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-5.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-5.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-6.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-6.stdout.txt",
+      "bytes": 2357,
+      "sha256": "48562725b41d11192ca9f2da5ec4fed363dfbaa629c4e45b419198551991588a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-7.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\detect-fixture-7.stdout.txt",
+      "bytes": 2641,
+      "sha256": "4cf0f9faff2e2670664d71c1db77fb6a4ae1c0246589e8a56463f51dba404883"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\namespace-proof.json",
+      "bytes": 29994,
+      "sha256": "dcf39e0f611b6f1c79c1df29d71b59132b577d2f3381f218c57bfd6fbdc79668"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\pane-split-help.txt",
+      "bytes": 501,
+      "sha256": "c135327016219f9de7a5d2672dda9ee10aaa9ae442f4951955e18bea2e331b64"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\preparation.json",
+      "bytes": 1797,
+      "sha256": "47dea0c07214a4a30cde029199fa31513bfcec9c45faef3ab389681a73507263"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\server-stop-help.txt",
+      "bytes": 51,
+      "sha256": "42ab725bdb263fe0afce2cb783c2b76d293045b9c00266ac44ea2ad500fc3db8"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\server.stderr.txt",
+      "bytes": 588,
+      "sha256": "a05201bae2408287806d4a0d46333f01ba524e33521b9556c53cf074384f9b9f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\server.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\split-w2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\split-w2.stdout.txt",
+      "bytes": 373,
+      "sha256": "744c60fc6437b3e771c57932c38309d21355cd88c0a0670f83ac63b6b146b5c7"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\start-synthetic-fixture.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\start-synthetic-fixture.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\startup-0.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\startup-0.stdout.txt",
+      "bytes": 380,
+      "sha256": "967cd8eb07607a54a304c54d0a93c2fed2076d040c24b5923b30c17a01b7c47a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\startup-1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\startup-1.stdout.txt",
+      "bytes": 533,
+      "sha256": "180a62e8ebc0a865d51f82481ce6e1167f99cfc3158eb1f692d777eafe9f805f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\stop-secondary.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\stop-secondary.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\teardown-process-w1-p1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\teardown-process-w1-p1.stdout.txt",
+      "bytes": 414,
+      "sha256": "152df8b7c4808f6a7231041d08b1f47f1d5ad02066bbedb08c26a94ebbca52b8"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\teardown-process-w2-p1.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\teardown-process-w2-p1.stdout.txt",
+      "bytes": 414,
+      "sha256": "11efd6d7e24418dc44fb07848dc671fb77984c8c2bbdee0b02d22540e7d2824d"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\teardown-process-w2-p2.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\teardown-process-w2-p2.stdout.txt",
+      "bytes": 798,
+      "sha256": "bff4429f5db5db2941665ca16fe83553e053936443125c1188dc429ad596cfc7"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\evidence\\workspace-create-help.txt",
+      "bytes": 266,
+      "sha256": "b2a3543bb7a8c0390091c8ae1adcd8dcb313be0618db7ef28210c3a7b7d623ae"
+    }
+  ]
+}

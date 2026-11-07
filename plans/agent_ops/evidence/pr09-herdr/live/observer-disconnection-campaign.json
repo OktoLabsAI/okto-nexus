@@ -1,0 +1,32 @@
+{
+  "result": "passed",
+  "actual_source_stop_restart": true,
+  "old_processes_exited": [
+    10496,
+    41908,
+    42264,
+    42848,
+    51348,
+    51412,
+    51972,
+    52216
+  ],
+  "disconnected": {
+    "code": "HERDR_SERVER_UNAVAILABLE",
+    "status": "unavailable"
+  },
+  "invalidated_during_unavailability": false,
+  "reconnected": {
+    "code": "HERDR_BINDING_CHANGED",
+    "status": "unavailable"
+  },
+  "invalidated_after_new_identity": true,
+  "sequence_before": 1,
+  "sequence_after": 1,
+  "no_backlog_replayed": true,
+  "source_snapshot_read_after_reconnect": true,
+  "previous_occupant_pid": 52216,
+  "new_occupant_pid": 46532,
+  "synthetic_observed_process": true,
+  "provider_inference": false
+}

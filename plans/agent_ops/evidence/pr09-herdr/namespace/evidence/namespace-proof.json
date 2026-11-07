@@ -1,0 +1,1277 @@
+{
+  "revision": 1,
+  "case": "OBS-12 distinct explicit namespaces with identical pane IDs",
+  "result": "passed",
+  "observer_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\venv\\Scripts\\python.exe",
+  "observer_module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified-v2\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\observation\\herdr.py",
+  "real_herdr": true,
+  "real_os_identity": true,
+  "observed_executables_synthetic": true,
+  "provider_inference": false,
+  "nexus_publish": false,
+  "observer_commands": [
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "--version"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "api",
+        "schema",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "--version"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "schema",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    },
+    {
+      "session": "nexus-pr09-6fcb0c9a",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "shell": false,
+      "environment_keys": [
+        "APPDATA",
+        "COMSPEC",
+        "HERDR_CONFIG_PATH",
+        "HOME",
+        "LOCALAPPDATA",
+        "NO_COLOR",
+        "NUMBER_OF_PROCESSORS",
+        "OS",
+        "PATH",
+        "PATHEXT",
+        "PROCESSOR_ARCHITECTURE",
+        "SYSTEMROOT",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+        "WINDIR"
+      ]
+    }
+  ],
+  "driver_commands": [
+    {
+      "label": "before-start",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "startup-0",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "startup-1",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "create-workspace-1",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "workspace",
+        "create",
+        "--cwd",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\work",
+        "--label",
+        "pr09-secondary-1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "create-workspace-2",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "workspace",
+        "create",
+        "--cwd",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4\\work",
+        "--label",
+        "pr09-secondary-2"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "split-w2",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "split",
+        "--pane",
+        "w2:p1",
+        "--direction",
+        "right",
+        "--focus"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "start-synthetic-fixture",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "run",
+        "w2:p2",
+        "import subprocess; subprocess.run(['C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\pr09-herdr-namespace-cvxe4ar4\\\\work\\\\codex.exe', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\pr09-herdr-namespace-cvxe4ar4\\\\work\\\\stop-secondary-fixture'])"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-0",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-1",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-2",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-3",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-4",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-5",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-6",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "detect-fixture-7",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "api",
+        "snapshot"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "teardown-process-w1-p1",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w1:p1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "teardown-process-w2-p1",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "teardown-process-w2-p2",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "pane",
+        "process-info",
+        "--pane",
+        "w2:p2"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "stop-secondary",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "server",
+        "stop"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "after-stop",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "arguments": [
+        "status",
+        "server",
+        "--json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "secondary_launcher_pid": 52268,
+  "cross_namespace_reuse_refused": "HERDR_PROCESS_IMAGE_CHANGED",
+  "primary": {
+    "contract": {
+      "version": "0.9.5",
+      "protocol": 22,
+      "schema_version": 1,
+      "schema_sha256": "9e2af207e9aa8183d4aeca5fde9cc48e7909bb40cdbd7cf21608a6d3ea78075b"
+    },
+    "binding": {
+      "namespace": "pr09-qualified-primary-installation",
+      "session": "nexus-pr09-6fcb0c9a",
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "workspace_id": "w2",
+      "tab_id": "w2:t2",
+      "pane_id": "w2:p2",
+      "terminal_id": "term_65fa5400f80f51",
+      "pid": 52216,
+      "creation_filetime": 134384887536490856,
+      "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-0.9.5-_n3kwt9i\\work\\codex.exe",
+      "agent_session_id_hash": null
+    },
+    "binding_hash": "sha256:116caad2d317ae2faacaea17ab0b2da38241089c6350b166c8c851baa00634fc",
+    "observation": {
+      "binding_hash": "sha256:116caad2d317ae2faacaea17ab0b2da38241089c6350b166c8c851baa00634fc",
+      "state": "idle",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 9,
+      "completion_seq": 9,
+      "last_completion_seq": 9,
+      "completion_ref": null
+    },
+    "observed_at": "2026-11-07T01:39:14.889006Z"
+  },
+  "secondary": {
+    "contract": {
+      "version": "0.9.5",
+      "protocol": 22,
+      "schema_version": 1,
+      "schema_sha256": "9e2af207e9aa8183d4aeca5fde9cc48e7909bb40cdbd7cf21608a6d3ea78075b"
+    },
+    "binding": {
+      "namespace": "pr09-qualified-secondary-installation",
+      "session": "nexus-pr09-namespace-cvxe4ar4",
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "workspace_id": "w2",
+      "tab_id": "w2:t1",
+      "pane_id": "w2:p2",
+      "terminal_id": "term_65fa5cc0ea97f3",
+      "pid": 13264,
+      "creation_filetime": 134384891600944732,
+      "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-namespace-cvxe4ar4\\work\\codex.exe",
+      "agent_session_id_hash": null
+    },
+    "binding_hash": "sha256:abc751926ee13b5616f9997ca336069565e82461ea5b8a303815a46c6ca2481b",
+    "observation": {
+      "binding_hash": "sha256:abc751926ee13b5616f9997ca336069565e82461ea5b8a303815a46c6ca2481b",
+      "state": "unknown",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 0,
+      "completion_seq": null,
+      "last_completion_seq": 0,
+      "completion_ref": null
+    },
+    "observed_at": "2026-11-07T01:39:21.199652Z"
+  },
+  "same_pane_id": true,
+  "distinct_bindings": true,
+  "primary_unchanged_during_comparison": true,
+  "observer_allowlist_enforced": true,
+  "secondary_owned_processes": [
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 13264,
+      "creation_filetime": 134384891600944732,
+      "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-namespace-cvxe4ar4\\work\\codex.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 19004,
+      "creation_filetime": 134384891577395162,
+      "image_path": "c:\\python313\\python.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 38256,
+      "creation_filetime": 134384891578784740,
+      "image_path": "c:\\python313\\python.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 42964,
+      "creation_filetime": 134384891580146012,
+      "image_path": "c:\\python313\\python.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 44592,
+      "creation_filetime": 134384891576898236,
+      "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-namespace-cvxe4ar4\\distribution\\conpty\\x64\\openconsole.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 49540,
+      "creation_filetime": 134384891578644949,
+      "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-namespace-cvxe4ar4\\distribution\\conpty\\x64\\openconsole.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 50208,
+      "creation_filetime": 134384891580003303,
+      "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-namespace-cvxe4ar4\\distribution\\conpty\\x64\\openconsole.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 52268,
+      "creation_filetime": 134384891571460098,
+      "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-namespace-cvxe4ar4\\distribution\\herdr.exe"
+    },
+    {
+      "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+      "pid": 52280,
+      "creation_filetime": 134384891571659315,
+      "image_path": "c:\\windows\\system32\\conhost.exe"
+    }
+  ],
+  "secondary_stop": {
+    "canonical_server_stop": true,
+    "launcher_exit_code": 0,
+    "held_processes": 9,
+    "all_owned_processes_exited": true,
+    "remaining_owned_pids": []
+  },
+  "primary_alive_and_binding_unchanged_after_secondary_stop": true,
+  "script_sha256": "fa067150e8d4da6be17df511b83a45863d46e589a82e5be67edcf2d58678546c"
+}

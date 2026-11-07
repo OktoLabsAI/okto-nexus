@@ -1,0 +1,9 @@
+{
+  "url": "http://127.0.0.1:54683",
+  "pid": 33196,
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\server-home",
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\server.log",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\qualified\\venv\\Scripts\\python.exe",
+  "shutdown": "GET /api/v1/service then POST /api/v1/service/stop with current instance_id and generation",
+  "launcher": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-installed-_p9t3pls\\server_entry.py"
+}

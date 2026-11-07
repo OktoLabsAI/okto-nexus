@@ -10,3 +10,6 @@ plans/agent_ops/evidence/pr07-attention-ui/** -text
 # PR-08 manifests retain original test, installed-wheel and browser bytes.
 plans/agent_ops/evidence/pr08-observations*.json -text
 plans/agent_ops/evidence/pr08-observations/** -text
+# PR-09 retains exact report bytes, including original CRLF and diagnostic spaces.
+plans/agent_ops/evidence/pr09-herdr/** -text -whitespace
+plans/agent_ops/evidence/pr09-herdr*.json -text -whitespace

@@ -1,0 +1,34 @@
+{
+  "result": "passed",
+  "observed_at": "2026-11-07T01:34:29.062180+00:00",
+  "view": {
+    "observed_instance_id": "obs_inst_0000000000000007",
+    "source_id": "obs_src_0000000000000006",
+    "agent_id": "pr09-observed-fixture",
+    "workspace_id": "pr09-smoke-workspace",
+    "generation": 9,
+    "external_instance_ref": "pr09-real-herdr-explicit-occupant",
+    "source_kind": "herdr",
+    "source_revision": 1,
+    "freshness": "stale",
+    "activity_state": "unknown",
+    "source_last_received_at": "2026-11-07T01:32:33.196195Z",
+    "source_continuity": "delayed",
+    "last_report": {
+      "sequence": 1,
+      "state": "idle",
+      "evidence": "inferred",
+      "observed_at": "2026-11-07T01:32:32.964005Z",
+      "received_at": "2026-11-07T01:32:33.196195Z",
+      "valid_until": "2026-11-07T01:33:02.964005Z",
+      "reason_code": "external_idle",
+      "reason_text": null,
+      "current_completion_ref": null,
+      "last_completion_ref": null,
+      "last_completion_received_at": null
+    },
+    "observational_only": true,
+    "canonical_session_ref": null
+  },
+  "canonical_unchanged": true
+}

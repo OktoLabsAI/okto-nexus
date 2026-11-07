@@ -1,0 +1,30 @@
+{
+  "revision": 1,
+  "previous_harness": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr08-installed-wy268uaa",
+  "scripts": {
+    "build_release.py": {
+      "template_sha256": "34da40b40f94829f1bd4df7d76abe88b4acc0eff517daa91f6a6e90432909853",
+      "prepared_sha256": "aa3c3a16aeca4c3264d0f63faf0bd66fb341cce5db93041516d5dc523b7ba96a"
+    },
+    "qualify_installed.py": {
+      "template_sha256": "1dcca21146cf048acdb8a7f2750247c5602a8eb299475b8733af5e70531d7c63",
+      "prepared_sha256": "5320add9215f1615bc164eb9bb270738bd41851ae9c12f2782b37501226b3c17"
+    },
+    "verify_release.py": {
+      "template_sha256": "0490bbdd28134e1f42d226644303e9890c2dfa98a4c69e1004b109bf7480c5e7",
+      "prepared_sha256": "d14f6a930890890c3d85568c176be3a18ede4485dfdc619c900b0e1f67d31f9a"
+    },
+    "server_entry.py": {
+      "template_sha256": "ba161774984e7b73cd0109125e2108fba4ecb7ff984c1d6677e0fa95e78e19d7",
+      "prepared_sha256": "6b0e62dc2390df138888c8ad99a59ec52948c76b7342ba1f1b364d41f417da99"
+    },
+    "start_server.py": {
+      "template_sha256": "8b5babc314f9b750613a02f8b25c0b4d4f659d0032e105d49010c2492703df89",
+      "prepared_sha256": "5c9db6572483db0338dd72994fc5a3844cbb2416e91baeb13deee044461f9a91"
+    },
+    "stop_server.py": {
+      "template_sha256": "8687fb0caf19b7d65cb08417fb2ed288a9fab0e57ee958e69493442340448e47",
+      "prepared_sha256": "1fdffe6a84ec18408b6a183af9c8020d2581ea8ec0fb29efb994ddedab94a7ed"
+    }
+  }
+}

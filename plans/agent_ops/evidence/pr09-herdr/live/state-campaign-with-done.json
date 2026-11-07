@@ -1,0 +1,336 @@
+{
+  "real_herdr": true,
+  "synthetic_process": true,
+  "synthetic_lifecycle_hooks": true,
+  "provider_inference": false,
+  "binding": {
+    "namespace": "pr09-state-campaign",
+    "session": "nexus-pr09-6fcb0c9a",
+    "host_id": "e3852ac79391f0287b0665f49d31762657fe5be892557157c4168e18f0d86800",
+    "workspace_id": "w1",
+    "tab_id": "w1:t1",
+    "pane_id": "w1:p1",
+    "terminal_id": "term_65fa5400f80f51",
+    "pid": 46324,
+    "creation_filetime": 134384870609652051,
+    "image_path": "c:\\users\\jpamb\\appdata\\local\\temp\\pr09-herdr-0.9.5-_n3kwt9i\\work\\codex.exe",
+    "agent_session_id_hash": null
+  },
+  "observations": [
+    {
+      "stage": "initial-working",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "working",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 2,
+      "completion_seq": null,
+      "last_completion_seq": 0,
+      "completion_ref": null,
+      "observed_at": "2026-11-07T01:19:05.933925Z"
+    },
+    {
+      "stage": "blocked",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "blocked",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 3,
+      "completion_seq": null,
+      "last_completion_seq": 0,
+      "completion_ref": null,
+      "observed_at": "2026-11-07T01:19:06.434304Z"
+    },
+    {
+      "stage": "idle",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "idle",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 4,
+      "completion_seq": 4,
+      "last_completion_seq": 4,
+      "completion_ref": "herdr:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf:4",
+      "observed_at": "2026-11-07T01:19:06.982401Z"
+    },
+    {
+      "stage": "idle-repeated",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "idle",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 4,
+      "completion_seq": 4,
+      "last_completion_seq": 4,
+      "completion_ref": "herdr:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf:4",
+      "observed_at": "2026-11-07T01:19:07.480860Z"
+    },
+    {
+      "stage": "renamed",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "idle",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 4,
+      "completion_seq": 4,
+      "last_completion_seq": 4,
+      "completion_ref": "herdr:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf:4",
+      "observed_at": "2026-11-07T01:19:08.125482Z"
+    },
+    {
+      "stage": "working-again",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "working",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 5,
+      "completion_seq": null,
+      "last_completion_seq": 4,
+      "completion_ref": null,
+      "observed_at": "2026-11-07T01:19:08.770984Z"
+    },
+    {
+      "stage": "done",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "idle",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 6,
+      "completion_seq": 6,
+      "last_completion_seq": 6,
+      "completion_ref": "herdr:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf:6",
+      "observed_at": "2026-11-07T01:20:40.889076Z",
+      "herdr_status": "done"
+    },
+    {
+      "stage": "done-repeated",
+      "binding_hash": "sha256:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf",
+      "state": "idle",
+      "evidence": "inferred",
+      "revision": 0,
+      "state_change_seq": 6,
+      "completion_seq": 6,
+      "last_completion_seq": 6,
+      "completion_ref": "herdr:5d83f3501b68db755ce5595ba4260e50535e8379b0878905f50987e9669e21cf:6",
+      "observed_at": "2026-11-07T01:20:41.312198Z",
+      "herdr_status": "done"
+    }
+  ],
+  "observer_commands": [
+    {
+      "command": "version",
+      "pane_id": null
+    },
+    {
+      "command": "schema",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    },
+    {
+      "command": "status",
+      "pane_id": null
+    },
+    {
+      "command": "process_info",
+      "pane_id": "w1:p1"
+    },
+    {
+      "command": "snapshot",
+      "pane_id": null
+    }
+  ],
+  "observer_terminal_reads": 0,
+  "observer_control_commands": 0,
+  "reads_preserved_herdr_done": true
+}

@@ -1,0 +1,14 @@
+{
+  "result": "passed",
+  "cli_result": {
+    "code": "HERDR_TARGET_CHANGED",
+    "status": "unavailable"
+  },
+  "repeat": {
+    "code": "OBSERVER_REASSOCIATION_REQUIRED",
+    "status": "unavailable"
+  },
+  "sequence": 6,
+  "invalidated": true,
+  "wheel_sha256": "fe597e0e5a7256d6c3328382d4a046706cba3cc37f4e15e286afad54eab2d29d"
+}

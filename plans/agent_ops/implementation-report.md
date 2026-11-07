@@ -492,3 +492,23 @@ scope, deduplication and exact artifacts. Injected storage failures are not a
 physical-disk-full campaign. Herdr/schema/helper qualification remains PR-09;
 external attention and joint regression remain PR-10. Existing real provider,
 client and user-service acceptance gates remain open. Full R3 is still in progress.
+
+## 2026-11-06 — PR-09: observador e helper em qualificação
+
+- Implementados `observe herdr bind|run|status`, vínculo explícito, identidade de criação do processo local, transporte só de metadados, journal com exclusão e helper de publicação restrita. A recuperação preserva a incerteza acumulada e nunca troca o reporte pendente por outro conteúdo.
+- **316 testes distintos de origem passaram**. Revisão independente cobriu transporte, identidade, persistência, CLI e recuperação; diagnósticos iniciais permanecem no manifesto.
+- Herdr Windows x64 **0.9.5/protocolo 22/schema 1**, pacote oficial com checksum e schema instalado retidos. A sessão descartável confirmou working/blocked/idle/done, referência estável de conclusão, renomeação e preservação do done após leitura. O observador fez 53 chamadas permitidas, sem leitura de terminal nem controle.
+- O processo observado e os hooks são sintéticos, explicitamente identificados. Isso qualifica a integração com Herdr real, sem alegar execução de provedor/cliente nativo. Wrappers, remote e outras plataformas não são aceitos como identidade comprovada.
+- Qualificação com Nexus instalado, casos restantes de troca/desconexão e commit/push PR-09 estão em andamento. Core/Connector não mudaram; PR-10 e os demais aceites integrais R3 continuam abertos.
+- [Evidências de progresso](plans/agent_ops/evidence/pr09-herdr-progress.md) e [manifesto inicial](plans/agent_ops/evidence/pr09-herdr/initial-manifest.json).
+
+## 2026-11-06 — PR-09: observador Herdr e helper qualificados
+
+- Entregues `observe herdr bind|run|status`, vínculo explícito com revisão, identidade Windows por processo/criação/imagem/host, transporte só de metadados e helper restrito. Journal persiste intenção/seq antes de cada envio e mantém incerteza até recibo válido; retry histórico explícito não precisa do executável Herdr.
+- **318 testes de implementação, dois de regressão CLI e 321 testes instalados passaram**; reruns anteriores não são somados. Wheel final `fe597e0e5a7256d6c3328382d4a046706cba3cc37f4e15e286afad54eab2d29d`: **668 arquivos** conferidos. V2 altera somente o transporte CLI Herdr; os 667 demais arquivos são iguais aos do Server real mantido para a campanha.
+- Herdr Windows **0.9.5/protocolo 22/schema 1** real, schema/ZIP/executável com hashes retidos. Processo observado e hooks são sintéticos, explicitamente distintos de OpenAI Codex ou inferência. Campanhas reais cobrem working/blocked/idle/done, referências estáveis, renomeação, dois namespaces com mesmo pane ID, movimentação, substituição e stop/restart.
+- A campanha instalada auditou **143 leituras** permitidas; a de estado, 53; a de namespaces, 34. Nenhuma leu terminal ou controlou agente. **147 tabelas canônicas permaneceram idênticas**; conclusão repetida emitiu um único evento observacional; startup/reassociação não inventaram conclusão. TTL expirou para stale/unknown.
+- O teste real de move encontrou recusa sem invalidação persistente; V2 corrigiu `HERDR_TARGET_CHANGED` e revalidou o fluxo. Relatórios iniciais permanecem. Quatro strings de credencial sintética em IDs de testes foram redigidas com hashes originais preservados; bearer temporário não foi coletado.
+- As duas Herdr foram encerradas canonicamente, com saída dos processos próprios confirmada. Nexus terminou `DRAINED`, sem recursos/erros, e seu PID saiu; a sondagem TCP não conectou. Nenhum serviço pessoal ou provedor foi usado.
+- **PR-09 IMPLEMENTED; OBS-05…10 VERIFIED no escopo Windows/local declarado.** PR-10, campanhas reais pendentes de M1/M2/serviços e aceite integral R3 continuam abertos. Core/Connector sem alterações; hash do plano e conjuntos fixos de IDs preservados.
+- [Evidências e limites](plans/agent_ops/evidence/pr09-herdr.md), [manifesto de 142 artefatos](plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json) e [uso do observador](docs/herdr-observer.md).

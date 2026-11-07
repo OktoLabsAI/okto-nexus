@@ -1,0 +1,10 @@
+onboarding = false
+[terminal]
+default_shell = "C:\\Python313\\python.exe"
+shell_mode = "non_login"
+new_cwd = "current"
+[update]
+version_check = false
+manifest_check = false
+[session]
+resume_agents_on_restore = false

@@ -1,0 +1,43 @@
+{
+  "revision": 1,
+  "session": "nexus-pr09-namespace-cvxe4ar4",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-namespace-cvxe4ar4",
+  "official_version": "0.9.5",
+  "distribution_hashes": {
+    "herdr.exe": "cd877c8744296f4a38a2703bf13cf11728973649ec54959959c4587ffe5368b2",
+    "conpty/conpty.dll": "39fba2713e2495117b1591ae8c32a3b904bea7aa66069cf7815e2844c76d75d8",
+    "conpty/herdr-conpty.json": "c8f499ad82c568e737d6bc7d0b583e3785d2f43af3d2c0cebb856076690533f5",
+    "THIRD-PARTY-NOTICES/Microsoft.Windows.Console.ConPTY-LICENSE.txt": "5d177f23ecfeb0ea8e050b6a5a16355e1ae9a0b286436ca8f83ed08b3795be6b",
+    "THIRD-PARTY-NOTICES/Microsoft.Windows.Console.ConPTY-NOTICE.md": "e7fbaadee6ab20c28b87730a510ee5f5815d8fb4bd88d1d54d282dc2a74c0726",
+    "conpty/arm64/OpenConsole.exe": "ed7622fd0d3bedc9ab9f122f5e58edf0def9e7999224f52dd395ba9f54edbe09",
+    "conpty/x64/OpenConsole.exe": "b7fd936c2668b87b9ecf7b3366dc6568afc1c6f981874cba3e955a1c35cf8160"
+  },
+  "distribution_original_proof": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr09-herdr-0.9.5-_n3kwt9i\\distribution-proof.json",
+  "fixture": {
+    "synthetic": true,
+    "is_openai_codex": false,
+    "provider_inference": false,
+    "source": "work/Fixture.cs",
+    "executable": "work/codex.exe",
+    "source_sha256": "110875cf462d1280e18197f7933f0bf3ca5816d2cd11a1b9b98cc12501096631",
+    "executable_sha256": "e5d69cbce453e749c0deaa167447be670d1322345dd3fcd1bf97ff3ff6ae4fdf"
+  },
+  "environment_keys": [
+    "APPDATA",
+    "COMSPEC",
+    "HERDR_CONFIG_PATH",
+    "HOME",
+    "LOCALAPPDATA",
+    "NO_COLOR",
+    "NUMBER_OF_PROCESSORS",
+    "OS",
+    "PATH",
+    "PATHEXT",
+    "PROCESSOR_ARCHITECTURE",
+    "SYSTEMROOT",
+    "TEMP",
+    "TMP",
+    "USERPROFILE",
+    "WINDIR"
+  ]
+}

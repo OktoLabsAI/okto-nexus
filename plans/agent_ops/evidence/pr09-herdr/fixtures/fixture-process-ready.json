@@ -1,0 +1,24 @@
+{
+  "id": "cli:pane:process_info",
+  "result": {
+    "process_info": {
+      "foreground_process_group_id": 46324,
+      "foreground_processes": [
+        {
+          "argv": [
+            "C:\\fixture\\herdr-0.9.5\\work\\codex.exe",
+            "C:\\fixture\\herdr-0.9.5\\work\\stop-fixture-1"
+          ],
+          "argv0": "C:\\fixture\\herdr-0.9.5\\work\\codex.exe",
+          "cmdline": "C:\\fixture\\herdr-0.9.5\\work\\codex.exe C:\\fixture\\herdr-0.9.5\\work\\stop-fixture-1",
+          "cwd": "C:\\fixture\\herdr-0.9.5\\work\\",
+          "name": "codex.exe",
+          "pid": 46324
+        }
+      ],
+      "pane_id": "w1:p1",
+      "shell_pid": 51412
+    },
+    "type": "pane_process_info"
+  }
+}
