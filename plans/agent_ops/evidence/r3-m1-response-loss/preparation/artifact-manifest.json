@@ -1,0 +1,143 @@
+{
+  "kind": "finite_M1_response_loss_preparation_only",
+  "files": {
+    "response_loss.py": {
+      "bytes": 8755,
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56"
+    },
+    "test_response_loss.py": {
+      "bytes": 7712,
+      "sha256": "aaf03e6b2107fd8759f3fb876ce73b4e1eae86019ba7f512e770c6853e47cc95"
+    },
+    "test_installed_flow.py": {
+      "bytes": 6555,
+      "sha256": "9573fe435520010f358b22fbe0b847ff7dacebafcfe2c529561013c573cede08"
+    },
+    "run_synthetic.py": {
+      "bytes": 3526,
+      "sha256": "73a99c59fb7ceef1384a13ecb98737cf2a0dd88893be5e7db7877f3a897250ea"
+    },
+    "pytest.ini": {
+      "bytes": 85,
+      "sha256": "4f296035193670e79fea10507cb3f4db262ee058bf758636162d35361942a085"
+    },
+    "README.md": {
+      "bytes": 6041,
+      "sha256": "b49cbad47ba3a876112a0f82fe67f74b031396b007f6ccd61247bf370ee27a52"
+    },
+    "fixture-manifest.json": {
+      "bytes": 681,
+      "sha256": "48321752bfb79ff4c188bf6823912a49b48fb3916561400178a3f7e5c0938caa"
+    },
+    "synthetic-results.xml": {
+      "bytes": 5067,
+      "sha256": "bdc273298375e5ddcbd2b4c0e8bd414d5d659b30f2e9c624f772c9f18a20145c"
+    },
+    "installed-import-proof.json": {
+      "bytes": 1010,
+      "sha256": "9cee03a0d897def01a473fee6206e6e4ff7ab9554e8bce56f810f28003602aba"
+    },
+    "fixtures/test_binding_operator.py": {
+      "bytes": 28642,
+      "sha256": "d44090ef7f0b6dfaedf8f14a3a3b1cd0f11319e578ee70aa7e4e7fdb3ab933a0"
+    },
+    "fixtures/test_embedded_dispatch.py": {
+      "bytes": 44503,
+      "sha256": "3a4c8b265729482a86b7c77d0a3f3ff3e794fe3934ecb440de1fc082bf199324"
+    },
+    "fixtures/test_embedded_inventory.py": {
+      "bytes": 20599,
+      "sha256": "bcf26f49915be258a705ff969b0c49ca332446fafbd61dda400a2aabfd356ef4"
+    },
+    "fixtures/test_local_realization.py": {
+      "bytes": 15853,
+      "sha256": "7e3aa0601eae2721afab4a9fbc3676c83a061aa431bfcba7d9cfdd7c1ae4a1f6"
+    },
+    "fixtures/test_vertical_inventory.py": {
+      "bytes": 24148,
+      "sha256": "ff7cdeb3fa3159df99749bc6244760d4e2f847cbb047e2e19daa7c95d7e56168"
+    },
+    "synthetic-run-9lwj98ek/synthetic-results.xml": {
+      "bytes": 3758,
+      "sha256": "3d388866e3f5d8eefc867505457e4c48a67308a8254a862f5082178213885d13"
+    },
+    "synthetic-run-9lwj98ek/installed-import-proof.json": {
+      "bytes": 1010,
+      "sha256": "9cee03a0d897def01a473fee6206e6e4ff7ab9554e8bce56f810f28003602aba"
+    },
+    "synthetic-run-a2o99mdo/synthetic-results.xml": {
+      "bytes": 1457,
+      "sha256": "732dcbd0b711b3064661df962386408107c9b25e048559c6e77a0bcb3b635c06"
+    },
+    "synthetic-run-a2o99mdo/status.json": {
+      "bytes": 301,
+      "sha256": "a729c571b67aebe8be46d329d1db7e0a60cfd5a6aeb2aa78c39a32c7fcc62d96"
+    },
+    "synthetic-run-a2o99mdo/installed-import-proof.json": {
+      "bytes": 1010,
+      "sha256": "9cee03a0d897def01a473fee6206e6e4ff7ab9554e8bce56f810f28003602aba"
+    },
+    "synthetic-run-a2o99mdo/input-hashes-before.json": {
+      "bytes": 219316,
+      "sha256": "55fab500c40f74fbf649a967fcacf89cc9936b9852aa71649cb8af011465c6f6"
+    },
+    "synthetic-run-a2o99mdo/input-hashes-after.json": {
+      "bytes": 219316,
+      "sha256": "55fab500c40f74fbf649a967fcacf89cc9936b9852aa71649cb8af011465c6f6"
+    },
+    "synthetic-run-oziznf0y/synthetic-results.xml": {
+      "bytes": 544,
+      "sha256": "105409ab5aed0faca1a65ae0ec061bda792bcc25531782e6a8f3e829a84e3ee8"
+    },
+    "synthetic-run-oziznf0y/status.json": {
+      "bytes": 301,
+      "sha256": "a729c571b67aebe8be46d329d1db7e0a60cfd5a6aeb2aa78c39a32c7fcc62d96"
+    },
+    "synthetic-run-oziznf0y/installed-import-proof.json": {
+      "bytes": 1010,
+      "sha256": "9cee03a0d897def01a473fee6206e6e4ff7ab9554e8bce56f810f28003602aba"
+    },
+    "synthetic-run-oziznf0y/input-hashes-before.json": {
+      "bytes": 219316,
+      "sha256": "60fba264b7d8026e007ba06a22b67818ef553001823156481b60020b1cfbfe1f"
+    },
+    "synthetic-run-oziznf0y/input-hashes-after.json": {
+      "bytes": 219316,
+      "sha256": "60fba264b7d8026e007ba06a22b67818ef553001823156481b60020b1cfbfe1f"
+    },
+    "synthetic-run-ncmurvj3/synthetic-results.xml": {
+      "bytes": 1753,
+      "sha256": "b8732262b02adfb5f14755863bdeb6aab41ff0118c7fc391f29348eb2c36ad89"
+    },
+    "synthetic-run-ncmurvj3/status.json": {
+      "bytes": 301,
+      "sha256": "a729c571b67aebe8be46d329d1db7e0a60cfd5a6aeb2aa78c39a32c7fcc62d96"
+    },
+    "synthetic-run-ncmurvj3/installed-import-proof.json": {
+      "bytes": 1010,
+      "sha256": "9cee03a0d897def01a473fee6206e6e4ff7ab9554e8bce56f810f28003602aba"
+    },
+    "synthetic-run-ncmurvj3/input-hashes-before.json": {
+      "bytes": 219316,
+      "sha256": "60fba264b7d8026e007ba06a22b67818ef553001823156481b60020b1cfbfe1f"
+    },
+    "synthetic-run-ncmurvj3/input-hashes-after.json": {
+      "bytes": 219316,
+      "sha256": "60fba264b7d8026e007ba06a22b67818ef553001823156481b60020b1cfbfe1f"
+    }
+  },
+  "provider_executed": false,
+  "repo_edited": false,
+  "test_scope": "Installed ASGI/SQLite/Core, synthetic native only; Connector topology not exercised",
+  "initial_failures_preserved": true,
+  "latest_full_run": "synthetic-run-ncmurvj3: 11 distinct passed on final driver",
+  "final_focused_run": "Earlier synthetic-run-oziznf0y: 2 crash guard cases passed",
+  "excluded": [
+    "test-state",
+    "homes",
+    "SQLite",
+    "private driver/checkpoint state",
+    "__pycache__"
+  ],
+  "secret_scan_matches": 0
+}

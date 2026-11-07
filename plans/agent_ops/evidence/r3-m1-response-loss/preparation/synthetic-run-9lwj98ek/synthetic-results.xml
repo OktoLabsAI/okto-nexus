@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="13.913" timestamp="2026-11-07T11:11:47.396059-03:00" hostname="Alienware_m15"><testcase classname="test_response_loss" name="test_exact_one_loss_survives_driver_restart_and_never_reposts" time="0.045" /><testcase classname="test_response_loss" name="test_six_reservations_shared_by_two_lanes_not_seventh" time="0.075" /><testcase classname="test_response_loss" name="test_unconfirmed_response_not_qualified_fault_and_controls_remain_available[wrong_scope]" time="0.026" /><testcase classname="test_response_loss" name="test_unconfirmed_response_not_qualified_fault_and_controls_remain_available[wrong_id]" time="0.027" /><testcase classname="test_response_loss" name="test_unconfirmed_response_not_qualified_fault_and_controls_remain_available[transport]" time="0.025" /><testcase classname="test_response_loss" name="test_wrong_checkpoint_and_external_mutation_refuse_before_forward" time="0.012" /><testcase classname="test_response_loss" name="test_response_and_prompt_material_never_enter_driver_journal" time="0.025" /><testcase classname="test_response_loss" name="test_unrelated_reads_forward_without_fault_or_reservation" time="0.014" /><testcase classname="test_installed_flow" name="test_installed_admission_and_decision_response_loss_recover_without_replay" time="9.832"><failure message="Failed: DID NOT RAISE ConnectionError">connected_local = ((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-response-loss-4n_e6nii/synthetic-...agent_id': 'subject', ...}, &lt;test_embedded_dispatch.connect_local.&lt;locals&gt;.NativeFactory object at 0x0000029A2B91A510&gt;)
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-response-loss-4n_e6nii/synthetic-run-9lwj98ek/test-state/test_installed_admission_and_d0')
+
+    def test_installed_admission_and_decision_response_loss_recover_without_replay(connected_local, tmp_path):
+        setup, binding, native = connected_local
+        deps, app, client, *_ = setup
+        deps.config.feature_hitl = True
+        checkpoint = tmp_path / 'work.json'
+        def save(doc):
+            checkpoint.write_text(json.dumps(doc), encoding='utf-8')
+        def load():
+            return json.loads(checkpoint.read_text())
+        calls = []
+        def http(method, path, body=None):
+            calls.append((method, path))
+            response = client.request(method, path, json=body, headers={'X-Nexus-UI': '1'})
+            value = response.json()
+            if response.status_code &gt;= 400:
+                error = value.get('error', {})
+                raise ConnectionError(error.get('code', 'REQUEST_REFUSED'), 'Synthetic HTTP request refused',
+                                      stage=error.get('stage', 'http'), possible_effect=error.get('possible_effect', False))
+            return value
+        connection = dict(state='done', server_id=binding['server_id'],
+            selection=dict(agent='subject', client='codex', project=str(setup[6].resolve()), workspace_id=None,
+                           candidate_ref=None, provider_home=None), result={'binding': binding})
+        state = CampaignState(tmp_path / 'faults.json', campaign_id='installed-synthetic')
+        state.arm('admission', 'connector', 'm1-synthetic-work')
+        call = FiniteResponseLoss(http, load, state, 'connector')
+        flow = TerminalWork(call, save, connection)
+&gt;       with pytest.raises(ConnectionError) as error:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ConnectionError
+
+test_installed_flow.py:55: Failed</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,21 @@
+{
+  "scope": "installed ASGI/SQLite/Core with synthetic native peer only",
+  "modules": {
+    "okto_nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nexus_connector_core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "sha256": "2c4ca5d38bac7033748d5eea54aa5acb5d868566136c5a6d6782a5e65c507caf"
+    },
+    "okto_nexus_connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+      "sha256": "c79833725989b43129854c224c1ffd9095de2701371daefd577bb3dc6f0ef46f"
+    }
+  },
+  "native_provider": false,
+  "vault": false,
+  "os_service": false,
+  "connector_topology_exercised": false
+}

@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T14:15:18.756103+00:00",
+  "updated_at": "2026-11-07T14:23:13.732097+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11961,7 +11961,13 @@
       "additional_token_tolerance": 500000,
       "preventive_interrupt_tokens": 100000,
       "context_preparation": "plans/agent_ops/evidence/r3-m1-execution-context/context.json",
-      "native_discovery": "plans/agent_ops/evidence/r3-m1-execution-context/discovery.json"
+      "native_discovery": "plans/agent_ops/evidence/r3-m1-execution-context/discovery.json",
+      "response_loss_preparation": {
+        "status": "SYNTHETIC_INSTALLED_VERIFIED",
+        "final_unique_passes": 11,
+        "evidence": "plans/agent_ops/evidence/r3-m1-response-loss/artifact-manifest.json",
+        "limit": "Driver only; setup accounting and controller integration remain pending. No productive M1 acceptance."
+      }
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -13022,6 +13028,15 @@
       "summary": "Three installed payloads verified; exact tasks absent, scratch paths absent, candidate provider path and lifecycle argv pinned; passive discovery fixed with isolated byte-identical codex.exe copy. No provider or service effects.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-execution-context/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Finite M1 response-loss driver",
+      "status": "PREPARED",
+      "summary": "11 final synthetic/installed cases qualify client instrumentation and crash fences;992inputs unchanged. No product/provider/service change; runner integration remains pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-response-loss/milestone.md"
       ]
     }
   ]
