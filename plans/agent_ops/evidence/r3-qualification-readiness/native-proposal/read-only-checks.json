@@ -1,0 +1,116 @@
+[
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\inspect_installed.py",
+      "--output",
+      "installed-proof.json"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\pythonw.exe",
+      "-I",
+      "-B",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\inspect_installed.py",
+      "--imports-only",
+      "--output",
+      "pythonw-import-proof.json"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "service",
+      "--help"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "81848aca4a9867e84f0f4f4c447ceb3c93718be35db545d4230bd5563f1071e7",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "service",
+      "--help"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "7e4f760040c6455de61ceba7f7d275b140df25a4aaa485da52dd81534dd35aa2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "service",
+      "install",
+      "--help"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "5edf6c8200317528b33f917a35b7c662549d2598e09705a58a1080d356fd7c45",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "daemon",
+      "--help"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "44c636ceb3e62eaf5b6c0665999041dc1f63bdfa4175d56395301ef5dc74f6b0",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "daemon",
+      "start",
+      "--help"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "567da96634bc47f71b606f8a420b621f2cb858ccd52e1938ce254cfac226c9b1",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "daemon",
+      "stop",
+      "--help"
+    ],
+    "returncode": 0,
+    "stdout_sha256": "e57499e563fd78d7407c53e8f728590f66f1501a8ce1ccaa70a847442dd60546",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

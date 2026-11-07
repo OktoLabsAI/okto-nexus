@@ -9910,14 +9910,17 @@
         "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
         "plans/agent_ops/evidence/pr04-participant-init.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md"
       ],
       "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
         "shared_participant_contract_and_editor": "VERIFIED",
         "participant_init_review_apply_recovery_windows": "VERIFIED",
         "participant_actual_harness_environment": "NOT_RUN",
-        "pr09_optional_windows_observer_contract": "VERIFIED"
+        "pr09_optional_windows_observer_contract": "VERIFIED",
+        "current_ci_pins_and_declared_dependency_solve": "VERIFIED"
       }
     },
     "RG-09": {
@@ -10360,11 +10363,14 @@
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
-        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json"
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md"
       ],
       "subscopes": {
         "remote_setup_installed_contract": "VERIFIED",
-        "remote_renewal_installed_contract": "VERIFIED"
+        "remote_renewal_installed_contract": "VERIFIED",
+        "current_ci_pins_and_declared_dependency_solve": "VERIFIED"
       }
     },
     "AC-08": {
@@ -10620,6 +10626,20 @@
         "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
         "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
         "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json"
+      ]
+    },
+    "r3_qualification_readiness": {
+      "status": "IN_PROGRESS",
+      "ci_installed_cases": 8,
+      "ci_changed_inputs": [],
+      "native_campaign": "PREPARED_NOT_AUTHORIZED_NOT_RUN",
+      "completion_matrix": "17 criteria and11 RG; no global promotion",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/audit/completion-matrix.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/artifact-manifest.json"
       ]
     }
   },
@@ -11389,6 +11409,19 @@
         "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
         "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
         "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "CI now pins the published Connector renewal wheel a8cf1810 instead of stale 63d99d16. All 123 Connector files match source. A fresh isolated environment resolves declared dependencies with MCP 1.30.0 and passes pip check. The actual installed CI runner passed 8 cases (four remote-renewal and four artifact/pin checks), with unchanged inputs. The finite audit maps 17 completion criteria and 11 RG scenarios without promotion; exact joint, compatibility and public-evidence reviews remain alongside authorized real campaigns. The updated 24-action native-service proposal is prepared only, with no registration/start performed.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/audit/completion-matrix.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/artifact-manifest.json"
       ]
     }
   ]

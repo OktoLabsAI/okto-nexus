@@ -537,3 +537,9 @@ Onboarding e agente existente agora compartilham comandos públicos de review/ap
 Passaram 138 testes de frontend e typecheck/build; 22 checkpoints no navegador usaram o wheel instalado com 690 arquivos conferidos. Nos dois Servers, as 34 comparações de estado permaneceram iguais, inclusive hashes brutos de agentes. As requisições capturadas foram GET; console sem erros/avisos. Layout de 390 px, tema escuro, clipboard, foco e onboarding vazio foram conferidos. Browser encerrado e ambos Servers DRAINED com PIDs finalizados.
 
 Somente subescopos de DX-03/04/05/12 e DX-T01/03/09/11/35 foram verificados. Os status globais e DX-02 cofre real→cliente permanecem iguais; M1/M2/R3 seguem abertos. Connector/Core sem alterações. [Evidências e limites](plans/agent_ops/evidence/pr04-participant-guide/milestone.md).
+
+## 2026-11-07 — Dependência CI atual e matriz de fechamento
+
+O pin CI do Connector foi corrigido para o wheel publicado a8cf1810, com 123 arquivos iguais à fonte. Venv limpa com MCP 1.30.0 passou no pip check e nos 8 testes instalados pelo runner CI, sem alterações de inputs. O ambiente histórico de browser tinha MCP 1.29.1 abaixo do mínimo declarado; não é usado como prova de resolução de dependências.
+
+Matriz finita dos17 critérios e11 RG registrada; ainda há verificações conjuntas, compatibilidade e revisão de evidências que podem avançar sem autorização. A proposta atualizada de duas tarefas temporárias Windows está preparada e aguardando resposta; nenhuma tarefa foi registrada. Aceites reais e plano integral continuam abertos. [Evidências e proposta](plans/agent_ops/evidence/r3-qualification-readiness/milestone.md).

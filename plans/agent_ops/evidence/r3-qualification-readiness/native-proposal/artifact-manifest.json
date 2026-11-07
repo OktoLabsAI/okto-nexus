@@ -1,0 +1,254 @@
+{
+  "status": "PREPARED_NOT_AUTHORIZED_NOT_RUN",
+  "revision": 2,
+  "artifact_count": 33,
+  "proposal_sha256": "fbf8644cf836886bc7bac596211a783d6090e79077c643b1d2a627c87a3a37e3",
+  "aggregate_sha256": "748d7800f103ea7be0177cbd0fd4790fdce6877963b008cfb1ef2a5e3b0ae1d0",
+  "prior_proposal": {
+    "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\pr02-native-campaign-plan.json",
+    "sha256": "0ced0ecb8a4b9aebdb1893f3eb676b6019802bfd26ccc4e26fb6ed4bcab834a2",
+    "unchanged": true
+  },
+  "task_names": {
+    "nexus": "OktoNexus-server-6aef221d64f2efec8a10f250061790685bcb7feb810528ee3ac3c23f6ffefd4c",
+    "connector": "OktoNexus-connector-bf22eab965deaf86933270fe35b98d098ced0c860809e19de98d49601f58b6b1"
+  },
+  "campaign_actions_executed": 0,
+  "native_preparation_calls": "two exact-name read calls only",
+  "exclusions": [
+    "No data homes, DB/WAL, venv, dependency or product wheel binaries, key/token/cookie material copied."
+  ],
+  "artifacts": [
+    {
+      "path": "connector-daemon-help.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-daemon-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-daemon-help.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-daemon-help.stdout.txt",
+      "sha256": "44c636ceb3e62eaf5b6c0665999041dc1f63bdfa4175d56395301ef5dc74f6b0",
+      "bytes": 704,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-daemon-start-help.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-daemon-start-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-daemon-start-help.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-daemon-start-help.stdout.txt",
+      "sha256": "567da96634bc47f71b606f8a420b621f2cb858ccd52e1938ce254cfac226c9b1",
+      "bytes": 316,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-daemon-stop-help.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-daemon-stop-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-daemon-stop-help.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-daemon-stop-help.stdout.txt",
+      "sha256": "e57499e563fd78d7407c53e8f728590f66f1501a8ce1ccaa70a847442dd60546",
+      "bytes": 314,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-service-help.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-service-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-service-help.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-service-help.stdout.txt",
+      "sha256": "7e4f760040c6455de61ceba7f7d275b140df25a4aaa485da52dd81534dd35aa2",
+      "bytes": 861,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-service-install-help.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-service-install-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "connector-service-install-help.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\connector-service-install-help.stdout.txt",
+      "sha256": "5edf6c8200317528b33f917a35b7c662549d2598e09705a58a1080d356fd7c45",
+      "bytes": 285,
+      "byte_exact": true
+    },
+    {
+      "path": "curate_proposal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\curate_proposal.py",
+      "sha256": "068df7ee47fa5e6db7ec5a59d4a1f54fcc4c8d0e1c5c7a4582376ccf714519d6",
+      "bytes": 3200,
+      "byte_exact": true
+    },
+    {
+      "path": "dependency-download.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\dependency-download.log",
+      "sha256": "735f51a9847ff3cf8149df14661d1d6a249b5d0ba7bbde23bfd0e4446e70d90d",
+      "bytes": 13591,
+      "byte_exact": true
+    },
+    {
+      "path": "environment-preparation.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\environment-preparation.json",
+      "sha256": "3461eabb8dee458e3f166d3b8e2906aebc953b897fec3391c779a0f7f13c419e",
+      "bytes": 10886,
+      "byte_exact": true
+    },
+    {
+      "path": "environment.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\environment.json",
+      "sha256": "50dacb4aa2c4dcd22cc58b22de21f9d5daf3c53898a688746468daef7632806a",
+      "bytes": 947,
+      "byte_exact": true
+    },
+    {
+      "path": "finalize_proposal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\finalize_proposal.py",
+      "sha256": "17336244811aaa24acb07c183c5fe6ad93f355eb50f469189b4600a471842db8",
+      "bytes": 2038,
+      "byte_exact": true
+    },
+    {
+      "path": "inspect_installed.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\inspect_installed.py",
+      "sha256": "7f6ee774bdb04df2074ea7d1572b0d61d3a57e9e3d45978716ed29f0aa7dbc30",
+      "bytes": 3718,
+      "byte_exact": true
+    },
+    {
+      "path": "installed-inspection.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\installed-inspection.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "installed-inspection.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\installed-inspection.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "installed-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\installed-proof.json",
+      "sha256": "f739deb22278c458e8ee55ec678cdcf1af53a3889c1d15615286ba65457fc10f",
+      "bytes": 116247,
+      "byte_exact": true
+    },
+    {
+      "path": "isolated-install.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\isolated-install.log",
+      "sha256": "86b457d8be6ecfd88bc5b0f379b404b33c7f3a7b3382b084f71cc60487caa2e9",
+      "bytes": 5713,
+      "byte_exact": true
+    },
+    {
+      "path": "native-service-campaign-proposal.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\native-service-campaign-proposal.json",
+      "sha256": "fbf8644cf836886bc7bac596211a783d6090e79077c643b1d2a627c87a3a37e3",
+      "bytes": 48795,
+      "byte_exact": true
+    },
+    {
+      "path": "nexus-service-help.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\nexus-service-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "nexus-service-help.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\nexus-service-help.stdout.txt",
+      "sha256": "81848aca4a9867e84f0f4f4c447ceb3c93718be35db545d4230bd5563f1071e7",
+      "bytes": 1493,
+      "byte_exact": true
+    },
+    {
+      "path": "pip-check.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\pip-check.log",
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31,
+      "byte_exact": true
+    },
+    {
+      "path": "preparation-diagnostic.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\preparation-diagnostic.json",
+      "sha256": "fa209a3e15c9361c4777895f723e1af9c6b2ea74d122652e0aa4c4940035bbd3",
+      "bytes": 916,
+      "byte_exact": true
+    },
+    {
+      "path": "prepare_environment.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\prepare_environment.py",
+      "sha256": "0c4a86e981707ec9b1527bba0ab7895b8c861ed38385f6506d5dd29ba5960293",
+      "bytes": 4459,
+      "byte_exact": true
+    },
+    {
+      "path": "prepare_proposal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\prepare_proposal.py",
+      "sha256": "60be6de37d93fabf39cb096b182ed190d2d7c1b5f8a5b3f43827d5b7ed9e5c42",
+      "bytes": 10114,
+      "byte_exact": true
+    },
+    {
+      "path": "pythonw-import-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\pythonw-import-proof.json",
+      "sha256": "e5302492b967a98325b6de0a05ab6ee97a5a84cd9fef4c6e5f025d9f610cca09",
+      "bytes": 115578,
+      "byte_exact": true
+    },
+    {
+      "path": "pythonw-imports.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\pythonw-imports.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "pythonw-imports.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\pythonw-imports.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "read-only-checks.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\read-only-checks.json",
+      "sha256": "179607af28b466f599198cbe4de0b0cb9b5a32bf957d52e3e5c618bf6cbf7da5",
+      "bytes": 3925,
+      "byte_exact": true
+    },
+    {
+      "path": "requirements-pinned.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\requirements-pinned.txt",
+      "sha256": "f287de4e60f8da50764b21fce3b173ac6a1e5b793c852bf643b6460fc57e22cc",
+      "bytes": 647,
+      "byte_exact": true
+    },
+    {
+      "path": "venv-create.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\venv-create.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "byte_exact": true
+    }
+  ]
+}

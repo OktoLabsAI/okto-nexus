@@ -1,0 +1,56 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Scripts\python.exe
+cachedir: C:UsersjpambAppDataLocalTempnexus-ci-connector-refresh-la1tb1l6pytest-cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\runtime-temp\nexus-ci-installed-odzeeoxb\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_renewal.py::test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session[exhausted] PASSED [ 12%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_renewal.py::test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session[expired] PASSED [ 25%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_renewal.py::test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets PASSED [ 37%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_renewal.py::test_remote_revocation_keeps_recovered_receipt_historical_and_participant_cannot_renew PASSED [ 50%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_ns01.py::test_ns01_03 PASSED [ 62%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_ci_installed_partitions.py::test_partitions_cover_every_test_file_once PASSED [ 75%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_ci_installed_partitions.py::test_partitioning_preserves_explicit_files_and_rejects_missing_paths PASSED [ 87%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_installed_campaign_inputs.py::test_campaign_tracks_ui_build_and_runner_changes PASSED [100%]
+
+============================== warnings summary ===============================
+..\..\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/execution_r4/test_remote_renewal.py: 12 warnings
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\websockets\exceptions.py:139: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+    warnings.warn(  # deprecated in 13.1 - 2024-09-21
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\ci\tests.xml -
+================= 8 passed, 13 warnings in 140.08s (0:02:20) ==================

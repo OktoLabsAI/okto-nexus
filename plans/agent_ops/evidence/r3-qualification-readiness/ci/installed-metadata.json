@@ -1,0 +1,83 @@
+{
+  "okto-nexus": {
+    "version": "0.3.3",
+    "requirements": [
+      "okto-nexus-connector-core==0.0.14",
+      "mcp<2,>=1.0",
+      "pydantic>=2",
+      "pywin32; sys_platform == \"win32\" and extra == \"serve\"",
+      "keyring; sys_platform != \"win32\" and extra == \"serve\"",
+      "fastapi!=0.137.0,>=0.110; extra == \"serve\"",
+      "uvicorn>=0.29; extra == \"serve\"",
+      "wsproto>=1.2; extra == \"serve\"",
+      "sentence-transformers>=2.5; extra == \"serve\"",
+      "tiktoken<1,>=0.7; extra == \"serve\"",
+      "pywin32; sys_platform == \"win32\" and extra == \"serve-lite\"",
+      "keyring; sys_platform != \"win32\" and extra == \"serve-lite\"",
+      "fastapi!=0.137.0,>=0.110; extra == \"serve-lite\"",
+      "uvicorn>=0.29; extra == \"serve-lite\"",
+      "wsproto>=1.2; extra == \"serve-lite\"",
+      "sentence-transformers>=2.5; extra == \"embeddings\"",
+      "pytest>=8; extra == \"dev\"",
+      "pytest-asyncio>=0.23; extra == \"dev\"",
+      "fastapi!=0.137.0,>=0.110; extra == \"dev\"",
+      "uvicorn>=0.29; extra == \"dev\"",
+      "wsproto>=1.2; extra == \"dev\"",
+      "httpx>=0.27; extra == \"dev\""
+    ]
+  },
+  "okto-nexus-connector": {
+    "version": "0.0.12",
+    "requirements": [
+      "okto-nexus-connector-core==0.0.14",
+      "websockets<18,>=15",
+      "httpx<1,>=0.27",
+      "pywin32; sys_platform == \"win32\"",
+      "keyring<26,>=25; extra == \"keyring\"",
+      "pytest>=8; extra == \"test\"",
+      "pytest-asyncio>=0.24; extra == \"test\"",
+      "build>=1; extra == \"test\"",
+      "cryptography>=43; extra == \"test\"",
+      "pywin32; sys_platform == \"win32\" and extra == \"test\"",
+      "pywin32; sys_platform == \"win32\" and extra == \"m6-prototype\""
+    ]
+  },
+  "okto-nexus-connector-core": {
+    "version": "0.0.14",
+    "requirements": [
+      "rfc8785==0.1.4",
+      "jsonschema==4.26.0",
+      "mcp<2,>=1.30",
+      "anyio<5,>=4.5",
+      "pytest>=8; extra == \"test\"",
+      "pytest-asyncio>=0.24; extra == \"test\"",
+      "build>=1; extra == \"test\""
+    ]
+  },
+  "mcp": {
+    "version": "1.30.0",
+    "requirements": [
+      "anyio>=4.5",
+      "httpx-sse>=0.4",
+      "httpx<1.0.0,>=0.27.1",
+      "jsonschema>=4.20.0",
+      "pydantic-settings>=2.5.2",
+      "pydantic<3.0.0,>=2.11.0; python_version < '3.14'",
+      "pydantic<3.0.0,>=2.12.0; python_version >= '3.14'",
+      "pyjwt[crypto]>=2.10.1",
+      "python-multipart>=0.0.9",
+      "pywin32>=310; sys_platform == 'win32' and python_version < '3.14'",
+      "pywin32>=311; sys_platform == 'win32' and python_version >= '3.14'",
+      "sse-starlette>=1.6.1",
+      "starlette>=0.27; python_version < '3.14'",
+      "starlette>=0.48.0; python_version >= '3.14'",
+      "typing-extensions>=4.9.0",
+      "typing-inspection>=0.4.1",
+      "uvicorn>=0.31.1; sys_platform != 'emscripten'",
+      "python-dotenv>=1.0.0; extra == 'cli'",
+      "typer>=0.16.0; extra == 'cli'",
+      "rich>=13.9.4; extra == 'rich'",
+      "websockets>=15.0.1; extra == 'ws'"
+    ]
+  }
+}

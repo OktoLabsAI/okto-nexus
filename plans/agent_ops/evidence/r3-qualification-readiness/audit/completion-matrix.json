@@ -1,0 +1,1215 @@
+{
+  "format": "okto.r3.finite-completion-audit",
+  "version": 1,
+  "created_at_utc": "2026-11-07T08:44:43.756595+00:00",
+  "scope": "Read-only audit of published R3; existing evidence read, no tests rerun and no product/ledger edits.",
+  "publication_snapshot": {
+    "nexus_commit": "26e6c746d61f98820258ad65fcc69b685e0e2acf",
+    "connector_commit": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+    "core_commit": "5d31784362676e7231b5c612c458a4d8f4b5db4a",
+    "plan_path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "ledger_path": "plans/agent_ops/ledger.json",
+    "ledger_sha256": "8708b5341f7a5d55a71308509b1b3bc66703f08fca65f4144960ea5337be4c87"
+  },
+  "fixed_inventory": {
+    "tasks": 59,
+    "scenarios": 132,
+    "invariants": 28,
+    "completion_criteria": 17,
+    "joint_scenarios": 11
+  },
+  "actions_executed": {
+    "tests": 0,
+    "providers": 0,
+    "service_starts": 0,
+    "credentials_accessed": 0,
+    "checkout_edits": 0,
+    "ledger_promotions": 0
+  },
+  "interpretation_rules": [
+    "Exact requirement text comes from the immutable plan, avoiding legacy ledger encoding corruption.",
+    "Evidence is authoritative only for its actual artifact/platform/fixture and assertions; historical scopes are not current reruns.",
+    "No test counts are summed across overlapping reports; file-name/test-name search alone is not proof of a full scenario.",
+    "Existing VERIFIED is assessed for the literal criterion, not silently expanded into global R3 or real-provider acceptance.",
+    "SAFE campaigns are next scoped work proposals, not work executed by this audit; map retained evidence before adding or rerunning tests.",
+    "No automatic adoption of externally edited service definitions, new platforms, new SLO, global authority system or other product requirement is introduced.",
+    "TLS/two physical hosts are explicit unqualified deployment scopes, not invented requirements for every valid local/Connector installation."
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "type": "concrete_artifact_gap",
+      "rows": [
+        "AC-07",
+        "RG-08",
+        "RG-11"
+      ],
+      "source": "26e6c746d61f98820258ad65fcc69b685e0e2acf:vendor/ci/manifest.json",
+      "source_sha256": "3bba602a8dddfbc15b4f233a56428bfa7caf88817bac2b5376a696c5efe69bcf",
+      "published_ci_connector_sha256": "63d99d1644555cb9be2b56ed4b31a0f0f5aabf50128078c33dc3e116c601d919",
+      "qualified_renewal_connector_sha256": "a8cf18105fa1cdca0443b6a3be08972d5576f72f3ce07e5a19dd9fc7cd59ae5a",
+      "state": "Assigned correction in progress; not accepted here."
+    },
+    {
+      "id": "F-02",
+      "type": "dependency_qualification_gap",
+      "rows": [
+        "AC-07",
+        "RG-06",
+        "RG-08",
+        "RG-10"
+      ],
+      "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+      "core_requires_mcp": "mcp<2,>=1.30",
+      "guide_environment_mcp": {
+        "guide_import_agents": "1.29.1",
+        "guide_import_onboarding": "1.29.1"
+      },
+      "state": "Fresh declared-dependency solve/pip check pending; preserve historical browser observations separately."
+    },
+    {
+      "id": "F-03",
+      "type": "evidence_mapping_gap",
+      "rows": [
+        "RG-01",
+        "RG-02",
+        "RG-03",
+        "RG-04",
+        "RG-05",
+        "RG-07",
+        "RG-11"
+      ],
+      "state": "Safe evidence review and only specifically uncovered synthetic/compatibility checks can progress independently of provider/native-service authorization."
+    },
+    {
+      "id": "F-04",
+      "type": "existing_verified_scope_supported",
+      "rows": [
+        "AC-04",
+        "RG-10"
+      ],
+      "state": "Existing canonical browser/backend evidence supports the literal criteria within recorded artifact scope; no global promotion."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "requirement_exact": "Cada tarefa obrigatória tem implementação ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "traceability_review_pending",
+      "proven_scope": [
+        "Implementation/reuse and installed tests are recorded by milestone across SVC/DX/ATN/OBS; latest guide, remote bootstrap and renewal close several old implementation gaps."
+      ],
+      "missing_authoritative_evidence": [
+        "No criterion-level closure mapping for every mandatory task at the selected published payload; an empty AC evidence list is not proof that implementation is absent."
+      ],
+      "evidence_ids": [
+        "ledger_reconciliation",
+        "guide",
+        "bootstrap",
+        "renewal",
+        "correlation"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE"
+      ],
+      "note": "No new mandatory product behavior was identified in this audit; the concrete packaging gap is tracked in AC-07/RG-08.",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-02",
+      "requirement_exact": "As frentes SVC, DX, ATN e OBS respeitam suas dependências e funcionam de modo combinado; Herdr continua opcional.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "combined_acceptance_pending",
+      "proven_scope": [
+        "OBS is optional and independent; browser/HTTP/Core-dispatch fixtures show OBS/attention coexist without canonical writes. Individual SVC, DX and ATN contracts have installed evidence."
+      ],
+      "missing_authoritative_evidence": [
+        "One explicit combined closure record over the final coordinated package; prerequisite real M1/M2 gates remain open."
+      ],
+      "evidence_ids": [
+        "herdr",
+        "external_attention",
+        "correlation",
+        "attention_ui",
+        "guide"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE",
+        "SAFE-RG",
+        "REAL-M1",
+        "REAL-SVC",
+        "REAL-MCP"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-03",
+      "requirement_exact": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "real_client_chain_pending",
+      "proven_scope": [
+        "Claude Code 2.1.317 and Codex 0.166.0 parsed generated configs and performed authenticated initialize/list against a synthetic responder in isolated protocol modes."
+      ],
+      "missing_authoritative_evidence": [
+        "Two actual clients participating/cooperating with canonical Nexus through the complete approved credential chain; responder and identity-only fixtures do not establish this."
+      ],
+      "evidence_ids": [
+        "participant_contract",
+        "participant_launch",
+        "cooperation",
+        "guide"
+      ],
+      "next_campaigns": [
+        "REAL-MCP"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-04",
+      "requirement_exact": "A central oferece ações reais e autorizadas, sem virar fonte paralela de lifecycle.",
+      "ledger_status_at_snapshot": "VERIFIED",
+      "assessment": "criterion_supported_with_declared_scope",
+      "proven_scope": [
+        "Real browser and installed HTTP/SQLite exercised canonical approval, question and handoff decisions; stale generic revision returned 409 and canonical handoff verdict reached COMPLETED.",
+        "Seen/snooze left 32 compared canonical work tables unchanged; exact source controls and reviewed decision/claim revisions are reused. Attention API adds no productive command.",
+        "Final browser regression confirmed native-question receipt/native reply and handoff/approval draft recovery; backend/navigation tests cover action families not individually seeded in the browser."
+      ],
+      "missing_authoritative_evidence": [
+        "No substantive missing evidence for the literal central-action/lifecycle criterion was found. Historical package evidence must not be relabeled as a full current-wheel rerun."
+      ],
+      "evidence_ids": [
+        "attention_ui",
+        "attention_browser_root",
+        "attention_browser_final",
+        "attention_installed",
+        "attention_backend",
+        "external_attention",
+        "correlation"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE"
+      ],
+      "note": "Existing ledger VERIFIED is justified for AC-04 as written. Synthetic native peers limit provider/native-harness qualification, which belongs to AC-11/13, not a hidden prerequisite for this criterion. No status change is made.",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-05",
+      "requirement_exact": "Repetição/timeout/restart preservam IDs e não duplicam mensagens, aprovações ou handoffs dentro do contrato de idempotência.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "contract_evidence_strong_global_path_mapping_pending",
+      "proven_scope": [
+        "Canonical message/handoff request IDs, fixed replay windows, lost replies, failed checkpoint writes and actual process-death recovery are qualified.",
+        "Remote setup/Finish and authorization issuance recover original receipts over actual loopback transports without duplicate creation or reissue."
+      ],
+      "missing_authoritative_evidence": [
+        "Explicit all-new-path/restart inventory and exact report mapping at the final artifact; no blanket exactly-once claim outside the documented receipt windows."
+      ],
+      "evidence_ids": [
+        "coordination",
+        "cooperation",
+        "bootstrap",
+        "renewal",
+        "terminal_work"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "This contract criterion can progress with isolated faults and synthetic peers; real active-harness interruption remains a separate AC-14 gate.",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-06",
+      "requirement_exact": "Atividade externa nunca se transforma em autorização, capacidade reservada ou conclusão de trabalho.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "scoped_contract_proven_mapping_pending",
+      "proven_scope": [
+        "External reports project only watch/inspection; real HTTP/SQLite/Core dispatch tests show done/seen do not release the queued turn.",
+        "Browser snapshots preserve canonical tables; explicit correlation displays committed facts without treating external idle/completion as authority or capacity."
+      ],
+      "missing_authoritative_evidence": [
+        "Explicit mapping covering every priority/fairness/eligibility/reservation assertion in RG-03; preserve the separation when deriving current joint acceptance."
+      ],
+      "evidence_ids": [
+        "observations",
+        "herdr",
+        "external_attention",
+        "correlation",
+        "correlation_installed"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-07",
+      "requirement_exact": "Core e Connector preservam suas fronteiras e o conjunto de dependências é reproduzível.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "concrete_artifact_and_dependency_gap",
+      "proven_scope": [
+        "Prior Core pure-import audit recorded zero network/process/thread effects and zero non-code reads; installed boundaries and noneditable payload proofs exist.",
+        "Renewal package independently qualifies Connector wheel a8cf1810... from the latest published implementation."
+      ],
+      "missing_authoritative_evidence": [
+        "Published CI manifest still pins Connector wheel 63d99d16... instead of renewal a8cf1810....",
+        "DX04 browser import proofs report mcp 1.29.1 while vendored Core requires mcp>=1.30,<2; browser observations do not establish a valid dependency solve.",
+        "Fresh isolated declared-requirement installation, pip check, corrected CI pin and final import/boundary evidence are pending the assigned correction."
+      ],
+      "evidence_ids": [
+        "participant_import",
+        "renewal_package",
+        "guide_package",
+        "guide_import_agents",
+        "guide_import_onboarding",
+        "correlation_installed"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE"
+      ],
+      "note": "Concrete correction is in progress with the root/frontend/reviewer. This is not an authorization-only blocker and not a request to rewrite historical browser evidence.",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-08",
+      "requirement_exact": "Documentação, schemas e ajuda da CLI descrevem o comportamento realmente entregue.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "final_document_contract_review_pending",
+      "proven_scope": [
+        "Milestones document canonical CLI, receipts, schemas, finite limits, rollback and narrower qualification; published DX04 guide generates public commands without setup effects."
+      ],
+      "missing_authoritative_evidence": [
+        "Final help/schema/doc comparison spanning the current three-package set and removal of misleading aggregate conclusions from superseded historical limitations."
+      ],
+      "evidence_ids": [
+        "guide",
+        "participant_docs",
+        "coordination_docs",
+        "service_docs",
+        "bootstrap",
+        "renewal",
+        "preset_evolution"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE",
+        "SAFE-COMPAT"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-09",
+      "requirement_exact": "Testes não executados estão nomeados; nenhuma fixture é apresentada como campanha de provedor ou plataforma real.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "reporting_review_pending",
+      "proven_scope": [
+        "Closed reports preserve initial failures, overlaps, named skips and synthetic-versus-real limits; real Herdr, real HTTP/browser and native client protocol modes are explicitly distinguished."
+      ],
+      "missing_authoritative_evidence": [
+        "Final single inventory of all NOT_RUN cases and environmental/authorization causes, including new package/dependency qualification limits; no execution is required merely to document these honestly."
+      ],
+      "evidence_ids": [
+        "guide",
+        "herdr",
+        "cooperation",
+        "coordination",
+        "renewal",
+        "preset_evolution"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE",
+        "SAFE-PUBLIC-REVIEW"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-10",
+      "requirement_exact": "Não há segredo em artefatos, logs, exemplos, URLs ou configurações exportadas.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "public_artifact_scope_review_pending",
+      "proven_scope": [
+        "Metadata-only checkpoints/exports, protected key input and allowlisted evidence collection exclude private bearer/DB files; retained synthetic secret redactions are documented.",
+        "DX04 browser guide uses public commands and no real vault/provider; native-launch campaign did not find its fixture key in campaign-owned files."
+      ],
+      "missing_authoritative_evidence": [
+        "One final allowlisted public-artifact/export/log/example/URL review tied to hashes; this audit does not claim an exhaustive or personal-machine secret scan."
+      ],
+      "evidence_ids": [
+        "bootstrap",
+        "renewal",
+        "herdr",
+        "participant_launch",
+        "guide",
+        "coordination"
+      ],
+      "next_campaigns": [
+        "SAFE-PUBLIC-REVIEW",
+        "SAFE-TRACE"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-11",
+      "requirement_exact": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "real_M1_pending",
+      "proven_scope": [
+        "Terminal send/watch/question/decision/result/recovery, project identity/preset and Connector setup/renewal have actual HTTP/SQLite/IPC transport evidence with synthetic native/provider behavior."
+      ],
+      "missing_authoritative_evidence": [
+        "Actual useful native-harness/provider cycle locally and via Connector, including decision, result, no mandatory dashboard/keep-alive terminal and re-entry to the same work."
+      ],
+      "evidence_ids": [
+        "terminal_work",
+        "identity",
+        "policy",
+        "bootstrap",
+        "renewal"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "REAL-M1",
+        "REAL-SVC",
+        "REAL-REMOTE"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-12",
+      "requirement_exact": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "scoped_lifecycle_proven_final_mapping_pending",
+      "proven_scope": [
+        "Real contender processes and installed three-concurrent-starter campaigns prove one owner, late-child rejection, reuse, restart and canonical drain in both hosts.",
+        "Remote bootstrap/reuse retains exact Server/binding identity without local Server fallback; installed-supervisor refusal is tested."
+      ],
+      "missing_authoritative_evidence": [
+        "Final artifact carry-forward and exact remote/no-double-supervisor case mapping; actual registered-supervisor coexistence is part of REAL-SVC, not proven by injected task effects."
+      ],
+      "evidence_ids": [
+        "locks",
+        "launch_recovery",
+        "passive_connector",
+        "bootstrap",
+        "renewal"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE",
+        "REAL-SVC"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-13",
+      "requirement_exact": "Serviço do usuário foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execução validados.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "native_service_and_real_context_pending",
+      "proven_scope": [
+        "Windows task definition/ownership/control contracts, validate-only XML and injected native effects are implemented; detached processes are real."
+      ],
+      "missing_authoritative_evidence": [
+        "Actual native install, login start, stop, supervised crash/recovery and removal with real execution-context credential access. The pending two-task plan alone explicitly excludes login/logout/crash/credential acceptance."
+      ],
+      "evidence_ids": [
+        "native_campaign",
+        "launch_recovery",
+        "upgrade",
+        "service_docs"
+      ],
+      "next_campaigns": [
+        "REAL-SVC"
+      ],
+      "note": "No POSIX/platform expansion or boot-without-login requirement is introduced. Qualify only platforms declared supported.",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-14",
+      "requirement_exact": "Restart, suspensão e queda de conexão preservam contratos de autoridade, ownership e incerteza, sem repetição produtiva implícita.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "real_interruption_acceptance_pending",
+      "proven_scope": [
+        "Detached restart, receipt/process-death recovery, live Herdr disconnect/replacement and remote epoch/grant uncertainty contracts have narrower evidence."
+      ],
+      "missing_authoritative_evidence": [
+        "Actual service/native-work restart, approved suspend/resume and network interruption with authority/ownership/uncertainty checked; loopback and synthetic peers do not establish real provider continuity."
+      ],
+      "evidence_ids": [
+        "launch_recovery",
+        "coordination",
+        "herdr",
+        "renewal"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE",
+        "SAFE-RG",
+        "REAL-RECOVERY"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-15",
+      "requirement_exact": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnóstico inicie daemon ou inferência.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "scoped_control_contract_proven_final_mapping_pending",
+      "proven_scope": [
+        "Installed real CLI/detached lifecycle and passive status/logs/default doctor preserve absent state, do not create vaults/start work, and expose uncertainty; upgrade/drain/foreground paths have historical evidence."
+      ],
+      "missing_authoritative_evidence": [
+        "Current coordinated artifact mapping of the control/passivity cases; registered-task control qualification remains within AC-13 and must not be silently inferred."
+      ],
+      "evidence_ids": [
+        "passive_connector",
+        "doctor",
+        "launch_recovery",
+        "upgrade",
+        "service_docs"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE"
+      ],
+      "note": "A broad provider rerun is not required to validate diagnostic passivity; only a missing/failing mapped assertion would justify a targeted isolated regression.",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-16",
+      "requirement_exact": "O agente padrão tem identidade persistente, perfil generalista útil e coordenação no escopo aprovado; preserva limites efetivos do harness e não recebe administração global ou poder de aprovar seus próprios pedidos.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "preset_contract_proven_useful_native_acceptance_pending",
+      "proven_scope": [
+        "Persistent reviewed identity, generalist role, scoped coordination permissions, finite grants and operator-only decisions are implemented and tested; remote Finish commits the reviewed configuration."
+      ],
+      "missing_authoritative_evidence": [
+        "Actual effective native harness context/tools/permissions and useful scoped collaboration in the default local/remote flow, without admin authority or self-approval."
+      ],
+      "evidence_ids": [
+        "identity",
+        "policy",
+        "remote_preset",
+        "bootstrap",
+        "renewal",
+        "cooperation"
+      ],
+      "next_campaigns": [
+        "REAL-M1",
+        "REAL-MCP"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "AC-17",
+      "requirement_exact": "Reconnect, atualização e abertura posterior da interface preservam a configuração e a identidade; personalização é opcional e o uso padrão continua completo pelo terminal.",
+      "ledger_status_at_snapshot": "NOT_VERIFIED",
+      "assessment": "preservation_contract_proven_full_terminal_use_pending",
+      "proven_scope": [
+        "Optional preset evolution retains custom choices; ordinary reconnect does not reapply defaults; remote completed reuse after explicit key rotation preserves bootstrap/Finish/configuration.",
+        "Real dashboard introduction/guide inspections do not create identity/binding/grants or reapply setup; installed upgrades preserve context/data."
+      ],
+      "missing_authoritative_evidence": [
+        "Final cross-artifact carry-forward and actual continued useful native terminal cycle after reconnect/update/interface reopen; historical contracts do not close M1."
+      ],
+      "evidence_ids": [
+        "preset_evolution",
+        "dashboard",
+        "guide",
+        "upgrade",
+        "renewal"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE",
+        "REAL-M1",
+        "REAL-RECOVERY"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-01",
+      "requirement_exact": "Dois participantes MCP e um runtime gerenciado cooperam no mesmo workspace sem identidades duplicadas.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "joint_contract_not_explicitly_mapped",
+      "proven_scope": [
+        "Canonical MCP coordination, identity-only peer replies and managed-runtime setup each have isolated transport/persistence evidence."
+      ],
+      "missing_authoritative_evidence": [
+        "One combined two-MCP-participant plus managed-runtime workspace scenario proving unique identities; no exact authoritative retained run was mapped here."
+      ],
+      "evidence_ids": [
+        "cooperation",
+        "coordination",
+        "bootstrap"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "This integration contract can use explicit synthetic peers. The distinct real-two-client acceptance remains AC-03/REAL-MCP.",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-02",
+      "requirement_exact": "Broadcast handoff disputado por MCP/runtime continua com um único vencedor.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "specific_joint_race_evidence_missing",
+      "proven_scope": [
+        "Canonical claim/admission and coordination tests cover related concurrency; a default-start concurrent-claim test exists, but is not evidence of this exact mixed-channel broadcast race."
+      ],
+      "missing_authoritative_evidence": [
+        "Exact simultaneous MCP/runtime broadcast claim with one committed winner, no duplicate lease/reservation/result and retained loser refusal."
+      ],
+      "evidence_ids": [
+        "coordination",
+        "cooperation"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-03",
+      "requirement_exact": "Observação idle não muda prioridade, fairness, elegibilidade ou reservas de claims.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "partial_assertions_proven_specific_scheduler_mapping_missing",
+      "proven_scope": [
+        "Installed external-observation isolation cases for OBS on/off prove done/seen do not release a turn or wake queued work; canonical row fingerprints remain unchanged in OBS browser/load campaigns."
+      ],
+      "missing_authoritative_evidence": [
+        "Exact idle assertions for priority, fairness, eligibility and claim reservations over the relevant scheduler paths; generic no-work-completion is narrower."
+      ],
+      "evidence_ids": [
+        "external_attention",
+        "correlation",
+        "correlation_installed"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-04",
+      "requirement_exact": "Isolamento shared/per_sender/per_sender_session/one_shot mantém semântica existente.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "four_mode_behavior_mapping_missing",
+      "proven_scope": [
+        "Prior one-shot claim/admission and configuration-mode validation cases are retained; canonical isolation behavior is reused."
+      ],
+      "missing_authoritative_evidence": [
+        "A retained behavior matrix exercising shared/per_sender/per_sender_session/one_shot together with the new paths; configuration parser acceptance alone is insufficient."
+      ],
+      "evidence_ids": [
+        "coordination",
+        "terminal_work",
+        "remote_preset"
+      ],
+      "next_campaigns": [
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-05",
+      "requirement_exact": "Reinício/queda de rede com operação incerta não dispara replay por nenhum dos novos caminhos.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "recovery_path_union_mapping_pending",
+      "proven_scope": [
+        "Real process death/console recovery, bootstrap response loss, authorization submitted uncertainty and observer reconnection preserve original metadata and reject replay."
+      ],
+      "missing_authoritative_evidence": [
+        "One finite inventory mapping every new productive entry/recovery path and its fault boundary to an existing retained result; do not infer all paths from one receipt suite."
+      ],
+      "evidence_ids": [
+        "coordination",
+        "cooperation",
+        "bootstrap",
+        "renewal",
+        "herdr"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "Synthetic/native doubles suffice for the no-replay contract; real provider interruption is separately AC-14.",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-06",
+      "requirement_exact": "Core importado sem sockets/processos/credenciais; dependências entre aplicações continuam proibidas.",
+      "ledger_status_at_snapshot": "IN_PROGRESS",
+      "assessment": "import_contract_supported_current_package_closure_pending",
+      "proven_scope": [
+        "Core pure import/render audit recorded zero sockets/process/thread effects and zero non-code reads; installed tests enforce domain/application import boundaries."
+      ],
+      "missing_authoritative_evidence": [
+        "Tie these checks and prohibited application-dependency scans to the corrected final three-package environment, including valid declared dependencies."
+      ],
+      "evidence_ids": [
+        "participant_import",
+        "participant_contract",
+        "correlation_installed",
+        "renewal_package"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-07",
+      "requirement_exact": "Cliente antigo + Server novo e cliente novo + Server antigo têm comportamento documentado.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "explicit_version_pair_evidence_missing",
+      "proven_scope": [
+        "CLI coordination documents refusal of absent receipt contract; service lifecycle diagnoses incompatibility; native work retains uncertainty for missing correlation."
+      ],
+      "missing_authoritative_evidence": [
+        "Explicit supported old/new pair table and evidence for both directions; additive API statements do not constitute a complete version-pair campaign."
+      ],
+      "evidence_ids": [
+        "coordination_docs",
+        "service_docs",
+        "terminal_work"
+      ],
+      "next_campaigns": [
+        "SAFE-COMPAT"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-08",
+      "requirement_exact": "Pacotes finais contêm UI, schemas, migrações e recursos necessários, sem depender de checkout irmão.",
+      "ledger_status_at_snapshot": "IN_PROGRESS",
+      "assessment": "concrete_CI_artifact_gap",
+      "proven_scope": [
+        "Latest published Nexus guide wheel has 690 raw files equal across source/staging/wheel/installation, including UI; prior coordinated wheels include migrations/resources and use noneditable imports."
+      ],
+      "missing_authoritative_evidence": [
+        "CI Connector pin is stale relative to latest published source; final coordinated dependency-solve/import/resource proof is pending."
+      ],
+      "evidence_ids": [
+        "guide_package",
+        "renewal_package",
+        "guide_import_agents",
+        "guide_import_onboarding"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE"
+      ],
+      "note": "",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-09",
+      "requirement_exact": "Campanha usa homes/workspaces temporários e não modifica contas/configurações pessoais.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "scoped_isolation_supported_final_manifest_review_pending",
+      "proven_scope": [
+        "Published campaigns use disposable homes/workspaces, synthetic fixtures and explicit public allowlists; real Herdr/browser servers have recorded canonical cleanup."
+      ],
+      "missing_authoritative_evidence": [
+        "Final campaign inventory/allowlist review and the corresponding isolation/cleanup evidence for future authorized campaigns."
+      ],
+      "evidence_ids": [
+        "guide",
+        "bootstrap",
+        "renewal",
+        "herdr",
+        "correlation"
+      ],
+      "next_campaigns": [
+        "SAFE-PUBLIC-REVIEW",
+        "SAFE-TRACE"
+      ],
+      "note": "No personal configuration or credentials were accessed during this audit; historical claims are not extended to unexecuted campaigns.",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-10",
+      "requirement_exact": "Validação de browser usa o backend real; snapshot/string test não substitui interação.",
+      "ledger_status_at_snapshot": "VERIFIED",
+      "assessment": "criterion_supported_with_declared_scope",
+      "proven_scope": [
+        "Actual Chrome/Playwright interaction against installed HTTP/SQLite exists for project introduction, attention decisions, external OBS/correlation and the latest published DX04 guide.",
+        "The guide browser campaign records 22 checkpoints, unchanged canonical table/credential projections, zero console messages and canonical cleanup."
+      ],
+      "missing_authoritative_evidence": [
+        "No missing browser interaction evidence was identified for those delivered UI surfaces. Dependency-invalid DX04 environment cannot serve as a reproducible dependency solve; it does not erase actual browser observations."
+      ],
+      "evidence_ids": [
+        "dashboard",
+        "attention_ui",
+        "attention_browser_final",
+        "external_attention",
+        "correlation",
+        "guide",
+        "guide_import_agents"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE"
+      ],
+      "note": "Existing ledger VERIFIED was originally scoped to project introduction; later closed browser records extend coverage. This audit does not mutate ledger status or claim all UI tests ran on one current wheel.",
+      "global_promotion": false
+    },
+    {
+      "id": "RG-11",
+      "requirement_exact": "Mesmo agente com MCP externo e runtime gerenciado mantém uma entrega lógica exclusiva, sem fan-out involuntário por canal.",
+      "ledger_status_at_snapshot": "NOT_RUN",
+      "assessment": "specific_dual_channel_delivery_evidence_missing",
+      "proven_scope": [
+        "Canonical coordination/delivery and managed-runtime origins have related tests; no complete exact same-agent MCP-plus-runtime delivery exclusion run was mapped here."
+      ],
+      "missing_authoritative_evidence": [
+        "One logical delivery for the same identity with MCP and managed runtime concurrently eligible, including loser/consumption state and no channel fan-out.",
+        "Use the corrected CI Connector artifact so mixed-channel qualification actually exercises the current published host implementation."
+      ],
+      "evidence_ids": [
+        "coordination",
+        "cooperation",
+        "renewal_package"
+      ],
+      "next_campaigns": [
+        "SAFE-PACK",
+        "SAFE-TRACE",
+        "SAFE-RG"
+      ],
+      "note": "A matching test name or unrelated multi-recipient fan-out case is not authoritative evidence for this scenario. The fixture campaign can run without a real provider.",
+      "global_promotion": false
+    }
+  ],
+  "campaigns": [
+    {
+      "id": "SAFE-PACK",
+      "class": "safe_artifact_correction_and_qualification",
+      "priority": 1,
+      "authorization": "No provider, personal vault or native registered service required; root already assigned this work. This audit does not run it.",
+      "action": "Finish the assigned CI Connector artifact/pin correction to the published renewal payload; install the selected Nexus/Connector/Core wheels with their declared dependencies in a new isolated environment and retain pip check plus exact wheel/import proofs.",
+      "acceptance": [
+        "Connector CI wheel hash equals the reviewed renewal wheel, or an exactly evidenced replacement with the same source payload.",
+        "Core mcp>=1.30,<2 requirement is satisfied in the new environment; do not reuse DX04 browser environment as dependency-solve proof.",
+        "CI runner and copied targeted tests load only the selected noneditable packages; preserve failures and overlap counts."
+      ],
+      "owner_state": "Latest root progress: exact new wheels installed and pip check passed; eight CI cases are running. This audit has not inspected that new report and keeps the correction pending final root closure."
+    },
+    {
+      "id": "SAFE-TRACE",
+      "class": "safe_read_only_review",
+      "priority": 2,
+      "authorization": "Read-only evidence/code/document review; no external authorization required.",
+      "action": "Bind the 59 task IDs, 132 scenario IDs, 28 invariants and these 28 closure rows to exact existing passing identities, package hashes and scoped limits. Reconcile superseded historical open statements without rewriting closed artifacts.",
+      "acceptance": [
+        "Every claimed implemented/reused mandatory task has an exact source/test/evidence reference.",
+        "Carry-forward claims compare actual relevant package bytes; do not sum repeated reports or label historical tests as current executions.",
+        "Current CLI/help/schema/doc contracts and all named NOT_RUN/skip reasons agree; no global promotion until mandatory campaigns pass."
+      ]
+    },
+    {
+      "id": "SAFE-RG",
+      "class": "safe_targeted_synthetic_integration_if_uncovered",
+      "priority": 3,
+      "authorization": "Disposable SQLite/HTTP/MCP fixtures and explicit native doubles only. No real provider, personal credential or persistent OS service.",
+      "action": "First map existing reports. Only uncovered assertions justify a small joint fixture campaign: RG-01 two MCP principals plus managed runtime; RG-02 concurrent MCP/runtime broadcast claim; RG-03 idle versus priority/fairness/eligibility/reservations; RG-04 four isolation modes; RG-05 uncertain restart paths; RG-11 one identity across MCP/runtime.",
+      "acceptance": [
+        "One canonical broadcast winner and one logical delivery without channel fan-out.",
+        "Exact isolation keys/session separation for shared, per_sender, per_sender_session and one_shot.",
+        "OBS changes do not change scheduler ordering, claims, reservations or productive state.",
+        "Process/checkpoint recovery preserves exact IDs and does not replay unknown productive effects.",
+        "Label simulated peers explicitly; these contract results alone do not qualify real MCP binaries or productive M1."
+      ]
+    },
+    {
+      "id": "SAFE-COMPAT",
+      "class": "safe_compatibility_review_then_targeted_contract",
+      "priority": 3,
+      "authorization": "Versioned disposable artifacts/protocol fixtures; no provider and no downgrade of a personal database.",
+      "action": "Define the actual supported old/new client-Server pairs from retained version/protocol contracts, document refusal/additive behavior, then exercise only pairs lacking authoritative evidence.",
+      "acceptance": [
+        "Both old-client/new-Server and new-client/old-Server expectations are explicit.",
+        "Missing receipt/correlation/capability support refuses before new productive effects or preserves uncertainty; no implicit fallback/reissue.",
+        "Fixture protocol coverage is distinguished from executing an old binary; no universal backwards-compatibility claim."
+      ]
+    },
+    {
+      "id": "SAFE-PUBLIC-REVIEW",
+      "class": "safe_allowlisted_artifact_review",
+      "priority": 2,
+      "authorization": "Review only public campaign/export artifacts and synthetic redaction fixtures; never enumerate or hash private vaults, bearer registries or personal databases.",
+      "action": "Close the public artifact allowlist, verify hashes and documented redactions, and compare exports/logs/examples/URLs against existing secret-handling tests. Check campaign homes/cleanup metadata and named skips.",
+      "acceptance": [
+        "No secret-bearing file is included in the public allowlist; known synthetic secret literals are absent or explicitly redacted.",
+        "Reports identify all executed versus NOT_RUN campaign scopes and initial failures.",
+        "Temporary scopes and owned-resource cleanup are recorded; absence of private-file collection is not mislabeled as a universal secret scan."
+      ]
+    },
+    {
+      "id": "REAL-M1",
+      "class": "real_provider_campaign_pending_explicit_authorization",
+      "priority": 4,
+      "authorization": "Requires an explicitly selected provider/account, useful task, cost/effect scope and local/Connector execution environment. Setup consent alone does not authorize inference.",
+      "action": "On the selected installed package, accept the reviewed default project preset, perform authorized work, handle a representative native question/permission through terminal, obtain the correlated result and reopen the same work locally and via Connector.",
+      "acceptance": [
+        "No mandatory dashboard or keep-alive terminal; stable identity/configuration/requests.",
+        "Actual native model/context/permission behavior and scoped coordination are observed, with finite grants and no self-approval/admin expansion.",
+        "Record decisions, readiness/result time, provider/build/topology and continuity limitations; do not equate ready/idle with completion."
+      ]
+    },
+    {
+      "id": "REAL-SVC",
+      "class": "native_service_campaign_pending_explicit_authorization",
+      "priority": 4,
+      "authorization": "Existing temporary-task request remains awaiting authorization. Its scope excludes logout/reboot/provider credentials and does not itself authorize the later login/crash/vault campaign.",
+      "action": "First execute only the immutable reviewed two-task Windows campaign if approved. Separately prepare explicit scopes for actual login, supervised crash/recovery, stop/removal and credential availability in the real service context needed by AC-13.",
+      "acceptance": [
+        "Task Scheduler observations agree with canonical owner/readiness/drain receipts for both components.",
+        "Actual login and crash recovery are demonstrated; XML validation or start via CLI is not login proof.",
+        "Selected credential backend/service context is validated without dumping secrets.",
+        "Owned tasks/processes are removed canonically; personal installation remains untouched; reboot/logout only if separately approved."
+      ]
+    },
+    {
+      "id": "REAL-MCP",
+      "class": "two_real_client_chain_pending_explicit_authorization",
+      "priority": 4,
+      "authorization": "Requires approved disposable client configuration/credential namespaces and, if useful cooperation invokes models, explicit provider authorization. Prior parser/initialize fixtures do not authorize this campaign.",
+      "action": "Use the two explicitly versioned supported MCP clients with generated configuration and actual approved credential resolution, authenticate to canonical Nexus and demonstrate scoped participation/cooperation alongside managed runtime.",
+      "acceptance": [
+        "Two tested clients without new native adapters or duplicate canonical identities.",
+        "Canonical reply/handoff result provenance and exact workspace/peer/claim correlation; no prompt marker as proof.",
+        "Preserve single-delivery and broadcast exclusivity; record which client/build actually acted, not just identities sharing a key.",
+        "The existing synthetic responder initialize tests remain narrower historical evidence."
+      ]
+    },
+    {
+      "id": "REAL-REMOTE",
+      "class": "remote_topology_TLS_vault_environment_pending",
+      "priority": 4,
+      "authorization": "Requires explicitly provided/approved hosts, origin/TLS deployment and credential backend; do not read personal credentials or create remote infrastructure implicitly.",
+      "action": "Qualify the chosen real remote deployment with the canonical agent credential only on the Connector host, explicit operator authority on its own client, current /me namespace/epoch and approved binding. Combine with REAL-M1 when authorized.",
+      "acceptance": [
+        "Remote availability never starts a local substitute Server or copies operator secrets.",
+        "Document actual host count, TLS and vault properties; loopback WSS does not qualify a two-physical-host deployment or a production TLS chain.",
+        "No new requirement that every valid deployment use two physical hosts/TLS: this closes those claimed deployment scopes only; AC-11 still requires its chosen local and Connector topologies."
+      ]
+    },
+    {
+      "id": "REAL-RECOVERY",
+      "class": "real_interruption_campaign_pending_explicit_authorization",
+      "priority": 4,
+      "authorization": "Requires explicit interruption/network/suspend scope and, for active useful work, REAL-M1 provider authorization. No machine suspension/logout/reboot is implicit.",
+      "action": "In the approved local/remote execution context, interrupt connectivity/restart the owner and perform the specifically approved suspend/resume observation while an operation is active or uncertain; inspect original receipts before any new work.",
+      "acceptance": [
+        "Expired/revoked grants remain invalid; ownership/leases/claims are reconciled before admission.",
+        "No automatic productive replay, new identity, new request or grant renewal.",
+        "Record unrecoverable native-session continuity honestly and require explicit new-session work; do not promise recovery after unsupported power loss."
+      ]
+    }
+  ],
+  "evidence_catalog": {
+    "locks": {
+      "path": "plans/agent_ops/evidence/pr01-locks.md",
+      "sha256": "011b05aa5a4859e74bd7e040dd68dbf61df3f8a337a6768fb47bfd2cd0b7ea1b",
+      "bytes": 2736,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "launch_recovery": {
+      "path": "plans/agent_ops/evidence/pr02-launch-recovery.md",
+      "sha256": "d82ba542ef6cecc31d5e9a4ebc1a3f2226c4a806a9f9e37702a3ea0bec9b9fa3",
+      "bytes": 4777,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "upgrade": {
+      "path": "plans/agent_ops/evidence/pr02-upgrade.md",
+      "sha256": "7df97ea61e138712d80c2961e0b82f18ecfbe0336e885dbf7e1098be08d5d0f5",
+      "bytes": 6345,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "passive_connector": {
+      "path": "plans/agent_ops/evidence/pr02-connector-passive.md",
+      "sha256": "978e22641f103e86b4fc89520dfc4b527a62adcaf058c37d561545d915e790ed",
+      "bytes": 4797,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "doctor": {
+      "path": "plans/agent_ops/evidence/pr03-project-doctor.md",
+      "sha256": "7f4c3fc083c21c717b25204a8c87529ba4702477ee92feae4bfe8b83b532f7be",
+      "bytes": 6336,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "terminal_work": {
+      "path": "plans/agent_ops/evidence/pr03-terminal-work.md",
+      "sha256": "152a0c666ba2516dc36fc380868daf64ccfb82b511c94bfa76d25c3a8f6921ce",
+      "bytes": 9062,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "identity": {
+      "path": "plans/agent_ops/evidence/pr03-terminal-identity.md",
+      "sha256": "e6355610ef6f752294460c1660b47c0bd26839a4581bfe4e28b834483b3b7ef0",
+      "bytes": 6330,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "policy": {
+      "path": "plans/agent_ops/evidence/pr03-terminal-policy.md",
+      "sha256": "3b325e87fc42fd697bc0624446042eabfad76114a1c942e04511119c8fa36dd9",
+      "bytes": 6640,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "remote_preset": {
+      "path": "plans/agent_ops/evidence/pr03-remote-preset.md",
+      "sha256": "6cfa0744962c87272a5734a35b5448b084bce20ebb43a3d2076557b2f0743ed3",
+      "bytes": 5734,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "preset_evolution": {
+      "path": "plans/agent_ops/evidence/pr03-preset-evolution.md",
+      "sha256": "936314e9e7aa0612144e1ea0b16d7b9c7c01f4b7566fbe8ea61411e16e150e95",
+      "bytes": 7064,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "dashboard": {
+      "path": "plans/agent_ops/evidence/pr03-project-dashboard.md",
+      "sha256": "27ffc74e199a27d6369ddc07428fa2ccb55e7a98056314d5063aefc5cbb2d6a0",
+      "bytes": 6134,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "participant_contract": {
+      "path": "plans/agent_ops/evidence/pr04-participant-contract.md",
+      "sha256": "e7a8f4bdd4bd94b292355330211c0ff508ae8c1b2a6b2081f7193bcdcf137c75",
+      "bytes": 6340,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "participant_import": {
+      "path": "plans/agent_ops/evidence/pr04-participant-contract-import.json",
+      "sha256": "4652c6a54b26670065856c4cca7e60e090911255a769c3157ebbf71ff4d2469d",
+      "bytes": 414,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "participant_launch": {
+      "path": "plans/agent_ops/evidence/pr04-participant-launch.md",
+      "sha256": "76d18cfaa0677f42d899cf0bf2fb56386711ba0e31ed0ee16255c460f215063c",
+      "bytes": 4872,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "participant_removal": {
+      "path": "plans/agent_ops/evidence/pr04-participant-removal.md",
+      "sha256": "67f1b842700ef0ba8dfb948fcce46fdf8965c91228f49266ada9545db893cf1e",
+      "bytes": 5202,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "cooperation": {
+      "path": "plans/agent_ops/evidence/pr04-cooperation.md",
+      "sha256": "6d8ae8d955bb76033577979065825f0986ca43fe40e45e4eaf5574bf9cc0821f",
+      "bytes": 6944,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "coordination": {
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli.md",
+      "sha256": "aad02b9b8a7fa63254df429e993913e01fc7a73449acef25a73f45bf52f0e6da",
+      "bytes": 8964,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "attention_backend": {
+      "path": "plans/agent_ops/evidence/pr06-attention.md",
+      "sha256": "b944717e50b3b6e4894fc14df4bdb52f8bdae39adbb7145b359193216629d070",
+      "bytes": 8383,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "attention_ui": {
+      "path": "plans/agent_ops/evidence/pr07-attention-ui.md",
+      "sha256": "94d1edfc8004cb62d4e174f46ababe016602388565c636e504b4bce710daabfd",
+      "bytes": 7709,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "attention_browser_root": {
+      "path": "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+      "sha256": "8999a1db3633fed14719004b2981e2bc2c6b6683aca198f83abaaa69634c21c2",
+      "bytes": 4693,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "attention_browser_final": {
+      "path": "plans/agent_ops/evidence/pr07-attention-ui/final-results.json",
+      "sha256": "eb2120f656219cfefda0f812377f9030a7462d20917f568c08c98597476e2a38",
+      "bytes": 5064,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "attention_installed": {
+      "path": "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
+      "sha256": "58f9a9abe00b346fbfded283120b698cb40cd7934560fda447690c741564e8d8",
+      "bytes": 1619,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "observations": {
+      "path": "plans/agent_ops/evidence/pr08-observations.md",
+      "sha256": "4a0861e62c16c22084b1463e52de9548d863cf33b4b5659bc32d6149cbed3e69",
+      "bytes": 8803,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "herdr": {
+      "path": "plans/agent_ops/evidence/pr09-herdr.md",
+      "sha256": "4318b2c2ce233eafb44111a22e0fe8e98419233e6d380ff9a3b810ca7d630272",
+      "bytes": 10922,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "external_attention": {
+      "path": "plans/agent_ops/evidence/pr10-external.md",
+      "sha256": "e4082ad492c105994e57825091f5c8d1f910cf9c3b9e235ca502547449b7b8e2",
+      "bytes": 11187,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "correlation": {
+      "path": "plans/agent_ops/evidence/pr10-correlation.md",
+      "sha256": "31a7eb5d7101c68272a17f55a0605461143d3ee8c6df8c295f220db746bbea10",
+      "bytes": 6788,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "correlation_installed": {
+      "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+      "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+      "bytes": 35751,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "ledger_reconciliation": {
+      "path": "plans/agent_ops/evidence/pr10-ledger-reconciliation.md",
+      "sha256": "e7678c38e9f7f9abb5048f9b3d4730218ef39c259cf87664a8855fd0e521c9f1",
+      "bytes": 5202,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "bootstrap": {
+      "path": "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+      "sha256": "4c4c80e24498f20c424d22ef79c4f1a2ac5e7f45ea12381f6f6e53b28981cd1f",
+      "bytes": 9670,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "renewal": {
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal.md",
+      "sha256": "820114df1be4959f7c556b26ed4e929fc3eb05f03d2068a1be6753f7bb56f469",
+      "bytes": 6386,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "renewal_package": {
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+      "sha256": "0afdff8a543fb234f75057fe1fd8a090efe863fd95fcad5b54ea06ee304b7d19",
+      "bytes": 96355,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "guide": {
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+      "sha256": "82b0c76c035f8c1e9bc92cb90b9fc38b0cb9f7dd2738d321e5e9751508c0727d",
+      "bytes": 3901,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "guide_package": {
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+      "sha256": "fca5c30255552a507e7a4c4e4e78f3db3c3e0b89f72f0b46ed9830d623ecbbfe",
+      "bytes": 80209,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "guide_import_agents": {
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/installed/servers/agents/import-proof.json",
+      "sha256": "6ad4ee83bf7389938a246e637ae4c97b0d978d350164b480955667434e3be57d",
+      "bytes": 60301,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "guide_import_onboarding": {
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/installed/servers/onboarding/import-proof.json",
+      "sha256": "fd6f8090120dbe2de30337179e97d17028070700ed4e3c5ca4cb168af20be27f",
+      "bytes": 60278,
+      "role": "existing_closed_evidence",
+      "reexecuted": false
+    },
+    "native_campaign": {
+      "path": "plans/agent_ops/campaigns/windows-user-service.md",
+      "sha256": "01d325f5bae355f4a712504ec450721622432ad38fa0f0312ca5ccba9e0a77b3",
+      "bytes": 3079,
+      "role": "existing_plan_or_documentation",
+      "reexecuted": false
+    },
+    "service_docs": {
+      "path": "docs/service-lifecycle.md",
+      "sha256": "6d7257bb2faa6acafbf387b01d305e62af2a5e50285a690ad6f39a6c3df81470",
+      "bytes": 17696,
+      "role": "existing_plan_or_documentation",
+      "reexecuted": false
+    },
+    "coordination_docs": {
+      "path": "docs/terminal-coordination.md",
+      "sha256": "f237ddb2c947b986db794a08ad93c0f11f234f8a6d596892bc6999784b6588bf",
+      "bytes": 8003,
+      "role": "existing_plan_or_documentation",
+      "reexecuted": false
+    },
+    "participant_docs": {
+      "path": "docs/terminal-participant.md",
+      "sha256": "d67266ac78c0e76b279889ad8b1ae94d0feb3267923d0bcbe850472858a74377",
+      "bytes": 14840,
+      "role": "existing_plan_or_documentation",
+      "reexecuted": false
+    }
+  },
+  "parallel_progress_not_independently_reviewed": "After the published snapshot, root reported exact new-wheel pip check passed and eight CI cases running. SAFE-PACK remains pending final root closure; this audit preserves the published mismatch and does not claim that the new qualification has failed or has not started.",
+  "global_conclusion": "R3 remains incomplete. Authorization is not the sole remaining dependency: the CI Connector pin and dependency-solve gaps are concrete, and finite evidence/compatibility/joint-contract reviews can proceed safely. Real provider/native-service/two-client and claimed remote-deployment/recovery scopes remain separately gated. No other mandatory missing product behavior was established by this read-only audit."
+}

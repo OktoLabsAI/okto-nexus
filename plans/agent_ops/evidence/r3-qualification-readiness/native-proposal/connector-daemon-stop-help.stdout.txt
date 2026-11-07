@@ -1,0 +1,8 @@
+usage: okto-nexus-connector daemon stop [-h] [--timeout TIMEOUT] [--json]
+                                        [--verbose]
+
+options:
+  -h, --help         show this help message and exit
+  --timeout TIMEOUT
+  --json             machine-readable JSON output
+  --verbose          include technical details

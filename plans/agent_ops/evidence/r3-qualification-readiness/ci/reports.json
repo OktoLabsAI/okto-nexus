@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "total_cases": 8,
+  "renewal_cases": 4,
+  "narrow_ci_cases": 4,
+  "failures": 0,
+  "skipped": 0,
+  "changed_inputs": [],
+  "runner": "tools/ci_installed.py test",
+  "exact_wheel_hashes": {
+    "okto_nexus": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+    "nexus_connector_core": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+    "okto_nexus_connector": "a8cf18105fa1cdca0443b6a3be08972d5576f72f3ce07e5a19dd9fc7cd59ae5a"
+  },
+  "connector_package_files_compared": 123,
+  "connector_source_equal": true,
+  "mcp_version": "1.30.0",
+  "pip_check": 0,
+  "source_checkout_files_changed": [
+    "vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl",
+    "vendor/ci/manifest.json"
+  ],
+  "limitations": [
+    "Real loopback HTTP/IPC/WebSocket with synthetic native/provider fixtures.",
+    "No personal vault, TLS/two-host, native-service or real-provider/M1 qualification.",
+    "No source application import overrides or editable installation; installed runner verifies package payloads."
+  ],
+  "evidence": {
+    "wheel-source-proof.json": "c0c45a8a619313743bf52faf5fe1cf2aef392cc696ef9b0ae2e4e44ac4bbd910",
+    "ci-runner.log": "c353df2ad4a2e05c4f7c4300b8a816020ad377ec582f4bff1ff132e893dec734",
+    "ci-runner.json": "66c8d2d7f9c460fed7e6a3a19ea5ce68c869a8dab4b78f1ca513ad354e7ffb71",
+    "ci/installed.json": "e0dadb9dce6de43bab086b2ca7bf10deb6191a9843c66cb802b129113b8d5a04",
+    "ci/campaign.json": "6a58e8411f2797eeb366c40e7a7e68ae74ccfab06ce5b76d8138d2a91a5aadbe",
+    "ci/tests.xml": "f4da9bf22204a6e39e0d93c543dc51a568fc35b5055066b6dd174c0c7b143a13",
+    "pip-check.log": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "pip-check.json": "62b0a31b11ae4a04ce3099af9228b3d20d1c3c9ae7a5853903f338bb4990ab54",
+    "installed-metadata.json": "f8d554945d8381e87d0c9f0d1e816555ddb9babba42b708ed9597f32f95cb546",
+    "installed-distributions.json": "67d3f00570203194ee905c34ed0c70707ab20b387482b7c232cca5108138fdcc"
+  }
+}

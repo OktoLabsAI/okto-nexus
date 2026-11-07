@@ -1,0 +1,8 @@
+usage: okto-nexus-connector service install [-h] [--dry-run] [--json]
+                                            [--verbose]
+
+options:
+  -h, --help  show this help message and exit
+  --dry-run
+  --json      machine-readable JSON output
+  --verbose   include technical details

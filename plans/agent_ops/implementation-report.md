@@ -545,3 +545,7 @@ Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticat
 ## PR-04 dashboard participant guide — 2026-11-07
 
 Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed. See [evidence](evidence/pr04-participant-guide/milestone.md).
+
+## R3 CI and qualification readiness — 2026-11-07
+
+CI now pins the published Connector renewal wheel a8cf1810 instead of stale 63d99d16. All 123 Connector files match source. A fresh isolated environment resolves declared dependencies with MCP 1.30.0 and passes pip check. The actual installed CI runner passed 8 cases (four remote-renewal and four artifact/pin checks), with unchanged inputs. The finite audit maps 17 completion criteria and 11 RG scenarios without promotion; exact joint, compatibility and public-evidence reviews remain alongside authorized real campaigns. The updated 24-action native-service proposal is prepared only, with no registration/start performed. See [evidence](evidence/r3-qualification-readiness/milestone.md).

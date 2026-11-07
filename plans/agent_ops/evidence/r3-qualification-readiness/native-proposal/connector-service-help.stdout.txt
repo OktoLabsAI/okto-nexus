@@ -1,0 +1,17 @@
+usage: okto-nexus-connector service [-h] [--json] [--verbose]
+                                    {install,uninstall,status,enable,disable,upgrade-plan,upgrade-apply} ...
+
+positional arguments:
+  {install,uninstall,status,enable,disable,upgrade-plan,upgrade-apply}
+    enable              enable the selected user task without starting it
+    disable             disable future task starts; use daemon stop to drain
+                        active work
+    upgrade-plan        review an installed environment replacement without
+                        starting it
+    upgrade-apply       apply a reviewed environment replacement after
+                        canonical drain
+
+options:
+  -h, --help            show this help message and exit
+  --json                machine-readable JSON output
+  --verbose             include technical details

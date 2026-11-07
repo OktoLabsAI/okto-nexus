@@ -1,0 +1,24 @@
+{
+  "format": "okto.r3.audit-artifact-manifest",
+  "version": 1,
+  "published_nexus_commit": "26e6c746d61f98820258ad65fcc69b685e0e2acf",
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "files": {
+    "build_audit.py": {
+      "sha256": "b3321b41ec7d0f7fc32adf9fad015e73f11b0be0470af6e0d913d63c01c6bdf3",
+      "bytes": 43422
+    },
+    "completion-matrix.json": {
+      "sha256": "a959b93d7cc606cd385b85b3d44ec16dcae51e792c6855e539507eca7062230b",
+      "bytes": 58981
+    },
+    "completion-matrix.md": {
+      "sha256": "a51178ddcc907c4b7185f3bf8ec3d9fdf0f4390ecd94394e76fbdfca1946ea57",
+      "bytes": 19305
+    },
+    "validation.json": {
+      "sha256": "662ac1e035cd401fea39ac8d923b6b9d122c83b1f9f44bbd06ab11b289f10706",
+      "bytes": 498
+    }
+  }
+}

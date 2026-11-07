@@ -1,0 +1,15 @@
+usage: okto-nexus-connector daemon [-h] [--json] [--verbose]
+                                   {start,run,status,stop,restart,recover-start} ...
+
+positional arguments:
+  {start,run,status,stop,restart,recover-start}
+    start               background; returns after readiness
+    run                 foreground (containers/diagnostics)
+    restart             drain, then start the same configured instance
+    recover-start       fence a reviewed detached launch that has not entered
+                        bootstrap
+
+options:
+  -h, --help            show this help message and exit
+  --json                machine-readable JSON output
+  --verbose             include technical details

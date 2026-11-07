@@ -1,0 +1,768 @@
+{
+  "connector_commit": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+  "source": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector",
+  "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\remote-renewal-release-8hs8nezr\\candidate-v2\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+  "previous_connector_sha256": "63d99d1644555cb9be2b56ed4b31a0f0f5aabf50128078c33dc3e116c601d919",
+  "connector_sha256": "a8cf18105fa1cdca0443b6a3be08972d5576f72f3ce07e5a19dd9fc7cd59ae5a",
+  "core_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+  "nexus_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+  "package_file_count": 123,
+  "all_source_files_equal": true,
+  "package_files": [
+    {
+      "path": "okto_nexus_connector/__init__.py",
+      "bytes": 514,
+      "sha256": "c79833725989b43129854c224c1ffd9095de2701371daefd577bb3dc6f0ef46f",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/__init__.py",
+      "bytes": 3674,
+      "sha256": "0a7b56368c7b1e3b37ad2278d82b67d06ad382bf30ba21ebda1aeb437601c2bb",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/approvals.py",
+      "bytes": 2097,
+      "sha256": "c6ceab0265826f307f71b067bf2fe442f41903e2d8dced186ed4fd8a9540edab",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/bind.py",
+      "bytes": 7937,
+      "sha256": "ef28d47175181e7bbaeab0cbcd6b1a6f21e44ba1d2929a618db7ac3111434358",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/binding_conflicts.py",
+      "bytes": 3291,
+      "sha256": "8584631da5be314d04f581f50b86fc7379c948c2a631afe126410a36b208eac4",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/clean.py",
+      "bytes": 6039,
+      "sha256": "60f93ba06f4fcd4693c92ab56d78fd18374c4b9c2b3ff7f42cb797faceaea692",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/configure.py",
+      "bytes": 11649,
+      "sha256": "3ea02ac24209647e8b13ef86f2ed0e62d43a8d04032830dbe15d7550e6410d0f",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/configure_local.py",
+      "bytes": 23003,
+      "sha256": "eff8932363be322af0107bbaea1ead053c18a3b8203583315829e966ff53f166",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/configure_startup.py",
+      "bytes": 4617,
+      "sha256": "48b7f386c16a83cf1422592b02aa6ee7dc814d606f04faf669a0bce147c13f20",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/connect.py",
+      "bytes": 15851,
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/connect_reuse.py",
+      "bytes": 15168,
+      "sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/connect_setup.py",
+      "bytes": 12389,
+      "sha256": "dce10c03c58b5a827b7aad83b09abc1fd252729366493b654385bc3424c55983",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/connect_setup_review.py",
+      "bytes": 7441,
+      "sha256": "e5d5ff5f340fe74cc77c468cfe6523f619c7b14df2a3fe71e60525f883b9fefa",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/connection_config.py",
+      "bytes": 7595,
+      "sha256": "c5f039291813059e62387a9f7cbdfe68d37b9bf9d809660ce777383e1ca73d1e",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/daemon.py",
+      "bytes": 1794,
+      "sha256": "1a46f9b18557bd1186ef42ef9bea338ff36d5bf847a374596ba2b2c2f349b235",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/diagnostics.py",
+      "bytes": 17514,
+      "sha256": "9323ba59af62080b9f53d3c01568f64a0384556531988af499cca73c265d3349",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/discover.py",
+      "bytes": 7890,
+      "sha256": "073bb5eb3d9390efa59a7ee409e541d26587250348e6c951f98ba5f8694217f8",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/doctor.py",
+      "bytes": 19111,
+      "sha256": "f3308b16d9979a9db8425e19bb02d59f1cb830b001102837618f7963326c0d57",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/executor.py",
+      "bytes": 4778,
+      "sha256": "f5940dcc9cb4036ce479d10e5d5182f9d8f15ecee62c618652b209818e17bc2e",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/harness_config.py",
+      "bytes": 3125,
+      "sha256": "31a1b3ca5e1bbc1238495a48dc251a0a5f5524388969ac6ad630379b5219ff8f",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/identity.py",
+      "bytes": 6409,
+      "sha256": "ff16210d8df9059c040ac3a5b81561efd0301cfdc2bf05ddd1811738ff3d4b48",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/mcp_config.py",
+      "bytes": 3945,
+      "sha256": "cb88734bfd91fbbdf9f30b04dae88be5dccf3d6282da1b4323be7468652a160c",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/proxy.py",
+      "bytes": 1197,
+      "sha256": "fa2fbd49054f2fc414e9f2c2231ac7da0229fa19dde6dc0e8560ecf0fed2b4d2",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/reach.py",
+      "bytes": 507,
+      "sha256": "7579f06b45a862dd42f0b888e527c2dedd8a59d4309e97fd4fd4a59e010ae636",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/reconnect.py",
+      "bytes": 881,
+      "sha256": "78b9b37a618fe3c7dc8f38600b8a858a296b6e4874e96ac2eb0e18d4ecbe6cec",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/runtime.py",
+      "bytes": 7417,
+      "sha256": "accf2f65a3f13c3bb25b0141fb292e38245bee7169fa6ddb3a9c40bc003c6701",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/service.py",
+      "bytes": 3221,
+      "sha256": "32f6765aeb9301e1e74264644c0f9ca7bf1f487e3927cc028d95db242ec4a576",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/commands/workspace_selection.py",
+      "bytes": 3244,
+      "sha256": "66205ae3b849bd91b0bd28c9afd61db6567e93be18a81857845730135a8fb310",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/diagnostic_report.py",
+      "bytes": 16644,
+      "sha256": "a16f0f5b86a73a08c4e014b6a397be38728dffbc3730596d9317eeb801a7c7b6",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/main.py",
+      "bytes": 30255,
+      "sha256": "6e3a9ab0b922333b83d8baebbadacd498cc818fed06a6327aa6c55a88401b336",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/output.py",
+      "bytes": 5267,
+      "sha256": "a9d043c974f33d44a7115c11ec6e91ca33636e545a32e60245cb1f3477815e11",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/presentation.py",
+      "bytes": 3426,
+      "sha256": "f71124a8ea94344addafff68d8a8dfaa2aac3a6524ba27b0df42d31819d49991",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/prompts.py",
+      "bytes": 2045,
+      "sha256": "6723e712b75392d5e4a0e35779359b0588c60ba92ab2249ca7fee756ed7696be",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/cli/wizard_prompts.py",
+      "bytes": 3600,
+      "sha256": "4a0d2db1d59c43234734b3ee882d89b52aed2116dd2eb23313d5b28ac51ba45a",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/__main__.py",
+      "bytes": 934,
+      "sha256": "33ff41f648c691a651d0e983a86242a4e4c436df5a57b367d63655fcb87332e5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/app.py",
+      "bytes": 71797,
+      "sha256": "90bd9c7905b28eb77f81050f0d330889389e105a507825f4194cd50eb6e88f7d",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/lifecycle.py",
+      "bytes": 15159,
+      "sha256": "f94adbf6d9eae5e5d98d4d40cd616933c9991e5917fd5abfd8e92fad3d6224f5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/lock.py",
+      "bytes": 9546,
+      "sha256": "0b9cb007e81061b5a78ac2636a2b0e7fc137c74480e0bcbe741d154a5db4ca9e",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/log_reader.py",
+      "bytes": 2409,
+      "sha256": "13666a701583e72107155d3ef428a1acde5f248fbf0eaf41f62648653b8cf4a3",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/logging_setup.py",
+      "bytes": 973,
+      "sha256": "8973df93c4312be46e543d79fcaa7f0f04528b49d5006a4261c4b7b9f1acec5e",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/manager.py",
+      "bytes": 12026,
+      "sha256": "d39fcb1f662035e093976aca3bd92ac9e90b9c281334b8350512555a1e04ce0b",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/r4_control.py",
+      "bytes": 38875,
+      "sha256": "04159a5bbd38992f84b021f4d7f417e8552dc556086403a0a23fd8e7af6823f4",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/r4_execution.py",
+      "bytes": 17289,
+      "sha256": "036d84919e6ac941fcd0e0f0422030ffe4e74a6891da880e7340e3559acae94b",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/r4_inventory.py",
+      "bytes": 5383,
+      "sha256": "04c71d973ba0e71764c581cc34d56b75c03758f5e1a2b6e19a9120864c5481d6",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/daemon/service_process.py",
+      "bytes": 5084,
+      "sha256": "69d4852972168981c638d8169added4e17af36c04ed519222f94a45dd15158ca",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/errors.py",
+      "bytes": 3658,
+      "sha256": "3316e4765bdb9958c6295efdb37c834bd15e9ee073032fea36f972919fbe5c24",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/harness_config/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/identity/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/identity/import_flow.py",
+      "bytes": 14022,
+      "sha256": "80cd0ad011ffd633640440d954d90da49befd2a93ee58fa48881c652bb3db602",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/identity/vault.py",
+      "bytes": 11768,
+      "sha256": "00c024c5a7aa5106982f44948e4c0d9381c770b25a3e925efeb42d8ac28e6084",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/ipc/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/ipc/client.py",
+      "bytes": 6279,
+      "sha256": "41311a7b03e15a0137ce18e1f329699f71d60baac605dde4c8f31f505b165e7d",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/ipc/named_pipe.py",
+      "bytes": 4311,
+      "sha256": "fd6bf2b9a86062da5742c5f2305167a77a797cfb6fdc13ea4e5632e447f11d8f",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/ipc/pipe_client.py",
+      "bytes": 5657,
+      "sha256": "03c0069f4bc352e43707b5e95fd5b91800629fec3e94fcbd0a3204d68f76d332",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/ipc/protocol.py",
+      "bytes": 2932,
+      "sha256": "913b8cf5922b82437b7a78a272174c1a319a5e52a24586255609b34c025a90f5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/ipc/server.py",
+      "bytes": 8345,
+      "sha256": "70fdcdb0debd92448f141264743ffb32fcdd94a0a5fb8db0a2430ac8e8a1dd79",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/login_start.py",
+      "bytes": 3878,
+      "sha256": "b689a59fe416755c279e5bc71c428908f2663d547265ef49a0d3aa4c69f2ab15",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/paths.py",
+      "bytes": 3713,
+      "sha256": "52f4c3e69b33396d52fafc3797761c2d3f2e5a0b190fc483333ca013611f7ae5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/service_context.py",
+      "bytes": 6455,
+      "sha256": "7871f6e2d90cb6ed82ab50a1897610edf8316e6e1c71b8133682526b28b7954d",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/service_identity.py",
+      "bytes": 2241,
+      "sha256": "f61f0d437fa6b0b2ffce1cb7d76e256ae096c21cb9ee28661f3bf85b06ce25d5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/service_install.py",
+      "bytes": 12711,
+      "sha256": "65ab398817429403c8eb41a2e1d74b60ec30a94bebaf646ae2ba1dfcc7754249",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/service_upgrade.py",
+      "bytes": 2658,
+      "sha256": "a12bd6546b0b6a26fd41a8308e9a793aa63e97b2583ec6d5ae7861b90d29254f",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/sysinfo.py",
+      "bytes": 5575,
+      "sha256": "10937ad60e8f3c34c4440e9f5072504b1f937a0466e1de59d6d771fde951880d",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/user_service.py",
+      "bytes": 14169,
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/platform/windows_tasks.py",
+      "bytes": 4174,
+      "sha256": "ba70980f4c072080ad78907a11dcab5e80c31342531748c921a5522b130f05ba",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/py.typed",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/redaction.py",
+      "bytes": 2145,
+      "sha256": "67558c6de164d67fd07502c8bb89c634a29fb944e7265d0c02d1fb7b7f9cc7e2",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/service_environment.py",
+      "bytes": 6717,
+      "sha256": "448a4f2867306c448430b33dbe57bd18d0fdcbfa344d77fb7d1466d0d14fb413",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/service_upgrade.py",
+      "bytes": 16447,
+      "sha256": "5b8ebf6da20e9d72493080dbd3ce88ab50eff42967880d0c25a10f03112815c1",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/approval_state.py",
+      "bytes": 6786,
+      "sha256": "f77b7e77ea7588beb2c5758bd4add12934e0a3d587e575f78483eedf8efc47de",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/background_onboarding.py",
+      "bytes": 3246,
+      "sha256": "e20dc11ea65848ea2e06f0397960a954349765412615ecc68d409a2b984149da",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/binding_authority.py",
+      "bytes": 2462,
+      "sha256": "1955dc2674ec7bf6dcc6c89454f20679aa10742c55c65558ce2da6948c04bf11",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/binding_onboarding.py",
+      "bytes": 19427,
+      "sha256": "e3cc5b32b2cba696d1df748549d7052ce7face6338c857b6292dc7b7cb8fc207",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/connect_service.py",
+      "bytes": 9336,
+      "sha256": "a3fa54b0fd9cfd97a55e31d9b3ed8eca0d8c09889bb3b40cfa87cd82f076d71b",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/core_host.py",
+      "bytes": 37348,
+      "sha256": "5fd8e2e3c78641c6eaf5cbe8f87ce8d8212a50178f158057aadcc8e161dbf5f5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/discovery_configuration.py",
+      "bytes": 4419,
+      "sha256": "7b61a797d553c38fd845bad903b33998be574f918d0ada4fc03ed8bfd79c490a",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/discovery_service.py",
+      "bytes": 14072,
+      "sha256": "9ca91054e52b50e3ac8ed792be80f33e6c2a6ea4f4bdd56f4edb6f32d767648b",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/execution_selection.py",
+      "bytes": 12402,
+      "sha256": "c899460bb3c7390bd51470e96ca8ed952b14980375ec44b93fad0e714772be90",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/executor_onboarding.py",
+      "bytes": 8931,
+      "sha256": "bdf6a19d67be8b4a454fcc19d5d7b94ab09ac5b78667316eb3466dc370b93f26",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/executor_registration.py",
+      "bytes": 10122,
+      "sha256": "b35ff49b4e2ebf0b00e4d4f5fbc649bca71124e925dc0a82789915d85c584cdd",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/installation_observation.py",
+      "bytes": 5451,
+      "sha256": "9dd372da93d4d998f9cb7c526f690882b55c95d6e7391c97d05e025a0cc20b52",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/launch_configuration.py",
+      "bytes": 11644,
+      "sha256": "3ea8a5b60be74bb4f7eec8388fa424fd69e9714f51eb775ad889394d3486a9a3",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/mcp_config_service.py",
+      "bytes": 8887,
+      "sha256": "00e6bc3348f7fb164c7cfc88c93bbcc1bd1e0022d93e9693d0ebcb86a2c9e97b",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/mcp_launch.py",
+      "bytes": 5905,
+      "sha256": "f842fbabb3196d39b2ba82a63415a90902b648da4a38fa3187e73042081a01c0",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_denied_capacity.py",
+      "bytes": 5583,
+      "sha256": "e71247520cbaaa9d542db3d12b1b8e774695a0f61a8c9516a603dc31b0fbfa7b",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_event_recovery.py",
+      "bytes": 6079,
+      "sha256": "6aa6c98b3cf62bb068f0189fb8377ad7cd9ee326404e0d39fd85ab9aef0e96cc",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_events.py",
+      "bytes": 5785,
+      "sha256": "9675ff5732faef334c5ab3666c6fe4e0925bb5972568ac7eb89257a71fc058e5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_execution.py",
+      "bytes": 48028,
+      "sha256": "38dc50dd5ba1e6bc97aa8c8a66dde870f4ab6b77e85dd203a86fd17ded500ebe",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_launch_recovery.py",
+      "bytes": 5120,
+      "sha256": "19b8d3999f9caa0b9a2b1463fd6b2d4cf075065b56c43afec51bdeeba83ea685",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_preopen_recovery.py",
+      "bytes": 5140,
+      "sha256": "75aacfe3328e0f0c0edde7b2f4cfcad04865573edd1bf3dfce989dee3a8bc967",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_publications.py",
+      "bytes": 8077,
+      "sha256": "8111c9cd2ca0ac1843a4fd2697a21be5c229e80a88c98856ee47adc434eb3dd7",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_reconciliation.py",
+      "bytes": 20382,
+      "sha256": "ffecdbdc3733783c3dbac340188c33cf778641809d4cac5a6892323fc0cc0040",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_session_release.py",
+      "bytes": 10256,
+      "sha256": "e89e9c0e957e39f99803bca26e7c3abedb867333f8dcc6329dc08e13ba6df401",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_startup_recovery.py",
+      "bytes": 5754,
+      "sha256": "4684aac05ece19c7fd7b9f30242bbbf733e516201431b8cfeffeb27e8530e6fe",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/r4_tickets.py",
+      "bytes": 3200,
+      "sha256": "fa85fc706985ab10cddc2f99c32e0fa60a23071e2240c0490545654cd7f3693e",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/realization_service.py",
+      "bytes": 12738,
+      "sha256": "f9a445b519feaa6be595b45e75da6945c10bbb58d9172511a89826c57feb4e29",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/remote_setup.py",
+      "bytes": 22746,
+      "sha256": "395090f6c7a354d3e80ffc321f182c3e3d0981fe6734c4744e60d840d23c0f99",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/remote_setup_revision.py",
+      "bytes": 10071,
+      "sha256": "14cb5075aeac6478cbef622878347a459af61c726ee6c35a465ae461ba4dae0d",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/runtime_admission.py",
+      "bytes": 18600,
+      "sha256": "7f549b9aaf9dbfd6315e374679ac7c1c7069f2c8ec13015981cd27caf17db283",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/runtime_service.py",
+      "bytes": 61215,
+      "sha256": "b1cfcef5c163c43e6c2a54a651542a9f2ca96ce4314c9d56b1de5b53ace1863c",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/services/session_capabilities.py",
+      "bytes": 21084,
+      "sha256": "dfa923cd34de84e1b7e6ecf62909419610c3b36fc5b841d2873f65c4a133ec81",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/ledger_binding.py",
+      "bytes": 5946,
+      "sha256": "5caa4d92cff22ed354353474c4ae836a563d26c9dfc65e13f0960a8c1686282c",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/r4_events.py",
+      "bytes": 10066,
+      "sha256": "e8f8bf48a0197d9211caaac2b32ae49f95be6a35e52d6ef7f9d17192748d15fe",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/r4_publications.py",
+      "bytes": 32924,
+      "sha256": "a97ebc5fc91661e69794bdba99992a753ebcc664121c773089181fd1b8f306bb",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/r4_session_releases.py",
+      "bytes": 17273,
+      "sha256": "8c7657b0ac622c47b016187dd05c76d228b6d478a64936c5c3c328429ed4953d",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/r4_tickets.py",
+      "bytes": 5426,
+      "sha256": "51cb0197739002e0cdfdba0e88f7b9446c372a02c58cd359ab38aedbff71de12",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/read_only.py",
+      "bytes": 1796,
+      "sha256": "570947cb7534312c8ea0ebd9aaa8c1eb6219d60d0c8f191771d54c9d2da9ba1b",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/storage/state_store.py",
+      "bytes": 20124,
+      "sha256": "19d77b4198332c5083b4caec3396e97735a7635ec2382531740424ee74bef28f",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/_batches.py",
+      "bytes": 603,
+      "sha256": "4bbbd6325b11678076b405caafdb619107f6546f19edff84828180cfa9fc6438",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/https_client.py",
+      "bytes": 80274,
+      "sha256": "0a076750f191924d8343239aa687c085cb4a516fe1914a572bed36f481780ed5",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/lease_denial.py",
+      "bytes": 443,
+      "sha256": "5031d019c8f939b2e21abecef93cec2379809c6ad58e3ee29b48dc9855f8ce23",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/native_actions.py",
+      "bytes": 7922,
+      "sha256": "aa823596e2c47e17f1736707caa34ea8587d69678415a4790aae84a4e1fd1180",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/proxy.py",
+      "bytes": 3875,
+      "sha256": "4cbd3e2b0e63012b941ecb857b9d8ab16d1420db4e26e29cee43632a72aa0de8",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/r4_connection.py",
+      "bytes": 40381,
+      "sha256": "91d02f80982d87de9fd1cf1fde363bffd577e4e88f0c929731f33c9dcbbaf4a9",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/r4_recovery.py",
+      "bytes": 7468,
+      "sha256": "1f2248efb9b9374bb16566aea208ccdf4f4d3cabd002605d992f9b1bedb51876",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/wss_client.py",
+      "bytes": 64173,
+      "sha256": "38ac7eba9f650f4d912a778f77163ebfe3fa4903f72c924506f8aea72e7183cc",
+      "source_equal": true
+    },
+    {
+      "path": "okto_nexus_connector/transport/wss_r4.py",
+      "bytes": 17509,
+      "sha256": "2b3eb2846368cd7b0e7b93d04ac832cb6c8617dc7124f81dd5606473819f67f6",
+      "source_equal": true
+    }
+  ],
+  "connector_requires_dist": [
+    "okto-nexus-connector-core==0.0.14",
+    "websockets<18,>=15",
+    "httpx<1,>=0.27",
+    "pywin32; sys_platform == \"win32\"",
+    "keyring<26,>=25; extra == \"keyring\"",
+    "pytest>=8; extra == \"test\"",
+    "pytest-asyncio>=0.24; extra == \"test\"",
+    "build>=1; extra == \"test\"",
+    "cryptography>=43; extra == \"test\"",
+    "pywin32; sys_platform == \"win32\" and extra == \"test\"",
+    "pywin32; sys_platform == \"win32\" and extra == \"m6-prototype\""
+  ],
+  "changed_checkout_files": [
+    "vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl",
+    "vendor/ci/manifest.json"
+  ]
+}

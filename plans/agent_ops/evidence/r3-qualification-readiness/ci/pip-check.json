@@ -1,0 +1,19 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/venv/Scripts/python.exe",
+    "-I",
+    "-m",
+    "pip",
+    "check"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-connector-refresh-la1tb1l6",
+  "started_at": "2026-11-07T08:41:47.461488+00:00",
+  "ended_at": "2026-11-07T08:41:51.233596+00:00",
+  "elapsed_seconds": 3.772107299999334,
+  "exit_code": 0,
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-connector-refresh-la1tb1l6\\pip-check.log",
+  "raw_output_stored": false,
+  "bytecode_writes_disabled": true
+}

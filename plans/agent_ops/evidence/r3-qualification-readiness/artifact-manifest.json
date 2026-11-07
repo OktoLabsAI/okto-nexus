@@ -1,0 +1,300 @@
+{
+  "artifacts": [
+    {
+      "path": "audit/artifact-manifest.json",
+      "sha256": "e4daa68a1b9d0d5fa358da4faf7b3bcfefd78aab1409714d087d404fc90347e4",
+      "bytes": 821
+    },
+    {
+      "path": "audit/build_audit.py",
+      "sha256": "b3321b41ec7d0f7fc32adf9fad015e73f11b0be0470af6e0d913d63c01c6bdf3",
+      "bytes": 43422
+    },
+    {
+      "path": "audit/completion-matrix.json",
+      "sha256": "a959b93d7cc606cd385b85b3d44ec16dcae51e792c6855e539507eca7062230b",
+      "bytes": 58981
+    },
+    {
+      "path": "audit/completion-matrix.md",
+      "sha256": "a51178ddcc907c4b7185f3bf8ec3d9fdf0f4390ecd94394e76fbdfca1946ea57",
+      "bytes": 19305
+    },
+    {
+      "path": "audit/validation.json",
+      "sha256": "662ac1e035cd401fea39ac8d923b6b9d122c83b1f9f44bbd06ab11b289f10706",
+      "bytes": 498
+    },
+    {
+      "path": "ci/audit_update.py",
+      "sha256": "94483e500b82805036531785740fedfa866463d9b611c20e6f43fe300b035dc3",
+      "bytes": 3206
+    },
+    {
+      "path": "ci/ci/campaign.json",
+      "sha256": "6a58e8411f2797eeb366c40e7a7e68ae74ccfab06ce5b76d8138d2a91a5aadbe",
+      "bytes": 256203
+    },
+    {
+      "path": "ci/ci/installed.json",
+      "sha256": "e0dadb9dce6de43bab086b2ca7bf10deb6191a9843c66cb802b129113b8d5a04",
+      "bytes": 774
+    },
+    {
+      "path": "ci/ci/tests.xml",
+      "sha256": "f4da9bf22204a6e39e0d93c543dc51a568fc35b5055066b6dd174c0c7b143a13",
+      "bytes": 1419
+    },
+    {
+      "path": "ci/ci-runner.json",
+      "sha256": "66c8d2d7f9c460fed7e6a3a19ea5ce68c869a8dab4b78f1ca513ad354e7ffb71",
+      "bytes": 1134
+    },
+    {
+      "path": "ci/ci-runner.log",
+      "sha256": "c353df2ad4a2e05c4f7c4300b8a816020ad377ec582f4bff1ff132e893dec734",
+      "bytes": 5065
+    },
+    {
+      "path": "ci/dependency-versions.json",
+      "sha256": "7f21102ca6551f5bb8335b8f14a236669cdd5c5608a15c9da8658e75510b57b6",
+      "bytes": 1698
+    },
+    {
+      "path": "ci/dependency-versions.txt",
+      "sha256": "7ce4b3de333ee5593430ad7785388e7ad6e047bded81027d92cb29c6971d006c",
+      "bytes": 705
+    },
+    {
+      "path": "ci/finish_report.py",
+      "sha256": "a02e87bb4a0e54f156d1d75b958b109f266f9a0f34d37f6d10be71eecab7f113",
+      "bytes": 2783
+    },
+    {
+      "path": "ci/install.json",
+      "sha256": "76f3f7e287615c7e4c74b93759d5d08f6cff86ac40216676d98046c032dec3b0",
+      "bytes": 1110
+    },
+    {
+      "path": "ci/install.log",
+      "sha256": "22d474e7dc1dc9aa373380b40e1ca79dfe296a93607237e077331ae30edf57cd",
+      "bytes": 1828
+    },
+    {
+      "path": "ci/installed-distributions.json",
+      "sha256": "67d3f00570203194ee905c34ed0c70707ab20b387482b7c232cca5108138fdcc",
+      "bytes": 2144
+    },
+    {
+      "path": "ci/installed-metadata.json",
+      "sha256": "f8d554945d8381e87d0c9f0d1e816555ddb9babba42b708ed9597f32f95cb546",
+      "bytes": 3086
+    },
+    {
+      "path": "ci/manifest-before.json",
+      "sha256": "23ee4e4daa72301344fe0c68e024a5477ffc87df9ae552508c96eb70682b3b90",
+      "bytes": 381
+    },
+    {
+      "path": "ci/pip-check.json",
+      "sha256": "62b0a31b11ae4a04ce3099af9228b3d20d1c3c9ae7a5853903f338bb4990ab54",
+      "bytes": 627
+    },
+    {
+      "path": "ci/pip-check.log",
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31
+    },
+    {
+      "path": "ci/reports.json",
+      "sha256": "41812e86f3a0e4b95f03e111c832023f41b6799464a48bba2b9a092b99bd31e0",
+      "bytes": 2055
+    },
+    {
+      "path": "ci/run_redacted.py",
+      "sha256": "14fcfdc491dc57b416eefdb43c7a3a25d90227aa9198ebd9afd092c124e7fad9",
+      "bytes": 1923
+    },
+    {
+      "path": "ci/wheel-source-proof.json",
+      "sha256": "c0c45a8a619313743bf52faf5fe1cf2aef392cc696ef9b0ae2e4e44ac4bbd910",
+      "bytes": 27706
+    },
+    {
+      "path": "milestone.md",
+      "sha256": "718d36d3d40d44777c289623b71bd8b10680151d5a7885dbea6fc77eafff6e21",
+      "bytes": 2836
+    },
+    {
+      "path": "native-proposal/artifact-manifest.json",
+      "sha256": "a19eaa2b8f8ff10206a8768aaa37195301fd237a6edbfa8121895c1801db47a0",
+      "bytes": 11726
+    },
+    {
+      "path": "native-proposal/connector-daemon-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/connector-daemon-help.stdout.txt",
+      "sha256": "44c636ceb3e62eaf5b6c0665999041dc1f63bdfa4175d56395301ef5dc74f6b0",
+      "bytes": 704
+    },
+    {
+      "path": "native-proposal/connector-daemon-start-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/connector-daemon-start-help.stdout.txt",
+      "sha256": "567da96634bc47f71b606f8a420b621f2cb858ccd52e1938ce254cfac226c9b1",
+      "bytes": 316
+    },
+    {
+      "path": "native-proposal/connector-daemon-stop-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/connector-daemon-stop-help.stdout.txt",
+      "sha256": "e57499e563fd78d7407c53e8f728590f66f1501a8ce1ccaa70a847442dd60546",
+      "bytes": 314
+    },
+    {
+      "path": "native-proposal/connector-service-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/connector-service-help.stdout.txt",
+      "sha256": "7e4f760040c6455de61ceba7f7d275b140df25a4aaa485da52dd81534dd35aa2",
+      "bytes": 861
+    },
+    {
+      "path": "native-proposal/connector-service-install-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/connector-service-install-help.stdout.txt",
+      "sha256": "5edf6c8200317528b33f917a35b7c662549d2598e09705a58a1080d356fd7c45",
+      "bytes": 285
+    },
+    {
+      "path": "native-proposal/curate_proposal.py",
+      "sha256": "068df7ee47fa5e6db7ec5a59d4a1f54fcc4c8d0e1c5c7a4582376ccf714519d6",
+      "bytes": 3200
+    },
+    {
+      "path": "native-proposal/dependency-download.log",
+      "sha256": "735f51a9847ff3cf8149df14661d1d6a249b5d0ba7bbde23bfd0e4446e70d90d",
+      "bytes": 13591
+    },
+    {
+      "path": "native-proposal/environment-preparation.json",
+      "sha256": "3461eabb8dee458e3f166d3b8e2906aebc953b897fec3391c779a0f7f13c419e",
+      "bytes": 10886
+    },
+    {
+      "path": "native-proposal/environment.json",
+      "sha256": "50dacb4aa2c4dcd22cc58b22de21f9d5daf3c53898a688746468daef7632806a",
+      "bytes": 947
+    },
+    {
+      "path": "native-proposal/finalize_proposal.py",
+      "sha256": "17336244811aaa24acb07c183c5fe6ad93f355eb50f469189b4600a471842db8",
+      "bytes": 2038
+    },
+    {
+      "path": "native-proposal/inspect_installed.py",
+      "sha256": "7f6ee774bdb04df2074ea7d1572b0d61d3a57e9e3d45978716ed29f0aa7dbc30",
+      "bytes": 3718
+    },
+    {
+      "path": "native-proposal/installed-inspection.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/installed-inspection.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/installed-proof.json",
+      "sha256": "f739deb22278c458e8ee55ec678cdcf1af53a3889c1d15615286ba65457fc10f",
+      "bytes": 116247
+    },
+    {
+      "path": "native-proposal/isolated-install.log",
+      "sha256": "86b457d8be6ecfd88bc5b0f379b404b33c7f3a7b3382b084f71cc60487caa2e9",
+      "bytes": 5713
+    },
+    {
+      "path": "native-proposal/native-service-campaign-proposal.json",
+      "sha256": "fbf8644cf836886bc7bac596211a783d6090e79077c643b1d2a627c87a3a37e3",
+      "bytes": 48795
+    },
+    {
+      "path": "native-proposal/nexus-service-help.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/nexus-service-help.stdout.txt",
+      "sha256": "81848aca4a9867e84f0f4f4c447ceb3c93718be35db545d4230bd5563f1071e7",
+      "bytes": 1493
+    },
+    {
+      "path": "native-proposal/pip-check.log",
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31
+    },
+    {
+      "path": "native-proposal/preparation-diagnostic.json",
+      "sha256": "fa209a3e15c9361c4777895f723e1af9c6b2ea74d122652e0aa4c4940035bbd3",
+      "bytes": 916
+    },
+    {
+      "path": "native-proposal/prepare_environment.py",
+      "sha256": "0c4a86e981707ec9b1527bba0ab7895b8c861ed38385f6506d5dd29ba5960293",
+      "bytes": 4459
+    },
+    {
+      "path": "native-proposal/prepare_proposal.py",
+      "sha256": "60be6de37d93fabf39cb096b182ed190d2d7c1b5f8a5b3f43827d5b7ed9e5c42",
+      "bytes": 10114
+    },
+    {
+      "path": "native-proposal/pythonw-import-proof.json",
+      "sha256": "e5302492b967a98325b6de0a05ab6ee97a5a84cd9fef4c6e5f025d9f610cca09",
+      "bytes": 115578
+    },
+    {
+      "path": "native-proposal/pythonw-imports.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/pythonw-imports.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "native-proposal/read-only-checks.json",
+      "sha256": "179607af28b466f599198cbe4de0b0cb9b5a32bf957d52e3e5c618bf6cbf7da5",
+      "bytes": 3925
+    },
+    {
+      "path": "native-proposal/requirements-pinned.txt",
+      "sha256": "f287de4e60f8da50764b21fce3b173ac6a1e5b793c852bf643b6460fc57e22cc",
+      "bytes": 647
+    },
+    {
+      "path": "native-proposal/venv-create.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "aggregate_sha256": "a8adccfa08f0e8f5b57b882523904e31333370367655b7da5504403ae74c3701"
+}

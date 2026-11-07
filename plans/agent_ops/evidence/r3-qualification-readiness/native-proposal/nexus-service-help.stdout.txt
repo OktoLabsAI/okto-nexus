@@ -1,0 +1,28 @@
+usage: okto-nexus service [-h] [--python PYTHON] [--plan-file PLAN_FILE]
+                          [--output OUTPUT]
+                          [--expected-revision EXPECTED_REVISION] [--follow]
+                          [--tail TAIL] [--user] [--start-at-login] [--json]
+                          [--timeout TIMEOUT]
+                          {status,logs,start,stop,restart,recover-start,install,uninstall,enable,disable,upgrade-plan,upgrade-apply}
+
+Inspect or explicitly start the configured local Server.
+
+positional arguments:
+  {status,logs,start,stop,restart,recover-start,install,uninstall,enable,disable,upgrade-plan,upgrade-apply}
+
+options:
+  -h, --help            show this help message and exit
+  --python PYTHON       absolute target installed Python for upgrade-plan
+  --plan-file PLAN_FILE
+                        reviewed upgrade plan JSON for upgrade-apply
+  --output OUTPUT       save upgrade-plan as a new UTF-8 JSON file
+  --expected-revision EXPECTED_REVISION
+                        pending launch receipt revision reviewed with status
+                        --json
+  --follow              follow local service logs until Ctrl+C
+  --tail TAIL           recent log records, 1..10000 (default 50)
+  --user                select the effective user service scope
+  --start-at-login      explicitly opt into user logon startup
+  --json
+  --timeout TIMEOUT     observation timeout in seconds; timeout never kills
+                        the service

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/venv/Scripts/python.exe",
+    "-I",
+    "D:/Projetos/Techridy/okto_labs_okto_nexus/tools/ci_installed.py",
+    "test",
+    "--wheel",
+    "C:/Users/jpamb/AppData/Local/Temp/dx04-mcp-guide-installed-sk13m28a/candidate-v1/wheels/okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/ci",
+    "--tests",
+    "tests/execution_r4/test_remote_renewal.py",
+    "tests/execution_r4/test_ns01.py::test_ns01_03",
+    "tests/test_ci_installed_partitions.py",
+    "tests/test_installed_campaign_inputs.py"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-connector-refresh-la1tb1l6",
+  "started_at": "2026-11-07T08:42:30.114699+00:00",
+  "ended_at": "2026-11-07T08:45:29.305751+00:00",
+  "elapsed_seconds": 179.19104830001015,
+  "exit_code": 0,
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-connector-refresh-la1tb1l6\\ci-runner.log",
+  "raw_output_stored": false,
+  "bytecode_writes_disabled": true
+}

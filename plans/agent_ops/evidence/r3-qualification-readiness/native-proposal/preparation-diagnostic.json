@@ -1,0 +1,22 @@
+{
+  "status": "PREPARATION_DIAGNOSTIC_ONLY",
+  "original_driver": "prepare_proposal.py",
+  "observed_exit_code": 1,
+  "failing_line": 102,
+  "condition": "assert clean",
+  "completed_readonly_checks": 8,
+  "checks_successfully_completed": [
+    "installed imports/source-wheel byte check and exactly two Task Scheduler reads",
+    "pythonw isolated imports",
+    "six CLI --help invocations"
+  ],
+  "pending_nonproduct_changes": [
+    "vendor/ci/manifest.json",
+    "vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl"
+  ],
+  "observed_error": "AssertionError",
+  "outcome_source": "Observed tool exit/trace transcribed; no raw stderr file was created for the orchestration process.",
+  "correction": "Separate finalize_proposal.py reused completed reports and recorded nonproduct CI edits; original driver unchanged.",
+  "native_campaign_actions_executed": 0,
+  "no_checks_repeated": true
+}
