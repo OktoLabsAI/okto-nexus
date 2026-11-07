@@ -1,0 +1,17 @@
+{
+  "label": "connector-12-uninstall-service-status",
+  "returncode": 0,
+  "elapsed_seconds": 2.1525430000619963,
+  "pid": 53564,
+  "stdout_bytes": 1193,
+  "stderr_bytes": 0,
+  "stdout_sha256": "380eb86cce46e46e57f4efe05e2423e1e4938d42aa93a50f3ec6599f6f5e5101",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "definition_digest": null,
+    "enabled": null,
+    "installed": false,
+    "native_state": null
+  },
+  "raw_output_retained": false
+}

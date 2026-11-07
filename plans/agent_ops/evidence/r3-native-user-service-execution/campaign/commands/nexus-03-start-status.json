@@ -1,0 +1,36 @@
+{
+  "label": "nexus-03-start-status",
+  "returncode": 0,
+  "elapsed_seconds": 2.355244699981995,
+  "pid": 45520,
+  "stdout_bytes": 1121,
+  "stderr_bytes": 0,
+  "stdout_sha256": "372bf907876f04e10ab0da6a2e07d27da7b44cddeb1f56b3d6c3ff812dec1105",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "component": "server",
+    "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "installed_version": "0.3.3",
+    "active_version": "0.3.3",
+    "generation": "24f9842fd3605c67abd48cbc8df3e246",
+    "state": "ready",
+    "ready_for_queries": true,
+    "reason": null,
+    "supervisor": "windows-task-scheduler",
+    "storage_initialized": true,
+    "pid": 52752,
+    "admission": "canonical_scope_checks_required",
+    "protocol_revision": 1,
+    "user_service": {
+      "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+      "state": 4,
+      "enabled": true,
+      "last_result": 267009,
+      "start_at_login": true,
+      "available_before_login": false,
+      "available_after_logout": false,
+      "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+    }
+  },
+  "raw_output_retained": false
+}

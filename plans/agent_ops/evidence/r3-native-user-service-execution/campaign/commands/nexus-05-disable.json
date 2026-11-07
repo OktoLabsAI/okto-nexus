@@ -1,0 +1,31 @@
+{
+  "label": "nexus-05-disable",
+  "returncode": 0,
+  "elapsed_seconds": 1.9886645000660792,
+  "pid": 39696,
+  "stdout_bytes": 1058,
+  "stderr_bytes": 0,
+  "stdout_sha256": "ffcaef6a11955ee9783d90e6f5744ce96b871829d39a2d4a51661fa06d9a5351",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "component": "server",
+    "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "installed_version": "0.3.3",
+    "active_version": "0.3.3",
+    "generation": "24f9842fd3605c67abd48cbc8df3e246",
+    "state": "ready",
+    "ready_for_queries": true,
+    "reason": null,
+    "supervisor": "windows-task-scheduler",
+    "storage_initialized": true,
+    "pid": 52752,
+    "protocol_revision": 1,
+    "admission": "canonical_scope_checks_required",
+    "enabled": false,
+    "changed": true,
+    "definition_digest": "d9e29e4cc43a403a52d9ea741362ea225ecbb523d74c2ecd9b2e5b21aad47a95",
+    "enablement_confirmed": true,
+    "installation_state": "installed"
+  },
+  "raw_output_retained": false
+}

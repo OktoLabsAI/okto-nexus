@@ -1,0 +1,7 @@
+{
+  "scope": "Public JSON recursively checked for raw secret/XML fields; no homes/DB/context files selected.",
+  "forbidden_fields_found": [],
+  "allowlist_exact": true,
+  "real_generated_credentials_or_tokens_copied": false,
+  "limitation": "This is structural artifact validation, not a universal secret detector."
+}

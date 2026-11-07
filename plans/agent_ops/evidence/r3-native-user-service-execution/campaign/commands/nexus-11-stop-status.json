@@ -1,0 +1,33 @@
+{
+  "label": "nexus-11-stop-status",
+  "returncode": 0,
+  "elapsed_seconds": 2.905716000008397,
+  "pid": 52132,
+  "stdout_bytes": 1093,
+  "stderr_bytes": 0,
+  "stdout_sha256": "53dc4b74f089e0e7ad4893caf915c078a1454e0d79faa07933ea49848d648497",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "component": "server",
+    "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "installed_version": "0.3.3",
+    "active_version": null,
+    "generation": null,
+    "state": "stopped",
+    "ready_for_queries": false,
+    "reason": "SHUTDOWN_COMPLETE",
+    "supervisor": "windows-task-scheduler",
+    "user_service": {
+      "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+      "state": 3,
+      "enabled": true,
+      "last_result": 0,
+      "start_at_login": true,
+      "available_before_login": false,
+      "available_after_logout": false,
+      "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+    },
+    "shutdown_outcome": "drained"
+  },
+  "raw_output_retained": false
+}

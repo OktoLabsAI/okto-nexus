@@ -1,0 +1,23 @@
+{
+  "label": "nexus-01-install",
+  "returncode": 0,
+  "elapsed_seconds": 2.3158377000363544,
+  "pid": 17400,
+  "stdout_bytes": 759,
+  "stderr_bytes": 0,
+  "stdout_sha256": "711e007c916e0840b1755d99457084bc0c83465ac316dfd56bfde6f1f6b101b7",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "component": "server",
+    "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "installed_version": "0.3.3",
+    "active_version": null,
+    "generation": null,
+    "state": "stopped",
+    "ready_for_queries": false,
+    "reason": "USER_SERVICE_INSTALLED",
+    "supervisor": "windows-task-scheduler",
+    "installation_state": "installed"
+  },
+  "raw_output_retained": false
+}

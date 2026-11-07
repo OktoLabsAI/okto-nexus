@@ -1,0 +1,70 @@
+{
+  "reviewer": "coordination_review",
+  "kind": "finite_readonly_review",
+  "reviewed_at": "2026-11-07",
+  "scope": [
+    "Empty Windows lifecycle runner V3 delta and final public execution record"
+  ],
+  "conclusion": "No concrete blocker found in the resume delta or contradiction in the examined final record.",
+  "checks": [
+    "V3 validates inherited four attempts/four passes and the prior frozen runner, then reacquires the exact owner HANDLE with canonical PID, birth, generation, instance and task definition digest.",
+    "Execution resumes at steps[4:]; the first four lifecycle mutations are not replayed.",
+    "Retry applies only to temporary persistence failures WinError 5/32 for one second. Failure handling retains owner observation independently of report-save success.",
+    "The final record contains 24 distinct attempted and passed action IDs in the same order, all assertions PASS, with original two harness failures retained as prior records.",
+    "The final record reports both tasks absent, owners exited, listener closed and installed packages unchanged."
+  ],
+  "limits": [
+    "Record and runner reviewed only; reviewer did not execute or independently re-query native tasks/processes.",
+    "Empty Windows runtimes only. No logout, reboot, crash, suspension, personal credentials, provider turns, foreground run after uninstall, or M1/M2 acceptance is inferred.",
+    "Historical V1 PATH-normalization and V2 report-persistence failures remain diagnostics, not extra completed lifecycle actions."
+  ],
+  "inputs": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\execute_campaign_v3.py",
+      "sha256": "62c529c1556d5f2c723ff5b9a458cb178c77f18c2424f7d461c224ccc362a3cd"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\execution-001-resume2\\execution-record.json",
+      "sha256": "0f4040e568fc060036e143b08c6c7446e3180748f5ee7c90d73db5009b6f4f92"
+    }
+  ],
+  "record_summary": {
+    "status": "PASS",
+    "planned_actions": 24,
+    "cleanup_confirmed": true,
+    "tasks_absent": true,
+    "owners_exited": true,
+    "listener_closed": true,
+    "packages_unchanged": true,
+    "prior_records": [
+      "execution-001/execution-record.json",
+      "execution-001-resume/execution-record.json"
+    ],
+    "unique_action_ids": [
+      "nexus-01-install",
+      "nexus-02-install",
+      "nexus-03-start",
+      "nexus-04-start",
+      "nexus-05-disable",
+      "nexus-06-stop",
+      "nexus-07-start",
+      "nexus-08-enable",
+      "nexus-09-start",
+      "nexus-10-restart",
+      "nexus-11-stop",
+      "nexus-12-uninstall",
+      "connector-01-install",
+      "connector-02-install",
+      "connector-03-start",
+      "connector-04-start",
+      "connector-05-disable",
+      "connector-06-stop",
+      "connector-07-start",
+      "connector-08-enable",
+      "connector-09-start",
+      "connector-10-restart",
+      "connector-11-stop",
+      "connector-12-uninstall"
+    ]
+  }
+}

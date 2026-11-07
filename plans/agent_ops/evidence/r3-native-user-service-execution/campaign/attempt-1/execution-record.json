@@ -1,0 +1,28 @@
+{
+  "status": "STOPPED_PROGRESSION",
+  "started_at": "2026-11-07T16:14:16.728710+00:00",
+  "user_authorization": "sim pode executar",
+  "proposal_sha256": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a",
+  "runner_sha256": "3b4e00cb501c715e53da34f72b32e81727cbe92dd04229fd241b74aa81a5d014",
+  "planned_actions": 24,
+  "attempted": [
+    {
+      "id": "nexus-01-install",
+      "at": "2026-11-07T16:14:16.733988+00:00"
+    }
+  ],
+  "passed": [],
+  "owners": {},
+  "limits": [
+    "empty Windows runtimes only",
+    "no logout/reboot",
+    "no providers/credentials/turns",
+    "no force/kill",
+    "no M1/M2 completion claim"
+  ],
+  "at": "2026-11-07T16:14:22.057850+00:00",
+  "reason": "RECORDED_ENVIRONMENT_MISMATCH",
+  "runner_pid": 53484,
+  "cleanup_confirmed": false,
+  "live_cli_handles": []
+}

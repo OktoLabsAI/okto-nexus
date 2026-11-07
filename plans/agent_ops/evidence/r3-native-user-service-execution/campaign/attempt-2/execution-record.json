@@ -1,0 +1,416 @@
+{
+  "status": "RUNNING",
+  "started_at": "2026-11-07T16:18:01.940253+00:00",
+  "user_authorization": "sim pode executar",
+  "proposal_sha256": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a",
+  "runner_sha256": "60fa7307ebef7ba3b52a9902fef7e0fd5b1af32ef45f03aeefa79f561de12912",
+  "planned_actions": 24,
+  "attempted": [
+    {
+      "id": "nexus-01-install",
+      "at": "2026-11-07T16:18:01.944352+00:00"
+    },
+    {
+      "id": "nexus-02-install",
+      "at": "2026-11-07T16:18:04.030280+00:00"
+    },
+    {
+      "id": "nexus-03-start",
+      "at": "2026-11-07T16:18:07.961182+00:00"
+    },
+    {
+      "id": "nexus-04-start",
+      "at": "2026-11-07T16:18:28.643904+00:00"
+    }
+  ],
+  "passed": [
+    {
+      "id": "nexus-01-install",
+      "action": {
+        "label": "nexus-01-install",
+        "returncode": 0,
+        "elapsed_seconds": 2.3158377000363544,
+        "pid": 17400,
+        "stdout_bytes": 759,
+        "stderr_bytes": 0,
+        "stdout_sha256": "711e007c916e0840b1755d99457084bc0c83465ac316dfd56bfde6f1f6b101b7",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": null,
+          "generation": null,
+          "state": "stopped",
+          "ready_for_queries": false,
+          "reason": "USER_SERVICE_INSTALLED",
+          "supervisor": "windows-task-scheduler",
+          "installation_state": "installed"
+        },
+        "raw_output_retained": false,
+        "effect_replayed": false,
+        "observation_resumed": true
+      },
+      "status": {
+        "label": "nexus-01-install-status",
+        "returncode": 0,
+        "elapsed_seconds": 2.0083252999465913,
+        "pid": 11032,
+        "stdout_bytes": 1066,
+        "stderr_bytes": 0,
+        "stdout_sha256": "9bd3b0a72a1e16304dd7caf79ffe1bfd0a9a7536982e653832c39a4b1d57d55f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": null,
+          "generation": null,
+          "state": "stopped",
+          "ready_for_queries": false,
+          "reason": "NO_SERVICE_OWNER",
+          "supervisor": "windows-task-scheduler",
+          "user_service": {
+            "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+            "state": 3,
+            "enabled": true,
+            "last_result": 267011,
+            "start_at_login": true,
+            "available_before_login": false,
+            "available_after_logout": false,
+            "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+          }
+        },
+        "raw_output_retained": false
+      },
+      "native": {
+        "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+        "exists": true,
+        "state": 3,
+        "enabled": true,
+        "last_result": 267011,
+        "digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a",
+        "ownership_confirmed": true,
+        "owner_token_unchanged": true,
+        "context_digest": "786abe9174f92516624262b23e33f65962fc63832edb76079c2ac3fa1cb481f2",
+        "recorded_environment_is_approved_subset": true,
+        "action_shape": {
+          "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\pythonw.exe",
+          "component": "nexus",
+          "installation_token": "PRESENT_REDACTED",
+          "supervised_foreground": true
+        }
+      },
+      "assertions": "PASS"
+    },
+    {
+      "id": "nexus-02-install",
+      "action": {
+        "label": "nexus-02-install",
+        "returncode": 0,
+        "elapsed_seconds": 1.742377599934116,
+        "pid": 53384,
+        "stdout_bytes": 1132,
+        "stderr_bytes": 0,
+        "stdout_sha256": "a459457be2cb4d9e0f7b02a625e34fea0e7a044453a61ea899e7c837c48aa4a6",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": null,
+          "generation": null,
+          "state": "stopped",
+          "ready_for_queries": false,
+          "reason": "NO_SERVICE_OWNER",
+          "supervisor": "windows-task-scheduler",
+          "user_service": {
+            "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+            "state": 3,
+            "enabled": true,
+            "last_result": 267011,
+            "start_at_login": true,
+            "available_before_login": false,
+            "available_after_logout": false,
+            "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+          },
+          "installation_prepared": true,
+          "installation_state": "installed"
+        },
+        "raw_output_retained": false
+      },
+      "status": {
+        "label": "nexus-02-install-status",
+        "returncode": 0,
+        "elapsed_seconds": 2.1049117000075057,
+        "pid": 48884,
+        "stdout_bytes": 1066,
+        "stderr_bytes": 0,
+        "stdout_sha256": "9bd3b0a72a1e16304dd7caf79ffe1bfd0a9a7536982e653832c39a4b1d57d55f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": null,
+          "generation": null,
+          "state": "stopped",
+          "ready_for_queries": false,
+          "reason": "NO_SERVICE_OWNER",
+          "supervisor": "windows-task-scheduler",
+          "user_service": {
+            "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+            "state": 3,
+            "enabled": true,
+            "last_result": 267011,
+            "start_at_login": true,
+            "available_before_login": false,
+            "available_after_logout": false,
+            "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+          }
+        },
+        "raw_output_retained": false
+      },
+      "native": {
+        "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+        "exists": true,
+        "state": 3,
+        "enabled": true,
+        "last_result": 267011,
+        "digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a",
+        "ownership_confirmed": true,
+        "owner_token_unchanged": true,
+        "context_digest": "786abe9174f92516624262b23e33f65962fc63832edb76079c2ac3fa1cb481f2",
+        "recorded_environment_is_approved_subset": true,
+        "action_shape": {
+          "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\pythonw.exe",
+          "component": "nexus",
+          "installation_token": "PRESENT_REDACTED",
+          "supervised_foreground": true
+        }
+      },
+      "assertions": "PASS"
+    },
+    {
+      "id": "nexus-03-start",
+      "action": {
+        "label": "nexus-03-start",
+        "returncode": 0,
+        "elapsed_seconds": 18.182426700019278,
+        "pid": 43696,
+        "stdout_bytes": 1121,
+        "stderr_bytes": 0,
+        "stdout_sha256": "b31d9e43bbf580ca6d496bad071fc4174b714b4761b6a366d0fc89862532ec2b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": "0.3.3",
+          "generation": "24f9842fd3605c67abd48cbc8df3e246",
+          "state": "ready",
+          "ready_for_queries": true,
+          "reason": null,
+          "admission": "canonical_scope_checks_required",
+          "storage_initialized": true,
+          "protocol_revision": 1,
+          "pid": 52752,
+          "supervisor": "windows-task-scheduler",
+          "user_service": {
+            "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+            "state": 4,
+            "enabled": true,
+            "last_result": 267009,
+            "start_at_login": true,
+            "available_before_login": false,
+            "available_after_logout": false,
+            "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+          }
+        },
+        "raw_output_retained": false
+      },
+      "status": {
+        "label": "nexus-03-start-status",
+        "returncode": 0,
+        "elapsed_seconds": 2.355244699981995,
+        "pid": 45520,
+        "stdout_bytes": 1121,
+        "stderr_bytes": 0,
+        "stdout_sha256": "372bf907876f04e10ab0da6a2e07d27da7b44cddeb1f56b3d6c3ff812dec1105",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": "0.3.3",
+          "generation": "24f9842fd3605c67abd48cbc8df3e246",
+          "state": "ready",
+          "ready_for_queries": true,
+          "reason": null,
+          "supervisor": "windows-task-scheduler",
+          "storage_initialized": true,
+          "pid": 52752,
+          "admission": "canonical_scope_checks_required",
+          "protocol_revision": 1,
+          "user_service": {
+            "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+            "state": 4,
+            "enabled": true,
+            "last_result": 267009,
+            "start_at_login": true,
+            "available_before_login": false,
+            "available_after_logout": false,
+            "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+          }
+        },
+        "raw_output_retained": false
+      },
+      "native": {
+        "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+        "exists": true,
+        "state": 4,
+        "enabled": true,
+        "last_result": 267009,
+        "digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a",
+        "ownership_confirmed": true,
+        "owner_token_unchanged": true,
+        "context_digest": "786abe9174f92516624262b23e33f65962fc63832edb76079c2ac3fa1cb481f2",
+        "recorded_environment_is_approved_subset": true,
+        "action_shape": {
+          "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\pythonw.exe",
+          "component": "nexus",
+          "installation_token": "PRESENT_REDACTED",
+          "supervised_foreground": true
+        }
+      },
+      "assertions": "PASS",
+      "owner": {
+        "pid": 52752,
+        "generation": "24f9842fd3605c67abd48cbc8df3e246",
+        "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+        "birth_100ns": 134385418904850541,
+        "exit_100ns": 0,
+        "exited": false
+      }
+    },
+    {
+      "id": "nexus-04-start",
+      "action": {
+        "label": "nexus-04-start",
+        "returncode": 0,
+        "elapsed_seconds": 2.9435272999107838,
+        "pid": 40544,
+        "stdout_bytes": 1121,
+        "stderr_bytes": 0,
+        "stdout_sha256": "b1a148084139b15ea0772a077f26173b066bff152187b9c083eecb75dac6a434",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": "0.3.3",
+          "generation": "24f9842fd3605c67abd48cbc8df3e246",
+          "state": "ready",
+          "ready_for_queries": true,
+          "reason": null,
+          "admission": "canonical_scope_checks_required",
+          "pid": 52752,
+          "protocol_revision": 1,
+          "supervisor": "windows-task-scheduler",
+          "storage_initialized": true,
+          "user_service": {
+            "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+            "state": 4,
+            "enabled": true,
+            "last_result": 267009,
+            "start_at_login": true,
+            "available_before_login": false,
+            "available_after_logout": false,
+            "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+          }
+        },
+        "raw_output_retained": false
+      },
+      "status": {
+        "label": "nexus-04-start-status",
+        "returncode": 0,
+        "elapsed_seconds": 2.652964900014922,
+        "pid": 16228,
+        "stdout_bytes": 1121,
+        "stderr_bytes": 0,
+        "stdout_sha256": "bd3ace2d226c37b9437dfacde94a011303fb29787b5b08406e2cc10d87876ca2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result": {
+          "component": "server",
+          "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+          "installed_version": "0.3.3",
+          "active_version": "0.3.3",
+          "generation": "24f9842fd3605c67abd48cbc8df3e246",
+          "state": "ready",
+          "ready_for_queries": true,
+          "reason": null,
+          "supervisor": "windows-task-scheduler",
+          "storage_initialized": true,
+          "admission": "canonical_scope_checks_required",
+          "protocol_revision": 1,
+          "pid": 52752,
+          "user_service": {
+            "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+            "state": 4,
+            "enabled": true,
+            "last_result": 267009,
+            "start_at_login": true,
+            "available_before_login": false,
+            "available_after_logout": false,
+            "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+          }
+        },
+        "raw_output_retained": false
+      },
+      "native": {
+        "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+        "exists": true,
+        "state": 4,
+        "enabled": true,
+        "last_result": 267009,
+        "digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a",
+        "ownership_confirmed": true,
+        "owner_token_unchanged": true,
+        "context_digest": "786abe9174f92516624262b23e33f65962fc63832edb76079c2ac3fa1cb481f2",
+        "recorded_environment_is_approved_subset": true,
+        "action_shape": {
+          "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\pythonw.exe",
+          "component": "nexus",
+          "installation_token": "PRESENT_REDACTED",
+          "supervised_foreground": true
+        }
+      },
+      "assertions": "PASS",
+      "owner": {
+        "pid": 52752,
+        "generation": "24f9842fd3605c67abd48cbc8df3e246",
+        "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+        "birth_100ns": 134385418904850541,
+        "exit_100ns": 0,
+        "exited": false
+      }
+    }
+  ],
+  "owners": {
+    "nexus": {
+      "pid": 52752,
+      "generation": "24f9842fd3605c67abd48cbc8df3e246",
+      "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+      "birth_100ns": 134385418904850541,
+      "exit_100ns": 0,
+      "exited": false
+    }
+  },
+  "limits": [
+    "empty Windows runtimes only",
+    "no logout/reboot",
+    "no providers/credentials/turns",
+    "no force/kill",
+    "no M1/M2 completion claim"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "label": "nexus-12-uninstall",
+  "returncode": 0,
+  "elapsed_seconds": 2.600819499930367,
+  "pid": 19320,
+  "stdout_bytes": 724,
+  "stderr_bytes": 0,
+  "stdout_sha256": "63a64f31d40a23ea3b5f589e54538bd67a805e32f26a49ae027e218b4aa67525",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "component": "server",
+    "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "installed_version": "0.3.3",
+    "active_version": null,
+    "generation": null,
+    "state": "stopped",
+    "ready_for_queries": false,
+    "reason": "USER_SERVICE_REMOVED",
+    "installation_state": "absent"
+  },
+  "raw_output_retained": false
+}

@@ -1,0 +1,29 @@
+{
+  "label": "connector-12-uninstall-status",
+  "returncode": 0,
+  "elapsed_seconds": 1.129535699961707,
+  "pid": 20624,
+  "stdout_bytes": 662,
+  "stderr_bytes": 0,
+  "stdout_sha256": "1ac417381d1b49f8b3e66e720eed33a4448ccc608c200c2a1b7b94eaf78bb1f0",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "active_version": null,
+    "component": "connector",
+    "drain": null,
+    "draining": false,
+    "generation": "",
+    "installed_version": "0.0.12",
+    "instance_id": "svc_803538d0fe8d0385e7509b2101331869b261ad04581caeb47e5fce03bb66570b",
+    "ipc_ok": false,
+    "pid": null,
+    "ready_for_queries": false,
+    "reason": "NO_SERVICE_OWNER",
+    "running": false,
+    "state": "stopped",
+    "supervisor": "foreground",
+    "user_service": null,
+    "version": ""
+  },
+  "raw_output_retained": false
+}

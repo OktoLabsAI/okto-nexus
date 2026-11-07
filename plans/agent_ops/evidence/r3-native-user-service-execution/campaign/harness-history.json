@@ -1,0 +1,25 @@
+{
+  "failures_preserved": [
+    {
+      "attempt": 1,
+      "kind": "observer_comparison_error",
+      "effect_committed": "nexus-01-install",
+      "failure": "RECORDED_ENVIRONMENT_MISMATCH",
+      "actual_difference": "PATH Windows directory casing",
+      "resolution": "Apply the installed context Path.resolve/deduplication contract to the expected PATH only; no argv/env change; no repeat install1."
+    },
+    {
+      "attempt": 2,
+      "kind": "evidence_writer_error",
+      "completed_actions": 4,
+      "failure": "PermissionError WinError5 on os.replace; failure handler encountered the same write error.",
+      "effect_5_emitted": false,
+      "evidence": "Retained four passed/attempted entries; active command status4; source line before command5 failed.",
+      "limitation": "Observer process exited and closed its handles. Cause of the OS denial was not established.",
+      "resolution": "Bounded one-second write retry for WinError5/32; robust error handler; re-acquired same PID/birth/generation/instance before resuming action5."
+    }
+  ],
+  "action_retries_outside_proposal": 0,
+  "native_force_or_kill": false,
+  "preparation_note": "One PowerShell text-generation parse failure occurred before V2 file creation; no native/CLI action was invoked by that preparation failure."
+}

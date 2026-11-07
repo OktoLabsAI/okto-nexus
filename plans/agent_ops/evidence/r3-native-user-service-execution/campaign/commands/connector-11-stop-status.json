@@ -1,0 +1,37 @@
+{
+  "label": "connector-11-stop-status",
+  "returncode": 0,
+  "elapsed_seconds": 2.0400869000004604,
+  "pid": 44564,
+  "stdout_bytes": 928,
+  "stderr_bytes": 0,
+  "stdout_sha256": "9966a84193865e7a46f1577031b8d25de4f9dd13c4115dfe9112d634a3a364d1",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "active_version": null,
+    "component": "connector",
+    "drain": null,
+    "draining": false,
+    "generation": "",
+    "installed_version": "0.0.12",
+    "instance_id": "svc_803538d0fe8d0385e7509b2101331869b261ad04581caeb47e5fce03bb66570b",
+    "ipc_ok": false,
+    "pid": null,
+    "ready_for_queries": false,
+    "reason": "NO_SERVICE_OWNER",
+    "running": false,
+    "state": "stopped",
+    "supervisor": "windows-task-scheduler",
+    "user_service": {
+      "available_after_logout": false,
+      "available_before_login": false,
+      "enabled": true,
+      "last_result": 0,
+      "name": "OktoNexus-connector-803538d0fe8d0385e7509b2101331869b261ad04581caeb47e5fce03bb66570b",
+      "start_at_login": true,
+      "state": 3
+    },
+    "version": ""
+  },
+  "raw_output_retained": false
+}

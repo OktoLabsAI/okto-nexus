@@ -1,0 +1,78 @@
+{
+  "kind": "editorial_scenario_mapping_correction",
+  "at": "2026-11-07T16:29:52.135347+00:00",
+  "reason": "The prior map incorrectly associated enable/disable with SVC-T14 and used unrelated limitations for SVC-T17.",
+  "authority": {
+    "fixed_plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "fixed_plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "ledger_sha256": "bcb6da54cc814cee6c04f4375e98928f514b066ffbb11a2bb4813e9e7b18c89a"
+  },
+  "prior_manifest": {
+    "sha256": "dbe2edfa1cfada2c6b6bab7b73f209b283be906711a3ac5fe3cdfcb8e500cf9c",
+    "bytes": 11429
+  },
+  "prior_qualification": {
+    "sha256": "89cbcd134cc4f4505999cd37963a7d92ae556122205954dd345eee4547f278c4",
+    "bytes": 2099
+  },
+  "before_supports": [
+    {
+      "id": "SVC-T07",
+      "scope": "Installed user tasks start the owned empty runtimes and canonical readiness confirms identity/version/supervisor."
+    },
+    {
+      "id": "SVC-T14",
+      "scope": "Explicit native enable/disable observed; disable preserves live owner and refuses later start; enable alone stays stopped."
+    },
+    {
+      "id": "SVC-T17",
+      "scope": "PARTIAL: repeated install and repeated start preserve definition/owner; no crash/adoption/recovery campaign."
+    },
+    {
+      "id": "SVC-T20",
+      "scope": "PARTIAL: canonical graceful stop of empty runtimes, drained outcome and process exit; no nonempty backlog or forced stop."
+    },
+    {
+      "id": "SVC-T27",
+      "scope": "PARTIAL: owner/digest-fenced uninstall removes only the two stopped tasks and retains homes; no post-uninstall foreground launch."
+    }
+  ],
+  "after_supports": [
+    {
+      "id": "SVC-T07",
+      "literal_requirement": "Servi\u00e7o instalado e parado \u00e9 iniciado por seu supervisor, sem daemon avulso concorrente.",
+      "scope": "Installed user tasks start the selected empty runtimes; canonical readiness confirms instance, version and Task Scheduler supervisor. Repeated start retains the same PID, birth and generation.",
+      "remaining": "Windows empty-runtime scope; no broader platform or provider qualification."
+    },
+    {
+      "id": "SVC-T14",
+      "literal_requirement": "Servi\u00e7o iniciado com cwd/PATH diferentes encontra execut\u00e1vel, configura\u00e7\u00e3o e projeto corretos.",
+      "scope": "PARTIAL: inspected saved absolute executable, selected cwd/project, configuration arguments and approved PATH/environment subset; PATH normalization follows the installed Path.resolve contract. The actual registered tasks reached canonical readiness using that saved context.",
+      "remaining": "The campaign did not deliberately vary CLI cwd/PATH between install and start or independently sample the running child cwd/PATH. No provider, vault or effective provider configuration was exercised."
+    },
+    {
+      "id": "SVC-T17",
+      "literal_requirement": "Instalar/habilitar servi\u00e7o repetidamente n\u00e3o duplica recursos; altera\u00e7\u00e3o externa de defini\u00e7\u00e3o \u00e9 preservada.",
+      "scope": "PARTIAL: repeated install preserved the same owned task definition digest; repeated start also preserved the same process identity. Disable/enable each ran once per component.",
+      "remaining": "Repeated enable and preservation of an externally modified task definition were not exercised in this native campaign."
+    },
+    {
+      "id": "SVC-T20",
+      "literal_requirement": "Stop expl\u00edcito n\u00e3o aciona autorressurrei\u00e7\u00e3o; pr\u00f3ximo connect segue a pol\u00edtica documentada.",
+      "scope": "PARTIAL: explicit canonical stop drained each empty runtime and confirmed the exact owner exited. The following bounded observations remained stopped; no automatic restart was observed in those checkpoints.",
+      "remaining": "The next connect and its documented restart policy were not exercised. This does not establish unlimited-duration suppression from the finite stopped checkpoints."
+    },
+    {
+      "id": "SVC-T27",
+      "literal_requirement": "Desinstala\u00e7\u00e3o remove s\u00f3 a integra\u00e7\u00e3o selecionada, preservando dados e execu\u00e7\u00e3o foreground posterior.",
+      "scope": "PARTIAL: owner/digest-fenced uninstall removed the two selected stopped tasks and retained their disposable homes.",
+      "remaining": "Execution in foreground after uninstall was not exercised; bytewise preservation of all data was not measured."
+    }
+  ],
+  "campaign_actions_or_observations_added": 0,
+  "unique_actions_remain": 24,
+  "all_nonmapping_qualification_fields_unchanged": true,
+  "actions_sha256_unchanged": "06ebe049ecd6dddc8c11f417d808e97825d64bf33b210538fd4993b7d094b051",
+  "final_execution_record_sha256_unchanged": "0f4040e568fc060036e143b08c6c7446e3180748f5ee7c90d73db5009b6f4f92",
+  "no_ledger_status_promotion": true
+}

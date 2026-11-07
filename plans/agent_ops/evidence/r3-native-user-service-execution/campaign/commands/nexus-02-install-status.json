@@ -1,0 +1,32 @@
+{
+  "label": "nexus-02-install-status",
+  "returncode": 0,
+  "elapsed_seconds": 2.1049117000075057,
+  "pid": 48884,
+  "stdout_bytes": 1066,
+  "stderr_bytes": 0,
+  "stdout_sha256": "9bd3b0a72a1e16304dd7caf79ffe1bfd0a9a7536982e653832c39a4b1d57d55f",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "component": "server",
+    "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "installed_version": "0.3.3",
+    "active_version": null,
+    "generation": null,
+    "state": "stopped",
+    "ready_for_queries": false,
+    "reason": "NO_SERVICE_OWNER",
+    "supervisor": "windows-task-scheduler",
+    "user_service": {
+      "name": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+      "state": 3,
+      "enabled": true,
+      "last_result": 267011,
+      "start_at_login": true,
+      "available_before_login": false,
+      "available_after_logout": false,
+      "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a"
+    }
+  },
+  "raw_output_retained": false
+}

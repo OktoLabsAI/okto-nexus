@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "unique_actions": 24,
+  "authorization_quote": "sim pode executar",
+  "proposal_revision": 4,
+  "proposal_sha256": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a",
+  "final_record": "attempt-3/execution-record.json",
+  "cleanup_confirmed": true,
+  "tasks_absent": {
+    "nexus": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "connector": "OktoNexus-connector-803538d0fe8d0385e7509b2101331869b261ad04581caeb47e5fce03bb66570b"
+  },
+  "all_observed_owners_exited": true,
+  "listener_closed": {
+    "host": "127.0.0.1",
+    "port": 52106
+  },
+  "post_wheel_and_installed_payloads_unchanged": true,
+  "package_file_count": 981,
+  "homes_retained": {
+    "server_home": true,
+    "connector_state": true
+  },
+  "supports": [
+    {
+      "id": "SVC-T07",
+      "literal_requirement": "Servi\u00e7o instalado e parado \u00e9 iniciado por seu supervisor, sem daemon avulso concorrente.",
+      "scope": "Installed user tasks start the selected empty runtimes; canonical readiness confirms instance, version and Task Scheduler supervisor. Repeated start retains the same PID, birth and generation.",
+      "remaining": "Windows empty-runtime scope; no broader platform or provider qualification."
+    },
+    {
+      "id": "SVC-T14",
+      "literal_requirement": "Servi\u00e7o iniciado com cwd/PATH diferentes encontra execut\u00e1vel, configura\u00e7\u00e3o e projeto corretos.",
+      "scope": "PARTIAL: inspected saved absolute executable, selected cwd/project, configuration arguments and approved PATH/environment subset; PATH normalization follows the installed Path.resolve contract. The actual registered tasks reached canonical readiness using that saved context.",
+      "remaining": "The campaign did not deliberately vary CLI cwd/PATH between install and start or independently sample the running child cwd/PATH. No provider, vault or effective provider configuration was exercised."
+    },
+    {
+      "id": "SVC-T17",
+      "literal_requirement": "Instalar/habilitar servi\u00e7o repetidamente n\u00e3o duplica recursos; altera\u00e7\u00e3o externa de defini\u00e7\u00e3o \u00e9 preservada.",
+      "scope": "PARTIAL: repeated install preserved the same owned task definition digest; repeated start also preserved the same process identity. Disable/enable each ran once per component.",
+      "remaining": "Repeated enable and preservation of an externally modified task definition were not exercised in this native campaign."
+    },
+    {
+      "id": "SVC-T20",
+      "literal_requirement": "Stop expl\u00edcito n\u00e3o aciona autorressurrei\u00e7\u00e3o; pr\u00f3ximo connect segue a pol\u00edtica documentada.",
+      "scope": "PARTIAL: explicit canonical stop drained each empty runtime and confirmed the exact owner exited. The following bounded observations remained stopped; no automatic restart was observed in those checkpoints.",
+      "remaining": "The next connect and its documented restart policy were not exercised. This does not establish unlimited-duration suppression from the finite stopped checkpoints."
+    },
+    {
+      "id": "SVC-T27",
+      "literal_requirement": "Desinstala\u00e7\u00e3o remove s\u00f3 a integra\u00e7\u00e3o selecionada, preservando dados e execu\u00e7\u00e3o foreground posterior.",
+      "scope": "PARTIAL: owner/digest-fenced uninstall removed the two selected stopped tasks and retained their disposable homes.",
+      "remaining": "Execution in foreground after uninstall was not exercised; bytewise preservation of all data was not measured."
+    }
+  ],
+  "not_qualified": [
+    "logon trigger execution",
+    "logout",
+    "reboot",
+    "crash",
+    "suspension",
+    "foreground after uninstall",
+    "provider readiness",
+    "credential resolution",
+    "M1",
+    "M2"
+  ],
+  "public_artifact_policy": "Only explicit allowlist; no raw XML, token-bearing argv, contexts, DBs, homes, credentials or raw child output."
+}

@@ -1,0 +1,27 @@
+{
+  "label": "nexus-08-enable",
+  "returncode": 0,
+  "elapsed_seconds": 2.3835815000347793,
+  "pid": 21360,
+  "stdout_bytes": 876,
+  "stderr_bytes": 0,
+  "stdout_sha256": "e2864cb0446ac02f74047c6433188eba3a099d53c17045cd3249b192d608e887",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "component": "server",
+    "instance_id": "svc_8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "installed_version": "0.3.3",
+    "active_version": null,
+    "generation": null,
+    "state": "stopped",
+    "ready_for_queries": false,
+    "reason": "NO_SERVICE_OWNER",
+    "enabled": true,
+    "changed": true,
+    "definition_digest": "22f08a5ef7ae8cbb87edd62602c54c5012524a15eea5650655047ade105f846a",
+    "enablement_confirmed": true,
+    "installation_state": "installed",
+    "supervisor": "windows-task-scheduler"
+  },
+  "raw_output_retained": false
+}

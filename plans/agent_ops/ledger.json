@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T16:26:28.649414+00:00",
+  "updated_at": "2026-11-07T16:32:23.563800+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -764,7 +764,8 @@
         "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
         "plans/agent_ops/evidence/pr03-project-doctor.md",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Both hosts expose the shared lifecycle facade; CLI/native entrypoints converge. Passive diagnostics, logs, enablement, recovery and upgrades are implemented, contrary to old limitation text. Remaining: First supported Windows real user-service acceptance remains open; other platforms need only retain their explicit qualification limits. Keep individual verified subcontracts.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -779,7 +780,8 @@
         "connector_lifecycle_facade": "IMPLEMENTED",
         "server_passive_logs_facade": "VERIFIED",
         "passive_project_diagnostics_installed": "VERIFIED",
-        "canonical_work_diagnostics_without_replay": "VERIFIED"
+        "canonical_work_diagnostics_without_replay": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Both hosts expose the shared lifecycle facade; CLI/native entrypoints converge. Passive diagnostics, logs, enablement, recovery and upgrades are implemented, contrary to old limitation text.",
@@ -991,7 +993,8 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Detached lifecycle and installed-supervisor routing exist; topology is resolved before local effects; start only once then observes. Remaining: Connect-to-facade composition and real process lifecycle are complementary evidence; actual supervised user context/terminal-close work remains distinct.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1020,7 +1023,8 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Detached lifecycle and installed-supervisor routing exist; topology is resolved before local effects; start only once then observes.",
@@ -1085,7 +1089,8 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Readiness and failure-state contracts, including actual startup config/migration/storage failures and interrupted connect observation, are verified. Real provider readiness remains separately pending.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1097,7 +1102,8 @@
         "server_passive_status": "VERIFIED",
         "owner_change_during_readiness": "VERIFIED",
         "connector_passive_service_status": "VERIFIED",
-        "explicit_settings_provenance_and_legacy_stored_overrides": "VERIFIED"
+        "explicit_settings_provenance_and_legacy_stored_overrides": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Explicit state/readiness correlates owner/version; local query readiness is not provider/authority readiness; failure and stopping stay observable.",
@@ -1213,7 +1219,8 @@
         "plans/agent_ops/evidence/pr03-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-login-start-wheels.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite. Remaining: Real two-task Windows campaign not executed; login and other OSes have separate unqualified scope. Windows definition validation is not installation.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1241,7 +1248,8 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite.",
@@ -1352,7 +1360,8 @@
         "plans/agent_ops/evidence/pr03-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-login-start-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-login-start-wheels.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions. Remaining: Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1374,7 +1383,8 @@
         "connector_connect_login_review": "VERIFIED",
         "actual_login_start_campaign": "NOT_RUN",
         "connector_host_transition_checkpoint": "VERIFIED",
-        "connector_later_disablement_preserved": "VERIFIED"
+        "connector_later_disablement_preserved": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions.",
@@ -1460,7 +1470,8 @@
         "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Drain/força explícita/autoridade atual/timeout pendente e retenção de recursos estão comprovados. O novo T22 prova filho real e parada cooperativa, não logout/shutdown externo.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1477,7 +1488,8 @@
         "cooperative_connector_installed": "VERIFIED",
         "cooperative_nexus_installed": "VERIFIED",
         "explicit_generation_force": "VERIFIED",
-        "admitted_authority_continuation": "VERIFIED"
+        "admitted_authority_continuation": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Cooperative drain delivered in Core and both hosts. 217 Core,194 Connector and247 Nexus installed unique contract cases pass; Nexus also passes45 isolation/recovery cases. New productive work is fenced, admitted authority/results/ACKs continue, timeout stays pending, explicit force checks current generation and expired drain, and unknown resources retain ownership. Real external shutdown/service/provider campaigns remain open.",
@@ -1754,7 +1766,8 @@
         "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
         "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Terminal lifecycle controls and explicit generation-bound force decision are implemented and contract-qualified. Real terminal-independent productive operation remains pending.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1773,7 +1786,8 @@
         "reviewed_pending_detached_launch_recovery": "VERIFIED",
         "reviewed_environment_replacement_hosts": "VERIFIED",
         "interrupted_upgrade_injected_native_effects": "VERIFIED",
-        "actual_native_task_upgrade": "NOT_RUN"
+        "actual_native_task_upgrade": "NOT_RUN",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Terminal-only start/stop/restart/install/uninstall/log/status/doctor and retained foreground commands exist; passive commands do not infer work absence.",
@@ -1914,7 +1928,8 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback. Remaining: Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1945,7 +1960,8 @@
         "remote_connector_productive_work": "NOT_RUN",
         "remote_operator_proposal_approval": "VERIFIED",
         "connector_pending_intent_resume_after_human_decision": "VERIFIED",
-        "binding_approval_loss_recovery_without_repost": "VERIFIED"
+        "binding_approval_loss_recovery_without_repost": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback.",
@@ -2075,7 +2091,8 @@
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
         "plans/agent_ops/evidence/pr03-project-doctor.md",
         "plans/agent_ops/evidence/pr10-ledger-reconciliation.md",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "result": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications. Remaining: Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -2099,7 +2116,8 @@
         "connector_host_transition_checkpoint": "VERIFIED",
         "connector_later_disablement_preserved": "VERIFIED",
         "passive_project_diagnostics_installed": "VERIFIED",
-        "canonical_work_diagnostics_without_replay": "VERIFIED"
+        "canonical_work_diagnostics_without_replay": "VERIFIED",
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications.",
@@ -6943,7 +6961,7 @@
     },
     "SVC-T07": {
       "requirement": "Serviço instalado e parado é iniciado por seu supervisor, sem daemon avulso concorrente.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-cli.json",
@@ -6952,13 +6970,15 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/actions.json"
       ],
-      "result": "Injected installed-stopped integration uses only its scheduler, preserving pending start and refusing detached fallback. Scope/remaining: Actual Task Scheduler start remains the explicit native campaign; scope label must retain injected adapter.",
-      "remaining": "Actual Task Scheduler start remains the explicit native campaign; scope label must retain injected adapter.",
+      "result": "Actual Windows Task Scheduler started the two installed/stopped isolated runtimes. Canonical instance/version/generation/supervisor and native task/owned process handles agree; repeated start reused the same owner. No detached fallback or duplicate owner was observed.",
+      "remaining": "",
       "remaining_kind": "none",
       "subscopes": {
-        "retained_injected_contract": "VERIFIED"
+        "retained_injected_contract": "VERIFIED",
+        "actual_windows_empty_user_tasks": "VERIFIED"
       }
     },
     "SVC-T08": {
@@ -7082,11 +7102,15 @@
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "remaining": "Actual registered service with reduced/different PATH/cwd and correct project still needs service context campaign.",
       "remaining_kind": "real_service_context_campaign",
-      "result": "Saved absolute executable/cwd/paths/environment contracts and changed launcher cwd tested. Scope/remaining: Actual registered service with reduced/different PATH/cwd and correct project still needs service context campaign."
+      "result": "Saved absolute executable/cwd/paths/environment contracts and changed launcher cwd tested. Scope/remaining: Actual registered service with reduced/different PATH/cwd and correct project still needs service context campaign.",
+      "subscopes": {
+        "finite_empty_windows_campaign": "PARTIAL"
+      }
     },
     "SVC-T15": {
       "requirement": "Credencial só disponível no terminal ou cofre bloqueado gera diagnóstico no contexto real do serviço.",
@@ -7149,12 +7173,14 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "subscopes": {
         "enablement_idempotence_and_external_edits_isolated": "VERIFIED",
         "native_mutation_campaign": "NOT_RUN",
-        "retained_injected_contract": "VERIFIED"
+        "retained_injected_contract": "VERIFIED",
+        "finite_empty_windows_campaign": "PARTIAL"
       },
       "result": "Repeated scoped install/enable is no-op; native fingerprint edits and foreign definitions refuse, preserving them. Scope/remaining: Scheduler effects injected; real native integration remains separately pending.",
       "remaining": "Scheduler effects injected; real native integration remains separately pending.",
@@ -7192,12 +7218,14 @@
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "remaining": "Do not call injected OS suppression actual scheduler crash qualification.",
       "remaining_kind": "none",
       "subscopes": {
-        "retained_injected_contract": "VERIFIED"
+        "retained_injected_contract": "VERIFIED",
+        "finite_empty_windows_campaign": "PARTIAL"
       },
       "result": "Explicit stop reaches stopped and no detached auto-resurrection; generation/token fences and injected same-login recovery suppression. Scope/remaining: Do not call injected OS suppression actual scheduler crash qualification."
     },
@@ -7336,11 +7364,15 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
       "remaining": "Actual native removal followed by same preserved data in foreground remains native campaign scope.",
       "remaining_kind": "authorized_native_campaign_pending",
-      "result": "Injected uninstall requires inactive/drained selected integration and preserves DB/credentials/context; repeated absence passive. Scope/remaining: Actual native removal followed by same preserved data in foreground remains native campaign scope."
+      "result": "Injected uninstall requires inactive/drained selected integration and preserves DB/credentials/context; repeated absence passive. Scope/remaining: Actual native removal followed by same preserved data in foreground remains native campaign scope.",
+      "subscopes": {
+        "finite_empty_windows_campaign": "PARTIAL"
+      }
     },
     "SVC-T28": {
       "requirement": "Container/supervisor externo usa foreground sem dupla supervisão ou dupla daemonização.",
@@ -11778,16 +11810,19 @@
   },
   "campaigns": {
     "windows_temporary_user_tasks": {
-      "status": "AUTHORIZED_PENDING_PREFLIGHT",
+      "status": "FINITE_EMPTY_NATIVE_LIFECYCLE_VERIFIED",
       "plan": "plans/agent_ops/campaigns/windows-user-service.md",
       "snapshot": "plans/agent_ops/evidence/r3-campaign-proposals/native-service-campaign-proposal.json",
       "snapshot_sha256": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a",
-      "native_preflight": "Selected task names absent; no registration or app state created",
-      "limits": "Temporary isolated tasks only; no personal app state, provider, credential, logout or reboot",
+      "native_preflight": "Exact targets absent, homes empty and port52106 free before effects; retained preflights and reconciliation records.",
+      "limits": "Empty temporary Windows user tasks only; no provider, credential, actual logon, crash, logout, suspension, reboot or foreground-after-uninstall qualification.",
       "payload_refresh_required": false,
       "payload_refresh_reason": "Current qualified wheel hashes pinned in revision4; exact two tasks remain absent and no registration performed.",
       "execution_authorized": true,
-      "execution_authorization": "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json"
+      "execution_authorization": "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json",
+      "execution_evidence": "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+      "unique_lifecycle_actions": 24,
+      "cleanup_confirmed": true
     },
     "pr09_windows_herdr": {
       "status": "VERIFIED",
@@ -13094,6 +13129,15 @@
       "summary": "Real setup completed once (22775 observed tokens), then raw slash comparison refused Finish observation. Minimal client fix:14source/14installed PASS; historical regression fails as expected. Same receipt retained; no M1 acceptance promotion.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-path-normalization/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Finite native empty user-service campaign",
+      "status": "VERIFIED",
+      "summary": "24unique approved lifecycle actions PASS across2Windows user tasks; both removed, ownerexit/portfree confirmed,981payloads unchanged. Two instrumentation resumptions preserved without effect replay. Only SVC-T07 fully promoted; remaining OS/provider clauses stay open.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ]
     }
   ]
