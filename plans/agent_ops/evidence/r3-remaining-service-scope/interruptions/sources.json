@@ -1,0 +1,71 @@
+{
+  "mode": "READ_ONLY_REQUIREMENT_MAPPING",
+  "execution_authorized": false,
+  "effects": {
+    "service": 0,
+    "task": 0,
+    "provider": 0,
+    "vault": 0,
+    "os_interruptions": 0
+  },
+  "files": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\ledger.json",
+      "sha256": "21a41f826f4007d622cad5d993d7b8903765ae22127c0166affb8c047d1d42d5"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\campaigns\\windows-user-service.md",
+      "sha256": "0c1174a4d45640fcd0fec20c8c6800bf10d761f8a7d3362881a1df3af35d66f1"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\service_manager\\windows_tasks.py",
+      "sha256": "ba70980f4c072080ad78907a11dcab5e80c31342531748c921a5522b130f05ba"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\service_manager\\local.py",
+      "sha256": "8d388f54ca56da886a7b2675316b5aef4b854a87e0219f696aea4b69a44b2989"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\service_manager\\identity.py",
+      "sha256": "28a5d663c99c4cbf89739e57b4d3ce222ec374f3471126023a8ba048d38fa871"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\http\\service_lifecycle.py",
+      "sha256": "63c1be3056176a59a3d195b51796824185f631595d7338f483d6dde97af304e7"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\cli\\supervised_service.py",
+      "sha256": "4cb4f62d878dad0b3dcad8c486e46d5c2c9b6acc864fadcc1cf737bbecfd3fc8"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\cli\\serve.py",
+      "sha256": "e035f239181391c24e35038fda3b2b13ce44a34d87437d3d2d6130358eb5d512"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\user_service_definition.py",
+      "sha256": "f17acb3edf7e4fc3ed671a92412b004610db30ba20f9f2499276d5e478a25788"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\service_process.py",
+      "sha256": "69d4852972168981c638d8169added4e17af36c04ed519222f94a45dd15158ca"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\manager.py",
+      "sha256": "65ee837a61af3bbb2c4a3e98f13e2d02cd691c0ca2bf41d4f0c555d6d9a47611"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\app.py",
+      "sha256": "2b901aee2284606c3ad20caf670a848b950e8d44d2785fd0cf3daebfbf3d6db5"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\lifecycle.py",
+      "sha256": "3b7541b832ed1ff7eaba213ddefbc841a56d869754a7eb863f3930ada420c4d8"
+    }
+  ],
+  "note_sha256": "7f1cd22558a7ac4cf1a0e15cecb93e7b28c36635133057f4d03e30806827fe37",
+  "new_confirmed_product_defects": []
+}

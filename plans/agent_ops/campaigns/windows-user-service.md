@@ -65,3 +65,9 @@ A campanha M1 usou outros alvos e teve encerramento separado: houve duas
 admissões e trabalho cancelado, seguido da
 [contenção autorizada](../evidence/r3-m1-authorized-containment/closure/summary.json).
 Essa parada forçada não qualifica drain cooperativo nem o ciclo completo M1.
+
+## Qualificações seguintes
+
+O [mapa de lacunas reais](../evidence/r3-remaining-service-scope/README.md)
+separa os passos restantes e as interrupções do SO. É planejamento em leitura,
+não extensão da autorização das 24 ações encerradas nem da campanha M1 v8.

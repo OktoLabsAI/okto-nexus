@@ -1077,3 +1077,22 @@ produtos nesta preparação. BASE-06, DX-T39, DX-T40, DX-T43 e M1 continuam pend
 da evidência real. O plano e os estados dos cenários e critérios não mudaram.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v8-preparation/root-review.json`.
+
+## 2026-11-07 — escopo das qualificações reais de serviço
+
+Corrigidos os rótulos de pendência de SVC-T17 e SVC-T20: ambos estavam como
+remaining_kind none, apesar dos passos reais faltantes. Enable repetido e edição
+externa da definição permanecem em T17; T20 exige stop seguido do próximo
+connect canônico, com perfil concluído legítimo, sem substituí-lo por start.
+
+As notas de leitura separam os incrementos da campanha Windows já encerrada
+e os observáveis de terminal, login, logout/shutdown, suspensão e reboot.
+A fonte declara serviço de sessão interativa, indisponível após logout.
+Em T19, a distinção entre retry pendente e falha terminal é hipótese concreta
+para qualificação, não bug confirmado por esta leitura. O template Connector
+connect foi conferido e omite --json/--non-interactive, recusados pelo parser.
+
+Não houve execução, acesso a cofre ou promoção de cenário/critério. O plano
+permanece igual; M1 v8 continua congelada e aguardando a aprovação solicitada.
+
+Evidência: `plans/agent_ops/evidence/r3-remaining-service-scope/root-review.json`.

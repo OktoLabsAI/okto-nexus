@@ -1,0 +1,149 @@
+{
+  "format": "read_only_source_references",
+  "revision": 1,
+  "captured_at": "2026-11-07T20:21:38.539919+00:00",
+  "scope": [
+    "SVC-T14",
+    "SVC-T15",
+    "SVC-T17",
+    "SVC-T19",
+    "SVC-T20",
+    "SVC-T27"
+  ],
+  "observed_heads": {
+    "nexus": "4771dcdf4baf6764acb9c86eefe79fea72e4e96b",
+    "connector": "ef216b1fa48ac89675685bc0aaecb8afa2b11534",
+    "core": "7f69d866f19616fcdd1ee83984f3806b1eb85ff5"
+  },
+  "read_only": true,
+  "tests_executed": 0,
+  "product_cli_executed": 0,
+  "scheduler_access": false,
+  "personal_credentials_access": false,
+  "provider_executed": false,
+  "native_service_effects": false,
+  "m1_v8_modified": false,
+  "new_authorization_inferred": false,
+  "sources": [
+    {
+      "repo": "nexus",
+      "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "bytes": 133337,
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+    },
+    {
+      "repo": "nexus",
+      "path": "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+      "bytes": 4031,
+      "sha256": "25dce3110f39319a5dc53c4aca2ba6585e6c41a118e9b4b34e26946b84471a6a"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/service.py",
+      "bytes": 12289,
+      "sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/serve.py",
+      "bytes": 30457,
+      "sha256": "e035f239181391c24e35038fda3b2b13ce44a34d87437d3d2d6130358eb5d512"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+      "bytes": 4456,
+      "sha256": "4cb4f62d878dad0b3dcad8c486e46d5c2c9b6acc864fadcc1cf737bbecfd3fc8"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "bytes": 21054,
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "bytes": 21317,
+      "sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/context.py",
+      "bytes": 6489,
+      "sha256": "8f54e12b9c6d657a44ae3ed178e2efbc60782b4479e1b0f5f516d4bbee397e06"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/installation.py",
+      "bytes": 17776,
+      "sha256": "4a3df9d200b1e4875c48aa4d9e874f93477c7f458f36f2c6b81a8950a451dcaa"
+    },
+    {
+      "repo": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/local.py",
+      "bytes": 24682,
+      "sha256": "8d388f54ca56da886a7b2675316b5aef4b854a87e0219f696aea4b69a44b2989"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/cli/main.py",
+      "bytes": 30534,
+      "sha256": "0ab9fe7e9f6b6680699e127f32c0377a553459e0791a5276adf0d4a726b48c4b"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect.py",
+      "bytes": 15851,
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/daemon/lifecycle.py",
+      "bytes": 17738,
+      "sha256": "3b7541b832ed1ff7eaba213ddefbc841a56d869754a7eb863f3930ada420c4d8"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/daemon/service_process.py",
+      "bytes": 5084,
+      "sha256": "69d4852972168981c638d8169added4e17af36c04ed519222f94a45dd15158ca"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/daemon/r4_control.py",
+      "bytes": 39841,
+      "sha256": "fc490e38a73d6cad94f7eb20a403300b9e1917204ea61a1bd6fae91e0b9ce75a"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/identity/vault.py",
+      "bytes": 11768,
+      "sha256": "00c024c5a7aa5106982f44948e4c0d9381c770b25a3e925efeb42d8ac28e6084"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/platform/user_service.py",
+      "bytes": 14169,
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804"
+    },
+    {
+      "repo": "connector",
+      "path": "src/okto_nexus_connector/platform/service_context.py",
+      "bytes": 6455,
+      "sha256": "7871f6e2d90cb6ed82ab50a1897610edf8316e6e1c71b8133682526b28b7954d"
+    },
+    {
+      "repo": "core",
+      "path": "src/nexus_connector_core/user_service_definition.py",
+      "bytes": 9969,
+      "sha256": "f17acb3edf7e4fc3ed671a92412b004610db30ba20f9f2499276d5e478a25788"
+    }
+  ],
+  "limits": [
+    "Source reading and retained actual campaign evidence only; no new runtime proof.",
+    "No scenario promoted and no claim of Scheduler failure reproduced.",
+    "T15 backend-specific scope stays explicit; OS-vault locked behavior is not qualified here.",
+    "Future command templates need concrete approved paths, task names, package pins and effects."
+  ]
+}

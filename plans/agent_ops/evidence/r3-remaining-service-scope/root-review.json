@@ -1,0 +1,69 @@
+{
+  "status": "READ_ONLY_SCOPE_MAPPING_NOT_EXECUTION",
+  "recorded_at_utc": "2026-11-07T20:25:47.520233+00:00",
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "counts_unchanged": {
+    "tasks": {
+      "VERIFIED": 43,
+      "IMPLEMENTED": 6,
+      "IN_PROGRESS": 10
+    },
+    "scenarios": {
+      "VERIFIED": 118,
+      "IN_PROGRESS": 11,
+      "NOT_RUN": 3
+    },
+    "completion_criteria": {
+      "NOT_VERIFIED": 4,
+      "VERIFIED": 13
+    }
+  },
+  "m1_v8_snapshot_unchanged": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+  "m1_v8_approval_still_pending": true,
+  "ledger_corrections": {
+    "SVC-T17": "remaining_kind: none -> real_service_mutation_campaign; repeated enable and external definition changes remain unexecuted.",
+    "SVC-T20": "remaining_kind: none -> real_service_stop_reconnect_campaign; actual next connect is required, not another start."
+  },
+  "source_observation_not_confirmed_runtime_bug": "SVC-T19 status preserves raw Scheduler last_result, but terminal failure versus pending retry/launch_requested must be observed on the actual selected task. Nonzero last_result alone is not proof of exhaustion.",
+  "effects": {
+    "provider": 0,
+    "services": 0,
+    "scheduler_mutations": 0,
+    "vault": 0,
+    "os_interruptions": 0
+  },
+  "source_records": [
+    {
+      "path": "interruptions/nota.md",
+      "sha256": "7f1cd22558a7ac4cf1a0e15cecb93e7b28c36635133057f4d03e30806827fe37",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-windows-interruption-scope-21owvuvg\\nota.md"
+    },
+    {
+      "path": "interruptions/sources.json",
+      "sha256": "647b33cc4cb04d73e001d2f0873cf4e8cb876f9879342e8ddec65f49d1055ca0",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-windows-interruption-scope-21owvuvg\\sources.json"
+    },
+    {
+      "path": "service-context/review.md",
+      "sha256": "ab9f437ac4101bf02b95645810b3072024abad830378204987b20cf7cb63db91",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-scope-root-omw3emdo\\service-context-review.md"
+    },
+    {
+      "path": "service-context/sources.json",
+      "sha256": "4529541f005a371b6da06e2a977cb7d05f1b80490c9ef09cc16c384140af440e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-windows-targeted-readonly-reyqb1uy\\sources.json"
+    }
+  ],
+  "curation_notes": {
+    "original_context_note_sha256": "22437458918feb71162242a593e9afc832e9b331d8a81c642ea1d6c86ff67d27",
+    "corrected_context_note_sha256": "ab9f437ac4101bf02b95645810b3072024abad830378204987b20cf7cb63db91",
+    "correction": "Omit --json/--non-interactive from Connector connect template; clarify disposable canonical identity credential.",
+    "source_hashes_checked_before_ledger_update": 33
+  },
+  "limits": [
+    "No new scenario or acceptance was promoted.",
+    "These notes are planning inputs, not an approved executable campaign.",
+    "The completed 24-action campaign and consumed M1 force authorization remain closed.",
+    "Login, logout, shutdown, suspend/resume and reboot require separate observations and user coordination."
+  ]
+}

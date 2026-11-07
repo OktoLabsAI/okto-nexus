@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T20:08:15.790841+00:00",
+  "updated_at": "2026-11-07T20:25:47.520233+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -7196,8 +7196,8 @@
         "finite_empty_windows_campaign": "PARTIAL"
       },
       "result": "Repeated scoped install/enable is no-op; native fingerprint edits and foreign definitions refuse, preserving them. Scope/remaining: Scheduler effects injected; real native integration remains separately pending.",
-      "remaining": "Scheduler effects injected; real native integration remains separately pending.",
-      "remaining_kind": "none"
+      "remaining": "Complete the real Windows campaign with repeated enable and an externally changed temporary task definition, demonstrating preservation/refusal without duplicating resources.",
+      "remaining_kind": "real_service_mutation_campaign"
     },
     "SVC-T18": {
       "requirement": "Início no login é comprovado em SO real; resultado não é apresentado como prova de boot sem login.",
@@ -7234,8 +7234,8 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "remaining": "Do not call injected OS suppression actual scheduler crash qualification.",
-      "remaining_kind": "none",
+      "remaining": "Observe suppression after an explicit stop in the actual Scheduler context, then exercise the next canonical connect; the completed empty-service campaign did not include that connect.",
+      "remaining_kind": "real_service_stop_reconnect_campaign",
       "subscopes": {
         "retained_injected_contract": "VERIFIED",
         "finite_empty_windows_campaign": "PARTIAL"
@@ -12275,6 +12275,31 @@
         "plans/agent_ops/evidence/r3-m1-v8-preparation/root-review.json",
         "plans/agent_ops/evidence/r3-m1-v8-preparation/artifact-manifest.json"
       ]
+    },
+    "r3_remaining_service_scope": {
+      "status": "READ_ONLY_SCOPE_MAPPING_NOT_EXECUTION",
+      "effects_executed": false,
+      "scenarios": [
+        "SVC-T09",
+        "SVC-T14",
+        "SVC-T15",
+        "SVC-T17",
+        "SVC-T18",
+        "SVC-T19",
+        "SVC-T20",
+        "SVC-T21",
+        "SVC-T27",
+        "SVC-T29"
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-remaining-service-scope/root-review.json"
+      ],
+      "limits": [
+        "No new scenario or acceptance was promoted.",
+        "These notes are planning inputs, not an approved executable campaign.",
+        "The completed 24-action campaign and consumed M1 force authorization remain closed.",
+        "Login, logout, shutdown, suspend/resume and reboot require separate observations and user coordination."
+      ]
     }
   },
   "history": [
@@ -13333,6 +13358,15 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v8-preparation/root-review.json",
         "plans/agent_ops/evidence/r3-m1-v8-preparation/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Remaining Windows service qualification scope",
+      "status": "READ_ONLY_PLANNING",
+      "summary": "Correct two stale remaining_kind values and map the actual service/OS observations still required. No service/provider/OS effects or acceptance promotions; M1 v8 remains frozen awaiting approval.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-remaining-service-scope/root-review.json"
       ]
     }
   ]

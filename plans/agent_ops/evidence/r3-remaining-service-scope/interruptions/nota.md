@@ -1,0 +1,33 @@
+# Escopo Windows restante — leitura, sem execução
+
+Esta nota deriva do plano fixo SVC-T09/T18/T21/T29 e dos caminhos atuais de serviço Windows. Não autoriza nem executa interrupções. M1 v8 e sua aprovação não incluem logout, suspensão, shutdown ou reboot. Nenhum evento pessoal, credencial, tarefa ou serviço foi consultado/mutado nesta análise.
+
+| Requisito / evento separado | Observável que comprovaria o contrato | Efeito futuro a coordenar com o usuário |
+|---|---|---|
+| SVC-T09 — fechar terminal e dashboard | Antes: identidade das duas instâncias, tarefa/digest, PID + nascimento + geração e IDs do trabalho admitido. Fechamento literal das interfaces; depois, consulta por novo cliente das mesmas instâncias e do mesmo trabalho, eventos/recibo/resultado canônicos, sem nova admissão. Provar ownership do runtime/nativo e ausência de cancelamento provocado pela interface; mera porta aberta não basta. | Fechar somente terminal e dashboard selecionados, preservando o serviço dono. Reabrir observação. Trabalho real e eventual consumo precisam pertencer a uma campanha explícita; não inventar um turno para esta nota. |
+| SVC-T18 — login real | Definição própria habilitada, LogonTrigger e InteractiveToken; registro do login real e início posterior do owner correto sem comando start/connect intermediário. Correlacionar tarefa/digest, nova sessão de logon do próprio processo, PID/nascimento/geração e prontidão HTTP/IPC; Connector saudável e vínculo autenticado são fatos separados. | Um login real do usuário no Windows e janela de coleta posterior. Se exigir logout prévio, esse efeito também deve ser combinado. Não simular login por iniciar manualmente a tarefa. |
+| SVC-T21 — logout externo | Antes: trabalhos/decisões/streams próprios e watermarks duráveis. Após novo login: recibos de shutdown/run da geração antiga, resultado canônico ou interrupção/incerteza retida, reconciliação da mesma operação e ausência de replay. Confirmar saída/novo owner sem converter desaparecimento do processo em sucesso do trabalho. | Logout real encerra a sessão interativa e pode interromper esta ferramenta; combinar momento e como retomar a observação. Não prometer continuidade após logout: a implementação declara available_after_logout=false. |
+| SVC-T21 — shutdown externo | Mesmo conjunto de fatos anteriores, preservado após ligar a máquina. Distinguir execução de finally/recibo DRAINED de marcador incompleto ou UNCONFIRMED e da reconciliação posterior. O prazo realmente concedido pelo SO e a persistência obtida precisam de evidência real; CLI stop não substitui este cenário. | Desligamento normal real, seguido de ligar e fazer login. Afeta todas as aplicações do usuário e precisa janela explícita. Não usar força, kill ou alteração de política de shutdown como substituto. |
+| SVC-T29 — suspensão e retorno | Suspensão/retorno reais delimitados; antes/depois correlacionar owner e geração, prontidão, vínculo, leases, sessão/stream/epoch, cursor/watermark e estados da mesma operação. Identificar preservação ou expiração honestamente. Sem turnos adicionais ou reenvio automático ao detectar disponibilidade. | Suspender a máquina e acordá-la com duração combinada; rede/leases podem mudar. Acordar não equivale a login, reboot ou retomada produtiva autorizada. |
+| SVC-T29 — reboot | Reinício real delimitado, encerramento da geração antiga e nova geração após login; recuperar os mesmos IDs/recibos/streams, estado incerto e reconciliação sem operação produtiva nova. Pode fornecer fatos úteis a T18/T21, mas deve ter registro e resultado próprios: não transferir automaticamente seu aceite para logout isolado ou suspensão. | Reiniciar o Windows e retornar à sessão. Separar disponibilidade após login de boot sem login; este último não é suportado implicitamente pelo caminho atual. |
+
+O plano separa processo disponível de trabalho reconciliado (linhas 298–300), e exige incerteza honesta quando o SO encerra externamente (327). Um terminal fechado pode deixar o mesmo trabalho continuar; logout/reboot não prometem conservar um harness cujo dono morreu. Nenhum cenário autoriza novo trabalho apenas porque HTTP/IPC voltou a responder.
+
+O template atual usa LogonTrigger, InteractiveToken, LeastPrivilege, IgnoreNew e RestartOnFailure; não contém gatilho de boot. AllowHardTerminate=false e ExecutionTimeLimit=PT0S não são prova de que logout/shutdown não encerrará o processo. A trava de stop usa a sessão de logon; um login posterior é tratado separadamente de recuperação por falha na mesma sessão. Conservar nome/digest de tarefa não prova conservar a geração.
+
+Há recibos canônicos suficientes para iniciar uma campanha delimitada: Nexus GET /api/v1/service mais service status, Connector status/IPC, task observation da instância exata, e eventos/receipts canônicos de execução. Para término externo, usar apenas metadados allowlist dos homes próprios: service-run.json, service-shutdown.json / run/shutdown.json e generation/IDs; não copiar payloads, transcritos, configurações pessoais ou logs gerais do Windows. Marcador ausente/incompleto e timeout continuam desconhecidos; DRAINED precisa corresponder à geração e não é inferido de task stopped.
+
+Limite concreto da leitura: Connector instala handlers SIGINT/SIGTERM e grava resultados em finally; Nexus usa o fechamento ASGI e finally. Esses caminhos, isoladamente, não demonstram que o Windows entrega uma notificação utilizável nem que a persistência cabe no prazo real de logout/shutdown. Não foi identificado um novo defeito de produto comprovado nesta leitura; permanece a qualificação real exigida pelo plano. Falta de prova de notificação/prazo não deve ser convertida nem em garantia nem em bug confirmado. Não foram propostos novos serviços, alvos ou infraestrutura.
+
+Fontes lidas (linhas do snapshot atual, hashes em sources.json):
+
+- Plano fixo: 290, 298–311, 325–331, 835, 844, 847, 855.
+- Core user_service_definition.py: 82–103, gatilho/principal/política Windows.
+- Nexus service_manager/windows_tasks.py: 65–90, observação e start explícito separados.
+- Nexus service_manager/local.py: 84–108, disponibilidade e shutdown honesto; HTTP service_lifecycle.py: 43–60, observação canônica.
+- Nexus supervised_service.py: 29–45 e 74–82; identity.py: 30–45, trava por sessão de logon.
+- Nexus serve.py: 658–704, recibos e marcador drained/unconfirmed.
+- Connector daemon/service_process.py: 29–52 e 75–80, instância supervisionada e logon.
+- Connector daemon/manager.py: 240–273, sinais e marcador de término.
+- Connector daemon/app.py: 530–580 e daemon/lifecycle.py: 182–277, recibos e geração.
+- Ledger atual dos quatro cenários e campaigns/windows-user-service.md: histórico de qualificação, sem promoção por esta nota.
