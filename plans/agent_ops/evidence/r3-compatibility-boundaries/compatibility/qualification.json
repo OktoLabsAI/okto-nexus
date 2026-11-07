@@ -1,0 +1,69 @@
+{
+  "scenario": "RG-07",
+  "plan_reference": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md:974",
+  "status": "PASS",
+  "pair_count": 4,
+  "http_requests": 4,
+  "requests": "GET /v1/connections/protocol only; zero credentials, body or query parameters",
+  "database_tables_unchanged": {
+    "old": 143,
+    "new": 160
+  },
+  "actual_server_process_cleanup": {
+    "old": {
+      "pid": 24016,
+      "state": "not_present"
+    },
+    "new": {
+      "pid": 38476,
+      "state": "not_present"
+    }
+  },
+  "current_source_comparison": [
+    {
+      "component": "okto_nexus",
+      "current_commit": "bcf0e8aaf0bc957d2a876632f90e923316733d89",
+      "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+      "source_equal_package_members": 690
+    },
+    {
+      "component": "okto_nexus_connector",
+      "current_commit": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+      "wheel_sha256": "a8cf18105fa1cdca0443b6a3be08972d5576f72f3ce07e5a19dd9fc7cd59ae5a",
+      "source_equal_package_members": 123
+    }
+  ],
+  "historical_sources": {
+    "nexus": "c1e78e26fb2bd57ace3370417a2cb7529856b603",
+    "connector": "a3017d97b6a295cb2b46b9dd391b4c04ed121ee2",
+    "core_wheel_sha256": "b01d4e2c6882b581d41cdf40179d5a96a6ff671b9f762244f3a4cae929a99988"
+  },
+  "preparation_attempts": [
+    {
+      "path": "matrix",
+      "qualification_requests": 0,
+      "reason": "Missing dependency .pth bootstrap for pywin32"
+    },
+    {
+      "path": "matrix-final",
+      "qualification_requests": 0,
+      "reason": "Preparation one-liner rewrote dependency expression repeatedly"
+    },
+    {
+      "path": "matrix-qualified",
+      "qualification_requests": 0,
+      "reason": "Windows venv redirector PID differs from real Python child; server closed normally"
+    }
+  ],
+  "final_driver": "matrix-final-pairs",
+  "documentation_candidate": {
+    "file": "connection-setup-compatibility-section.md",
+    "intended_target": "docs/connection-setup.md",
+    "applied": false
+  },
+  "limitations": [
+    "Public protocol negotiation only; no authenticated work/provider qualification",
+    "No daemon/native-service lifecycle, remote TLS, actual external MCP client versions or M1/M2 qualification",
+    "No checkout, ledger or historical artifact modifications"
+  ]
+}

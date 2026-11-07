@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-rg07-version-pairs-3dwh02v_\verify_installed.py", line 15, in <module>
+    module = importlib.import_module(item['module'])
+  File "C:\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-rg07-version-pairs-3dwh02v_\old-venv\Lib\site-packages\nexus_connector_core\__init__.py", line 48, in <module>
+    from .protocol import CONTRACT_REVISION, intent_hash, submit_frame_intent_hash
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-rg07-version-pairs-3dwh02v_\old-venv\Lib\site-packages\nexus_connector_core\protocol.py", line 10, in <module>
+    import rfc8785
+ModuleNotFoundError: No module named 'rfc8785'

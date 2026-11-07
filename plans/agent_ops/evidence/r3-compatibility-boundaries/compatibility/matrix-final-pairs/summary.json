@@ -1,0 +1,99 @@
+{
+  "status": "PASS",
+  "pair_count": 4,
+  "pairs": [
+    {
+      "pair": "old-client--old-server",
+      "connector_version": "0.0.11",
+      "client_core_version": "0.0.13",
+      "protocol": {
+        "management_revision": "nexus-connections-2026-09-29-r4",
+        "executor_snapshot_format": 3,
+        "remote_execution_ready": true,
+        "inventory_refresh_supported": true
+      },
+      "state": "compatible",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/v1/connections/protocol",
+          "query_present": false,
+          "authorization_present": false,
+          "cookie_present": false,
+          "x_api_key_present": false,
+          "body_bytes": 0
+        }
+      ]
+    },
+    {
+      "pair": "new-client--old-server",
+      "connector_version": "0.0.12",
+      "client_core_version": "0.0.14",
+      "state": "refused",
+      "code": "VERSION_INCOMPATIBLE",
+      "stage": "protocol",
+      "possible_effect": false,
+      "retry_safe": false,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/v1/connections/protocol",
+          "query_present": false,
+          "authorization_present": false,
+          "cookie_present": false,
+          "x_api_key_present": false,
+          "body_bytes": 0
+        }
+      ]
+    },
+    {
+      "pair": "old-client--new-server",
+      "connector_version": "0.0.11",
+      "client_core_version": "0.0.13",
+      "state": "refused",
+      "code": "VERSION_INCOMPATIBLE",
+      "stage": "protocol",
+      "possible_effect": false,
+      "retry_safe": false,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/v1/connections/protocol",
+          "query_present": false,
+          "authorization_present": false,
+          "cookie_present": false,
+          "x_api_key_present": false,
+          "body_bytes": 0
+        }
+      ]
+    },
+    {
+      "pair": "new-client--new-server",
+      "connector_version": "0.0.12",
+      "client_core_version": "0.0.14",
+      "protocol": {
+        "management_revision": "nexus-connections-2026-09-29-r4",
+        "executor_snapshot_format": 3,
+        "remote_execution_ready": true,
+        "inventory_refresh_supported": true
+      },
+      "state": "compatible",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/v1/connections/protocol",
+          "query_present": false,
+          "authorization_present": false,
+          "cookie_present": false,
+          "x_api_key_present": false,
+          "body_bytes": 0
+        }
+      ]
+    }
+  ],
+  "providers_used": false,
+  "credentials_supplied": false,
+  "daemon_lifecycle_exercised": false,
+  "native_services_registered": false,
+  "qualification": "Public protocol negotiation only; compatible does not assert authenticated work readiness."
+}

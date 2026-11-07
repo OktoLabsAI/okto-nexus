@@ -1,0 +1,34 @@
+{
+  "method": "Read-only bytes of existing wheel, current source and CI installation; no product imports or product process launched.",
+  "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+  "expected_wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+  "files_checked": 690,
+  "extensions": {
+    ".py": 513,
+    ".txt": 2,
+    ".js": 1,
+    ".css": 1,
+    ".html": 1,
+    ".svg": 4,
+    "": 1,
+    ".sql": 167
+  },
+  "migrations_count": 167,
+  "static_files": [
+    "adapters/inbound/http/static/assets/index-Baw-pvQn.js",
+    "adapters/inbound/http/static/assets/index-CbeM8Lpf.css",
+    "adapters/inbound/http/static/index.html",
+    "adapters/inbound/http/static/logos/nexus-icon.svg",
+    "adapters/inbound/http/static/logos/nexus-wordmark-dark.svg",
+    "adapters/inbound/http/static/logos/nexus-wordmark-light.svg",
+    "adapters/inbound/http/static/logos/oktolabs-icon.svg"
+  ],
+  "other_resources": [
+    "adapters/inbound/cli/banner.txt",
+    "adapters/inbound/http/LICENSE.txt",
+    "adapters/outbound/tokenizer/_encodings/fb374d419588a4632f3f557e76b4b70aebbca790"
+  ],
+  "mismatches": [],
+  "proof": "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+  "ci_installation_proof": "plans/agent_ops/evidence/r3-qualification-readiness/ci/ci/installed.json"
+}

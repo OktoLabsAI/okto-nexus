@@ -1,0 +1,96 @@
+{
+  "herdr_supplemental_inventory": [
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/collect_artifacts.py",
+      "classification": "Expected closure/verification driver; collector generates the 142-entry manifest and is cited separately by pr09-herdr.md:47.",
+      "bytes": 9066,
+      "sha256": "53de1cbf4283b5f3bfbe95de4235b52ecf6f0bd7a8e2ad9eb99db726c3719018",
+      "public_review_inventory_matches": [
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/collect_artifacts.py",
+          "record": {
+            "sha256": "53de1cbf4283b5f3bfbe95de4235b52ecf6f0bd7a8e2ad9eb99db726c3719018",
+            "bytes": 9066
+          }
+        }
+      ]
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+      "classification": "Expected historical manifest of 316 unique source tests/11 initial reports; retained independently by collector lines143-151. Not an untracked runtime artifact.",
+      "bytes": 7939,
+      "sha256": "a53fde1e514bab49dfc98486f7afa7cb5fadfb3e905a5bd603c7bbb59a4095f3",
+      "public_review_inventory_matches": [
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+          "record": {
+            "sha256": "a53fde1e514bab49dfc98486f7afa7cb5fadfb3e905a5bd603c7bbb59a4095f3",
+            "bytes": 7939
+          }
+        }
+      ]
+    }
+  ],
+  "payload_completeness": [
+    {
+      "module": "okto_nexus",
+      "source_files": 690,
+      "wheel_files": 690,
+      "source_files_missing_from_wheel": [],
+      "wheel_files_not_in_source": [],
+      "extensions": {
+        ".py": 513,
+        ".sql": 167,
+        "": 1,
+        ".txt": 2,
+        ".css": 1,
+        ".svg": 4,
+        ".html": 1,
+        ".js": 1
+      }
+    },
+    {
+      "module": "okto_nexus_connector",
+      "source_files": 123,
+      "wheel_files": 123,
+      "source_files_missing_from_wheel": [],
+      "wheel_files_not_in_source": [],
+      "extensions": {
+        ".py": 122,
+        ".typed": 1
+      }
+    },
+    {
+      "module": "nexus_connector_core",
+      "source_files": 165,
+      "wheel_files": 165,
+      "source_files_missing_from_wheel": [],
+      "wheel_files_not_in_source": [],
+      "extensions": {
+        ".py": 131,
+        ".json": 31,
+        ".typed": 1,
+        ".js": 2
+      }
+    }
+  ],
+  "all_explicit_ledger_evidence_lists": {
+    "unique": 428,
+    "missing": []
+  },
+  "public_review_followup": {
+    "commit": "bcf0e8aa",
+    "read_files": {
+      "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md": "5c5073e7d32935e0b5e71b62a0e7845fde36a2d799bb19edcb793e39884da8f2",
+      "plans/agent_ops/evidence/r3-public-artifact-review/scan-after.json": "469f279196dca3e2f8a11cd011df8bcb093670ffe176b6d014fa85b9f73c6fcc",
+      "plans/agent_ops/evidence/r3-public-artifact-review/verification.json": "70c26ac0e3d25299f971367a912d54f9984aa0222a4ffa23e5b8365aa0c5a392"
+    },
+    "no_values_copied": true
+  },
+  "pending_campaign_document_update": {
+    "path": "plans/agent_ops/campaigns/windows-user-service.md",
+    "worktree_sha256": "2a605d21972b72bfa60fac27da7a087af4a91e3167862a5bea315213dadf0db4",
+    "proposal_sha256": "fbf8644cf836886bc7bac596211a783d6090e79077c643b1d2a627c87a3a37e3",
+    "status": "Read updated working-tree document; parent owns pending publication. Native campaign remains NOT_AUTHORIZED_NOT_RUN."
+  }
+}

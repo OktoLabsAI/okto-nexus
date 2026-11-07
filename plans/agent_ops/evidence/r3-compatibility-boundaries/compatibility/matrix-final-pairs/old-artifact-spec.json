@@ -1,0 +1,23 @@
+{
+  "artifacts": [
+    {
+      "module": "okto_nexus",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\wheels\\okto_nexus-0.3.2-py3-none-any.whl",
+      "sha256": "3c12bc447c180340fbb98ce747519af809fbc89e03b52a0a1b378270c3179572",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\build-source\\nexus\\src"
+    },
+    {
+      "module": "nexus_connector_core",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\wheels\\okto_nexus_connector_core-0.0.13-py3-none-any.whl",
+      "sha256": "b01d4e2c6882b581d41cdf40179d5a96a6ff671b9f762244f3a4cae929a99988"
+    },
+    {
+      "module": "okto_nexus_connector",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\wheels\\okto_nexus_connector-0.0.11-py3-none-any.whl",
+      "sha256": "2a307fe00d7d615b826d5597846e45ea2abe033128173e494abec64e42ec85a4",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\build-source\\connector\\src"
+    }
+  ],
+  "expected_package_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\old-venv\\Lib\\site-packages",
+  "output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-installed.json"
+}

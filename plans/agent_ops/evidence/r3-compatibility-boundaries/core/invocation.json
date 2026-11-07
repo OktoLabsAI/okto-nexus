@@ -1,0 +1,38 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.EXE",
+    "proxy",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-connector-refresh-la1tb1l6\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg06-credential-import-1ww0z_4t\\public\\audit.py",
+    "D:/Projetos/Techridy/okto_labs_okto_nexus/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+    "D:/Projetos/Techridy/okto-nexus-connector-core/src",
+    "D:/Projetos/Techridy/okto-nexus-connector-core/tools/verify_wheel.py"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg06-credential-import-1ww0z_4t\\synthetic-home",
+  "environment_inherited": false,
+  "synthetic_environment_keys": [
+    "APPDATA",
+    "COMSPEC",
+    "HOME",
+    "LOCALAPPDATA",
+    "PATH",
+    "RG06_IMPORT_CREDENTIAL_SENTINEL",
+    "SystemRoot",
+    "TEMP",
+    "TMP",
+    "USERDOMAIN",
+    "USERNAME",
+    "USERPROFILE",
+    "WINDIR"
+  ],
+  "pid": 15184,
+  "exit_code": 0,
+  "started_at": "2026-11-07T09:22:52.354330+00:00",
+  "ended_at": "2026-11-07T09:22:55.840702+00:00",
+  "stdout_sha256": "3cd4da2641c6462bd74720a196b4e709a481e0f50580a94aaabacfd0ce4b96a5",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "script_sha256": "7c2ce3c2739f23b186c9d00ce3e3c03fde6217eeee03a5da5a377ecb32d2ebc7",
+  "stdout_retained_verbatim": true
+}

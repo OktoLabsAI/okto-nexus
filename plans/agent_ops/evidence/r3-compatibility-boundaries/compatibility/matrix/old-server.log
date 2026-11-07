@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-rg07-version-pairs-3dwh02v_\server_probe.py", line 18, in <module>
+    app = build_app(deps)
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-rg07-version-pairs-3dwh02v_\old-venv\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 555, in build_app
+    mcp_server = create_http_mcp_server(deps, host=bind_host, port=bind_port)
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-rg07-version-pairs-3dwh02v_\old-venv\Lib\site-packages\okto_nexus\adapters\inbound\http\app.py", line 454, in create_http_mcp_server
+    FastMCP = _load_fastmcp()  # lazy: SDK only needed at serve time
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-rg07-version-pairs-3dwh02v_\old-venv\Lib\site-packages\okto_nexus\adapters\inbound\mcp\registration.py", line 547, in _load_fastmcp
+    from mcp.server.fastmcp import FastMCP
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\mcp\__init__.py", line 2, in <module>
+    from .client.session_group import ClientSessionGroup
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\mcp\client\session_group.py", line 28, in <module>
+    from mcp.client.stdio import StdioServerParameters
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\mcp\client\stdio\__init__.py", line 17, in <module>
+    from mcp.os.win32.utilities import (
+    ...<4 lines>...
+    )
+  File "C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\mcp\os\win32\utilities.py", line 22, in <module>
+    import pywintypes
+ModuleNotFoundError: No module named 'pywintypes'

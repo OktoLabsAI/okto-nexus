@@ -1,0 +1,22 @@
+{
+  "connector_version": "0.0.12",
+  "client_core_version": "0.0.14",
+  "protocol": {
+    "management_revision": "nexus-connections-2026-09-29-r4",
+    "executor_snapshot_format": 3,
+    "remote_execution_ready": true,
+    "inventory_refresh_supported": true
+  },
+  "state": "compatible",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/v1/connections/protocol",
+      "query_present": false,
+      "authorization_present": false,
+      "cookie_present": false,
+      "x_api_key_present": false,
+      "body_bytes": 0
+    }
+  ]
+}

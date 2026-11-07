@@ -1,0 +1,101 @@
+{
+  "format": "r3.final-traceability.allowlist",
+  "version": 1,
+  "baseline": {
+    "nexus": "5545dbdeb1500b9531978b0e5ec85f9c6bd4962b",
+    "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "fixed_id_counts": {
+      "tasks": 59,
+      "scenarios": 132,
+      "invariants": 28,
+      "completion_criteria": 17
+    },
+    "repositories": {
+      "connector": {
+        "head": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+        "status_porcelain": [],
+        "wheel": "vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl",
+        "payload_files_compared": 123,
+        "source_payload_mismatches": [],
+        "requires_dist": [
+          "okto-nexus-connector-core==0.0.14",
+          "websockets<18,>=15",
+          "httpx<1,>=0.27",
+          "pywin32; sys_platform == \"win32\"",
+          "keyring<26,>=25; extra == \"keyring\"",
+          "pytest>=8; extra == \"test\"",
+          "pytest-asyncio>=0.24; extra == \"test\"",
+          "build>=1; extra == \"test\"",
+          "cryptography>=43; extra == \"test\"",
+          "pywin32; sys_platform == \"win32\" and extra == \"test\"",
+          "pywin32; sys_platform == \"win32\" and extra == \"m6-prototype\""
+        ]
+      },
+      "core": {
+        "head": "5d31784362676e7231b5c612c458a4d8f4b5db4a",
+        "status_porcelain": [],
+        "wheel": "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "payload_files_compared": 165,
+        "source_payload_mismatches": [],
+        "requires_dist": [
+          "rfc8785==0.1.4",
+          "jsonschema==4.26.0",
+          "mcp<2,>=1.30",
+          "anyio<5,>=4.5",
+          "pytest>=8; extra == \"test\"",
+          "pytest-asyncio>=0.24; extra == \"test\"",
+          "build>=1; extra == \"test\""
+        ]
+      }
+    }
+  },
+  "files": {
+    "traceability.json": {
+      "bytes": 52361,
+      "sha256": "2d50ba3af35a5d65573744d32910d64795862e5f05a8913de43d48db71d060d9"
+    },
+    "traceability.md": {
+      "bytes": 6407,
+      "sha256": "1e53135d58ad399f38c5af546ad29b60c723ea1b26e2b76472bb98f9bb63b66a"
+    },
+    "verification.json": {
+      "bytes": 490106,
+      "sha256": "330efa467efc3c513b24b8525c6ef190de4fea80042e8fdce59389934a2bfbd1"
+    },
+    "protection-tests.json": {
+      "bytes": 42044,
+      "sha256": "2152bc0243684322e9901f388df6f8e57bee6692d0cd548e56dfbcaf4af9092b"
+    },
+    "payload-verification.json": {
+      "bytes": 1409,
+      "sha256": "8b59d8c374ca625dbf3414d830338d648e7f4f9b93d6a42edd8afb79dff518e2"
+    },
+    "supplemental-checks.json": {
+      "bytes": 3471,
+      "sha256": "098af3eae236440680e8262e4756dcec1c158e4c8872056577361c25853b4d65"
+    },
+    "verify_traceability.py": {
+      "bytes": 8460,
+      "sha256": "e9b39b51318cd3681a9c4635b8f950f7f1214a3d8959ea22be48d759be0303f0"
+    },
+    "protection_and_payload.py": {
+      "bytes": 5501,
+      "sha256": "03f2c22d1e7fe6985e430b0ce6fe9bb7d20f8136481cde7f49e22fcb152b3f3b"
+    },
+    "supplemental_checks.py": {
+      "bytes": 4305,
+      "sha256": "40408453eadc943731df867c435a65b1c4dcae6affea3a160e5e6c265a056801"
+    },
+    "build_report.py": {
+      "bytes": 29124,
+      "sha256": "75ec8c71fc671351c80ca635dd8e43939322af846fdc8f13db25c8192ed2a48d"
+    }
+  },
+  "excluded": [
+    "inspect_manifest_shapes.py (inspection helper only)",
+    "all private homes, databases, vaults, runtime state and credential values"
+  ],
+  "tests_executed": false,
+  "checkout_edited": false,
+  "global_status_promoted": false
+}

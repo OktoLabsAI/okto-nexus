@@ -1,0 +1,350 @@
+{
+  "format": "rg07-protocol-pairs-v1",
+  "artifact_count": 42,
+  "artifacts": [
+    {
+      "path": "prepare.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\prepare.py",
+      "bytes": 4355,
+      "original_sha256": "29d0c897766d75f4b61e75f6abb24b29c6ac9321f6dfa226afaab476b08b7a43",
+      "artifact_sha256": "29d0c897766d75f4b61e75f6abb24b29c6ac9321f6dfa226afaab476b08b7a43",
+      "redactions": 0
+    },
+    {
+      "path": "configure_dependencies.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\configure_dependencies.py",
+      "bytes": 1348,
+      "original_sha256": "d1b610dd029c2aaaf31c8bd6fb6706a67209174fbd2de68ff25059398d43a575",
+      "artifact_sha256": "d1b610dd029c2aaaf31c8bd6fb6706a67209174fbd2de68ff25059398d43a575",
+      "redactions": 0
+    },
+    {
+      "path": "server_probe.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\server_probe.py",
+      "bytes": 4394,
+      "original_sha256": "a8433c2e59d7e762a27df7e5077e9c86f0dd140ab2209b0936fdb167b1e417e6",
+      "artifact_sha256": "a8433c2e59d7e762a27df7e5077e9c86f0dd140ab2209b0936fdb167b1e417e6",
+      "redactions": 0
+    },
+    {
+      "path": "client_probe.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\client_probe.py",
+      "bytes": 1961,
+      "original_sha256": "92116155f6498624caa2c9cc20ab4799b34de0459365f26aa677a0139adc59d2",
+      "artifact_sha256": "92116155f6498624caa2c9cc20ab4799b34de0459365f26aa677a0139adc59d2",
+      "redactions": 0
+    },
+    {
+      "path": "verify_installed.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\verify_installed.py",
+      "bytes": 1606,
+      "original_sha256": "9d9be66a9a7d8d8ebf92ad144321fbef07f3d1dc401f92a8ddd7625e820c3f66",
+      "artifact_sha256": "9d9be66a9a7d8d8ebf92ad144321fbef07f3d1dc401f92a8ddd7625e820c3f66",
+      "redactions": 0
+    },
+    {
+      "path": "run_matrix.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\run_matrix.py",
+      "bytes": 7681,
+      "original_sha256": "a2cab2956d9fd2cb1ca793e37590b136e46f830e8fee64c08a80e9e2b138a585",
+      "artifact_sha256": "a2cab2956d9fd2cb1ca793e37590b136e46f830e8fee64c08a80e9e2b138a585",
+      "redactions": 0
+    },
+    {
+      "path": "run_matrix-initial.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\run_matrix-initial.py",
+      "bytes": 5977,
+      "original_sha256": "dcd4afde25e3953b5989d14aa3797821c7b034bc965c8b335330dbea79b4da6f",
+      "artifact_sha256": "dcd4afde25e3953b5989d14aa3797821c7b034bc965c8b335330dbea79b4da6f",
+      "redactions": 0
+    },
+    {
+      "path": "run_matrix-before-process-check.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\run_matrix-before-process-check.py",
+      "bytes": 6057,
+      "original_sha256": "85dc0c332e76eca81536c967abe6ed91f85d1827a982c4ba9274b90bf77e5e76",
+      "artifact_sha256": "85dc0c332e76eca81536c967abe6ed91f85d1827a982c4ba9274b90bf77e5e76",
+      "redactions": 0
+    },
+    {
+      "path": "close_evidence.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\close_evidence.py",
+      "bytes": 7108,
+      "original_sha256": "42a593b632ed32a2f72e9cfa217c8eced41478dad9042995c4649a12663b6981",
+      "artifact_sha256": "42a593b632ed32a2f72e9cfa217c8eced41478dad9042995c4649a12663b6981",
+      "redactions": 0
+    },
+    {
+      "path": "environment.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\environment.json",
+      "bytes": 1042,
+      "original_sha256": "e043faab6c00a93215015babdae632782af0447e28f64df629a5b1a1125a9b0d",
+      "artifact_sha256": "e043faab6c00a93215015babdae632782af0447e28f64df629a5b1a1125a9b0d",
+      "redactions": 0
+    },
+    {
+      "path": "preparation.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\preparation.json",
+      "bytes": 2767,
+      "original_sha256": "86c8df50c568540b8518f4032ffbffb918183c0ad051e5b9ac598414bbc9c927",
+      "artifact_sha256": "86c8df50c568540b8518f4032ffbffb918183c0ad051e5b9ac598414bbc9c927",
+      "redactions": 0
+    },
+    {
+      "path": "runtime-dependencies-final.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\runtime-dependencies-final.json",
+      "bytes": 857,
+      "original_sha256": "7b07b3378daa12afd45913be4a23b1f7acf8c08e514ca97852c4f093a73c4433",
+      "artifact_sha256": "7b07b3378daa12afd45913be4a23b1f7acf8c08e514ca97852c4f093a73c4433",
+      "redactions": 0
+    },
+    {
+      "path": "qualification.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\qualification.json",
+      "bytes": 2359,
+      "original_sha256": "4d20de88b89e4b6b4e9180f26f35a53737ac404ac33b672345c7cf980c86be92",
+      "artifact_sha256": "4d20de88b89e4b6b4e9180f26f35a53737ac404ac33b672345c7cf980c86be92",
+      "redactions": 0
+    },
+    {
+      "path": "connection-setup-compatibility-section.md",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\connection-setup-compatibility-section.md",
+      "bytes": 2188,
+      "original_sha256": "a903eda05eae5f465e2e7ad4e7d8dc0ceb8570f6fbd20ac398d13f7a53358660",
+      "artifact_sha256": "a903eda05eae5f465e2e7ad4e7d8dc0ceb8570f6fbd20ac398d13f7a53358660",
+      "redactions": 0
+    },
+    {
+      "path": "nexus-build.log",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\nexus-build.log",
+      "bytes": 168872,
+      "original_sha256": "a194c6e7e7062b2c513f415e0546e18bff89b92faa424f187bccbcbd4a26a23a",
+      "artifact_sha256": "a194c6e7e7062b2c513f415e0546e18bff89b92faa424f187bccbcbd4a26a23a",
+      "redactions": 0
+    },
+    {
+      "path": "connector-build.log",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\connector-build.log",
+      "bytes": 33212,
+      "original_sha256": "9ce1923ac80266d3a2e0c420441b43d547831049233d0f3d3a81c186081d5f1a",
+      "artifact_sha256": "9ce1923ac80266d3a2e0c420441b43d547831049233d0f3d3a81c186081d5f1a",
+      "redactions": 0
+    },
+    {
+      "path": "old-install.log",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\old-install.log",
+      "bytes": 575,
+      "original_sha256": "e8618a37c0969d7e12c304b84ea671ed38afbf98c8b4d7094d6cbdce97eb0d7a",
+      "artifact_sha256": "e8618a37c0969d7e12c304b84ea671ed38afbf98c8b4d7094d6cbdce97eb0d7a",
+      "redactions": 0
+    },
+    {
+      "path": "matrix/old-server.log",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix\\old-server.log",
+      "bytes": 1748,
+      "original_sha256": "8b7a3b962bca44dd139fd0141f0712ffa6b9ca52061110bd71dcc9cf54943f11",
+      "artifact_sha256": "8b7a3b962bca44dd139fd0141f0712ffa6b9ca52061110bd71dcc9cf54943f11",
+      "redactions": 0
+    },
+    {
+      "path": "matrix/old-cleanup.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix\\old-cleanup.json",
+      "bytes": 148,
+      "original_sha256": "6fb4e57a1a1b01ffb3676aa5d9872aafda4e5f5a75e1c47ea5c1f3bb3dbdf92f",
+      "artifact_sha256": "6fb4e57a1a1b01ffb3676aa5d9872aafda4e5f5a75e1c47ea5c1f3bb3dbdf92f",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final/old-verify.log",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final\\old-verify.log",
+      "bytes": 1320,
+      "original_sha256": "08334dcbdfb9b9253e08ffbb798111a9a3b999cc275ef74729f2198368c40bf5",
+      "artifact_sha256": "08334dcbdfb9b9253e08ffbb798111a9a3b999cc275ef74729f2198368c40bf5",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-qualified/old-cleanup.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-qualified\\old-cleanup.json",
+      "bytes": 148,
+      "original_sha256": "9f28dc20d4af04173b6610c36f6b9b4dd963d283ebe6ba722cefb24a2b667f2f",
+      "artifact_sha256": "9f28dc20d4af04173b6610c36f6b9b4dd963d283ebe6ba722cefb24a2b667f2f",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-qualified/old-server/ready.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-qualified\\old-server\\ready.json",
+      "bytes": 208,
+      "original_sha256": "effa5eed84a39e04360a196405db314aaf7aa04891ba59a11a404b1c83e76ba4",
+      "artifact_sha256": "effa5eed84a39e04360a196405db314aaf7aa04891ba59a11a404b1c83e76ba4",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-qualified/old-server/proof.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-qualified\\old-server\\proof.json",
+      "bytes": 41363,
+      "original_sha256": "b53f2b69bd0ffdd750a6428c1fad7dc2d2430fc658679969b3ed43ef4a261a5c",
+      "artifact_sha256": "b53f2b69bd0ffdd750a6428c1fad7dc2d2430fc658679969b3ed43ef4a261a5c",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/summary.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\summary.json",
+      "bytes": 2903,
+      "original_sha256": "a54e4e6f627b0d267be7a269f1eea7c84593880a8df1abbf708ac2025fd4d940",
+      "artifact_sha256": "a54e4e6f627b0d267be7a269f1eea7c84593880a8df1abbf708ac2025fd4d940",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-artifact-spec.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-artifact-spec.json",
+      "bytes": 1361,
+      "original_sha256": "b5965f5b6a97387d98ee13789f622b551d61c7b9e3dcea7829336e00f1fa9883",
+      "artifact_sha256": "b5965f5b6a97387d98ee13789f622b551d61c7b9e3dcea7829336e00f1fa9883",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-artifact-spec.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-artifact-spec.json",
+      "bytes": 1101,
+      "original_sha256": "701e763dc5fd03ba3e1e4c4889102290e2c8d048ecbb9068533bb51235b955e0",
+      "artifact_sha256": "701e763dc5fd03ba3e1e4c4889102290e2c8d048ecbb9068533bb51235b955e0",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-installed.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-installed.json",
+      "bytes": 94079,
+      "original_sha256": "12a1c7f6060280de36a2b4e6bc777e826c94fd303cc1fab1a7e3d5436d6b83ae",
+      "artifact_sha256": "12a1c7f6060280de36a2b4e6bc777e826c94fd303cc1fab1a7e3d5436d6b83ae",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-installed.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-installed.json",
+      "bytes": 110956,
+      "original_sha256": "0c3fb937c56f86f22b0c8b41096cf6f92842a4c6a090f1ead927298a3b8cc18c",
+      "artifact_sha256": "0c3fb937c56f86f22b0c8b41096cf6f92842a4c6a090f1ead927298a3b8cc18c",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-pipcheck.log",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-pipcheck.log",
+      "bytes": 31,
+      "original_sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "artifact_sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-pipcheck.log",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-pipcheck.log",
+      "bytes": 31,
+      "original_sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "artifact_sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-client--old-server.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-client--old-server.json",
+      "bytes": 565,
+      "original_sha256": "438b267a11c8a584893daf53f867c52c520ba382f8dadcb0eb59fe9cf9f7407c",
+      "artifact_sha256": "438b267a11c8a584893daf53f867c52c520ba382f8dadcb0eb59fe9cf9f7407c",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-client--old-server.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-client--old-server.json",
+      "bytes": 474,
+      "original_sha256": "4fc9a4deff463c40197a2046128c3bd08f6d033d14e1cc6a740f567171395cd8",
+      "artifact_sha256": "4fc9a4deff463c40197a2046128c3bd08f6d033d14e1cc6a740f567171395cd8",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-client--new-server.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-client--new-server.json",
+      "bytes": 474,
+      "original_sha256": "c9f5bb6cc89a48b294a8f33a4e3588019d6c8f49be2e3b81852928c5a084b61d",
+      "artifact_sha256": "c9f5bb6cc89a48b294a8f33a4e3588019d6c8f49be2e3b81852928c5a084b61d",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-client--new-server.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-client--new-server.json",
+      "bytes": 565,
+      "original_sha256": "1254a69306a275e341f0996e301e1137c2356475a3db2c55a7363830d9e2ce6f",
+      "artifact_sha256": "1254a69306a275e341f0996e301e1137c2356475a3db2c55a7363830d9e2ce6f",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-server/ready.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-server\\ready.json",
+      "bytes": 208,
+      "original_sha256": "7dbe48340e3b3c0ad81270f3a61814f069f5c31356918b980d399918f3733cc7",
+      "artifact_sha256": "7dbe48340e3b3c0ad81270f3a61814f069f5c31356918b980d399918f3733cc7",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-server/ready.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-server\\ready.json",
+      "bytes": 208,
+      "original_sha256": "f188c5e11e3548356428fbfd5862900908dee8473be0f51bfb4f5e9262975edd",
+      "artifact_sha256": "f188c5e11e3548356428fbfd5862900908dee8473be0f51bfb4f5e9262975edd",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-server/proof.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-server\\proof.json",
+      "bytes": 41846,
+      "original_sha256": "3a34845af6664cff48ab9c2c9c13137f8c59eafc0f74acbc0fd742df3c28bc20",
+      "artifact_sha256": "3a34845af6664cff48ab9c2c9c13137f8c59eafc0f74acbc0fd742df3c28bc20",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-server/proof.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-server\\proof.json",
+      "bytes": 46780,
+      "original_sha256": "2b66d67480b87be69db857345c5730826d67a92e0ddd9b7139a6ecf1037a3b3d",
+      "artifact_sha256": "2b66d67480b87be69db857345c5730826d67a92e0ddd9b7139a6ecf1037a3b3d",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-cleanup.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-cleanup.json",
+      "bytes": 147,
+      "original_sha256": "fd78a2ab0e66907e24d067e93d5b91aea7075bc1bea20219cd95882609cb1da4",
+      "artifact_sha256": "fd78a2ab0e66907e24d067e93d5b91aea7075bc1bea20219cd95882609cb1da4",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-cleanup.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-cleanup.json",
+      "bytes": 148,
+      "original_sha256": "f91a7fa3f7c848f1ad2d98838c67923472e0ca5be36c7a68fc4701ba8190b4f1",
+      "artifact_sha256": "f91a7fa3f7c848f1ad2d98838c67923472e0ca5be36c7a68fc4701ba8190b4f1",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/old-ownership.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\old-ownership.json",
+      "bytes": 86,
+      "original_sha256": "7bef8e2a515eeaf64895288489187dc869206cc367c281b3949fcc457aed9712",
+      "artifact_sha256": "7bef8e2a515eeaf64895288489187dc869206cc367c281b3949fcc457aed9712",
+      "redactions": 0
+    },
+    {
+      "path": "matrix-final-pairs/new-ownership.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg07-version-pairs-3dwh02v_\\matrix-final-pairs\\new-ownership.json",
+      "bytes": 88,
+      "original_sha256": "7ee064b64150435de43f9dde4fc46e53f068caafb322f5c6e8ff0d095e5f0638",
+      "artifact_sha256": "7ee064b64150435de43f9dde4fc46e53f068caafb322f5c6e8ff0d095e5f0638",
+      "redactions": 0
+    }
+  ],
+  "excluded": [
+    "venvs",
+    "wheels",
+    "archives",
+    "homes",
+    "databases"
+  ],
+  "aggregate_sha256": "e16332935ba24a5974ad5fefd8f25203e98b9525145db268fc1f3d440f140fb1"
+}

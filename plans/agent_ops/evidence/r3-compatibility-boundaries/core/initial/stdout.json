@@ -1,0 +1,936 @@
+{
+  "status": "FAIL",
+  "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+  "package_files_equal_to_source_and_install": 165,
+  "static_python_files": 131,
+  "imported_modules": [
+    "nexus_connector_core",
+    "nexus_connector_core.approval_reducer_r4",
+    "nexus_connector_core.automation",
+    "nexus_connector_core.availability",
+    "nexus_connector_core.build_identity",
+    "nexus_connector_core.capacity",
+    "nexus_connector_core.capacity_bundle",
+    "nexus_connector_core.capacity_codec",
+    "nexus_connector_core.capacity_control",
+    "nexus_connector_core.capacity_publication",
+    "nexus_connector_core.capacity_runtime",
+    "nexus_connector_core.capacity_storage",
+    "nexus_connector_core.capacity_waiter",
+    "nexus_connector_core.catalog",
+    "nexus_connector_core.clock",
+    "nexus_connector_core.close_operation",
+    "nexus_connector_core.close_runtime",
+    "nexus_connector_core.composition",
+    "nexus_connector_core.config_document",
+    "nexus_connector_core.config_persistence",
+    "nexus_connector_core.configuration_file",
+    "nexus_connector_core.configuration_probe",
+    "nexus_connector_core.conformance",
+    "nexus_connector_core.connection_configuration",
+    "nexus_connector_core.contracts",
+    "nexus_connector_core.contracts.nxl",
+    "nexus_connector_core.contracts.nxl.r4",
+    "nexus_connector_core.contracts.nxl.v1",
+    "nexus_connector_core.control_codec",
+    "nexus_connector_core.control_reducer_r4",
+    "nexus_connector_core.decision_bridge_r4",
+    "nexus_connector_core.discovery",
+    "nexus_connector_core.discovery_control",
+    "nexus_connector_core.discovery_layouts",
+    "nexus_connector_core.environment",
+    "nexus_connector_core.event_artifacts",
+    "nexus_connector_core.event_reducer",
+    "nexus_connector_core.event_reducer_r4",
+    "nexus_connector_core.executor_inventory",
+    "nexus_connector_core.frame_codec",
+    "nexus_connector_core.frame_codec_r4",
+    "nexus_connector_core.harness_config",
+    "nexus_connector_core.harness_configuration",
+    "nexus_connector_core.identifiers",
+    "nexus_connector_core.installation",
+    "nexus_connector_core.inventory_observations",
+    "nexus_connector_core.inventory_observer",
+    "nexus_connector_core.inventory_reducer",
+    "nexus_connector_core.journal",
+    "nexus_connector_core.journal_location_storage",
+    "nexus_connector_core.journal_locations",
+    "nexus_connector_core.kernel",
+    "nexus_connector_core.launch_release_r4",
+    "nexus_connector_core.lease_denial",
+    "nexus_connector_core.lease_reducer",
+    "nexus_connector_core.lease_reducer_r4",
+    "nexus_connector_core.lease_runtime_r4",
+    "nexus_connector_core.mcp_inheritance"
+  ],
+  "denied_events": [
+    "ctypes.dlsym"
+  ],
+  "import_failure": {
+    "type": "GuardRejected",
+    "module": "nexus_connector_core.mcp_owned_stdio"
+  },
+  "environment_reads": [
+    {
+      "key": "PYTHONTZPATH",
+      "caller": "zoneinfo._tzpath"
+    },
+    {
+      "key": "PYTHONUSERBASE",
+      "caller": "sysconfig"
+    },
+    {
+      "key": "APPDATA",
+      "caller": "sysconfig"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader"
+    }
+  ],
+  "guarded_native_apis": [
+    "win32cred.CredDelete",
+    "win32cred.CredEnumerate",
+    "win32cred.CredGetSessionTypes",
+    "win32cred.CredGetTargetInfo",
+    "win32cred.CredIsMarshaledCredential",
+    "win32cred.CredMarshalCredential",
+    "win32cred.CredRead",
+    "win32cred.CredReadDomainCredentials",
+    "win32cred.CredRename",
+    "win32cred.CredUICmdLinePromptForCredentials",
+    "win32cred.CredUIConfirmCredentials",
+    "win32cred.CredUIParseUserName",
+    "win32cred.CredUIPromptForCredentials",
+    "win32cred.CredUIReadSSOCredW",
+    "win32cred.CredUIStoreSSOCredW",
+    "win32cred.CredUnmarshalCredential",
+    "win32cred.CredWrite",
+    "win32cred.CredWriteDomainCredentials",
+    "win32crypt.CryptUnprotectData"
+  ],
+  "controls": [
+    {
+      "name": "os.getenv",
+      "blocked": true
+    },
+    {
+      "name": "os.environ.get",
+      "blocked": true
+    },
+    {
+      "name": "os.environ[index]",
+      "blocked": true
+    },
+    {
+      "name": "dict(os.environ)",
+      "blocked": true
+    },
+    {
+      "name": "win32cred.CredRead",
+      "blocked": true
+    },
+    {
+      "name": "win32cred.CredEnumerate",
+      "blocked": true
+    },
+    {
+      "name": "win32crypt.CryptUnprotectData",
+      "blocked": true
+    },
+    {
+      "name": "ctypes.WinDLL",
+      "blocked": true
+    },
+    {
+      "name": "ctypes.dlsym",
+      "blocked": true
+    }
+  ],
+  "reads_within_python_installations": 443,
+  "forbidden_applications_loaded": [],
+  "isolated": true,
+  "bytecode_disabled": true,
+  "limits": [
+    "Windows local installed-import path only; no runtime adapter or credential resolution.",
+    "Native guards cover win32cred entry points, DPAPI unprotect and ctypes dynamic loads/symbol lookup.",
+    "Python environment lookup instrumentation is not an arbitrary C-extension/system-call tracer.",
+    "No credential value, inherited user environment, real user home, vault read or vault write is used."
+  ]
+}

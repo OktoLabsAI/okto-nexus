@@ -1,0 +1,43 @@
+{
+  "literal_checks": [
+    {
+      "application": "Nexus",
+      "python_files": 513,
+      "forbidden": "okto_nexus_connector",
+      "violations": []
+    },
+    {
+      "application": "Connector",
+      "python_files": 122,
+      "forbidden": "okto_nexus",
+      "violations": []
+    }
+  ],
+  "dynamic_import_calls_reviewed": [
+    {
+      "application": "Nexus",
+      "path": "src/okto_nexus/adapters/inbound/mcp/registration.py",
+      "line": 491,
+      "call": "importlib.import_module(module_info.name)"
+    },
+    {
+      "application": "Nexus",
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+      "line": 78,
+      "call": "importlib.import_module('.attention_' + family, __package__)"
+    },
+    {
+      "application": "Nexus",
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+      "line": 79,
+      "call": "importlib.import_module('okto_nexus.application.attention_' + family)"
+    },
+    {
+      "application": "Connector",
+      "path": "src/okto_nexus_connector/transport/https_client.py",
+      "line": 29,
+      "call": "__import__('okto_nexus_connector')"
+    }
+  ],
+  "dynamic_review": "All four current calls remain inside their own application namespace: Nexus tools package iterator, two fixed-family attention imports, and Connector self-version import. No sys.path/file-loader import sites found by the accompanying source review."
+}

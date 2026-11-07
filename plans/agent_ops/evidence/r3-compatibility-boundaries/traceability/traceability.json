@@ -1,0 +1,872 @@
+{
+  "format": "r3.final-public-traceability-review",
+  "version": 1,
+  "baseline": {
+    "nexus": "5545dbdeb1500b9531978b0e5ec85f9c6bd4962b",
+    "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "fixed_id_counts": {
+      "tasks": 59,
+      "scenarios": 132,
+      "invariants": 28,
+      "completion_criteria": 17
+    },
+    "repositories": {
+      "connector": {
+        "head": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+        "status_porcelain": [],
+        "wheel": "vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl",
+        "payload_files_compared": 123,
+        "source_payload_mismatches": [],
+        "requires_dist": [
+          "okto-nexus-connector-core==0.0.14",
+          "websockets<18,>=15",
+          "httpx<1,>=0.27",
+          "pywin32; sys_platform == \"win32\"",
+          "keyring<26,>=25; extra == \"keyring\"",
+          "pytest>=8; extra == \"test\"",
+          "pytest-asyncio>=0.24; extra == \"test\"",
+          "build>=1; extra == \"test\"",
+          "cryptography>=43; extra == \"test\"",
+          "pywin32; sys_platform == \"win32\" and extra == \"test\"",
+          "pywin32; sys_platform == \"win32\" and extra == \"m6-prototype\""
+        ]
+      },
+      "core": {
+        "head": "5d31784362676e7231b5c612c458a4d8f4b5db4a",
+        "status_porcelain": [],
+        "wheel": "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "payload_files_compared": 165,
+        "source_payload_mismatches": [],
+        "requires_dist": [
+          "rfc8785==0.1.4",
+          "jsonschema==4.26.0",
+          "mcp<2,>=1.30",
+          "anyio<5,>=4.5",
+          "pytest>=8; extra == \"test\"",
+          "pytest-asyncio>=0.24; extra == \"test\"",
+          "build>=1; extra == \"test\""
+        ]
+      }
+    }
+  },
+  "followup_separate_from_baseline": {
+    "commit": "bcf0e8aa",
+    "read_files": {
+      "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md": "5c5073e7d32935e0b5e71b62a0e7845fde36a2d799bb19edcb793e39884da8f2",
+      "plans/agent_ops/evidence/r3-public-artifact-review/scan-after.json": "469f279196dca3e2f8a11cd011df8bcb093670ffe176b6d014fa85b9f73c6fcc",
+      "plans/agent_ops/evidence/r3-public-artifact-review/verification.json": "70c26ac0e3d25299f971367a912d54f9984aa0222a4ffa23e5b8365aa0c5a392"
+    },
+    "no_values_copied": true
+  },
+  "scope": "Finite read-only audit of literal ACs, RG08/RG09 and INV references, public file inventory, current pins/resources and existing protection assertions/results. No product, ledger, closed evidence or global status changed.",
+  "actions_not_executed": [
+    "tests",
+    "builds",
+    "product imports",
+    "provider/native service/client campaigns",
+    "credentials/accounts/configuration access",
+    "Git-history rewrite",
+    "commit/push"
+  ],
+  "verified": {
+    "manifest_entry_checks_including_nested_overlap": 1384,
+    "manifest_hash_size_path_errors": 0,
+    "local_literal_ledger_reference_paths": 724,
+    "explicit_evidence_list_paths": 428,
+    "missing_ledger_paths": 0,
+    "joint_unique_passed_identities": 71,
+    "package_payload_files": {
+      "nexus": 690,
+      "connector": 123,
+      "core": 165
+    },
+    "package_mismatches": 0,
+    "source_resources_missing_from_wheel": 0,
+    "existing_protection_functions": 8
+  },
+  "findings": [
+    {
+      "id": "TRACE-01",
+      "priority": "remaining_acceptance_limit",
+      "requirements": [
+        "AC-10",
+        "INV-11"
+      ],
+      "finding": "Public snapshot correction is complete in bcf0e8aa, but historical UAT credential validity/revocation and prior Git history are outside the reviewed closure.",
+      "minimum_action": "Retain NOT_VERIFIED with exact residual scope; use protection-tests.json and public-review provenance as scoped evidence. Any credential-owner/history action requires separate authorized handling; this audit neither authenticates nor expands to history rewrite.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+        "plans/agent_ops/evidence/r3-public-artifact-review/scan-after.json",
+        "protection-tests.json"
+      ],
+      "new_product_change_required": false
+    },
+    {
+      "id": "TRACE-02",
+      "priority": "safe_traceability_completion",
+      "requirements": [
+        "AC-01",
+        "AC-07",
+        "AC-08",
+        "AC-09",
+        "RG-08",
+        "RG-09",
+        "INV-03",
+        "INV-05",
+        "INV-06",
+        "INV-09",
+        "INV-11"
+      ],
+      "finding": "The5545 ledger underlinks current evidence: RG09 cites only Herdr, while mixed/sessions/guide drivers retain newer isolation; INV03 and INV09 have no direct references despite bounded Core/joint proofs. Missing links are not missing implementation.",
+      "minimum_action": "Root may attach the finite evidence-to-scope links from this report, keeping unqualified portions and all global statuses unchanged until their actual criteria are met. No repeated test run needed for this association.",
+      "evidence": [
+        "traceability.json",
+        "verification.json",
+        "protection-tests.json"
+      ],
+      "new_product_change_required": false
+    },
+    {
+      "id": "TRACE-03",
+      "priority": "pending_parent_document_publish",
+      "requirements": [
+        "AC-08",
+        "AC-09",
+        "INV-24"
+      ],
+      "finding": "The old Windows campaign document referred only to historical PR02 artifacts. Parent already prepared the correct link to the current proposal; it is not part of the5545 baseline.",
+      "minimum_action": "Publish only the prepared document update with its current proposal hash; preserve NOT_AUTHORIZED_NOT_RUN and historical snapshot.",
+      "evidence": [
+        "plans/agent_ops/campaigns/windows-user-service.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "supplemental-checks.json"
+      ],
+      "new_product_change_required": false
+    },
+    {
+      "id": "TRACE-04",
+      "priority": "explicit_unrun_campaigns",
+      "requirements": [
+        "AC-02",
+        "AC-03",
+        "AC-11",
+        "AC-12",
+        "AC-13",
+        "AC-14",
+        "AC-15",
+        "AC-16",
+        "AC-17",
+        "RG-07"
+      ],
+      "finding": "No new implementation defect was established by the public-inventory review. RG07 is owned by the parallel compatibility campaign; actual client/provider/native-service and joint acceptance scopes remain distinct from fixtures.",
+      "minimum_action": "Consume the separately retained RG07 result when closed. Run only specifically authorized real campaigns against pinned artifacts and isolated homes, with individual scope/cleanup evidence. Do not create universal TLS/two-host or extra platform requirements.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "new_product_change_required": false
+    }
+  ],
+  "completion_criteria": [
+    {
+      "id": "AC-01",
+      "requirement_exact": "Cada tarefa obrigatória tem implementação ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Current fixed inventory is intact and every checked ledger path exists; all 71 selected joint identities resolve to passing XML.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ],
+      "remaining_or_limit": "Task-by-task implementation/reuse closure is still required. Do not infer it from file/test counts; this audit does not claim all59 task obligations accepted.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-02",
+      "requirement_exact": "As frentes SVC, DX, ATN e OBS respeitam suas dependências e funcionam de modo combinado; Herdr continua opcional.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Installed mixed-channel/idle/isolation contracts coexist with optional OBS/attention; canonical facts remain separate.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-correlation.md"
+      ],
+      "remaining_or_limit": "Combined final acceptance still depends on the declared real-provider/client/service gates; no new product defect identified here.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-03",
+      "requirement_exact": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Two MCP actors plus one runtime are proved through actual canonical MCP/HTTP/SQLite components with synthetic native I/O.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
+      ],
+      "remaining_or_limit": "Two actual client executables participating end-to-end are not proved by these fixtures or by config parsing. Retain the explicitly authorized real-client campaign gate.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-04",
+      "requirement_exact": "A central oferece ações reais e autorizadas, sem virar fonte paralela de lifecycle.",
+      "ledger_status_at_5545dbde": "VERIFIED",
+      "proven_scope_in_this_review": "Existing VERIFIED scope is supported by real browser/backend authorized actions and canonical lifecycle/ownership checks.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-correlation.md"
+      ],
+      "remaining_or_limit": "No additional package/inventory gap found for this criterion. Do not broaden it into a real-provider M1 claim.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-05",
+      "requirement_exact": "Repetição/timeout/restart preservam IDs e não duplicam mensagens, aprovações ou handoffs dentro do contrato de idempotência.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Recovery retains identity and one effect in the39 named current installed cases; bootstrap/renewal receipts preserve uncertainty.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "remaining_or_limit": "Current selection is not every new path or real network/process failure. Retain the named unrun recovery scopes; no broad rerun requested by this audit.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-06",
+      "requirement_exact": "Atividade externa nunca se transforma em autorização, capacidade reservada ou conclusão de trabalho.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "OBS isolation and six idle scheduler cases preserve native reservations, TTL, eligibility, ordering and authority.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+        "plans/agent_ops/evidence/pr10-external.md"
+      ],
+      "remaining_or_limit": "Link these exact scopes to the criterion/invariants; no inference of provider completion or global full-plan acceptance.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-07",
+      "requirement_exact": "Core e Connector preservam suas fronteiras e o conjunto de dependências é reproduzível.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Current Nexus/Connector/Core payloads match source and installed CI artifacts; corrected pins and MCP1.30 declared solve are retained.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/ci/installed.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/core/application-import-boundaries.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json"
+      ],
+      "remaining_or_limit": "The old DX04 browser MCP1.29.1 environment is not a valid dependency solve. Current solve is sufficient for packaging; Core audit limitations remain explicit, without inventing a new product boundary.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-08",
+      "requirement_exact": "Documentação, schemas e ajuda da CLI descrevem o comportamento realmente entregue.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Public package includes167 SQL migrations,7 UI files and required resources; docs/CLI milestones and current service proposal links exist.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/campaigns/windows-user-service.md"
+      ],
+      "remaining_or_limit": "Parent must publish the already prepared service-campaign link update. Complete criterion-level documentation/schema/help trace mapping; no new application behavior requested.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-09",
+      "requirement_exact": "Testes não executados estão nomeados; nenhuma fixture é apresentada como campanha de provedor ou plataforma real.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Closed milestones explicitly identify synthetic peers, fixture credentials, failed attempts and unrun real campaigns.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "remaining_or_limit": "Retain these limitations in final closure, especially historical invalid dependency solve and unqualified client/service/provider scopes. Avoid fixture-to-real-campaign promotion.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-10",
+      "requirement_exact": "Não há segredo em artefatos, logs, exemplos, URLs ou configurações exportadas.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Eight existing protection functions have passing retained XML; bcf0e8aa removes two public literals and retains structural outcomes/provenance.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+        "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+        "plans/agent_ops/evidence/r3-public-artifact-review/scan-after.json"
+      ],
+      "remaining_or_limit": "Historical UAT credential validity/revocation is unknown; previous Git commits were intentionally not rewritten, and visual/binary content is outside the pattern scan. AC10 cannot be closed by this read-only review.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-11",
+      "requirement_exact": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Installed terminal/bootstrap/work/recovery contracts are exercised with synthetic native peers.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+      ],
+      "remaining_or_limit": "The required real harness cycle with work, authorized decision and result on local Server and Connector remains an explicitly authorized campaign; service/session ready is insufficient.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-12",
+      "requirement_exact": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "No package or public-inventory inconsistency found. Existing service/root authority contracts are retained separately from these joint tests.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md"
+      ],
+      "remaining_or_limit": "Physical service concurrency/supervisor qualification remains in its declared real service scope; this audit did not rerun or infer it.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-13",
+      "requirement_exact": "Serviço do usuário foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execução validados.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "The24-action Windows temporary-service proposal pins current binaries, isolated homes and explicit cleanup and remains prepared only.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "plans/agent_ops/campaigns/windows-user-service.md"
+      ],
+      "remaining_or_limit": "Actual registration/login/stop/crash recovery/removal/context/credential qualification requires explicit campaigns. The24-action no-login/no-crash proposal does not replace the full criterion.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-14",
+      "requirement_exact": "Restart, suspensão e queda de conexão preservam contratos de autoridade, ownership e incerteza, sem repetição produtiva implícita.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Current selected recovery and explicit credential-rotation reconnect contracts preserve ownership and uncertainty.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "remaining_or_limit": "Real suspension/service/network/provider campaigns remain separate. TLS/two-host proof is required only for scopes declared supported/qualified, not invented as a universal new mandate.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-15",
+      "requirement_exact": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnóstico inicie daemon ou inferência.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Existing diagnostic/control implementation evidence is retained; package includes the public CLI entry points and help.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "remaining_or_limit": "Actual native lifecycle/control campaign remains unrun; this audit adds no repeated regression run or global passivity claim.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-16",
+      "requirement_exact": "O agente padrão tem identidade persistente, perfil generalista útil e coordenação no escopo aprovado; preserva limites efetivos do harness e não recebe administração global ou poder de aprovar seus próprios pedidos.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Persistent default identity and preset/reconnect contracts are documented and tested in the published milestones.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "remaining_or_limit": "Effective native harness limits/instructions and real-use acceptance still require the declared actual harness campaign; no new global identity/admin authority is implied.",
+      "status_changed": false
+    },
+    {
+      "id": "AC-17",
+      "requirement_exact": "Reconnect, atualização e abertura posterior da interface preservam a configuração e a identidade; personalização é opcional e o uso padrão continua completo pelo terminal.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "proven_scope_in_this_review": "Completed reconnect after explicit rotation preserves original bootstrap, binding, configuration and Finish; browser guide is additive.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md"
+      ],
+      "remaining_or_limit": "Record exact installed/browser scope; broader real-client/provider/service acceptance remains unclaimed. No further product omission demonstrated in this inventory audit.",
+      "status_changed": false
+    }
+  ],
+  "regression_requirements": [
+    {
+      "id": "RG-08",
+      "requirement_exact": "Pacotes finais contêm UI, schemas, migrações e recursos necessários, sem depender de checkout irmão.",
+      "ledger_status_at_5545dbde": "IN_PROGRESS",
+      "proven_scope": "Current wheel completeness and bytes verified for all three packages; UI, SQL, Core schemas and resources present; installed-only proof and current dependency solve retained.",
+      "remaining": "No package-file or pin defect found. Link current artifact proof; do not carry historical dependency mismatch as an unresolved current pin defect.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/ci/installed.json"
+      ],
+      "status_changed": false
+    },
+    {
+      "id": "RG-09",
+      "requirement_exact": "Campanha usa homes/workspaces temporários e não modifica contas/configurações pessoais.",
+      "ledger_status_at_5545dbde": "NOT_RUN",
+      "proven_scope": "Selected closed campaigns retain disposable homes/workspaces and synthetic native/account boundaries, with the exact differences detailed in isolation_scopes.",
+      "remaining": "Map each campaign scope to its evidence; current global row is underlinked. Future real campaigns must separately retain isolated profiles/cleanup and no-personal-config proof; the stronger launcher proof must not be generalized to all prior wrappers.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/mixed/run_candidate.py",
+        "plans/agent_ops/evidence/r3-joint-contracts/sessions-initial/invocation.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/drivers/servers.py",
+        "plans/agent_ops/evidence/pr09-herdr.md"
+      ],
+      "status_changed": false
+    }
+  ],
+  "invariants": [
+    {
+      "id": "INV-01",
+      "requirement_exact": "A identidade canônica continua sendo `agent_id`. Harness, transporte, pane, host, sessão e observador não criam automaticamente outro agente.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 11,
+      "existing_subscopes": {
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "external_observation_admission_and_passive_read_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-02",
+      "requirement_exact": "MCP do Nexus permanece HTTP direto no Server. Não adicionar servidor/proxy/fachada MCP no Connector ou no observador. Não reintroduzir MCP stdio do Nexus.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 9,
+      "existing_subscopes": {
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-03",
+      "requirement_exact": "Core continua independente das aplicações; não recebe banco de identidades, inbox, HTTP de produto, UI ou autorização canônica.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/core/application-import-boundaries.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-04",
+      "requirement_exact": "Connector continua host/cliente remoto de execução. Não passa a decidir handoffs nem a possuir inbox própria.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-05",
+      "requirement_exact": "Presença, atividade, capacidade, autorização, término do turno e conclusão do handoff são fatos diferentes.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 2,
+      "existing_subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-correlation.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-06",
+      "requirement_exact": "`idle`, `done`, timeout, silêncio ou desconexão não autorizam execução, conclusão, liberação de capacidade ou replay.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 2,
+      "existing_subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-07",
+      "requirement_exact": "Observar/ler/abrir a central não aprova, responde, interrompe, reivindica ou reexecuta trabalho.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 2,
+      "existing_subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-correlation.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-08",
+      "requirement_exact": "Um observador externo não produz recibos nativos, prova de ownership do Core, heartbeat de sessão MCP ou reserva de capacidade.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 11,
+      "existing_subscopes": {
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "external_observation_admission_and_passive_read_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-correlation.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-09",
+      "requirement_exact": "Handoffs preservam claim canônico único. MCP-only continua elegível conforme o contrato existente, sem obrigação de reportar capacidade externa.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-10",
+      "requirement_exact": "Uma requisição repetida para recuperação mantém a identidade original. Nova tentativa produtiva exige intenção explícita e as regras canônicas.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 7,
+      "existing_subscopes": {
+        "generic_coordination_cli_installed_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-11",
+      "requirement_exact": "Não colocar chaves em URLs, argumentos de processo, logs, screenshots, exemplos executáveis, exportações ou estado do browser.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 2,
+      "existing_subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+        "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-12",
+      "requirement_exact": "Não fabricar qualificação de harness. Suporte ao formato de configuração MCP é distinto de suporte à execução nativa.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-13",
+      "requirement_exact": "A fonte de verdade de mensagens, handoffs, aprovações e execução permanece nos subsistemas atuais. Novas tabelas são auxiliares, não novas filas de trabalho.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 2,
+      "existing_subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/pr10-correlation.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-14",
+      "requirement_exact": "Não interpretar texto livre de prompt/log como comando Nexus, aprovação, identidade ou conclusão.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 9,
+      "existing_subscopes": {
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-15",
+      "requirement_exact": "Não aumentar a superfície MCP indiscriminadamente. Priorizar ferramentas existentes e APIs específicas; qualquer parâmetro novo deve ter schema, testes e revisão de superfície.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-16",
+      "requirement_exact": "O daemon é um modo de operação do Server/Connector existente; não cria outro domínio de execução, fila, scheduler ou identidade de agente.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-17",
+      "requirement_exact": "Identidade da instância do serviço é distinta de agent_id, workspace e sessão. Perfis que usam a mesma instância não iniciam processos concorrentes sobre seus dados.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-18",
+      "requirement_exact": "Resolver destino local/remoto antes de iniciar processos. Falha do Server remoto nunca cria um Server local substituto.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-19",
+      "requirement_exact": "Só existe um supervisor ativo por instância. Serviço instalado é acionado pelo gerenciador correspondente, sem daemon avulso concorrente.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-20",
+      "requirement_exact": "Iniciar/reiniciar serviço não concede autoridade nova, não renova grants e não repete operações de resultado incerto. Trabalho previamente autorizado segue admissão/reconciliação canônicas.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-21",
+      "requirement_exact": "Fechar CLI/dashboard não significa parar serviço ou cancelar trabalho. Parada explícita não é tratada como crash para ressuscitar a instância.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-22",
+      "requirement_exact": "Estado do processo, prontidão do serviço, conexão do harness e sucesso de uma tarefa são provas diferentes.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 8,
+      "existing_subscopes": {
+        "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-23",
+      "requirement_exact": "Consultas de status, logs e doctor padrão não iniciam o serviço nem inferência. A inicialização automática pertence a comandos de ação documentados.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 8,
+      "existing_subscopes": {
+        "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-24",
+      "requirement_exact": "Sobreviver ao terminal, reiniciar após falha, iniciar no login e operar sem login exigem evidências separadas; não prometer sobrevivência do processo a reboot.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "plans/agent_ops/campaigns/windows-user-service.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-25",
+      "requirement_exact": "O caminho padrão de conexão e uso cotidiano é completo pelo terminal, incluindo decisões com autoridade válida. Política organizacional explicitamente preexistente continua obrigatória; a configuração padrão nova não introduz dependência do dashboard.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 1,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-26",
+      "requirement_exact": "O preset preenche a configuração comum do produto. Generalista é um perfil reutilizável, não uma identidade global compartilhada; reconnect não recria agente nem reaplica defaults sobre escolhas do usuário.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 10,
+      "existing_subscopes": {
+        "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
+        "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
+        "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
+        "preset_update_local_remote_receipt_recovery": "VERIFIED",
+        "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
+      },
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    },
+    {
+      "id": "INV-27",
+      "requirement_exact": "O preset preserva instruções, modelo, ferramentas e limites efetivos do harness quando suportados e verificáveis. Integração com Nexus não remove sandbox, não desabilita perguntas nativas nem concede administração global.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 0,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [],
+      "disposition": "No new closure claim. Existing ledger evidence or explicit campaign gap retained; zero references is not proof of absent implementation."
+    },
+    {
+      "id": "INV-28",
+      "requirement_exact": "Serviço ativo ou sessão pronta não encerram M1: solicitar trabalho, decidir pedidos autorizados e recuperar resultados pelo terminal precisam estar demonstrados no caminho escolhido.",
+      "ledger_status_at_5545dbde": "NOT_VERIFIED",
+      "existing_evidence_count": 1,
+      "existing_subscopes": {},
+      "additional_scoped_references_reviewed": [
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "disposition": "Cross-reference only: follow each cited scope/limitation; no invariant promotion."
+    }
+  ],
+  "isolation_scopes": [
+    {
+      "scope": "RG01/RG02/RG11 mixed",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/mixed/run_candidate.py",
+        "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/qualification.json"
+      ],
+      "proven": "Driver clears named application/provider variables before imports, sets disposable USERPROFILE/APPDATA/LOCALAPPDATA, uses isolated cwd/pytest basetemp and checks loaded product modules in the qualified venv. Existing fixtures supply temporary project/home and synthetic native authentication.",
+      "limit": "This is the selected canonical fixture campaign, not actual MCP client/provider/service qualification or a universal syscall sandbox."
+    },
+    {
+      "scope": "RG04 sessions",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/sessions-initial/run.py",
+        "plans/agent_ops/evidence/r3-joint-contracts/sessions-initial/invocation.json"
+      ],
+      "proven": "Runner constructs OS-only environment allowlist, disposable profile/appdata/temp directories, independent cwd and Python-I; installed runner verifies wheel payloads before execution.",
+      "limit": "No personal account/config state comparison is implied outside selected fixture effects. Native peer/service authority remains synthetic."
+    },
+    {
+      "scope": "RG03 idle / selected RG05 recovery",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/idle/run_redacted.py",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/run_redacted.py"
+      ],
+      "proven": "Reports identify synthetic native peers and fixture credentials; selected fixtures use temporary SQLite/homes. Runners retain redacted output and own temp/cache directories.",
+      "limit": "These wrappers inherit ambient environment instead of recording the RG04-style full allowlist. Do not describe all71 cases as proving identical hermetic OS/profile isolation. This is a limit of retained isolation evidence, not proof of a personal-config mutation."
+    },
+    {
+      "scope": "DX04 browser",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/drivers/servers.py"
+      ],
+      "proven": "Actual installed backend/browser campaign retains isolated homes, table before/after observations and canonical cleanup.",
+      "limit": "Historical MCP1.29.1 environment is not dependency-solve proof; current CI solve is separately pinned. UI observations remain historical."
+    }
+  ],
+  "herdr_inventory_resolution": [
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/collect_artifacts.py",
+      "classification": "Expected closure/verification driver; collector generates the 142-entry manifest and is cited separately by pr09-herdr.md:47.",
+      "bytes": 9066,
+      "sha256": "53de1cbf4283b5f3bfbe95de4235b52ecf6f0bd7a8e2ad9eb99db726c3719018",
+      "public_review_inventory_matches": [
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/collect_artifacts.py",
+          "record": {
+            "sha256": "53de1cbf4283b5f3bfbe95de4235b52ecf6f0bd7a8e2ad9eb99db726c3719018",
+            "bytes": 9066
+          }
+        }
+      ]
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+      "classification": "Expected historical manifest of 316 unique source tests/11 initial reports; retained independently by collector lines143-151. Not an untracked runtime artifact.",
+      "bytes": 7939,
+      "sha256": "a53fde1e514bab49dfc98486f7afa7cb5fadfb3e905a5bd603c7bbb59a4095f3",
+      "public_review_inventory_matches": [
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/initial-manifest.json",
+          "record": {
+            "sha256": "a53fde1e514bab49dfc98486f7afa7cb5fadfb3e905a5bd603c7bbb59a4095f3",
+            "bytes": 7939
+          }
+        }
+      ]
+    }
+  ],
+  "literal_closure_recommendations_for_parent": {
+    "RG-08": "Sufficient for the current exact Windows package set: all690/123/165 source resources are in the wheels, installed payload equality is retained, and UI/schema/migration resources are present without sibling application imports. No concrete literal package gap remains.",
+    "AC-07": "Sufficient for the current snapshot with the current declared dependency solve/pipcheck, exact pins/payloads, reviewed application boundaries and the separately closing RG06 import131 audit. Actual provider/client/service campaigns are not prerequisites of this literal boundary/dependency criterion.",
+    "AC-09": "Sufficient as an honest snapshot declaration when this finite matrix, named NOT_RUN inventory and explicit synthetic-vs-real limits are retained. Executing named unrun tests is not required by this criterion.",
+    "authority": "Recommendations only; parent owns the final ledger decision. This subagent did not mutate or promote any status."
+  },
+  "protection_test_detail": "protection-tests.json",
+  "evidence_catalog": {
+    "joint": "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+    "joint_scope": "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+    "current_dependencies": "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+    "current_package": "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+    "ci_installed": "plans/agent_ops/evidence/r3-qualification-readiness/ci/ci/installed.json",
+    "core_import_scope": "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json",
+    "application_boundaries": "plans/agent_ops/evidence/r3-joint-contracts/core/application-import-boundaries.json",
+    "mixed_isolation": "plans/agent_ops/evidence/r3-joint-contracts/mixed/run_candidate.py",
+    "mixed_installed": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/qualification.json",
+    "sessions_isolation": "plans/agent_ops/evidence/r3-joint-contracts/sessions-initial/run.py",
+    "sessions_invocation": "plans/agent_ops/evidence/r3-joint-contracts/sessions-initial/invocation.json",
+    "idle_scope": "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+    "idle_runner": "plans/agent_ops/evidence/r3-joint-contracts/idle/run_redacted.py",
+    "recovery_scope": "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+    "recovery_runner": "plans/agent_ops/evidence/r3-joint-contracts/recovery/run_redacted.py",
+    "guide": "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+    "guide_server_driver": "plans/agent_ops/evidence/pr04-participant-guide/installed/drivers/servers.py",
+    "bootstrap": "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+    "bootstrap_tests": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+    "renewal": "plans/agent_ops/evidence/pr03-remote-renewal.md",
+    "participant_tests": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+    "observer_tests": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+    "herdr": "plans/agent_ops/evidence/pr09-herdr.md",
+    "herdr_manifest": "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+    "attention_ui": "plans/agent_ops/evidence/pr07-attention-ui.md",
+    "external_attention": "plans/agent_ops/evidence/pr10-external.md",
+    "correlation": "plans/agent_ops/evidence/pr10-correlation.md",
+    "public_correction": "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+    "public_inventory": "plans/agent_ops/evidence/r3-public-artifact-review/scan-after.json",
+    "native_prepared": "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+    "service_campaign_doc": "plans/agent_ops/campaigns/windows-user-service.md"
+  },
+  "conclusion": "No additional product defect or missing package resource identified in this bounded audit. Current public inventory/payload proofs are sufficient for their stated scope. Remaining work is precise traceability, the already prepared document update, parallel compatibility qualification and explicitly unqualified real campaigns; AC10 retains its historical credential limit. No automatic status promotion."
+}

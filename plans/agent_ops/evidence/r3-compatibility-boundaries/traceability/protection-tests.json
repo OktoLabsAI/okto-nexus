@@ -1,0 +1,1018 @@
+{
+  "baseline": "5545dbde",
+  "method": "Source assertion inspection and existing JUnit XML parsing only. Reports overlap; counts are never added across reports. Case parameters are represented by identity digests; no token-bearing values copied.",
+  "tests": {
+    "test_one_shot_key_never_enters_results_checkpoints_or_exported_handoff": {
+      "source": "tests/execution_r4/test_remote_terminal_setup.py",
+      "line": 209,
+      "end_line": 218,
+      "function_sha256": "b4c7c225d7ec97965cb44c744acd37ec8ece072ad4ad1fea974aaf71d03ff93a",
+      "assertions": [
+        "peer.keys == [KEY] and peer.boots == 1 and (peer.decisions == 0)",
+        "KEY not in json.dumps([result, peer.saved, peer.exports])",
+        "resumed['material_delivery'] == 'delivered_once' and resumed['material_status'] == 'unavailable'",
+        "peer.keys == [KEY] and peer.boots == 1"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+          "sha256": "d72eab329cd690073f1485c6b1181bbea87c6d5a90e3d5cd2034ff116b9c1fd3",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-auth-uncertainty.xml",
+          "sha256": "536ca33e2b5271d8d39ef146fa21decdcc267aa4fc28259250d7bfc96d4e4b87",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-initial.xml",
+          "sha256": "a47523400dfc738f8fb9090d4a2ee99bc4cd3570c976b2db12e50beba1e63420",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-local-review.xml",
+          "sha256": "8f35b2ca0e3f5f02f3cae74f5729f7e41678795763a476666aba72bd3b897ca7",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-recovery-review.xml",
+          "sha256": "df8f34d250064f91e43f0a4a504b538bdb4fd83a7088aa639316139b037ae855",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-regression.xml",
+          "sha256": "0f529ef964c54855feeef7f8b8fc7065c3a7d8a0a2c21f907aab02aa48771054",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-review-display.xml",
+          "sha256": "df1ce4d1ad5eb01ccb8b829cc69bc87c34899a07e89676ee7254801cb1088778",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-startup-flags.xml",
+          "sha256": "0736a7cc5468fbd62b50a19edae1257eea76ff1df2ba95f63cb11a8a6e7c308f",
+          "cases": [
+            {
+              "case_identity_sha256": "b0625a40071108524ffef71b9ebead3c72b5e4f7532ee5982e00b060f05ebf7a",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        }
+      ]
+    },
+    "test_unexpected_secret_field_in_receipt_is_refused_without_checkpointing_it": {
+      "source": "tests/execution_r4/test_remote_terminal_setup.py",
+      "line": 263,
+      "end_line": 271,
+      "function_sha256": "c2e79a8d2e912d15a9e2e5554d55d9e033e13b9f7e9341214ba23820107479f9",
+      "assertions": [
+        "failure.value.code == 'RECEIPT_UNCONFIRMED'",
+        "peer.boots == 0 and KEY not in json.dumps(peer.saved)"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+          "sha256": "d72eab329cd690073f1485c6b1181bbea87c6d5a90e3d5cd2034ff116b9c1fd3",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-auth-uncertainty.xml",
+          "sha256": "536ca33e2b5271d8d39ef146fa21decdcc267aa4fc28259250d7bfc96d4e4b87",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-initial.xml",
+          "sha256": "a47523400dfc738f8fb9090d4a2ee99bc4cd3570c976b2db12e50beba1e63420",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-local-review.xml",
+          "sha256": "8f35b2ca0e3f5f02f3cae74f5729f7e41678795763a476666aba72bd3b897ca7",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-recovery-review.xml",
+          "sha256": "df8f34d250064f91e43f0a4a504b538bdb4fd83a7088aa639316139b037ae855",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-regression.xml",
+          "sha256": "0f529ef964c54855feeef7f8b8fc7065c3a7d8a0a2c21f907aab02aa48771054",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-review-display.xml",
+          "sha256": "df1ce4d1ad5eb01ccb8b829cc69bc87c34899a07e89676ee7254801cb1088778",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-startup-flags.xml",
+          "sha256": "0736a7cc5468fbd62b50a19edae1257eea76ff1df2ba95f63cb11a8a6e7c308f",
+          "cases": [
+            {
+              "case_identity_sha256": "e70b217d71ac8ce2c47aa305f969a7222034d2f1b9579e6f8d497b2e64104108",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        }
+      ]
+    },
+    "test_material_delivery_requires_tty_and_is_separate_from_public_stdout": {
+      "source": "tests/execution_r4/test_remote_terminal_setup.py",
+      "line": 308,
+      "end_line": 319,
+      "function_sha256": "cc03451c5f2fdf2ecd6c938b7ceadafac80da247c6d5e2c66f40415e66ecded5",
+      "assertions": [
+        "remote_setup_io.material_sink(True) is None",
+        "KEY in streams[2].getvalue() and KEY not in streams[1].getvalue()",
+        "remote_setup_io.material_sink(False) is None"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+          "sha256": "d72eab329cd690073f1485c6b1181bbea87c6d5a90e3d5cd2034ff116b9c1fd3",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-auth-uncertainty.xml",
+          "sha256": "536ca33e2b5271d8d39ef146fa21decdcc267aa4fc28259250d7bfc96d4e4b87",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-initial.xml",
+          "sha256": "a47523400dfc738f8fb9090d4a2ee99bc4cd3570c976b2db12e50beba1e63420",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-local-review.xml",
+          "sha256": "8f35b2ca0e3f5f02f3cae74f5729f7e41678795763a476666aba72bd3b897ca7",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-recovery-review.xml",
+          "sha256": "df8f34d250064f91e43f0a4a504b538bdb4fd83a7088aa639316139b037ae855",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-regression.xml",
+          "sha256": "0f529ef964c54855feeef7f8b8fc7065c3a7d8a0a2c21f907aab02aa48771054",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-review-display.xml",
+          "sha256": "df1ce4d1ad5eb01ccb8b829cc69bc87c34899a07e89676ee7254801cb1088778",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/source/operator/dx1819-operator-startup-flags.xml",
+          "sha256": "0736a7cc5468fbd62b50a19edae1257eea76ff1df2ba95f63cb11a8a6e7c308f",
+          "cases": [
+            {
+              "case_identity_sha256": "7cdf4fa9e96f5f178b9ad3f6f3f02deacd19e330be590c9d919a2478a263a5cd",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        }
+      ]
+    },
+    "test_cli_never_falls_back_to_echoing_key": {
+      "source": "tests/execution_r4/test_participant_init.py",
+      "line": 228,
+      "end_line": 243,
+      "function_sha256": "d6103703300e97af4e31fae3e1b414ce7367ca06782611bb68d73a05bdda007f",
+      "assertions": [
+        "participant.run_participant(['--home', str(s.home), '--profile', 'hidden', '--json', '--plan', '--project', str(s.root), '--server', ORIGIN, '--agent', 'subject', '--workspace-id', s.selection['workspace_id'], '--client', 'claude']) == 3",
+        "json.loads(capsys.readouterr().out)['code'] == 'PARTICIPANT_KEY_REQUIRED'",
+        "not s.vault.values"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-doctor-installed.xml",
+          "sha256": "06ee1f7a0efaac8af8b4dd9075f255c5d8399d9ada41fde31b4341580f72c920",
+          "cases": [
+            {
+              "case_identity_sha256": "ad528d0a46b9695ee46634ce4c55294d3c5eacad0327f4b2005176b9dea5adfb",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+          "sha256": "d3d325891c083b1b72f012fcf9e1f89f90111c38437969cfb27ea1eadbfef418",
+          "cases": [
+            {
+              "case_identity_sha256": "ad528d0a46b9695ee46634ce4c55294d3c5eacad0327f4b2005176b9dea5adfb",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+          "sha256": "8e63facfb2a9be4e2ac946e11f5938f2eba45ed6f20e0a2fb478574ddd7e1f01",
+          "cases": [
+            {
+              "case_identity_sha256": "ad528d0a46b9695ee46634ce4c55294d3c5eacad0327f4b2005176b9dea5adfb",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+          "sha256": "272afa473480020c3c16cdc56c2c2dd079164cd462ac18b17ab65d2c3698433f",
+          "cases": [
+            {
+              "case_identity_sha256": "ad528d0a46b9695ee46634ce4c55294d3c5eacad0327f4b2005176b9dea5adfb",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+          "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+          "cases": [
+            {
+              "case_identity_sha256": "ad528d0a46b9695ee46634ce4c55294d3c5eacad0327f4b2005176b9dea5adfb",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        }
+      ]
+    },
+    "test_malformed_http_errors_never_echo_response_or_key": {
+      "source": "tests/execution_r4/test_participant_init.py",
+      "line": 268,
+      "end_line": 276,
+      "function_sha256": "c01fe9ecdfc5dc92f47735cd22d575ed99175ba998d107414a6cdd69ed0df3c4",
+      "assertions": [
+        "error.value.code == 'REQUEST_REFUSED'",
+        "secret not in str(error.value) and 'private diagnostic' not in str(error.value)"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-doctor-installed.xml",
+          "sha256": "06ee1f7a0efaac8af8b4dd9075f255c5d8399d9ada41fde31b4341580f72c920",
+          "cases": [
+            {
+              "case_identity_sha256": "af85ff3b514663985ce3a6e7b4323ea8ccb86ca8ae11e0b02e69a1d47e3de4d8",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bf7dd78a6b549c1a84f0c20e03920566c023533b6bffab5ee6137a656793a0be",
+              "state": "passed"
+            }
+          ],
+          "passed": 2,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+          "sha256": "d3d325891c083b1b72f012fcf9e1f89f90111c38437969cfb27ea1eadbfef418",
+          "cases": [
+            {
+              "case_identity_sha256": "af85ff3b514663985ce3a6e7b4323ea8ccb86ca8ae11e0b02e69a1d47e3de4d8",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bf7dd78a6b549c1a84f0c20e03920566c023533b6bffab5ee6137a656793a0be",
+              "state": "passed"
+            }
+          ],
+          "passed": 2,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+          "sha256": "8e63facfb2a9be4e2ac946e11f5938f2eba45ed6f20e0a2fb478574ddd7e1f01",
+          "cases": [
+            {
+              "case_identity_sha256": "af85ff3b514663985ce3a6e7b4323ea8ccb86ca8ae11e0b02e69a1d47e3de4d8",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bf7dd78a6b549c1a84f0c20e03920566c023533b6bffab5ee6137a656793a0be",
+              "state": "passed"
+            }
+          ],
+          "passed": 2,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+          "sha256": "272afa473480020c3c16cdc56c2c2dd079164cd462ac18b17ab65d2c3698433f",
+          "cases": [
+            {
+              "case_identity_sha256": "af85ff3b514663985ce3a6e7b4323ea8ccb86ca8ae11e0b02e69a1d47e3de4d8",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bf7dd78a6b549c1a84f0c20e03920566c023533b6bffab5ee6137a656793a0be",
+              "state": "passed"
+            }
+          ],
+          "passed": 2,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+          "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+          "cases": [
+            {
+              "case_identity_sha256": "af85ff3b514663985ce3a6e7b4323ea8ccb86ca8ae11e0b02e69a1d47e3de4d8",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bf7dd78a6b549c1a84f0c20e03920566c023533b6bffab5ee6137a656793a0be",
+              "state": "passed"
+            }
+          ],
+          "passed": 2,
+          "failed_or_skipped": 0
+        }
+      ]
+    },
+    "test_actual_http_redirect_does_not_forward_bearer": {
+      "source": "tests/execution_r4/test_participant_init.py",
+      "line": 279,
+      "end_line": 305,
+      "function_sha256": "058ca8f0b8d5b2591e25a21253f9841f9fc0054c12a472c329d6553b1cdb185f",
+      "assertions": [
+        "error.value.code == 'SERVER_REDIRECT_REFUSED'",
+        "len(received) == 1 and received[0][1] == 'Bearer ' + secret",
+        "received[0][0].startswith('/v1/connections/participant?')"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-doctor-installed.xml",
+          "sha256": "06ee1f7a0efaac8af8b4dd9075f255c5d8399d9ada41fde31b4341580f72c920",
+          "cases": [
+            {
+              "case_identity_sha256": "5d55829a928e9dbeb22351c7ab0f74811605e422a049f48d49a99c1e45d2f389",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+          "sha256": "d3d325891c083b1b72f012fcf9e1f89f90111c38437969cfb27ea1eadbfef418",
+          "cases": [
+            {
+              "case_identity_sha256": "5d55829a928e9dbeb22351c7ab0f74811605e422a049f48d49a99c1e45d2f389",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
+          "sha256": "8e63facfb2a9be4e2ac946e11f5938f2eba45ed6f20e0a2fb478574ddd7e1f01",
+          "cases": [
+            {
+              "case_identity_sha256": "5d55829a928e9dbeb22351c7ab0f74811605e422a049f48d49a99c1e45d2f389",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+          "sha256": "272afa473480020c3c16cdc56c2c2dd079164cd462ac18b17ab65d2c3698433f",
+          "cases": [
+            {
+              "case_identity_sha256": "5d55829a928e9dbeb22351c7ab0f74811605e422a049f48d49a99c1e45d2f389",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+          "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+          "cases": [
+            {
+              "case_identity_sha256": "5d55829a928e9dbeb22351c7ab0f74811605e422a049f48d49a99c1e45d2f389",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        }
+      ]
+    },
+    "test_cli_does_not_echo_process_errors_or_secrets": {
+      "source": "tests/execution_r4/test_participant_launch.py",
+      "line": 189,
+      "end_line": 200,
+      "function_sha256": "753e91869a51c8db9b317f1730e62e4d8c88ecf0f9b0b379631f599a0ae715e0",
+      "assertions": [
+        "main([*base, '--plan', '--executable', t.executable]) == 0",
+        "main([*base, '--approve', plan['review_revision']]) == 3",
+        "t.s.key not in raw and 'SECRET' not in raw",
+        "json.loads(raw)['code'] == 'PARTICIPANT_LAUNCH_UNCONFIRMED'"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+          "sha256": "272afa473480020c3c16cdc56c2c2dd079164cd462ac18b17ab65d2c3698433f",
+          "cases": [
+            {
+              "case_identity_sha256": "1baedaf52278d4299df15f33c91bbb36e9c04dab6b45e549f7efb2edfbd76294",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-launch-source.xml",
+          "sha256": "60e092f032b30408352790a832a4fd444517d04702303453927e6a6fe1375fde",
+          "cases": [
+            {
+              "case_identity_sha256": "1baedaf52278d4299df15f33c91bbb36e9c04dab6b45e549f7efb2edfbd76294",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+          "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+          "cases": [
+            {
+              "case_identity_sha256": "1baedaf52278d4299df15f33c91bbb36e9c04dab6b45e549f7efb2edfbd76294",
+              "state": "passed"
+            }
+          ],
+          "passed": 1,
+          "failed_or_skipped": 0
+        }
+      ]
+    },
+    "test_invalid_origins_are_sanitized_before_network": {
+      "source": "tests/test_observation_client.py",
+      "line": 209,
+      "end_line": 214,
+      "function_sha256": "504cb7d3d117bbb845eae3709db1b0584d88e1fd0b8c83d147c0a55f238de9ad",
+      "assertions": [
+        "caught.value.code == 'SERVER_ORIGIN_INVALID'",
+        "caught.value.outcome_unknown is False",
+        "'private' not in str(caught.value) and 'secret' not in str(caught.value)"
+      ],
+      "retained_reports": [
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified/pr09-observation-installed-initial.xml",
+          "sha256": "8017e579d3b764ac2a612da308a1b9d3f3a3680e13dcf79d892c818e2625ba6b",
+          "cases": [
+            {
+              "case_identity_sha256": "9e3a2428d97d64e10fdbf189b4e5f7541500be556189cde935eadf439b4b645f",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "500c90531609339f01415506371e86f8fe71092c63f76f0c4194a7193b1e379d",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "59efa66dc1150408ef4154463a92eace9de0ca3a9a90e3ce0f2efb73aaf7653a",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "27b5ac9e905b2ce500e48e442200f69b227655f0ebf9823869b6ec7b9a71ff57",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e4aa11e27be807bb7f0959cd30d0e5740342135ade5f7c7627d5747bb270ca6b",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3529989e8807e885527bfd448e13c03caa49ad7e266a553f92ed9dd7c3d0bca3",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "7649708a9134582054300f3a2c14b2de5c07d9257e6d86cc4faf92af52237906",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bb677630690799ef6e0d63a19614942fdb19211d4c9194821dda5a8b245e83ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "2bcd67140879dcd4c68e0dfbfe2e81faea48f7af9bdff3bc106074990eca0412",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e0826ce4b691c6b1f6915003f8d0bd1cbabf8e7fdfa0884758a4b130f3e35bb9",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "832ee42ea9f6afc457b959a2221b31fe18def8cf16e4aced540ee41d2e038423",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "4536781b07eced9cd63d8338f4be4ed0487d3080e7d28fadab94e3664c30d4ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3e5d7db802308f0b5a8ceed2cea68e8c4135afbb93776cf1feef16f9b1d7de06",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "060ac9f257d77ff742ab14b48a2d632c9e5797f4ca168a797cfea8d0409a972f",
+              "state": "passed"
+            }
+          ],
+          "passed": 14,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+          "sha256": "011bce74f9a80361357e68d050ab701950b13c0c3893ed59d7566c9c91ba368b",
+          "cases": [
+            {
+              "case_identity_sha256": "9e3a2428d97d64e10fdbf189b4e5f7541500be556189cde935eadf439b4b645f",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "500c90531609339f01415506371e86f8fe71092c63f76f0c4194a7193b1e379d",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "59efa66dc1150408ef4154463a92eace9de0ca3a9a90e3ce0f2efb73aaf7653a",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "27b5ac9e905b2ce500e48e442200f69b227655f0ebf9823869b6ec7b9a71ff57",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e4aa11e27be807bb7f0959cd30d0e5740342135ade5f7c7627d5747bb270ca6b",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3529989e8807e885527bfd448e13c03caa49ad7e266a553f92ed9dd7c3d0bca3",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "7649708a9134582054300f3a2c14b2de5c07d9257e6d86cc4faf92af52237906",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bb677630690799ef6e0d63a19614942fdb19211d4c9194821dda5a8b245e83ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "2bcd67140879dcd4c68e0dfbfe2e81faea48f7af9bdff3bc106074990eca0412",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e0826ce4b691c6b1f6915003f8d0bd1cbabf8e7fdfa0884758a4b130f3e35bb9",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "832ee42ea9f6afc457b959a2221b31fe18def8cf16e4aced540ee41d2e038423",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "4536781b07eced9cd63d8338f4be4ed0487d3080e7d28fadab94e3664c30d4ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3e5d7db802308f0b5a8ceed2cea68e8c4135afbb93776cf1feef16f9b1d7de06",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "060ac9f257d77ff742ab14b48a2d632c9e5797f4ca168a797cfea8d0409a972f",
+              "state": "passed"
+            }
+          ],
+          "passed": 14,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observation-client-final.xml",
+          "sha256": "7dd2f2e169832547a4c61209c1c199a6d7d15ef4e70b11cf4318db167a06f1df",
+          "cases": [
+            {
+              "case_identity_sha256": "9e3a2428d97d64e10fdbf189b4e5f7541500be556189cde935eadf439b4b645f",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "500c90531609339f01415506371e86f8fe71092c63f76f0c4194a7193b1e379d",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "59efa66dc1150408ef4154463a92eace9de0ca3a9a90e3ce0f2efb73aaf7653a",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "27b5ac9e905b2ce500e48e442200f69b227655f0ebf9823869b6ec7b9a71ff57",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e4aa11e27be807bb7f0959cd30d0e5740342135ade5f7c7627d5747bb270ca6b",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3529989e8807e885527bfd448e13c03caa49ad7e266a553f92ed9dd7c3d0bca3",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "7649708a9134582054300f3a2c14b2de5c07d9257e6d86cc4faf92af52237906",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bb677630690799ef6e0d63a19614942fdb19211d4c9194821dda5a8b245e83ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "2bcd67140879dcd4c68e0dfbfe2e81faea48f7af9bdff3bc106074990eca0412",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e0826ce4b691c6b1f6915003f8d0bd1cbabf8e7fdfa0884758a4b130f3e35bb9",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "832ee42ea9f6afc457b959a2221b31fe18def8cf16e4aced540ee41d2e038423",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "4536781b07eced9cd63d8338f4be4ed0487d3080e7d28fadab94e3664c30d4ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3e5d7db802308f0b5a8ceed2cea68e8c4135afbb93776cf1feef16f9b1d7de06",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "060ac9f257d77ff742ab14b48a2d632c9e5797f4ca168a797cfea8d0409a972f",
+              "state": "passed"
+            }
+          ],
+          "passed": 14,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observation-client-initial.xml",
+          "sha256": "c3f2477112511de338717ff01edc0db5fb6f1564df0820d0f9ed1242ef2bf2ca",
+          "cases": [
+            {
+              "case_identity_sha256": "9e3a2428d97d64e10fdbf189b4e5f7541500be556189cde935eadf439b4b645f",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "500c90531609339f01415506371e86f8fe71092c63f76f0c4194a7193b1e379d",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "59efa66dc1150408ef4154463a92eace9de0ca3a9a90e3ce0f2efb73aaf7653a",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "27b5ac9e905b2ce500e48e442200f69b227655f0ebf9823869b6ec7b9a71ff57",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e4aa11e27be807bb7f0959cd30d0e5740342135ade5f7c7627d5747bb270ca6b",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3529989e8807e885527bfd448e13c03caa49ad7e266a553f92ed9dd7c3d0bca3",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "7649708a9134582054300f3a2c14b2de5c07d9257e6d86cc4faf92af52237906",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bb677630690799ef6e0d63a19614942fdb19211d4c9194821dda5a8b245e83ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "2bcd67140879dcd4c68e0dfbfe2e81faea48f7af9bdff3bc106074990eca0412",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e0826ce4b691c6b1f6915003f8d0bd1cbabf8e7fdfa0884758a4b130f3e35bb9",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "832ee42ea9f6afc457b959a2221b31fe18def8cf16e4aced540ee41d2e038423",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "4536781b07eced9cd63d8338f4be4ed0487d3080e7d28fadab94e3664c30d4ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3e5d7db802308f0b5a8ceed2cea68e8c4135afbb93776cf1feef16f9b1d7de06",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "060ac9f257d77ff742ab14b48a2d632c9e5797f4ca168a797cfea8d0409a972f",
+              "state": "passed"
+            }
+          ],
+          "passed": 14,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observer-integration-initial.xml",
+          "sha256": "9a724b81e1f8e4d5c3cffae61edeadfc3a90034530f716c68fe1b6c6440a2c4f",
+          "cases": [
+            {
+              "case_identity_sha256": "9e3a2428d97d64e10fdbf189b4e5f7541500be556189cde935eadf439b4b645f",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "500c90531609339f01415506371e86f8fe71092c63f76f0c4194a7193b1e379d",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "59efa66dc1150408ef4154463a92eace9de0ca3a9a90e3ce0f2efb73aaf7653a",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "27b5ac9e905b2ce500e48e442200f69b227655f0ebf9823869b6ec7b9a71ff57",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e4aa11e27be807bb7f0959cd30d0e5740342135ade5f7c7627d5747bb270ca6b",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3529989e8807e885527bfd448e13c03caa49ad7e266a553f92ed9dd7c3d0bca3",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "7649708a9134582054300f3a2c14b2de5c07d9257e6d86cc4faf92af52237906",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bb677630690799ef6e0d63a19614942fdb19211d4c9194821dda5a8b245e83ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "2bcd67140879dcd4c68e0dfbfe2e81faea48f7af9bdff3bc106074990eca0412",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e0826ce4b691c6b1f6915003f8d0bd1cbabf8e7fdfa0884758a4b130f3e35bb9",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "832ee42ea9f6afc457b959a2221b31fe18def8cf16e4aced540ee41d2e038423",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "4536781b07eced9cd63d8338f4be4ed0487d3080e7d28fadab94e3664c30d4ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3e5d7db802308f0b5a8ceed2cea68e8c4135afbb93776cf1feef16f9b1d7de06",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "060ac9f257d77ff742ab14b48a2d632c9e5797f4ca168a797cfea8d0409a972f",
+              "state": "passed"
+            }
+          ],
+          "passed": 14,
+          "failed_or_skipped": 0
+        },
+        {
+          "path": "plans/agent_ops/evidence/pr09-herdr/pr09-observer-integration-review.xml",
+          "sha256": "21e911d842d49cb57e0f97dd1b1f0cbb28c89d9b22d2233d676178ca515668db",
+          "cases": [
+            {
+              "case_identity_sha256": "9e3a2428d97d64e10fdbf189b4e5f7541500be556189cde935eadf439b4b645f",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "500c90531609339f01415506371e86f8fe71092c63f76f0c4194a7193b1e379d",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "59efa66dc1150408ef4154463a92eace9de0ca3a9a90e3ce0f2efb73aaf7653a",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "27b5ac9e905b2ce500e48e442200f69b227655f0ebf9823869b6ec7b9a71ff57",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e4aa11e27be807bb7f0959cd30d0e5740342135ade5f7c7627d5747bb270ca6b",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3529989e8807e885527bfd448e13c03caa49ad7e266a553f92ed9dd7c3d0bca3",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "7649708a9134582054300f3a2c14b2de5c07d9257e6d86cc4faf92af52237906",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "bb677630690799ef6e0d63a19614942fdb19211d4c9194821dda5a8b245e83ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "2bcd67140879dcd4c68e0dfbfe2e81faea48f7af9bdff3bc106074990eca0412",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "e0826ce4b691c6b1f6915003f8d0bd1cbabf8e7fdfa0884758a4b130f3e35bb9",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "832ee42ea9f6afc457b959a2221b31fe18def8cf16e4aced540ee41d2e038423",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "4536781b07eced9cd63d8338f4be4ed0487d3080e7d28fadab94e3664c30d4ad",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "3e5d7db802308f0b5a8ceed2cea68e8c4135afbb93776cf1feef16f9b1d7de06",
+              "state": "passed"
+            },
+            {
+              "case_identity_sha256": "060ac9f257d77ff742ab14b48a2d632c9e5797f4ca168a797cfea8d0409a972f",
+              "state": "passed"
+            }
+          ],
+          "passed": 14,
+          "failed_or_skipped": 0
+        }
+      ]
+    }
+  }
+}

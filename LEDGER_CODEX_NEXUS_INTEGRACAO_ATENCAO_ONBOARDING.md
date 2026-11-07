@@ -553,3 +553,8 @@ Matriz finita dos17 critérios e11 RG registrada; ainda há verificações conju
 ## 2026-11-07 — R3: revisão e redação de artefatos públicos
 
 Revisados 1.822 arquivos públicos dos três repos. Dois valores foram redigidos em relatórios históricos: uma chave UAT e um ticket sintético de fixture. Hashes antes/depois, fonte e falhas originais permanecem documentados; 35 ocorrências restantes são parâmetros inválidos de testes. A segunda varredura confirmou essa classificação. AC-10 permanece aberto: a validade/revogação da chave UAT e commits anteriores não foram alterados ou verificados, e a varredura tem limites declarados. Aplicações/wheels e configurações pessoais inalterados. Evidência: `plans/agent_ops/evidence/r3-public-artifact-review/milestone.md`.
+
+
+## 2026-11-07 — R3: versões, imports e pacotes
+
+Quatro pares instalados qualificados: versões Core alinhadas aceitas; dois pares cruzados recusados com VERSION_INCOMPATIBLE antes de efeitos. 131 módulos Core importados sob guards, nove controles negativos e stdout bruto retido; fronteiras atuais sem violação. Pacotes completos: Nexus690/Connector123/Core165 arquivos, sem recurso-fonte omitido. RG06/07/08 e AC07 verificados para o snapshot Windows atual. Documentação de compatibilidade e proposta Windows vigente atualizadas. Rastreabilidade vinculada sem somar reruns; RG09, AC09/10 e campanhas reais continuam abertos. Revisão tarefa/cenário a tarefa/cenário segue somente leitura. Evidência: `plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md`.

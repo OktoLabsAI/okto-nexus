@@ -1,0 +1,50 @@
+{
+  "os_environ_references": [
+    {
+      "path": "src/nexus_connector_core/discovery.py",
+      "line": 320,
+      "function": "discover_path"
+    },
+    {
+      "path": "src/nexus_connector_core/environment.py",
+      "line": 196,
+      "function": "_is_default_claude_state"
+    },
+    {
+      "path": "src/nexus_connector_core/environment.py",
+      "line": 102,
+      "function": "child_environment"
+    },
+    {
+      "path": "src/nexus_connector_core/mcp_inheritance.py",
+      "line": 83,
+      "function": "global_mcp_environment"
+    },
+    {
+      "path": "src/nexus_connector_core/native/legacy_environment.py",
+      "line": 23,
+      "function": "child_environment"
+    },
+    {
+      "path": "src/nexus_connector_core/native/process/macos_process.py",
+      "line": 62,
+      "function": "_trace"
+    },
+    {
+      "path": "src/nexus_connector_core/native/runtime_bridge.py",
+      "line": 888,
+      "function": "_open"
+    },
+    {
+      "path": "src/nexus_connector_core/pi_mcp_bridge.py",
+      "line": 28,
+      "function": "__init__"
+    },
+    {
+      "path": "src/nexus_connector_core/provider_discovery.py",
+      "line": 19,
+      "function": "discover_provider_home"
+    }
+  ],
+  "conclusion": "All current Core references are inside runtime functions/methods; the installed import audit observes zero Core-origin lookups."
+}

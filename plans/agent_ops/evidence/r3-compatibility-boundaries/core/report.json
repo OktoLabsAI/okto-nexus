@@ -1,0 +1,138 @@
+{
+  "requirement": "RG-06",
+  "requirement_line": 973,
+  "result": "PASS",
+  "recommendation": "RG-06 may be VERIFIED for the current installed Core/application revisions on Windows/local. No concrete literal gap remains after combining current static boundaries, import observation and credential-access guards. Ledger decision belongs to root.",
+  "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+  "core_package_files_equal": 165,
+  "imported_modules": 131,
+  "guard_controls_passed": 9,
+  "denied_during_import": 0,
+  "core_environment_lookups": 0,
+  "dependency_environment_lookups": 255,
+  "dependency_environment_lookup_groups": [
+    {
+      "key": "PYTHONTZPATH",
+      "caller": "zoneinfo._tzpath",
+      "count": 1
+    },
+    {
+      "key": "PYTHONUSERBASE",
+      "caller": "sysconfig",
+      "count": 1
+    },
+    {
+      "key": "APPDATA",
+      "caller": "sysconfig",
+      "count": 1
+    },
+    {
+      "key": "PYDANTIC_DISABLE_PLUGINS",
+      "caller": "pydantic.plugin._loader",
+      "count": 240
+    },
+    {
+      "key": "LANGUAGE",
+      "caller": "gettext",
+      "count": 3
+    },
+    {
+      "key": "LC_ALL",
+      "caller": "gettext",
+      "count": 3
+    },
+    {
+      "key": "LC_MESSAGES",
+      "caller": "gettext",
+      "count": 3
+    },
+    {
+      "key": "LANG",
+      "caller": "gettext",
+      "count": 3
+    }
+  ],
+  "native_credential_api_calls_during_import": 0,
+  "guarded_native_api_count": 19,
+  "dependency_console_bindings": [
+    {
+      "event": "ctypes.dlsym",
+      "target": "GetStdHandle",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlsym",
+      "target": "ReadConsoleW",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlsym",
+      "target": "WriteConsoleW",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlsym",
+      "target": "GetConsoleMode",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlopen",
+      "target": "shell32",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlsym",
+      "target": "CommandLineToArgvW",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlsym",
+      "target": "LocalFree",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlsym",
+      "target": "PyObject_GetBuffer",
+      "caller": "click._winconsole"
+    },
+    {
+      "event": "ctypes.dlsym",
+      "target": "PyBuffer_Release",
+      "caller": "click._winconsole"
+    }
+  ],
+  "guard_scope": "Every one of the 131 Core Python modules was imported under the same active guards. Python os.getenv/environ access and enumeration, all exported callable win32cred Cred* entry points, DPAPI unprotect and ctypes dynamic loading/symbol binding were instrumented; the nine negative controls are representative tests of these guard paths. This is not a tracer of arbitrary native C-extension or kernel calls, which is not required to verify this fixed code/import path.",
+  "dependency_lookups_review": "The eight observed key/caller pairs are timezone, Python user-base/config path, Pydantic plugin opt-out, and locale configuration; no credential names or values were read. HOME/APPDATA/user context are synthetic, with no inherited user environment.",
+  "retained_refusals": "Initial and diagnostic runs stopped at Click GetStdHandle binding. They are retained verbatim. The final run allows only the reviewed console/buffer symbols from click._winconsole and keeps all credential paths guarded; no product code changed.",
+  "prior_evidence": {
+    "plans/agent_ops/evidence/r3-joint-contracts/core/audit.py": "37baaf4635f5e599a6d3ce57d9dc4790aa49ad7a0a7ce8b83427f08debbfc44c",
+    "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json": "28fb2e4ce0e5abca933ac5dfa1c89db7c5eb5c325db44049f57fbfa35e930c31",
+    "plans/agent_ops/evidence/r3-joint-contracts/core/application-import-boundaries.json": "83553d3aa7f54f03e00055d142a49cc3b96f7687538d11d37201cac9e290f694"
+  },
+  "repository_state": {
+    "Nexus": {
+      "head": "bcf0e8aaf0bc957d2a876632f90e923316733d89",
+      "status": "M docs/connection-setup.md\n M plans/agent_ops/campaigns/windows-user-service.md"
+    },
+    "Connector": {
+      "head": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+      "status": ""
+    },
+    "Core": {
+      "head": "5d31784362676e7231b5c612c458a4d8f4b5db4a",
+      "status": ""
+    }
+  },
+  "verification_tool": {
+    "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tools\\verify_wheel.py",
+    "sha256": "b875fa30b2411f31cd71a8ab08ba5e61ce7e02c110d121a9c490117e67df4ca9"
+  },
+  "checkout_edits": false,
+  "credentials_used": false,
+  "subprocess_finished": true,
+  "limits": [
+    "Current Windows installed-import behavior only; no adapter/provider/service or runtime credential-resolution qualification.",
+    "No claim for other platforms or future package/dependency versions.",
+    "No requirement for universal native syscall tracing has been added."
+  ]
+}

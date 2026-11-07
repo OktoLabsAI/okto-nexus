@@ -483,6 +483,8 @@
         "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
         "plans/agent_ops/evidence/pr10-external/final/package-proof.json",
         "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
         "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
@@ -9876,7 +9878,7 @@
     },
     "RG-06": {
       "requirement": "Core importado sem sockets/processos/credenciais; dependÃªncias entre aplicaÃ§Ãµes continuam proibidas.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
         "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
@@ -9899,12 +9901,15 @@
         "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
         "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
         "plans/agent_ops/evidence/pr04-participant-init.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/core/report.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
         "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "result": "All 131 current Core modules imported on Windows under socket/process/file/environment/native-credential guards; nine negative controls and verbatim stdout retained. Current literal/dynamic application imports stay within declared boundaries. No credential resolution or adapter execution; no universal native tracing claim.",
       "subscopes": {
         "shared_participant_contract_and_editor": "VERIFIED",
         "participant_init_review_apply_recovery_windows": "VERIFIED",
@@ -9914,12 +9919,17 @@
     },
     "RG-07": {
       "requirement": "Cliente antigo + Server novo e cliente novo + Server antigo tÃªm comportamento documentado.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/compatibility/qualification.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md"
+      ],
+      "result": "Four exact installed public-protocol version pairs qualified. Aligned Core versions accepted; old/new crossed pairs refused VERSION_INCOMPATIBLE at protocol before effects. Four uncredentialed GETs; 143/160 database tables unchanged. Documented separately from external MCP client/provider compatibility."
     },
     "RG-08": {
       "requirement": "Pacotes finais contÃªm UI, schemas, migraÃ§Ãµes e recursos necessÃ¡rios, sem depender de checkout irmÃ£o.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
         "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
@@ -9944,10 +9954,13 @@
         "plans/agent_ops/evidence/pr04-participant-init.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/payload-verification.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "result": "Current Nexus/Connector/Core wheels contain all 690/123/165 source package files, including UI, 167 migrations, 31 Core schemas and resources. Current isolated installed CI payload and declared MCP1.30 solve are verified; no sibling checkout dependency.",
       "subscopes": {
         "shared_participant_contract_and_editor": "VERIFIED",
         "participant_init_review_apply_recovery_windows": "VERIFIED",
@@ -9958,14 +9971,19 @@
     },
     "RG-09": {
       "requirement": "Campanha usa homes/workspaces temporÃ¡rios e nÃ£o modifica contas/configuraÃ§Ãµes pessoais.",
-      "status": "NOT_RUN",
+      "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
-        "pr09_optional_windows_observer_contract": "VERIFIED"
-      }
+        "pr09_optional_windows_observer_contract": "VERIFIED",
+        "current_mixed_session_protocol_and_import_campaign_isolation": "VERIFIED"
+      },
+      "result": "Recorded temporary scopes and explicit environment allowlists qualify the named mixed/session/protocol/import campaigns. RG03/RG05 inherited environment; do not generalize stronger isolation proof to them. Future authorized native/provider campaigns require their own isolation/cleanup proof."
     },
     "RG-10": {
       "requirement": "ValidaÃ§Ã£o de browser usa o backend real; snapshot/string test nÃ£o substitui interaÃ§Ã£o.",
@@ -10005,7 +10023,8 @@
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
@@ -10025,7 +10044,8 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
@@ -10035,19 +10055,24 @@
     "INV-03": {
       "requirement": "Core continua independente das aplicaÃ§Ãµes; nÃ£o recebe banco de identidades, inbox, HTTP de produto, UI ou autorizaÃ§Ã£o canÃ´nica.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-04": {
       "requirement": "Connector continua host/cliente remoto de execuÃ§Ã£o. NÃ£o passa a decidir handoffs nem a possuir inbox prÃ³pria.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-05": {
       "requirement": "PresenÃ§a, atividade, capacidade, autorizaÃ§Ã£o, tÃ©rmino do turno e conclusÃ£o do handoff sÃ£o fatos diferentes.",
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
@@ -10058,7 +10083,8 @@
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
@@ -10069,7 +10095,8 @@
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
@@ -10089,7 +10116,8 @@
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
@@ -10100,7 +10128,9 @@
     "INV-09": {
       "requirement": "Handoffs preservam claim canÃ´nico Ãºnico. MCP-only continua elegÃ­vel conforme o contrato existente, sem obrigaÃ§Ã£o de reportar capacidade externa.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-10": {
       "requirement": "Uma requisiÃ§Ã£o repetida para recuperaÃ§Ã£o mantÃ©m a identidade original. Nova tentativa produtiva exige intenÃ§Ã£o explÃ­cita e as regras canÃ´nicas.",
@@ -10112,7 +10142,8 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED"
@@ -10123,7 +10154,8 @@
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
@@ -10132,14 +10164,17 @@
     "INV-12": {
       "requirement": "NÃ£o fabricar qualificaÃ§Ã£o de harness. Suporte ao formato de configuraÃ§Ã£o MCP Ã© distinto de suporte Ã  execuÃ§Ã£o nativa.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-13": {
       "requirement": "A fonte de verdade de mensagens, handoffs, aprovaÃ§Ãµes e execuÃ§Ã£o permanece nos subsistemas atuais. Novas tabelas sÃ£o auxiliares, nÃ£o novas filas de trabalho.",
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
@@ -10157,7 +10192,8 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md"
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
@@ -10167,37 +10203,51 @@
     "INV-15": {
       "requirement": "NÃ£o aumentar a superfÃ­cie MCP indiscriminadamente. Priorizar ferramentas existentes e APIs especÃ­ficas; qualquer parÃ¢metro novo deve ter schema, testes e revisÃ£o de superfÃ­cie.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-16": {
       "requirement": "O daemon Ã© um modo de operaÃ§Ã£o do Server/Connector existente; nÃ£o cria outro domÃ­nio de execuÃ§Ã£o, fila, scheduler ou identidade de agente.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-17": {
       "requirement": "Identidade da instÃ¢ncia do serviÃ§o Ã© distinta de agent_id, workspace e sessÃ£o. Perfis que usam a mesma instÃ¢ncia nÃ£o iniciam processos concorrentes sobre seus dados.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-18": {
       "requirement": "Resolver destino local/remoto antes de iniciar processos. Falha do Server remoto nunca cria um Server local substituto.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-19": {
       "requirement": "SÃ³ existe um supervisor ativo por instÃ¢ncia. ServiÃ§o instalado Ã© acionado pelo gerenciador correspondente, sem daemon avulso concorrente.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-20": {
       "requirement": "Iniciar/reiniciar serviÃ§o nÃ£o concede autoridade nova, nÃ£o renova grants e nÃ£o repete operaÃ§Ãµes de resultado incerto. Trabalho previamente autorizado segue admissÃ£o/reconciliaÃ§Ã£o canÃ´nicas.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-21": {
       "requirement": "Fechar CLI/dashboard nÃ£o significa parar serviÃ§o ou cancelar trabalho. Parada explÃ­cita nÃ£o Ã© tratada como crash para ressuscitar a instÃ¢ncia.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-22": {
       "requirement": "Estado do processo, prontidÃ£o do serviÃ§o, conexÃ£o do harness e sucesso de uma tarefa sÃ£o provas diferentes.",
@@ -10210,7 +10260,8 @@
         "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
-        "plans/agent_ops/evidence/pr03-project-doctor.md"
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
@@ -10227,7 +10278,8 @@
         "plans/agent_ops/evidence/pr03-project-doctor-source.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
-        "plans/agent_ops/evidence/pr03-project-doctor.md"
+        "plans/agent_ops/evidence/pr03-project-doctor.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
@@ -10236,13 +10288,16 @@
     "INV-24": {
       "requirement": "Sobreviver ao terminal, reiniciar apÃ³s falha, iniciar no login e operar sem login exigem evidÃªncias separadas; nÃ£o prometer sobrevivÃªncia do processo a reboot.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-25": {
       "requirement": "O caminho padrÃ£o de conexÃ£o e uso cotidiano Ã© completo pelo terminal, incluindo decisÃµes com autoridade vÃ¡lida. PolÃ­tica organizacional explicitamente preexistente continua obrigatÃ³ria; a configuraÃ§Ã£o padrÃ£o nova nÃ£o introduz dependÃªncia do dashboard.",
       "status": "NOT_VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ]
     },
     "INV-26": {
@@ -10258,7 +10313,8 @@
         "plans/agent_ops/evidence/pr03-preset-evolution-source.xml",
         "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
         "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
-        "plans/agent_ops/evidence/pr03-preset-evolution.md"
+        "plans/agent_ops/evidence/pr03-preset-evolution.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
@@ -10271,13 +10327,16 @@
     "INV-27": {
       "requirement": "O preset preserva instruÃ§Ãµes, modelo, ferramentas e limites efetivos do harness quando suportados e verificÃ¡veis. IntegraÃ§Ã£o com Nexus nÃ£o remove sandbox, nÃ£o desabilita perguntas nativas nem concede administraÃ§Ã£o global.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "INV-28": {
       "requirement": "ServiÃ§o ativo ou sessÃ£o pronta nÃ£o encerram M1: solicitar trabalho, decidir pedidos autorizados e recuperar resultados pelo terminal precisam estar demonstrados no caminho escolhido.",
       "status": "NOT_VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ]
     }
   },
@@ -10285,7 +10344,11 @@
     "AC-01": {
       "requirement": "Cada tarefa obrigatÃ³ria tem implementaÃ§Ã£o ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ]
     },
     "AC-02": {
       "requirement": "As frentes SVC, DX, ATN e OBS respeitam suas dependÃªncias e funcionam de modo combinado; Herdr continua opcional.",
@@ -10294,7 +10357,11 @@
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr10-correlation.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
       ],
       "subscopes": {
         "pr08_external_observation_server_contract": "VERIFIED",
@@ -10304,21 +10371,27 @@
     "AC-03": {
       "requirement": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
+      ]
     },
     "AC-04": {
       "requirement": "A central oferece aÃ§Ãµes reais e autorizadas, sem virar fonte paralela de lifecycle.",
       "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/pr07-attention-ui.md",
-        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
-        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
         "plans/agent_ops/evidence/pr07-attention-ui-contracts-installed.xml",
-        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-frontend-final.xml",
         "plans/agent_ops/evidence/pr07-attention-ui-http-smoke-installed.json",
-        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-reports.json",
+        "plans/agent_ops/evidence/pr07-attention-ui-wheel.json",
+        "plans/agent_ops/evidence/pr07-attention-ui.md",
+        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json",
         "plans/agent_ops/evidence/pr07-attention-ui/native-initial-results.json",
-        "plans/agent_ops/evidence/pr07-attention-ui/final-results.json"
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr10-correlation.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "result": "Real canonical operator decisions and verification are reached through shared controls; attention preferences and reads create no parallel productive lifecycle. Native transport qualification uses synthetic peers."
     },
@@ -10354,7 +10427,9 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
@@ -10369,7 +10444,11 @@
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
       ],
       "subscopes": {
         "pr08_external_observation_server_contract": "VERIFIED",
@@ -10378,7 +10457,7 @@
     },
     "AC-07": {
       "requirement": "Core e Connector preservam suas fronteiras e o conjunto de dependÃªncias Ã© reproduzÃ­vel.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/artifact-manifest.json",
@@ -10402,6 +10481,15 @@
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/core/report.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/payload-verification.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/core/application-import-boundaries.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/ci/installed.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md"
       ],
@@ -10409,12 +10497,14 @@
         "remote_setup_installed_contract": "VERIFIED",
         "remote_renewal_installed_contract": "VERIFIED",
         "current_ci_pins_and_declared_dependency_solve": "VERIFIED"
-      }
+      },
+      "result": "Current installed Windows dependencies resolve with MCP1.30 and pip check; exact coordinated pins/payloads and Core/Nexus/Connector import boundaries are qualified. Historical browser environment is not used as dependency-solve evidence."
     },
     "AC-08": {
       "requirement": "DocumentaÃ§Ã£o, schemas e ajuda da CLI descrevem o comportamento realmente entregue.",
       "status": "NOT_VERIFIED",
       "evidence": [
+        "plans/agent_ops/campaigns/windows-user-service.md",
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/artifact-manifest.json",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/connector/installed.xml",
@@ -10437,6 +10527,8 @@
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
         "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml",
@@ -10447,7 +10539,8 @@
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
@@ -10461,28 +10554,7 @@
       "requirement": "Testes nÃ£o executados estÃ£o nomeados; nenhuma fixture Ã© apresentada como campanha de provedor ou plataforma real.",
       "status": "NOT_VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
-        "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml",
-        "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
-        "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
-        "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md",
-        "plans/agent_ops/evidence/pr08-observations-tests.json",
-        "plans/agent_ops/evidence/pr08-observations.md",
-        "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
-      ],
-      "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED",
-        "pr08_external_observation_server_contract": "VERIFIED",
-        "pr09_optional_windows_observer_contract": "VERIFIED"
-      }
-    },
-    "AC-10": {
-      "requirement": "NÃ£o hÃ¡ segredo em artefatos, logs, exemplos, URLs ou configuraÃ§Ãµes exportadas.",
-      "status": "NOT_VERIFIED",
-      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
         "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml",
@@ -10494,10 +10566,40 @@
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "subscopes": {
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "pr08_external_observation_server_contract": "VERIFIED",
+        "pr09_optional_windows_observer_contract": "VERIFIED"
+      }
+    },
+    "AC-10": {
+      "requirement": "NÃ£o hÃ¡ segredo em artefatos, logs, exemplos, URLs ou configuraÃ§Ãµes exportadas.",
+      "status": "NOT_VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+        "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
+        "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
+        "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr09-herdr.md",
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/classifications.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/corrections.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+        "plans/agent_ops/evidence/r3-public-artifact-review/scan-after.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/verification.json"
       ],
       "subscopes": {
@@ -10511,17 +10613,30 @@
     "AC-11": {
       "requirement": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisÃ£o e resultado, sem dashboard obrigatÃ³rio nem terminal exclusivo para manter o serviÃ§o.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+      ]
     },
     "AC-12": {
       "requirement": "InicializaÃ§Ã£o concorrente reutiliza a instÃ¢ncia correta; perfil remoto nÃ£o cria Server local e nÃ£o hÃ¡ supervisores concorrentes.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ]
     },
     "AC-13": {
       "requirement": "ServiÃ§o do usuÃ¡rio foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execuÃ§Ã£o validados.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/campaigns/windows-user-service.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ]
     },
     "AC-14": {
       "requirement": "Restart, suspensÃ£o e queda de conexÃ£o preservam contratos de autoridade, ownership e incerteza, sem repetiÃ§Ã£o produtiva implÃ­cita.",
@@ -10536,7 +10651,9 @@
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
       ],
       "subscopes": {
         "pr09_optional_windows_observer_contract": "VERIFIED",
@@ -10546,12 +10663,20 @@
     "AC-15": {
       "requirement": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnÃ³stico inicie daemon ou inferÃªncia.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ]
     },
     "AC-16": {
       "requirement": "O agente padrÃ£o tem identidade persistente, perfil generalista Ãºtil e coordenaÃ§Ã£o no escopo aprovado; preserva limites efetivos do harness e nÃ£o recebe administraÃ§Ã£o global ou poder de aprovar seus prÃ³prios pedidos.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ]
     },
     "AC-17": {
       "requirement": "Reconnect, atualizaÃ§Ã£o e abertura posterior da interface preservam a configuraÃ§Ã£o e a identidade; personalizaÃ§Ã£o Ã© opcional e o uso padrÃ£o continua completo pelo terminal.",
@@ -10564,7 +10689,9 @@
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
-        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json"
+        "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "remote_renewal_installed_contract": "VERIFIED"
@@ -10711,6 +10838,18 @@
         "plans/agent_ops/evidence/r3-public-artifact-review/classifications.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/verification.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/artifact-manifest.json"
+      ]
+    },
+    "r3_compatibility_import_packaging": {
+      "status": "VERIFIED",
+      "protocol_pairs": 4,
+      "imported_core_modules": 131,
+      "negative_controls": 9,
+      "product_changed": false,
+      "scope": "Current Windows installed protocol/import/package boundaries; not global acceptance",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json"
       ]
     }
   },
@@ -11517,6 +11656,16 @@
         "plans/agent_ops/evidence/r3-public-artifact-review/classifications.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/verification.json",
         "plans/agent_ops/evidence/r3-public-artifact-review/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "Qualified four installed old/new protocol pairs, 131 guarded Core imports with nine negative controls, and complete 690/123/165 package payloads. RG06/07/08 and AC07 verified in current Windows scope. Documentation now states version refusals and points to the current unexecuted service proposal. Read-only trace inventory linked; RG09, AC09/10 and real M1/M2 remain open; task/scenario reconciliation proceeds without reruns.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json"
       ]
     }
   ]

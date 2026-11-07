@@ -5,8 +5,16 @@ usuário. Esta campanha usa os candidatos já testados e instalados em venv limp
 Não substitui os aceites de login/logout, reboot, crash, credenciais ou trabalho
 produtivo do plano R3.
 
-O snapshot revisável está em `../evidence/pr02-native-campaign-plan.json` e no
-arquivo temporário apontado nele. Ele fixa o executável instalado, diretórios
+O snapshot vigente está em
+[`native-service-campaign-proposal.json`](../evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json),
+SHA-256 `fbf8644cf836886bc7bac596211a783d6090e79077c643b1d2a627c87a3a37e3`.
+Foi preparado com os wheels atuais Nexus 0.3.3, Connector 0.0.12 e Core 0.0.14,
+MCP 1.30.0 e `pip check` aprovado. Seus 24 comandos continuam **não autorizados
+e não executados**; a preparação registrou apenas verificações passivas.
+`../evidence/pr02-native-campaign-plan.json` permanece como snapshot histórico,
+sem autorizar uso dos artefatos anteriores.
+
+O snapshot vigente fixa o executável instalado, diretórios
 descartáveis, porta loopback, versões, nomes exatos das duas tarefas e cada argv.
 A preparação consultou a ausência desses nomes no Task Scheduler sem criar
 tarefas nem dados de aplicação. Somente o diretório da campanha foi reservado.
