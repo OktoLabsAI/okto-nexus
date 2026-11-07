@@ -664,3 +664,14 @@ com oráculo de DTO incorreto foi preservada. Não houve provedor, modelo,
 credencial pessoal, adaptador nativo novo ou alteração de produto.
 O handoff separadamente consentido de DX08 e a campanha M1 continuam abertos.
 Evidência: `plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json`.
+
+## 2026-11-07 — smoke de cooperação com dois clientes
+
+DX-08 verificado com Inspector/FastMCP e TerminalCooperation/CooperationFiles
+reais: troca dirigida, consentimento separado do handoff, claim/epoch e resultado
+canônicos. Consentimento errado/antecipado não cria efeitos. Reconstituir a
+fachada recupera os mesmos IDs sem novas chamadas produtivas. Dois casos passaram
+na fonte e nos pacotes instalados: um novo e o caso AC03 requalificado porque o
+helper compartilhado mudou. Não houve produto, modelo, credencial pessoal ou
+serviço nativo alterado. M1 e launcher/cofre de DX04 continuam separados.
+Evidência: `plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json`.

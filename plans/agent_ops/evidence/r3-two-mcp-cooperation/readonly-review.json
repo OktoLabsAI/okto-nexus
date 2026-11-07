@@ -1,0 +1,35 @@
+{
+  "scope": "Read-only final DX08 existing-client cooperation review",
+  "reviewer": "ac03_review",
+  "inputs": {
+    "tests/execution_r4/test_two_existing_mcp_clients.py": "fb32d2ec1e4e4208bc0a33cb9128ed12cec5aa6577ff72038be90dd3b32b9812",
+    "tests/execution_r4/test_two_existing_mcp_cooperation.py": "7579bf180d521a2d1d2fa1d70cbbe95dcc0385b4c00303f1c9d15f1923a0bf1b"
+  },
+  "tests_executed_by_reviewer": 0,
+  "product_edits_by_reviewer": 0,
+  "blocking_findings": [],
+  "resolved_before_execution": [
+    {
+      "finding": "Inspector discover called envelope() while a later const envelope in the same try block shadowed the function and created a temporal dead zone.",
+      "original_client_sha256": "2bbe73fb08294a2d42b1d1d6f8c69beb9956bcbebf555de1dfd2190ab95828c6",
+      "correction": "Renamed the helper unwrapEnvelope; current discover calls that distinct binding."
+    }
+  ],
+  "checked_contracts": [
+    "Tool schema and nexus_info discovery retain the required coordination request, passive observation and cooperation fields.",
+    "Driver tool responses use field allowlists; session_secret stays in the client process and credentials enter over stdin.",
+    "Wrong or premature exchange/handoff consent is refused with REVIEW_REQUIRED before recorded port calls or canonical effects.",
+    "Exchange and handoff revisions differ; exchange consent cannot authorize handoff creation.",
+    "Real peer handoff_claim returns its owner and strict positive integer claim_epoch; handoff_complete receives that epoch and explicit non-null synthetic result.",
+    "Canonical SQL confirms one COMPLETED handoff, exact owner/epoch and exact nonempty result; three request receipts cover exchange/reply/handoff.",
+    "A reconstructed facade/checkpoint recovers the original IDs, adds no productive port call and leaves canonical effects unchanged.",
+    "ExitStack attempts every owned client and Server cleanup even when a callback raises; normal close requires exit0 and canonical Server stop closes the listener."
+  ],
+  "limits": [
+    "Static source review only. Source and installed qualification results belong to the executing agents, not this reviewer.",
+    "Recovery here reconstructs facade and durable checkpoints; it is not a real process-crash campaign.",
+    "Empty execution binding snapshots prove no binding was introduced, not preservation of an active productive binding.",
+    "Inspector uses distributed programmatic client modules, not its CLI credential header forwarding route.",
+    "No model inference, personal vault, native service registration, provider credential access, or M1 acceptance is claimed."
+  ]
+}

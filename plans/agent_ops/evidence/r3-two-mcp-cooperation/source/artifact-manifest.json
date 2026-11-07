@@ -1,0 +1,89 @@
+{
+  "public_allowlist": [
+    {
+      "path": "run_source.py",
+      "sha256": "5daf577b00d58ef3b5ac3a912c9209bbea1e5bd6e7d545222ad15f46185f7bc3",
+      "bytes": 3534
+    },
+    {
+      "path": "source-launcher.py",
+      "sha256": "09c47b530723614bd2567ac77b5ec6537dfb0abc7a9b559d78300f786698efa9",
+      "bytes": 264
+    },
+    {
+      "path": "selectors.json",
+      "sha256": "9cb4aa1b97a44fca3b963c210786a4c19f746732e4dfd09931c5288fb5ab43c0",
+      "bytes": 356
+    },
+    {
+      "path": "distributed-module-inputs.json",
+      "sha256": "abe41d0b023f7eca79cd24417eaa3181350131a21be002354efabecffc980df3",
+      "bytes": 4278
+    },
+    {
+      "path": "curate.py",
+      "sha256": "3489ca8386b5dfec73f8471e7bd8061dd7d01320a20c80e7101a8d54c1d28f08",
+      "bytes": 5262
+    },
+    {
+      "path": "summary.json",
+      "sha256": "dc1cd829f739bce41d765f7b8269c40812a294075dda716f0307f519125ebb2c",
+      "bytes": 2854
+    },
+    {
+      "path": "source-initial/result.json",
+      "sha256": "70c9fb9b9b89a1b74ac0418d76491bcec31070bdfa7dc0e79d739e4d2be88183",
+      "bytes": 2654
+    },
+    {
+      "path": "source-initial/tests.xml",
+      "sha256": "2191235f22b06212ea9a89c8ccb02688b074ecec3b05c4af9264def45870df93",
+      "bytes": 603
+    },
+    {
+      "path": "source-initial/stdout.log",
+      "sha256": "dc9ebb474f973b8e6c7e4fe2d0f21f62eb8d83ec4cbf1913b1dd25a42b4259d2",
+      "bytes": 791
+    },
+    {
+      "path": "source/tests/execution_r4/test_two_existing_mcp_clients.py",
+      "sha256": "fb32d2ec1e4e4208bc0a33cb9128ed12cec5aa6577ff72038be90dd3b32b9812",
+      "bytes": 20216
+    },
+    {
+      "path": "source/tests/execution_r4/test_two_existing_mcp_cooperation.py",
+      "sha256": "7579bf180d521a2d1d2fa1d70cbbe95dcc0385b4c00303f1c9d15f1923a0bf1b",
+      "bytes": 11459
+    },
+    {
+      "path": "proofs/test_existing_clients_complete0/public-cooperation-proof.json",
+      "sha256": "5d726c3b5ef5dd4cf785b9deafdb2cafa9ea76126530780f8723279e384ff271",
+      "bytes": 1090
+    },
+    {
+      "path": "proofs/test_existing_clients_complete0/owner-proofs.json",
+      "sha256": "c6fea8ece250294bf22eb0a7f9ae6366949e43235161bd2fe2179eb9de80e6d9",
+      "bytes": 289
+    },
+    {
+      "path": "proofs/test_inspector_and_fastmcp_par0/public-client-proof.json",
+      "sha256": "ec8461f181ea8bb3188781ed1c9a78af5d46029dd4d2b1be4302d433c81b26a1",
+      "bytes": 969
+    },
+    {
+      "path": "proofs/test_inspector_and_fastmcp_par0/owner-proofs.json",
+      "sha256": "1cdca96672b1c0a04eae81ea35f862254752af3a2a18b7a71612d1a871dd64a1",
+      "bytes": 289
+    }
+  ],
+  "excluded": [
+    "runtime homes",
+    "DBs",
+    "private stderr",
+    "server logs",
+    "credentials",
+    "client dependency directories"
+  ],
+  "product_changes": 0,
+  "ledger_edits": 0
+}

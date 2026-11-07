@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T12:42:56.529826+00:00",
+  "updated_at": "2026-11-07T12:57:23.815973+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -3747,7 +3747,7 @@
     },
     "DX-08": {
       "title": "smoke de cooperação",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-03",
         "PR-04"
@@ -3777,6 +3777,7 @@
         "src/okto_nexus/application/terminal_cooperation.py",
         "tests/execution_r4/test_cooperation_cli.py",
         "tests/execution_r4/test_two_existing_mcp_clients.py",
+        "tests/execution_r4/test_two_existing_mcp_cooperation.py",
         "tests/test_cooperation_reply_read.py",
         "tests/test_frente1_resources.py",
         "tests/test_terminal_cooperation.py",
@@ -3807,12 +3808,18 @@
         "plans/agent_ops/evidence/pr04-cooperation-wheel-initial.json",
         "plans/agent_ops/evidence/pr04-cooperation-wheel.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
-        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/installed/canonical/tests.xml"
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json"
       ],
-      "result": "TerminalCooperation exige consentimento separado para troca dirigida e handoff, persiste IDs antes de enviar, observa reply/claim/resultado canônicos e preserva incerteza. Doctor lê histórico sem qualificá-lo como fato atual. Mecanismo e prova canônica estão exercitados; o smoke real de cooperação M2 continua NOT_RUN. Nenhuma nova falha concreta do mecanismo encontrada. AC03 now separately proves directed exchange and reconnect through two existing MCP clients; a separately consented handoff through the optional smoke facade remains unqualified.",
+      "result": "Existing Inspector and FastMCP clients complete TerminalCooperation directed exchange and separately consented handoff over real TCP. Wrong or premature consent has no effects. Peer claim_epoch and non-null result are canonical. CooperationFiles checkpoints reconstruct the facade and recover original IDs without another productive call or changed database effects.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Complete the optional separately consented handoff smoke with the qualified external clients. The plan requires the canonical chain, not a model-generated marker; no paid-provider requirement is inferred for DX08 itself."
+        "Scripted real distributed MCP clients and synthetic non-null result; no model or paid provider.",
+        "Facade/checkpoint reconstruction, not a new process-crash qualification.",
+        "Bindings are empty and stay empty; no preexisting productive binding preservation is claimed.",
+        "The shared client driver changed, so the prior AC03 participation case was rerun together with the new DX08 case.",
+        "No credential launcher/vault chain, native scheduled task, M1 or full M2 acceptance is inferred."
       ],
       "subscopes": {
         "separate_exchange_and_handoff_consent_installed": "VERIFIED",
@@ -3823,14 +3830,14 @@
         "passive_current_observation_and_historical_inspection": "VERIFIED",
         "doctor_historical_evidence_separation": "VERIFIED",
         "cli_scope_json_exits_and_current_authentication": "VERIFIED",
-        "qualified_external_client_cooperation": "NOT_RUN",
+        "qualified_external_client_cooperation": "VERIFIED",
         "productive_m1_m2_acceptance": "NOT_RUN",
         "two_existing_clients_directed_exchange": "VERIFIED"
       },
       "reconciliation": {
         "superseded_text": "Não confundir NEXUS_CONNECTION_OK gerenciado ou texto gerado com a cadeia de cooperação nova.",
-        "current_scope": "Mecanismo e prova canônica estão exercitados; o smoke real de cooperação M2 continua NOT_RUN. Nenhuma nova falha concreta do mecanismo encontrada.",
-        "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+        "current_scope": "Existing Inspector and FastMCP clients complete TerminalCooperation directed exchange and separately consented handoff over real TCP. Wrong or premature consent has no effects. Peer claim_epoch and non-null result are canonical. CooperationFiles checkpoints reconstruct the facade and recover original IDs without another productive call or changed database effects.",
+        "evidence": "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json"
       }
     },
     "DX-09": {
@@ -11258,7 +11265,8 @@
       "qualification_limit": "Não se usa task.status como prova nem se exige campanha M1 para testes puramente contratuais.",
       "remaining": [
         "BASE-06, plano245: medir instalação até primeira sessão útil permanece NOT_RUN; 7.811s é liveness foreground e não essa medida.",
-        "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-08 smoke com handoff consentido e DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada."
+        "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada.",
+        "Other mandatory real campaign evidence remains pending in the individually named task records; DX08 consented handoff smoke is now qualified."
       ]
     },
     "AC-02": {
@@ -11296,7 +11304,9 @@
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-two-existing-mcp-clients/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-two-existing-mcp-clients/installed/canonical/tests.xml",
-        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json"
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json",
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json"
       ],
       "result": "MCP Inspector0.21.2 programmatic distributed client (TypeScript SDK1.29.0) and FastMCP2.14.7 (Python SDK1.30.0) each establish useful sessions over real TCP, exchange and acknowledge a correlated directed request/reply, then reconnect without new identities or sessions. Actual installed Server exits canonically. No native adapter or model is involved.",
       "qualification_limit": [
@@ -11945,6 +11955,17 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json",
         "plans/agent_ops/evidence/r3-two-existing-mcp-clients/artifact-manifest.json"
+      ]
+    },
+    "r3_two_mcp_cooperation": {
+      "status": "VERIFIED",
+      "source_cases": 2,
+      "installed_cases": 2,
+      "new_unique_cases": 1,
+      "requalified_existing_cases": 1,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json",
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/artifact-manifest.json"
       ]
     }
   },
@@ -12849,6 +12870,15 @@
       "summary": "AC03 qualified with Inspector and FastMCP real TCP participation/reconnect;1source+1installed PASS. DX08 handoff and M1 remain separate.",
       "evidence": [
         "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Two-client consented cooperation",
+      "status": "VERIFIED",
+      "summary": "DX08 verified with separately consented canonical handoff; AC03 helper extension requalified.2source+2installed PASS, one new case, no provider/product change.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json"
       ]
     }
   ]

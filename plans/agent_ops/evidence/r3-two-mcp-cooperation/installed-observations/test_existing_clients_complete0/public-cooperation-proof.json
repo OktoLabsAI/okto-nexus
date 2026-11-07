@@ -1,0 +1,34 @@
+{
+  "clients": [
+    {
+      "client": "@modelcontextprotocol/inspector",
+      "version": "0.21.2",
+      "sdk": "1.29.0"
+    },
+    {
+      "client": "fastmcp",
+      "version": "2.14.7",
+      "sdk": "1.30.0"
+    }
+  ],
+  "smoke_id": "smoke_d781e3defcf145d68daaaaaf576780b7",
+  "message_id": "msg_6680ff750e094cbd93babaf2f7908229",
+  "reply_message_id": "msg_3cb11ac8749447b2a583c09be808dc19",
+  "handoff_id": "hof_b3678c2c2db7448983ce7b3e0dfd5fa8",
+  "claim_epoch": 1,
+  "separate_consents": true,
+  "wrong_consent_refused": true,
+  "result_verified_in_canonical_table": true,
+  "resumed_same_ids": true,
+  "productive_calls": [
+    "message_create",
+    "handoff_create"
+  ],
+  "identities_and_bindings_unchanged": true,
+  "runtime_operations": 0,
+  "qualification": "Distributed clients with real facade/TCP/SQLite; synthetic non-null result, no model.",
+  "drivers": {
+    "inspector.mjs": "a92eaeb2cae32a671bf876dcbe8df30b41f45d458324f16722a3ab1a5c286bce",
+    "fastmcp.py": "4e1e96303213850665db49b48cea0468b82051442c525e3f8f253a550af17afa"
+  }
+}

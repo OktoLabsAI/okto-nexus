@@ -1,0 +1,58 @@
+{
+  "scope": "DX08 canonical cooperation smoke through two existing clients and the real application facade",
+  "literal_plan_line": 460,
+  "literal": "Troca dirigida e handoff explicitamente consentido; resultado válido é a cadeia canônica observada.",
+  "source_passed": 2,
+  "source_failed": 0,
+  "source_skipped": 0,
+  "first_source_attempt": true,
+  "static_preflight": "JS function/const shadow caught by root and independent reviewer before any campaign; renamed unwrapEnvelope. No product correction or executed failure.",
+  "source_cases": [
+    {
+      "node": "tests.execution_r4.test_two_existing_mcp_clients::test_inspector_and_fastmcp_participate_and_reconnect_without_duplicate_identity",
+      "seconds": "37.931",
+      "status": "passed"
+    },
+    {
+      "node": "tests.execution_r4.test_two_existing_mcp_cooperation::test_existing_clients_complete_separately_consented_handoff_and_recover_same_ids",
+      "seconds": "35.398",
+      "status": "passed"
+    }
+  ],
+  "source_inputs_unchanged": 8,
+  "distributed_modules_unchanged": 17,
+  "clients": [
+    {
+      "name": "@modelcontextprotocol/inspector",
+      "version": "0.21.2",
+      "sdk": "TypeScript1.29.0"
+    },
+    {
+      "name": "FastMCP Client",
+      "version": "2.14.7",
+      "sdk": "Python1.30.0"
+    }
+  ],
+  "contracts": [
+    "Separate exchange/handoff reviews and consents; wrong or premature consent has no canonical effect",
+    "Directed message plus correlated reply observed through canonical metadata",
+    "Exact peer claim_epoch and non-null synthetic completion result verified in handoffs",
+    "Facade reconstructed from real CooperationFiles checkpoints retains IDs/receipts and makes no extra productive calls",
+    "Same agent/session identity set; execution binding set remains empty; zero runtime operations",
+    "Both owned client processes exit0; Server canonical stop and closed listener asserted"
+  ],
+  "limits": [
+    "Windows process owner qualification only",
+    "Programmatic Inspector modules, not Inspector standalone CLI",
+    "Application facade, not a new CLI credential-launcher campaign",
+    "No model/provider, personal credentials or native adapter",
+    "Synthetic non-null handoff result, not useful model work or M1",
+    "Reconstructed facade/checkpoints, not process crash during handoff",
+    "Empty execution binding set proves no creation, not preservation of an existing managed binding"
+  ],
+  "credential_handling": "Fixture keys/session secrets stay in private stdin and process memory. Private runtime homes, DBs and stderr excluded.",
+  "installed_result": "Root performs separate installed qualification; this public bundle records source qualification only.",
+  "ledger_edits": 0,
+  "product_changes": 0,
+  "earlier_ac03_evidence_unchanged": true
+}

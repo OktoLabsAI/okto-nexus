@@ -1,0 +1,37 @@
+{
+  "returncode": 0,
+  "source_hashes_before": {
+    "tests/execution_r4/test_two_existing_mcp_clients.py": "fb32d2ec1e4e4208bc0a33cb9128ed12cec5aa6577ff72038be90dd3b32b9812",
+    "tests/execution_r4/test_two_existing_mcp_cooperation.py": "7579bf180d521a2d1d2fa1d70cbbe95dcc0385b4c00303f1c9d15f1923a0bf1b",
+    "tests/execution_r4/test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+    "src/okto_nexus/application/terminal_cooperation.py": "aad4b50308af9ab29b59e0d66d65d4e29a2bf7f52068adc4a01ada01f43e9a43",
+    "src/okto_nexus/application/terminal_coordination.py": "65920e954d88f23589b2f1806caadca7cf5077cad0e4644c260cd3fce4f39e27",
+    "src/okto_nexus/adapters/outbound/cooperation_files.py": "0131b56029aa67358ae1879eae3a604f372f411e3eb85b47e6ace4512f8b2ee0",
+    "src/okto_nexus/adapters/outbound/coordination_files.py": "4720ba7d59785797cbcc6b0a677e55f785b5fc6b4089a31c5becee60c2f3e13a",
+    "src/okto_nexus/application/handoff.py": "ddd4512c4b381fa257941c79e1fdabedc7a069d00a785d910973f952b78b453e"
+  },
+  "source_hashes_after": {
+    "tests/execution_r4/test_two_existing_mcp_clients.py": "fb32d2ec1e4e4208bc0a33cb9128ed12cec5aa6577ff72038be90dd3b32b9812",
+    "tests/execution_r4/test_two_existing_mcp_cooperation.py": "7579bf180d521a2d1d2fa1d70cbbe95dcc0385b4c00303f1c9d15f1923a0bf1b",
+    "tests/execution_r4/test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+    "src/okto_nexus/application/terminal_cooperation.py": "aad4b50308af9ab29b59e0d66d65d4e29a2bf7f52068adc4a01ada01f43e9a43",
+    "src/okto_nexus/application/terminal_coordination.py": "65920e954d88f23589b2f1806caadca7cf5077cad0e4644c260cd3fce4f39e27",
+    "src/okto_nexus/adapters/outbound/cooperation_files.py": "0131b56029aa67358ae1879eae3a604f372f411e3eb85b47e6ace4512f8b2ee0",
+    "src/okto_nexus/adapters/outbound/coordination_files.py": "4720ba7d59785797cbcc6b0a677e55f785b5fc6b4089a31c5becee60c2f3e13a",
+    "src/okto_nexus/application/handoff.py": "ddd4512c4b381fa257941c79e1fdabedc7a069d00a785d910973f952b78b453e"
+  },
+  "inputs_unchanged": true,
+  "distributed_module_changes": [],
+  "cases": [
+    {
+      "node": "tests.execution_r4.test_two_existing_mcp_clients::test_inspector_and_fastmcp_participate_and_reconnect_without_duplicate_identity",
+      "seconds": "37.931",
+      "status": "passed"
+    },
+    {
+      "node": "tests.execution_r4.test_two_existing_mcp_cooperation::test_existing_clients_complete_separately_consented_handoff_and_recover_same_ids",
+      "seconds": "35.398",
+      "status": "passed"
+    }
+  ]
+}

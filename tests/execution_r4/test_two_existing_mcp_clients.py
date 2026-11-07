@@ -37,6 +37,12 @@ const {connect,disconnect,listTools,callTool} = await load(path.join(root,'cli/b
 const {createTransport} = await load(path.join(root,'cli/build/transport.js'));
 let client, transport, session;
 const emit = value => process.stdout.write(JSON.stringify(value)+'\n');
+const pick = (data,keys) => Object.fromEntries(keys.filter(k=>k in data).map(k=>[k,data[k]]));
+function unwrapEnvelope(result) {
+  const value=result.structuredContent || JSON.parse(result.content.find(c=>c.type==='text').text);
+  if(result.isError || !value.ok) throw new Error('Canonical tool refused');
+  return value.data;
+}
 async function open() {
   client = new Client({name:info.name,version:info.version});
   transport = createTransport({transportType:'http',url:config.url,
@@ -45,15 +51,28 @@ async function open() {
 }
 function publicData(name, data) {
   if(name === 'session_open') session = data;
+  if(name === 'nexus_info') return pick(data,['coordination_requests','coordination_observation','coordination_cooperation']);
+  if(name === 'event_cursor') return pick(data,['cursor']);
+  if(name === 'event_wait') return pick(data,['next_cursor']);
+  if(name === 'message_status') return {...pick(data,['message_id','count','replies_truncated']),
+    deliveries:data.deliveries.map(d=>pick(d,['recipient','status'])),
+    replies:data.replies.map(r=>pick(r,['message_id','parent_message_id','workspace_id','from_agent_id',
+      'target','delivery_status','authority_kind','runtime_outcome','created_at','read_at']))};
+  if(name === 'handoff_get') return pick(data,['handoff_id','workspace_id','from_agent_id','target',
+    'status','claimed_by','claim_epoch','result']);
   if(name === 'inbox_pull') return {messages:data.messages.map(m => ({
     message_id:m.message_id,from_agent_id:m.from_agent_id,parent_message_id:m.parent_message_id,
     workspace_id:m.workspace_id,body:m.body}))};
   const keys=['session_id','agent_id','workspace_id','status','message_id','recipients',
-    'delivered_count','acknowledged','read_message_ids'];
-  return Object.fromEntries(keys.filter(k=>k in data).map(k=>[k,data[k]]));
+    'delivered_count','acknowledged','read_message_ids','handoff_id'];
+  const value=pick(data,keys);
+  if(['message_create','handoff_create','coordination_request_get'].includes(name) && data.request_receipt)
+    value.request_receipt=pick(data.request_receipt,['server_id','actor_agent_id','workspace_id','operation',
+      'client_request_id','state','resource_id','approval_id','created_at','expires_at']);
+  return value;
 }
 function argsFor(name, args) {
-  if(['inbox_pull','inbox_ack'].includes(name))
+  if(['inbox_pull','inbox_ack','handoff_create'].includes(name))
     return {...args,session_id:session.session_id,session_secret:session.session_secret};
   if(name === 'message_create')
     return {...args,from_session_id:session.session_id,session_secret:session.session_secret};
@@ -74,6 +93,13 @@ try {
         if(cmd.method === 'stop') {await disconnect(transport);emit({ok:true});break;}
         if(cmd.method === 'reconnect') {await disconnect(transport);await open();emit({ok:true});continue;}
         if(cmd.method === 'list') {emit({ok:true,tools:(await listTools(client)).tools.map(t=>t.name)});continue;}
+        if(cmd.method === 'discover') {
+          const names=['message_create','handoff_create','coordination_request_get','message_status',
+            'handoff_get','event_cursor','event_wait','nexus_info'];
+          const tools=(await listTools(client)).tools.filter(t=>names.includes(t.name));
+          const info=publicData('nexus_info',unwrapEnvelope(await callTool(client,'nexus_info',{})));
+          emit({ok:true,data:{schemas:Object.fromEntries(tools.map(t=>[t.name,t.inputSchema])),info}});continue;
+        }
         const result=await callTool(client,cmd.name,argsFor(cmd.name,cmd.args||{}));
         const envelope=result.structuredContent || JSON.parse(result.content.find(c=>c.type==='text').text);
         if(result.isError || !envelope.ok) {emit({ok:false,code:envelope.error?.code||'TOOL_FAILED'});continue;}
@@ -104,7 +130,7 @@ session=None
 def emit(value):
     print(json.dumps(value),flush=True)
 def args_for(name,args):
-    if name in ('inbox_pull','inbox_ack'):
+    if name in ('inbox_pull','inbox_ack','handoff_claim','handoff_complete'):
         return dict(args,session_id=session['session_id'],session_secret=session['session_secret'])
     if name=='message_create':
         return dict(args,from_session_id=session['session_id'],session_secret=session['session_secret'])
@@ -119,7 +145,7 @@ def public_data(name,data):
         return {'messages':[{k:m.get(k) for k in ('message_id','from_agent_id',
             'parent_message_id','workspace_id','body')} for m in data['messages']]}
     keys=('session_id','agent_id','workspace_id','status','message_id','recipients',
-          'delivered_count','acknowledged','read_message_ids')
+          'delivered_count','acknowledged','read_message_ids','handoff_id','claimed_by','claim_epoch','result')
     return {k:data[k] for k in keys if k in data}
 def make_client():
     return Client(StreamableHttpTransport(config['url'],auth=BearerAuth(config['token'])),
