@@ -1,0 +1,33 @@
+{
+  "scope": "Final read-only AC03 test oracle and cleanup review",
+  "reviewer": "ac03_review",
+  "reviewed_test": "tests/execution_r4/test_two_existing_mcp_clients.py",
+  "reviewed_test_sha256": "1b8bee3d7601bcf7d9b7793af521cfd13e7a4f69ae8bb946943ad15b80c5429c",
+  "blocking_findings": [],
+  "tests_executed_by_reviewer": 0,
+  "product_edits_by_reviewer": 0,
+  "checks": [
+    "Exact Inspector and FastMCP client/version identities are asserted; sessions and tools travel over actual loopback MCP transports when the test runs.",
+    "session_open and heartbeat assert canonical active status; identities and sessions remain stable across transport reconnect.",
+    "Inspector to FastMCP request and reverse reply assert unique IDs, author and body in received inboxes.",
+    "Inbox does not promise parent_message_id; canonical messages rows prove the reply parent, both authors, workspace and foreign key integrity.",
+    "Before/after agent identities and execution binding rows agree; productive runtime sessions and operations remain zero.",
+    "Private bearer and session secret remain in in-memory driver configuration via stdin, excluded from public response allowlists.",
+    "Client constructor failures abort their own retained process handle; normal close requires exit0 even for already exited processes.",
+    "Final cleanup attempts every client and the Server; successful completion requires canonical Server stop and closed listener."
+  ],
+  "limits": [
+    "This is static review, not an independently executed source or installed PASS.",
+    "Root reported one final source PASS; installed qualification is root-owned and was still running when review was requested.",
+    "Inspector qualification is its distributed programmatic client modules, not a claim about safely passing bearer credentials via the Inspector CLI.",
+    "Empty execution binding snapshots prove absence of new binding effects, not preservation of a productive runtime binding.",
+    "No model inference, personal vault, provider authorization, native service registration, or M1 acceptance follows from AC03 participation."
+  ],
+  "inputs": {
+    "tests/execution_r4/test_two_existing_mcp_clients.py": "1b8bee3d7601bcf7d9b7793af521cfd13e7a4f69ae8bb946943ad15b80c5429c",
+    "tests/execution_r4/test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+    "src/okto_nexus/application/inbox.py": "76cd52c3c77d29f798aa2c7dc387ab05341dfbb807a4a89ca07dfe4d31fc923c",
+    "src/okto_nexus/application/identity.py": "a27d1a9b2ed035772f1d74d58a724640d1b0967c0d35c3a84d22d7811ebc1de4",
+    "src/okto_nexus/adapters/inbound/mcp/tools/messages.py": "1ce719b1cb6d478803a22ea2aeec97a717f008490baa7f3b0085cf6f7d00b54e"
+  }
+}

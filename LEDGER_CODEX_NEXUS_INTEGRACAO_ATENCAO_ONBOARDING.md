@@ -653,3 +653,14 @@ permanece pendente. Dois clientes MCP podem ter qualificação direta sem proved
 se essa capacidade for comprovada; initialize sozinho não basta. Nenhum código
 de produto, inferência ou registro nativo mudou neste milestone.
 Evidência: `plans/agent_ops/evidence/r3-acceptance-contracts/milestone.md`.
+
+## 2026-11-07 — dois clientes MCP existentes
+
+AC-03 verificado: MCP Inspector0.21.2 programático e FastMCP2.14.7 abriram
+sessões úteis, trocaram mensagem/resposta dirigida com correlação canônica e
+reconectaram sem duplicar identidades ou sessões. Um caso passou na fonte e
+no Server instalado; são duas execuções do mesmo caso. A tentativa inicial
+com oráculo de DTO incorreto foi preservada. Não houve provedor, modelo,
+credencial pessoal, adaptador nativo novo ou alteração de produto.
+O handoff separadamente consentido de DX08 e a campanha M1 continuam abertos.
+Evidência: `plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json`.

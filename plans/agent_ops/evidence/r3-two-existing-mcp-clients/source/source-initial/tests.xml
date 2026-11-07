@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="34.251" timestamp="2026-11-07T09:35:46.318612-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_two_existing_mcp_clients" name="test_inspector_and_fastmcp_participate_and_reconnect_without_duplicate_identity" time="32.196"><failure message="KeyError: 'parent_message_id'">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/ac03-client-capabilities-03khbbtj/source-initial/runtime/test_inspector_and_fastmcp_par0')
+
+    def test_inspector_and_fastmcp_participate_and_reconnect_without_duplicate_identity(tmp_path):
+        values, paths = _dependencies()
+        from okto_nexus.application.auth import AgentKeyAuthService
+    
+        server = RestartServer(tmp_path)
+        clients = []
+        try:
+            keys = {}
+            auth = AgentKeyAuthService(server.deps.repos.agents, server.deps.clock)
+            with server.deps.connection_factory.unit_of_work() as uow:
+                server.deps.repos.workspaces.upsert(uow, workspace_id='ac03-workspace', display_name='AC03 synthetic workspace')
+                for agent in ('ac03-inspector', 'ac03-fastmcp'):
+                    server.deps.repos.agents.upsert(uow, agent_id=agent, role='Synthetic MCP participant')
+                    keys[agent] = auth.issue_key(uow, agent_id=agent)
+            server.start()
+            before = _canonical(server)
+            inspector_script = tmp_path / 'inspector-client.mjs'
+            inspector_script.write_text(INSPECTOR_DRIVER, encoding='utf-8')
+            fastmcp_script = tmp_path / 'fastmcp-client.py'
+            fastmcp_script.write_text(FASTMCP_DRIVER, encoding='utf-8')
+            inspector = ExistingClient(tmp_path, 'inspector', [values['NEXUS_AC03_NODE'], str(inspector_script)],
+                dict(url=server.origin+'/mcp/', token=keys['ac03-inspector'], inspector=values['NEXUS_AC03_INSPECTOR_ROOT']), server.env)
+            clients.append(inspector)
+            fastmcp = ExistingClient(tmp_path, 'fastmcp', [values['NEXUS_AC03_PYTHON'], '-I', str(fastmcp_script)],
+                dict(url=server.origin+'/mcp/', token=keys['ac03-fastmcp'], dependency_paths=paths), server.env)
+            clients.append(fastmcp)
+            assert inspector.identity == dict(client='@modelcontextprotocol/inspector', version='0.21.2', sdk='1.29.0')
+            assert fastmcp.identity == dict(client='fastmcp', version='2.14.7', sdk='1.30.0')
+            required = {'session_open','session_heartbeat','message_create','inbox_pull','inbox_ack'}
+            sessions = {}
+            for client, agent in zip(clients, ('ac03-inspector', 'ac03-fastmcp')):
+                assert required &lt;= set(client.request('list')['tools'])
+                sessions[agent] = client.request('call', 'session_open', agent_id=agent, workspace_id='ac03-workspace')['session_id']
+            def presence():
+                with server.deps.connection_factory.unit_of_work(write=False) as uow:
+                    return [tuple(r) for r in uow.connection.execute(
+                        'SELECT agent_id,session_id,workspace_id,status FROM sessions ORDER BY agent_id')]
+            expected = [(agent, sessions[agent], 'ac03-workspace', 'active') for agent in sorted(sessions)]
+            assert presence() == expected
+            sent = inspector.request('call', 'message_create', from_agent_id='ac03-inspector',
+                workspace_id='ac03-workspace', target={'strategy':'direct','agent_id':'ac03-fastmcp'},
+                subject='AC03 directed exchange', body='Synthetic request', client_request_id='ac03-directed-request')
+            mid = sent['message_id']
+            received = fastmcp.request('call', 'inbox_pull', agent_id='ac03-fastmcp')['messages']
+            assert [m['message_id'] for m in received] == [mid]
+            assert received[0]['from_agent_id'] == 'ac03-inspector' and received[0]['body'] == 'Synthetic request'
+            fastmcp.request('call', 'inbox_ack', agent_id='ac03-fastmcp', message_ids=[mid])
+            reply = fastmcp.request('call', 'message_create', from_agent_id='ac03-fastmcp',
+                workspace_id='ac03-workspace', target={'strategy':'direct','agent_id':'ac03-inspector'},
+                parent_message_id=mid, subject='AC03 directed reply', body='Synthetic reply', client_request_id='ac03-directed-reply')
+            inbox = inspector.request('call', 'inbox_pull', agent_id='ac03-inspector')['messages']
+            correlated = [m for m in inbox if m['message_id'] == reply['message_id']]
+&gt;           assert len(correlated) == 1 and correlated[0]['parent_message_id'] == mid
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'parent_message_id'
+
+tests\execution_r4\test_two_existing_mcp_clients.py:310: KeyError</failure></testcase></testsuite></testsuites>

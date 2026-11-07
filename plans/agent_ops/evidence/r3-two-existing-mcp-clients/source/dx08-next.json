@@ -1,0 +1,36 @@
+{
+  "mode": "Read-only proposal; no additional campaign or implementation",
+  "literal": "DX-08 (plan460): optional correlated smoke, first directed exchange, then an explicitly consented handoff; proof is the observed canonical chain, not text in a model reply.",
+  "provider_requirement": "No real model/provider requirement in this predicate. These two clients now have a demonstrated direct MCP tool path; a new provider gate would come from M1, not from DX08.",
+  "existing_reuse": [
+    {
+      "path": "src/okto_nexus/application/terminal_cooperation.py",
+      "symbols": ["TerminalCooperation.__init__ (mcp, scope, save, requests)", "review_exchange", "review_handoff", "observe", "status"],
+      "behavior": "Existing versioned reviews, separate consents, request IDs, canonical message reply and claim/result observation. Do not implement a second consent or checkpoint model."
+    },
+    {
+      "path": "tests/execution_r4/test_cooperation_cli.py",
+      "node": "test_separate_consents_canonical_reply_after_other_session_ack_and_claim_result",
+      "lines": [123, 179],
+      "behavior": "Already proves facade/CLI semantics over real TCP/SQLite with a test helper peer. Missing narrow qualification is replacing the peer/client transport with the two identified distributed clients; the current AC03 test does not perform handoff."
+    }
+  ],
+  "minimal_next_test": [
+    "Reuse the frozen RestartServer and the two separate client processes. Preserve same synthetic identities/sessions and zero runtime bindings/operations.",
+    "Use the existing TerminalCooperation application facade with its existing discover/call port delegated to the distributed Inspector client. The small test bridge selects existing APIs and carries no new JSON-RPC/HTTP implementation. Use the existing checkpoint storage under Temp.",
+    "Review and explicitly approve exchange; FastMCP receives the exact directed message and produces a correlated canonical reply through message_create with its own durable client_request_id.",
+    "Observe exchange_proven. Request a separate handoff review; assert no handoff before consent and reject the exchange revision as handoff approval. Approve only the exact new handoff review revision.",
+    "FastMCP calls handoff_claim on the exact handoff, retains claim_epoch, then handoff_complete with a non-null synthetic result and that epoch. No model is involved.",
+    "Facade observe(timeout=0) must report handoff_proven with exact message/handoff/claim/result IDs. Resume/observe must not create a second handoff or identity. Product status may still label retained evidence identities_only; do not modify it to infer future liveness or M1.",
+    "Close only owned transports/Server; retain installed XML, client version/module hashes and public canonical IDs, excluding keys/session secrets/body/checkpoint secrets."
+  ],
+  "existing_cli_commands": [
+    "okto-nexus participant smoke exchange --home <Temp> --profile <existing-profile> --to <peer> --plan --json",
+    "okto-nexus participant smoke exchange --home <Temp> --profile <existing-profile> --approve <exchange-review-revision> --key-stdin --json",
+    "okto-nexus participant smoke observe --home <Temp> --profile <existing-profile> --timeout 0 --key-stdin --json",
+    "okto-nexus participant smoke handoff --home <Temp> --profile <existing-profile> --plan --key-stdin --json",
+    "okto-nexus participant smoke handoff --home <Temp> --profile <existing-profile> --approve <handoff-review-revision> --key-stdin --json"
+  ],
+  "scope_choice": "The smallest next test qualifies the existing application facade plus these two distributed clients; it must not claim a new standalone CLI credential/launcher qualification. Existing CLI contract tests remain separately cited.",
+  "status": "Proposed only; qualified_external_client_cooperation remains NOT_RUN until this handoff campaign passes. No product gap identified."
+}

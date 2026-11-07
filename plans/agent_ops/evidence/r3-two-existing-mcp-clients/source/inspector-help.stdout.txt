@@ -1,0 +1,23 @@
+Usage: inspector-cli [options] <target...>
+
+Arguments:
+  target                      Command and arguments or URL of the MCP server
+
+Options:
+  --method <method>           Method to invoke
+  --tool-name <toolName>      Tool name (for tools/call method)
+  --tool-arg <pairs...>       Tool argument as key=value pair (default: {})
+  --uri <uri>                 URI of the resource (for resources/read method)
+  --prompt-name <promptName>  Name of the prompt (for prompts/get method)
+  --prompt-args <pairs...>    Prompt arguments as key=value pairs (default: {})
+  --log-level <level>         Logging level (for logging/setLevel method)
+  --transport <type>          Transport type (sse, http, or stdio).
+                              Auto-detected from URL: /mcp → http, /sse → sse,
+                              commands → stdio
+  --header <headers...>       HTTP headers as "HeaderName: Value" pairs (for
+                              HTTP/SSE transports) (default: {})
+  --metadata <pairs...>       General metadata as key=value pairs (applied to
+                              all methods) (default: {})
+  --tool-metadata <pairs...>  Tool-specific metadata as key=value pairs (for
+                              tools/call method only) (default: {})
+  -h, --help                  display help for command

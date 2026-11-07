@@ -1,0 +1,20 @@
+{
+  "exit": 0,
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-wheel-v1\\okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-two-existing-mcp-clients\\canonical",
+    "--tests",
+    "tests/execution_r4/test_two_existing_mcp_clients.py"
+  ],
+  "cases": 1,
+  "failures": [],
+  "skips": []
+}

@@ -1,0 +1,14 @@
+{
+  "test": "tests/execution_r4/test_two_existing_mcp_clients.py",
+  "source_sha256": "1b8bee3d7601bcf7d9b7793af521cfd13e7a4f69ae8bb946943ad15b80c5429c",
+  "source_report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\ac03-client-capabilities-03khbbtj\\source-final\\tests.xml",
+  "source_report_sha256": "b0669e7c4f9b40f8156d15ba31ed7c32cb084a7ff3b7dc077c71ecaaea57091a",
+  "selectors": {
+    "NEXUS_AC03_NODE": "C:/Program Files/nodejs/node.exe",
+    "NEXUS_AC03_INSPECTOR_ROOT": "C:/Users/jpamb/AppData/Local/npm-cache/_npx/5a9d879542beca3a/node_modules/@modelcontextprotocol/inspector",
+    "NEXUS_AC03_PYTHON": "C:/Python313/python.exe",
+    "NEXUS_AC03_PYTHON_PATHS": "[\"C:/Users/jpamb/AppData/Roaming/Python/Python313/site-packages\"]"
+  },
+  "selector_sha256": "9cb4aa1b97a44fca3b963c210786a4c19f746732e4dfd09931c5288fb5ab43c0",
+  "scope": "Client code dependencies only; credentials remain synthetic and in private stdin; no provider"
+}

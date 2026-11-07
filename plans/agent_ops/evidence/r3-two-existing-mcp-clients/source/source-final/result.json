@@ -1,0 +1,18 @@
+{
+  "returncode": 0,
+  "source_hashes_before": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_two_existing_mcp_clients.py": "1b8bee3d7601bcf7d9b7793af521cfd13e7a4f69ae8bb946943ad15b80c5429c",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a"
+  },
+  "source_hashes_after": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_two_existing_mcp_clients.py": "1b8bee3d7601bcf7d9b7793af521cfd13e7a4f69ae8bb946943ad15b80c5429c",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a"
+  },
+  "inputs_unchanged": true,
+  "cases": [
+    {
+      "node": "tests.execution_r4.test_two_existing_mcp_clients::test_inspector_and_fastmcp_participate_and_reconnect_without_duplicate_identity",
+      "status": "passed"
+    }
+  ]
+}

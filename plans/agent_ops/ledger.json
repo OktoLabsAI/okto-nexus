@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T12:25:22.126905+00:00",
+  "updated_at": "2026-11-07T12:42:56.529826+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -3776,6 +3776,7 @@
         "src/okto_nexus/application/ports.py",
         "src/okto_nexus/application/terminal_cooperation.py",
         "tests/execution_r4/test_cooperation_cli.py",
+        "tests/execution_r4/test_two_existing_mcp_clients.py",
         "tests/test_cooperation_reply_read.py",
         "tests/test_frente1_resources.py",
         "tests/test_terminal_cooperation.py",
@@ -3805,12 +3806,13 @@
         "plans/agent_ops/evidence/pr04-cooperation-wheel-facade-corrected.json",
         "plans/agent_ops/evidence/pr04-cooperation-wheel-initial.json",
         "plans/agent_ops/evidence/pr04-cooperation-wheel.json",
-        "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/installed/canonical/tests.xml"
       ],
-      "result": "TerminalCooperation exige consentimento separado para troca dirigida e handoff, persiste IDs antes de enviar, observa reply/claim/resultado canônicos e preserva incerteza. Doctor lê histórico sem qualificá-lo como fato atual. Mecanismo e prova canônica estão exercitados; o smoke real de cooperação M2 continua NOT_RUN. Nenhuma nova falha concreta do mecanismo encontrada.",
+      "result": "TerminalCooperation exige consentimento separado para troca dirigida e handoff, persiste IDs antes de enviar, observa reply/claim/resultado canônicos e preserva incerteza. Doctor lê histórico sem qualificá-lo como fato atual. Mecanismo e prova canônica estão exercitados; o smoke real de cooperação M2 continua NOT_RUN. Nenhuma nova falha concreta do mecanismo encontrada. AC03 now separately proves directed exchange and reconnect through two existing MCP clients; a separately consented handoff through the optional smoke facade remains unqualified.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Executar cooperação com os clientes externos qualificados e operadores/autorização apropriados; testes atuais usam peers/atores sintéticos, não demonstram comportamento de um modelo real."
+        "Complete the optional separately consented handoff smoke with the qualified external clients. The plan requires the canonical chain, not a model-generated marker; no paid-provider requirement is inferred for DX08 itself."
       ],
       "subscopes": {
         "separate_exchange_and_handoff_consent_installed": "VERIFIED",
@@ -3822,7 +3824,8 @@
         "doctor_historical_evidence_separation": "VERIFIED",
         "cli_scope_json_exits_and_current_authentication": "VERIFIED",
         "qualified_external_client_cooperation": "NOT_RUN",
-        "productive_m1_m2_acceptance": "NOT_RUN"
+        "productive_m1_m2_acceptance": "NOT_RUN",
+        "two_existing_clients_directed_exchange": "VERIFIED"
       },
       "reconciliation": {
         "superseded_text": "Não confundir NEXUS_CONNECTION_OK gerenciado ou texto gerado com a cadeia de cooperação nova.",
@@ -11255,7 +11258,7 @@
       "qualification_limit": "Não se usa task.status como prova nem se exige campanha M1 para testes puramente contratuais.",
       "remaining": [
         "BASE-06, plano245: medir instalação até primeira sessão útil permanece NOT_RUN; 7.811s é liveness foreground e não essa medida.",
-        "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-08/AC-03 participação/cooperação e DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada."
+        "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-08 smoke com handoff consentido e DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada."
       ]
     },
     "AC-02": {
@@ -11284,20 +11287,26 @@
     },
     "AC-03": {
       "requirement": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
-        "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json"
       ],
-      "result": "Dois formatos/versões e initialize real estão retidos, e dois atores MCP sintéticos cooperam sem novas identidades. As provas não ligam os dois clientes identificados a participação canônica: o driver de cliente injeta chave em ambiente manual e não chama tools/call; RG01 usa dois atores pelo mesmo helper TestClient.",
-      "qualification_limit": "Não promover o initialize manual a cofre→launcher→cliente; isso continua separado em DX04. Não há execução nova nesta auditoria.",
-      "remaining": [
-        "Reter participação de dois clientes MCP existentes e identificados: sessões/troca dirigida pelo Server real, autenticação por identidade autorizada, contagem de identidades/bindings estável e nenhum adaptador nativo novo.",
-        "Plano399 prefere Claude Code/Codex mas não os obriga; plano454-456 e874 distinguem initialize de participação. AC03 não exige dois harnesses nativos nem inferência paga, nem exige por si só handoff concluído ou cadeia completa de cofre."
-      ]
+      "result": "MCP Inspector0.21.2 programmatic distributed client (TypeScript SDK1.29.0) and FastMCP2.14.7 (Python SDK1.30.0) each establish useful sessions over real TCP, exchange and acknowledge a correlated directed request/reply, then reconnect without new identities or sessions. Actual installed Server exits canonically. No native adapter or model is involved.",
+      "qualification_limit": [
+        "Inspector programmatic modules are qualified, not a claim that its CLI protects bearer argv.",
+        "Credentials and profiles are synthetic; neither personal vault/launcher integration nor paid inference was exercised.",
+        "No productive runtime bindings exist in this fixture: unchanged empty bindings prove no creation, not preservation of productive bindings.",
+        "AC03 participation is qualified; DX08 separately consented handoff smoke and M1 are not inferred.",
+        "Seventeen selected client module hashes are stable before/after; no complete transitive dependency lock is claimed."
+      ],
+      "remaining": []
     },
     "AC-04": {
       "requirement": "A central oferece ações reais e autorizadas, sem virar fonte paralela de lifecycle.",
@@ -11925,6 +11934,17 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-acceptance-contracts/milestone.md",
         "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json"
+      ]
+    },
+    "r3_two_existing_mcp_clients": {
+      "status": "VERIFIED",
+      "source_cases": 1,
+      "installed_cases": 1,
+      "unique_new_cases": 1,
+      "real_provider": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json",
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/artifact-manifest.json"
       ]
     }
   },
@@ -12820,6 +12840,15 @@
       "summary": "AC02/12/16/17 verified by explicit retained predicates; AC01/03/11/13/14 remain open with concrete evidence gaps. No new provider or service campaign inferred.",
       "evidence": [
         "plans/agent_ops/evidence/r3-acceptance-contracts/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Two existing MCP clients",
+      "status": "VERIFIED",
+      "summary": "AC03 qualified with Inspector and FastMCP real TCP participation/reconnect;1source+1installed PASS. DX08 handoff and M1 remain separate.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json"
       ]
     }
   ]

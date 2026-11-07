@@ -1,0 +1,31 @@
+{
+  "clients": [
+    {
+      "client": "@modelcontextprotocol/inspector",
+      "version": "0.21.2",
+      "sdk": "1.29.0"
+    },
+    {
+      "client": "fastmcp",
+      "version": "2.14.7",
+      "sdk": "1.30.0"
+    }
+  ],
+  "sessions": {
+    "ac03-inspector": "ses_a5ac28a725b34d19a523ceb1cd72a34b",
+    "ac03-fastmcp": "ses_3606750f358649e0ada35bc1b25d790b"
+  },
+  "message_ids": [
+    "msg_7569dace20ba455189dfef6fbc872686",
+    "msg_0409016949f14fd7b1daa6841d4524fc"
+  ],
+  "reconnect_same_sessions": true,
+  "identity_and_bindings_unchanged": true,
+  "runtime_operations": 0,
+  "native_adapters_added": 0,
+  "qualification": "Existing programmatic Inspector and FastMCP over real TCP; no model, vault or CLI-header claim.",
+  "drivers": {
+    "inspector-client.mjs": "dd0715b81c1e9acda860cb9ee0eb2f45d5d33c26d35d393d9efa6ed864466e2f",
+    "fastmcp-client.py": "4c29734403545af657074fe301b668eb32369032d5b8102c85532b3d75479df0"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "scope": "AC03 participation by two existing, independently distributed MCP clients; no provider or new native adapter",
+  "clients": [
+    {
+      "name": "@modelcontextprotocol/inspector",
+      "version": "0.21.2",
+      "runtime": "Node 24.15.0",
+      "protocol_stack": "@modelcontextprotocol/sdk 1.29.0, TypeScript",
+      "entrypoints": ["cli/build/client/index.js: connect, disconnect, listTools, callTool", "cli/build/transport.js: createTransport"],
+      "invocation": "node <temporary inspector-client.mjs>; private fixture input arrives on stdin",
+      "qualification": "Distributed programmatic Inspector modules, not the standalone Inspector CLI",
+      "cli_limit": "Its launcher converts config headers to --header child argv. The qualification bypasses that launcher and passes in-memory headers to the existing transport factory. It implements no JSON-RPC or HTTP client itself."
+    },
+    {
+      "name": "fastmcp",
+      "version": "2.14.7",
+      "runtime": "Python 3.13.1 with -I and explicit code/dependency paths",
+      "protocol_stack": "mcp 1.30.0, Python",
+      "entrypoints": ["fastmcp.Client", "fastmcp.client.transports.StreamableHttpTransport", "fastmcp.client.auth.BearerAuth"],
+      "invocation": "python -I <temporary fastmcp-client.py>; private fixture input arrives on stdin",
+      "qualification": "FastMCP Client programmatic API, separate process and implementation from Inspector"
+    }
+  ],
+  "minimal_flow": [
+    "Start the existing RestartServer owner helper against current selected Nexus imports and a disposable home. Local discovery is explicitly empty; no native adapter is composed.",
+    "Seed exactly two synthetic agent identities, private fixture keys and one logical workspace through existing repositories/auth service. Snapshot identities and execution bindings after real Server readiness.",
+    "Each separate client performs tools/list and session_open with its own authenticated identity. Keep session_secret only in that client process; assert two canonical active sessions.",
+    "Inspector calls message_create directed to FastMCP. FastMCP calls inbox_pull and inbox_ack, then message_create with parent_message_id replying to Inspector. Inspector receives and acknowledges the exact reply.",
+    "Disconnect/reconnect MCP transport in each client; heartbeat the same canonical session, do not reopen sessions or identities. Assert unchanged identity/binding set, canonical message correlation, and zero runtime sessions/operations.",
+    "Close clients with exit0 required, invoke the Server canonical stop and verify owner exit/listener closure. Cleanup joins all owned processes even on an assertion failure."
+  ],
+  "no_claims": [
+    "No Claude Code or Codex client participation claim",
+    "No user vault-to-client chain or protected Inspector standalone CLI claim",
+    "No model inference, useful provider work, native adapter qualification or M1",
+    "No completed DX08 handoff smoke: this flow stops at participation and directed exchange"
+  ],
+  "official_references": [
+    "https://github.com/modelcontextprotocol/inspector",
+    "https://gofastmcp.com/docs/clients/client",
+    "https://github.com/PrefectHQ/fastmcp/blob/v2.14.7/src/fastmcp/client/client.py"
+  ],
+  "local_evidence": "local-capabilities.json records exact versions, import/help return codes, and SHA256 of 17 distributed modules/metadata files. Source/installed campaign results are separate; this proposal is not an execution result.",
+  "literal_basis": "Plan399 prefers rather than mandates Claude/Codex; 454-456 distinguish MCP negotiation, participation and completed handoff; AC03 at1066 requires two tested MCP clients without a new native adapter or duplicate identity. It does not require paid inference."
+}

@@ -1,0 +1,36 @@
+{
+  "scope": "Existing Inspector programmatic client + FastMCP Client against current source Server real TCP",
+  "source_sha256": "1b8bee3d7601bcf7d9b7793af521cfd13e7a4f69ae8bb946943ad15b80c5429c",
+  "reports": {
+    "source-initial": {
+      "count": 1,
+      "passed": 0,
+      "skipped": 0,
+      "seconds": "32.196"
+    },
+    "source-final": {
+      "count": 1,
+      "passed": 1,
+      "skipped": 0,
+      "seconds": "29.728"
+    }
+  },
+  "initial_failure": "Test expected parent_message_id in inbox DTO. Production DTO omits it. Final test checks exact parent/autorship/workspace in canonical messages rows and exact reply delivery separately; no production change.",
+  "same_driver_bytes_as_import_probes": true,
+  "distributed_modules_unchanged": 17,
+  "source_and_helper_unchanged_during_each_run": true,
+  "final_owned_server_canonically_stopped": true,
+  "final_listener_closed": true,
+  "installed_qualification": "Root retains installed evidence separately at r3-cooperative-drain-09ucmgsr/nexus-two-existing-mcp-clients; this bundle contains source qualification only.",
+  "limits": [
+    "Windows owner helper",
+    "No Claude/Codex participation claim",
+    "No provider or native adapter",
+    "No user vault/client launch chain",
+    "No completed handoff smoke",
+    "Not the standalone Inspector CLI"
+  ],
+  "checkout_files_owned": [
+    "tests/execution_r4/test_two_existing_mcp_clients.py"
+  ]
+}
