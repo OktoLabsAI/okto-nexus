@@ -1,0 +1,79 @@
+{
+  "scope": "preparation_only_installed_synthetic_integration",
+  "accepted_distinct_final_cases": 14,
+  "runs": [
+    {
+      "path": "synthetic-run-00z4nw2h",
+      "role": "diagnostic_intervened_not_accepted",
+      "pytest_exit": 1,
+      "tests": 13,
+      "failures": 1,
+      "errors": 0,
+      "seconds": 249.436,
+      "inputs_unchanged": true
+    },
+    {
+      "path": "synthetic-run-ekodn597",
+      "role": "prior_13_case_pass",
+      "pytest_exit": 0,
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 87.748,
+      "inputs_unchanged": true
+    },
+    {
+      "path": "synthetic-run-gtxuhy58",
+      "role": "final_qualification",
+      "pytest_exit": 0,
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 99.763,
+      "inputs_unchanged": true
+    }
+  ],
+  "final_source_sha256": {
+    "controller.py": "1423494d75217983477dd464ffbc46bd3bc9fbde4664217fa5fa73376b35d90e",
+    "setup_journal.py": "3598363815a340d8324b7743fff42738e1bf7e936b87e4d6b1856ecaf6a927e5",
+    "test_controller.py": "2b731033860fcb83adc7bb05b55a7ad82703927a110caf95dd3afe87dea6b141",
+    "run_synthetic.py": "f1e8bf6a437e7d7506baefc2eaee89be473cf0365d830c82259b52ced8c46bc0",
+    "response_loss.py": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "token_collector.py": "10584c1675b0a6cd8f586b3b62fd9694eb5c7ac0433854f991e81c8f7eb5d574"
+  },
+  "final_input_files": 994,
+  "final_inputs_unchanged": true,
+  "final_product_shadow_modules": [],
+  "limits": {
+    "global_requests_including_setup": 6,
+    "lane_labels": 2,
+    "preventive_observed_tokens": 100000,
+    "operational_tolerance_tokens": 700000,
+    "unsettled_deadline_seconds": 120,
+    "caller_max_poll_interval_seconds": 1,
+    "final_billed_or_atomic_usage_guarantee": false
+  },
+  "qualified": [
+    "installed ASGI/SQLite/Core with synthetic native",
+    "Nexus standalone setup journal accounting",
+    "canonical work event pages",
+    "pre-effect persistence and shared reservation limit",
+    "same-ID response-loss recovery",
+    "owned canonical work controls and installed setup shutdown hook"
+  ],
+  "not_qualified": [
+    "real M1",
+    "provider or inference",
+    "personal authentication",
+    "OS service stop",
+    "Connector network topology"
+  ],
+  "public_excludes": [
+    "private homes",
+    "databases",
+    "controller checkpoints",
+    "authentication data",
+    "raw event payloads"
+  ],
+  "historical_source_note": "Final source is included; prior rounds retain their original input hashes and complete result records. Diagnostic cases are not accepted separately."
+}

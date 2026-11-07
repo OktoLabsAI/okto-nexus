@@ -1,0 +1,69 @@
+{
+  "review": "narrow final check of prior M1 synthetic controller blockers and cleanup oracle",
+  "status": "NO_REMAINING_BLOCKER_IN_REVIEWED_SYNTHETIC_SCOPE",
+  "prior_review_sha256": "ef3b181ae73648afbd88e3a40d0a607879aff08694086a3fd201f761882454b9",
+  "source_hashes": {
+    "controller.py": "1423494d75217983477dd464ffbc46bd3bc9fbde4664217fa5fa73376b35d90e",
+    "setup_journal.py": "3598363815a340d8324b7743fff42738e1bf7e936b87e4d6b1856ecaf6a927e5",
+    "test_controller.py": "2b731033860fcb83adc7bb05b55a7ad82703927a110caf95dd3afe87dea6b141",
+    "run_synthetic.py": "f1e8bf6a437e7d7506baefc2eaee89be473cf0365d830c82259b52ced8c46bc0"
+  },
+  "evidence": {
+    "run": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-controller-xh414i40\\synthetic-run-gtxuhy58",
+    "xml_sha256": "73dfa8acb6e0ef1136b6e7726c59bb1af1d50e1a1ae5ab0425a3606d979a915e",
+    "status_sha256": "ec90e003212287aa2358843c290bc48bd28919211f4e1323011c7c90b6d672c3",
+    "retained_tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 99.763,
+    "input_files": 994,
+    "before_after_equal": true,
+    "shadowed_modules": [],
+    "reviewer_test_executions": 0
+  },
+  "resolved": [
+    {
+      "id": "CTRL-01",
+      "evidence": "Controller holds nonblocking msvcrt byte-range lock via a retained handle for its lifetime; second instance is refused, close releases ownership and persist refuses a closed owner. test_two_controller_instances_cannot_lose_reservations passed."
+    },
+    {
+      "id": "SETUP-01",
+      "evidence": "SQL projects json_type and requires integer before accepting totalTokens. boolean_usage case selects the owned stop and refuses further work."
+    },
+    {
+      "id": "CTRL-02",
+      "evidence": "Terminal lookup now matches both operation_id and stream before choosing close; otherwise owned active work uses interrupt."
+    },
+    {
+      "id": "SETUP-CALLBACK-RECOVERY",
+      "evidence": "Exact lane/home is persisted; reload requires explicit callable reattachment. Wrong home is refused and missing owner stop blocks new admission. deadline_after_reload passed."
+    },
+    {
+      "id": "PREVIOUS-OWNED-JOURNALS",
+      "evidence": "arm accepts only settled recorded prior journals with matching identity; monitor distinguishes retained known journals from at most one serial new journal. Two own setup tests with independent usage17+19 then canonical work23 total59 passed; seventh global request refused."
+    }
+  ],
+  "cleanup_oracle": {
+    "result": "ACCEPTABLE_FOR_THIS_STANDALONE_OWNED_SETUP",
+    "requirements": [
+      "started + terminal + observed usage + caught-up stream",
+      "terminal turn receipt SUCCEEDED/FAILED/CANCELLED",
+      "close receipt SUBMITTED or SUCCEEDED",
+      "exact opening owned_slot_reservations.released=1"
+    ],
+    "basis": "Installed close_runtime._run_policy_close awaits physical shutdown and commits SUBMITTED for a non-R4 context; R4 commits SUCCEEDED. runtime._close_owned releases the owned slot only after STOPPED observation. Source and installed close_runtime/runtime bytes match. The directed test flips only its own released bit to0 and proves known17 tokens do not make setup settled, then restores1 and settles.",
+    "core_source_hashes": {
+      "close_runtime.py": "63666f2d65d0012a039e64d91de0709dc40ccc9b802711344068340327ec7346",
+      "runtime.py": "c4cf6e4c69c04c55c0dbdd848f371746dff2827d2768c9afe8c75e4af3c97c18"
+    }
+  },
+  "historical_snapshot_note": "Initial review findings came from the pre-fix source read. The snapshot saved with the initial report already contained the boolean fix applied concurrently afterward; that saved snapshot must not be described as an immutable reproduction of all3initial findings.",
+  "limits": [
+    "No new execution, test, native process, HTTP, vault or OS service access by reviewer.",
+    "Retained integration uses installed Core/Nexus and synthetic native peers; connector_topology is explicitly false. This does not qualify a real provider or real M1 campaign.",
+    "Setup attribution is serial journal ownership in the dedicated home, not a product test_id mapping.",
+    "Known observed usage is not final billed usage; no hard cap or final usage marker is asserted.",
+    "Only requested fixes and cleanup oracle were rechecked; no expanded audit."
+  ]
+}

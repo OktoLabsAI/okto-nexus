@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="13" time="249.436" timestamp="2026-11-07T11:41:56.740371-03:00" hostname="Alienware_m15"><testcase classname="test_controller" name="test_setup_then_work_loss_recovery_real_pages_shared_accounting" time="10.496"><failure message="assert (False)">prepared = namespace(setup=(Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-controller-xh414i4...setup_then_work_loss_reco0'), owner_stop=&lt;function prepared.&lt;locals&gt;.owner_stop at 0x000002C9994CA3E0&gt;, owner_stops=[])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002C9975B42B0&gt;
+
+    def test_setup_then_work_loss_recovery_real_pages_shared_accounting(prepared,monkeypatch):
+        t=prepared
+        factory,entry,stops=standalone_setup(t,monkeypatch)
+        for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):
+            setup_emit(t,factory,method,17)
+        wait_until(lambda:entry['task'].done())
+        assert entry['status']=='succeeded' and factory.native.stopped
+&gt;       assert t.controller.poll()['can_admit'] and t.controller.summary()['known_observed_tokens']==17
+E       assert (False)
+
+test_controller.py:139: AssertionError</failure></testcase><testcase classname="test_controller" name="test_actual_setup_journal_can_select_only_owned_service_shutdown[budget]" time="6.312" /><testcase classname="test_controller" name="test_actual_setup_journal_can_select_only_owned_service_shutdown[deadline]" time="6.553" /><testcase classname="test_controller" name="test_actual_setup_journal_can_select_only_owned_service_shutdown[missing_usage]" time="6.323" /><testcase classname="test_controller" name="test_actual_setup_journal_can_select_only_owned_service_shutdown[deadline_after_reload]" time="6.291" /><testcase classname="test_controller" name="test_actual_setup_journal_can_select_only_owned_service_shutdown[boolean_usage]" time="6.164" /><testcase classname="test_controller" name="test_work_monitor_selects_only_owned_canonical_interrupt[budget]" time="7.875" /><testcase classname="test_controller" name="test_work_monitor_selects_only_owned_canonical_interrupt[deadline]" time="8.298" /><testcase classname="test_controller" name="test_work_monitor_selects_only_owned_canonical_interrupt[missing_usage]" time="8.201" /><testcase classname="test_controller" name="test_work_monitor_selects_only_owned_canonical_interrupt[gap]" time="173.192" /><testcase classname="test_controller" name="test_ambiguous_new_setup_journals_stop_owner_before_any_other_work" time="0.112" /><testcase classname="test_controller" name="test_two_controller_instances_cannot_lose_reservations" time="0.013" /><testcase classname="test_controller" name="test_unknown_work_without_canonical_operation_stops_exact_owner" time="6.003" /></testsuite></testsuites>

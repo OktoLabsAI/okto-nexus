@@ -1,0 +1,20 @@
+{
+  "kind": "test_fault_cleanup_intervention",
+  "utc": "2026-11-07T14:45:59.409011+00:00",
+  "fixture_db_relative": "test-state\\test_work_monitor_selects_only3\\home\\nexus.db",
+  "before": [
+    [
+      1,
+      "pending"
+    ]
+  ],
+  "after": [
+    [
+      1,
+      "none"
+    ]
+  ],
+  "rows_changed": 1,
+  "qualification": "diagnostic_intervened_run_not_accepted",
+  "reason": "Restore only owned artificial gap so canonical fixture teardown can finish"
+}
