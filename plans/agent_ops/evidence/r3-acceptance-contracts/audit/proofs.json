@@ -1,0 +1,2264 @@
+{
+  "proofs": {
+    "identity": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_identity.py",
+        "sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+        "bytes": 13692,
+        "symbol": "test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key",
+        "line": 35,
+        "catalog_sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 55,
+          "expression": "document['identity_creation']['display_name'] == 'Codex — Project'"
+        },
+        {
+          "line": 56,
+          "expression": "document['request']['broadcast_handoff_auto_claim'] is False"
+        },
+        {
+          "line": 57,
+          "expression": "(agents(t.deps), snapshot(t.deps)) == before"
+        },
+        {
+          "line": 58,
+          "expression": "t.probes == t.turns == issued == []"
+        },
+        {
+          "line": 66,
+          "expression": "result['state'] == 'configured' and result['work_state'] == 'not_submitted'"
+        },
+        {
+          "line": 67,
+          "expression": "set(agents(t.deps)) == set(before[0]) | {'project-assistant'}"
+        },
+        {
+          "line": 69,
+          "expression": "row['role'] == 'Project assistant'"
+        },
+        {
+          "line": 70,
+          "expression": "json.loads(row['metadata'])['display_name'] == 'Codex — Project'"
+        },
+        {
+          "line": 71,
+          "expression": "row['is_active'] and len(row['api_key_hash']) == 64"
+        },
+        {
+          "line": 78,
+          "expression": "permissions['messages'] == dict(send_direct=True, send_channel=True, send_broadcast=False)"
+        },
+        {
+          "line": 79,
+          "expression": "permissions['handoffs'] == dict(create=True, work=True, cancel=True)"
+        },
+        {
+          "line": 80,
+          "expression": "permissions['identity']['update_capabilities'] is False"
+        },
+        {
+          "line": 81,
+          "expression": "permissions['workspaces']['include_paths'] is False"
+        },
+        {
+          "line": 82,
+          "expression": "not any(permissions['experimental'].values())"
+        },
+        {
+          "line": 84,
+          "expression": "len(after[1]['runtime_execution_grants']) == len(after[1]['execution_bindings']) == 1"
+        },
+        {
+          "line": 85,
+          "expression": "document['result']['agent_created'] is True"
+        },
+        {
+          "line": 86,
+          "expression": "len(issued) == len(t.turns) == len(t.probes) == 1"
+        },
+        {
+          "line": 89,
+          "expression": "issued[0] not in json.dumps([t.saved, result, document['result']])"
+        },
+        {
+          "line": 90,
+          "expression": "'api_key' not in json.dumps([t.saved, result])"
+        },
+        {
+          "line": 91,
+          "expression": "t.flow.apply(deepcopy(t.saved[-1])) == result"
+        },
+        {
+          "line": 92,
+          "expression": "(agents(t.deps), snapshot(t.deps)) == after"
+        },
+        {
+          "line": 93,
+          "expression": "len(issued) == len(t.turns) == len(t.probes) == 1"
+        },
+        {
+          "line": 73,
+          "expression": "runtime_policy.defaults(uow.connection)['broadcast_handoff_auto_claim'] is True"
+        },
+        {
+          "line": 74,
+          "expression": "runtime_policy.effective(uow.connection, 'project-assistant')['broadcast_handoff_auto_claim'] is False"
+        },
+        {
+          "line": 76,
+          "expression": "'execute_work' not in json.dumps(grant)"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False]",
+          "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "reconnect_identity": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_identity.py",
+        "sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+        "bytes": 13692,
+        "symbol": "test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations",
+        "line": 219,
+        "catalog_sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 227,
+          "expression": "connect.run_connect(args + ['--plan']) == 0"
+        },
+        {
+          "line": 229,
+          "expression": "document['selection']['create_agent'] is True"
+        },
+        {
+          "line": 230,
+          "expression": "document['identity_creation']['display_name'].startswith('Codex — ')"
+        },
+        {
+          "line": 231,
+          "expression": "(agents(t.deps), snapshot(t.deps)) == before"
+        },
+        {
+          "line": 232,
+          "expression": "connect.run_connect(args + ['--plan']) == 0"
+        },
+        {
+          "line": 233,
+          "expression": "json.loads(capsys.readouterr().out) == document"
+        },
+        {
+          "line": 235,
+          "expression": "connect.run_connect(args + ['--plan', '--agent', document['selection']['agent']]) == 3"
+        },
+        {
+          "line": 236,
+          "expression": "json.loads(capsys.readouterr().out)['code'] == 'PROFILE_CONFLICT'"
+        },
+        {
+          "line": 237,
+          "expression": "connect.run_connect(args + ['--approve', document['review_revision']]) == 0"
+        },
+        {
+          "line": 243,
+          "expression": "connect.run_connect(['--profile', 'default-project', '--json']) == 0"
+        },
+        {
+          "line": 244,
+          "expression": "json.loads(capsys.readouterr().out)['agent_id'] == agent_id"
+        },
+        {
+          "line": 245,
+          "expression": "(agents(t.deps), snapshot(t.deps)) == after"
+        },
+        {
+          "line": 246,
+          "expression": "len(t.turns) == len(t.probes) == 1"
+        },
+        {
+          "line": 247,
+          "expression": "load_setup(t.deps, RuntimeRequestContext('operator', 'http_loopback', trusted_local_operator=True), agent_id, result['binding_id'])['project_preset'] == {'id': 'project-generalist', 'revision': 1}"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_identity::test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "remote_setup": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_remote_setup_integration.py",
+        "sha256": "9817f6d91e7355c763284b22d423707cbcd6755cfddc7bd0f12693626ba642cd",
+        "bytes": 17588,
+        "symbol": "test_operator_and_connector_cli_complete_same_root_once",
+        "line": 51,
+        "catalog_sha256": "9817f6d91e7355c763284b22d423707cbcd6755cfddc7bd0f12693626ba642cd",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 92,
+          "expression": "counts(deps) == before"
+        },
+        {
+          "line": 94,
+          "expression": "result['state'] == 'awaiting_host' and len(material) == len(handoffs) == 1"
+        },
+        {
+          "line": 95,
+          "expression": "counts(deps)['agents'] == before['agents'] + 1"
+        },
+        {
+          "line": 96,
+          "expression": "counts(deps)['runtime_execution_grants'] == before['runtime_execution_grants']"
+        },
+        {
+          "line": 112,
+          "expression": "'cookie' not in request.headers"
+        },
+        {
+          "line": 113,
+          "expression": "request.headers.get('Authorization') != 'Bearer ' + runtime[4]"
+        },
+        {
+          "line": 138,
+          "expression": "not frame['operation_ids'] and (not frame['session_ids'])"
+        },
+        {
+          "line": 145,
+          "expression": "root == host"
+        },
+        {
+          "line": 163,
+          "expression": "method == 'executor.realize'"
+        },
+        {
+          "line": 174,
+          "expression": "pending['status'] == 'awaiting_operator_approval'"
+        },
+        {
+          "line": 175,
+          "expression": "pending['operator_review']['command'] == 'okto-nexus connect --profile CONNECT_PROFILE'"
+        },
+        {
+          "line": 176,
+          "expression": "counts(deps)['runtime_execution_grants'] == before['runtime_execution_grants']"
+        },
+        {
+          "line": 234,
+          "expression": "configured['saved']"
+        },
+        {
+          "line": 241,
+          "expression": "complete['state'] == 'configured'"
+        },
+        {
+          "line": 242,
+          "expression": "saved[-1]['final_binding']['finish_id'] == saved[-1]['final_binding']['proposal_id'] + '_setup'"
+        },
+        {
+          "line": 244,
+          "expression": "final_counts['runtime_execution_grants'] == before['runtime_execution_grants'] + 1"
+        },
+        {
+          "line": 249,
+          "expression": "(await asyncio.to_thread(flow.apply, saved[-1], timeout=0))['state'] == 'configured'"
+        },
+        {
+          "line": 250,
+          "expression": "all((method == 'GET' for method, path in calls[previous:]))"
+        },
+        {
+          "line": 251,
+          "expression": "counts(deps) == final_counts"
+        },
+        {
+          "line": 252,
+          "expression": "len(probes) == 1"
+        },
+        {
+          "line": 253,
+          "expression": "sum((path.endswith('/decision') for method, path in calls)) == 1"
+        },
+        {
+          "line": 254,
+          "expression": "len(store.load().identities) == len(store.load().execution_bindings) == 1"
+        },
+        {
+          "line": 256,
+          "expression": "material[0] not in public"
+        },
+        {
+          "line": 257,
+          "expression": "all((token not in public for token in operator_vault.values.values()))"
+        },
+        {
+          "line": 258,
+          "expression": "not runtime[3]"
+        },
+        {
+          "line": 265,
+          "expression": "unapproved.value.code == 'REVIEW_REQUIRED'"
+        },
+        {
+          "line": 267,
+          "expression": "handoffs[-1]['bootstrap'] == original_bootstrap"
+        },
+        {
+          "line": 268,
+          "expression": "(handoffs[-1]['child_requests']['realize'] == original_children['realize']) is (loss == 'rereview')"
+        },
+        {
+          "line": 269,
+          "expression": "handoffs[-1]['child_requests']['prepare'] != original_children['prepare']"
+        },
+        {
+          "line": 273,
+          "expression": "stale.value.code == ('OPERATION_CONFLICT' if loss == 'local-rereview' else 'REMOTE_SETUP_REVIEW_REQUIRED')"
+        },
+        {
+          "line": 274,
+          "expression": "store.path.read_bytes() == unchanged"
+        },
+        {
+          "line": 276,
+          "expression": "(await connect.run_connect(host_args(), output, host))['status'] == 'awaiting_operator_approval'"
+        },
+        {
+          "line": 278,
+          "expression": "len(retained['handoff_history']) == 1"
+        },
+        {
+          "line": 279,
+          "expression": "store.load().binding_intents[0].status == 'REVIEW_REPLACED'"
+        },
+        {
+          "line": 178,
+          "expression": "(await asyncio.to_thread(flow.apply, saved[-1], timeout=0))['state'] == 'awaiting_finish'"
+        },
+        {
+          "line": 223,
+          "expression": "failed.value.possible_effect"
+        },
+        {
+          "line": 226,
+          "expression": "waiting['state'] == 'awaiting_finish'"
+        },
+        {
+          "line": 227,
+          "expression": "counts(deps)['runtime_execution_grants'] == before['runtime_execution_grants']"
+        },
+        {
+          "line": 237,
+          "expression": "retained.get('pending_local_review') is None"
+        },
+        {
+          "line": 238,
+          "expression": "retained['local']['configuration']['workspace_root'] == str(project)"
+        },
+        {
+          "line": 239,
+          "expression": "retained['handoff_history'][-1]['outcome'] == 'prior_finish_committed'"
+        },
+        {
+          "line": 247,
+          "expression": "final_counts[name] == before[name] + extra"
+        },
+        {
+          "line": 281,
+          "expression": "retained.get('pending_local_review') is None"
+        },
+        {
+          "line": 282,
+          "expression": "retained['local']['configuration']['workspace_root'] == str(host / 'revised-project')"
+        },
+        {
+          "line": 197,
+          "expression": "amendment['status'] == 'awaiting_operator_review'"
+        },
+        {
+          "line": 199,
+          "expression": "retained['local']['configuration']['workspace_root'] == str(project)"
+        },
+        {
+          "line": 200,
+          "expression": "retained['pending_local_review']['local']['configuration']['workspace_root'] == str(new_project)"
+        },
+        {
+          "line": 207,
+          "expression": "changed['state'] == 'review_required'"
+        },
+        {
+          "line": 216,
+          "expression": "remote_setup.load(store, 'integrated-root').get('pending_local_review')"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+        "sha256": "d72eab329cd690073f1485c6b1181bbea87c6d5a90e3d5cd2034ff116b9c1fd3",
+        "bytes": 30375,
+        "passed_nodes": [
+          "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[apply]",
+          "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[decision]",
+          "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[finish-race]",
+          "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[local-rereview]",
+          "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[none]",
+          "tests.execution_r4.test_remote_setup_integration::test_operator_and_connector_cli_complete_same_root_once[rereview]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "terminal_work": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_work.py",
+        "sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "bytes": 20694,
+        "symbol": "test_interactive_cli_request_question_answer_result_and_return",
+        "line": 320,
+        "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 362,
+          "expression": "cli.run_work(['chat', '--profile', 'project', '--timeout', '30']) == 0"
+        },
+        {
+          "line": 364,
+          "expression": "'Which change should be made?' in output"
+        },
+        {
+          "line": 365,
+          "expression": "'Interactive terminal work completed.' in output"
+        },
+        {
+          "line": 366,
+          "expression": "replies == [('accept', {'answers': {'question': {'answers': ['Use the reviewed option']}}})]"
+        },
+        {
+          "line": 368,
+          "expression": "'Use the reviewed option' not in json.dumps(checkpoint)"
+        },
+        {
+          "line": 369,
+          "expression": "'Implement the requested project change' not in json.dumps(checkpoint)"
+        },
+        {
+          "line": 370,
+          "expression": "not t.native.native.stopped"
+        },
+        {
+          "line": 371,
+          "expression": "cli.run_work(['status', '--profile', 'project', '--json']) == 0"
+        },
+        {
+          "line": 373,
+          "expression": "returned['state'] == 'completed'"
+        },
+        {
+          "line": 374,
+          "expression": "returned['operations'][-1]['result']['output_text'] == 'Interactive terminal work completed.'"
+        },
+        {
+          "line": 375,
+          "expression": "t.native.opens == 1 and len(t.native.native.sent) == 1"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_work::test_interactive_cli_request_question_answer_result_and_return"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "terminal_resume": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_work.py",
+        "sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "bytes": 20694,
+        "symbol": "test_send_result_reopen_continue_and_close_share_canonical_session",
+        "line": 58,
+        "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 63,
+          "expression": "result['state'] == 'completed'"
+        },
+        {
+          "line": 64,
+          "expression": "result['operations'][-1]['result']['output_text'] == 'Canonical project result'"
+        },
+        {
+          "line": 65,
+          "expression": "'Private project request' not in json.dumps(t.saved)"
+        },
+        {
+          "line": 66,
+          "expression": "'Canonical project result' not in json.dumps(t.saved)"
+        },
+        {
+          "line": 68,
+          "expression": "reopened.observe()['operations'][-1]['operation_id'] == first['operation_id']"
+        },
+        {
+          "line": 69,
+          "expression": "reopened.submit('Private project request', client_intent_id='terminal-first')['operation_id'] == operation['operation_id']"
+        },
+        {
+          "line": 71,
+          "expression": "second['scope']['session_id'] == operation['scope']['session_id']"
+        },
+        {
+          "line": 73,
+          "expression": "reopened.observe()['operations'][-1]['result']['output_text'] == 'Second result'"
+        },
+        {
+          "line": 74,
+          "expression": "len(reopened.sessions()['sessions']) == 1 and t.native.opens == 1"
+        },
+        {
+          "line": 77,
+          "expression": "reopened.observe()['session']['lifecycle_state'] == 'CLOSED'"
+        },
+        {
+          "line": 78,
+          "expression": "t.native.native.stopped"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_work::test_send_result_reopen_continue_and_close_share_canonical_session"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "lost_submission": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_work.py",
+        "sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "bytes": 20694,
+        "symbol": "test_lost_submission_response_recovers_same_work_without_duplicate_dispatch",
+        "line": 82,
+        "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 91,
+          "expression": "again['operation_id'] == operation['operation_id']"
+        },
+        {
+          "line": 94,
+          "expression": "t.native.opens == 1"
+        },
+        {
+          "line": 95,
+          "expression": "[item[0] for item in t.native.native.sent] == ['send_turn']"
+        },
+        {
+          "line": 93,
+          "expression": "uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 2"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[/runtime/operations]",
+          "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[intents:resolve]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "lost_decision": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_work.py",
+        "sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "bytes": 20694,
+        "symbol": "test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile",
+        "line": 116,
+        "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 144,
+          "expression": "observed['state'] == 'needs_input'"
+        },
+        {
+          "line": 147,
+          "expression": "proposal.get('recipient_agent_id', 'operator') == 'operator'"
+        },
+        {
+          "line": 163,
+          "expression": "decision['canonical_state'] == 'CONFIRMED'"
+        },
+        {
+          "line": 164,
+          "expression": "sum((path.endswith('/runtime/approval-decisions') for _, path in t.calls)) == 1"
+        },
+        {
+          "line": 165,
+          "expression": "'Private answer marker' not in json.dumps(t.saved)"
+        },
+        {
+          "line": 181,
+          "expression": "len(replies) == 1"
+        },
+        {
+          "line": 183,
+          "expression": "resumed.observe()['state'] == 'completed'"
+        },
+        {
+          "line": 142,
+          "expression": "time.monotonic() < deadline"
+        },
+        {
+          "line": 153,
+          "expression": "invalid.value.code == 'VALIDATION_ERROR'"
+        },
+        {
+          "line": 154,
+          "expression": "'decision' not in t.flow.document"
+        },
+        {
+          "line": 155,
+          "expression": "replies == []"
+        },
+        {
+          "line": 174,
+          "expression": "observed['decision']['native_stage'] == 'REFUSED_BEFORE_EFFECT'"
+        },
+        {
+          "line": 175,
+          "expression": "observed['decision']['operation']['error'] is not None"
+        },
+        {
+          "line": 176,
+          "expression": "replies == []"
+        },
+        {
+          "line": 179,
+          "expression": "time.monotonic() < deadline"
+        },
+        {
+          "line": 172,
+          "expression": "time.monotonic() < deadline"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False]",
+          "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True]",
+          "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "terminal_detach": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_work.py",
+        "sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "bytes": 20694,
+        "symbol": "test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work",
+        "line": 248,
+        "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 268,
+          "expression": "cli.run_work(['chat', '--profile', 'project']) == (130 if interruption is KeyboardInterrupt else 0)"
+        },
+        {
+          "line": 269,
+          "expression": "not t.native.native.stopped"
+        },
+        {
+          "line": 270,
+          "expression": "[item[0] for item in t.native.native.sent] == ['send_turn']"
+        },
+        {
+          "line": 271,
+          "expression": "t.flow.observe()['session']['control_available']"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_work::test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work[EOFError]",
+          "tests.execution_r4.test_terminal_work::test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work[KeyboardInterrupt]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "preset_merge": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_project_preset_update.py",
+        "sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+        "bytes": 12396,
+        "symbol": "test_review_advances_only_unchanged_defaults_and_finish_recovers_once",
+        "line": 48,
+        "catalog_sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 56,
+          "expression": "snapshot(t[0]) == before"
+        },
+        {
+          "line": 57,
+          "expression": "{item['field'] for item in review['changes']} == {'session_policy', 'authorization.actions'}"
+        },
+        {
+          "line": 58,
+          "expression": "review['preserved'] == [dict(field='tool_access', current='always_allow', recommendation='ask')]"
+        },
+        {
+          "line": 61,
+          "expression": "updated['binding']['binding_id'] == result['binding']['binding_id']"
+        },
+        {
+          "line": 62,
+          "expression": "updated['project_preset']['revision'] == 2"
+        },
+        {
+          "line": 63,
+          "expression": "test_connection_setup.count(t, 'runtime_execution_grants') == 2"
+        },
+        {
+          "line": 67,
+          "expression": "test_connection_setup.finish(t, context, request, verified=None) == updated"
+        },
+        {
+          "line": 68,
+          "expression": "snapshot(t[0]) == after"
+        },
+        {
+          "line": 72,
+          "expression": "recovered.status_code == 200"
+        },
+        {
+          "line": 73,
+          "expression": "recovered.json()['result']['project_preset']['revision'] == 1"
+        },
+        {
+          "line": 76,
+          "expression": "repeated_finish.status_code == 200"
+        },
+        {
+          "line": 77,
+          "expression": "repeated_finish.json()['project_preset']['revision'] == 1"
+        },
+        {
+          "line": 78,
+          "expression": "snapshot(t[0]) == after"
+        },
+        {
+          "line": 65,
+          "expression": "uow.connection.execute(\"SELECT role FROM agents WHERE agent_id='subject'\").fetchone()[0] == 'Personalized reviewer'"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "sha256": "3b0dfe759ea90d97fcd5d41cf9055ea4fa0b847cd1ecb97f4006b88d9bbd3704",
+        "bytes": 760,
+        "passed_nodes": [
+          "tests.execution_r4.test_project_preset_update::test_review_advances_only_unchanged_defaults_and_finish_recovers_once"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "preset_disabled": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_project_preset_update.py",
+        "sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+        "bytes": 12396,
+        "symbol": "test_disabled_runtime_stays_disabled_without_test_or_grant",
+        "line": 106,
+        "catalog_sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 115,
+          "expression": "review['request']['configuration']['runtime_enabled'] is False"
+        },
+        {
+          "line": 116,
+          "expression": "review['local_test_required'] is False"
+        },
+        {
+          "line": 119,
+          "expression": "response.status_code == 200"
+        },
+        {
+          "line": 120,
+          "expression": "response.json()['binding']['binding_id'] == result['binding']['binding_id']"
+        },
+        {
+          "line": 121,
+          "expression": "runtime_policy.read_policy(t[0], context, 'subject')['runtime_enabled'] is False"
+        },
+        {
+          "line": 122,
+          "expression": "test_connection_setup.count(t, 'runtime_execution_grants') == 1"
+        },
+        {
+          "line": 123,
+          "expression": "t[1].state.connection_tests.tests == {}"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "sha256": "c858dd7c21295fd5af0598127ad5ea7154c1bf28920ea88e53124ed21d5f7fbc",
+        "bytes": 26321,
+        "passed_nodes": [
+          "tests.execution_r4.test_project_preset_update::test_disabled_runtime_stays_disabled_without_test_or_grant"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "dashboard": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_project_dashboard.py",
+        "sha256": "bea451bfba2fbf5dda92cc0b57aae1347d8299236707c08f2c23c5d706cfcdc3",
+        "bytes": 4247,
+        "symbol": "test_dashboard_personalization_and_terminal_reopen_preserve_identity_history_and_grants",
+        "line": 43,
+        "catalog_sha256": "bea451bfba2fbf5dda92cc0b57aae1347d8299236707c08f2c23c5d706cfcdc3",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 54,
+          "expression": "before_setup['project_preset'] == project_preset.ORIGIN"
+        },
+        {
+          "line": 55,
+          "expression": "before_setup['runtime_policy']['session_policy'] == 'per_sender'"
+        },
+        {
+          "line": 60,
+          "expression": "history"
+        },
+        {
+          "line": 62,
+          "expression": "agent_id in {agent['agent_id'] for agent in t.call('GET', '/api/v1/agents')['data']['items']}"
+        },
+        {
+          "line": 67,
+          "expression": "changed['agent_id'] == agent_id and changed['metadata'] == edited"
+        },
+        {
+          "line": 68,
+          "expression": "changed['role'] == 'Review specialist'"
+        },
+        {
+          "line": 70,
+          "expression": "set(after_agents) == set(before_agents)"
+        },
+        {
+          "line": 73,
+          "expression": "json.loads(after_agents[agent_id]['metadata']) == edited"
+        },
+        {
+          "line": 74,
+          "expression": "t.call('GET', setup_path) == before_setup"
+        },
+        {
+          "line": 75,
+          "expression": "t.flow.apply(deepcopy(t.saved[-1])) == result"
+        },
+        {
+          "line": 76,
+          "expression": "snapshot(t.deps) == before_authority"
+        },
+        {
+          "line": 79,
+          "expression": "len(t.probes) == len(t.turns) == 1"
+        },
+        {
+          "line": 72,
+          "expression": "after_agents[agent_id][field] == before_agents[agent_id][field]"
+        },
+        {
+          "line": 78,
+          "expression": "[tuple(row) for row in uow.connection.execute('SELECT * FROM messages')] == history"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-project-dashboard-installed.xml",
+        "sha256": "489d720de56d635dd9fa8b90fc8e601ec6208f2c3047b2b012bc631f4a64bbb6",
+        "bytes": 12089,
+        "passed_nodes": [
+          "tests.execution_r4.test_project_dashboard::test_dashboard_personalization_and_terminal_reopen_preserve_identity_history_and_grants"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "revocation": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_remote_renewal.py",
+        "sha256": "0fe4eddb6ec28419014707090305d78e5f73f16061c378d96f07932e9d38df61",
+        "bytes": 11400,
+        "symbol": "test_remote_revocation_keeps_recovered_receipt_historical_and_participant_cannot_renew",
+        "line": 153,
+        "catalog_sha256": "0fe4eddb6ec28419014707090305d78e5f73f16061c378d96f07932e9d38df61",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 162,
+          "expression": "review['can_issue'] and review['current_grants'][0]['state'] == 'revoked'"
+        },
+        {
+          "line": 173,
+          "expression": "lost.value.possible_effect"
+        },
+        {
+          "line": 178,
+          "expression": "historical['result']['grant']['grant_id'] == current['grant_id']"
+        },
+        {
+          "line": 179,
+          "expression": "project.rows('runtime_execution_grants') == before"
+        },
+        {
+          "line": 180,
+          "expression": "all((row['revoked_at'] for row in before))"
+        },
+        {
+          "line": 181,
+          "expression": "len(project.rows('connection_authorization_receipts')) == 1"
+        },
+        {
+          "line": 182,
+          "expression": "not project.native.opened and (not project.rows('execution_operations'))"
+        },
+        {
+          "line": 169,
+          "expression": "denied.status_code == 403"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "sha256": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430",
+        "bytes": 11485,
+        "passed_nodes": [
+          "tests.execution_r4.test_remote_renewal::test_remote_revocation_keeps_recovered_receipt_historical_and_participant_cannot_renew"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "participant_preserve": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_participant_init.py",
+        "sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+        "bytes": 15032,
+        "symbol": "test_review_apply_reconnect_preserves_runtime_and_other_configuration",
+        "line": 76,
+        "catalog_sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+        "same_bytes_as_catalog": true
+      },
+      "assertions": [
+        {
+          "line": 83,
+          "expression": "path.read_bytes() == raw and (not s.vault.values)"
+        },
+        {
+          "line": 84,
+          "expression": "s.key not in json.dumps(saved) and 'other-secret' not in json.dumps(saved)"
+        },
+        {
+          "line": 86,
+          "expression": "result['state'] == 'configuration_applied'"
+        },
+        {
+          "line": 87,
+          "expression": "result['proof'] == dict(identity='PASS', client_entry='PASS', credential_in_client='UNKNOWN', client_reload='UNKNOWN', mcp='UNKNOWN', work='NOT_SUBMITTED')"
+        },
+        {
+          "line": 89,
+          "expression": "participant_files.access_revision(path) == before_acl"
+        },
+        {
+          "line": 90,
+          "expression": "json.loads(path.read_bytes())['mcpServers']['other'] == json.loads(raw)['mcpServers']['other']"
+        },
+        {
+          "line": 92,
+          "expression": "len(backups) == 1 and backups[0].read_bytes() == raw"
+        },
+        {
+          "line": 94,
+          "expression": "s.vault.writes == 1 and snapshot(s.deps) == s.before"
+        },
+        {
+          "line": 95,
+          "expression": "s.key not in path.read_text() and s.key not in json.dumps(s.saves)"
+        },
+        {
+          "line": 100,
+          "expression": "repeated['state'] == 'configuration_applied'"
+        },
+        {
+          "line": 101,
+          "expression": "path.read_bytes() == final and s.vault.writes == 1 and (len(list(path.parent.glob('*.bak'))) == 1)"
+        },
+        {
+          "line": 102,
+          "expression": "[item['state'] for item in s.saves] == ['review', 'credential_pending', 'credential_stored', 'file_pending', 'done']"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634,
+        "passed_nodes": [
+          "tests.execution_r4.test_participant_init::test_review_apply_reconnect_preserves_runtime_and_other_configuration"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      }
+    },
+    "E01": {
+      "assertion": "Three actual launcher processes converge to one PID/generation, ready; launcher exit does not stop it. Reuse keeps generation; explicit restart changes it; stale stop rejected; DRAINED receipt/run marker agree; DB retained.",
+      "limit": "Actual disposable detached service, no provider. Launcher exit is narrower than terminal/dashboard closure with admitted work.",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr01-detached-process.xml",
+          "sha256": "5ef5be7d67ad8cbe394ac68269c2bbda8683de759107893402e27a371c6583bc",
+          "bytes": 389,
+          "passed_nodes": [
+            "tests.test_service_process::test_concurrent_detached_start_survives_cli_exit_reuses_and_drains"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_process.py",
+          "sha256": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b",
+          "bytes": 6079,
+          "symbol": null,
+          "line": 14,
+          "catalog_sha256": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E02": {
+      "assertion": "Connector: three actual starts, exactly one started=true/PID/generation; late launch token refused; secret sentinel absent from context; restart/drain receipt agree; state/journal survive.",
+      "limit": "No remote Server/provider or registered Windows task in this process case.",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+          "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0",
+          "bytes": 9752,
+          "passed_nodes": [
+            "tests.integration.test_detached_service_lifecycle::test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "connector",
+          "path": "tests/integration/test_detached_service_lifecycle.py",
+          "sha256": "116d079f14a89b6e3e17c7f4a86f4cb600c996cc16ed4337067ce4a5668b87cc",
+          "bytes": 4148,
+          "symbol": null,
+          "line": 10,
+          "catalog_sha256": "116d079f14a89b6e3e17c7f4a86f4cb600c996cc16ed4337067ce4a5668b87cc",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E03": {
+      "assertion": "Alias paths and shared DB exclude; independent DB/home acquires; two real processes yield one owner and OS lock releases after actual death; loser never bootstraps/migrates.",
+      "limit": "",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr01-locks.xml",
+          "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd",
+          "bytes": 3469,
+          "passed_nodes": [
+            "tests.test_serve_lock::test_canonical_home_alias_and_shared_database_are_exclusive"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr01-locks.xml",
+          "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd",
+          "bytes": 3469,
+          "passed_nodes": [
+            "tests.test_serve_lock::test_two_real_processes_one_owner_and_crash_releases_os_lock"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr01-locks.xml",
+          "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd",
+          "bytes": 3469,
+          "passed_nodes": [
+            "tests.test_serve_lock::test_serve_loser_does_not_bootstrap_or_migrate"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/test_serve_lock.py",
+          "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+          "bytes": 7483,
+          "symbol": null,
+          "line": 71,
+          "catalog_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_serve_lock.py",
+          "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+          "bytes": 7483,
+          "symbol": null,
+          "line": 139,
+          "catalog_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_serve_lock.py",
+          "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+          "bytes": 7483,
+          "symbol": null,
+          "line": 165,
+          "catalog_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E06": {
+      "assertion": "Status is passive on absent storage; logs only coded bounded records with corrupt/secret lines withheld; Ctrl+C follow ends observation; default doctor does not vault/network/start; remote failure has no local fallback.",
+      "limit": "",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr01-readiness.xml",
+          "sha256": "b72f35f83ae7b84873c99dcd5d192e5a914170527f49433765e0d768e56691f8",
+          "bytes": 4939,
+          "passed_nodes": [
+            "tests.test_service_inspection::test_status_of_absent_instance_does_not_create_home_or_start_process"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+          "bytes": 12747,
+          "passed_nodes": [
+            "tests.test_project_doctor_cli::test_absent_instance_is_not_started_or_initialized"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+          "bytes": 12747,
+          "passed_nodes": [
+            "tests.test_project_doctor_cli::test_remote_default_reads_metadata_without_vault_network_or_local_service"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+          "bytes": 12747,
+          "passed_nodes": [
+            "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_LOGIN_REQUIRED-FAIL]"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+          "bytes": 12747,
+          "passed_nodes": [
+            "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_VAULT_UNAVAILABLE-UNKNOWN]"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+          "bytes": 12747,
+          "passed_nodes": [
+            "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[SERVER_UNREACHABLE-UNKNOWN]"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+          "bytes": 1727,
+          "passed_nodes": [
+            "test_service_logs::test_absent_logs_are_passive_and_do_not_require_saved_python"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+          "bytes": 1727,
+          "passed_nodes": [
+            "test_service_logs::test_tail_and_json_expose_only_coded_records"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+          "bytes": 1727,
+          "passed_nodes": [
+            "test_service_logs::test_corrupt_or_secret_bearing_lines_are_withheld"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+          "bytes": 1727,
+          "passed_nodes": [
+            "test_service_logs::test_read_and_retention_are_bounded"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+          "bytes": 1727,
+          "passed_nodes": [
+            "test_service_logs::test_ctrl_c_ends_follow_without_lifecycle_mutation"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_inspection.py",
+          "sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140",
+          "bytes": 5355,
+          "symbol": null,
+          "line": 17,
+          "catalog_sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_project_doctor_cli.py",
+          "sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+          "bytes": 6613,
+          "symbol": null,
+          "line": 36,
+          "catalog_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_project_doctor_cli.py",
+          "sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+          "bytes": 6613,
+          "symbol": null,
+          "line": 50,
+          "catalog_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_project_doctor_cli.py",
+          "sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+          "bytes": 6613,
+          "symbol": null,
+          "line": 74,
+          "catalog_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_logs.py",
+          "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "bytes": 7009,
+          "symbol": null,
+          "line": 19,
+          "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_logs.py",
+          "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "bytes": 7009,
+          "symbol": null,
+          "line": 36,
+          "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_logs.py",
+          "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "bytes": 7009,
+          "symbol": null,
+          "line": 53,
+          "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_logs.py",
+          "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "bytes": 7009,
+          "symbol": null,
+          "line": 104,
+          "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_logs.py",
+          "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "bytes": 7009,
+          "symbol": null,
+          "line": 126,
+          "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E08": {
+      "assertion": "Installed start calls native scheduler, not detached launch; known pending start not resubmitted. Edited/foreign task and context mismatch refuse without overwrite.",
+      "limit": "Task mutations are injected; native XML validation is not registration.",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+          "bytes": 8036,
+          "passed_nodes": [
+            "tests.test_user_service_installation::test_installed_start_uses_scheduler_and_reuses_pending_task"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+          "bytes": 8036,
+          "passed_nodes": [
+            "tests.test_user_service_installation::test_edited_task_is_retained_for_every_mutation[install_user_service]"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+          "bytes": 8036,
+          "passed_nodes": [
+            "tests.test_user_service_installation::test_edited_task_is_retained_for_every_mutation[start]"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+          "bytes": 8036,
+          "passed_nodes": [
+            "tests.test_user_service_installation::test_edited_task_is_retained_for_every_mutation[uninstall_user_service]"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+          "bytes": 8036,
+          "passed_nodes": [
+            "tests.test_user_service_installation::test_foreign_task_conflicts_before_context_or_os_mutation"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/test_user_service_installation.py",
+          "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "bytes": 24157,
+          "symbol": null,
+          "line": 123,
+          "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_user_service_installation.py",
+          "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "bytes": 24157,
+          "symbol": null,
+          "line": 102,
+          "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_user_service_installation.py",
+          "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "bytes": 24157,
+          "symbol": null,
+          "line": 93,
+          "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E10": {
+      "assertion": "Saved execution context uses resolved paths and allowlist, no terminal secrets; supervised entry verifies lock/token and restores caller environment after foreground call.",
+      "limit": "Pure/injected context validation; service-user OS vault/PATH still requires its real campaign.",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr01-start-stop.xml",
+          "sha256": "ef194a3594fe3d124b2912c4990cd006c2a04127f9025c4b4371181524651c7b",
+          "bytes": 9112,
+          "passed_nodes": [
+            "tests.test_service_start::test_background_context_retains_resolved_settings_without_terminal_secrets"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+          "sha256": "7e9ddaac7548a768dbea79efcb9e35e9e65267defe52365e5c2493aaf956d241",
+          "bytes": 23368,
+          "passed_nodes": [
+            "tests.test_user_service_installation::test_supervised_entry_is_foreground_fenced_and_uses_saved_context"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_start.py",
+          "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a",
+          "bytes": 11898,
+          "symbol": null,
+          "line": 30,
+          "catalog_sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_user_service_installation.py",
+          "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "bytes": 24157,
+          "symbol": null,
+          "line": 204,
+          "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E14": {
+      "assertion": "Upgrade requires reviewed source generation/context and DRAINED latest run, resumes every write boundary, recognizes exact lost native effect, refuses edits/downgrade/unknown runtime and never auto-starts/migrates.",
+      "limit": "",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_connector_service_upgrade::test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_service_upgrade::test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_connector_service_upgrade::test_downgrade_and_unconfirmed_existing_runtime_are_refused"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_service_upgrade::test_downgrade_and_unconfirmed_existing_runtime_are_refused"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_connector_service_upgrade::test_drain_receipt_must_match_reviewed_generation_and_latest_run"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_service_upgrade::test_drain_receipt_must_match_reviewed_generation_and_latest_run"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_upgrade.py",
+          "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+          "bytes": 18258,
+          "symbol": null,
+          "line": 139,
+          "catalog_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "connector",
+          "path": "tests/unit/test_service_upgrade.py",
+          "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+          "bytes": 17936,
+          "symbol": null,
+          "line": 138,
+          "catalog_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_upgrade.py",
+          "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+          "bytes": 18258,
+          "symbol": null,
+          "line": 229,
+          "catalog_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "connector",
+          "path": "tests/unit/test_service_upgrade.py",
+          "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+          "bytes": 17936,
+          "symbol": null,
+          "line": 228,
+          "catalog_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_upgrade.py",
+          "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+          "bytes": 18258,
+          "symbol": null,
+          "line": 212,
+          "catalog_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "connector",
+          "path": "tests/unit/test_service_upgrade.py",
+          "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+          "bytes": 17936,
+          "symbol": null,
+          "line": 211,
+          "catalog_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E15": {
+      "assertion": "Two installed disposable environments: live apply refused; stop then apply preserves raw DB/ownership ledger; repeated apply no change; executable changes, saved config stable; restart new generation ready and drains.",
+      "limit": "Actual environment switch, same package/version family; no real registered-task update, historical migration rollback or provider.",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_service_upgrade_process::test_reviewed_upgrade_between_installed_environments_preserves_database"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16",
+          "bytes": 28656,
+          "passed_nodes": [
+            "tests.test_connector_service_upgrade_process::test_reviewed_upgrade_between_installed_environments_preserves_journal"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/test_service_upgrade_process.py",
+          "sha256": "5374fe6a203478caf24b66a38268b82009c9afbc3d48bca791a422cb49e5d258",
+          "bytes": 3426,
+          "symbol": null,
+          "line": 13,
+          "catalog_sha256": "5374fe6a203478caf24b66a38268b82009c9afbc3d48bca791a422cb49e5d258",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "connector",
+          "path": "tests/integration/test_service_upgrade_process.py",
+          "sha256": "7c77997bff90d6a74437ac889e82e758caf1e34be23bd6bec9567408757c6f15",
+          "bytes": 3285,
+          "symbol": null,
+          "line": 12,
+          "catalog_sha256": "7c77997bff90d6a74437ac889e82e758caf1e34be23bd6bec9567408757c6f15",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "E16": {
+      "assertion": "Connect --plan invokes inspect only; approve/reconnect invoke ensure_running; one probe/test/Finish and saved-profile reconnect. Lifecycle itself is injected at this CLI seam.",
+      "limit": "Together with E01 this validates composition, not a single real first-connect-to-detached-start execution.",
+      "reports": [
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+          "sha256": "e4f2ef4cb33218011bb2d5248f985ce6ee7ad9933c1a94a80f1c7de2d398ccac",
+          "bytes": 16105,
+          "passed_nodes": [
+            "tests.execution_r4.test_terminal_connect::test_cli_plan_apply_and_reconnect_use_saved_profile"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        },
+        {
+          "repository": "nexus",
+          "path": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+          "sha256": "e4f2ef4cb33218011bb2d5248f985ce6ee7ad9933c1a94a80f1c7de2d398ccac",
+          "bytes": 16105,
+          "passed_nodes": [
+            "tests.execution_r4.test_terminal_connect::test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration"
+          ],
+          "interpretation": "Existing retained PASS; no new execution."
+        }
+      ],
+      "sources": [
+        {
+          "repository": "nexus",
+          "path": "tests/execution_r4/test_terminal_connect.py",
+          "sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+          "bytes": 11803,
+          "symbol": null,
+          "line": 125,
+          "catalog_sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+          "same_bytes_as_catalog": true
+        },
+        {
+          "repository": "nexus",
+          "path": "tests/execution_r4/test_terminal_connect.py",
+          "sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+          "bytes": 11803,
+          "symbol": null,
+          "line": 62,
+          "catalog_sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+          "same_bytes_as_catalog": true
+        }
+      ]
+    },
+    "obs_canonical": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_observation_service.py",
+        "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0",
+        "bytes": 17363,
+        "line": 77,
+        "symbol": "test_publish_changes_no_coordination_presence_or_capacity"
+      },
+      "assertions": [
+        {
+          "line": 81,
+          "text": "snapshot(obs) == before"
+        },
+        {
+          "line": 82,
+          "text": "[row['type'] for row in events(obs)] == ['observation.activity', 'observation.completion']"
+        },
+        {
+          "line": 83,
+          "text": "all((row['visibility'] == 'private' for row in events(obs)))"
+        },
+        {
+          "line": 84,
+          "text": "all((json.loads(row['target']) == {'strategy': 'direct', 'agent_id': 'alice'} for row in events(obs)))"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751,
+        "passed_nodes": [
+          "tests.test_observation_service::test_publish_changes_no_coordination_presence_or_capacity"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "limit": "Existing passing identity/declared milestone scope. This audit reads current assertions and does not claim a new execution or sum overlapping reports. Migration version-maintenance assertions can postdate older retained rows."
+    },
+    "obs_work": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_external_observation_isolation.py",
+        "sha256": "9c8885f37bb55bd792c29cb905c213cf9a99b9f98aba95d08598716755488b54",
+        "bytes": 7754,
+        "line": 74,
+        "symbol": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work"
+      },
+      "assertions": [
+        {
+          "line": 84,
+          "text": "native.opens == 0"
+        },
+        {
+          "line": 89,
+          "text": "first['ok']"
+        },
+        {
+          "line": 93,
+          "text": "second['ok']"
+        },
+        {
+          "line": 94,
+          "text": "native.opens == 1 and len(native.native.sent) == 1"
+        },
+        {
+          "line": 98,
+          "text": "len(admitted_turns) == 2 and turn['operation_id'] in admitted_turns"
+        },
+        {
+          "line": 113,
+          "text": "response.status_code == 200"
+        },
+        {
+          "line": 114,
+          "text": "response.json()['data']['activity']['unknown' if disable_observations else 'idle'] == 1"
+        },
+        {
+          "line": 125,
+          "text": "native.opens == 1 and len(native.native.sent) == 1"
+        },
+        {
+          "line": 134,
+          "text": "native.opens == 1 and len(native.native.sent) == 2"
+        },
+        {
+          "line": 79,
+          "text": "response.status_code == 200"
+        },
+        {
+          "line": 87,
+          "text": "publish('blocked').status_code == 409"
+        },
+        {
+          "line": 103,
+          "text": "response.status_code == 200"
+        },
+        {
+          "line": 105,
+          "text": "response.status_code == 200"
+        },
+        {
+          "line": 107,
+          "text": "len(items) == 1 and items[0]['allowed_actions'] == ['inspect_external_observation']"
+        },
+        {
+          "line": 111,
+          "text": "response.status_code == 200"
+        },
+        {
+          "line": 118,
+          "text": "receipts[0] == 'SUBMITTED'"
+        },
+        {
+          "line": 119,
+          "text": "{row[0] for row in uow.connection.execute(\"SELECT operation_id FROM execution_operations WHERE action='turn.submit'\")} == admitted_turns"
+        },
+        {
+          "line": 121,
+          "text": "uow.connection.execute(\"SELECT count(*) FROM execution_receipts WHERE operation_id=? AND stage IN ('SUBMITTED','RUNNING','SUCCEEDED')\", (queued_turn,)).fetchone()[0] == 0"
+        },
+        {
+          "line": 123,
+          "text": "uow.connection.execute('SELECT count(*) FROM delivery_outbox').fetchone()[0] == 2"
+        },
+        {
+          "line": 124,
+          "text": "uow.connection.execute('SELECT count(*) FROM runtime_results').fetchone()[0] == 0"
+        },
+        {
+          "line": 132,
+          "text": "time.monotonic() < deadline"
+        },
+        {
+          "line": 83,
+          "text": "uow.connection.execute('SELECT count(*) FROM ' + table).fetchone()[0] == 0"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751,
+        "passed_nodes": [
+          "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+          "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "limit": "Existing passing identity/declared milestone scope. This audit reads current assertions and does not claim a new execution or sum overlapping reports. Migration version-maintenance assertions can postdate older retained rows."
+    },
+    "obs_idle": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_external_idle_scheduler_isolation.py",
+        "sha256": "ae9597ae5470cd8ba41492861e332e633508637475ad44cf320d36b5190cb02d",
+        "bytes": 10432,
+        "line": 186,
+        "symbol": "test_external_idle_preserves_exact_unconsumed_claim_reservation"
+      },
+      "assertions": [
+        {
+          "line": 191,
+          "text": "held.state == 'RESERVED' and held.active"
+        },
+        {
+          "line": 192,
+          "text": "held.reservation is not None and held.operation_id is None"
+        },
+        {
+          "line": 204,
+          "text": "snapshot() == before"
+        },
+        {
+          "line": 205,
+          "text": "service.get(aid) == held"
+        },
+        {
+          "line": 207,
+          "text": "0 < observed.remaining_ms <= held.reservation.remaining_ms"
+        },
+        {
+          "line": 208,
+          "text": "replace(observed, remaining_ms=held.reservation.remaining_ms) == held.reservation"
+        },
+        {
+          "line": 210,
+          "text": "0 < repeated.reservation.remaining_ms <= observed.remaining_ms"
+        },
+        {
+          "line": 213,
+          "text": "replace(repeated, reservation=replace(repeated.reservation, remaining_ms=held.reservation.remaining_ms)) == held"
+        },
+        {
+          "line": 217,
+          "text": "not client.portal.call(service.release, aid).active"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/idle/rg03-final.xml",
+        "sha256": "1da3c2d60d8c15a009e29e0f1715660574ea51b60d8b9b8e221153004c8f1ddf",
+        "bytes": 1266,
+        "passed_nodes": [
+          "tests.execution_r4.test_external_idle_scheduler_isolation::test_external_idle_preserves_exact_unconsumed_claim_reservation"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "limit": "Existing passing identity/declared milestone scope. This audit reads current assertions and does not claim a new execution or sum overlapping reports. Migration version-maintenance assertions can postdate older retained rows."
+    },
+    "atn_passive": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/test_attention_operations.py",
+        "sha256": "4aee8fc7ee973e64f5b2ccb5e24df2031738a37606340430f478e8761a464f71",
+        "bytes": 39771,
+        "line": 97,
+        "symbol": "test_read_is_metadata_only_and_changes_no_table"
+      },
+      "assertions": [
+        {
+          "line": 103,
+          "text": "first == second"
+        },
+        {
+          "line": 104,
+          "text": "list(db.iterdump()) == before"
+        },
+        {
+          "line": 105,
+          "text": "'SECRET' not in json.dumps(facts) + json.dumps(first)"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+        "sha256": "8fdca0e3c475036b7bab2978d7159b74f9b72c61d2cd81e1312470693e8c48f1",
+        "bytes": 46943,
+        "passed_nodes": [
+          "tests.test_attention_operations::test_read_is_metadata_only_and_changes_no_table"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "limit": "Existing passing identity/declared milestone scope. This audit reads current assertions and does not claim a new execution or sum overlapping reports. Migration version-maintenance assertions can postdate older retained rows."
+    },
+    "mixed": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_r3_mixed_coordination.py",
+        "sha256": "22f7b5b4af430f2226f135c1744b3792969acd4c9d60f6ed0d9880bf495e8b22",
+        "bytes": 8977,
+        "line": 55,
+        "symbol": "test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities"
+      },
+      "assertions": [
+        {
+          "line": 72,
+          "text": "governed['recipients'] == ['subject']"
+        },
+        {
+          "line": 73,
+          "text": "len(governed['runtime_operations']) == 1"
+        },
+        {
+          "line": 76,
+          "text": "native.opens == len(native.native.sent) == 1"
+        },
+        {
+          "line": 83,
+          "text": "reply_id"
+        },
+        {
+          "line": 94,
+          "text": "tuple((row[0] for row in conn.execute('SELECT agent_id FROM agents ORDER BY agent_id'))) == identities"
+        },
+        {
+          "line": 96,
+          "text": "set(identities) == {'operator', 'subject', 'caller', 'mcp-peer'}"
+        },
+        {
+          "line": 97,
+          "text": "{row[0] for row in conn.execute('SELECT agent_id FROM sessions')} == {'caller', 'mcp-peer'}"
+        },
+        {
+          "line": 98,
+          "text": "conn.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 1"
+        },
+        {
+          "line": 99,
+          "text": "conn.execute('SELECT COUNT(*) FROM execution_sessions').fetchone()[0] == 1"
+        },
+        {
+          "line": 103,
+          "text": "conn.execute('SELECT from_agent_id,parent_message_id FROM messages WHERE message_id=?', (reply_id,)).fetchone()[:] == ('subject', governed['message_id'])"
+        },
+        {
+          "line": 105,
+          "text": "conn.execute(\"SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'\").fetchone()[0] == 1"
+        },
+        {
+          "line": 106,
+          "text": "conn.execute('SELECT COUNT(*) FROM runtime_results WHERE canonical_operation_id=?', (turn['operation_id'],)).fetchone()[0] == 1"
+        },
+        {
+          "line": 108,
+          "text": "conn.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1"
+        },
+        {
+          "line": 109,
+          "text": "conn.execute('PRAGMA foreign_key_check').fetchall() == []"
+        },
+        {
+          "line": 101,
+          "text": "conn.execute('SELECT workspace_id FROM messages WHERE message_id=?', (mid,)).fetchone()[0] == wid"
+        },
+        {
+          "line": 102,
+          "text": "conn.execute('SELECT COUNT(*) FROM message_deliveries WHERE message_id=?', (mid,)).fetchone()[0] == 1"
+        }
+      ],
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+        "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+        "bytes": 938,
+        "passed_nodes": [
+          "tests.execution_r4.test_r3_mixed_coordination::test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "limit": "Existing passing identity/declared milestone scope. This audit reads current assertions and does not claim a new execution or sum overlapping reports. Migration version-maintenance assertions can postdate older retained rows."
+    },
+    "remote_no_fallback": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_remote_operator_terminal.py",
+        "sha256": "fd5b56f9da7ea158bc291c1d444b2c233ba13c92360d8a2db16edea65121c1ac",
+        "bytes": 13973
+      },
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
+        "sha256": "2ad8d9705c355336541e7304481c2fc29b18ed8735cfe1c7b2d54bb4a36b9d09",
+        "bytes": 25796,
+        "passed_nodes": [
+          "tests.execution_r4.test_remote_operator_terminal::test_remote_profile_reuse_selects_remote_before_any_local_service"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "assertion": "Saved remote operator profile is resolved before local service path; no local start/fallback."
+    },
+    "drain": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_service_cooperative_drain.py",
+        "sha256": "1d1e43d96f00daf648e36b8812d78aad1123eaa506918707c2eb9359e09da4c3",
+        "bytes": 12507
+      },
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-v1/canonical/tests.xml",
+        "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+        "bytes": 60132,
+        "passed_nodes": [
+          "tests.execution_r4.test_service_cooperative_drain::test_drain_keeps_approval_and_terminal_publication_until_work_completes[None]",
+          "tests.execution_r4.test_service_cooperative_drain::test_drain_keeps_approval_and_terminal_publication_until_work_completes[agent]",
+          "tests.execution_r4.test_service_cooperative_drain::test_drain_keeps_approval_and_terminal_publication_until_work_completes[grant]",
+          "tests.execution_r4.test_service_cooperative_drain::test_drain_keeps_approval_and_terminal_publication_until_work_completes[revision]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "assertion": "Drain retains admitted approval/control/terminal publication; participant cannot decide; drift invalidates current authority."
+    },
+    "self_approval": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_policy.py",
+        "sha256": "d4c8c3cc25606a62a9d7e87b835fc2bbfc8ce9460335d29f2d0f87686d92fb29",
+        "bytes": 9933
+      },
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_policy::test_participant_cannot_initialize_server_policy[finish]",
+          "tests.execution_r4.test_terminal_policy::test_participant_cannot_initialize_server_policy[test]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "assertion": "Participant cannot initialize or bypass human decision policy."
+    },
+    "limits": {
+      "source": {
+        "repository": "nexus",
+        "path": "tests/execution_r4/test_terminal_authorization.py",
+        "sha256": "1a97a51513b6e4b4ddb5edd054671f557539c9ac6e310f057298359d38110a2d",
+        "bytes": 14104
+      },
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
+        "sha256": "8aef7849cd6c519bad3350613fe508c758689f6a34245f813822ba7aeccfbee1",
+        "bytes": 40795,
+        "passed_nodes": [
+          "tests.execution_r4.test_terminal_authorization::test_renewal_does_not_rebind_or_close_an_exhausted_live_session",
+          "tests.execution_r4.test_terminal_authorization::test_renewal_is_explicit_bounded_and_new_opening_uses_new_grant[exhausted]",
+          "tests.execution_r4.test_terminal_authorization::test_renewal_is_explicit_bounded_and_new_opening_uses_new_grant[expired]",
+          "tests.execution_r4.test_terminal_authorization::test_renewal_is_explicit_bounded_and_new_opening_uses_new_grant[limited]",
+          "tests.execution_r4.test_terminal_authorization::test_renewal_is_explicit_bounded_and_new_opening_uses_new_grant[revoked]"
+        ],
+        "interpretation": "Existing retained PASS; no new execution."
+      },
+      "assertion": "Explicit bounded grant, no silent authority expansion; exhausted live session cannot send under replacement grant."
+    }
+  },
+  "documents": {
+    "herdr": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr09-herdr.md",
+      "sha256": "4318b2c2ce233eafb44111a22e0fe8e98419233e6d380ff9a3b810ca7d630272",
+      "bytes": 10922
+    },
+    "herdr_manifest": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+      "sha256": "eab74c639b6c7633920b57a6f12162622cc2224f849ecf241b1b2c2ab006824a",
+      "bytes": 52937
+    },
+    "joint": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+      "sha256": "a14f5fc02d9384da86f056d6349141e818defa7ea4c05f9d4ba893c41ec4e607",
+      "bytes": 12903
+    },
+    "drain_qualification": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+      "sha256": "926b62892b561e43ff0cf8cd2baef4c962705c31faa6dfc6226fa1dfedf05ee8",
+      "bytes": 39148
+    },
+    "accepted_invariants": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+      "sha256": "807c6e88825a2de3f8b35d94e5cb97e01c54f4c1b96a8fd33c4837aef6d30d18",
+      "bytes": 990
+    },
+    "formats": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+      "sha256": "38206ff1a0a929df4baed4e02550b331aea3cceffa2ce7e030bac5d2dff60bfa",
+      "bytes": 3322
+    },
+    "initialize": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-launch-native.json",
+      "sha256": "c8cedc4394f1b62a0afc625ecda33233b82080ae24d3c1bebec50d238dcd63f9",
+      "bytes": 7354
+    },
+    "client_driver": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/campaigns/participant-environment.py",
+      "sha256": "d850d4e5c7d4a0f24ee7d31b924b8e01d2e73a132f29dbecee3cea40dd0fa49a",
+      "bytes": 9234
+    },
+    "browser": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-dashboard-browser.json",
+      "sha256": "f0982bd9a3b65c9d5466f57fe8e51d9ee2f406713c1027d2ed2730cf0d041268",
+      "bytes": 2354
+    },
+    "baseline": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/baseline-startup.json",
+      "sha256": "0d34ddc70df4499d1b7df557baa0264956250d2f9bf08218fea464658472b40b",
+      "bytes": 896
+    },
+    "native_proposal": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+      "sha256": "fbf8644cf836886bc7bac596211a783d6090e79077c643b1d2a627c87a3a37e3",
+      "bytes": 48795
+    },
+    "traceability": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+      "sha256": "2d50ba3af35a5d65573744d32910d64795862e5f05a8913de43d48db71d060d9",
+      "bytes": 52361
+    }
+  }
+}

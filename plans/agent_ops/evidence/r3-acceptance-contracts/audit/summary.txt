@@ -1,0 +1,9 @@
+Auditoria finita AC-01/02/03/11/12/13/14/16/17
+
+Recomendação: VERIFIED AC-02, AC-12, AC-16 e AC-17 por seus contratos literais; manter os outros cinco abertos com a pendência específica em matrix.json.
+
+Nenhuma nova lacuna concreta de produto foi demonstrada. AC-01 conserva a entrega BASE-06 de medir o primeiro uso útil, além das campanhas explicitamente obrigatórias. AC-03 é participação canônica de dois clientes testados: não exige inferência paga ou dois adaptadores. A menor qualificação segura pode usar clientes MCP existentes que permitam tools/call direto, em ambiente sintético, sem presumir esse modo em clientes que não o ofereçam. Duas identidades no mesmo helper não qualificam automaticamente dois produtos clientes.
+
+AC-11 depende do harness real local/remoto; AC-13 do serviço registrado/login/contexto real; AC-14 da suspensão/retorno ainda não observados, preservando o trabalho de mapeamento seguro restart/conexão separado. AC-16 é contrato de preservação/autoridade; não recebe automaticamente o gate DX-T43 de consumo efetivo pelo provedor. AC-17 é preservação e completude da interface terminal, não M1 real por associação.
+
+proofs.json contém nodes e afirmações; input-manifest.json contém hashes. verification.json confirma estabilidade e distingue fontes de catálogo de arquivos atuais. Nenhum resultado foi reexecutado, nenhuma campanha sintética virou prova real, nenhum status foi alterado.

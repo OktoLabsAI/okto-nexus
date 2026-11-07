@@ -1,0 +1,366 @@
+{
+  "input_count": 82,
+  "inputs_changed": [],
+  "retained_report_node_pairs": 74,
+  "source_comparisons": [
+    {
+      "path": "tests/execution_r4/test_terminal_identity.py",
+      "repository": "nexus",
+      "current_sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+      "catalog_sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_identity.py",
+      "repository": "nexus",
+      "current_sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+      "catalog_sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_remote_setup_integration.py",
+      "repository": "nexus",
+      "current_sha256": "9817f6d91e7355c763284b22d423707cbcd6755cfddc7bd0f12693626ba642cd",
+      "catalog_sha256": "9817f6d91e7355c763284b22d423707cbcd6755cfddc7bd0f12693626ba642cd",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_work.py",
+      "repository": "nexus",
+      "current_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_work.py",
+      "repository": "nexus",
+      "current_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_work.py",
+      "repository": "nexus",
+      "current_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_work.py",
+      "repository": "nexus",
+      "current_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_work.py",
+      "repository": "nexus",
+      "current_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "catalog_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_project_preset_update.py",
+      "repository": "nexus",
+      "current_sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+      "catalog_sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_project_preset_update.py",
+      "repository": "nexus",
+      "current_sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+      "catalog_sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_project_dashboard.py",
+      "repository": "nexus",
+      "current_sha256": "bea451bfba2fbf5dda92cc0b57aae1347d8299236707c08f2c23c5d706cfcdc3",
+      "catalog_sha256": "bea451bfba2fbf5dda92cc0b57aae1347d8299236707c08f2c23c5d706cfcdc3",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_remote_renewal.py",
+      "repository": "nexus",
+      "current_sha256": "0fe4eddb6ec28419014707090305d78e5f73f16061c378d96f07932e9d38df61",
+      "catalog_sha256": "0fe4eddb6ec28419014707090305d78e5f73f16061c378d96f07932e9d38df61",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_participant_init.py",
+      "repository": "nexus",
+      "current_sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+      "catalog_sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_process.py",
+      "repository": "nexus",
+      "current_sha256": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b",
+      "catalog_sha256": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b",
+      "equal": true
+    },
+    {
+      "path": "tests/integration/test_detached_service_lifecycle.py",
+      "repository": "connector",
+      "current_sha256": "116d079f14a89b6e3e17c7f4a86f4cb600c996cc16ed4337067ce4a5668b87cc",
+      "catalog_sha256": "116d079f14a89b6e3e17c7f4a86f4cb600c996cc16ed4337067ce4a5668b87cc",
+      "equal": true
+    },
+    {
+      "path": "tests/test_serve_lock.py",
+      "repository": "nexus",
+      "current_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+      "catalog_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+      "equal": true
+    },
+    {
+      "path": "tests/test_serve_lock.py",
+      "repository": "nexus",
+      "current_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+      "catalog_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+      "equal": true
+    },
+    {
+      "path": "tests/test_serve_lock.py",
+      "repository": "nexus",
+      "current_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+      "catalog_sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_inspection.py",
+      "repository": "nexus",
+      "current_sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140",
+      "catalog_sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140",
+      "equal": true
+    },
+    {
+      "path": "tests/test_project_doctor_cli.py",
+      "repository": "nexus",
+      "current_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+      "catalog_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+      "equal": true
+    },
+    {
+      "path": "tests/test_project_doctor_cli.py",
+      "repository": "nexus",
+      "current_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+      "catalog_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+      "equal": true
+    },
+    {
+      "path": "tests/test_project_doctor_cli.py",
+      "repository": "nexus",
+      "current_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+      "catalog_sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_logs.py",
+      "repository": "nexus",
+      "current_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_logs.py",
+      "repository": "nexus",
+      "current_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_logs.py",
+      "repository": "nexus",
+      "current_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_logs.py",
+      "repository": "nexus",
+      "current_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_logs.py",
+      "repository": "nexus",
+      "current_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "catalog_sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7",
+      "equal": true
+    },
+    {
+      "path": "tests/test_user_service_installation.py",
+      "repository": "nexus",
+      "current_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "equal": true
+    },
+    {
+      "path": "tests/test_user_service_installation.py",
+      "repository": "nexus",
+      "current_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "equal": true
+    },
+    {
+      "path": "tests/test_user_service_installation.py",
+      "repository": "nexus",
+      "current_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_start.py",
+      "repository": "nexus",
+      "current_sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a",
+      "catalog_sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a",
+      "equal": true
+    },
+    {
+      "path": "tests/test_user_service_installation.py",
+      "repository": "nexus",
+      "current_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "catalog_sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_upgrade.py",
+      "repository": "nexus",
+      "current_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+      "catalog_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+      "equal": true
+    },
+    {
+      "path": "tests/unit/test_service_upgrade.py",
+      "repository": "connector",
+      "current_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+      "catalog_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_upgrade.py",
+      "repository": "nexus",
+      "current_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+      "catalog_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+      "equal": true
+    },
+    {
+      "path": "tests/unit/test_service_upgrade.py",
+      "repository": "connector",
+      "current_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+      "catalog_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_upgrade.py",
+      "repository": "nexus",
+      "current_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+      "catalog_sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3",
+      "equal": true
+    },
+    {
+      "path": "tests/unit/test_service_upgrade.py",
+      "repository": "connector",
+      "current_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+      "catalog_sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef",
+      "equal": true
+    },
+    {
+      "path": "tests/test_service_upgrade_process.py",
+      "repository": "nexus",
+      "current_sha256": "5374fe6a203478caf24b66a38268b82009c9afbc3d48bca791a422cb49e5d258",
+      "catalog_sha256": "5374fe6a203478caf24b66a38268b82009c9afbc3d48bca791a422cb49e5d258",
+      "equal": true
+    },
+    {
+      "path": "tests/integration/test_service_upgrade_process.py",
+      "repository": "connector",
+      "current_sha256": "7c77997bff90d6a74437ac889e82e758caf1e34be23bd6bec9567408757c6f15",
+      "catalog_sha256": "7c77997bff90d6a74437ac889e82e758caf1e34be23bd6bec9567408757c6f15",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_connect.py",
+      "repository": "nexus",
+      "current_sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+      "catalog_sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+      "equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_terminal_connect.py",
+      "repository": "nexus",
+      "current_sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+      "catalog_sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/application/project_preset.py",
+      "repository": "nexus",
+      "current_sha256": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f",
+      "catalog_sha256": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/application/remote_setup.py",
+      "repository": "nexus",
+      "current_sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd",
+      "catalog_sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/application/terminal_work.py",
+      "repository": "nexus",
+      "current_sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "catalog_sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/work.py",
+      "repository": "nexus",
+      "current_sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+      "catalog_sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/native_input.py",
+      "repository": "nexus",
+      "current_sha256": "3b2c3e3891972d6071a2d20f51901a4d5ad3a99204668523f33b4ab9f1f49283",
+      "catalog_sha256": "3b2c3e3891972d6071a2d20f51901a4d5ad3a99204668523f33b4ab9f1f49283",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/application/project_preset_update.py",
+      "repository": "nexus",
+      "current_sha256": "2ac1c0f5bad6239bfd471ebc88a6aaccdf71d4c14c761ab1e0ce8413aa6bd252",
+      "catalog_sha256": "2ac1c0f5bad6239bfd471ebc88a6aaccdf71d4c14c761ab1e0ce8413aa6bd252",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/application/terminal_preset.py",
+      "repository": "nexus",
+      "current_sha256": "33ac9374ea347791b3f0b8b826010d04c22684618d20946e14b0cdd3d2665790",
+      "catalog_sha256": "33ac9374ea347791b3f0b8b826010d04c22684618d20946e14b0cdd3d2665790",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "repository": "nexus",
+      "current_sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63",
+      "catalog_sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63",
+      "equal": true
+    },
+    {
+      "path": "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+      "repository": "connector",
+      "current_sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925",
+      "catalog_sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925",
+      "equal": true
+    }
+  ],
+  "mismatched_source": [],
+  "new_executions": 0
+}

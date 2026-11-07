@@ -1,0 +1,347 @@
+{
+  "format": "r3-finite-acceptance-audit",
+  "version": 1,
+  "scope": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-11",
+    "AC-12",
+    "AC-13",
+    "AC-14",
+    "AC-16",
+    "AC-17"
+  ],
+  "head": "6ce61b7bbc7b835c054a9de9723f2843b06b9d96",
+  "plan": {
+    "repository": "nexus",
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "bytes": 133337
+  },
+  "method": "Read-only source/catalog/XML inspection; no tests, services, browser, provider or checkout/ledger edits.",
+  "proposed_counts": {
+    "VERIFIED": 4,
+    "NOT_VERIFIED": 5
+  },
+  "rows": [
+    {
+      "id": "AC-01",
+      "literal_requirement": "Cada tarefa obrigatória tem implementação ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
+      "plan_line": 1064,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "NOT_VERIFIED",
+      "reason": "Os catálogos demonstram implementação/reuso e testes das 59 tarefas; não há novo gap de código identificado. Entretanto o literal é universal sobre tarefas obrigatórias, e entregas de evidência expressamente exigidas ainda faltam; não equivale a exigir que todos os substatus históricos sejam VERIFIED.",
+      "proof_ids": [
+        "identity",
+        "remote_setup",
+        "terminal_work",
+        "drain",
+        "obs_work"
+      ],
+      "document_ids": [
+        "traceability",
+        "baseline"
+      ],
+      "remaining_work": [
+        "BASE-06, plano245: medir instalação até primeira sessão útil permanece NOT_RUN; 7.811s é liveness foreground e não essa medida.",
+        "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-08/AC-03 participação/cooperação e DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada."
+      ],
+      "safe_implementation_gap": "Nenhum novo produto identificado; trabalho restante é obter/conciliar a evidência exigida, especialmente a medida BASE-06.",
+      "limit": "Não se usa task.status como prova nem se exige campanha M1 para testes puramente contratuais."
+    },
+    {
+      "id": "AC-02",
+      "literal_requirement": "As frentes SVC, DX, ATN e OBS respeitam suas dependências e funcionam de modo combinado; Herdr continua opcional.",
+      "plan_line": 1065,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "VERIFIED",
+      "reason": "Composição contratual demonstrada: SVC→DX no start/reuse e trabalho possuído; DX→ATN nas decisões/publicações canônicas; ATN→OBS na projeção externa; OBS→execução/coordenação sem interferência. Herdr é opt-in e os caminhos canônicos funcionam com OBS desabilitado. Dependências de contrato estão implementadas sem declarar encerrados os marcos de campanha.",
+      "proof_ids": [
+        "E16",
+        "terminal_detach",
+        "drain",
+        "atn_passive",
+        "obs_work",
+        "obs_idle",
+        "mixed"
+      ],
+      "document_ids": [
+        "joint",
+        "herdr",
+        "herdr_manifest",
+        "drain_qualification"
+      ],
+      "remaining_work": [],
+      "safe_implementation_gap": "Nenhum. Não criar novo teste monolítico nem gate de provedor por associação.",
+      "limit": "Windows e composição canônica com pares sintéticos; não é declaração de M1/M2 nem promoção dos critérios de saída reais PR03/04/10."
+    },
+    {
+      "id": "AC-03",
+      "literal_requirement": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
+      "plan_line": 1066,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "NOT_VERIFIED",
+      "reason": "Dois formatos/versões e initialize real estão retidos, e dois atores MCP sintéticos cooperam sem novas identidades. As provas não ligam os dois clientes identificados a participação canônica: o driver de cliente injeta chave em ambiente manual e não chama tools/call; RG01 usa dois atores pelo mesmo helper TestClient.",
+      "proof_ids": [
+        "mixed",
+        "participant_preserve"
+      ],
+      "document_ids": [
+        "formats",
+        "initialize",
+        "client_driver"
+      ],
+      "remaining_work": [
+        "Reter participação de dois clientes MCP existentes e identificados: sessões/troca dirigida pelo Server real, autenticação por identidade autorizada, contagem de identidades/bindings estável e nenhum adaptador nativo novo.",
+        "Plano399 prefere Claude Code/Codex mas não os obriga; plano454-456 e874 distinguem initialize de participação. AC03 não exige dois harnesses nativos nem inferência paga, nem exige por si só handoff concluído ou cadeia completa de cofre."
+      ],
+      "safe_implementation_gap": "Qualificação segura possível sem produto novo e sem provedor se dois clientes existentes tiverem API/CLI de chamada MCP direta; usar homes e chaves exclusivamente sintéticos e declarar nomes/versões. Não presumir essa capacidade em Claude/Codex sem verificação, nem chamar duas invocações do mesmo helper de dois produtos qualificados.",
+      "limit": "Não promover o initialize manual a cofre→launcher→cliente; isso continua separado em DX04. Não há execução nova nesta auditoria."
+    },
+    {
+      "id": "AC-11",
+      "literal_requirement": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
+      "plan_line": 1075,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "NOT_VERIFIED",
+      "reason": "O percurso terminal, preset, decisões e recuperação estão qualificados com Core/HTTP/SQLite reais e peer nativo sintético. O literal exige harness real em duas topologias.",
+      "proof_ids": [
+        "E01",
+        "E02",
+        "identity",
+        "terminal_work",
+        "terminal_resume",
+        "remote_setup",
+        "lost_decision"
+      ],
+      "document_ids": [
+        "drain_qualification"
+      ],
+      "remaining_work": [
+        "Executar DX-T39 local e DX-T40 via Connector com um harness real suportado: tarefa, progresso, pergunta/permissão, decisão canônica, resultado e retorno ao trabalho; serviço persistente sem dashboard ou terminal exclusivo.",
+        "Medir o primeiro uso útil de BASE-06 na campanha; registrar contexto, versões e custos previamente autorizados."
+      ],
+      "safe_implementation_gap": "Nenhuma lacuna nova de produto identificada; campanha real depende de contexto/credencial/autorização apropriados.",
+      "limit": "Não converter teste de processo, initialize, NEXUS_CONNECTION_OK ou peer sintético em M1."
+    },
+    {
+      "id": "AC-12",
+      "literal_requirement": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
+      "plan_line": 1076,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "VERIFIED",
+      "reason": "Concorrência real converge para um owner/PID/generation em cada host; locks impedem segundo owner. Perfil remoto é resolvido antes do lifecycle local. O roteamento de supervisor instalado recusa fallback/definition drift e o foreground tem um único owner.",
+      "proof_ids": [
+        "E01",
+        "E02",
+        "E03",
+        "E06",
+        "E08",
+        "remote_no_fallback"
+      ],
+      "document_ids": [
+        "accepted_invariants"
+      ],
+      "remaining_work": [],
+      "safe_implementation_gap": "Nenhum; não exigir login/registro real do agendador para este contrato de exclusividade.",
+      "limit": "Concorrência/locks em processos Windows reais; efeitos do Task Scheduler injetados nos testes de roteamento. Instalação/login reais continuam AC13."
+    },
+    {
+      "id": "AC-13",
+      "literal_requirement": "Serviço do usuário foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execução validados.",
+      "plan_line": 1077,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "NOT_VERIFIED",
+      "reason": "Lifecycle/instalação idempotente/contexto salvo e upgrades têm provas reais e injetadas discriminadas; a sequência de serviço registrado e contexto de credenciais reais não foi executada.",
+      "proof_ids": [
+        "E08",
+        "E10",
+        "E14",
+        "E15"
+      ],
+      "document_ids": [
+        "native_proposal"
+      ],
+      "remaining_work": [
+        "Na plataforma Windows declarada: registrar/iniciar no login, parar sem ressurreição, recuperar crash/backoff, remover e comprovar contexto/cwd/PATH e credenciais no serviço real.",
+        "Manter login, logout, reboot, terminal fechado e suspensão como eventos distintos. Não declarar outras plataformas qualificadas."
+      ],
+      "safe_implementation_gap": "Campanha explícita de ambiente, sem novo framework ou mecanismo de supervisor.",
+      "limit": "Mocks de Task Scheduler e processo foreground supervisionado não substituem logon real; cofre sintético não comprova credencial pessoal real."
+    },
+    {
+      "id": "AC-14",
+      "literal_requirement": "Restart, suspensão e queda de conexão preservam contratos de autoridade, ownership e incerteza, sem repetição produtiva implícita.",
+      "plan_line": 1078,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "NOT_VERIFIED",
+      "reason": "Recuperação canônica, perda de resposta, revogação e ownership/incerteza já têm asserts; restart e transporte não autorizam repetir efeito ou renovar grant. O predicado suspensão/retorno ainda não tem campanha retida.",
+      "proof_ids": [
+        "E01",
+        "E02",
+        "lost_submission",
+        "lost_decision",
+        "revocation",
+        "limits",
+        "drain"
+      ],
+      "document_ids": [
+        "joint",
+        "drain_qualification"
+      ],
+      "remaining_work": [
+        "Executar/observar suspensão e retorno reais com operação/owner conhecido; validar que ausência de resposta não vira morte, trabalho repetido, autoridade renovada ou release de claim.",
+        "SVC-T23/T24 ainda têm anotação de mapeamento/qualificação descartável: mapear continuidade restart/Server drop específico antes de exigir ambiente real extra. Essas lacunas não autorizam inferir necessidade de provedor."
+      ],
+      "safe_implementation_gap": "Nenhuma correção de produto demonstrada; eventual qualificação descartável de continuidade é menor que M1. Suspensão real é limite ambiental restante.",
+      "limit": "Falhas injetadas e recovery após commit comprovam seus cortes exatos; não são suspensão/logout/reboot observados."
+    },
+    {
+      "id": "AC-16",
+      "literal_requirement": "O agente padrão tem identidade persistente, perfil generalista útil e coordenação no escopo aprovado; preserva limites efetivos do harness e não recebe administração global ou poder de aprovar seus próprios pedidos.",
+      "plan_line": 1080,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "VERIFIED",
+      "reason": "Identidade persistente e preset generalista são objetos canônicos revisados; coordenação é limitada ao workspace/permissões concedidos. harness_settings vazio conserva modelo/instruções/sandbox, tool_access=ask conserva decisões, grants são limitados. Merge preserva customizações; agente não inicializa política nem aprova seus pedidos.",
+      "proof_ids": [
+        "identity",
+        "reconnect_identity",
+        "remote_setup",
+        "preset_merge",
+        "preset_disabled",
+        "self_approval",
+        "limits",
+        "drain"
+      ],
+      "document_ids": [
+        "accepted_invariants"
+      ],
+      "remaining_work": [],
+      "safe_implementation_gap": "Nenhum no literal de preservação/autoridade. Não herdar DX-T43 ou M1 como requisito novo deste AC.",
+      "limit": "Preservação e enforcement das opções suportadas qualificados; não mede utilidade de inferência nem afirma consumo de configuração por provedor real. DX-T43 permanece separado. Plano119/524-539 e INV27 definem a preservação, não nova campanha obrigatória AC16."
+    },
+    {
+      "id": "AC-17",
+      "literal_requirement": "Reconnect, atualização e abertura posterior da interface preservam a configuração e a identidade; personalização é opcional e o uso padrão continua completo pelo terminal.",
+      "plan_line": 1081,
+      "current_status": "NOT_VERIFIED",
+      "proposed_status": "VERIFIED",
+      "reason": "Reconnect mantém identidade e customizações; merge/upgrade preservam seleção, arquivos e dados; dashboard instalado personaliza os mesmos objetos. Caminho terminal completo e retorno ao trabalho têm decisões/resultados correlacionados sem painel obrigatório.",
+      "proof_ids": [
+        "reconnect_identity",
+        "preset_merge",
+        "preset_disabled",
+        "dashboard",
+        "E14",
+        "E15",
+        "terminal_work",
+        "terminal_resume",
+        "revocation"
+      ],
+      "document_ids": [
+        "browser"
+      ],
+      "remaining_work": [],
+      "safe_implementation_gap": "Nenhum; não reabrir gate de M1 real para o contrato de preservação/UX.",
+      "limit": "Browser real e upgrades instalados, trabalho nativo sintético; isto não encerra AC11 nem qualifica configurações de todos os clientes/providers."
+    }
+  ],
+  "implementation": [
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/project_preset.py",
+      "sha256": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f",
+      "bytes": 3678,
+      "symbol": "identity_defaults",
+      "line": 24,
+      "catalog_sha256": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/remote_setup.py",
+      "sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd",
+      "bytes": 21304,
+      "symbol": "bootstrap",
+      "line": 149,
+      "catalog_sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_work.py",
+      "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "bytes": 21125,
+      "symbol": "submit",
+      "line": 78,
+      "catalog_sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/work.py",
+      "sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+      "bytes": 19900,
+      "symbol": null,
+      "line": 1,
+      "catalog_sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/native_input.py",
+      "sha256": "3b2c3e3891972d6071a2d20f51901a4d5ad3a99204668523f33b4ab9f1f49283",
+      "bytes": 6706,
+      "symbol": null,
+      "line": 1,
+      "catalog_sha256": "3b2c3e3891972d6071a2d20f51901a4d5ad3a99204668523f33b4ab9f1f49283",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/project_preset_update.py",
+      "sha256": "2ac1c0f5bad6239bfd471ebc88a6aaccdf71d4c14c761ab1e0ce8413aa6bd252",
+      "bytes": 12656,
+      "symbol": "merge_defaults",
+      "line": 19,
+      "catalog_sha256": "2ac1c0f5bad6239bfd471ebc88a6aaccdf71d4c14c761ab1e0ce8413aa6bd252",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_preset.py",
+      "sha256": "33ac9374ea347791b3f0b8b826010d04c22684618d20946e14b0cdd3d2665790",
+      "bytes": 6811,
+      "symbol": "apply",
+      "line": 71,
+      "catalog_sha256": "33ac9374ea347791b3f0b8b826010d04c22684618d20946e14b0cdd3d2665790",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63",
+      "bytes": 20873,
+      "symbol": "current",
+      "line": 38,
+      "catalog_sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63",
+      "same_bytes_as_catalog": true
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+      "sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925",
+      "bytes": 15168,
+      "symbol": "completed_remote_reuse",
+      "line": 171,
+      "catalog_sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925",
+      "same_bytes_as_catalog": true
+    }
+  ],
+  "historical_rule": "Each node is checked PASS in the exact retained XML; hashes and current source comparison are recorded. Historical result is reused only for its asserted contract and declared fixture scope, never promoted to a new real-client/provider/service campaign.",
+  "global_acceptance": false,
+  "new_test_runs": 0,
+  "ledger_edits": 0,
+  "product_edits": 0
+}

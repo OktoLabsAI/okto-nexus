@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T12:22:56.184176+00:00",
+  "updated_at": "2026-11-07T12:25:22.126905+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11244,14 +11244,23 @@
       "requirement": "Cada tarefa obrigatória tem implementação ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
       "status": "NOT_VERIFIED",
       "evidence": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ],
+      "result": "Os catálogos demonstram implementação/reuso e testes das 59 tarefas; não há novo gap de código identificado. Entretanto o literal é universal sobre tarefas obrigatórias, e entregas de evidência expressamente exigidas ainda faltam; não equivale a exigir que todos os substatus históricos sejam VERIFIED.",
+      "qualification_limit": "Não se usa task.status como prova nem se exige campanha M1 para testes puramente contratuais.",
+      "remaining": [
+        "BASE-06, plano245: medir instalação até primeira sessão útil permanece NOT_RUN; 7.811s é liveness foreground e não essa medida.",
+        "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-08/AC-03 participação/cooperação e DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada."
       ]
     },
     "AC-02": {
       "requirement": "As frentes SVC, DX, ATN e OBS respeitam suas dependências e funcionam de modo combinado; Herdr continua opcional.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
@@ -11259,20 +11268,35 @@
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
         "plans/agent_ops/evidence/pr10-correlation.md",
         "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
       ],
       "subscopes": {
         "pr08_external_observation_server_contract": "VERIFIED",
         "pr09_optional_windows_observer_contract": "VERIFIED"
-      }
+      },
+      "result": "Composição contratual demonstrada: SVC→DX no start/reuse e trabalho possuído; DX→ATN nas decisões/publicações canônicas; ATN→OBS na projeção externa; OBS→execução/coordenação sem interferência. Herdr é opt-in e os caminhos canônicos funcionam com OBS desabilitado. Dependências de contrato estão implementadas sem declarar encerrados os marcos de campanha.",
+      "qualification_limit": "Windows e composição canônica com pares sintéticos; não é declaração de M1/M2 nem promoção dos critérios de saída reais PR03/04/10.",
+      "remaining": []
     },
     "AC-03": {
       "requirement": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
       "status": "NOT_VERIFIED",
       "evidence": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
+      ],
+      "result": "Dois formatos/versões e initialize real estão retidos, e dois atores MCP sintéticos cooperam sem novas identidades. As provas não ligam os dois clientes identificados a participação canônica: o driver de cliente injeta chave em ambiente manual e não chama tools/call; RG01 usa dois atores pelo mesmo helper TestClient.",
+      "qualification_limit": "Não promover o initialize manual a cofre→launcher→cliente; isso continua separado em DX04. Não há execução nova nesta auditoria.",
+      "remaining": [
+        "Reter participação de dois clientes MCP existentes e identificados: sessões/troca dirigida pelo Server real, autenticação por identidade autorizada, contagem de identidades/bindings estável e nenhum adaptador nativo novo.",
+        "Plano399 prefere Claude Code/Codex mas não os obriga; plano454-456 e874 distinguem initialize de participação. AC03 não exige dois harnesses nativos nem inferência paga, nem exige por si só handoff concluído ou cadeia completa de cofre."
       ]
     },
     "AC-04": {
@@ -11527,26 +11551,50 @@
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
         "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+      ],
+      "result": "O percurso terminal, preset, decisões e recuperação estão qualificados com Core/HTTP/SQLite reais e peer nativo sintético. O literal exige harness real em duas topologias.",
+      "qualification_limit": "Não converter teste de processo, initialize, NEXUS_CONNECTION_OK ou peer sintético em M1.",
+      "remaining": [
+        "Executar DX-T39 local e DX-T40 via Connector com um harness real suportado: tarefa, progresso, pergunta/permissão, decisão canônica, resultado e retorno ao trabalho; serviço persistente sem dashboard ou terminal exclusivo.",
+        "Medir o primeiro uso útil de BASE-06 na campanha; registrar contexto, versões e custos previamente autorizados."
       ]
     },
     "AC-12": {
       "requirement": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
-      ]
+      ],
+      "result": "Concorrência real converge para um owner/PID/generation em cada host; locks impedem segundo owner. Perfil remoto é resolvido antes do lifecycle local. O roteamento de supervisor instalado recusa fallback/definition drift e o foreground tem um único owner.",
+      "qualification_limit": "Concorrência/locks em processos Windows reais; efeitos do Task Scheduler injetados nos testes de roteamento. Instalação/login reais continuam AC13.",
+      "remaining": []
     },
     "AC-13": {
       "requirement": "Serviço do usuário foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execução validados.",
       "status": "NOT_VERIFIED",
       "evidence": [
         "plans/agent_ops/campaigns/windows-user-service.md",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "result": "Lifecycle/instalação idempotente/contexto salvo e upgrades têm provas reais e injetadas discriminadas; a sequência de serviço registrado e contexto de credenciais reais não foi executada.",
+      "qualification_limit": "Mocks de Task Scheduler e processo foreground supervisionado não substituem logon real; cofre sintético não comprova credencial pessoal real.",
+      "remaining": [
+        "Na plataforma Windows declarada: registrar/iniciar no login, parar sem ressurreição, recuperar crash/backoff, remover e comprovar contexto/cwd/PATH e credenciais no serviço real.",
+        "Manter login, logout, reboot, terminal fechado e suspensão como eventos distintos. Não declarar outras plataformas qualificadas."
       ]
     },
     "AC-14": {
@@ -11563,13 +11611,22 @@
         "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
-        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json"
       ],
       "subscopes": {
         "pr09_optional_windows_observer_contract": "VERIFIED",
         "remote_renewal_installed_contract": "VERIFIED"
-      }
+      },
+      "result": "Recuperação canônica, perda de resposta, revogação e ownership/incerteza já têm asserts; restart e transporte não autorizam repetir efeito ou renovar grant. O predicado suspensão/retorno ainda não tem campanha retida. Subsequent milestone03b3e801 qualifies real Server crash/return and live owned child restart with four current installed PASS; the audit is retained unchanged at its original point in time.",
+      "qualification_limit": "Falhas injetadas e recovery após commit comprovam seus cortes exatos; não são suspensão/logout/reboot observados.",
+      "remaining": [
+        "Real suspension/resume with known operation/owner and no inferred replay, authority renewal or claim release remains unqualified."
+      ]
     },
     "AC-15": {
       "requirement": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnóstico inicie daemon ou inferência.",
@@ -11586,16 +11643,22 @@
     },
     "AC-16": {
       "requirement": "O agente padrão tem identidade persistente, perfil generalista útil e coordenação no escopo aprovado; preserva limites efetivos do harness e não recebe administração global ou poder de aprovar seus próprios pedidos.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
         "plans/agent_ops/evidence/pr03-remote-renewal.md",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+      ],
+      "result": "Identidade persistente e preset generalista são objetos canônicos revisados; coordenação é limitada ao workspace/permissões concedidos. harness_settings vazio conserva modelo/instruções/sandbox, tool_access=ask conserva decisões, grants são limitados. Merge preserva customizações; agente não inicializa política nem aprova seus pedidos.",
+      "qualification_limit": "Preservação e enforcement das opções suportadas qualificados; não mede utilidade de inferência nem afirma consumo de configuração por provedor real. DX-T43 permanece separado. Plano119/524-539 e INV27 definem a preservação, não nova campanha obrigatória AC16.",
+      "remaining": []
     },
     "AC-17": {
       "requirement": "Reconnect, atualização e abertura posterior da interface preservam a configuração e a identidade; personalização é opcional e o uso padrão continua completo pelo terminal.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-renewal.md",
         "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
@@ -11606,11 +11669,17 @@
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
         "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
         "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
       ],
       "subscopes": {
         "remote_renewal_installed_contract": "VERIFIED"
-      }
+      },
+      "result": "Reconnect mantém identidade e customizações; merge/upgrade preservam seleção, arquivos e dados; dashboard instalado personaliza os mesmos objetos. Caminho terminal completo e retorno ao trabalho têm decisões/resultados correlacionados sem painel obrigatório.",
+      "qualification_limit": "Browser real e upgrades instalados, trabalho nativo sintético; isto não encerra AC11 nem qualifica configurações de todos os clientes/providers.",
+      "remaining": []
     }
   },
   "campaigns": {
@@ -11841,6 +11910,21 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
         "plans/agent_ops/evidence/r3-service-restart-contracts/artifact-manifest.json"
+      ]
+    },
+    "r3_acceptance_contracts": {
+      "status": "VERIFIED",
+      "accepted": [
+        "AC-02",
+        "AC-12",
+        "AC-16",
+        "AC-17"
+      ],
+      "new_tests": 0,
+      "retained_report_node_references": 74,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json"
       ]
     }
   },
@@ -12727,6 +12811,15 @@
       "summary": "SVC-T22/T23/T24 and RG-05 contract predicates qualified; four new source and four installed PASS. M1/native service/platform campaigns remain open.",
       "evidence": [
         "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Finite acceptance contract reconciliation",
+      "status": "VERIFIED",
+      "summary": "AC02/12/16/17 verified by explicit retained predicates; AC01/03/11/13/14 remain open with concrete evidence gaps. No new provider or service campaign inferred.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/milestone.md"
       ]
     }
   ]

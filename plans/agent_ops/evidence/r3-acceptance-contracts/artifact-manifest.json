@@ -1,0 +1,41 @@
+{
+  "files": {
+    "audit/artifact-manifest.json": {
+      "sha256": "4e6348ac68d92f0c7cb39b633e98a553bcfb332221e30d3fad79a3cf36c58f22",
+      "bytes": 1105
+    },
+    "audit/input-manifest.json": {
+      "sha256": "4374380b9366d6c6365346316428173084201e84379c655ecc7384d6079fdda7",
+      "bytes": 17323
+    },
+    "audit/matrix.json": {
+      "sha256": "ae5e9251d99bc123381cf8bfc919134a27895984dd8324acc897488c4f369794",
+      "bytes": 17896
+    },
+    "audit/proofs.json": {
+      "sha256": "1f470f3d71a4383838410e70c9201c1ae568226f372be407e0e89f02ef457926",
+      "bytes": 91915
+    },
+    "audit/reconcile.py": {
+      "sha256": "308bea2d3e40d2b592e8722cb7c59e2e538ab5c65388d4fa05bff714ee83c480",
+      "bytes": 21612
+    },
+    "audit/summary.txt": {
+      "sha256": "fba4b576649204954bf89bffad844795811629207d232035f78b512ba4acd9b1",
+      "bytes": 1472
+    },
+    "audit/verification.json": {
+      "sha256": "547b951c9bcfe2404758eaf1004066a5fef668e39d497ba671845bcc894b521b",
+      "bytes": 15958
+    },
+    "close_milestone.py": {
+      "sha256": "a275e8d3eee8f9f533fd7fc92ff407aa25b7c50c933828af3962b6119ee74538",
+      "bytes": 4416
+    },
+    "milestone.md": {
+      "sha256": "12c48ee4758bedf0877211e147b17ac7ed3c8d88e1c8536cce054fbd29facc2e",
+      "bytes": 757
+    }
+  },
+  "note": "Original audit immutable; AC14 later qualification recorded in ledger"
+}
