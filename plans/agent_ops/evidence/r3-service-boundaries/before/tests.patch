@@ -1,0 +1,518 @@
+--- /dev/null
++++ b/tests/test_service_failure_boundaries.py
+@@ -0,0 +1,515 @@
++"""SVC-T06/T12/T13: installed code, disposable ownership, no provider.
++
++The only injected interruption is KeyboardInterrupt in one CLI wait callback.
++The observed Server is a real child held before bootstrap by a fixture gate.
++No global console signal is sent. No task registration or personal vault occurs.
++"""
++
++from __future__ import annotations
++
++from contextlib import contextmanager
++import json
++import os
++from pathlib import Path
++import socket
++import sqlite3
++import subprocess
++import sys
++import time
++
++import inspect
++import pytest
++
++from okto_nexus.adapters.inbound.cli import connect, service
++from okto_nexus.adapters.inbound.http.lock import ServeLock
++from okto_nexus.adapters.outbound.service_manager.context import read_json
++from okto_nexus.adapters.outbound.service_manager.inspection import inspect_local_server
++from okto_nexus.adapters.outbound.service_manager.local import LocalServerLifecycle
++
++
++def record(name, data):
++    target = Path(os.environ["SVC_EVIDENCE_DIR"]) / (name + ".json")
++    target.write_text(
++        json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
++    )
++
++
++def isolated_env(root):
++    # No inherited secret/proxy/provider/Nexus/Core configuration values.
++    env = {
++        k: v
++        for k, v in os.environ.items()
++        if k.upper() in {"SYSTEMROOT", "WINDIR", "COMSPEC"}
++    }
++    # os.environ on Windows is case-insensitive; our plain isolated dictionary
++    # must retain the canonical spelling consumed by the production allowlist.
++    env["SystemRoot"] = os.environ["SYSTEMROOT"]
++    for key, folder in [
++        ("TEMP", "temp"),
++        ("TMP", "temp"),
++        ("USERPROFILE", "profile"),
++        ("APPDATA", "appdata"),
++        ("LOCALAPPDATA", "localappdata"),
++    ]:
++        path = root / folder
++        path.mkdir(parents=True, exist_ok=True)
++        env[key] = str(path)
++    env.update(PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1", OKTO_NEXUS_NO_BANNER="1")
++    env["PATH"] = (
++        str(Path(sys.executable).parent)
++        + os.pathsep
++        + str(Path(env["SYSTEMROOT"]) / "System32")
++    )
++    return env
++
++
++def selection(root, port):
++    approved = root / "empty-discovery"
++    approved.mkdir(exist_ok=True)
++    return [
++        "--home",
++        str(root / "home"),
++        "--db-path",
++        str(root / "data/selected.sqlite"),
++        "--host",
++        "127.0.0.1",
++        "--port",
++        str(port),
++        "--project-root",
++        str(root),
++        "--embedding-mode",
++        "off",
++        "--feature-harness-integrations",
++        "false",
++        "--harness-root",
++        str(approved),
++    ]
++
++
++@contextmanager
++def bound_port():
++    with socket.socket() as listener:
++        if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
++            listener.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
++        listener.bind(("127.0.0.1", 0))
++        listener.listen(4)
++        yield listener, listener.getsockname()[1]
++
++
++def free_port():
++    with socket.socket() as listener:
++        listener.bind(("127.0.0.1", 0))
++        return listener.getsockname()[1]
++
++
++def run_serve(root, args):
++    completed = subprocess.run(
++        [
++            sys.executable,
++            "-I",
++            "-X",
++            "utf8",
++            "-m",
++            "okto_nexus.adapters.inbound.cli.main",
++            "serve",
++            *args,
++        ],
++        cwd=root,
++        env=isolated_env(root),
++        stdin=subprocess.DEVNULL,
++        capture_output=True,
++        text=True,
++        encoding="utf-8",
++        timeout=45,
++    )
++    return completed
++
++
++def test_occupied_port_refuses_without_fallback_and_exposes_the_bind_cause(
++    tmp_path, monkeypatch, capsys
++):
++    """Real occupied socket; observe public service result and bounded logs."""
++    from okto_nexus.adapters.outbound.service_manager import local
++
++    real_popen = subprocess.Popen
++    children = []
++    private = tmp_path / "child-stderr.txt"
++    with bound_port() as (listener, port), private.open("wb") as log:
++        args = selection(tmp_path, port)
++
++        def capture(*a, **kw):
++            # Only retain the real spawn's output; argv, environment and effects
++            # are unchanged. Captured raw stderr is diagnostic, not public UX.
++            kw["stderr"] = log
++            child = real_popen(*a, **kw)
++            children.append(child)
++            return child
++
++        monkeypatch.setattr(local.subprocess, "Popen", capture)
++        with monkeypatch.context() as envpatch:
++            envpatch.setattr(os, "environ", isolated_env(tmp_path))
++            code = service.run_service(["start", *args, "--json", "--timeout", "20"])
++        report = json.loads(capsys.readouterr().out)
++        for child in children:
++            child.wait(timeout=30)
++        log.flush()
++        assert len(children) == 1
++        assert children[0].returncode != 0
++        assert code != 0 and report["state"] != "ready"
++        assert listener.getsockname() == ("127.0.0.1", port)
++        context = read_json(tmp_path / "home/service-context.json")
++        assert context["arguments"][context["arguments"].index("--port") + 1] == str(
++            port
++        )
++        assert context["arguments"][context["arguments"].index("--db-path") + 1] == str(
++            tmp_path / "data/selected.sqlite"
++        )
++        assert not (tmp_path / "home/nexus.db").exists()
++        with ServeLock(tmp_path / "home", db_path=tmp_path / "data/selected.sqlite"):
++            pass
++        raw = private.read_text(encoding="utf-8", errors="replace")
++        assert "bind" in raw.lower() or "10048" in raw
++        view, _ = LocalServerLifecycle(
++            home=tmp_path / "home",
++            database=tmp_path / "data/selected.sqlite",
++            host="127.0.0.1",
++            port=port,
++        ).logs(tail=100)
++        assert not any(x["code"] == "READY_FOR_QUERIES" for x in view["events"])
++        public = json.dumps(
++            {
++                "reason": report.get("reason"),
++                "next_action": report.get("next_action"),
++                "events": view["events"],
++            }
++        ).lower()
++        cause_visible = (
++            "address already in use" in public
++            or "port_conflict" in public
++            or "port_in_use" in public
++            or "10048" in public
++            or (
++                "bind" in public
++                and any(x in public for x in ["failed", "unavailable", "conflict"])
++            )
++        )
++        record(
++            "occupied-port",
++            {
++                "cli_exit": code,
++                "state": report["state"],
++                "reason": report.get("reason"),
++                "next_action": report.get("next_action"),
++                "single_spawn": len(children) == 1,
++                "spawn_exit": children[0].returncode,
++                "configured_port_unchanged": True,
++                "configured_database_unchanged": True,
++                "foreign_listener_survived": True,
++                "no_ready_log": True,
++                "actual_bind_failure_observed_in_private_stderr": True,
++                "public_cause_visible": cause_visible,
++                "public_log_codes": [x["code"] for x in view["events"]],
++            },
++        )
++        assert cause_visible, (
++            "Actual bind conflict was hidden by the public service result and bounded service logs"
++        )
++
++
++@pytest.mark.parametrize(
++    "fault", ["invalid_config", "future_migration", "unavailable_storage"]
++)
++def test_startup_failures_never_bind_or_report_readiness_and_preserve_selection(
++    tmp_path, fault
++):
++    port = free_port()
++    args = selection(tmp_path, port)
++    expected = None
++    before = None
++    db = tmp_path / "data/selected.sqlite"
++    if fault == "invalid_config":
++        args[args.index("--embedding-mode") + 1] = "invalid-mode"
++        expected = "CONFIG_ERROR"
++    elif fault == "future_migration":
++        db.parent.mkdir()
++        with sqlite3.connect(db) as c:
++            c.execute(
++                "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)"
++            )
++            c.execute(
++                "INSERT INTO schema_migrations VALUES(999999,'2026-11-07T00:00:00Z')"
++            )
++        with sqlite3.connect(db) as c:
++            before = c.execute("SELECT * FROM schema_migrations").fetchall()
++        expected = "MIGRATION_ERROR"
++    else:
++        db.parent.write_text("not a directory", encoding="utf-8")
++        expected = "Cannot acquire Server instance exclusion"
++    result = run_serve(tmp_path, args)
++    assert result.returncode == 1
++    assert expected in result.stderr
++    assert "initialized successfully" not in result.stderr
++    with socket.socket() as observer:
++        observer.settimeout(0.2)
++        assert observer.connect_ex(("127.0.0.1", port)) != 0
++    assert not (tmp_path / "home/nexus.db").exists()
++    if fault == "invalid_config":
++        assert not (tmp_path / "home").exists() and not db.exists()
++    elif fault == "future_migration":
++        with sqlite3.connect(db) as c:
++            assert c.execute("SELECT * FROM schema_migrations").fetchall() == before
++            assert c.execute(
++                "SELECT name FROM sqlite_master WHERE type='table'"
++            ).fetchall() == [("schema_migrations",)]
++        with ServeLock(tmp_path / "home", db_path=db):
++            pass
++    else:
++        assert db.parent.read_text(encoding="utf-8") == "not a directory"
++        assert not (tmp_path / "home/nexus.serve.lock").exists()
++    # Lifecycle logs live under their own implementation filename; inspect via
++    # canonical API rather than depending on that filename for readiness.
++    view, _ = LocalServerLifecycle(
++        home=tmp_path / "home", database=db, host="127.0.0.1", port=port
++    ).logs(tail=100)
++    assert not any(x["code"] == "READY_FOR_QUERIES" for x in view["events"])
++    record(
++        "startup-" + fault,
++        {
++            "exit": result.returncode,
++            "expected_diagnostic_observed": expected,
++            "listening": False,
++            "ready_log": False,
++            "database_fallback": False,
++            "preserved_future_ledger": fault == "future_migration",
++            "fault_kind": "real isolated state/configuration",
++        },
++    )
++
++
++def process_birth(pid):
++    """Inspect only a captured child PID; no process enumeration or registry."""
++    import ctypes
++    from ctypes import wintypes
++
++    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
++    kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
++    kernel.OpenProcess.restype = wintypes.HANDLE
++    kernel.GetProcessTimes.argtypes = [wintypes.HANDLE] + [
++        ctypes.POINTER(wintypes.FILETIME)
++    ] * 4
++    kernel.GetProcessTimes.restype = wintypes.BOOL
++    kernel.QueryFullProcessImageNameW.argtypes = [
++        wintypes.HANDLE,
++        wintypes.DWORD,
++        wintypes.LPWSTR,
++        ctypes.POINTER(wintypes.DWORD),
++    ]
++    kernel.QueryFullProcessImageNameW.restype = wintypes.BOOL
++    kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
++    kernel.WaitForSingleObject.restype = wintypes.DWORD
++    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
++    handle = kernel.OpenProcess(0x1000 | 0x100000, False, pid)
++    if not handle:
++        raise OSError("Captured child unavailable")
++    try:
++        if kernel.WaitForSingleObject(handle, 0) != 0x102:
++            raise OSError("Captured child exited")
++        times = [wintypes.FILETIME() for _ in range(4)]
++        if not kernel.GetProcessTimes(handle, *(ctypes.byref(t) for t in times)):
++            raise OSError("Birth unavailable")
++        image = ctypes.create_unicode_buffer(32768)
++        length = wintypes.DWORD(len(image))
++        if not kernel.QueryFullProcessImageNameW(
++            handle, 0, image, ctypes.byref(length)
++        ):
++            raise OSError("Image unavailable")
++        return {
++            "creation_filetime": (times[0].dwHighDateTime << 32)
++            | times[0].dwLowDateTime,
++            "image_path": image.value,
++        }
++    finally:
++        kernel.CloseHandle(handle)
++
++
++GATED_SERVER = (
++    inspect.getsource(process_birth)
++    + """
++import json,os,sys,time
++from pathlib import Path
++from okto_nexus.bootstrap import dependencies
++from okto_nexus.adapters.inbound.cli.serve import run_serve
++from okto_nexus.adapters.inbound.http.lock import ServeLock
++root=Path(sys.argv[1]);args=json.loads(sys.argv[2])
++real=dependencies.bootstrap
++def gated(env,argv):
++    metadata=json.loads((root/'home/nexus.serve.lock').read_text())
++    (root/'owner.json').write_text(json.dumps(dict(pid=os.getpid(),ppid=os.getppid(),
++       birth=process_birth(os.getpid()),generation=metadata['generation'])))
++    deadline=time.monotonic()+45
++    while not (root/'release').exists():
++        if time.monotonic()>deadline:raise RuntimeError('Disposable fixture gate expired')
++        time.sleep(.03)
++    return real(env,argv)
++dependencies.bootstrap=gated
++raise SystemExit(run_serve(args))
++"""
++)
++
++
++def wait_until(predicate, timeout=30):
++    deadline = time.monotonic() + timeout
++    while True:
++        answer = predicate()
++        if answer:
++            return answer
++        assert time.monotonic() < deadline, (
++            "Disposable owner did not reach the expected boundary"
++        )
++        time.sleep(0.05)
++
++
++def test_interrupting_connect_wait_preserves_the_same_real_starting_owner(
++    tmp_path, monkeypatch
++):
++    port = free_port()
++    args = selection(tmp_path, port)
++    script = tmp_path / "gated_server.py"
++    script.write_text(GATED_SERVER, encoding="utf-8")
++    original_resolver = connect.resolve_local_service
++    interrupted = []
++    owner = None
++    drained = False
++    with (tmp_path / "server-private.log").open("wb") as log:
++        child = subprocess.Popen(
++            [
++                sys.executable,
++                "-I",
++                "-X",
++                "utf8",
++                str(script),
++                str(tmp_path),
++                json.dumps(args),
++            ],
++            cwd=tmp_path,
++            env=isolated_env(tmp_path),
++            stdin=subprocess.DEVNULL,
++            stdout=log,
++            stderr=log,
++            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
++        )
++        try:
++            wait_until(lambda: (tmp_path / "owner.json").exists())
++            owner = json.loads((tmp_path / "owner.json").read_text())
++            assert process_birth(owner["pid"]) == owner["birth"]
++            assert owner["pid"] == child.pid or owner["ppid"] == child.pid
++            assert not (tmp_path / "data/selected.sqlite").exists()
++            original_metadata = (tmp_path / "home/nexus.serve.lock").read_bytes()
++
++            def resolved(*a, **kw):
++                facade = original_resolver(*a, **kw)
++
++                def interrupt_wait(_seconds):
++                    interrupted.append(True)
++                    raise KeyboardInterrupt
++
++                facade.sleep = interrupt_wait
++                return facade
++
++            monkeypatch.setattr(connect, "resolve_local_service", resolved)
++            with monkeypatch.context() as envpatch:
++                envpatch.setattr(os, "environ", isolated_env(tmp_path))
++                code = connect.run_connect(
++                    [
++                        "--profile",
++                        "wait-interruption",
++                        "--project",
++                        str(tmp_path),
++                        "--agent",
++                        "synthetic-unused",
++                        "--json",
++                        *args,
++                    ]
++                )
++            assert code == 130 and interrupted == [True]
++            assert child.poll() is None
++            assert process_birth(owner["pid"]) == owner["birth"]
++            assert (
++                tmp_path / "home/nexus.serve.lock"
++            ).read_bytes() == original_metadata
++            assert not (tmp_path / "home/service-launch.json").exists()
++            assert not (
++                tmp_path / "home/terminal/profiles/wait-interruption.json"
++            ).exists()
++            assert not (tmp_path / "home/service-shutdown.json").exists()
++            (tmp_path / "release").touch()
++            def ready_view():
++                value = inspect_local_server(
++                    home=tmp_path / "home",
++                    database=tmp_path / "data/selected.sqlite",
++                    host="127.0.0.1",
++                    port=port,
++                    timeout=0.2,
++                )
++                return value if value["state"] == "ready" else None
++
++            ready = wait_until(ready_view)
++            assert (
++                ready["generation"] == owner["generation"]
++                and ready["pid"] == owner["pid"]
++            )
++            from okto_nexus.application.service_lifecycle import ServiceLifecycle
++
++            adapter = LocalServerLifecycle(
++                home=tmp_path / "home",
++                database=tmp_path / "data/selected.sqlite",
++                host="127.0.0.1",
++                port=port,
++            )
++            end = ServiceLifecycle(
++                adapter, monotonic=time.monotonic, sleep=time.sleep
++            ).stop(timeout=30)
++            assert end["state"] == "stopped" and end["shutdown_outcome"] == "drained"
++            assert child.wait(timeout=10) == 0
++            drained = True
++            record(
++                "connect-interruption",
++                {
++                    "exit": code,
++                    "injected_boundary": "one observer sleep raises KeyboardInterrupt",
++                    "global_signal_sent": False,
++                    "owner_pid_birth_confirmed": True,
++                    "same_generation_ready_after_interruption": True,
++                    "new_launch_receipt": False,
++                    "setup_checkpoint": False,
++                    "shutdown_requested_by_interruption": False,
++                    "canonical_cleanup": "DRAINED",
++                    "process_exit": child.returncode,
++                    "native_or_provider_invoked": False,
++                },
++            )
++        finally:
++            (tmp_path / "release").touch(exist_ok=True)
++            if not drained and child.poll() is None:
++                # Cleanup targets only this captured child birth; never a PID
++                # from a preexisting service record or any console process group.
++                if owner:
++                    if process_birth(owner["pid"]) == owner["birth"]:
++                        adapter = LocalServerLifecycle(
++                            home=tmp_path / "home",
++                            database=tmp_path / "data/selected.sqlite",
++                            host="127.0.0.1",
++                            port=port,
++                        )
++                        from okto_nexus.application.service_lifecycle import (
++                            ServiceLifecycle,
++                        )
++
++                        wait_until(
++                            lambda: adapter.inspect(timeout=0.2)["state"] == "ready",
++                            timeout=20,
++                        )
++                        ServiceLifecycle(
++                            adapter, monotonic=time.monotonic, sleep=time.sleep
++                        ).stop(timeout=30)
++                child.wait(timeout=10)

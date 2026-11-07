@@ -1,0 +1,37 @@
+{
+  "initial_exact_check_mismatches": [
+    "src/okto_nexus/adapters/inbound/cli/serve.py",
+    "tests/test_service_failure_boundaries.py"
+  ],
+  "classification": "Only Git CRLF-to-LF normalization; qualified wheel and original frozen source bytes retained; no code difference.",
+  "files": [
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/serve.py",
+      "qualified_worktree_sha256": "e035f239181391c24e35038fda3b2b13ce44a34d87437d3d2d6130358eb5d512",
+      "git_index_sha256": "e7cd763346921ece65ee5c326289bbbb1200b295c61f9e34e3c39b313f465abf",
+      "exact": false,
+      "lf_normalized_equal": true
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/service_manager/logs.py",
+      "qualified_worktree_sha256": "07148a93632ef92c4797985dc91c60a05b28ffd5879920f3e01ca41f9ba1cf7d",
+      "git_index_sha256": "07148a93632ef92c4797985dc91c60a05b28ffd5879920f3e01ca41f9ba1cf7d",
+      "exact": true,
+      "lf_normalized_equal": true
+    },
+    {
+      "path": "tests/test_service_failure_boundaries.py",
+      "qualified_worktree_sha256": "d4395e21b9a06332e4d9ecf6d838a9613e8e5c0cc048183e10ef66f5b1833310",
+      "git_index_sha256": "43037c520fd81875e153605d4da95c1acd6416c124a7852f4bff52c98f82772d",
+      "exact": false,
+      "lf_normalized_equal": true
+    },
+    {
+      "path": "tests/test_service_bind_diagnostics.py",
+      "qualified_worktree_sha256": "bba6b05e7b58733b67e8e00606cef8b12d88a4ad41848579753c51e6dda8a695",
+      "git_index_sha256": "bba6b05e7b58733b67e8e00606cef8b12d88a4ad41848579753c51e6dda8a695",
+      "exact": true,
+      "lf_normalized_equal": true
+    }
+  ]
+}

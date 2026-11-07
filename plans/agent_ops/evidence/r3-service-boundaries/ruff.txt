@@ -1,0 +1,2 @@
+python -m ruff check tests/test_service_failure_boundaries.py tests/test_service_bind_diagnostics.py src/okto_nexus/adapters/inbound/cli/serve.py src/okto_nexus/adapters/outbound/service_manager/logs.py
+All checks passed!

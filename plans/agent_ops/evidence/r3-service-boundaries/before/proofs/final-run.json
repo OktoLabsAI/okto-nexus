@@ -1,0 +1,74 @@
+{
+  "exit": 1,
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-connector-refresh-la1tb1l6\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\candidate\\pytest.ini",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\pytest-temp",
+    "-q",
+    "--tb=short",
+    "--junitxml",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\tests.xml",
+    "tests/test_service_failure_boundaries.py",
+    "tests/test_serve_lock.py::test_failed_bootstrap_releases_both_locks",
+    "tests/test_serve_lock.py::test_unavailable_lock_storage_reports_failure_without_bootstrap"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\candidate",
+  "source_files_unchanged": {
+    "pytest.ini": "bd41a2b6b6a09ec63954a212e1ee77dcfaeca56e9f213af40b8d12a478e516e3",
+    "tests\\test_serve_lock.py": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41",
+    "tests\\test_service_failure_boundaries.py": "6b51128d9d206296f8c856670468fc8bb0547d324d69571db50abbf44ac447a2"
+  },
+  "cases": [
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_occupied_port_refuses_without_fallback_and_exposes_the_bind_cause",
+      "status": "failed"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[invalid_config]",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[future_migration]",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[unavailable_storage]",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_interrupting_connect_wait_preserves_the_same_real_starting_owner",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_serve_lock",
+      "name": "test_failed_bootstrap_releases_both_locks",
+      "status": "passed"
+    },
+    {
+      "classname": "tests.test_serve_lock",
+      "name": "test_unavailable_lock_storage_reports_failure_without_bootstrap",
+      "status": "passed"
+    }
+  ],
+  "counts": {
+    "passed": 6,
+    "failed": 1,
+    "error": 0,
+    "skipped": 0
+  },
+  "raw_xml_sha256": "792c2566b9046d9a72f051626ef3bc01f4e6db72a79d9ae9647b6de812628f13"
+}

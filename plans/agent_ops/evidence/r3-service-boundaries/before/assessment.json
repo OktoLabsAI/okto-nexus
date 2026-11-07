@@ -1,0 +1,68 @@
+{
+  "schema": "r3.svc.failure-boundaries.v1",
+  "scope": [
+    "SVC-T06",
+    "SVC-T12",
+    "SVC-T13"
+  ],
+  "mode": "installed noneditable wheel, new tests only in Temp",
+  "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+  "package_files_verified": 690,
+  "mcp": "1.30.0",
+  "product_changed": false,
+  "checkout_changed": false,
+  "results": {
+    "SVC-T06": {
+      "status": "PARTIAL_PRODUCT_DEFECT",
+      "proved": [
+        "one actual spawn",
+        "occupied foreign loopback listener survives",
+        "configured port and database unchanged",
+        "no ready event",
+        "child exits and ownership lock releases"
+      ],
+      "defect": "Public service start returns STARTUP_FAILED and asks to inspect diagnostics, but service logs have no bind/port cause. The canonical detached child stderr is discarded in production.",
+      "product_refs": [
+        "src/okto_nexus/adapters/outbound/service_manager/local.py:225",
+        "src/okto_nexus/adapters/inbound/cli/service_process.py:44",
+        "src/okto_nexus/adapters/inbound/cli/serve.py:612"
+      ],
+      "recommendation": "Preserve a sanitized typed startup bind failure from the actual bind attempt; do not replace ownership or add a racy preflight-only port probe. Parent owns any product change."
+    },
+    "SVC-T12": {
+      "status": "VERIFIED_SCOPED",
+      "proved": [
+        "invalid enum rejected before home/store creation",
+        "future migration ledger rejected with MIGRATION_ERROR; original rows and table set preserved",
+        "storage parent occupied by regular file yields explicit exclusion/storage diagnostic and preserves file",
+        "all three never listen or report readiness",
+        "existing failed-bootstrap lock release and injected lock-storage denial regressions pass"
+      ],
+      "limits": "Disposable local config/SQLite/filesystem; not all possible OS permission or migration faults."
+    },
+    "SVC-T13": {
+      "status": "VERIFIED_SCOPED",
+      "proved": [
+        "real owner captured by PID plus Windows process birth/image and parent relationship",
+        "KeyboardInterrupt injected into one connect observer sleep",
+        "connect returns130 without launch/setup/shutdown receipts",
+        "same owner/generation subsequently reaches ready",
+        "canonical stop yields DRAINED and process exits0"
+      ],
+      "limits": "Fault injection at the exact observer boundary, not physical keyboard/console signaling; no provider or admitted native turn was needed or claimed."
+    }
+  },
+  "cleanup": {
+    "occupied_port_child": "exited1; foreign listener retained until test-owned context closes",
+    "interrupted_connect_owner": "canonical DRAINED then captured process exit0",
+    "global_console_signals": 0,
+    "registered_services": 0,
+    "providers": 0
+  },
+  "isolation_limits": [
+    "No packages installed or source/config bytes changed in shared qualified venv. Wheel comparison covers payload files, not incidental Python bytecode caches.",
+    "Raw XML and raw process stderr remain in Temp; only curated allowlist goes to public.",
+    "A captured Popen stderr sink is the only instrumentation of port startup; the public-cause assertion deliberately excludes that private stream.",
+    "Parent repository source may evolve independently; these assertions import only the pinned installed package."
+  ]
+}

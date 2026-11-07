@@ -1,0 +1,123 @@
+{
+  "attempts": [
+    {
+      "attempt": "initial",
+      "report": "reports/collection-initial.xml",
+      "cases": [
+        {
+          "classname": "",
+          "name": "tests.test_service_failure_boundaries",
+          "status": "error"
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failed": 0,
+        "error": 1,
+        "skipped": 0
+      },
+      "limitation": "Preparation only: psutil absent in qualified venv; no Server/test body started. Fixed helper to use native Windows read APIs without installing dependencies."
+    },
+    {
+      "attempt": "execution-initial",
+      "report": "reports/execution-fixture-initial.xml",
+      "cases": [
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_occupied_port_refuses_without_fallback_and_exposes_the_bind_cause",
+          "status": "failed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[invalid_config]",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[future_migration]",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[unavailable_storage]",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_interrupting_connect_wait_preserves_the_same_real_starting_owner",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_serve_lock",
+          "name": "test_failed_bootstrap_releases_both_locks",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_serve_lock",
+          "name": "test_unavailable_lock_storage_reports_failure_without_bootstrap",
+          "status": "passed"
+        }
+      ],
+      "counts": {
+        "passed": 6,
+        "failed": 1,
+        "error": 0,
+        "skipped": 0
+      },
+      "limitation": "6 pass /1 fixture failure: replacing Windows os.environ by a plain dict lost canonical SystemRoot spelling before detached spawn; WinError10106 occurred before bind. Runner afterward compared preexisting __pycache__ only on its before side and raised; XML was already closed. No product qualification from this failed port case."
+    },
+    {
+      "attempt": "final",
+      "report": "reports/execution-final.xml",
+      "cases": [
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_occupied_port_refuses_without_fallback_and_exposes_the_bind_cause",
+          "status": "failed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[invalid_config]",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[future_migration]",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[unavailable_storage]",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_service_failure_boundaries",
+          "name": "test_interrupting_connect_wait_preserves_the_same_real_starting_owner",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_serve_lock",
+          "name": "test_failed_bootstrap_releases_both_locks",
+          "status": "passed"
+        },
+        {
+          "classname": "tests.test_serve_lock",
+          "name": "test_unavailable_lock_storage_reports_failure_without_bootstrap",
+          "status": "passed"
+        }
+      ],
+      "counts": {
+        "passed": 6,
+        "failed": 1,
+        "error": 0,
+        "skipped": 0
+      },
+      "limitation": "6 pass /1 real product failure: occupied-port cause is absent from public service result and bounded logs. Product bytes match the qualified wheel; tests stayed unchanged during this final run."
+    }
+  ],
+  "distinct_execution_identities": 7,
+  "qualified_identities": 6,
+  "unresolved_product_failures": 1,
+  "collection_error_is_not_an_execution_identity": true,
+  "repeat_counts_not_added_to_coverage": true
+}

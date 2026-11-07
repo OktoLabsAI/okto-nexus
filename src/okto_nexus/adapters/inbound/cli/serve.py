@@ -426,6 +426,34 @@ def _warm_embeddings(deps: "object", done_event: "object") -> None:
         done_event.set()
 
 
+def _bind_failure_code(error: BaseException) -> str | None:
+    """Classify the listener failure without retaining exception text.
+
+    Uvicorn converts create_server's OSError to SystemExit while preserving
+    the exception context. Unrelated startup failures must remain unrelated.
+    """
+    import errno
+
+    cause = error.__context__ if isinstance(error, SystemExit) else error
+    if not isinstance(cause, OSError):
+        return None
+    trace = cause.__traceback__
+    while trace is not None:
+        frame = trace.tb_frame
+        if (frame.f_code.co_name == 'create_server'
+                and frame.f_globals.get('__name__', '').startswith('asyncio.')):
+            break
+        trace = trace.tb_next
+    if trace is None:
+        return None
+    number = cause.errno
+    if number in {errno.EADDRINUSE, 10048}:
+        return 'PORT_IN_USE'
+    if number in {errno.EADDRNOTAVAIL, errno.EACCES, 10049, 10013}:
+        return 'BIND_FAILED'
+    return None
+
+
 def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
               acquired_lock=None, supervisor: str = 'foreground', settings_pinned_fields=None,
               settings_provenance_legacy=False) -> int:
@@ -610,6 +638,16 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None, *,
         try:
             try:
                 server.run()
+            except (SystemExit, OSError) as exc:
+                code = _bind_failure_code(exc) if not server.started else None
+                if code is None:
+                    raise
+                if service_log is not None:
+                    service_log.write(code, state='STARTING')
+                print(f'[okto-nexus] {code}: cannot bind the configured HTTP endpoint. '
+                      'Inspect the selected address and port before explicitly retrying.',
+                      file=sys.stderr)
+                return 1
             except KeyboardInterrupt:
                 # uvicorn already completed its graceful shutdown and
                 # re-raised the captured CTRL+C (its signal-forwarding

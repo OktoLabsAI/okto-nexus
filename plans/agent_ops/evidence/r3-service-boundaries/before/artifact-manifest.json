@@ -1,0 +1,282 @@
+{
+  "allowlist": [
+    {
+      "path": "README.md",
+      "bytes": 1771,
+      "sha256": "10f2c9adf10fdc1ebb558fa2e73cbebd47cd287bc6d36d9b9bc8a9aabe8ae4aa"
+    },
+    {
+      "path": "assessment.json",
+      "bytes": 3398,
+      "sha256": "c83260b93cc160a7b6f3422c38d60565070ce80657d71a1757e88cdbfa5a33a5"
+    },
+    {
+      "path": "attempts.json",
+      "bytes": 4688,
+      "sha256": "4f5418267753f3c0137d2cf2f66a18e0079a99b73101c7901b7a9be2afae7c87"
+    },
+    {
+      "path": "candidate/test_service_failure_boundaries.py",
+      "bytes": 19233,
+      "sha256": "6b51128d9d206296f8c856670468fc8bb0547d324d69571db50abbf44ac447a2"
+    },
+    {
+      "path": "proofs/connect-interruption.json",
+      "bytes": 409,
+      "sha256": "9b25486ec25bd425581bf9585eb4e38436056c8c7eaec02baebcbd5b928dcd7b"
+    },
+    {
+      "path": "proofs/final-run.json",
+      "bytes": 2792,
+      "sha256": "3330c36ea1873f3be62f3251d607e2904019997f4efe9001ac7d3888a4d54879"
+    },
+    {
+      "path": "proofs/final-test-input-hashes.json",
+      "bytes": 301,
+      "sha256": "600014f9305b96210337bd662f680152d361d8bd9ee8e3a92f5995211a0cef4a"
+    },
+    {
+      "path": "proofs/installed-inputs.json",
+      "bytes": 908,
+      "sha256": "d952a21150b48c93c851c07cfbb80904bf1b1399f29eeb4c0cf00357bec68a27"
+    },
+    {
+      "path": "proofs/occupied-port.json",
+      "bytes": 530,
+      "sha256": "d7e952b1da9448911f10a5d7d819bc37e12077f23aa9b3595654e7841d7d411e"
+    },
+    {
+      "path": "proofs/startup-future_migration.json",
+      "bytes": 231,
+      "sha256": "d4a19ffdc96f1d2b9aa3f5e2b54e12b9adf1d3be55b74919562885f9e688f6a7"
+    },
+    {
+      "path": "proofs/startup-invalid_config.json",
+      "bytes": 229,
+      "sha256": "cf30d0e657529c8f890f539e41ce11f2ebbcc6db03d2c3e0c238c6732cefdec5"
+    },
+    {
+      "path": "proofs/startup-unavailable_storage.json",
+      "bytes": 257,
+      "sha256": "34bbf8096e52e7ae0f0b60b5f7fe544929036420e74d55298573a6fa21c073ec"
+    },
+    {
+      "path": "reports/collection-initial.xml",
+      "bytes": 759,
+      "sha256": "146b637073b4b34be3f2b69e4515683c82188706f9ae5e0efd2e906e1ef8310d"
+    },
+    {
+      "path": "reports/execution-final.xml",
+      "bytes": 1749,
+      "sha256": "ae4311a2f5b0b7923e9041d8af3457a37092a57cc4c5560973c24fe0341406a7"
+    },
+    {
+      "path": "reports/execution-fixture-initial.xml",
+      "bytes": 3396,
+      "sha256": "7bbc6b14d6105e6f13a8a102d8a35f56323191c827d4a73c6916acaf98f5e5c1"
+    },
+    {
+      "path": "ruff.txt",
+      "bytes": 19,
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "scripts/curate.py",
+      "bytes": 10000,
+      "sha256": "ab16503ddb18c9501828fb5bf3ed7e9326af0e5d1dca587c292b41eedab4e55a"
+    },
+    {
+      "path": "scripts/prepare.py",
+      "bytes": 457,
+      "sha256": "48c2638355d718adc3f2012ed0fcb29fb7f87d3bcf5055c0d52adb8be972a0de"
+    },
+    {
+      "path": "scripts/run_installed.py",
+      "bytes": 3781,
+      "sha256": "3388df6dc9ecaa6975c432621fc6d9ef31399d5240bffab4824c87b70784c4da"
+    },
+    {
+      "path": "tests.patch",
+      "bytes": 19827,
+      "sha256": "44feaae266503c63091397862c8b39bb17c72215a6204cec962142fa87c3b334"
+    }
+  ],
+  "copies": [
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\initial\\tests.xml",
+      "path": "reports/collection-initial.xml",
+      "original_sha256": "1386c41d0c46bac5c4cfc40ca99add5d1087146ae1e19ecdf8ce24b634ec84ab",
+      "artifact_sha256": "146b637073b4b34be3f2b69e4515683c82188706f9ae5e0efd2e906e1ef8310d",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\execution-initial\\tests.xml",
+      "path": "reports/execution-fixture-initial.xml",
+      "original_sha256": "5f79d579705891c9371de738ea75048ab195eb352a3a4b6daa3a58317029be2d",
+      "artifact_sha256": "7bbc6b14d6105e6f13a8a102d8a35f56323191c827d4a73c6916acaf98f5e5c1",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\tests.xml",
+      "path": "reports/execution-final.xml",
+      "original_sha256": "792c2566b9046d9a72f051626ef3bc01f4e6db72a79d9ae9647b6de812628f13",
+      "artifact_sha256": "ae4311a2f5b0b7923e9041d8af3457a37092a57cc4c5560973c24fe0341406a7",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\installed-inputs.json",
+      "path": "proofs/installed-inputs.json",
+      "original_sha256": "f8b676ae234f292b309db6a2ad4d85cc997388237c5d3a5c26f82efc0d089c3d",
+      "artifact_sha256": "d952a21150b48c93c851c07cfbb80904bf1b1399f29eeb4c0cf00357bec68a27",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\input-hashes.json",
+      "path": "proofs/final-test-input-hashes.json",
+      "original_sha256": "f9851c2affd2a618fddb3f6a66b9e776a4f63352e84430dfdad794ac48ca5f7b",
+      "artifact_sha256": "600014f9305b96210337bd662f680152d361d8bd9ee8e3a92f5995211a0cef4a",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\summary.json",
+      "path": "proofs/final-run.json",
+      "original_sha256": "b83ceb15a33bc91bd244d3430471b343797465f56c945292fe9ce033d5d1e346",
+      "artifact_sha256": "3330c36ea1873f3be62f3251d607e2904019997f4efe9001ac7d3888a4d54879",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\occupied-port.json",
+      "path": "proofs/occupied-port.json",
+      "original_sha256": "f8953902d4644d38651f4ee65d1819f9fd20a1622e55b2b257a92637575d45d9",
+      "artifact_sha256": "d7e952b1da9448911f10a5d7d819bc37e12077f23aa9b3595654e7841d7d411e",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\startup-invalid_config.json",
+      "path": "proofs/startup-invalid_config.json",
+      "original_sha256": "e754e3589f53e046476e373db69fdc99c924275c7a0b34cd680cd9a8ed44d2fd",
+      "artifact_sha256": "cf30d0e657529c8f890f539e41ce11f2ebbcc6db03d2c3e0c238c6732cefdec5",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\startup-future_migration.json",
+      "path": "proofs/startup-future_migration.json",
+      "original_sha256": "8e3281256776d48af804ccbc9b4a08305141eada74395113f2639290757f9bb4",
+      "artifact_sha256": "d4a19ffdc96f1d2b9aa3f5e2b54e12b9adf1d3be55b74919562885f9e688f6a7",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\startup-unavailable_storage.json",
+      "path": "proofs/startup-unavailable_storage.json",
+      "original_sha256": "10808b3435641621b8d4ea603d3decb99057702fcd37c9be0af47f9b231b9999",
+      "artifact_sha256": "34bbf8096e52e7ae0f0b60b5f7fe544929036420e74d55298573a6fa21c073ec",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\reports\\final\\connect-interruption.json",
+      "path": "proofs/connect-interruption.json",
+      "original_sha256": "cadd114b9c0f7d2e12859b8f76d4b3f394ecdd835cd7eb94a84dc17153f26c10",
+      "artifact_sha256": "9b25486ec25bd425581bf9585eb4e38436056c8c7eaec02baebcbd5b928dcd7b",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\candidate\\tests\\test_service_failure_boundaries.py",
+      "path": "candidate/test_service_failure_boundaries.py",
+      "original_sha256": "6b51128d9d206296f8c856670468fc8bb0547d324d69571db50abbf44ac447a2",
+      "artifact_sha256": "6b51128d9d206296f8c856670468fc8bb0547d324d69571db50abbf44ac447a2",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\prepare.py",
+      "path": "scripts/prepare.py",
+      "original_sha256": "48c2638355d718adc3f2012ed0fcb29fb7f87d3bcf5055c0d52adb8be972a0de",
+      "artifact_sha256": "48c2638355d718adc3f2012ed0fcb29fb7f87d3bcf5055c0d52adb8be972a0de",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\run_installed.py",
+      "path": "scripts/run_installed.py",
+      "original_sha256": "3388df6dc9ecaa6975c432621fc6d9ef31399d5240bffab4824c87b70784c4da",
+      "artifact_sha256": "3388df6dc9ecaa6975c432621fc6d9ef31399d5240bffab4824c87b70784c4da",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    },
+    {
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-boundaries-installed-ktys6hfb\\curate.py",
+      "path": "scripts/curate.py",
+      "original_sha256": "ab16503ddb18c9501828fb5bf3ed7e9326af0e5d1dca587c292b41eedab4e55a",
+      "artifact_sha256": "ab16503ddb18c9501828fb5bf3ed7e9326af0e5d1dca587c292b41eedab4e55a",
+      "redactions": {
+        "agent_key": 0,
+        "observation_token": 0
+      },
+      "normalization": "UTF-8; CRLF to LF; credential patterns only"
+    }
+  ],
+  "aggregate_sha256": "16436c7f59ed748eb61a72cfea8be9c679692dae6d8aea7ec27d7231f5dfc5c9",
+  "excluded": [
+    "homes",
+    "databases",
+    "credentials",
+    "raw process logs",
+    "venv",
+    "wheel binaries",
+    "pytest temporary state"
+  ],
+  "redactions": 0
+}

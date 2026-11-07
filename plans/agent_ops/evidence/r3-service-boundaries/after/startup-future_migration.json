@@ -1,0 +1,9 @@
+{
+  "exit": 1,
+  "expected_diagnostic_observed": "MIGRATION_ERROR",
+  "listening": false,
+  "ready_log": false,
+  "database_fallback": false,
+  "preserved_future_ledger": true,
+  "fault_kind": "real isolated state/configuration"
+}

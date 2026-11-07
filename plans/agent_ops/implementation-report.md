@@ -569,3 +569,14 @@ Quatro pares instalados qualificados: versões Core alinhadas aceitas; dois pare
 ## 2026-11-07 — R3: reconciliação literal e lacuna SVC07
 
 Revisados os59 IDs sem novas execuções: BASE/SVC18, DX21, ATN/OBS20. Corrigidos195campos com acentos corrompidos, comprovando apenas reparo de codificação; checker passa a exigir texto literal do plano. ATN/OBS e14contratosDX verificados; seteDX implementados aguardam qualificação real. Contratos puros SVC reconciliados sem transformar adapter injetado em serviço real. AC06/09 e AC10 no escopo dos artefatos entregues verificados; risco histórico UAT/Git continua registrado fora desse aceite, sem novo requisito de reescrita/revogação. Lacuna concreta SVC07 (drain antes de contenção e decisão explícita de força) continua aberta; T06/T12/T13 em qualificação segura. M1/M2/R3 não concluídos. Evidência: `plans/agent_ops/evidence/r3-task-reconciliation/milestone.md`.
+
+## 2026-11-07 — R3: falhas de startup e interrupção da espera
+
+Corrigido o diagnóstico público de porta ocupada: `PORT_IN_USE` no log limitado,
+sem texto bruto da exceção nem troca de endpoint/banco. **21 testes instalados
+passaram** em snapshot isolado: sete novos e14 reutilizados. Retidos os resultados
+anteriores, incluindo6pass/1falha real. T06/T12/T13 verificados: porta realmente
+ocupada, falhas reais de configuração/migração/storage e Ctrl+C injetado na espera
+do connect com o mesmo processo vivo, depois READY/DRAINED. Nenhum serviço nativo,
+provedor ou cofre pessoal utilizado. SVC07 e campanhas reais seguem pendentes.
+Evidência: `plans/agent_ops/evidence/r3-service-boundaries/milestone.md`.

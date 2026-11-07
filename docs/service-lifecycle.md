@@ -195,6 +195,12 @@ reported shutdown and process exit. They contain no provider messages, prompts,
 exception text, credentials or URLs. Existing task/session results and recovery
 records remain canonical; this log cannot establish completion of work.
 
+If the configured HTTP port is occupied, startup fails and the log records
+`PORT_IN_USE`. An unavailable address or denied bind records `BIND_FAILED`.
+The Server does not select another endpoint or database. Inspect the selected
+address/port and retry explicitly after resolving the conflict; exception text
+is not copied into the public lifecycle log.
+
 The active file rotates at 2 MiB with three backups. `--tail` accepts 1..10000
 records within a 256 KiB read budget; truncation is explicit. The view reads the
 active file and withholds malformed/unknown records. `--follow` closes each read

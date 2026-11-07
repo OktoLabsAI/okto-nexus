@@ -1,0 +1,138 @@
+{
+  "date": "2026-11-07T10:13:09.863381+00:00",
+  "base_commit": "d1d4c0be3d932b0776ca545edf0f7faef5a7c0cf",
+  "snapshot": "committed HEAD plus exactly the four paths in overlay.json; concurrent SVC07 edits excluded",
+  "passed": 21,
+  "failed": 0,
+  "new_cases": 7,
+  "reused_cases": 14,
+  "changed_inputs": [],
+  "cases": [
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_occupied_port_refuses_without_fallback_and_exposes_the_bind_cause",
+      "time": "11.263"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[invalid_config]",
+      "time": "3.018"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[future_migration]",
+      "time": "3.969"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[unavailable_storage]",
+      "time": "6.112"
+    },
+    {
+      "classname": "tests.test_service_failure_boundaries",
+      "name": "test_interrupting_connect_wait_preserves_the_same_real_starting_owner",
+      "time": "13.193"
+    },
+    {
+      "classname": "tests.test_service_bind_diagnostics",
+      "name": "test_bind_conflict_has_a_coded_diagnostic_without_exception_text",
+      "time": "0.031"
+    },
+    {
+      "classname": "tests.test_service_bind_diagnostics",
+      "name": "test_unrelated_startup_errors_are_not_misreported_as_listener_failures",
+      "time": "0.001"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_absent_logs_are_passive_and_do_not_require_saved_python",
+      "time": "0.022"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_tail_and_json_expose_only_coded_records",
+      "time": "0.096"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_corrupt_or_secret_bearing_lines_are_withheld",
+      "time": "0.052"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_follow_consumes_append_once_and_reopens_after_rotation",
+      "time": "0.048"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_partial_record_is_not_emitted_until_completed",
+      "time": "0.045"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_read_and_retention_are_bounded",
+      "time": "0.077"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_unavailable_log_is_not_inferred_as_stopped",
+      "time": "0.016"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_ctrl_c_ends_follow_without_lifecycle_mutation",
+      "time": "0.008"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_log_write_failure_is_bounded_and_does_not_emit_raw_error",
+      "time": "0.010"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_log_flags_are_bounded_and_scoped[args0]",
+      "time": "0.005"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_log_flags_are_bounded_and_scoped[args1]",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.test_service_logs",
+      "name": "test_log_flags_are_bounded_and_scoped[args2]",
+      "time": "0.004"
+    },
+    {
+      "classname": "tests.test_serve_lock",
+      "name": "test_failed_bootstrap_releases_both_locks",
+      "time": "1.992"
+    },
+    {
+      "classname": "tests.test_serve_lock",
+      "name": "test_unavailable_lock_storage_reports_failure_without_bootstrap",
+      "time": "0.012"
+    }
+  ],
+  "qualification": [
+    "actual occupied loopback listener owned by test parent; service launched as child",
+    "actual invalid configuration, future migration and unavailable selected storage",
+    "KeyboardInterrupt injected only in connect observer wait; real same-generation child remains alive",
+    "child later reaches READY and canonical DRAINED with zero exit",
+    "public diagnostic is coded; raw child stderr never used as public-cause proof"
+  ],
+  "limits": [
+    "Windows/Python3.13 installed packages; no real provider or native harness",
+    "no Task Scheduler registration, login/logout/reboot or personal credentials",
+    "initial raw reports retained under before; no failed result converted to pass",
+    "Core and Connector wheels remain pre-SVC07 baseline; new drain work is not qualified here"
+  ],
+  "redactions_in_new_artifacts": 0,
+  "excluded": [
+    "runtime homes and databases",
+    "raw child stderr",
+    "venv",
+    "wheel binary",
+    "pip install log"
+  ]
+}

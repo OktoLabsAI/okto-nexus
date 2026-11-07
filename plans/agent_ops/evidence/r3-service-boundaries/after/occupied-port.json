@@ -1,0 +1,20 @@
+{
+  "cli_exit": 3,
+  "state": "failed",
+  "reason": "STARTUP_FAILED",
+  "next_action": "Inspect startup diagnostics, then explicitly start again.",
+  "single_spawn": true,
+  "spawn_exit": 1,
+  "configured_port_unchanged": true,
+  "configured_database_unchanged": true,
+  "foreign_listener_survived": true,
+  "no_ready_log": true,
+  "actual_bind_failure_observed_in_private_stderr": true,
+  "public_cause_visible": true,
+  "public_log_codes": [
+    "STARTING",
+    "PORT_IN_USE",
+    "SHUTDOWN_REPORTED",
+    "SERVICE_EXIT"
+  ]
+}

@@ -1,0 +1,59 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\r3-bind-diagnostics-i286akko\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\r3-bind-diagnostics-i286akko\snapshot
+configfile: ..\..\nexus-ci-installed-1_qr_cdj\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 21 items
+
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_failure_boundaries.py::test_occupied_port_refuses_without_fallback_and_exposes_the_bind_cause PASSED [  4%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_failure_boundaries.py::test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[invalid_config] PASSED [  9%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_failure_boundaries.py::test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[future_migration] PASSED [ 14%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_failure_boundaries.py::test_startup_failures_never_bind_or_report_readiness_and_preserve_selection[unavailable_storage] PASSED [ 19%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_failure_boundaries.py::test_interrupting_connect_wait_preserves_the_same_real_starting_owner PASSED [ 23%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_bind_diagnostics.py::test_bind_conflict_has_a_coded_diagnostic_without_exception_text PASSED [ 28%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_bind_diagnostics.py::test_unrelated_startup_errors_are_not_misreported_as_listener_failures PASSED [ 33%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_absent_logs_are_passive_and_do_not_require_saved_python PASSED [ 38%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_tail_and_json_expose_only_coded_records PASSED [ 42%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_corrupt_or_secret_bearing_lines_are_withheld PASSED [ 47%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_follow_consumes_append_once_and_reopens_after_rotation PASSED [ 52%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_partial_record_is_not_emitted_until_completed PASSED [ 57%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_read_and_retention_are_bounded PASSED [ 61%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_unavailable_log_is_not_inferred_as_stopped PASSED [ 66%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_ctrl_c_ends_follow_without_lifecycle_mutation PASSED [ 71%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_log_write_failure_is_bounded_and_does_not_emit_raw_error PASSED [ 76%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_log_flags_are_bounded_and_scoped[args0] PASSED [ 80%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_log_flags_are_bounded_and_scoped[args1] PASSED [ 85%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_service_logs.py::test_log_flags_are_bounded_and_scoped[args2] PASSED [ 90%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_serve_lock.py::test_failed_bootstrap_releases_both_locks PASSED [ 95%]
+..\r3-bind-diagnostics-i286akko\snapshot\tests\test_serve_lock.py::test_unavailable_lock_storage_reports_failure_without_bootstrap PASSED [100%]
+
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\r3-bind-diagnostics-i286akko\reports\installed\tests.xml -
+============================= 21 passed in 42.20s =============================

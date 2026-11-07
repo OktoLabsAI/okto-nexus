@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.422" timestamp="2026-11-07T06:52:55.718626-03:00" hostname="Alienware_m15"><testcase classname="" name="tests.test_service_failure_boundaries" time="0.000"><error message="collection failure">ImportError while importing test module 'C:\Users\jpamb\AppData\Local\Temp\r3-svc-boundaries-installed-ktys6hfb\candidate\tests\test_service_failure_boundaries.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests\test_service_failure_boundaries.py:19: in &lt;module&gt;
+    import psutil
+E   ModuleNotFoundError: No module named 'psutil'</error></testcase></testsuite></testsuites>

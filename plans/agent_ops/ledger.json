@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07",
+  "updated_at": "2026-11-07T10:13:10.286567+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -6810,15 +6810,19 @@
     },
     "SVC-T06": {
       "requirement": "Porta ocupada por outro processo produz diagnóstico; não muda endpoint ou base silenciosamente.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-readiness.xml",
         "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/after/installed/tests.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-service-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "remaining": "A real occupied TCP socket during start and no endpoint/DB fallback assertion not located. Safe isolated test gap, not authorization.",
-      "remaining_kind": "focused_safe_qualification",
-      "result": "Foreign endpoint is not ready; no fallback logic in inspected lifecycle. Scope/remaining: A real occupied TCP socket during start and no endpoint/DB fallback assertion not located. Safe isolated test gap, not authorization."
+      "remaining": "None within the stated disposable Windows process scope.",
+      "remaining_kind": "none",
+      "result": "Actual foreign occupied listener survives one failed detached startup; public PORT_IN_USE, same selected endpoint/database, no readiness, lock released. Installed fixed candidate passes."
     },
     "SVC-T07": {
       "requirement": "Serviço instalado e parado é iniciado por seu supervisor, sem daemon avulso concorrente.",
@@ -6917,20 +6921,24 @@
     },
     "SVC-T12": {
       "requirement": "Falha de migração/configuração/armazenamento impede prontidão ou admissão afetada e informa causa.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-locks.xml",
         "plans/agent_ops/evidence/pr01-readiness.xml",
         "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/after/installed/tests.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-service-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "remaining": "Startup invalid-config/migration diagnostic cases not mapped; no blanket permission barrier.",
-      "remaining_kind": "focused_safe_qualification",
-      "result": "Lock-storage/bootstrap failures do not declare ready; ownership released or retained conservatively. Scope/remaining: Startup invalid-config/migration diagnostic cases not mapped; no blanket permission barrier."
+      "remaining": "None within the stated disposable Windows process scope.",
+      "remaining_kind": "none",
+      "result": "Real invalid config, future migration ledger and blocked storage fail before readiness, preserve selected state and report cause; existing lock/bootstrap refusal tests also pass."
     },
     "SVC-T13": {
       "requirement": "Timeout/Ctrl+C do connect interrompe espera sem matar serviço, repetir setup ou cancelar tarefas.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-cli.json",
@@ -6939,11 +6947,15 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-source.xml",
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
+        "plans/agent_ops/evidence/r3-service-boundaries/after/installed/tests.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-service-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "result": "Wait timeout cannot restart/stop; cancelled shutdown observer cannot cancel retained recovery. Scope/remaining: Retained Ctrl+C during actual connect not located. Log-follow Ctrl+C is not a substitute.",
-      "remaining": "Retained Ctrl+C during actual connect not located. Log-follow Ctrl+C is not a substitute.",
-      "remaining_kind": "focused_safe_qualification"
+      "result": "KeyboardInterrupt injected in connect observer wait preserves the same real owner/generation and does not repeat setup or stop service; owner then reaches READY and canonical DRAINED. Composes with retained timeout observer coverage.",
+      "remaining": "None within the stated disposable Windows process scope.",
+      "remaining_kind": "none"
     },
     "SVC-T14": {
       "requirement": "Serviço iniciado com cwd/PATH diferentes encontra executável, configuração e projeto corretos.",
@@ -12052,6 +12064,18 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/decisions.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/pending-qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "Fixed actual occupied-port diagnostic gap with coded listener failure. 21 unique installed tests passed; SVC-T06/T12/T13 verified within disposable Windows scope. Historical 6pass/1productfailure retained. SVC07 and real service/provider campaigns remain pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-service-boundaries/milestone.md",
+        "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
+        "plans/agent_ops/evidence/r3-service-boundaries/after/installed/tests.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/artifact-manifest.json"
       ]
     }
   ]
