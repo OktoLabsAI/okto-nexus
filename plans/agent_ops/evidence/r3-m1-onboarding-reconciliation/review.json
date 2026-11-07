@@ -1,0 +1,105 @@
+{
+  "review": "DX-T38 literal reconciliation and successor authorization boundary",
+  "reviewer": "coordination_review",
+  "method": "Read-only review of existing repository sources and retained reports; no tests, provider, credentials or service commands executed.",
+  "recommendation": {
+    "scenario": "DX-T38",
+    "status": "VERIFIED",
+    "scope": "Windows local, installed Nexus packages, isolated new Server home, official Codex0.157.0 with real authenticated native setup; composed with previously qualified canonical creation/authority contracts."
+  },
+  "clause_mapping": [
+    {
+      "clause": "Instalacao nova com harness/provedor prontos",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/preflight.json:36",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/local-setup-result.json:37",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/setup-native-metadata.json:1"
+      ],
+      "finding": "The selected home was absent before execution; the real native setup reached SUCCEEDED with started/terminal/usage evidence. Packages were preinstalled; no fresh pip installation is claimed."
+    },
+    {
+      "clause": "Identidade, workspace e perfil uteis no mesmo resumo",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/local-plan.json:13",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/local-plan.json:37",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/local-plan.json:68",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/local-plan.json:79"
+      ],
+      "finding": "One review contains new identity, workspace root, project-generalist preset, role, permissions, native human-review effect and finite60-minute/20-action grant."
+    },
+    {
+      "clause": "Aceitar cria somente objetos autorizados",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/profile-drift-incident.json:21",
+        "tests/execution_r4/test_terminal_identity.py:35",
+        "tests/execution_r4/test_terminal_identity.py:96",
+        "tests/execution_r4/test_terminal_identity.py:173",
+        "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
+        "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml"
+      ],
+      "finding": "The actual Finish was saved with APPROVED binding. Existing installed canonical tests demonstrate one reviewed identity, no identity before Finish, atomic rollback and current authority. This is composed proof, not a new exhaustive real-database before/after audit. The broad historical XML authority assertion failed initially; its retained targeted authority XML passes."
+    },
+    {
+      "clause": "Sem persona manual ou painel",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/executed-instrumentation/m1_local_setup.py:36",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/corrected-client-readonly-resume.json:2",
+        "tests/execution_r4/test_terminal_identity.py:219"
+      ],
+      "finding": "Canonical CLI review/approve and later GET-only recovery produced configured state with profile bytes unchanged and no repeated setup; role/permissions came from reviewed defaults."
+    }
+  ],
+  "limits": [
+    "Literal criterion is PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md:899. Do not add fresh pip or first useful result as a new DX-T38 target.",
+    "The original CLI returned false PROFILE_DRIFT after committed Finish. Retain that failure and the separately qualified corrected-client/original-Server split build; do not claim a flawless first attempt.",
+    "Useful work was cancelled and delivered no report; no native decision, continuation or Connector productive path was qualified. DX-T39, DX-T40 and M1 remain open.",
+    "BASE-06 elapsed install-to-first-useful-result is not covered: packages were already installed and no useful result was delivered.",
+    "This review grants no new authorization and does not modify ledger, plan, product or historical artifacts."
+  ],
+  "successor_boundary": {
+    "prior_scope": "v7 was six serial productive admissions plus eight exact M1 lifecycle actions and24 separate empty-service actions, with pinned packages/tasks/paths; its force exclusion was amended only for one exact generation-bound containment.",
+    "closed_state": "Original Server generation exited and its task was uninstalled. Connector M1 never started. Permanent controller fault and historical claims remain preserved.",
+    "cumulative": {
+      "productive_admissions_used": 2,
+      "productive_admissions_maximum": 6,
+      "maximum_remaining": 4,
+      "observed_minimum_tokens": 45843,
+      "preventive_threshold": 100000,
+      "arithmetic_observed_margin": 54157,
+      "total_operational_tolerance": 700000,
+      "final_or_billed_usage": false
+    },
+    "requirements_for_concrete_successor": [
+      "Pin corrected Nexus/Core packages, exact tasks/homes/commands, reviewed native configuration and finite new lifecycle actions; never silently substitute the old v7 package or repeat completed actions.",
+      "Preserve old reservations, observed usage, receipts and fault as immutable ancestry. Do not clear the old fault, reset usage to zero or reopen six slots.",
+      "v7 allocation allows one useful request and continuation per topology and no extra retry turns. The cancelled local useful request consumed its slot; no existing local result can justify its continuation. Any replacement/redistribution must be explicit in the successor authorization.",
+      "If remote setup itself consumes a provider admission, new local work+local continuation+remote setup+remote work+remote continuation would require five, exceeding the four remaining. State the resulting acceptance gap rather than omit a setup or add a hidden turn.",
+      "The one-force authorization authorizes zero further provider admissions and no reusable force permission."
+    ],
+    "references": [
+      "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json:5",
+      "plans/agent_ops/evidence/r3-m1-controller/m1-codex-campaign-proposal-v7.json:164",
+      "plans/agent_ops/evidence/r3-m1-controller/m1-codex-campaign-proposal-v7.json:165",
+      "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/authorization.json:6",
+      "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/summary.json:14"
+    ]
+  },
+  "evidence_sha256": {
+    "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "tests/execution_r4/test_terminal_identity.py": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+    "plans/agent_ops/evidence/pr03-terminal-identity.md": "e6355610ef6f752294460c1660b47c0bd26839a4581bfe4e28b834483b3b7ef0",
+    "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml": "4621e25f4bd0b37e4e0ea52080f8d9634d1883cc2eeed0098b4fc4f914a46b27",
+    "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml": "a7961f2bf2d10538afe33ae4e2916868bdea264a37ae3bdca767d1f3d0619281",
+    "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/preflight.json": "9161e138c711de2a41c0a22fee91be6440d88e8f9ed4972ac1a8acce0fea56bc",
+    "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/local-plan.json": "37f2fedb0b12a4dfb0883e7069213fa6e4bf3824fca7c1400f07c015d820ea37",
+    "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/local-setup-result.json": "c57060f266b6957b4aaa8367ef6eaed4b66cc8f71fe9d819edd5789fb00bf0a8",
+    "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/setup-native-metadata.json": "ed6e786d1edd8ec6002076cedf4e385c88e843d29c5455554ef16ba54eb71419",
+    "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/profile-drift-incident.json": "0b7f599515b935930d40976768ff7423e4b12434dc2eaf37cd5083369d4515e4",
+    "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/real-run/corrected-client-readonly-resume.json": "27443b941bbffb6bc5b86e8b6306caa07f6702bfe4573a1f7c0145dde3a536d9",
+    "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/executed-instrumentation/m1_local_setup.py": "9118f8489cace6826d6324d5fe083ea021b3bccdd1535b237622fd5aafe14d82",
+    "plans/agent_ops/evidence/r3-m1-controller/m1-codex-campaign-proposal-v7.json": "a5a01d1dd858e18645b020b4b604d09a8becab61c34b288ec524c34392da4371",
+    "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json": "2b7fe256e9359838ffa32420205ca0e44347c09ad4880ad1fafc918e1698b0ce",
+    "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/authorization.json": "c918fd38f175820c9cc727e5155b69852c81526a01721dce79bc864dd26a5831",
+    "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/summary.json": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b"
+  }
+}

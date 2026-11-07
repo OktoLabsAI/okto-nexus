@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T17:13:49.406462+00:00",
+  "updated_at": "2026-11-07T18:36:17.623718+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -8865,7 +8865,7 @@
     },
     "DX-T38": {
       "requirement": "Instalação nova com harness/provedor prontos propõe identidade, workspace e perfil úteis no mesmo resumo; aceitar os efeitos cria apenas os objetos autorizados e não exige definir persona ou visitar o painel.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
         "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
@@ -8895,24 +8895,29 @@
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+        "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/review.json",
+        "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/verification.json",
+        "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/artifact-manifest.json"
       ],
-      "result": "Resumo único, criação autorizada e rollback/recovery estão provados. A pré-condição literal de instalação nova com harness/provedor prontos ainda foi modelada por candidatos/probes sintéticos.",
+      "result": "Real Windows/Codex0.157.0 setup in a new Server home reviewed identity, workspace and project-generalist together; Finish committed APPROVED binding. GET-only corrected-client recovery preserved the profile and did not repeat setup. Composed with retained installed atomic creation/authority contracts; original PROFILE_DRIFT and split build remain recorded.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
-        "remote_noneditable_joint_packages": "VERIFIED"
+        "remote_noneditable_joint_packages": "VERIFIED",
+        "real_local_initial_review_and_finish": "VERIFIED"
       },
-      "remaining": "Qualificar a instalação nova instalada com harness/provedor efetivamente prontos, exibindo identidade/workspace/perfil no mesmo resumo e conferindo que a aprovação só cria os objetos autorizados, sem persona manual/dashboard. O contrato de revisão já está provado.",
-      "remaining_kind": "real_campaign_not_run",
-      "qualification_limit": "Não exigir toda a campanha M1 para validar só o resumo; tampouco trocar prontidão real de harness/provedor por fixture.",
-      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "remaining": "None for the literal initial-review criterion in the observed local Windows route. Useful work, native decision, continuation, Connector M1 and installation-to-first-result timing retain their separate requirements.",
+      "remaining_kind": "none",
+      "qualification_limit": "Existing installed packages with a new Server home, not a fresh pip timing campaign. Real setup plus retained creation/authority contracts; no exhaustive new real-database before/after audit and no flawless-first-attempt claim.",
+      "common_qualification_limit": "Read-only reconciliation of existing real setup and installed contract evidence; no new provider or service execution. M1 and global acceptance remain open.",
       "verified_contract_subscopes": [
         "single_review_and_defaults",
         "authorized_atomic_identity_workspace_binding",
-        "same_root_recovery"
+        "same_root_recovery",
+        "real_local_provider_ready_initial_review_and_recovered_finish"
       ]
     },
     "DX-T39": {
@@ -11938,7 +11943,7 @@
       "status": "IN_PROGRESS",
       "ci_installed_cases": 8,
       "ci_changed_inputs": [],
-      "native_campaign": "PREPARED_NOT_AUTHORIZED_NOT_RUN",
+      "native_campaign": "FINITE_EMPTY_NATIVE_LIFECYCLE_VERIFIED",
       "completion_matrix": "17 criteria and11 RG; no global promotion",
       "evidence": [
         "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md",
@@ -11946,7 +11951,8 @@
         "plans/agent_ops/evidence/r3-qualification-readiness/audit/completion-matrix.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/artifact-manifest.json"
-      ]
+      ],
+      "native_campaign_current_evidence": "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
     },
     "r3_joint_installed_contracts": {
       "status": "VERIFIED",
@@ -12008,7 +12014,7 @@
       "provider_inference_performed": true,
       "observed_cli_version": "0.167.0",
       "observed_version_command": "codex --version",
-      "build_qualification": "Real setup used original pinned bytes; corrected client separately installed/qualified after false Windows separator drift. Original Server and native build unchanged; productive work pending.",
+      "build_qualification": "Historical real setup used original pinned Server/native bytes. Separately qualified corrected client recovered the saved profile by GET; useful work was cancelled without result. Corrected Nexus/Core packages are qualified separately and were not hotpatched into the historical service.",
       "budget_limit": "User permits500000 additional tokens over200000. Operational tolerance700000; preventive interruption100000; native hard cap unavailable.",
       "proposal": "plans/agent_ops/evidence/r3-m1-controller/m1-codex-campaign-proposal-v7.json",
       "original_token_limit": 200000,
@@ -12062,7 +12068,9 @@
       "containment_evidence": "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/summary.json",
       "additional_provider_admissions_during_cleanup": 0,
       "m1_accepted": false,
-      "data_and_history_preserved": true
+      "data_and_history_preserved": true,
+      "qualified_native_version": "0.157.0",
+      "initial_review_evidence": "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/review.json"
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -12198,6 +12206,20 @@
         "nexus": "f44ca088375056459228941fe02f3d40b0abc6ce",
         "connector": "c100002259439c0f8252e494ad3f61dafcd9ab7b"
       }
+    },
+    "r3_m1_onboarding_reconciliation": {
+      "status": "VERIFIED",
+      "sources_checked": 16,
+      "normalized_utf8_lf_hashes": [],
+      "other_source_hashes": "raw bytes",
+      "new_test_runs": 0,
+      "provider_admissions": 0,
+      "service_actions": 0,
+      "accepted": [
+        "DX-T38"
+      ],
+      "global_acceptance_promoted": false,
+      "evidence": "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/artifact-manifest.json"
     }
   },
   "history": [
@@ -13227,6 +13249,16 @@
       "summary": "User authorized one generation-bound force. Original PID exit confirmed, then owned task uninstalled; port64507free and ConnectorM1neverinstalled. No extra inference;2admissions/45843observed preserved, fault/claim history retained. Cleanup complete, M1 partial.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-authorized-containment/closure/summary.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Real initial review reconciled; campaign page brought current",
+      "status": "VERIFIED",
+      "summary": "DX-T38 verified from retained real local setup plus installed atomic creation/authority contracts. PROFILE_DRIFT recovery and split build retained; no M1/BASE-06 promotion or new provider/service action. Current campaign page points to the completed24-action revision4.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/review.json",
+        "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/verification.json"
       ]
     }
   ]
