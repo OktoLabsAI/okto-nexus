@@ -3,6 +3,7 @@ from urllib.parse import quote, urlencode
 from copy import deepcopy
 import hashlib
 import json
+import os
 import time
 import uuid
 
@@ -14,6 +15,14 @@ PREFIX = '/api/v1/runtime-management'
 def document_revision(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
         separators=(',', ':')).encode('utf-8')).hexdigest()
+
+
+def _same_local_path(actual, selected):
+    # Windows accepts both separators, while the Server returns its native one.
+    # Do not resolve links, fold case, collapse '..', or inspect a provider home.
+    return (isinstance(actual, str) and isinstance(selected, str)
+            and os.path.isabs(actual) and os.path.isabs(selected)
+            and actual.replace('/', os.sep) == selected.replace('/', os.sep))
 
 
 class ConnectionError(Exception):
@@ -170,7 +179,7 @@ class TerminalConnection:
                 selection.get('workspace_id') and match['workspace_id'] != selection['workspace_id'] or
                 selection.get('candidate_ref') and match['candidate_ref'] != selection['candidate_ref'] or
                 selection.get('provider_home') is not None and
-                    current.get('folders', {}).get('provider_home') != selection['provider_home'] or
+                    not _same_local_path(current.get('folders', {}).get('provider_home'), selection['provider_home']) or
                 current.get('folders', {}).get('workspace_root') != selection['project']):
             raise ConnectionError('PROFILE_DRIFT', 'The canonical binding no longer matches this local project profile. Review it explicitly.')
         return {'state': 'configured', 'server_id': me['server_id'], 'agent_id': selection['agent'],

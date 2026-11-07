@@ -1,0 +1,93 @@
+{
+  "files": {
+    "build-uv.txt": {
+      "bytes": 204644,
+      "sha256": "6875b3b6af89e24f5c22e52daff415245c7608d8c9fa58db916a0d70ccd96976"
+    },
+    "build.txt": {
+      "bytes": 6476,
+      "sha256": "07da4d86a9ccedcc5d5713df8fe0d0a5b94d83d9fc5bb1c0109c51af499a8356"
+    },
+    "fixed-installed/canonical/campaign.json": {
+      "bytes": 176958,
+      "sha256": "01a093f2dc440a6d5e8669db4cf429de261a52c028fa5ef466e0ea8b314f7d14"
+    },
+    "fixed-installed/canonical/installed.json": {
+      "bytes": 729,
+      "sha256": "08eb549382fdb53d1be268c995c066a2a2bf6a3f3f282e8df66fbf2f33357c26"
+    },
+    "fixed-installed/canonical/tests.xml": {
+      "bytes": 2341,
+      "sha256": "16fcf401e2048d9b91db6c7d13e6e220fb04872dc7faf99a40112910736c4585"
+    },
+    "fixed-installed/command.json": {
+      "bytes": 689,
+      "sha256": "c934a123ed3f0211db46e3d98fe3500a2b73c3bfa57552f645d266ae2d8d291b"
+    },
+    "fixed-installed/test-output.txt": {
+      "bytes": 5464,
+      "sha256": "404740e6bac8355bd6f6fc5f3b57d3128548d2465fbdf331ca92936e8cde7774"
+    },
+    "historical-reproducer/canonical/campaign.json": {
+      "bytes": 177241,
+      "sha256": "7323814290866a86a06d99a3515ead4de6efbb53075a0035c9a9dd2db79662a1"
+    },
+    "historical-reproducer/canonical/installed.json": {
+      "bytes": 756,
+      "sha256": "54b25aef4f8387eccf76e14adc1a265e4547af87a2478df341b8f17f02b79e04"
+    },
+    "historical-reproducer/canonical/tests.xml": {
+      "bytes": 1486,
+      "sha256": "05681340b9c0f28162d3b94c946c11825a9ede903c0fdbb945cff6c54ee51958"
+    },
+    "historical-reproducer/command.json": {
+      "bytes": 787,
+      "sha256": "47698039411792526f619f5eaf045aa26cf8aac1cd13c8ab9446a396baf94a58"
+    },
+    "historical-reproducer/test-output.txt": {
+      "bytes": 4772,
+      "sha256": "4c20f27a811c4a5deddf9b89e3b1f1989d28bad8f6c4fe6d8832e45a1679b1e6"
+    },
+    "install.txt": {
+      "bytes": 364,
+      "sha256": "e4524770af5b5dff3f9559fdc3dbbe7eae651ff72fb9702543a4a39e16a12cc1"
+    },
+    "local-setup-result.json": {
+      "bytes": 1706,
+      "sha256": "c57060f266b6957b4aaa8367ef6eaed4b66cc8f71fe9d819edd5789fb00bf0a8"
+    },
+    "milestone.md": {
+      "bytes": 1492,
+      "sha256": "15ba16bb42015ed4900bb918fad89cec3a50829c46bb927048ec4dc5e273084a"
+    },
+    "package-proof.json": {
+      "bytes": 1249,
+      "sha256": "996b1991a4fa9aa7126c8ce08ad4b6638a6e1920ff37240c59673def3808ea68"
+    },
+    "preparation.json": {
+      "bytes": 430,
+      "sha256": "68be46c056a5cb1ff4f748bad919288953762698946e418f3a9f974ff8538cdc"
+    },
+    "prepare_m1_path_fix.py": {
+      "bytes": 4148,
+      "sha256": "88e1fa498bc842b6387f84bc29683725ab961d07d625cdaf559b2a95891c64d8"
+    },
+    "profile-drift-incident.json": {
+      "bytes": 1634,
+      "sha256": "0b7f599515b935930d40976768ff7423e4b12434dc2eaf37cd5083369d4515e4"
+    },
+    "profile-drift-readonly.json": {
+      "bytes": 1147,
+      "sha256": "53cdc86567e707c2911a6396898e93d79ceb0823aef606c7acc5f1f8beacdf4b"
+    },
+    "qualification.json": {
+      "bytes": 1524,
+      "sha256": "54483f8d7052801748496f9f2e2642388a7c904d5d13fd2bfa6028aaf876fff4"
+    },
+    "qualify_m1_path_fix.py": {
+      "bytes": 1807,
+      "sha256": "7acc1b9377a5072e235ae1c8bef48ee9fea08343ba065821b08e7c86e8121087"
+    }
+  },
+  "scope": "Client defect, historical real setup incident and installed regression; no full M1 acceptance"
+}

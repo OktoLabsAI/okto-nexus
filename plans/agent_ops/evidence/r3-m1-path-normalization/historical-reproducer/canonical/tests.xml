@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="21.833" timestamp="2026-11-07T13:23:46.020608-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_terminal_connect" name="test_provider_home_separators_survive_finish_and_read_only_resume" time="15.702"><failure message="okto_nexus.application.terminal_connection.ConnectionError: The canonical binding no longer matches this local project profile. Review it explicitly.">..\m1-path-fix-8rktvrtc\source\tests\execution_r4\test_terminal_connect.py:109: in test_provider_home_separators_survive_finish_and_read_only_resume
+    result = t.flow.apply(document, approval=document['review_revision'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\okto_nexus\application\terminal_connection.py:262: in apply
+    return self.observe(document)
+           ^^^^^^^^^^^^^^^^^^^^^^
+..\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\okto_nexus\application\terminal_connection.py:175: in observe
+    raise ConnectionError('PROFILE_DRIFT', 'The canonical binding no longer matches this local project profile. Review it explicitly.')
+E   okto_nexus.application.terminal_connection.ConnectionError: The canonical binding no longer matches this local project profile. Review it explicitly.</failure></testcase></testsuite></testsuites>

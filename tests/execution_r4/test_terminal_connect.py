@@ -99,6 +99,40 @@ def test_response_loss_resumes_without_repeating_native_effects(terminal, lost):
     assert len(snapshot(t.deps)['runtime_execution_grants']) == 1
 
 
+def test_provider_home_separators_survive_finish_and_read_only_resume(terminal, tmp_path):
+    t = terminal
+    provider = tmp_path / 'provider-home'
+    provider.mkdir()
+    t.selection['provider_home'] = provider.as_posix()
+    document = t.flow.review(t.selection)
+    selected_home = document['selection']['provider_home']
+    result = t.flow.apply(document, approval=document['review_revision'])
+    assert result['state'] == 'configured'
+    assert result['configuration']['folders']['provider_home'] == str(provider.resolve())
+    assert document['selection']['provider_home'] == selected_home
+    before = snapshot(t.deps)
+    t.calls.clear()
+    assert t.flow.apply(deepcopy(t.saved[-1])) == result
+    assert all(method == 'GET' for method, _ in t.calls)
+    assert snapshot(t.deps) == before and len(t.probes) == len(t.turns) == 1
+
+    for different in (str(tmp_path / 'other-home'), 'provider-home',
+                      str(provider / '..' / 'provider-home'), None):
+        changed = deepcopy(document)
+        # A missing canonical path is also a drift, not permission to skip it.
+        if different is None:
+            original_current = t.flow.current
+            t.flow.current = lambda *args, **kwargs: original_current(*args, **kwargs) | {
+                'folders': {'provider_home': None, 'workspace_root': t.selection['project']}}
+        else:
+            changed['selection']['provider_home'] = different
+        with pytest.raises(ConnectionError) as failure:
+            t.flow.observe(changed)
+        assert failure.value.code == 'PROFILE_DRIFT'
+    assert all(method == 'GET' for method, _ in t.calls)
+    assert snapshot(t.deps) == before and len(t.turns) == 1
+
+
 def test_submitted_test_with_lost_cache_is_not_replayed(terminal):
     t = terminal
     document = t.flow.review(t.selection)

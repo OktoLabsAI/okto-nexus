@@ -1,0 +1,23 @@
+{
+  "okto_nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-path-fix-8rktvrtc\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+    "sha256": "fdb8f37866f5332244a6916d6e6eaac433cd317d4ed2792a81bd4a3f426b49c2",
+    "files": 691
+  },
+  "okto_nexus_connector": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+    "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+    "files": 124
+  },
+  "nexus_connector_core": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+    "sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+    "files": 166
+  },
+  "changed_product_payloads": [
+    "okto_nexus/application/terminal_connection.py"
+  ],
+  "dependency_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv",
+  "method": "Fresh venv; copied disposable qualified dependencies; new Nexus wheel installed offline without editable paths.",
+  "terminal_connection_sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787"
+}

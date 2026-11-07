@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T16:09:11.961418+00:00",
+  "updated_at": "2026-11-07T16:26:28.649414+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11947,16 +11947,16 @@
       ]
     },
     "m1_codex_real": {
-      "status": "AUTHORIZED_PENDING_PREFLIGHT",
+      "status": "EXECUTING_WITH_QUALIFIED_CLIENT_FIX",
       "harness": "Codex CLI",
       "account_selection": "already authenticated CLI account",
       "total_token_limit": 700000,
       "execution_authorized": true,
       "credential_access_performed": false,
-      "provider_inference_performed": false,
+      "provider_inference_performed": true,
       "observed_cli_version": "0.167.0",
       "observed_version_command": "codex --version",
-      "build_qualification": "Exact official0.157.0 bytes copied into an isolated complete package with additional codex.exe discovery name; passive candidate selected. Native behavior remains unexecuted.",
+      "build_qualification": "Real setup used original pinned bytes; corrected client separately installed/qualified after false Windows separator drift. Original Server and native build unchanged; productive work pending.",
       "budget_limit": "User permits500000 additional tokens over200000. Operational tolerance700000; preventive interruption100000; native hard cap unavailable.",
       "proposal": "plans/agent_ops/evidence/r3-m1-controller/m1-codex-campaign-proposal-v7.json",
       "original_token_limit": 200000,
@@ -11983,7 +11983,12 @@
         "evidence": "plans/agent_ops/evidence/r3-m1-controller/artifact-manifest.json",
         "real_campaign_executed": false
       },
-      "execution_authorization": "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json"
+      "execution_authorization": "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json",
+      "native_authenticated_context_used": true,
+      "direct_agent_personal_credential_read": false,
+      "observed_tokens": 22775,
+      "reserved_productive_requests": 1,
+      "client_path_fix": "plans/agent_ops/evidence/r3-m1-path-normalization/qualification.json"
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -13080,6 +13085,15 @@
       "summary": "User authorizes v7: six serial admissions, 700k tolerance, 100k preventive stop and32actions across4exact temporary user tasks. Historical proposals preserved; no acceptance promoted.",
       "evidence": [
         "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Fix false Windows provider-home drift",
+      "status": "IMPLEMENTED",
+      "summary": "Real setup completed once (22775 observed tokens), then raw slash comparison refused Finish observation. Minimal client fix:14source/14installed PASS; historical regression fails as expected. Same receipt retained; no M1 acceptance promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-path-normalization/qualification.json"
       ]
     }
   ]

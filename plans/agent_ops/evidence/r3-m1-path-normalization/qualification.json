@@ -1,0 +1,26 @@
+{
+  "status": "FIXED_INSTALLED_QUALIFIED",
+  "defect": "A real setup completed Finish, but the local CLI falsely rejected the approved provider home because Windows canonicalized slash separators.",
+  "correction": "Compare absolute host-local paths using only native separator spelling; do not read the home, resolve links, fold case or collapse parent traversal.",
+  "source_tests": 14,
+  "installed_tests": 14,
+  "historical_reproducer": "1 expected failure at original PROFILE_DRIFT predicate; not a passing qualification",
+  "inputs_unchanged": 1419,
+  "source_files": {
+    "src/okto_nexus/application/terminal_connection.py": {
+      "raw_sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787",
+      "lf_sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787"
+    },
+    "tests/execution_r4/test_terminal_connect.py": {
+      "raw_sha256": "77adf155ced78114983e85445c8426b85cdd3b5352ffa3a2bcb19f92f17d2c0c",
+      "lf_sha256": "77adf155ced78114983e85445c8426b85cdd3b5352ffa3a2bcb19f92f17d2c0c"
+    }
+  },
+  "real_setup_observed_tokens": 22775,
+  "real_setup_reservations": 1,
+  "native_package_unchanged": true,
+  "original_server_environment_unchanged": true,
+  "next_execution": "Use separately pinned corrected client with original running Server and same done receipt. No setup replay, profile rewrite, extra service action, authority change or extra admission is permitted by this fix.",
+  "split_build": true,
+  "acceptance_promoted": false
+}
