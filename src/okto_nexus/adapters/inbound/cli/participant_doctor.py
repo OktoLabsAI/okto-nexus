@@ -22,6 +22,8 @@ def run_participant_doctor(argv):
     parser.add_argument('--check-environment', action='store_true', help='inspect this process\'s named credential reference; with --check-server use it instead of the vault')
     parser.add_argument('--timeout', type=float, default=10)
     parser.add_argument('--json', action='store_true')
+    parser.add_argument('--diagnostic-format', choices=('legacy', 'v1'), default='legacy',
+        help='opt into the common diagnostic schema; legacy preserves existing output')
     args = parser.parse_args(argv)
     if not 0 < args.timeout <= 30:
         parser.error('--timeout must be greater than zero and at most 30 seconds per active stage')
@@ -49,4 +51,5 @@ def run_participant_doctor(argv):
         return 130
     except Exception as error:
         report.error('participant_profile', error)
-    return _finish(report, args.json)
+    return _finish(report, args.json, diagnostic_format=args.diagnostic_format, scope='participant',
+        explicit_checks=args.check_server or args.check_mcp or args.check_environment)

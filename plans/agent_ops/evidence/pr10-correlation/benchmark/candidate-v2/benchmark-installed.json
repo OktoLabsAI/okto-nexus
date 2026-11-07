@@ -1,0 +1,1688 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-11-07T05:52:37.025264+00:00",
+  "package": {
+    "wheel_sha256": "fc9bb8f075ac0167eee9c21d96592b12d46c218df77a0f2114f44b1fc20b1355",
+    "verified_files": 681,
+    "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+    "core_version": "0.0.14",
+    "product_imports_only_installed": true,
+    "loaded_module_counts": {
+      "nexus": 1,
+      "core": 77
+    },
+    "python_version": "3.13.1"
+  },
+  "samples": 3,
+  "quotas": {
+    "observation_source_rate_per_minute": 6000,
+    "observation_source_burst": 1024,
+    "observation_agent_rate_per_minute": 60000,
+    "observation_agent_burst": 4096,
+    "observation_installation_rate_per_minute": 600000,
+    "observation_installation_burst": 16384,
+    "observation_max_sources_per_agent": 1024,
+    "observation_max_sources": 4096,
+    "observation_max_instances": 4096,
+    "observation_max_correlation_records": 4096,
+    "observation_max_tokens_per_source": 64,
+    "observation_max_events": 20000,
+    "observation_max_valid_for_seconds": 3600
+  },
+  "deadline_seconds": 5,
+  "layouts": [
+    {
+      "sessions": 1,
+      "receipts_per_session": 12,
+      "external_state_distribution": {
+        "blocked": 0.5,
+        "working": 0.5
+      },
+      "native_seed_ms": 903.2029999652877,
+      "stages": [
+        {
+          "instances": 64,
+          "observation_seed_ms": 98.04889996303245,
+          "reads": {
+            "batch_all": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "verified_receipts": 64,
+                  "elapsed_ms": 41.86539998045191,
+                  "cpu_ms": 31.25,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "verified_receipts": 64,
+                  "elapsed_ms": 45.340799959376454,
+                  "cpu_ms": 46.875,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "verified_receipts": 64,
+                  "elapsed_ms": 49.360400007572025,
+                  "cpu_ms": 46.875,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 45.340799959376454,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_page_200": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "canonical_items": 64,
+                  "elapsed_ms": 90.4547999962233,
+                  "cpu_ms": 93.75,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "canonical_items": 64,
+                  "elapsed_ms": 63.67160001536831,
+                  "cpu_ms": 46.875,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "canonical_items": 64,
+                  "elapsed_ms": 56.857199990190566,
+                  "cpu_ms": 46.875,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 63.67160001536831,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_external_blocked_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 77.8334999922663,
+                  "cpu_ms": 78.125,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 68.37940000696108,
+                  "cpu_ms": 62.5,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 67.47379997977987,
+                  "cpu_ms": 78.125,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 68.37940000696108,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_all_kinds_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 215.3935999958776,
+                  "cpu_ms": 187.5,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 192.23809998948127,
+                  "cpu_ms": 203.125,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 176.11360002774745,
+                  "cpu_ms": 171.875,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 192.23809998948127,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_summary": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 64,
+                  "activity": {
+                    "working": 32,
+                    "idle": 0,
+                    "blocked": 32,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 64,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 8.629700052551925,
+                  "cpu_ms": 15.625,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 64,
+                  "activity": {
+                    "working": 32,
+                    "idle": 0,
+                    "blocked": 32,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 64,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 9.35040001058951,
+                  "cpu_ms": 0.0,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 64,
+                  "activity": {
+                    "working": 32,
+                    "idle": 0,
+                    "blocked": 32,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 64,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 8.810400031507015,
+                  "cpu_ms": 15.625,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 8.810400031507015,
+              "first_sample_is_cold_or_less_warm": true
+            }
+          },
+          "canonical_tables_unchanged": true,
+          "canonical_table_count": 145
+        },
+        {
+          "instances": 512,
+          "observation_seed_ms": 720.6675999914296,
+          "reads": {
+            "batch_all": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 512,
+                  "total": null,
+                  "verified_receipts": 512,
+                  "elapsed_ms": 279.96000001439825,
+                  "cpu_ms": 265.625,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 512,
+                  "total": null,
+                  "verified_receipts": 512,
+                  "elapsed_ms": 269.1933999885805,
+                  "cpu_ms": 250.0,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 512,
+                  "total": null,
+                  "verified_receipts": 512,
+                  "elapsed_ms": 228.57330000260845,
+                  "cpu_ms": 203.125,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 269.1933999885805,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_page_200": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 136.26790000125766,
+                  "cpu_ms": 125.0,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 158.02909998456016,
+                  "cpu_ms": 156.25,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 160.49619996920228,
+                  "cpu_ms": 171.875,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 158.02909998456016,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_external_blocked_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 384.23869997495785,
+                  "cpu_ms": 375.0,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 382.5745999929495,
+                  "cpu_ms": 390.625,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 362.74130002129823,
+                  "cpu_ms": 359.375,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 382.5745999929495,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_all_kinds_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 515.2795999892987,
+                  "cpu_ms": 453.125,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 455.50640003057197,
+                  "cpu_ms": 406.25,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 494.05399995157495,
+                  "cpu_ms": 484.375,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 494.05399995157495,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_summary": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 512,
+                  "activity": {
+                    "working": 256,
+                    "idle": 0,
+                    "blocked": 256,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 512,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 74.6381999924779,
+                  "cpu_ms": 78.125,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 512,
+                  "activity": {
+                    "working": 256,
+                    "idle": 0,
+                    "blocked": 256,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 512,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 73.12690000981092,
+                  "cpu_ms": 62.5,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 512,
+                  "activity": {
+                    "working": 256,
+                    "idle": 0,
+                    "blocked": 256,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 512,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 75.95720002427697,
+                  "cpu_ms": 78.125,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 74.6381999924779,
+              "first_sample_is_cold_or_less_warm": true
+            }
+          },
+          "canonical_tables_unchanged": true,
+          "canonical_table_count": 145
+        },
+        {
+          "instances": 4096,
+          "observation_seed_ms": 6602.756900014356,
+          "reads": {
+            "batch_all": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 4096,
+                  "total": null,
+                  "verified_receipts": 4096,
+                  "elapsed_ms": 1866.4736000355333,
+                  "cpu_ms": 1796.875,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 4096,
+                  "total": null,
+                  "verified_receipts": 4096,
+                  "elapsed_ms": 1958.0876000109129,
+                  "cpu_ms": 1937.5,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 4096,
+                  "total": null,
+                  "verified_receipts": 4096,
+                  "elapsed_ms": 2035.8118999865837,
+                  "cpu_ms": 1937.5,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 1958.0876000109129,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_page_200": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 154.78799998527393,
+                  "cpu_ms": 156.25,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 159.89849995821714,
+                  "cpu_ms": 171.875,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 165.55380000500008,
+                  "cpu_ms": 140.625,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 159.89849995821714,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_external_blocked_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 2898.1691999942996,
+                  "cpu_ms": 2859.375,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 3042.511999956332,
+                  "cpu_ms": 3000.0,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 2933.294599992223,
+                  "cpu_ms": 2843.75,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 2933.294599992223,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_all_kinds_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 3012.532500026282,
+                  "cpu_ms": 2984.375,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 2851.2458999757655,
+                  "cpu_ms": 2812.5,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 3018.1379999849014,
+                  "cpu_ms": 3015.625,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 3012.532500026282,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_summary": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 4096,
+                  "activity": {
+                    "working": 2048,
+                    "idle": 0,
+                    "blocked": 2048,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 4096,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 461.7129999678582,
+                  "cpu_ms": 453.125,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 4096,
+                  "activity": {
+                    "working": 2048,
+                    "idle": 0,
+                    "blocked": 2048,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 4096,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 453.19289999315515,
+                  "cpu_ms": 437.5,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 4096,
+                  "activity": {
+                    "working": 2048,
+                    "idle": 0,
+                    "blocked": 2048,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 4096,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 499.44699998013675,
+                  "cpu_ms": 500.0,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 461.7129999678582,
+              "first_sample_is_cold_or_less_warm": true
+            }
+          },
+          "canonical_tables_unchanged": true,
+          "canonical_table_count": 145
+        }
+      ],
+      "package_after": {
+        "wheel_sha256": "fc9bb8f075ac0167eee9c21d96592b12d46c218df77a0f2114f44b1fc20b1355",
+        "verified_files": 681,
+        "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+        "core_version": "0.0.14",
+        "product_imports_only_installed": true,
+        "loaded_module_counts": {
+          "nexus": 159,
+          "core": 80
+        },
+        "python_version": "3.13.1"
+      }
+    },
+    {
+      "sessions": 64,
+      "receipts_per_session": 12,
+      "external_state_distribution": {
+        "blocked": 0.5,
+        "working": 0.5
+      },
+      "native_seed_ms": 15237.205900019035,
+      "stages": [
+        {
+          "instances": 64,
+          "observation_seed_ms": 89.39739997731522,
+          "reads": {
+            "batch_all": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "verified_receipts": 64,
+                  "elapsed_ms": 344.360199989751,
+                  "cpu_ms": 343.75,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "verified_receipts": 64,
+                  "elapsed_ms": 327.54600001499057,
+                  "cpu_ms": 328.125,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "verified_receipts": 64,
+                  "elapsed_ms": 363.4957000031136,
+                  "cpu_ms": 343.75,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 344.360199989751,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_page_200": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "canonical_items": 64,
+                  "elapsed_ms": 382.04709999263287,
+                  "cpu_ms": 312.5,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "canonical_items": 64,
+                  "elapsed_ms": 364.68759999843314,
+                  "cpu_ms": 359.375,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 64,
+                  "total": null,
+                  "canonical_items": 64,
+                  "elapsed_ms": 380.67859999137,
+                  "cpu_ms": 375.0,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 380.67859999137,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_external_blocked_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 212.62229996500537,
+                  "cpu_ms": 218.75,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 219.19410000555217,
+                  "cpu_ms": 218.75,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 216.32269996916875,
+                  "cpu_ms": 218.75,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 216.32269996916875,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_all_kinds_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 335.8720999676734,
+                  "cpu_ms": 328.125,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 328.3942000125535,
+                  "cpu_ms": 328.125,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 32,
+                  "total": 32,
+                  "canonical_items": 32,
+                  "elapsed_ms": 340.18470003502443,
+                  "cpu_ms": 343.75,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 335.8720999676734,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_summary": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 64,
+                  "activity": {
+                    "working": 32,
+                    "idle": 0,
+                    "blocked": 32,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 64,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 10.312200000043958,
+                  "cpu_ms": 15.625,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 64,
+                  "activity": {
+                    "working": 32,
+                    "idle": 0,
+                    "blocked": 32,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 64,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 9.799099992960691,
+                  "cpu_ms": 0.0,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 64,
+                  "activity": {
+                    "working": 32,
+                    "idle": 0,
+                    "blocked": 32,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 64,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 9.063099976629019,
+                  "cpu_ms": 15.625,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 9.799099992960691,
+              "first_sample_is_cold_or_less_warm": true
+            }
+          },
+          "canonical_tables_unchanged": true,
+          "canonical_table_count": 145
+        },
+        {
+          "instances": 512,
+          "observation_seed_ms": 685.0228999974206,
+          "reads": {
+            "batch_all": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 512,
+                  "total": null,
+                  "verified_receipts": 512,
+                  "elapsed_ms": 562.8437999985181,
+                  "cpu_ms": 562.5,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 512,
+                  "total": null,
+                  "verified_receipts": 512,
+                  "elapsed_ms": 527.7672999654897,
+                  "cpu_ms": 515.625,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 512,
+                  "total": null,
+                  "verified_receipts": 512,
+                  "elapsed_ms": 508.58760002302006,
+                  "cpu_ms": 515.625,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 527.7672999654897,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_page_200": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 424.3783999700099,
+                  "cpu_ms": 375.0,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 455.4974000202492,
+                  "cpu_ms": 453.125,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 403.36260001640767,
+                  "cpu_ms": 406.25,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 424.3783999700099,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_external_blocked_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 471.90709999995306,
+                  "cpu_ms": 453.125,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 478.9714999496937,
+                  "cpu_ms": 484.375,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 470.33809998538345,
+                  "cpu_ms": 453.125,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 471.90709999995306,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_all_kinds_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 587.2971000499092,
+                  "cpu_ms": 578.125,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 530.6545000057667,
+                  "cpu_ms": 500.0,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 256,
+                  "canonical_items": 50,
+                  "elapsed_ms": 554.3852999689989,
+                  "cpu_ms": 546.875,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 554.3852999689989,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_summary": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 512,
+                  "activity": {
+                    "working": 256,
+                    "idle": 0,
+                    "blocked": 256,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 512,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 62.18790001003072,
+                  "cpu_ms": 62.5,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 512,
+                  "activity": {
+                    "working": 256,
+                    "idle": 0,
+                    "blocked": 256,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 512,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 55.514800013042986,
+                  "cpu_ms": 62.5,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 512,
+                  "activity": {
+                    "working": 256,
+                    "idle": 0,
+                    "blocked": 256,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 512,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 58.72890003956854,
+                  "cpu_ms": 46.875,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 58.72890003956854,
+              "first_sample_is_cold_or_less_warm": true
+            }
+          },
+          "canonical_tables_unchanged": true,
+          "canonical_table_count": 145
+        },
+        {
+          "instances": 4096,
+          "observation_seed_ms": 4719.612599990796,
+          "reads": {
+            "batch_all": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 4096,
+                  "total": null,
+                  "verified_receipts": 4096,
+                  "elapsed_ms": 2247.5123000331223,
+                  "cpu_ms": 2218.75,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 4096,
+                  "total": null,
+                  "verified_receipts": 4096,
+                  "elapsed_ms": 2366.450799978338,
+                  "cpu_ms": 2328.125,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 4096,
+                  "total": null,
+                  "verified_receipts": 4096,
+                  "elapsed_ms": 2372.8324000258,
+                  "cpu_ms": 2218.75,
+                  "select_or_cte": 1,
+                  "statement_classes": {
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 2366.450799978338,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_page_200": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 455.2531999652274,
+                  "cpu_ms": 437.5,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 420.4985999967903,
+                  "cpu_ms": 406.25,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 200,
+                  "total": null,
+                  "canonical_items": 200,
+                  "elapsed_ms": 449.33919998584315,
+                  "cpu_ms": 453.125,
+                  "select_or_cte": 3,
+                  "statement_classes": {
+                    "SELECT": 2,
+                    "WITH": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 449.33919998584315,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_external_blocked_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 3021.4205000083894,
+                  "cpu_ms": 2921.875,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 2900.9218999999575,
+                  "cpu_ms": 2843.75,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 2801.9449000130408,
+                  "cpu_ms": 2781.25,
+                  "select_or_cte": 4,
+                  "statement_classes": {
+                    "WITH": 3,
+                    "SELECT": 1
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 2900.9218999999575,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "attention_all_kinds_50": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 3452.0917999907397,
+                  "cpu_ms": 3156.25,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 3286.5913999849,
+                  "cpu_ms": 3187.5,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 50,
+                  "total": 2048,
+                  "canonical_items": 50,
+                  "elapsed_ms": 2980.350499972701,
+                  "cpu_ms": 2859.375,
+                  "select_or_cte": 44,
+                  "statement_classes": {
+                    "SELECT": 41,
+                    "WITH": 3
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 3286.5913999849,
+              "first_sample_is_cold_or_less_warm": true
+            },
+            "observation_summary": {
+              "samples": [
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 4096,
+                  "activity": {
+                    "working": 2048,
+                    "idle": 0,
+                    "blocked": 2048,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 4096,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 440.52290002582595,
+                  "cpu_ms": 453.125,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 4096,
+                  "activity": {
+                    "working": 2048,
+                    "idle": 0,
+                    "blocked": 2048,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 4096,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 469.1549999988638,
+                  "cpu_ms": 468.75,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                },
+                {
+                  "ok": true,
+                  "records": 0,
+                  "total": 4096,
+                  "activity": {
+                    "working": 2048,
+                    "idle": 0,
+                    "blocked": 2048,
+                    "unknown": 0
+                  },
+                  "freshness": {
+                    "current": 4096,
+                    "stale": 0,
+                    "unknown": 0,
+                    "unavailable": 0
+                  },
+                  "elapsed_ms": 445.96739998087287,
+                  "cpu_ms": 421.875,
+                  "select_or_cte": 2,
+                  "statement_classes": {
+                    "SELECT": 2
+                  }
+                }
+              ],
+              "successful_samples": 3,
+              "median_ms": 445.96739998087287,
+              "first_sample_is_cold_or_less_warm": true
+            }
+          },
+          "canonical_tables_unchanged": true,
+          "canonical_table_count": 145
+        }
+      ],
+      "package_after": {
+        "wheel_sha256": "fc9bb8f075ac0167eee9c21d96592b12d46c218df77a0f2114f44b1fc20b1355",
+        "verified_files": 681,
+        "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+        "core_version": "0.0.14",
+        "product_imports_only_installed": true,
+        "loaded_module_counts": {
+          "nexus": 159,
+          "core": 80
+        },
+        "python_version": "3.13.1"
+      }
+    }
+  ],
+  "notes": [
+    "USERPROFILE/APPDATA/LOCALAPPDATA are isolated inside each disposable fixture home before imports/bootstrap.",
+    "Inherited application/provider variables are deleted by name without reading or recording their values; HOME/CODEX_HOME are untouched.",
+    "Installed wheel only; real SQLite/services; synthetic host correlation fixtures, not real OS proof acceptance.",
+    "Same-session and 64-session layouts are distinct. 4096 unique native sessions are NOT qualified by this default campaign.",
+    "Twelve receipts per native session were committed through production append_execution_receipt.",
+    "Three local samples include trace overhead and do not establish a general SLO.",
+    "Alternating 50% blocked / 50% working, all instances correlated; no external completion events.",
+    "This is not an identical comparison to OBS11: that baseline included external completions; this measures correlation and 12 receipts/session.",
+    "The prior prepared 100%-blocked driver was preserved but never executed or qualified.",
+    "Any noncanonical receipt timestamp in selected history produces unknown; no older-valid fallback.",
+    "Direct application-service measurements exclude HTTP authentication cold-cache lookup overhead.",
+    "First sample is retained separately; no undisclosed warmup. Summary remains exclusively external.",
+    "Database files and synthetic credentials/proofs are private fixtures; never collect DB/WAL/SHM or their hashes."
+  ],
+  "status": "COMPLETED_MEASUREMENTS",
+  "finished_at": "2026-11-07T05:54:23.193919+00:00"
+}

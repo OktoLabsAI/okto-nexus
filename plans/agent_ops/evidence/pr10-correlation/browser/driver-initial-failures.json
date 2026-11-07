@@ -1,0 +1,8 @@
+{
+  "failures": [
+    {"step": "DOM check launch", "result": "rtk could not execute multiline npx.cmd arguments", "product_request_sent": false, "resolution": "Encode the same read-only DOM expression as one ASCII argument"},
+    {"step": "Trace metadata inspection", "result": "A one-off Python summary command had an unmatched parenthesis", "product_request_sent": false, "resolution": "Corrected and reran the read-only metadata summary"},
+    {"step": "Initial artifact curation", "result": "The first manifest collected sha1 keys but this CLI uses _file references; public resources were omitted", "product_request_sent": false, "resolution": "Initial curated directory preserved; complete resources collected and audited in curated-v2"}
+  ],
+  "initial_screenshots_retained": ["browser-working.png", "browser-blocked-list.png"]
+}

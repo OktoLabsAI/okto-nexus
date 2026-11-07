@@ -1,0 +1,628 @@
+{
+  "status": "MEASUREMENTS_COMPLETED_ALL_SAMPLES_PASSED",
+  "wheel_sha256": "fc9bb8f075ac0167eee9c21d96592b12d46c218df77a0f2114f44b1fc20b1355",
+  "samples_total": 90,
+  "samples_successful": 90,
+  "budget_refusals": 0,
+  "other_failures": 0,
+  "sample_retries": 0,
+  "measurement_driver_exact_bytes_equal_v3": true,
+  "approved_layouts": [
+    1,
+    64
+  ],
+  "scales": [
+    64,
+    512,
+    4096
+  ],
+  "samples_per_read": 3,
+  "states": {
+    "blocked": 0.5,
+    "working": 0.5
+  },
+  "all_correlated": true,
+  "receipts_per_session": 12,
+  "deadline_seconds": 5,
+  "first_cold_or_less_warm_samples_retained": true,
+  "not_qualified": [
+    "4096 unique native sessions",
+    "general latency SLO",
+    "real OS birth proof"
+  ],
+  "canonical_row_fingerprints_unchanged": true,
+  "canonical_tables_per_stage": 145,
+  "fingerprint_exclusions": [
+    "observation_*",
+    "attention_*",
+    "events"
+  ],
+  "measured_trace_write_classes": [],
+  "product_imports_only_installed_before_and_after": true,
+  "raw_report_sha256": "75fdee82fcdf2f951ef8f58131a8ac5d7dc99fa6dfd9ac3d15f8a8a6472c666c",
+  "factories_closed": true,
+  "closure_evidence": "Each campaign returns through connection_factory.close() in finally; both returned and the process exited 0.",
+  "process_exit_code": 0,
+  "process_session": 82635,
+  "started_at": "2026-11-07T05:52:37.025264+00:00",
+  "finished_at": "2026-11-07T05:54:23.193919+00:00",
+  "summary": [
+    {
+      "sessions": 1,
+      "instances": 64,
+      "reads": {
+        "batch_all": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 45.340799959376454,
+          "max_success_ms": 49.360400007572025,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            1
+          ],
+          "sample_ms_in_recorded_order": [
+            41.86539998045191,
+            45.340799959376454,
+            49.360400007572025
+          ]
+        },
+        "observation_page_200": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 63.67160001536831,
+          "max_success_ms": 90.4547999962233,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            3
+          ],
+          "sample_ms_in_recorded_order": [
+            90.4547999962233,
+            63.67160001536831,
+            56.857199990190566
+          ]
+        },
+        "attention_external_blocked_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 68.37940000696108,
+          "max_success_ms": 77.8334999922663,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            4
+          ],
+          "sample_ms_in_recorded_order": [
+            77.8334999922663,
+            68.37940000696108,
+            67.47379997977987
+          ]
+        },
+        "attention_all_kinds_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 192.23809998948127,
+          "max_success_ms": 215.3935999958776,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            44
+          ],
+          "sample_ms_in_recorded_order": [
+            215.3935999958776,
+            192.23809998948127,
+            176.11360002774745
+          ]
+        },
+        "observation_summary": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 8.810400031507015,
+          "max_success_ms": 9.35040001058951,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            2
+          ],
+          "sample_ms_in_recorded_order": [
+            8.629700052551925,
+            9.35040001058951,
+            8.810400031507015
+          ]
+        }
+      }
+    },
+    {
+      "sessions": 1,
+      "instances": 512,
+      "reads": {
+        "batch_all": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 269.1933999885805,
+          "max_success_ms": 279.96000001439825,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            1
+          ],
+          "sample_ms_in_recorded_order": [
+            279.96000001439825,
+            269.1933999885805,
+            228.57330000260845
+          ]
+        },
+        "observation_page_200": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 158.02909998456016,
+          "max_success_ms": 160.49619996920228,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            3
+          ],
+          "sample_ms_in_recorded_order": [
+            136.26790000125766,
+            158.02909998456016,
+            160.49619996920228
+          ]
+        },
+        "attention_external_blocked_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 382.5745999929495,
+          "max_success_ms": 384.23869997495785,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            4
+          ],
+          "sample_ms_in_recorded_order": [
+            384.23869997495785,
+            382.5745999929495,
+            362.74130002129823
+          ]
+        },
+        "attention_all_kinds_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 494.05399995157495,
+          "max_success_ms": 515.2795999892987,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            44
+          ],
+          "sample_ms_in_recorded_order": [
+            515.2795999892987,
+            455.50640003057197,
+            494.05399995157495
+          ]
+        },
+        "observation_summary": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 74.6381999924779,
+          "max_success_ms": 75.95720002427697,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            2
+          ],
+          "sample_ms_in_recorded_order": [
+            74.6381999924779,
+            73.12690000981092,
+            75.95720002427697
+          ]
+        }
+      }
+    },
+    {
+      "sessions": 1,
+      "instances": 4096,
+      "reads": {
+        "batch_all": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 1958.0876000109129,
+          "max_success_ms": 2035.8118999865837,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            1
+          ],
+          "sample_ms_in_recorded_order": [
+            1866.4736000355333,
+            1958.0876000109129,
+            2035.8118999865837
+          ]
+        },
+        "observation_page_200": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 159.89849995821714,
+          "max_success_ms": 165.55380000500008,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            3
+          ],
+          "sample_ms_in_recorded_order": [
+            154.78799998527393,
+            159.89849995821714,
+            165.55380000500008
+          ]
+        },
+        "attention_external_blocked_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 2933.294599992223,
+          "max_success_ms": 3042.511999956332,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            4
+          ],
+          "sample_ms_in_recorded_order": [
+            2898.1691999942996,
+            3042.511999956332,
+            2933.294599992223
+          ]
+        },
+        "attention_all_kinds_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 3012.532500026282,
+          "max_success_ms": 3018.1379999849014,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            44
+          ],
+          "sample_ms_in_recorded_order": [
+            3012.532500026282,
+            2851.2458999757655,
+            3018.1379999849014
+          ]
+        },
+        "observation_summary": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 461.7129999678582,
+          "max_success_ms": 499.44699998013675,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            2
+          ],
+          "sample_ms_in_recorded_order": [
+            461.7129999678582,
+            453.19289999315515,
+            499.44699998013675
+          ]
+        }
+      }
+    },
+    {
+      "sessions": 64,
+      "instances": 64,
+      "reads": {
+        "batch_all": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 344.360199989751,
+          "max_success_ms": 363.4957000031136,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            1
+          ],
+          "sample_ms_in_recorded_order": [
+            344.360199989751,
+            327.54600001499057,
+            363.4957000031136
+          ]
+        },
+        "observation_page_200": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 380.67859999137,
+          "max_success_ms": 382.04709999263287,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            3
+          ],
+          "sample_ms_in_recorded_order": [
+            382.04709999263287,
+            364.68759999843314,
+            380.67859999137
+          ]
+        },
+        "attention_external_blocked_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 216.32269996916875,
+          "max_success_ms": 219.19410000555217,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            4
+          ],
+          "sample_ms_in_recorded_order": [
+            212.62229996500537,
+            219.19410000555217,
+            216.32269996916875
+          ]
+        },
+        "attention_all_kinds_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 335.8720999676734,
+          "max_success_ms": 340.18470003502443,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            44
+          ],
+          "sample_ms_in_recorded_order": [
+            335.8720999676734,
+            328.3942000125535,
+            340.18470003502443
+          ]
+        },
+        "observation_summary": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 9.799099992960691,
+          "max_success_ms": 10.312200000043958,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            2
+          ],
+          "sample_ms_in_recorded_order": [
+            10.312200000043958,
+            9.799099992960691,
+            9.063099976629019
+          ]
+        }
+      }
+    },
+    {
+      "sessions": 64,
+      "instances": 512,
+      "reads": {
+        "batch_all": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 527.7672999654897,
+          "max_success_ms": 562.8437999985181,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            1
+          ],
+          "sample_ms_in_recorded_order": [
+            562.8437999985181,
+            527.7672999654897,
+            508.58760002302006
+          ]
+        },
+        "observation_page_200": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 424.3783999700099,
+          "max_success_ms": 455.4974000202492,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            3
+          ],
+          "sample_ms_in_recorded_order": [
+            424.3783999700099,
+            455.4974000202492,
+            403.36260001640767
+          ]
+        },
+        "attention_external_blocked_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 471.90709999995306,
+          "max_success_ms": 478.9714999496937,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            4
+          ],
+          "sample_ms_in_recorded_order": [
+            471.90709999995306,
+            478.9714999496937,
+            470.33809998538345
+          ]
+        },
+        "attention_all_kinds_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 554.3852999689989,
+          "max_success_ms": 587.2971000499092,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            44
+          ],
+          "sample_ms_in_recorded_order": [
+            587.2971000499092,
+            530.6545000057667,
+            554.3852999689989
+          ]
+        },
+        "observation_summary": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 58.72890003956854,
+          "max_success_ms": 62.18790001003072,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            2
+          ],
+          "sample_ms_in_recorded_order": [
+            62.18790001003072,
+            55.514800013042986,
+            58.72890003956854
+          ]
+        }
+      }
+    },
+    {
+      "sessions": 64,
+      "instances": 4096,
+      "reads": {
+        "batch_all": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 2366.450799978338,
+          "max_success_ms": 2372.8324000258,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            1
+          ],
+          "sample_ms_in_recorded_order": [
+            2247.5123000331223,
+            2366.450799978338,
+            2372.8324000258
+          ]
+        },
+        "observation_page_200": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 449.33919998584315,
+          "max_success_ms": 455.2531999652274,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            3
+          ],
+          "sample_ms_in_recorded_order": [
+            455.2531999652274,
+            420.4985999967903,
+            449.33919998584315
+          ]
+        },
+        "attention_external_blocked_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 2900.9218999999575,
+          "max_success_ms": 3021.4205000083894,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            4
+          ],
+          "sample_ms_in_recorded_order": [
+            3021.4205000083894,
+            2900.9218999999575,
+            2801.9449000130408
+          ]
+        },
+        "attention_all_kinds_50": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 3286.5913999849,
+          "max_success_ms": 3452.0917999907397,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            44
+          ],
+          "sample_ms_in_recorded_order": [
+            3452.0917999907397,
+            3286.5913999849,
+            2980.350499972701
+          ]
+        },
+        "observation_summary": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 445.96739998087287,
+          "max_success_ms": 469.1549999988638,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            2
+          ],
+          "sample_ms_in_recorded_order": [
+            440.52290002582595,
+            469.1549999988638,
+            445.96739998087287
+          ]
+        }
+      }
+    }
+  ],
+  "comparison": {
+    "prior_campaign": "V3 against candidate-v1",
+    "prior_raw_report_sha256": "4e005cf9925dcf1635fdd4bcb30f12a3b9c91d4ea6a1ad2d6d0fe6ab8d9f282b",
+    "prior_samples_total": 90,
+    "prior_samples_successful": 86,
+    "prior_budget_refusals": 4,
+    "same_driver_workload_quotas_and_deadline": true,
+    "prior_64_sessions_4096_instances": {
+      "sessions": 64,
+      "instances": 4096,
+      "reads": {
+        "batch_all": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 2288.7130999588408,
+          "max_success_ms": 2300.1263000187464,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            1
+          ],
+          "sample_ms_in_recorded_order": [
+            2254.325100046117,
+            2288.7130999588408,
+            2300.1263000187464
+          ]
+        },
+        "observation_page_200": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 443.236600025557,
+          "max_success_ms": 457.9511999618262,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            3
+          ],
+          "sample_ms_in_recorded_order": [
+            438.0981999565847,
+            457.9511999618262,
+            443.236600025557
+          ]
+        },
+        "attention_external_blocked_50": {
+          "samples_total": 3,
+          "samples_successful": 2,
+          "median_success_ms": 4729.416000016499,
+          "max_success_ms": 4895.241000049282,
+          "budget_refusals": 1,
+          "select_or_cte_counts": [
+            3,
+            4
+          ],
+          "sample_ms_in_recorded_order": [
+            5029.895399988163,
+            4895.241000049282,
+            4563.590999983717
+          ]
+        },
+        "attention_all_kinds_50": {
+          "samples_total": 3,
+          "samples_successful": 0,
+          "median_success_ms": null,
+          "max_success_ms": null,
+          "budget_refusals": 3,
+          "select_or_cte_counts": [
+            43
+          ],
+          "sample_ms_in_recorded_order": [
+            5025.031999975909,
+            5059.3378999619745,
+            5050.656799983699
+          ]
+        },
+        "observation_summary": {
+          "samples_total": 3,
+          "samples_successful": 3,
+          "median_success_ms": 599.9483999912627,
+          "max_success_ms": 655.8167999610305,
+          "budget_refusals": 0,
+          "select_or_cte_counts": [
+            2
+          ],
+          "sample_ms_in_recorded_order": [
+            655.8167999610305,
+            599.9483999912627,
+            583.600900019519
+          ]
+        }
+      }
+    },
+    "limit": "Three local samples include trace overhead and retain the first colder sample; no general latency SLO. Earlier OBS11 had completions and is a different workload."
+  }
+}

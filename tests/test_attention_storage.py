@@ -53,7 +53,7 @@ def test_upgrade_from_160_preserves_canonical_rows_and_backfills_only_metadata(t
         before = {table: rows(factory, table) for table in tables}
         expected = sorted(int(path.name.split('_')[0]) for path in _default_migrations_dir().glob('*.sql')
                           if int(path.name.split('_')[0]) > baseline)
-        assert 165 in expected
+        assert 165 in expected and 166 in expected
         assert MigrationRunner(factory).apply() == expected
         assert rows(factory, 'server_effective_policy') == []
         assert {table: rows(factory, table) for table in tables} == before

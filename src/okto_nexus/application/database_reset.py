@@ -14,7 +14,7 @@ INSTALLATION_TABLES = frozenset({
     'attention_operation_epochs',
     # No identity FKs: keep the allocator and spent rate budget through both
     # reset modes, without retaining removed agent/source configuration.
-    'observation_installation', 'observation_rate_buckets',
+    'observation_installation', 'observation_rate_buckets', 'observation_correlations',
 })
 
 # Preserve the whole configured connection, including its original authority
@@ -91,6 +91,15 @@ def clear_operational_history(conn, *, keep_agents):
     # RESTRICT credential/history FKs must be cleared in dependency order.
     # Configuration may survive, but no old token or instance survives reset.
     counts = {}
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='observation_correlations'").fetchone():
+        # Reset erases private operational proof, but never the per-instance
+        # revision high-water. Saturated rows are irrevocable by normal CAS;
+        # saturation must not prevent canonical reset or retain their proof.
+        conn.execute("UPDATE observation_correlations SET state='revoked',"
+            'revision=CASE WHEN revision<9223372036854775807 THEN revision+1 ELSE revision END,'
+            'server_id=NULL,executor_id=NULL,session_id=NULL,selection_json=NULL,proof_json=NULL,'
+            "correlation_digest=NULL,verified_at=NULL,updated_at=strftime('%Y-%m-%dT%H:%M:%f','now')||'000Z' "
+            "WHERE state='selected'")
     observation_tables = ['observation_heads', 'observation_token_instances',
                           'observation_tokens', 'observation_instances']
     if not keep_agents:

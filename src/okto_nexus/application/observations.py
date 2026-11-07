@@ -16,6 +16,7 @@ from ..domain.permissions import PermissionSet
 from ..errors import ErrorCode, OktoNexusError
 from . import observation_validation as check
 from .observation_ingress import ObservationIngress
+from .observation_correlation_ports import ObservationCorrelationProjection
 
 
 def _time(value):
@@ -38,11 +39,12 @@ def _conflict():
 
 
 class ObservationService:
-    def __init__(self, *, deps, access):
+    def __init__(self, *, deps, access, correlations: ObservationCorrelationProjection | None = None):
         self.factory, self.config, self.clock = deps.connection_factory, deps.config, deps.clock
         self.repo, self.agents, self.workspaces = deps.repos.observations, deps.repos.agents, deps.repos.workspaces
         self.events, self.access = deps.event_emitter, access
         self.ingress = ObservationIngress(self.config)
+        self.correlations = correlations
 
     def _feature(self):
         if not self.config.feature_observations:
@@ -349,7 +351,7 @@ class ObservationService:
             now, config = _stamp(self.clock.now_iso()), deepcopy(self.config)
             rows = self.repo.list_current(uow, agent_id=agent_id, workspace_id=workspace_id,
                 source_id=source_id, after=after, limit=limit + 1)
-            items = [self._project(row, now, config) for row in rows[:limit]]
+            items = self._project_current(uow, rows[:limit], now, config)
         return dict(items=items, next_after=items[-1]['observed_instance_id'] if len(rows) > limit else None,
                     observed_at=now, feature_enabled=config.feature_observations)
 
@@ -363,6 +365,15 @@ class ObservationService:
         return dict(next_refresh_at=deadline.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
                     refresh_after_seconds=max(0.0, (deadline - _time(now)).total_seconds()))
 
+    def _project_current(self, uow, rows, now, config):
+        # Authentication and scope filtering precede this single passive batch.
+        # Keep native metadata and observation heads in the same SQLite snapshot.
+        facts = (self.correlations.load(uow, observed_instance_ids=[
+            row['instance']['observed_instance_id'] for row in rows])
+            if self.correlations is not None and config.feature_observations else {})
+        return [self._project(dict(row, correlation=facts.get(
+            row['instance']['observed_instance_id'])), now, config) for row in rows]
+
     def get_instance(self, *, context, observed_instance_id):
         check.identity(observed_instance_id, 'observed_instance_id')
         with self.factory.unit_of_work(write=False) as uow:
@@ -372,7 +383,7 @@ class ObservationService:
             if row is None:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, 'Observation instance is unavailable.', {})
             now, config = _stamp(self.clock.now_iso()), deepcopy(self.config)
-            item = self._project(row, now, config)
+            item = self._project_current(uow, [row], now, config)[0]
         return dict(item=item, observed_at=now, feature_enabled=config.feature_observations,
                     **self._refresh([item], now))
 
@@ -443,7 +454,7 @@ class ObservationService:
         freshness = ('unavailable' if unavailable else 'unknown' if head is None
                      else 'stale' if expired else 'current')
         source_received_at = row.get('source_last_received_at')
-        return dict(observed_instance_id=instance['observed_instance_id'], source_id=source['source_id'],
+        view = dict(observed_instance_id=instance['observed_instance_id'], source_id=source['source_id'],
             agent_id=source['agent_id'], workspace_id=instance['workspace_id'], generation=instance['generation'],
             external_instance_ref=instance['external_instance_ref'], source_kind=source['source_kind'],
             source_revision=source['revision'], freshness=freshness,
@@ -457,3 +468,7 @@ class ObservationService:
                 'reason_code', 'reason_text', 'current_completion_ref',
                 'last_completion_ref', 'last_completion_received_at')},
             observational_only=True, canonical_session_ref=None)
+        # Local import avoids a cycle with the correlation write service, which
+        # uses this service's timestamp and current-observation validation.
+        from .observation_correlation_view import attach_canonical
+        return attach_canonical(view, row.get('correlation'))

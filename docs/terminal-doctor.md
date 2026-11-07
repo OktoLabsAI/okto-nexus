@@ -68,7 +68,7 @@ login on the execution host before a separately approved connection test.
 
 ## JSON and exit codes
 
-JSON has `format_version: 1`, selected `profile`/`topology`, independent `checks`,
+The default `--diagnostic-format legacy` JSON has `format_version: 1`, selected `profile`/`topology`, independent `checks`,
 status `counts`, explicit effect flags and overall diagnostic `state`:
 `failed_checks`, `incomplete` or `checks_passed`. None of these means the project
 is universally ready. Inspect the check relevant to the action you intend.
@@ -84,3 +84,57 @@ Use `work status` / `work watch` to inspect the same saved work in detail.
 Participant-file validation, active MCP/coordination smoke and real-provider
 qualification remain separate work in R3; this command does not pretend those
 checks were performed. The Connector retains its own host `doctor` command.
+
+## Opt-in common diagnostic format
+
+Use `--diagnostic-format v1 --json` to select the shared Nexus/Connector report
+shape. Omitting the option or selecting `legacy` preserves the existing output
+and exit convention. The selector works in both Nexus modes:
+
+```text
+okto-nexus doctor --profile project --json --diagnostic-format v1
+okto-nexus doctor --mode participant --profile external --json --diagnostic-format v1
+okto-nexus-connector doctor --json --diagnostic-format v1
+```
+
+The common report identifies `schema: "okto.diagnostics"`, `format_version: 1`,
+component, scope, topology and requested mode. Each check has a stable `id`, a
+`subject` with kind/ID, one of the four proof statuses, a controlled code, reason,
+next action and severity. A check is identified by `(id, subject.kind,
+subject.id)`, so checks for different selected objects remain distinct.
+Severity is presentation metadata; it does not alter proof status or exit code.
+In v1, a typed local service state of `stopped` or `failed` uses the shared
+`SERVICE_NOT_READY` code. The legacy code and output remain unchanged.
+
+All four statuses are counted. Any FAIL yields `failed_checks`; otherwise UNKNOWN
+or an empty report yields `incomplete`; otherwise the state is `checks_passed`.
+This is an aggregation of named checks, not a readiness or productive-work
+guarantee. Nexus keeps the exit codes above. Connector keeps its existing exit
+convention, including exit 0 for a produced report with failed checks. Automation
+using both hosts must inspect `counts.FAIL` and `state` instead of treating their
+process exits as equivalent.
+
+Format selection only projects already collected facts. It adds no network,
+vault, process, service or configuration action. Existing `--check-server`,
+participant `--check-environment`/`--check-mcp`, and Connector `--probe` boundaries
+remain unchanged. `mode: explicit_checks` records a request for those checks;
+it does not prove they ran. Effect fields retain actual reported facts; an absent
+optional effect field does not mean false.
+
+The v1 projection omits arbitrary exception text, unknown evidence fields and
+nested historical observation payloads. It preserves bounded historical IDs,
+status and provenance without converting an old cooperation receipt into a
+current PASS. Unknown diagnostic codes receive a controlled fallback without
+changing the original proof status or exit code. Participant validation and
+bounded MCP negotiation remain scoped as described in
+[participant setup](terminal-participant.md); neither proves real-client reload
+or productive cooperation.
+
+The common [schema](../tests/fixtures/diagnostics_v1/schema.json),
+[catalog](../tests/fixtures/diagnostics_v1/catalog.json) and
+[synthetic vectors](../tests/fixtures/diagnostics_v1/vectors.json) are pinned by
+an artifact digest in each adapter. They describe the current producer
+vocabulary; consumers must tolerate future optional fields/check IDs/codes in
+v1 and must not promote UNKNOWN to success. A change in meaning, type or status
+vocabulary requires a new format version. These fixtures are contract evidence,
+not a provider, real-client or native-service qualification campaign.

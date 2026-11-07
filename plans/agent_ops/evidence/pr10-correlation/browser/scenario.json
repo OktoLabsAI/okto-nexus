@@ -1,0 +1,26 @@
+{
+  "status": "prepared_not_executed",
+  "qualification": "installed HTTP and static UI over an explicitly synthetic canonical fixture",
+  "not_qualified_here": ["real process birth", "real OS identity", "provider execution", "native runtime composition"],
+  "inputs": ["installed wheel path", "isolated installed venv path", "shared dependency site path", "checkout root path"],
+  "synthetic_agent": "observed",
+  "synthetic_workspace": "obs-workspace",
+  "initial_instances": {"working": "working", "blocked": "blocked", "generation": "blocked", "source": "blocked"},
+  "canonical": {"session_id": "correlation-session", "lifecycle": "READY", "last_received_operation": "synthetic-received-turn", "last_received_stage": "SUCCEEDED"},
+  "browser_checkpoints": [
+    "Agents: External activity summary has 1 working and 3 awaiting input, never canonical aggregate",
+    "Agents expanded instance: Canonical session facts precede External activity report",
+    "Attention blocked instance: same order and exact selected source/instance scope",
+    "Recorded session lifecycle READY is separate from Last receipt received SUCCEEDED",
+    "Provenance identifies operator attestation and machine native-birth comparison; fixture nature is documented outside product",
+    "SUCCEEDED receipt does not change external working/blocked into Idle, online, presence or capacity",
+    "Source reference and reason with javascript/HTML render as text; no external command link or approve/dispatch control",
+    "Clear blocked: refresh shows null correlation and no cached canonical session/receipt",
+    "Rotate generation while inspector open: old selection is unavailable; refreshed current list has new generation without canonical ref",
+    "Disable source with revision change: fresh detail/current list contains null canonical ref, explicit unavailable activity",
+    "13 selected canonical execution tables unchanged after all UI/HTTP reads and observation-only mutations",
+    "Close browser; stop exact Server via matching pid/instance/generation with held process handle; listener closed"
+  ],
+  "artifacts_safe_to_read": ["configuration.json", "scenario.json", "qualified/server.json", "qualified/server-owner.json", "qualified/server-import-proof.json", "qualified/browser-fixture-metadata.json", "qualified/canonical-fixture-provenance.json", "qualified/http-projection-*.json", "qualified/canonical-read-proof.json", "qualified/server-cleanup.json"],
+  "private_do_not_read_copy_hash_or_export": ["qualified/browser-fixture-private.json", "qualified/server-home/nexus.db", "qualified/server-home/nexus.db-wal", "qualified/server-home/nexus.db-shm"]
+}

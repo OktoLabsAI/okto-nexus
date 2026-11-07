@@ -7,16 +7,20 @@ import type { ObservationReadState } from '../observationReader';
 import type { ExternalObservation, ObservationDetail, ObservationPageQuery, ObservationSummary } from '../observationTypes';
 import { observationCountText, observationLimitation, observationRefreshSeconds, observationSourceLabels, observationStatus } from '../observationPresentation';
 import { useWorkspaceName } from './WorkspaceNames';
+import { CanonicalObservationFacts } from './CanonicalObservation';
 
 const focus = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500';
 const time = (value: string | null | undefined) => value && Number.isFinite(Date.parse(value)) ? new Date(value).toLocaleString() : 'Not recorded';
 
-export function ExternalObservationMetadata({ item, currentView = true, compact = false }: {
-  item: ExternalObservation; currentView?: boolean; compact?: boolean;
+export function ExternalObservationMetadata({ item, currentView = true, compact = false, showCanonical = true }: {
+  item: ExternalObservation; currentView?: boolean; compact?: boolean; showCanonical?: boolean;
 }) {
   const status = observationStatus(item, currentView);
   const workspaceName = useWorkspaceName(item.workspace_id);
   return <section aria-label={`External instance ${item.observed_instance_id}`} className="min-w-0 space-y-2 text-xs" data-testid={`external-instance-${item.observed_instance_id}`}>
+    {showCanonical && <CanonicalObservationFacts item={item} currentView={currentView} />}
+    <h4 className="font-semibold">External activity report</h4>
+    {item.canonical_session_ref && <p className="text-surface-500">Secondary activity signal from the external source.</p>}
     <div className="flex flex-wrap gap-2">
       <span className="rounded bg-surface-100 dark:bg-surface-800 px-2 py-1 font-medium">{status.activity}</span>
       <span>{status.freshness}</span>
@@ -42,7 +46,6 @@ export function ExternalObservationMetadata({ item, currentView = true, compact 
         <p className="font-mono whitespace-pre-wrap break-all">{item.last_report.last_completion_ref}</p>
         <p>This external reference is not a Nexus result or handoff completion.</p>
       </div>}
-      <p>No canonical session correlation is established.</p>
       <p className="text-surface-600 dark:text-surface-400">{observationLimitation}</p>
     </>}
   </section>;
@@ -58,20 +61,20 @@ export function ExternalObservationInspection({ target, refreshKey, completionEp
   }, observationRefreshSeconds);
   useEffect(() => { if (refreshKey) refresh(); }, [refreshKey, refresh]);
   return <section aria-label="External observation inspection" className="space-y-4" data-testid="external-observation-inspection">
-    <h3 className="font-semibold">Inspect in the source environment</h3>
-    <p className="text-sm">Use the source and instance references below to locate the observed environment. Nexus only displays its reports here.</p>
+    <h3 className="font-semibold">Observed instance</h3>
+    <p className="text-sm">Review any correlated Core facts, then use the source and instance references to locate the external environment.</p>
     {state.loading && <p role="status" className="text-sm">Refreshing external observation…</p>}
     {state.error && <p role="alert" className="text-sm">{state.error}</p>}
     {state.value && <>
       {!state.value.feature_enabled && <p role="status">External observation publishing is disabled. Retained reports are unavailable as current activity.</p>}
+      <CanonicalObservationFacts item={state.value.item} currentView={state.status === 'ready'} />
       {completionEpisode?.last_report && <section aria-label="Selected external completion" className="rounded border border-surface-200 dark:border-surface-700 p-3 space-y-2 text-sm" data-testid="external-completion-episode">
         <h4 className="font-semibold">Selected observed completion</h4>
         <p className="font-mono break-all whitespace-pre-wrap">{completionEpisode.last_report.current_completion_ref ?? completionEpisode.last_report.last_completion_ref ?? 'Reference unavailable'}</p>
         <p>Observed: {time(completionEpisode.last_report.observed_at)} · Received: {time(completionEpisode.last_report.received_at)}</p>
         <p>This retained report belongs to the selected attention episode. A newer report below does not replace it or confirm a Nexus task result.</p>
       </section>}
-      <h4 className="font-semibold">Latest instance report</h4>
-      <ExternalObservationMetadata item={state.value.item} currentView={state.status === 'ready'} />
+      <ExternalObservationMetadata item={state.value.item} currentView={state.status === 'ready'} showCanonical={false} />
     </>}
     <button type="button" className={`btn btn-secondary ${focus}`} disabled={state.loading} onClick={refresh}>Refresh observation</button>
   </section>;

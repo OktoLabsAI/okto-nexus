@@ -526,7 +526,7 @@ def test_migration_161_to_162_backfills_metadata_only_and_never_changes_161(conn
     MigrationRunner(conn_factory, previous).apply()
     with conn_factory.unit_of_work() as uow:
         uow.connection.execute("INSERT INTO agents(agent_id,api_key_hash,metadata,created_at) VALUES('retained','private-key-digest','{\"private\":true}','2026-01-01T00:00:00Z')")
-    assert MigrationRunner(conn_factory).apply() == [162, 163, 164, 165]
+    assert MigrationRunner(conn_factory).apply() == [162, 163, 164, 165, 166]
     with conn_factory.unit_of_work(write=False) as uow:
         anchor = dict(uow.connection.execute("SELECT * FROM attention_operation_epochs WHERE source_type='authority_agents'").fetchone())
         assert anchor['episode'] == 1 and anchor['state'] == 'present'

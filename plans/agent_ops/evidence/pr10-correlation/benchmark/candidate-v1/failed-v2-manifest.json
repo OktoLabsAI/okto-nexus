@@ -1,0 +1,78 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "version": 2,
+  "parent_v1_preserved_unexecuted": true,
+  "parent_manifest_sha256": "02a9d497ffe20c27d38d2d0984712db7c93eb6e676c6d98c414f73ebd8336b64",
+  "wheel_sha256": "991a1995bec626012d113df12c90e897274a83b320373539c28b73c6b4fb7be1",
+  "files": {
+    "benchmark_installed.py": {
+      "bytes": 28794,
+      "sha256": "001d9f9a3db817fbb028d91daf3d0c1e996aca1f2b8303ddedb2e0aa5ed33b19"
+    },
+    "README.md": {
+      "bytes": 4880,
+      "sha256": "98327c91c655bfbf8ced123759801986e74d168e3735797ba9bc81b5248c47fb"
+    },
+    "parent-v1-manifest.json": {
+      "bytes": 687,
+      "sha256": "02a9d497ffe20c27d38d2d0984712db7c93eb6e676c6d98c414f73ebd8336b64"
+    },
+    "prepared-before-profile-isolation/benchmark_installed.py": {
+      "bytes": 24409,
+      "sha256": "d7a25fc3fc2b801eadc97a9751d9609e6ccac68eb5cbd80a83ce17469eda6e22"
+    },
+    "prepared-before-profile-isolation/manifest.json": {
+      "bytes": 1145,
+      "sha256": "285f94c5aba8a7ade0560ae691a12970fda5b4d8b9da4ca6e83c2335d9664553"
+    },
+    "prepared-before-profile-isolation/README.md": {
+      "bytes": 3612,
+      "sha256": "6067a10c9f1c09a144cc345479c9ebf61543aaa337f6fac238e4f83862967b54"
+    },
+    "prepared-before-core-import-check/benchmark_installed.py": {
+      "bytes": 26466,
+      "sha256": "7bb1934ed6d458b20a21b61221df1f5dc2e2a1f9979c73c5a154846e3b8db920"
+    },
+    "prepared-before-core-import-check/manifest.json": {
+      "bytes": 1947,
+      "sha256": "e3556a0535da434266c2b0625befd3313f2985b10a4338435659be880ecb24aa"
+    },
+    "prepared-before-core-import-check/README.md": {
+      "bytes": 4242,
+      "sha256": "2bd9b7fa1f3d47ad6a5fabc13aedc8e4232df4c3d23f9616e970c207d007dace"
+    }
+  },
+  "approved_layouts": [
+    1,
+    64
+  ],
+  "instance_scales": [
+    64,
+    512,
+    4096
+  ],
+  "samples": 3,
+  "external_state_distribution": {
+    "blocked": 0.5,
+    "working": 0.5
+  },
+  "external_completions": false,
+  "all_instances_correlated": true,
+  "excluded": [
+    "DB",
+    "WAL",
+    "SHM",
+    "capabilities",
+    "proofs",
+    "receipt frames",
+    "SQL text"
+  ],
+  "environment_isolated_before_product_imports_and_each_bootstrap": true,
+  "environment_values_never_read_or_logged": true,
+  "home_and_codex_home_untouched": true,
+  "prepared_v2_previous_manifest_sha256": "285f94c5aba8a7ade0560ae691a12970fda5b4d8b9da4ca6e83c2335d9664553",
+  "core_loaded_modules_same_venv": true,
+  "core_required_version": "0.0.14",
+  "sanitized_errors_only": true,
+  "prepared_v2_environment_manifest_sha256": "e3556a0535da434266c2b0625befd3313f2985b10a4338435659be880ecb24aa"
+}

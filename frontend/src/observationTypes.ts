@@ -1,6 +1,33 @@
 /** External telemetry is never canonical presence, execution state or capacity. */
 export type ObservationActivity = 'working' | 'idle' | 'blocked' | 'unknown';
 export type ObservationFreshness = 'current' | 'stale' | 'unknown' | 'unavailable';
+export interface CanonicalSessionReference {
+  server_id: string;
+  executor_id: string;
+  session_id: string;
+  open_operation_id: string;
+  session_owner_generation: number;
+  stream_epoch: string;
+}
+export interface CanonicalObservation {
+  correlation_revision: number;
+  verified_at: string;
+  provenance: {
+    external_binding_provenance: 'operator_attested_external_binding';
+    native_birth_provenance: 'machine_checked_native_birth';
+  };
+  session_lifecycle_state: string;
+  last_received_receipt: null | { status: 'unknown'; reason: 'receipt_provenance_unavailable' } | {
+    status: 'verified';
+    operation_id: string;
+    action: string;
+    stage: string;
+    receipt_revision: number;
+    received_at: string;
+    provenance: 'core_committed';
+  };
+  precedence: 'canonical_core_facts';
+}
 export interface ExternalObservation {
   observed_instance_id: string;
   source_id: string;
@@ -28,7 +55,9 @@ export interface ExternalObservation {
     last_completion_received_at: string | null;
   } | null;
   observational_only: true;
-  canonical_session_ref: null;
+  canonical_session_ref: CanonicalSessionReference | null;
+  /** Older Servers omit this field. Null replaces any previous correlation. */
+  canonical_observation?: CanonicalObservation | null;
 }
 export interface ObservationFilters { agent_id?: string; workspace_id?: string; source_id?: string }
 export interface ObservationPageQuery extends ObservationFilters { after?: string; limit?: number }

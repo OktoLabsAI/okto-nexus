@@ -47,6 +47,8 @@ def run_doctor(argv):
         'permit bounded authenticated GETs, including the OS-vault session read for a remote operator; no MCP or native probes')
     parser.add_argument('--timeout', type=float, default=10, help='Server GET budget, 0 < seconds <= 30 (default 10)')
     parser.add_argument('--json', action='store_true')
+    parser.add_argument('--diagnostic-format', choices=('legacy', 'v1'), default='legacy',
+        help='opt into the common diagnostic schema; legacy preserves existing output')
     args, service_args = parser.parse_known_args(argv)
     if not 0 < args.timeout <= 30:
         parser.error('--timeout must be greater than 0 and at most 30 seconds')
@@ -73,7 +75,8 @@ def run_doctor(argv):
             operator = OperatorProfile(home, operator_name)
             operator.read()  # Validate non-secret origin metadata without opening the vault.
             if not args.check_server:
-                return _finish(report, args.json)
+                return _finish(report, args.json, diagnostic_format=args.diagnostic_format,
+                explicit_checks=args.check_server)
             transport = operator.client()
             read = DiagnosticReads(transport, timeout=args.timeout)
             me = transport.verify(call=read)
@@ -90,12 +93,14 @@ def run_doctor(argv):
                 'Use service status for details and explicitly start or repair the selected instance when appropriate.',
                 state=state, installed_version=observed.get('installed_version'), active_version=observed.get('active_version'))
             if state != 'ready':
-                return _finish(report, args.json)
+                return _finish(report, args.json, diagnostic_format=args.diagnostic_format,
+                explicit_checks=args.check_server)
             report.set('server_reachability', 'PASS', 'LOCAL_READINESS_CONFIRMED',
                 'The selected local Server answered its identity-bound readiness check.',
                 'Use --check-server to check operator access and project state.')
             if not args.check_server:
-                return _finish(report, args.json)
+                return _finish(report, args.json, diagnostic_format=args.diagnostic_format,
+                explicit_checks=args.check_server)
             level = 'operator_authentication'
             transport = LocalOperatorHTTP(host=service.adapter.host, port=service.adapter.port,
                 timeout=args.timeout, max_response_bytes=8 * 1048576)
@@ -136,11 +141,16 @@ def run_doctor(argv):
                 report.error('server_reachability', error)
     except KeyboardInterrupt:
         return 130
-    return _finish(report, args.json)
+    return _finish(report, args.json, diagnostic_format=args.diagnostic_format,
+                explicit_checks=args.check_server)
 
 
-def _finish(report, as_json):
-    value = report.result()
+def _finish(report, as_json, *, diagnostic_format='legacy', scope='managed_project', explicit_checks=False):
+    legacy = report.result()
+    value = legacy
+    if diagnostic_format == 'v1':
+        from ....domain.diagnostic_report import project_report
+        value = project_report(legacy, scope=scope, explicit_checks=explicit_checks)
     if as_json:
         print(json.dumps(value, ensure_ascii=False))
     else:
@@ -151,4 +161,4 @@ def _finish(report, as_json):
             print('  Next: ' + display_text(check['next_action']))
     # UNKNOWN is visible uncertainty, not a fabricated failure. A report can
     # succeed as a diagnostic command while some levels remain unverified.
-    return 3 if value['counts']['FAIL'] else 0
+    return 3 if legacy['counts']['FAIL'] else 0

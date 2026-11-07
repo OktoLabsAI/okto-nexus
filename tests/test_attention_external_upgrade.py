@@ -1,4 +1,4 @@
-"""Additive 164-to-165 upgrade and explicit summary failure boundaries."""
+"""Additive upgrade from 164 and explicit summary failure boundaries."""
 import shutil
 
 import pytest
@@ -22,7 +22,8 @@ def test_upgrade_preserves_existing_observation_and_business_bytes(tmp_config, t
         publish(env, state='blocked', current_completion_ref='historical-completion')
         before = snapshot(env, auxiliary=True)
         before.pop('schema_migrations')
-        assert 165 in MigrationRunner(factory).apply()
+        applied = MigrationRunner(factory).apply()
+        assert 165 in applied and 166 in applied
         after = snapshot(env, auxiliary=True)
         assert {key: after[key] for key in before} == before
         with factory.unit_of_work(write=False) as uow:

@@ -1,0 +1,57 @@
+{
+  "kind": "independent_read_only_review",
+  "date": "2026-11-07",
+  "reviewer": "/root/coordination_review",
+  "scope": "Occurrence-scoped OBS12 attention correlation preload; two production files and one new test inspected.",
+  "source_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "baseline": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr10b-correlation-installed-7g83osyy\\candidate-v1\\build-source",
+  "files": [
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+      "sha256": "b2d9b879294c88519468447416ff2ac8daf37eb61514cb9fd0d62293e21001ce",
+      "role": "production",
+      "baseline_sha256": "93d4443e0afa35f06b15eca95701c42aff5f963f2ddf9f28e72e80abe7c56d9e"
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention_external.py",
+      "sha256": "1237a40c626c29f4a6b6bb5b13365e52d08b63a6357b56dff3bc6b2b87113718",
+      "role": "production",
+      "baseline_sha256": "d447a220e6e41c398f60e20116f7e24bc5bef95c67259c13627c0feabdec32af"
+    },
+    {
+      "path": "tests/test_attention_correlation_policy.py",
+      "sha256": "b802e18cc2099e7f997e6871c3896dcfd6909450b4ad5926a1f97ba0ffa3959d",
+      "role": "test_read_only",
+      "baseline_sha256": null
+    }
+  ],
+  "result": "no_concrete_production_blocker_found",
+  "read_verified_conclusions": [
+    "HEAD_KEYS_SQL was extracted literally from candidate-v1 and is shared by SOURCE_SQL and preload.",
+    "Workspace, agent, kind and normalized time parameters match; seen/state/category are not applied prematurely.",
+    "Historical completion events still do not inherit current canonical correlation.",
+    "Metadata projection, source_revision/CAS, preferences and page/fingerprint logic remain unchanged.",
+    "Adapter SQL_FUNCTIONS register before build_policy and are removed in finally even when policy construction fails.",
+    "The SQLite progress handler remains active through preload; the five-second budget and post-yield deadline check remain unchanged.",
+    "The new test source covers pruning/superset equivalence, native metadata, temporal corruption with and without correlation, error cleanup and refusal instead of silent cap truncation."
+  ],
+  "test_fixture_correction": {
+    "prior_sha256": "d3a12fe6db2a5ec08b2c03600df3c06c561ce304281250b067788f82ea807999",
+    "final_sha256": "b802e18cc2099e7f997e6871c3896dcfd6909450b4ad5926a1f97ba0ffa3959d",
+    "lines": [
+      120,
+      128
+    ],
+    "change": "Two helper calls now provide a valid observed_at timestamp instead of NULL, so the failure/cleanup checks cannot pass due to invalid input.",
+    "exact_two_line_delta_verified_by_reverse_hash": true,
+    "reported_execution_context": "Projection reported initial 19 passes and one fixture failure; its four-case directed rerun was pending at review recording. Reviewer executed no tests."
+  },
+  "tests_executed_by_reviewer": false,
+  "files_edited_in_checkout": false,
+  "performance_status": "pending_installed_candidate_v2_campaign",
+  "limitations": [
+    "This is source review, not runtime test or installed performance acceptance.",
+    "Query-count assertions and synthetic fixtures do not prove all installed measurements complete within five seconds.",
+    "Candidate-v1 artifacts and reports were not changed."
+  ]
+}

@@ -134,5 +134,5 @@ def test_decoder_and_historical_projection_do_not_mutate_shared_facts(external):
         report=dict(receipt, state='idle', evidence='reported', completion_ref='one'),
         source_revision=env.source['revision'], observed_at=env.clock.now_iso(), publisher_revoked=False))
     before = deepcopy(facts)
-    assert project(facts, env.clock.now_iso(), env.config)
+    assert project(facts, env.clock.now_iso(), dict(config=env.config, correlations={}))
     assert facts == before

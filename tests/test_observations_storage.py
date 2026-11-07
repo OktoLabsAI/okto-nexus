@@ -89,7 +89,7 @@ def test_upgrade_163_additive_no_seed_authority_and_repository_wiring(tmp_config
         before = snapshot(factory)
         expected = sorted(int(path.name.split('_')[0]) for path in _default_migrations_dir().glob('*.sql')
                           if int(path.name.split('_')[0]) > 163)
-        assert expected[:2] == [164, 165]
+        assert expected[:3] == [164, 165, 166]
         assert MigrationRunner(factory).apply() == expected
         after = snapshot(factory)
         for name in before:

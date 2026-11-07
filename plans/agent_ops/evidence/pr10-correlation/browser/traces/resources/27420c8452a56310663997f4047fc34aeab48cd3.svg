@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Okto Nexus">
+  <defs>
+    <!-- userSpaceOnUse: ONE gradient spans the whole mark, so every circle
+         and connector samples the same continuous blue->violet ramp
+         (objectBoundingBox would restart the ramp inside each element). -->
+    <linearGradient id="ni" gradientUnits="userSpaceOnUse" x1="2" y1="30" x2="30" y2="2">
+      <stop offset="0%" stop-color="#2438f0"/>
+      <stop offset="55%" stop-color="#5b32f4"/>
+      <stop offset="100%" stop-color="#9b2cf0"/>
+    </linearGradient>
+  </defs>
+  <!-- Connected-agents mark, centered, no frame (pulse-icon grammar:
+       pure stroke geometry, round caps, one diagonal brand gradient).
+       Connectors stop 0.3 short of each rim so the round cap dies inside
+       the ring stroke instead of bleeding past its inner edge. -->
+  <g fill="none" stroke="url(#ni)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="14.5" cy="14.5" r="5.8"/>
+    <circle cx="23.5" cy="7.5" r="2.8"/>
+    <circle cx="24" cy="23.5" r="2.8"/>
+    <circle cx="7" cy="23" r="2.8"/>
+    <line x1="19.3" y1="10.8" x2="21.1" y2="9.4"/>
+    <line x1="18.9" y1="18.7" x2="21.7" y2="21.4"/>
+  </g>
+</svg>

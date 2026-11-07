@@ -39,6 +39,7 @@ DEFAULTS = {
     "observation_max_sources_per_agent": 32,
     "observation_max_sources": 4096,
     "observation_max_instances": 4096,
+    "observation_max_correlation_records": 4096,
     "observation_max_tokens_per_source": 8,
     "observation_event_retention_days": 7,
     "observation_max_events": 20000,

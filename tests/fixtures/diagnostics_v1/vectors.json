@@ -1,0 +1,399 @@
+{
+  "aggregation": [
+    {
+      "case": "empty",
+      "expected_counts": {
+        "FAIL": 0,
+        "NOT_APPLICABLE": 0,
+        "PASS": 0,
+        "UNKNOWN": 0
+      },
+      "expected_state": "incomplete",
+      "statuses": []
+    },
+    {
+      "case": "all_pass",
+      "expected_counts": {
+        "FAIL": 0,
+        "NOT_APPLICABLE": 0,
+        "PASS": 2,
+        "UNKNOWN": 0
+      },
+      "expected_state": "checks_passed",
+      "statuses": [
+        "PASS",
+        "PASS"
+      ]
+    },
+    {
+      "case": "all_not_applicable",
+      "expected_counts": {
+        "FAIL": 0,
+        "NOT_APPLICABLE": 1,
+        "PASS": 0,
+        "UNKNOWN": 0
+      },
+      "expected_state": "checks_passed",
+      "statuses": [
+        "NOT_APPLICABLE"
+      ]
+    },
+    {
+      "case": "unknown",
+      "expected_counts": {
+        "FAIL": 0,
+        "NOT_APPLICABLE": 0,
+        "PASS": 0,
+        "UNKNOWN": 1
+      },
+      "expected_state": "incomplete",
+      "statuses": [
+        "UNKNOWN"
+      ]
+    },
+    {
+      "case": "failure",
+      "expected_counts": {
+        "FAIL": 1,
+        "NOT_APPLICABLE": 0,
+        "PASS": 0,
+        "UNKNOWN": 0
+      },
+      "expected_state": "failed_checks",
+      "statuses": [
+        "FAIL"
+      ]
+    },
+    {
+      "case": "unknown_with_pass_na",
+      "expected_counts": {
+        "FAIL": 0,
+        "NOT_APPLICABLE": 1,
+        "PASS": 1,
+        "UNKNOWN": 1
+      },
+      "expected_state": "incomplete",
+      "statuses": [
+        "PASS",
+        "NOT_APPLICABLE",
+        "UNKNOWN"
+      ]
+    },
+    {
+      "case": "failure_precedes_unknown",
+      "expected_counts": {
+        "FAIL": 1,
+        "NOT_APPLICABLE": 0,
+        "PASS": 1,
+        "UNKNOWN": 1
+      },
+      "expected_state": "failed_checks",
+      "statuses": [
+        "UNKNOWN",
+        "FAIL",
+        "PASS"
+      ]
+    }
+  ],
+  "qualification": "HAND_AUTHORED_SYNTHETIC_CONTRACT_VECTORS_NOT_RUNTIME_ACCEPTANCE",
+  "reports": [
+    {
+      "case": "connector-service_not_ready",
+      "report": {
+        "checks": [
+          {
+            "code": "SERVICE_NOT_READY",
+            "id": "local_service",
+            "next_action": "Start or repair this selected instance explicitly when intended.",
+            "reason": "The selected instance is confirmed stopped or failed.",
+            "severity": "error",
+            "status": "FAIL",
+            "subject": {
+              "id": "synthetic-instance",
+              "kind": "instance"
+            }
+          }
+        ],
+        "component": "connector",
+        "counts": {
+          "FAIL": 1,
+          "NOT_APPLICABLE": 0,
+          "PASS": 0,
+          "UNKNOWN": 0
+        },
+        "effects": {
+          "configuration_applied": false,
+          "grants_issued": false,
+          "harness_started": false,
+          "service_started": false,
+          "work_submitted": false
+        },
+        "format_version": 1,
+        "mode": "passive",
+        "schema": "okto.diagnostics",
+        "scope": "execution_host",
+        "state": "failed_checks",
+        "topology": "connector_host"
+      },
+      "synthetic": true
+    },
+    {
+      "case": "connector-journal_size_high",
+      "report": {
+        "checks": [
+          {
+            "code": "JOURNAL_SIZE_HIGH",
+            "id": "journal_size_observation",
+            "next_action": "Review the journal maintenance procedure before changing it.",
+            "reason": "The observed journal size exceeds the advisory threshold; this does not prove failed work or journal corruption.",
+            "severity": "warning",
+            "status": "PASS",
+            "subject": {
+              "id": "synthetic-instance",
+              "kind": "instance"
+            }
+          }
+        ],
+        "component": "connector",
+        "counts": {
+          "FAIL": 0,
+          "NOT_APPLICABLE": 0,
+          "PASS": 1,
+          "UNKNOWN": 0
+        },
+        "effects": {
+          "configuration_applied": false,
+          "grants_issued": false,
+          "harness_started": false,
+          "service_started": false,
+          "work_submitted": false
+        },
+        "format_version": 1,
+        "mode": "passive",
+        "schema": "okto.diagnostics",
+        "scope": "execution_host",
+        "state": "checks_passed",
+        "topology": "connector_host"
+      },
+      "synthetic": true
+    },
+    {
+      "case": "connector-server_unreachable",
+      "report": {
+        "checks": [
+          {
+            "code": "SERVER_UNREACHABLE",
+            "id": "server_reachability",
+            "next_action": "Inspect the selected origin and network; missing evidence does not prove authentication failure.",
+            "reason": "The check did not establish a usable current Server response.",
+            "severity": "info",
+            "status": "UNKNOWN",
+            "subject": {
+              "id": "synthetic-instance",
+              "kind": "instance"
+            }
+          }
+        ],
+        "component": "connector",
+        "counts": {
+          "FAIL": 0,
+          "NOT_APPLICABLE": 0,
+          "PASS": 0,
+          "UNKNOWN": 1
+        },
+        "effects": {
+          "configuration_applied": false,
+          "grants_issued": false,
+          "harness_started": false,
+          "service_started": false,
+          "work_submitted": false
+        },
+        "format_version": 1,
+        "mode": "passive",
+        "schema": "okto.diagnostics",
+        "scope": "execution_host",
+        "state": "incomplete",
+        "topology": "connector_host"
+      },
+      "synthetic": true
+    },
+    {
+      "case": "nexus-remote-topology",
+      "report": {
+        "checks": [
+          {
+            "code": "REMOTE_TOPOLOGY",
+            "id": "local_service",
+            "next_action": "Inspect service ownership on the Server or Connector host itself.",
+            "reason": "This profile targets a remote Server; local service state is irrelevant.",
+            "severity": "info",
+            "status": "NOT_APPLICABLE",
+            "subject": {
+              "id": "synthetic-profile",
+              "kind": "profile"
+            }
+          }
+        ],
+        "component": "nexus",
+        "counts": {
+          "FAIL": 0,
+          "NOT_APPLICABLE": 1,
+          "PASS": 0,
+          "UNKNOWN": 0
+        },
+        "effects": {
+          "configuration_applied": false,
+          "grants_issued": false,
+          "harness_started": false,
+          "service_started": false,
+          "work_submitted": false
+        },
+        "format_version": 1,
+        "mode": "passive",
+        "schema": "okto.diagnostics",
+        "scope": "managed_project",
+        "state": "checks_passed",
+        "topology": "remote_operator"
+      },
+      "synthetic": true
+    },
+    {
+      "case": "nexus-participant-history",
+      "report": {
+        "checks": [
+          {
+            "code": "HISTORICAL_EVIDENCE_ONLY",
+            "evidence": {
+              "last_observed_status": "PASS",
+              "qualification": "identities_only",
+              "smoke_id": "synthetic-smoke",
+              "source": "local_receipt"
+            },
+            "id": "coordination_participation",
+            "next_action": "Use participant smoke observe for an explicit current Server read of the same attempt.",
+            "reason": "A local cooperation receipt records an earlier observation; this diagnostic has not rechecked it.",
+            "severity": "info",
+            "status": "UNKNOWN",
+            "subject": {
+              "id": "synthetic-profile",
+              "kind": "profile"
+            }
+          }
+        ],
+        "component": "nexus",
+        "counts": {
+          "FAIL": 0,
+          "NOT_APPLICABLE": 0,
+          "PASS": 0,
+          "UNKNOWN": 1
+        },
+        "effects": {
+          "configuration_applied": false,
+          "grants_issued": false,
+          "harness_started": false,
+          "service_started": false,
+          "work_submitted": false
+        },
+        "format_version": 1,
+        "mode": "passive",
+        "schema": "okto.diagnostics",
+        "scope": "participant",
+        "state": "incomplete",
+        "topology": "external_participant"
+      },
+      "synthetic": true
+    },
+    {
+      "case": "nexus-unprobed-runtime",
+      "report": {
+        "checks": [
+          {
+            "code": "RUNTIME_UNCONFIRMED",
+            "evidence": {
+              "policy_reasons": [
+                "TECHNICAL_NOT_READY"
+              ],
+              "technical_reasons": [
+                "no_build_observation"
+              ],
+              "technical_state": "NOT_PROBED"
+            },
+            "id": "runtime_eligibility",
+            "next_action": "Use work authorize for an explicit grant review when AUTHORIZATION_REQUIRED; inspect other reported blockers.",
+            "reason": "The current Server projection does not establish permission and technical readiness to open.",
+            "severity": "info",
+            "status": "UNKNOWN",
+            "subject": {
+              "id": "synthetic-profile",
+              "kind": "profile"
+            }
+          }
+        ],
+        "component": "nexus",
+        "counts": {
+          "FAIL": 0,
+          "NOT_APPLICABLE": 0,
+          "PASS": 0,
+          "UNKNOWN": 1
+        },
+        "effects": {
+          "configuration_applied": false,
+          "grants_issued": false,
+          "harness_started": false,
+          "service_started": false,
+          "work_submitted": false
+        },
+        "format_version": 1,
+        "mode": "explicit_checks",
+        "schema": "okto.diagnostics",
+        "scope": "managed_project",
+        "state": "incomplete",
+        "topology": "local_server"
+      },
+      "synthetic": true
+    },
+    {
+      "case": "nexus-stopped-service",
+      "report": {
+        "checks": [
+          {
+            "code": "SERVICE_NOT_READY",
+            "evidence": {
+              "state": "stopped"
+            },
+            "id": "local_service",
+            "next_action": "Use service status for details and explicitly start or repair the selected instance when appropriate.",
+            "reason": "The selected local instance is confirmed stopped or failed.",
+            "severity": "error",
+            "status": "FAIL",
+            "subject": {
+              "id": "synthetic-profile",
+              "kind": "profile"
+            }
+          }
+        ],
+        "component": "nexus",
+        "counts": {
+          "FAIL": 1,
+          "NOT_APPLICABLE": 0,
+          "PASS": 0,
+          "UNKNOWN": 0
+        },
+        "effects": {
+          "configuration_applied": false,
+          "grants_issued": false,
+          "harness_started": false,
+          "service_started": false,
+          "work_submitted": false
+        },
+        "format_version": 1,
+        "mode": "passive",
+        "schema": "okto.diagnostics",
+        "scope": "managed_project",
+        "state": "failed_checks",
+        "topology": "local_server"
+      },
+      "synthetic": true
+    }
+  ]
+}

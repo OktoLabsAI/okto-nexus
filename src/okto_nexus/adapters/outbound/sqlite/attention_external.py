@@ -1,6 +1,8 @@
 """Batched, read-only external attention facts with bounded retained history."""
 from ....application.observations import ObservationService
+from ....domain.attention import stamp
 from .observations_repo import CURRENT_FACTS_SQL, current_facts
+from . import observation_correlation_projection
 
 
 _FIELDS = '''observed_instance_id source_id workspace_id external_instance_ref generation created_at updated_at
@@ -33,8 +35,7 @@ def _expired(valid_until, received_at, observed_at, completion_received_at, now)
 
 SQL_FUNCTIONS = (('nexus_external_expired_v1', 5, _expired),)
 
-SOURCE_SQL = """
-WITH head_keys AS MATERIALIZED (
+HEAD_KEYS_SQL = """
     SELECT h.observed_instance_id FROM observation_heads h
     JOIN observation_instances i USING(observed_instance_id)
     JOIN observation_sources s USING(source_id)
@@ -46,7 +47,10 @@ WITH head_keys AS MATERIALIZED (
         OR (:external_kind IS NULL OR :external_kind='external_observation_stale')
             AND nexus_external_expired_v1(h.valid_until,h.received_at,
                 json_extract(h.report_json,'$.observed_at'),h.last_completion_received_at,:external_now))
-), completions AS MATERIALIZED (
+"""
+
+SOURCE_SQL = """
+WITH head_keys AS MATERIALIZED (""" + HEAD_KEYS_SQL + """), completions AS MATERIALIZED (
     SELECT e.event_id,e.payload,e.workspace_id,e.actor_agent_id,
         json_extract(e.payload,'$.observed_instance_id') AS observed_instance_id,
         json_extract(e.payload,'$.generation') AS generation,
@@ -102,7 +106,31 @@ FROM completion_provenance e LEFT JOIN observation_tokens t ON t.token_id=e.prov
 """
 
 
-def build_policy(uow, *, config, access, context, now):
+def build_policy(uow, *, config, access, context, now, filters, check_budget):
     # The enclosing attention transaction already authenticates the operator.
     # No publisher capability grants access to this relation.
-    return config
+    correlations = {}
+    if config.feature_observations and filters.get('kind') != 'external_completion_unseen':
+        check_budget()
+        # Bound the input before constructing the batch. The configured maximum
+        # can be lower than retained tombstones; the hard protocol cap is stable.
+        # Reuse the source's exact head predicate, including temporal validation.
+        # Working/unreported instances cannot benefit these occurrences; retained
+        # completion events never inherit a current correlation.
+        cursor = uow.connection.execute('''WITH head_keys AS MATERIALIZED (''' + HEAD_KEYS_SQL + ''')
+            SELECT c.observed_instance_id FROM observation_correlations c
+            JOIN head_keys k USING(observed_instance_id)
+            JOIN observation_instances i USING(observed_instance_id)
+            JOIN observation_sources s USING(source_id)
+            WHERE c.state='selected' AND c.agent_id=s.agent_id AND c.workspace_id=i.workspace_id
+            LIMIT :limit''', dict(workspace_id=filters.get('workspace_id'),
+                agent_id=filters.get('agent_id'), external_kind=filters.get('kind'),
+                external_now=stamp(now).replace('+00:00', 'Z'),
+                limit=observation_correlation_projection.MAX_RECORDS + 1))
+        try:
+            ids = [row[0] for row in cursor]
+        finally:
+            cursor.close()
+        correlations = observation_correlation_projection.load(uow,
+            observed_instance_ids=ids, check_budget=check_budget)
+    return dict(config=config, correlations=correlations)

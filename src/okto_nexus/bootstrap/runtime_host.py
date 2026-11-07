@@ -18,7 +18,7 @@ from nexus_connector_core import (
     ShutdownPolicy, create_runtime, ExecutionCapacity, CoreError,
 )
 from nexus_connector_core.journal import SQLiteJournal, open_journal
-from nexus_connector_core.models import PreparedLaunch
+from nexus_connector_core.models import PreparedLaunch, ProcessBirthRecord, SessionKey
 
 
 class EmbeddedRuntimeHost:
@@ -64,6 +64,53 @@ class EmbeddedRuntimeHost:
         async def read(journal):
             return await journal.get_receipt(key)
         return await self.with_history(executor_id=key.executor_id,session_id=session_id,read=read)
+
+    async def read_existing_process_birth(
+        self, *, server_id: str, executor_id: str, session_id: str,
+    ) -> ProcessBirthRecord | None:
+        """Read historical birth proof only from an already composed runtime.
+
+        The caller must authenticate and validate the current dispatch/session
+        fences separately. This method neither proves liveness nor grants work
+        authority. It never waits for composition or opens a missing journal.
+        An admitted reader survives caller cancellation; final host shutdown
+        joins it before closing its journal.
+        """
+        for value in (server_id, executor_id, session_id):
+            if (type(value) is not str or not 1 <= len(value) <= 160 or
+                    not all(char.isascii() and (char.isalnum() or char in "_-") for char in value)):
+                raise ValueError("Invalid process birth selection.")
+        loop = asyncio.get_running_loop()
+        key = (executor_id, session_id)
+        # Check the stable task's owning loop before waiting on an asyncio.Lock
+        # which may already be contended/bound to that other loop. Repeat under
+        # the lock below; this early read never grants access to the runtime.
+        existing = self._runtime_tasks.get(key)
+        if existing is not None and existing.get_loop() is not loop:
+            raise CoreError('SCOPE_MISMATCH', 'embedded_process_birth')
+        async with self._lock:
+            if self._closing or self._history_closing:
+                raise CoreError('RUNTIME_DRAINING', 'embedded_process_birth')
+            runtime_task = self._runtime_tasks.get(key)
+            if (runtime_task is None or not runtime_task.done() or runtime_task.cancelled()
+                    or runtime_task.exception() is not None):
+                raise CoreError('SESSION_UNKNOWN', 'embedded_process_birth')
+            selection = self._selections.get(key)
+            if runtime_task.get_loop() is not loop or selection is None or selection[4] != server_id:
+                raise CoreError('SCOPE_MISMATCH', 'embedded_process_birth')
+            runtime, _journal = runtime_task.result()
+            task = asyncio.create_task(runtime.process_birth(SessionKey(server_id, executor_id, session_id)))
+            self._history_tasks.add(task)
+
+            def release(done):
+                self._history_tasks.discard(done)
+                # A cancelled observer must not leave an unobserved task error.
+                # Retrieving it does not change what an awaiting caller receives.
+                if not done.cancelled():
+                    done.exception()
+
+            task.add_done_callback(release)
+        return await asyncio.shield(task)
 
     async def with_history(self, *, executor_id, session_id, read):
         """Retain a journal reader through observer cancellation and shutdown."""

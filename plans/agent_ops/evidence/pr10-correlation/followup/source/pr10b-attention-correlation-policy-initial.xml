@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="20" time="62.609" timestamp="2026-11-07T02:36:01.992344-03:00" hostname="Alienware_m15"><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters0-expected0]" time="2.501" /><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters1-expected1]" time="2.123" /><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters2-expected2]" time="2.149" /><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters3-expected3]" time="2.155" /><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters4-expected4]" time="2.577" /><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters5-expected5]" time="3.145" /><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters6-expected6]" time="2.603" /><testcase classname="tests.test_attention_correlation_policy" name="test_only_matching_blocked_and_stale_heads_reach_native_batch[filters7-expected7]" time="2.461" /><testcase classname="tests.test_attention_correlation_policy" name="test_blocked_without_an_anchor_does_not_preload_a_correlation" time="2.184" /><testcase classname="tests.test_attention_correlation_policy" name="test_pruned_preload_preserves_items_counts_preferences_and_cas_against_full_input[active]" time="3.595" /><testcase classname="tests.test_attention_correlation_policy" name="test_pruned_preload_preserves_items_counts_preferences_and_cas_against_full_input[all]" time="3.500" /><testcase classname="tests.test_attention_correlation_policy" name="test_pruned_preload_preserves_items_counts_preferences_and_cas_against_full_input[expired]" time="3.309" /><testcase classname="tests.test_attention_correlation_policy" name="test_pruned_preload_preserves_items_counts_preferences_and_cas_against_full_input[resolved]" time="3.583" /><testcase classname="tests.test_attention_correlation_policy" name="test_native_metadata_and_current_cas_are_unchanged_by_preload_pruning" time="7.005" /><testcase classname="tests.test_attention_correlation_policy" name="test_policy_error_removes_early_registered_callbacks_and_expired_handler" time="2.538"><failure message="okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.">uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x000001A0340E8F50&gt;
+kwargs = {'config': NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10616/test_polic..., runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None), 'now': '2026-06-07T00:00:02.000000Z', ...}
+
+    def fail(uow, **kwargs):
+&gt;       assert uow.connection.execute("SELECT nexus_external_expired_v1('2026-01-02T00:00:00Z','2026-01-01T00:00:00Z',NULL,NULL,'2026-01-01T00:00:00Z')").fetchone()[0] == 0
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       sqlite3.OperationalError: user-defined function raised exception
+
+tests\test_attention_correlation_policy.py:128: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+correlated = namespace(service=&lt;okto_nexus.application.observations.ObservationService object at 0x000001A03B64D4A0&gt;, factory=&lt;okto...-case-7', 'generation': 10, 'created_at': '2026-06-07T00:00:00.000000Z', 'updated_at': '2026-06-07T00:00:00.000000Z'}])
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001A03657A830&gt;
+
+    def test_policy_error_removes_early_registered_callbacks_and_expired_handler(correlated, monkeypatch):
+        env = correlated
+        clock = [0.0]
+        monkeypatch.setattr(attention.time, 'monotonic', lambda: clock[0])
+        def fail(uow, **kwargs):
+            assert uow.connection.execute("SELECT nexus_external_expired_v1('2026-01-02T00:00:00Z','2026-01-01T00:00:00Z',NULL,NULL,'2026-01-01T00:00:00Z')").fetchone()[0] == 0
+            clock[0] = 6.0
+            raise RuntimeError('synthetic-policy-failure')
+        monkeypatch.setattr(attention_external, 'build_policy', fail)
+        with env.factory.unit_of_work(write=False) as uow:
+            with pytest.raises(RuntimeError, match='synthetic-policy-failure'):
+&gt;               env.attention.queries.snapshot(uow, filters=normalize_filters({'kind':'external_blocked'}),
+                    now=env.clock.now_iso(), config=env.config, access=env.service.access, context=OPERATOR)
+
+tests\test_attention_correlation_policy.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\adapters\outbound\sqlite\attention.py:152: in snapshot
+    with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.adapters.outbound.sqlite.attention.SqliteAttentionQueries object at 0x000001A03B64D7E0&gt;
+uow = &lt;okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x000001A0340E8F50&gt;
+filters = {'kind': 'external_blocked', 'state': 'active', 'seen': 'all'}
+now = '2026-06-07T00:00:02.000000Z'
+config = NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10616/test_policy_error_rem..._roots_per_agent_per_minute=32, max_new_roots_per_workspace_per_minute=128, feature_health=False, feature_replay=False)
+access = &lt;okto_nexus.application.runtime_access.RuntimeAccessService object at 0x000001A036442750&gt;
+context = RuntimeRequestContext(actor_agent_id=None, authentication_source='http_loopback', trusted_local_operator=True, request...hentication_time=None, request_deadline=None, runtime_owner_id=None, runtime_owner_epoch=None, handoff_automation=None)
+
+    @contextmanager
+    def _relation(self, uow, *, filters, now, config, access, context):
+        conn = uow.connection
+        sources, policies, projectors, decoders, functions = [], {}, {}, {}, []
+        deadline = time.monotonic() + self.QUERY_SECONDS
+        expired = False
+    
+        def interrupt():
+            nonlocal expired
+            expired = time.monotonic() &gt;= deadline
+            return int(expired)
+    
+        def check_budget():
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+    
+        def project(family, facts, observed_at):
+            if interrupt():
+                raise TimeoutError
+            value = json.loads(facts)
+            if family in decoders:
+                value = decoders[family](value)
+            return canonical(projectors[family](value, observed_at, policies[family]))
+    
+        def preferences(item, seen, snooze, revision, observed_at):
+            return canonical(with_preferences(json.loads(item), seen_at=seen, snoozed_until=snooze,
+                                               revision=revision or 0, now=observed_at))
+    
+        registered = False
+        try:
+            conn.set_progress_handler(interrupt, 1000)
+            for family, kinds in _FAMILIES.items():
+                if filters.get('kind') is not None and filters['kind'] not in kinds:
+                    continue
+                adapter = importlib.import_module('.attention_' + family, __package__)
+                application = importlib.import_module('okto_nexus.application.attention_' + family)
+                # Policy preloads may reuse their source's SQL predicates. Track
+                # successful registrations immediately so policy failures cannot
+                # leave callbacks attached to the pooled connection.
+                for name, arity, function in getattr(adapter, 'SQL_FUNCTIONS', ()):
+                    conn.create_function(name, arity, function, deterministic=True)
+                    functions.append((name, arity, function))
+                sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
+                extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
+                         if family == 'approvals' else {})
+                if family in ('authority', 'external'):
+                    extra['check_budget'] = check_budget
+                if family == 'external':
+                    extra['filters'] = filters
+                policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
+                projectors[family] = application.project
+                if hasattr(adapter, 'decode_facts'):
+                    decoders[family] = adapter.decode_facts
+            registered = True
+            conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
+            conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
+            conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
+            params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'),
+                          external_kind=filters.get('kind'), external_now=stamp(now).replace('+00:00', 'Z'))
+            clauses = []
+            for name in ('workspace_id', 'agent_id', 'category', 'kind', 'priority'):
+                if name in filters:
+                    params['filter_' + name] = filters[name]
+                    clauses.append("json_extract(item,'$." + name + "')=:filter_" + name)
+            state = filters['state']
+            if state == 'active':
+                clauses.append("json_extract(item,'$.active')=1")
+            elif state != 'all':
+                params['filter_state'] = state
+                clauses.append("json_extract(item,'$.resolution')=:filter_state")
+            seen = filters['seen']
+            if seen in ('seen', 'unseen'):
+                clauses.append("json_extract(item,'$.seen_state.seen')=" + ('1' if seen == 'seen' else '0'))
+            elif seen == 'snoozed':
+                clauses.append("json_extract(item,'$.seen_state.snoozed')=1")
+            relation = '''WITH source_facts AS (''' + ' UNION ALL '.join(sources) + '''),
+                projected AS MATERIALIZED (
+                    SELECT nexus_attention_project_v1(family,facts,:now) AS items FROM source_facts),
+                occurrences AS MATERIALIZED (
+                    SELECT value AS item FROM projected, json_each(projected.items)),
+                viewing AS MATERIALIZED (
+                    SELECT nexus_attention_preferences_v1(o.item,p.seen_at,p.snoozed_until,p.revision,:now) AS item
+                    FROM occurrences o LEFT JOIN attention_preferences p
+                    ON p.principal='operator' AND p.attention_id=json_extract(o.item,'$.attention_id')),
+                filtered AS MATERIALIZED (SELECT item FROM viewing WHERE ''' + (' AND '.join(clauses) or '1') + ') '
+            if interrupt():
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {})
+            yield relation, params
+            # A final Python callback may cross the deadline before SQLite's
+            # next progress notification. Do not return that late snapshot.
+            check_budget()
+        except sqlite3.Error as error:
+            if expired:
+                raise OktoNexusError('ATTENTION_QUERY_BUDGET',
+                    'The attention query exceeded its processing budget. Narrow the filters and refresh; no empty snapshot is inferred.', {}) from None
+&gt;           raise OktoNexusError(ErrorCode.DB_ERROR, 'The attention projection could not be read.', {}) from error
+E           okto_nexus.errors.OktoNexusError: DB_ERROR: The attention projection could not be read.
+
+src\okto_nexus\adapters\outbound\sqlite\attention.py:140: OktoNexusError</failure></testcase><testcase classname="tests.test_attention_correlation_policy" name="test_corrupt_temporal_head_is_not_hidden_by_preload_selection[True]" time="2.595" /><testcase classname="tests.test_attention_correlation_policy" name="test_corrupt_temporal_head_is_not_hidden_by_preload_selection[False]" time="2.525" /><testcase classname="tests.test_attention_correlation_policy" name="test_feature_disabled_and_completion_history_do_not_load_current_native_facts" time="3.037" /><testcase classname="tests.test_attention_correlation_policy" name="test_native_input_cap_still_refuses_instead_of_returning_a_truncated_projection" time="2.440" /><testcase classname="tests.test_attention_correlation_policy" name="test_unreported_correlations_do_not_change_queries_items_or_native_input" time="2.712" /></testsuite></testsuites>

@@ -1,0 +1,29 @@
+{
+  "checkpoint": "blocked-inspector",
+  "viewport": {
+    "width": 1600,
+    "height": 1100
+  },
+  "xssExecuted": false,
+  "rows": [
+    {
+      "id": "external-instance-obs_inst_0000000000000005",
+      "text": "External activity report\n\nSecondary activity signal from the external source.\n\nAwaiting input\nCurrent report\nCustom integration\nInferred evidence\nSource\nobs_src_0000000000000004\nInstance · generation 5\nobs_inst_0000000000000005\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic blocked\nObserved at\n07/11/2026, 02:05:52\nValid until\n07/11/2026, 03:05:52\n\nAgent: observed\n\nReceived at: 07/11/2026, 02:05:52 · Sequence: 1\n\nSource contact: delayed · 07/11/2026, 02:05:52. Source contact does not establish this instance's current activity.\n\nReported reason: external_input_required\n\n<svg onload=window.OBS12_XSS=1>synthetic external input</svg>\n\nExternal activity does not confirm task success, presence or available capacity. Inspect this instance in its source environment.",
+      "width": 1263,
+      "scrollWidth": 1263,
+      "clientWidth": 1263,
+      "left": 161,
+      "right": 1424,
+      "parentWidth": 1263
+    }
+  ],
+  "inspection": {
+    "text": "Observed instance\n\nReview any correlated Core facts, then use the source and instance references to locate the external environment.\n\nCanonical session facts\n\nThese Core facts take precedence over the external activity signal below.\n\nRecorded session lifecycle\nREADY\nSession\ncorrelation-session\nServer\nsrv_02d2f231ee21b8214fa471ceb07ff34c\nExecutor\nexe_2bbf6e31b95c1487193fd45107930f80\nOpening operation\ncorrelation-open\nSession generation · stream\n3 · correlation-stream\n\nAssociation revision 1 · Verified at 07/11/2026, 02:05:54\n\nExternal binding attested by the operator. Native process birth checked by the machine.\n\nLast receipt received\nReceipt stage\nSUCCEEDED\nOperation\nsynthetic-received-turn\nAction\nturn.submit\nReceipt revision · received at\n3 · 07/11/2026, 02:05:55\n\nProvenance: committed Core receipt.\n\nA received receipt records an operation event; it does not establish the current execution state.\n\nMatching association fences do not establish continuing process liveness, idle activity, presence or available capacity.\n\nExternal activity report\n\nSecondary activity signal from the external source.\n\nAwaiting input\nCurrent report\nCustom integration\nInferred evidence\nSource\nobs_src_0000000000000004\nInstance · generation 5\nobs_inst_0000000000000005\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic blocked\nObserved at\n07/11/2026, 02:05:52\nValid until\n07/11/2026, 03:05:52\n\nAgent: observed\n\nReceived at: 07/11/2026, 02:05:52 · Sequence: 1\n\nSource contact: delayed · 07/11/2026, 02:05:52. Source contact does not establish this instance's current activity.\n\nReported reason: external_input_required\n\n<svg onload=window.OBS12_XSS=1>synthetic external input</svg>\n\nExternal activity does not confirm task success, presence or available capacity. Inspect this instance in its source environment.\n\nRefresh observation",
+    "width": 1263,
+    "scrollWidth": 1263,
+    "clientWidth": 1263,
+    "left": 161,
+    "right": 1424,
+    "parentWidth": 1263
+  }
+}

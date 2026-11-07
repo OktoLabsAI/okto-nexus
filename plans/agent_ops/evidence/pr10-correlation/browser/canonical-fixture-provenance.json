@@ -1,0 +1,15 @@
+{
+  "source": "explicit synthetic rows, synthetic process evidence, real storage and receipt producer",
+  "real_process_proof": false,
+  "provider_started": false,
+  "runtime_composed": false,
+  "receipt_producer": "append_execution_receipt",
+  "stages": [
+    "RECEIVED_DURABLE",
+    "RUNNING",
+    "SUCCEEDED"
+  ],
+  "session_lifecycle": "READY",
+  "session_id": "correlation-session",
+  "correlations": 4
+}

@@ -1,0 +1,68 @@
+{
+  "status": "MEASUREMENTS_COMPLETED_ALL_SAMPLES_PASSED",
+  "version": 4,
+  "candidate": "candidate-v2",
+  "wheel_sha256": "fc9bb8f075ac0167eee9c21d96592b12d46c218df77a0f2114f44b1fc20b1355",
+  "measurement_driver_exact_bytes_equal_v3": true,
+  "preflight_script_exact_bytes_equal_v3": true,
+  "approved_workload_unchanged": true,
+  "approved_layouts": [
+    1,
+    64
+  ],
+  "scales": [
+    64,
+    512,
+    4096
+  ],
+  "samples_per_read": 3,
+  "states": {
+    "blocked": 0.5,
+    "working": 0.5
+  },
+  "files": {
+    "benchmark_installed.py": {
+      "bytes": 28799,
+      "sha256": "3e0890789a43edbffa3569f9aaecfe64815b3a14ac58c982109acbfea1512cbc"
+    },
+    "preflight.py": {
+      "bytes": 4288,
+      "sha256": "0cd90f33db56930745f118a789107f79d3361e0e3f0bebfdac266caa6cfed1d4"
+    },
+    "README.md": {
+      "bytes": 5920,
+      "sha256": "4d63f8bb823ae9f76e29bc1bb694cedadcae61d1e878f37db2f1a15a96f37cec"
+    },
+    "parent-v3-manifest.json": {
+      "bytes": 1729,
+      "sha256": "89faa9ccfaab93b39835efa8e4df9b5dc416cdfb875e566211bbfdd5ba8a0d05"
+    },
+    "preflight.json": {
+      "bytes": 1025,
+      "sha256": "8d6aae76d200890f98e841fa4363a1813c9f21e49d32ba534724f069141b34ce"
+    },
+    "manifest-before-campaign.json": {
+      "bytes": 1247,
+      "sha256": "841541fc0589c68fe6cc3e066db289f62ec45d33c9589c845c816d7b227f8852"
+    },
+    "benchmark-installed.json": {
+      "bytes": 57378,
+      "sha256": "75fdee82fcdf2f951ef8f58131a8ac5d7dc99fa6dfd9ac3d15f8a8a6472c666c"
+    },
+    "assessment.json": {
+      "bytes": 18936,
+      "sha256": "e7ee37a659ba2bf027560c0545e9160c5a299c7792f298a1ea51bf4cc6ca8abd"
+    },
+    "finalize_assessment.py": {
+      "bytes": 6657,
+      "sha256": "03055efc43303f80b98d4303387f4bc94c6c4705278d77e9b3ebc728581792db"
+    }
+  },
+  "samples_total": 90,
+  "samples_successful": 90,
+  "budget_refusals": 0,
+  "sample_retries": 0,
+  "canonical_row_fingerprints_unchanged": true,
+  "factories_closed": true,
+  "process_exit_code": 0
+}

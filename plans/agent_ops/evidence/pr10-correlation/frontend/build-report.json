@@ -1,0 +1,26 @@
+{
+  "scope": "OBS12 frontend source tests and production static build",
+  "tests": {
+    "report": "C:/Users/jpamb/AppData/Local/Temp/obs12-frontend-final.xml",
+    "passed": 130,
+    "failed": 0,
+    "existing": 121,
+    "new": 9
+  },
+  "typecheck": "tsc -b passed",
+  "build": {
+    "command": "npm run build",
+    "exit_code": 0,
+    "vite_version": "6.4.3",
+    "modules": 2156,
+    "reported_vite_seconds": 40.98,
+    "javascript": "index-OzUGF4xp.js",
+    "css": "index-C1ejzFJK.css",
+    "warning": "Some chunks are larger than 500 kB after minification"
+  },
+  "limits": [
+    "Synthetic rendering and state-transition tests; no browser run performed by this agent.",
+    "No real provider, OS process identity lookup or runtime session was started.",
+    "Received receipt stages are historical Core evidence, not current execution state or idle activity."
+  ]
+}

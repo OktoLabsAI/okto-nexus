@@ -1,0 +1,46 @@
+{
+  "qualification": "synthetic canonical fixture; not real process/Core birth proof",
+  "origin": "http://127.0.0.1:51764",
+  "items": {
+    "working": {
+      "source_id": "obs_src_0000000000000001",
+      "source_revision": 1,
+      "observed_instance_id": "obs_inst_0000000000000002",
+      "generation": 2,
+      "agent_id": "observed",
+      "workspace_id": "obs-workspace",
+      "sequence": 1,
+      "expected_correlation": true
+    },
+    "blocked": {
+      "source_id": "obs_src_0000000000000004",
+      "source_revision": 1,
+      "observed_instance_id": "obs_inst_0000000000000005",
+      "generation": 5,
+      "agent_id": "observed",
+      "workspace_id": "obs-workspace",
+      "sequence": 1,
+      "expected_correlation": false
+    },
+    "generation": {
+      "source_id": "obs_src_0000000000000007",
+      "source_revision": 1,
+      "observed_instance_id": "obs_inst_0000000000000008",
+      "generation": 13,
+      "agent_id": "observed",
+      "workspace_id": "obs-workspace",
+      "sequence": 0,
+      "expected_correlation": false
+    },
+    "source": {
+      "source_id": "obs_src_000000000000000a",
+      "source_revision": 2,
+      "observed_instance_id": "obs_inst_000000000000000b",
+      "generation": 11,
+      "agent_id": "observed",
+      "workspace_id": "obs-workspace",
+      "sequence": 1,
+      "expected_correlation": false
+    }
+  }
+}

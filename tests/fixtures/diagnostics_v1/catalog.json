@@ -1,0 +1,731 @@
+{
+  "compatibility": "New optional fields/check IDs/codes may be added within v1. Consumers ignore unknown codes; changed type/status/meaning requires v2. This schema enumerates the currently emitted producer vocabulary.",
+  "components": {
+    "connector": {
+      "check_ids": [
+        "connector_identity",
+        "coordination_participation",
+        "core_contract",
+        "core_import",
+        "core_legacy_contract",
+        "credential_store",
+        "daemon_ipc",
+        "diagnostic_observation",
+        "handoff_test",
+        "identity_metadata",
+        "installation_inventory",
+        "journal_size_observation",
+        "local_service",
+        "managed_connection",
+        "mcp_negotiation",
+        "participant_authentication",
+        "provider_login",
+        "python_environment",
+        "runtime_binary",
+        "runtime_containment",
+        "runtime_eligibility",
+        "server_identity",
+        "server_protocol",
+        "server_reachability",
+        "state_directory",
+        "state_schema",
+        "transport",
+        "vault_backend",
+        "vault_namespaces",
+        "work_result"
+      ],
+      "codes": [
+        "AUTHENTICATION_UNCONFIRMED",
+        "AUTH_FAILED",
+        "BINARY_CANDIDATE_INVALID",
+        "BINARY_CANDIDATE_VALIDATED",
+        "BINARY_CHECK_NOT_REQUESTED",
+        "BINDING_NOT_CHECKED",
+        "CHECK_UNCONFIRMED",
+        "CONNECTOR_ID_ABSENT",
+        "CONNECTOR_ID_PRESENT",
+        "CONTAINMENT_PREFLIGHT_CONFIRMED",
+        "CONTAINMENT_UNCONFIRMED",
+        "CORE_CONTRACT_INVALID",
+        "CORE_CONTRACT_VERIFIED",
+        "CORE_IMPORTED",
+        "CORE_IMPORT_FAILED",
+        "DIAGNOSTIC_LIMIT",
+        "EXECUTABLE_MISSING",
+        "HANDOFF_TEST_NOT_OBSERVED",
+        "IDENTITY_METADATA_PRESENT",
+        "IDENTITY_NOT_SELECTED",
+        "INSTALLATION_CANDIDATES_PRESENT",
+        "INSTALLATION_UNCONFIRMED",
+        "JOURNAL_NOT_OBSERVED",
+        "JOURNAL_SIZE_HIGH",
+        "JOURNAL_SIZE_OBSERVED",
+        "JOURNAL_UNAVAILABLE",
+        "LEGACY_CONTRACT_REPORTED",
+        "MCP_NEGOTIATION_NOT_OBSERVED",
+        "PARTICIPANT_AUTHENTICATED",
+        "PARTICIPANT_NOT_AUTHENTICATED",
+        "PARTICIPATION_NOT_OBSERVED",
+        "PROCESS_CONTAINMENT_UNAVAILABLE",
+        "PROVIDER_LOGIN_NOT_CHECKED",
+        "PYTHON_SUPPORTED",
+        "PYTHON_UNSUPPORTED",
+        "RUNTIME_UNCONFIRMED",
+        "SCOPE_MISMATCH",
+        "SERVER_CHECK_NOT_REQUESTED",
+        "SERVER_ID_CONFIRMED",
+        "SERVER_ID_MISMATCH",
+        "SERVER_ID_UNCONFIRMED",
+        "SERVER_RESPONSE_CONFIRMED",
+        "SERVER_RESPONSE_UNCONFIRMED",
+        "SERVER_UNREACHABLE",
+        "SERVER_UPGRADE_REQUIRED",
+        "SERVICE_IPC_UNCONFIRMED",
+        "SERVICE_NOT_READY",
+        "SERVICE_READY",
+        "SERVICE_UNCONFIRMED",
+        "STATE_DIRECTORY_ABSENT",
+        "STATE_DIRECTORY_PRESENT",
+        "STATE_INVALID",
+        "STATE_SCHEMA_COMPATIBLE",
+        "STATE_UNAVAILABLE",
+        "STATE_VERSION_INCOMPATIBLE",
+        "TRANSPORT_NOT_OBSERVED",
+        "TRANSPORT_ONLINE",
+        "TRANSPORT_UNCONFIRMED",
+        "UNSUPPORTED_PLATFORM",
+        "VAULT_ACCESS_UNCONFIRMED",
+        "VAULT_BACKEND_DISCOVERED",
+        "VAULT_ENUMERATION_UNCONFIRMED",
+        "VAULT_FALLBACK_APPROVED",
+        "VAULT_FALLBACK_NOT_APPROVED",
+        "VAULT_NAMESPACE_SNAPSHOT_READ",
+        "VAULT_SNAPSHOT_INVALID",
+        "WORK_NOT_CHECKED"
+      ],
+      "exit_codes": "0 produced report even with failed checks; existing application/usage/unavailable/uncertain exits unchanged",
+      "findings": {
+        "AUTHENTICATION_UNCONFIRMED": {
+          "id": "participant_authentication",
+          "next_action": "Inspect the selected Server and existing identity through an explicit check.",
+          "reason": "Available error metadata does not establish a specific authentication outcome.",
+          "status": "UNKNOWN"
+        },
+        "AUTH_FAILED": {
+          "id": "participant_authentication",
+          "next_action": "Inspect the existing identity and current Server policy; no credential was replaced.",
+          "reason": "The Server explicitly refused the selected participant authentication or scope.",
+          "status": "FAIL"
+        },
+        "BINARY_CANDIDATE_INVALID": {
+          "id": "runtime_binary",
+          "next_action": "Review the selected candidate and binding explicitly.",
+          "reason": "Candidate validation refused the selected executable.",
+          "status": "FAIL"
+        },
+        "BINARY_CANDIDATE_VALIDATED": {
+          "id": "runtime_binary",
+          "next_action": "Review technical qualification and provider authentication separately.",
+          "reason": "The explicitly selected candidate passed passive validation; no native version process or provider login was run.",
+          "status": "PASS"
+        },
+        "BINARY_CHECK_NOT_REQUESTED": {
+          "id": "runtime_binary",
+          "next_action": "Use doctor --probe explicitly to validate the selected candidate.",
+          "reason": "The selected executable exists but candidate validation was not requested.",
+          "status": "UNKNOWN"
+        },
+        "BINDING_NOT_CHECKED": {
+          "id": "managed_connection",
+          "next_action": "Use status to inspect existing R4 connection progress; doctor does not create bindings.",
+          "reason": "Legacy binding metadata does not establish a current approved R4 connection.",
+          "status": "UNKNOWN"
+        },
+        "CHECK_UNCONFIRMED": {
+          "id": "diagnostic_observation",
+          "next_action": "Inspect the selected instance and rerun the same diagnostic; no repair was attempted.",
+          "reason": "A diagnostic observation could not be completed safely.",
+          "status": "UNKNOWN"
+        },
+        "CONNECTOR_ID_ABSENT": {
+          "id": "connector_identity",
+          "next_action": "Use connect explicitly when ready to configure this instance.",
+          "reason": "No Connector identifier was present in the returned snapshot.",
+          "status": "UNKNOWN"
+        },
+        "CONNECTOR_ID_PRESENT": {
+          "id": "connector_identity",
+          "next_action": "Verify Server authority separately; an identifier is metadata.",
+          "reason": "The returned snapshot contains a Connector identifier.",
+          "status": "PASS"
+        },
+        "CONTAINMENT_PREFLIGHT_CONFIRMED": {
+          "id": "runtime_containment",
+          "next_action": "Productive launch and provider qualification remain separate checks.",
+          "reason": "Passive containment preflight succeeded.",
+          "status": "PASS"
+        },
+        "CONTAINMENT_UNCONFIRMED": {
+          "id": "runtime_containment",
+          "next_action": "Inspect the supported execution host; no process was launched to repair it.",
+          "reason": "Containment preflight could not establish current evidence.",
+          "status": "UNKNOWN"
+        },
+        "CORE_CONTRACT_INVALID": {
+          "id": "core_contract",
+          "next_action": "Install the approved Connector and its exact pinned Core artifact.",
+          "reason": "The executable R4 bundle is unavailable or invalid.",
+          "status": "FAIL"
+        },
+        "CORE_CONTRACT_VERIFIED": {
+          "id": "core_contract",
+          "next_action": "Review provider, binding, authorization and lease evidence separately.",
+          "reason": "The executable R4 bundle passed its contract verification.",
+          "status": "PASS"
+        },
+        "CORE_IMPORTED": {
+          "id": "core_import",
+          "next_action": "Inspect its executable contract separately.",
+          "reason": "The installed Core was imported.",
+          "status": "PASS"
+        },
+        "CORE_IMPORT_FAILED": {
+          "id": "core_import",
+          "next_action": "Reinstall the approved Connector distribution and its pinned Core.",
+          "reason": "The installed Core could not be imported.",
+          "status": "FAIL"
+        },
+        "DIAGNOSTIC_LIMIT": {
+          "id": "state_schema",
+          "next_action": "Inspect the existing snapshot without assuming it is empty or corrupt.",
+          "reason": "The bounded state observation could not read the complete snapshot.",
+          "status": "UNKNOWN"
+        },
+        "EXECUTABLE_MISSING": {
+          "id": "runtime_binary",
+          "next_action": "Review discovery and the selected binding explicitly.",
+          "reason": "The selected legacy binding executable was not found.",
+          "status": "FAIL"
+        },
+        "HANDOFF_TEST_NOT_OBSERVED": {
+          "id": "handoff_test",
+          "next_action": "Inspect separately consented canonical handoff work.",
+          "reason": "This host diagnostic did not inspect a correlated handoff claim and result.",
+          "status": "UNKNOWN"
+        },
+        "IDENTITY_METADATA_PRESENT": {
+          "id": "identity_metadata",
+          "next_action": "Authenticate the selected identity separately; metadata does not prove credential validity.",
+          "reason": "The returned snapshot contains imported identity metadata.",
+          "status": "PASS"
+        },
+        "IDENTITY_NOT_SELECTED": {
+          "id": "identity_metadata",
+          "next_action": "Use connect or identity add explicitly when intended.",
+          "reason": "The returned snapshot has no imported identity selection.",
+          "status": "UNKNOWN"
+        },
+        "INSTALLATION_CANDIDATES_PRESENT": {
+          "id": "installation_inventory",
+          "next_action": "Review selection, technical eligibility and provider login separately.",
+          "reason": "Passive inventory found installation candidates.",
+          "status": "PASS"
+        },
+        "INSTALLATION_UNCONFIRMED": {
+          "id": "installation_inventory",
+          "next_action": "Inspect the intended installation or select its executable explicitly.",
+          "reason": "Passive discovery found no candidates in its supported search scope.",
+          "status": "UNKNOWN"
+        },
+        "JOURNAL_NOT_OBSERVED": {
+          "id": "journal_size_observation",
+          "next_action": "Inspect existing daemon state; do not infer productive history.",
+          "reason": "The journal has not been created for this selection.",
+          "status": "UNKNOWN"
+        },
+        "JOURNAL_SIZE_HIGH": {
+          "id": "journal_size_observation",
+          "next_action": "Review the journal maintenance procedure before changing it.",
+          "reason": "The observed journal size exceeds the advisory threshold; this does not prove failed work or journal corruption.",
+          "status": "PASS"
+        },
+        "JOURNAL_SIZE_OBSERVED": {
+          "id": "journal_size_observation",
+          "next_action": "Inspect journal health separately if required.",
+          "reason": "The existing journal size was observed; journal contents and health were not tested.",
+          "status": "PASS"
+        },
+        "JOURNAL_UNAVAILABLE": {
+          "id": "journal_size_observation",
+          "next_action": "Inspect access to the existing journal; do not infer corruption.",
+          "reason": "The journal size could not be read.",
+          "status": "UNKNOWN"
+        },
+        "LEGACY_CONTRACT_REPORTED": {
+          "id": "core_legacy_contract",
+          "next_action": "Use the executable contract check for current R4 compatibility.",
+          "reason": "The Core reports its legacy contract revision.",
+          "status": "PASS"
+        },
+        "MCP_NEGOTIATION_NOT_OBSERVED": {
+          "id": "mcp_negotiation",
+          "next_action": "Inspect the intended authenticated MCP client separately.",
+          "reason": "This host diagnostic did not observe MCP negotiation.",
+          "status": "UNKNOWN"
+        },
+        "PARTICIPANT_AUTHENTICATED": {
+          "id": "participant_authentication",
+          "next_action": "Review authorization, provider login and productive work separately.",
+          "reason": "The current response matches the selected Server and participant identity.",
+          "status": "PASS"
+        },
+        "PARTICIPANT_NOT_AUTHENTICATED": {
+          "id": "participant_authentication",
+          "next_action": "Use an explicit check with the existing selected identity.",
+          "reason": "This check did not establish authentication of the selected participant.",
+          "status": "UNKNOWN"
+        },
+        "PARTICIPATION_NOT_OBSERVED": {
+          "id": "coordination_participation",
+          "next_action": "Run a separately consented coordination check when intended.",
+          "reason": "This host diagnostic did not observe a correlated participant exchange.",
+          "status": "UNKNOWN"
+        },
+        "PROCESS_CONTAINMENT_UNAVAILABLE": {
+          "id": "runtime_containment",
+          "next_action": "Inspect the host containment prerequisites before requesting managed work.",
+          "reason": "The supported host lacks a required containment capability.",
+          "status": "FAIL"
+        },
+        "PROVIDER_LOGIN_NOT_CHECKED": {
+          "id": "provider_login",
+          "next_action": "Complete provider login explicitly on the execution host when required.",
+          "reason": "No provider login was tested by this diagnostic.",
+          "status": "UNKNOWN"
+        },
+        "PYTHON_SUPPORTED": {
+          "id": "python_environment",
+          "next_action": "Keep the supported Python runtime.",
+          "reason": "The Python runtime satisfies the supported minimum.",
+          "status": "PASS"
+        },
+        "PYTHON_UNSUPPORTED": {
+          "id": "python_environment",
+          "next_action": "Install Python 3.11 or newer.",
+          "reason": "The Python runtime is below the supported minimum.",
+          "status": "FAIL"
+        },
+        "RUNTIME_UNCONFIRMED": {
+          "id": "runtime_eligibility",
+          "next_action": "Inspect the selected connection and current Server authorization.",
+          "reason": "This host inspection does not establish canonical admission to execute work.",
+          "status": "UNKNOWN"
+        },
+        "SCOPE_MISMATCH": {
+          "id": "participant_authentication",
+          "next_action": "Review the existing identity selection before explicitly replacing a credential.",
+          "reason": "The returned agent differs from the selected participant identity.",
+          "status": "FAIL"
+        },
+        "SERVER_CHECK_NOT_REQUESTED": {
+          "id": "server_reachability",
+          "next_action": "Use doctor --probe explicitly for the existing selected Server and credential.",
+          "reason": "No active Server check was requested.",
+          "status": "UNKNOWN"
+        },
+        "SERVER_ID_CONFIRMED": {
+          "id": "server_identity",
+          "next_action": "Verify the participant identity and runtime authorization independently.",
+          "reason": "The returned Server identity matches the saved selection.",
+          "status": "PASS"
+        },
+        "SERVER_ID_MISMATCH": {
+          "id": "server_identity",
+          "next_action": "Review the selected Server installation explicitly; no profile was changed.",
+          "reason": "The returned Server identity differs from the saved selection.",
+          "status": "FAIL"
+        },
+        "SERVER_ID_UNCONFIRMED": {
+          "id": "server_identity",
+          "next_action": "Use an explicit check against the saved Server selection.",
+          "reason": "The current Server installation identity was not verified.",
+          "status": "UNKNOWN"
+        },
+        "SERVER_RESPONSE_CONFIRMED": {
+          "id": "server_reachability",
+          "next_action": "Review the separate Server identity and participant authentication checks.",
+          "reason": "The selected endpoint returned a current Server response.",
+          "status": "PASS"
+        },
+        "SERVER_RESPONSE_UNCONFIRMED": {
+          "id": "server_reachability",
+          "next_action": "Inspect the selected origin and repeat the explicit check if intended.",
+          "reason": "A current response from the selected Server was not established.",
+          "status": "UNKNOWN"
+        },
+        "SERVER_UNREACHABLE": {
+          "id": "server_reachability",
+          "next_action": "Inspect the selected origin and network; missing evidence does not prove authentication failure.",
+          "reason": "The check did not establish a usable current Server response.",
+          "status": "UNKNOWN"
+        },
+        "SERVER_UPGRADE_REQUIRED": {
+          "id": "server_protocol",
+          "next_action": "Inspect the Server and Connector versions; authentication remains independent.",
+          "reason": "The response is incompatible with the required Server management contract.",
+          "status": "FAIL"
+        },
+        "SERVICE_IPC_UNCONFIRMED": {
+          "id": "daemon_ipc",
+          "next_action": "Inspect the existing daemon without assuming work is absent.",
+          "reason": "The additional daemon status request could not be observed.",
+          "status": "UNKNOWN"
+        },
+        "SERVICE_NOT_READY": {
+          "id": "local_service",
+          "next_action": "Start or repair this selected instance explicitly when intended.",
+          "reason": "The selected instance is confirmed stopped or failed.",
+          "status": "FAIL"
+        },
+        "SERVICE_READY": {
+          "id": "local_service",
+          "next_action": "Review the remote transport and productive-work evidence separately.",
+          "reason": "The existing selected instance answered its identity-bound IPC readiness check.",
+          "status": "PASS"
+        },
+        "SERVICE_UNCONFIRMED": {
+          "id": "local_service",
+          "next_action": "Inspect daemon status and logs before changing its lifecycle.",
+          "reason": "The selected instance readiness is unconfirmed; it is not proven stopped.",
+          "status": "UNKNOWN"
+        },
+        "STATE_DIRECTORY_ABSENT": {
+          "id": "state_directory",
+          "next_action": "Run connect explicitly when ready to configure this instance.",
+          "reason": "The selected state directory is absent.",
+          "status": "FAIL"
+        },
+        "STATE_DIRECTORY_PRESENT": {
+          "id": "state_directory",
+          "next_action": "Inspect the independent state and daemon checks.",
+          "reason": "The selected state directory exists; its contents are checked separately.",
+          "status": "PASS"
+        },
+        "STATE_INVALID": {
+          "id": "state_schema",
+          "next_action": "Inspect or recover the selected snapshot explicitly; it was not changed.",
+          "reason": "The existing state snapshot cannot be decoded.",
+          "status": "FAIL"
+        },
+        "STATE_SCHEMA_COMPATIBLE": {
+          "id": "state_schema",
+          "next_action": "Inspect the independent state-directory and identity checks.",
+          "reason": "The returned snapshot has a supported schema; it may be the in-memory default for an absent file.",
+          "status": "PASS"
+        },
+        "STATE_UNAVAILABLE": {
+          "id": "state_schema",
+          "next_action": "Inspect access to the selected state directory.",
+          "reason": "The state snapshot could not be read; its contents remain unknown.",
+          "status": "UNKNOWN"
+        },
+        "STATE_VERSION_INCOMPATIBLE": {
+          "id": "state_schema",
+          "next_action": "Use the compatible installed Connector; do not rewrite the snapshot through doctor.",
+          "reason": "The state snapshot uses an incompatible version.",
+          "status": "FAIL"
+        },
+        "TRANSPORT_NOT_OBSERVED": {
+          "id": "transport",
+          "next_action": "Inspect the existing daemon and selected Server.",
+          "reason": "No transport state was observed for the selected instance.",
+          "status": "UNKNOWN"
+        },
+        "TRANSPORT_ONLINE": {
+          "id": "transport",
+          "next_action": "Verify participant authority, MCP participation and work results separately.",
+          "reason": "The current daemon status reports an online transport.",
+          "status": "PASS"
+        },
+        "TRANSPORT_UNCONFIRMED": {
+          "id": "transport",
+          "next_action": "Inspect existing Server availability and reconnect progress.",
+          "reason": "The daemon status did not establish an online transport.",
+          "status": "UNKNOWN"
+        },
+        "UNSUPPORTED_PLATFORM": {
+          "id": "runtime_containment",
+          "next_action": "Use a supported executor with verified containment; do not disable containment.",
+          "reason": "The selected executor platform has no qualified containment backend.",
+          "status": "FAIL"
+        },
+        "VAULT_ACCESS_UNCONFIRMED": {
+          "id": "credential_store",
+          "next_action": "Inspect access to the selected vault; no credential was repaired or replaced.",
+          "reason": "Existing vault access could not be established.",
+          "status": "UNKNOWN"
+        },
+        "VAULT_BACKEND_DISCOVERED": {
+          "id": "vault_backend",
+          "next_action": "Inspect the independent credential checks.",
+          "reason": "An OS vault backend name was discovered; credential access was not proved.",
+          "status": "PASS"
+        },
+        "VAULT_ENUMERATION_UNCONFIRMED": {
+          "id": "vault_namespaces",
+          "next_action": "Do not infer credential absence from an unavailable enumeration.",
+          "reason": "Vault namespace enumeration is unavailable or has no existing file.",
+          "status": "UNKNOWN"
+        },
+        "VAULT_FALLBACK_APPROVED": {
+          "id": "vault_backend",
+          "next_action": "Inspect credential availability separately; consent is not authentication.",
+          "reason": "The existing restricted-file fallback consent is recorded.",
+          "status": "PASS"
+        },
+        "VAULT_FALLBACK_NOT_APPROVED": {
+          "id": "vault_backend",
+          "next_action": "Approve the fallback explicitly during identity import or configure an OS keyring.",
+          "reason": "No OS backend was discovered and restricted-file fallback consent is absent.",
+          "status": "FAIL"
+        },
+        "VAULT_NAMESPACE_SNAPSHOT_READ": {
+          "id": "vault_namespaces",
+          "next_action": "Authenticate the selected identity only through an explicit check.",
+          "reason": "The existing file-vault namespace count was read; credential validity was not tested.",
+          "status": "PASS"
+        },
+        "VAULT_SNAPSHOT_INVALID": {
+          "id": "credential_store",
+          "next_action": "Inspect the existing vault format without replacing credentials implicitly.",
+          "reason": "The existing vault snapshot could not be interpreted.",
+          "status": "FAIL"
+        },
+        "WORK_NOT_CHECKED": {
+          "id": "work_result",
+          "next_action": "Inspect the same existing work through its canonical receipt.",
+          "reason": "This host diagnostic did not establish a canonical productive result.",
+          "status": "UNKNOWN"
+        }
+      }
+    },
+    "nexus": {
+      "check_ids": [
+        "client_configuration",
+        "client_reload",
+        "coordination_participation",
+        "credential_environment",
+        "credential_store",
+        "handoff_test",
+        "local_service",
+        "managed_connection",
+        "managed_session",
+        "mcp_negotiation",
+        "mcp_surface",
+        "operator_authentication",
+        "participant_authentication",
+        "participant_profile",
+        "project_identity",
+        "project_profile",
+        "provider_login",
+        "runtime_eligibility",
+        "server_reachability",
+        "work_result"
+      ],
+      "codes": [
+        "AGENT_DISABLED",
+        "AUTHENTICATION_NOT_CHECKED",
+        "AUTHORIZATION_REQUIRED",
+        "AUTH_FAILED",
+        "BINDING_APPROVED",
+        "BINDING_UNAVAILABLE",
+        "CHECK_UNCONFIRMED",
+        "CLIENT_CONFIGURATION_NOT_CHECKED",
+        "CLIENT_CONTEXT_NOT_OBSERVED",
+        "CLIENT_ENTRY_PRESENT",
+        "CLIENT_RELOAD_NOT_OBSERVED",
+        "COOPERATION_HISTORY_UNCONFIRMED",
+        "CREDENTIAL_ENVIRONMENT_ABSENT",
+        "CREDENTIAL_REFERENCE_PRESENT",
+        "DIAGNOSTIC_LIMIT",
+        "DIAGNOSTIC_MUTATION_REFUSED",
+        "DOCTOR_ENVIRONMENT_AUTHENTICATED",
+        "EXECUTION_LOCATION_RESTRICTED",
+        "EXTERNAL_PARTICIPANT",
+        "FEATURE_DISABLED",
+        "HANDOFF_TEST_NOT_OBSERVED",
+        "HISTORICAL_EVIDENCE_ONLY",
+        "IDENTITY_CREATION_UNCONFIRMED",
+        "INSTALLATION_UNCONFIRMED",
+        "LOCAL_READINESS_CONFIRMED",
+        "MANAGED_PROJECT_PROFILE",
+        "MANUAL_CLIENT_CONFIGURATION",
+        "MCP_AUTH_REFUSED",
+        "MCP_CLIENT_UPGRADE_REQUIRED",
+        "MCP_INITIALIZED",
+        "MCP_NEGOTIATION_NOT_OBSERVED",
+        "MCP_NEGOTIATION_UNCONFIRMED",
+        "MCP_ORIGIN_REFUSED",
+        "MCP_REQUEST_LIMIT",
+        "MCP_RESPONSE_LIMIT",
+        "MCP_RESPONSE_UNCONFIRMED",
+        "MCP_SURFACE_COMPATIBLE",
+        "MCP_SURFACE_INCOMPATIBLE",
+        "METHOD_DISABLED",
+        "NOT_CHECKED",
+        "NOT_FOUND",
+        "NOT_OBSERVED",
+        "OPEN_BLOCKED",
+        "OPEN_ELIGIBLE",
+        "OPERATOR_AUTHENTICATED",
+        "OPERATOR_LOGIN_REQUIRED",
+        "OPERATOR_REQUIRED",
+        "OPERATOR_VAULT_UNAVAILABLE",
+        "PARTICIPANT_AUTHENTICATED",
+        "PARTICIPANT_NOT_AUTHENTICATED",
+        "PARTICIPANT_PROFILE_RETIRED",
+        "PARTICIPANT_VAULT_UNAVAILABLE",
+        "PARTICIPATION_NOT_OBSERVED",
+        "PERMISSION_DENIED",
+        "PROFILE_ABSENT",
+        "PROFILE_CONFLICT",
+        "PROFILE_DRIFT",
+        "PROFILE_INVALID",
+        "PROFILE_PATH_UNSAFE",
+        "PROFILE_READ",
+        "PROJECT_IDENTITY_ACTIVE",
+        "PROTECTED_CREDENTIAL_READ",
+        "PROVIDER_LOGIN_NOT_CHECKED",
+        "REMOTE_TOPOLOGY",
+        "REMOVAL_RECEIPT_ONLY",
+        "RESPONSE_UNCONFIRMED",
+        "RUNTIME_DRAINING",
+        "RUNTIME_UNCONFIRMED",
+        "SCOPE_MISMATCH",
+        "SERVER_CHANGED",
+        "SERVER_CHECK_NOT_REQUESTED",
+        "SERVER_ID_MISMATCH",
+        "SERVER_REDIRECT_REFUSED",
+        "SERVER_RESPONSE_CONFIRMED",
+        "SERVER_UNREACHABLE",
+        "SERVER_UPGRADE_REQUIRED",
+        "SERVICE_NOT_READY",
+        "SERVICE_READY",
+        "SERVICE_UNCONFIRMED",
+        "SESSION_CONTROL_AVAILABLE",
+        "SESSION_NOT_CHECKED",
+        "SESSION_NOT_INTERACTIVE",
+        "SETUP_INCOMPLETE",
+        "SETUP_NOT_APPLIED",
+        "WORK_CHECKPOINT_INVALID",
+        "WORK_NOT_CHECKED",
+        "WORK_NOT_COMPLETED",
+        "WORK_RESULT_CONFIRMED"
+      ],
+      "evidence_enums": {
+        "lifecycle_state": [
+          "CHECK_UNCONFIRMED",
+          "CLOSED",
+          "FAILED",
+          "OPEN_PENDING",
+          "READY"
+        ],
+        "policy_reasons": [
+          "ADAPTER_UNSUPPORTED",
+          "AGENT_DISABLED",
+          "AGENT_RECOVERING",
+          "AUTHORIZATION_REQUIRED",
+          "BINDING_DISABLED",
+          "BINDING_PENDING_REVIEW",
+          "BINDING_REQUIRED",
+          "BINDING_REVOKED",
+          "BINDING_SELECTION_REQUIRED",
+          "BINDING_STALE",
+          "CHECK_UNCONFIRMED",
+          "EXECUTION_LOCATION_RESTRICTED",
+          "EXECUTION_UNAVAILABLE",
+          "EXECUTOR_OFFLINE",
+          "EXECUTOR_RECOVERING",
+          "FEATURE_DISABLED",
+          "INSTALLATION_REQUIRED",
+          "INVENTORY_INCOMPATIBLE",
+          "INVENTORY_STALE",
+          "LOCAL_INTEGRATION_RESTRICTED",
+          "LOCAL_OPERATOR_REQUIRED",
+          "METHOD_DISABLED",
+          "OPERATOR_APPROVAL_REQUIRED",
+          "OPERATOR_REQUIRED",
+          "PREPARATION_REQUIRED",
+          "REALIZATION_SELECTION_REQUIRED",
+          "RUNTIME_DISABLED",
+          "RUNTIME_DRAINING",
+          "TECHNICAL_NOT_READY",
+          "WORKSPACE_REQUIRED"
+        ],
+        "removal_stage": [
+          "done",
+          "file_pending",
+          "review",
+          "vault_pending"
+        ],
+        "state": [
+          "approved",
+          "blocked",
+          "check_submitted",
+          "completed",
+          "credential_pending",
+          "credential_stored",
+          "decision_refused",
+          "degraded",
+          "done",
+          "failed",
+          "file_pending",
+          "finish",
+          "idle",
+          "needs_input",
+          "observing",
+          "ready",
+          "review",
+          "starting",
+          "stopped",
+          "stopping",
+          "submission_unconfirmed",
+          "test_submitted",
+          "unknown"
+        ],
+        "technical_state": [
+          "CONTAINMENT_UNAVAILABLE",
+          "NOT_INSTALLED",
+          "NOT_PROBED",
+          "PREPARATION_REQUIRED",
+          "READY_FOR_RUNTIME",
+          "UNQUALIFIED_BUILD",
+          "UNSUPPORTED_PLATFORM"
+        ]
+      },
+      "exit_codes": "0 report without FAIL, 3 with FAIL, 2 usage, 130 interruption; legacy unchanged",
+      "service_failure_normalization": "Only typed local_service FAIL plus state stopped/failed maps to SERVICE_NOT_READY in v1; legacy report is unchanged."
+    }
+  },
+  "effects": "Only actual existing facts; absent optional fields mean unreported, never false. Mode describes requested checks, not executed effects.",
+  "format_version": 1,
+  "identity": [
+    "id",
+    "subject.kind",
+    "subject.id"
+  ],
+  "proof_statuses": {
+    "FAIL": "Current evidence refutes the named requirement or records its explicit refusal.",
+    "NOT_APPLICABLE": "The selected topology or role excludes the predicate; not unsupported or unobserved.",
+    "PASS": "Current evidence supports only the named predicate in its declared scope.",
+    "UNKNOWN": "Evidence was not requested, unavailable, bounded out or insufficient."
+  },
+  "qualification": "Declarative contract metadata; neither runtime evidence nor provider/service acceptance.",
+  "schema": "okto.diagnostics.catalog",
+  "state_rules": [
+    "Any FAIL -> failed_checks",
+    "Otherwise empty or any UNKNOWN -> incomplete",
+    "Otherwise checks_passed; never a global-ready assertion"
+  ],
+  "text_policy": "Codes, reason and next_action use controlled literals; arbitrary exception/server text is not copied. Evidence is key/type/enum bounded."
+}

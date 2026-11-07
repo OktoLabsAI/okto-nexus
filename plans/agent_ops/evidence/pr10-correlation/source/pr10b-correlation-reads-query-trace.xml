@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="14.027" timestamp="2026-11-07T02:00:56.812731-03:00" hostname="Alienware_m15"><testcase classname="tests.test_observation_correlation_reads" name="test_read_query_count_is_constant_without_native_os_or_artifact_io_per_item" time="8.724"><properties><property name="query_counts_1_and_7" value="[[5, 6, 4], [5, 5, 4]]" /><property name="redacted_query_differences" value="[{&quot;first_only&quot;: {}, &quot;second_only&quot;: {}}, {&quot;first_only&quot;: {&quot;SELECT agent_id, role, capabilities, metadata, created_at, last_seen_at, api_key_hash, is_active, permissions, preset_id, tags, comm_scope, color FROM agents WHERE api_key_hash = ? AND is_active = 1&quot;: 1}, &quot;second_only&quot;: {}}, {&quot;first_only&quot;: {}, &quot;second_only&quot;: {}}]" /></properties><failure message="AssertionError: [{'first_only': {}, 'second_only': {}}, {'first_only': {'SELECT agent_id, role, capabilities, metadata, created_at, la...r FROM agents WHERE api_key_hash = ? AND is_active = 1': 1}, 'second_only': {}}, {'first_only': {}, 'second_only': {}}]&#10;assert [5, 6, 4] == [5, 5, 4]&#10;  &#10;  At index 1 diff: 6 != 5&#10;  Use -v to get more diff">reads = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...mpose=&lt;function forbidden at 0x00000216AFA1FB00&gt;, _open_ledger=&lt;function forbidden at 0x00000216AFA1FB00&gt;), sequence=2)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000216B0009BA0&gt;
+record_property = &lt;function record_property.&lt;locals&gt;.append_property at 0x00000216B00F2340&gt;
+
+    def test_read_query_count_is_constant_without_native_os_or_artifact_io_per_item(reads, monkeypatch, record_property):
+        env = reads
+        select(env)
+        native_receipt(env)
+        publish(env)
+        calls = env.birth_calls, env.os_calls
+        from okto_nexus.adapters.outbound.file.artifacts import LocalArtifactStore
+        for method in ('describe', 'read_text', 'read_bytes'):
+            monkeypatch.setattr(LocalArtifactStore, method, lambda *a, **k: pytest.fail('artifact hydration'))
+        monkeypatch.setattr(env.host, 'read_existing_process_birth', lambda **k: pytest.fail('native birth read'))
+        routes = [BASE+'?limit=200', ATTENTION+'?kind=external_blocked&amp;limit=100', BASE+'/summary']
+        counts, profiles = [], []
+        for expected in (1, 7):
+            current, profile = [], []
+            for route in routes:
+                with trace_reads(env, monkeypatch) as statements:
+                    result = get(env, route)
+                assert (len(result['items']) if 'items' in result else result['total_instances']) == expected
+                current.append(sum(sql.lstrip().upper().startswith(('SELECT', 'WITH')) for sql in statements))
+                profile.append(Counter(re.sub(r"'(?:''|[^'])*'", '?', sql).strip()[:350]
+                    for sql in statements if sql.lstrip().upper().startswith(('SELECT', 'WITH'))))
+            counts.append(current)
+            profiles.append(profile)
+            if expected == 1:
+                grow_same_session(env)
+        differences = [dict(first_only=dict(first-second), second_only=dict(second-first))
+            for first, second in zip(profiles[0], profiles[1])]
+        record_property('query_counts_1_and_7', json.dumps(counts))
+        record_property('redacted_query_differences', json.dumps(differences))
+&gt;       assert counts[0] == counts[1], differences
+E       AssertionError: [{'first_only': {}, 'second_only': {}}, {'first_only': {'SELECT agent_id, role, capabilities, metadata, created_at, la...r FROM agents WHERE api_key_hash = ? AND is_active = 1': 1}, 'second_only': {}}, {'first_only': {}, 'second_only': {}}]
+E       assert [5, 6, 4] == [5, 5, 4]
+E         
+E         At index 1 diff: 6 != 5
+E         Use -v to get more diff
+
+tests\test_observation_correlation_reads.py:314: AssertionError</failure></testcase></testsuite></testsuites>

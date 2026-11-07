@@ -491,3 +491,23 @@ OBS-12 possui somente o contrato puro de evidência/digest/fences (91 casos); as
 A wheel V4 qualificou 292 casos: 291 passaram na regressão ampliada e um teste antigo de migração, que dependia do checkout, passou após correção em execução focal. O relatório original com a falha permanece retido. Os relatórios instalados dos candidatos somam 431 identidades distintas, sem somar reexecuções. Os 341 casos fonte atuais, 121 casos frontend, browser real com dados sintéticos e 24/24 amostras de volume sustentam OBS-11 como VERIFIED. As evidências preservam as falhas iniciais, candidatos substituídos e limites da campanha. Manifesto e verificador vinculam os bytes retidos aos arquivos staged antes do commit.
 
 OBS-12, PR-10 completo, campanhas reais e regressão conjunta R3 continuam pendentes. OB-19 permanece NOT_RUN e OB-24 IN_PROGRESS. Não houve qualificação nova de provider, cliente MCP real ou serviço nativo. Detalhes: [PR-10](plans/agent_ops/evidence/pr10-external.md).
+
+## 2026-11-07 — DX-07/DX-14: diagnósticos do Connector
+
+Commit e push `12d806f955aea84327dd3a33011016d0283ecc18` em `feature/v0.0.12`. O formato comum opt-in passou nos mesmos 93 casos fonte e instalados, com dependências sintéticas e 119 arquivos de pacote verificados byte a byte. A saída padrão e os exit codes foram preservados; o probe explícito passou a validar também a identidade do Server. O lado Nexus tem 75 casos fonte aprovados e ainda aguarda qualificação instalada. DX-07/DX-14 e R3 continuam em andamento. [Evidência](plans/agent_ops/evidence/pr10-diagnostics-connector.md).
+
+
+2026-11-07 — OBS-12: armazenamento CAS/tombstones, prova nativa autorizada, API e projeção/UI de precedência canônica implementados. Revisão corrigiu recusa após await, limites de admissão, datas de recibos corrompidas e tipos de revisão. Wheel instalada, browser e medição de carga ainda em qualificação; OBS-12 e PR-10 permanecem IN_PROGRESS. Plano fixo preservado.
+
+
+## 2026-11-07 — PR-10b: precedência canônica e diagnóstico comum qualificados
+
+OBS-12 e OB-19 passam a VERIFIED no escopo Windows/local declarado. Associação explícita de operador, CAS/tombstones, revisão de autoridade e projeção passiva preservam os fatos canônicos e mantêm o sinal externo separado. A prova de processo/Core desta fatia usa dados sintéticos; isso não qualifica associação real com provedor.
+
+A V1 passou em 736 casos instalados. A V2 altera somente duas consultas de atenção e passou nos 237 casos afetados, com 20 identidades novas: são 756 casos distintos entre candidatos, dos quais 519 permanecem qualificados na V1 inalterada. Os 681 arquivos finais correspondem ao fonte/build/wheel/instalação; 679 arquivos e os sete assets são idênticos à V1. Frontend: 130 passes. Browser real V1: oito checkpoints, 13 tabelas canônicas preservadas e encerramento confirmado.
+
+A medição inicial preserva 86/90 sucessos e quatro recusas pelo orçamento de cinco segundos. Após restringir o preload às ocorrências pertinentes, o mesmo driver registrou 90/90 sucessos e 0 recusas na V2, sem retries nem alteração do prazo. Resultados são separados por candidato; não constituem SLO geral. [Evidências, falhas iniciais e limites](plans/agent_ops/evidence/pr10-correlation.md).
+
+Diagnóstico comum v1 verificado: Nexus 75 casos instalados; Connector 93 já publicados em `12d806f955aea84327dd3a33011016d0283ecc18`. São os mesmos casos fonte de cada repo, sem soma duplicada. O contrato compartilhado é declarativo; DX-07/DX-14 completos e campanhas reais entre hosts continuam em andamento. Core permanece sem alterações neste milestone.
+
+PR-10 integral e R3 continuam IN_PROGRESS. Bootstrap remoto, M1/M2 produtivos, campanhas de serviço/provedor/cliente e regressão conjunta permanecem abertos. Plano e inventários fixos preservados.

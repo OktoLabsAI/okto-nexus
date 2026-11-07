@@ -23,6 +23,7 @@ def _item(view, *, kind, episode, first, changed, active, resolution='open'):
 
 def project(facts, now, policy):
     row = facts['current']
+    config = policy['config']
     head, instance = row['head'], row['instance']
     kind = facts.get('kind')
     completion = facts.get('completion')
@@ -35,6 +36,9 @@ def project(facts, now, policy):
         if not reference:
             return []
         historical = dict(row)
+        # A current association does not prove that the native session was
+        # associated at the time of this immutable completion event.
+        historical.pop('correlation', None)
         # Immutable event provenance follows its own publishing authority, not
         # whichever token or report now occupies the instance's current head.
         historical['publisher_revoked'] = completion['publisher_revoked']
@@ -43,7 +47,7 @@ def project(facts, now, policy):
             observed_at=completion['observed_at'], reason_text=None,
             current_completion_ref=reference, last_completion_ref=reference,
             last_completion_received_at=report['received_at'])
-        old = ObservationService._project(historical, now, policy)
+        old = ObservationService._project(historical, now, config)
         old['generation'] = report['generation']
         # Pre-upgrade events may lack their original publisher/observed time.
         # They remain explicitly unavailable historical facts, never invented
@@ -57,7 +61,8 @@ def project(facts, now, policy):
             active=proven and old['freshness'] != 'unavailable', resolution='resolved')]
     if head is None:
         return []
-    view = ObservationService._project(row, now, policy)
+    current = dict(row, correlation=policy['correlations'].get(instance['observed_instance_id']))
+    view = ObservationService._project(current, now, config)
     result = []
     anchor = facts.get('anchor')
     if kind in (None, 'external_blocked') and head['state'] == 'blocked' and anchor and anchor['blocked_sequence'] is not None:

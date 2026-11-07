@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "not_a_performance_sample": true,
+  "heavy_seed_started": false,
+  "package_before": {
+    "wheel_sha256": "991a1995bec626012d113df12c90e897274a83b320373539c28b73c6b4fb7be1",
+    "verified_files": 681,
+    "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+    "core_version": "0.0.14",
+    "product_imports_only_installed": true,
+    "loaded_module_counts": {
+      "nexus": 1,
+      "core": 77
+    },
+    "python_version": "3.13.1"
+  },
+  "empty_summary": true,
+  "empty_attention": true,
+  "package_after": {
+    "wheel_sha256": "991a1995bec626012d113df12c90e897274a83b320373539c28b73c6b4fb7be1",
+    "verified_files": 681,
+    "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+    "core_version": "0.0.14",
+    "product_imports_only_installed": true,
+    "loaded_module_counts": {
+      "nexus": 146,
+      "core": 77
+    },
+    "python_version": "3.13.1"
+  },
+  "factory_closed": true
+}

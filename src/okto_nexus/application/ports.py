@@ -26,7 +26,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
-from .observation_ports import ObservationRepo
+from .observation_ports import ObservationCorrelationRepo, ObservationRepo
 
 from ..domain.approvals import Approval
 from ..domain.handoff_origin import HandoffOrigin
@@ -2972,5 +2972,6 @@ class Repos:
     approvals: ApprovalRepo | None = None
     poll_tokens: PollTokenRepo | None = None
     observations: ObservationRepo | None = None
+    observation_correlations: ObservationCorrelationRepo | None = None
     harness_sessions: HarnessSessionRepo | None = None
     harness_events: HarnessEventRepo | None = None

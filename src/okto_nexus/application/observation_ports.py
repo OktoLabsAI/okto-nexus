@@ -12,6 +12,30 @@ if TYPE_CHECKING:
     from .ports import UnitOfWork
 
 
+class ObservationCorrelationRepo(Protocol):
+    """Private operator storage, not a self-reader DTO or an authority proof.
+
+    The host supplies current authorized scope/facts in this UoW. Tombstones
+    retain immutable agent/workspace scope and revision; capacity counts them.
+    """
+    def get(self, uow: UnitOfWork, *, observed_instance_id: str) -> dict | None: ...
+
+    def get_scoped(self, uow: UnitOfWork, *, observed_instance_id: str,
+                   agent_id: str, workspace_id: str) -> dict | None: ...
+
+    def get_for_session(self, uow: UnitOfWork, *, observed_instance_id: str,
+                        server_id: str, executor_id: str, session_id: str) -> dict | None: ...
+
+    def capacity(self, uow: UnitOfWork, *, max_records: int) -> dict: ...
+
+    def replace_selection(self, uow: UnitOfWork, *, selection: dict, proof: dict,
+                          verified_at: str, now: str, max_records: int,
+                          agent_id: str, workspace_id: str) -> dict: ...
+
+    def tombstone(self, uow: UnitOfWork, *, observed_instance_id: str, expected_revision: int,
+                  state: str, now: str, max_records: int, agent_id: str, workspace_id: str) -> dict: ...
+
+
 class ObservationRepo(Protocol):
     def create_source(self, uow: UnitOfWork, *, agent_id: str, source_kind: str,
                       workspace_ids: list[str], registration_ref: str, now: str,

@@ -1,0 +1,50 @@
+{
+  "checkpoint": "initial-list",
+  "viewport": {
+    "width": 929,
+    "height": 917
+  },
+  "xssExecuted": false,
+  "rows": [
+    {
+      "id": "external-instance-obs_inst_0000000000000002",
+      "text": "Canonical session facts\n\nThese Core facts take precedence over the external activity signal below.\n\nRecorded session lifecycle\nREADY\nSession\ncorrelation-session\nServer\nsrv_02d2f231ee21b8214fa471ceb07ff34c\nExecutor\nexe_2bbf6e31b95c1487193fd45107930f80\nOpening operation\ncorrelation-open\nSession generation · stream\n3 · correlation-stream\n\nAssociation revision 1 · Verified at 07/11/2026, 02:05:54\n\nExternal binding attested by the operator. Native process birth checked by the machine.\n\nLast receipt received\nReceipt stage\nSUCCEEDED\nOperation\nsynthetic-received-turn\nAction\nturn.submit\nReceipt revision · received at\n3 · 07/11/2026, 02:05:55\n\nProvenance: committed Core receipt.\n\nA received receipt records an operation event; it does not establish the current execution state.\n\nMatching association fences do not establish continuing process liveness, idle activity, presence or available capacity.\n\nExternal activity report\n\nSecondary activity signal from the external source.\n\nWorking\nCurrent report\nCustom integration\nInferred evidence\nSource\nobs_src_0000000000000001\nInstance · generation 2\nobs_inst_0000000000000002\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic working\nObserved at\n07/11/2026, 02:05:51\nValid until\n07/11/2026, 03:05:51",
+      "width": 254,
+      "scrollWidth": 254,
+      "clientWidth": 254,
+      "left": 597,
+      "right": 851,
+      "parentWidth": 272
+    },
+    {
+      "id": "external-instance-obs_inst_0000000000000005",
+      "text": "Canonical session facts\n\nThese Core facts take precedence over the external activity signal below.\n\nRecorded session lifecycle\nREADY\nSession\ncorrelation-session\nServer\nsrv_02d2f231ee21b8214fa471ceb07ff34c\nExecutor\nexe_2bbf6e31b95c1487193fd45107930f80\nOpening operation\ncorrelation-open\nSession generation · stream\n3 · correlation-stream\n\nAssociation revision 1 · Verified at 07/11/2026, 02:05:54\n\nExternal binding attested by the operator. Native process birth checked by the machine.\n\nLast receipt received\nReceipt stage\nSUCCEEDED\nOperation\nsynthetic-received-turn\nAction\nturn.submit\nReceipt revision · received at\n3 · 07/11/2026, 02:05:55\n\nProvenance: committed Core receipt.\n\nA received receipt records an operation event; it does not establish the current execution state.\n\nMatching association fences do not establish continuing process liveness, idle activity, presence or available capacity.\n\nExternal activity report\n\nSecondary activity signal from the external source.\n\nAwaiting input\nCurrent report\nCustom integration\nInferred evidence\nSource\nobs_src_0000000000000004\nInstance · generation 5\nobs_inst_0000000000000005\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic blocked\nObserved at\n07/11/2026, 02:05:52\nValid until\n07/11/2026, 03:05:52",
+      "width": 254,
+      "scrollWidth": 254,
+      "clientWidth": 254,
+      "left": 597,
+      "right": 851,
+      "parentWidth": 272
+    },
+    {
+      "id": "external-instance-obs_inst_0000000000000008",
+      "text": "Canonical session facts\n\nThese Core facts take precedence over the external activity signal below.\n\nRecorded session lifecycle\nREADY\nSession\ncorrelation-session\nServer\nsrv_02d2f231ee21b8214fa471ceb07ff34c\nExecutor\nexe_2bbf6e31b95c1487193fd45107930f80\nOpening operation\ncorrelation-open\nSession generation · stream\n3 · correlation-stream\n\nAssociation revision 1 · Verified at 07/11/2026, 02:05:54\n\nExternal binding attested by the operator. Native process birth checked by the machine.\n\nLast receipt received\nReceipt stage\nSUCCEEDED\nOperation\nsynthetic-received-turn\nAction\nturn.submit\nReceipt revision · received at\n3 · 07/11/2026, 02:05:55\n\nProvenance: committed Core receipt.\n\nA received receipt records an operation event; it does not establish the current execution state.\n\nMatching association fences do not establish continuing process liveness, idle activity, presence or available capacity.\n\nExternal activity report\n\nSecondary activity signal from the external source.\n\nAwaiting input\nCurrent report\nCustom integration\nInferred evidence\nSource\nobs_src_0000000000000007\nInstance · generation 8\nobs_inst_0000000000000008\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic generation\nObserved at\n07/11/2026, 02:05:52\nValid until\n07/11/2026, 03:05:52",
+      "width": 254,
+      "scrollWidth": 254,
+      "clientWidth": 254,
+      "left": 597,
+      "right": 851,
+      "parentWidth": 272
+    },
+    {
+      "id": "external-instance-obs_inst_000000000000000b",
+      "text": "Canonical session facts\n\nThese Core facts take precedence over the external activity signal below.\n\nRecorded session lifecycle\nREADY\nSession\ncorrelation-session\nServer\nsrv_02d2f231ee21b8214fa471ceb07ff34c\nExecutor\nexe_2bbf6e31b95c1487193fd45107930f80\nOpening operation\ncorrelation-open\nSession generation · stream\n3 · correlation-stream\n\nAssociation revision 1 · Verified at 07/11/2026, 02:05:54\n\nExternal binding attested by the operator. Native process birth checked by the machine.\n\nLast receipt received\nReceipt stage\nSUCCEEDED\nOperation\nsynthetic-received-turn\nAction\nturn.submit\nReceipt revision · received at\n3 · 07/11/2026, 02:05:55\n\nProvenance: committed Core receipt.\n\nA received receipt records an operation event; it does not establish the current execution state.\n\nMatching association fences do not establish continuing process liveness, idle activity, presence or available capacity.\n\nExternal activity report\n\nSecondary activity signal from the external source.\n\nAwaiting input\nCurrent report\nCustom integration\nInferred evidence\nSource\nobs_src_000000000000000a\nInstance · generation 11\nobs_inst_000000000000000b\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic source\nObserved at\n07/11/2026, 02:05:52\nValid until\n07/11/2026, 03:05:52",
+      "width": 254,
+      "scrollWidth": 254,
+      "clientWidth": 254,
+      "left": 597,
+      "right": 851,
+      "parentWidth": 272
+    }
+  ]
+}

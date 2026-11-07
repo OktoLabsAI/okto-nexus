@@ -1,0 +1,34 @@
+{
+  "status": "PREFLIGHT_PASSED_CAMPAIGN_NOT_STARTED",
+  "version": 3,
+  "approved_workload_unchanged": true,
+  "core_distribution": "okto-nexus-connector-core",
+  "core_required_version": "0.0.14",
+  "previous_failure_classification": "qualification_infrastructure_before_seed_not_performance",
+  "files": {
+    "benchmark_installed.py": {
+      "bytes": 28799,
+      "sha256": "3e0890789a43edbffa3569f9aaecfe64815b3a14ac58c982109acbfea1512cbc"
+    },
+    "preflight.py": {
+      "bytes": 4288,
+      "sha256": "0cd90f33db56930745f118a789107f79d3361e0e3f0bebfdac266caa6cfed1d4"
+    },
+    "README.md": {
+      "bytes": 5421,
+      "sha256": "68ade1f2e8ab7d844dda399b95688c36ae210e0d146098dd1ea9febbe0f6f222"
+    },
+    "failed-v2-manifest.json": {
+      "bytes": 2697,
+      "sha256": "154d94c272ec9edf712026bbe6a7935b67f95be5426c823271f18a7677c9cc54"
+    },
+    "driver-preflight-error-1794029008078560000.json": {
+      "bytes": 805,
+      "sha256": "ba7ba77f65922095dbc78cf52a0af0dedfe104aed0b1974bdb6dd35c61ff480d"
+    },
+    "preflight.json": {
+      "bytes": 1025,
+      "sha256": "916d22729b14ef75c5614d10509ac91c457d85ebb07123beef080498ee9a7279"
+    }
+  }
+}

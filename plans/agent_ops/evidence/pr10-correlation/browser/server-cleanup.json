@@ -1,0 +1,22 @@
+{
+  "owner": {
+    "server_pid": 53804,
+    "generation": "3bee381c376ba2b9f107eb1c054c76dc",
+    "instance_id": "svc_4923b35fbf09e3fc12a142f74692381c3195f9303e2bd77a77c788b6a879d7d2"
+  },
+  "shutdown": {
+    "ok": true,
+    "data": {
+      "instance_id": "svc_4923b35fbf09e3fc12a142f74692381c3195f9303e2bd77a77c788b6a879d7d2",
+      "generation": "3bee381c376ba2b9f107eb1c054c76dc",
+      "shutdown": {
+        "state": "DRAINED",
+        "deadline_monotonic": 522309.3358504,
+        "resources": [],
+        "error_codes": []
+      }
+    }
+  },
+  "process_wait_code": 0,
+  "tcp_connect_code": 10035
+}

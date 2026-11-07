@@ -67,6 +67,7 @@ OBSERVATION_INTEGER_LIMITS: dict[str, tuple[int, int, int]] = {
     "observation_max_sources_per_agent": (32, 1, 1024),
     "observation_max_sources": (4096, 1, 65536),
     "observation_max_instances": (4096, 1, 65536),
+    "observation_max_correlation_records": (4096, 1, 65536),
     "observation_max_tokens_per_source": (8, 1, 64),
     "observation_event_retention_days": (7, 1, 90),
     "observation_max_events": (20000, 1, 1000000),
@@ -251,6 +252,7 @@ class NexusConfig:
     observation_max_sources_per_agent: int = 32
     observation_max_sources: int = 4096
     observation_max_instances: int = 4096
+    observation_max_correlation_records: int = 4096
     observation_max_tokens_per_source: int = 8
     observation_event_retention_days: int = 7
     observation_max_events: int = 20000

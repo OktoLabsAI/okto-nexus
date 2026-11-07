@@ -1,0 +1,12 @@
+{
+  "aggregate_algorithm": "SHA256 of UTF-8 concatenation of each sorted filename as SHA256 + two spaces + filename + LF",
+  "aggregate_sha256": "06dbbea77eb0870058bc2fe4c9afc81023ea99f857612984321d1f8e6d20c422",
+  "files": {
+    "catalog.json": "134b2e4dcaf017640f55c81ccc5dd078bcda88b120841275780f1848d19e014d",
+    "schema.json": "630fadebc164bbad09bc6abb660a755c1b763bd5b7022aa5f3958e9c201652ec",
+    "vectors.json": "95aa197df5b276f9efc697d51290148b0bbf4bacd269de5419d162806cd53774"
+  },
+  "format_version": 1,
+  "qualification": "Synthetic contract vectors only; no runtime/provider/client qualification.",
+  "schema": "okto.diagnostics.artifacts"
+}

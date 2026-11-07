@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="8.521" timestamp="2026-11-07T01:33:09.183911-03:00" hostname="Alienware_m15"><testcase classname="tests.test_observation_correlation_http" name="test_exact_http_selection_and_clear_are_historical_metadata_only" time="4.073"><error message="failed on setup with &quot;TypeError: 'function' object is not subscriptable&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10597/test_exact_http_selection_and_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020EEFBFA8B0&gt;
+
+    @pytest.fixture
+    def correlation_http(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory, runtime_host
+        import subprocess
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates', lambda **_: NS(candidates=()))
+        monkeypatch.setattr(runtime_host, 'open_journal', forbidden)
+        monkeypatch.setattr(runtime_host, 'create_runtime', forbidden)
+        monkeypatch.setattr(runtime_host.EmbeddedRuntimeHost, '_compose', forbidden)
+        monkeypatch.setattr(subprocess, 'Popen', forbidden)
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+            '--feature-harness-integrations', 'false', '--embedding-mode', 'off', '--metrics-mode', 'disabled'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, operator_key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+            deps.repos.agents.set_permissions(uow, agent_id='observed', preset_id=None,
+                permissions={'observations': {'manage_self': True, 'publish': True}})
+            deps.repos.workspaces.upsert(uow, workspace_id='obs-workspace')
+&gt;       app = build_app(deps)
+              ^^^^^^^^^^^^^^^
+
+tests\test_observation_correlation_http.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\adapters\inbound\http\app.py:635: in build_app
+    mcp_server = create_http_mcp_server(deps, host=bind_host, port=bind_port)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:521: in create_http_mcp_server
+    FastMCP = _load_fastmcp()  # lazy: SDK only needed at serve time
+              ^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\mcp\registration.py:557: in _load_fastmcp
+    from mcp.server.fastmcp import FastMCP
+.venv\Lib\site-packages\mcp\__init__.py:2: in &lt;module&gt;
+    from .client.session_group import ClientSessionGroup
+.venv\Lib\site-packages\mcp\client\session_group.py:28: in &lt;module&gt;
+    from mcp.client.stdio import StdioServerParameters
+.venv\Lib\site-packages\mcp\client\stdio\__init__.py:17: in &lt;module&gt;
+    from mcp.os.win32.utilities import (
+.venv\Lib\site-packages\mcp\os\win32\utilities.py:68: in &lt;module&gt;
+    class FallbackProcess:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    class FallbackProcess:
+        """
+        A fallback process wrapper for Windows to handle async I/O
+        when using subprocess.Popen, which provides sync-only FileIO objects.
+    
+        This wraps stdin and stdout into async-compatible
+        streams (FileReadStream, FileWriteStream),
+        so that MCP clients expecting async streams can work properly.
+        """
+    
+&gt;       def __init__(self, popen_obj: subprocess.Popen[bytes]):
+                                      ^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: 'function' object is not subscriptable
+
+.venv\Lib\site-packages\mcp\os\win32\utilities.py:78: TypeError</error></testcase></testsuite></testsuites>

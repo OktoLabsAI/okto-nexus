@@ -867,7 +867,15 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         queries=SqliteAttentionQueries(decision_registry=deps.approvals.attention_decision_actions),
         clock=deps.clock, config=deps.config)
     from ....application.observations import ObservationService
-    app.state.observations = ObservationService(deps=deps, access=build_execution_access(deps))
+    from ...outbound.sqlite import observation_correlation_projection
+    app.state.observations = ObservationService(deps=deps, access=build_execution_access(deps),
+        correlations=observation_correlation_projection)
+    from ....application.observation_correlation_service import ObservationCorrelationService
+    from ...outbound.sqlite.observation_correlation_facts import SqliteObservationCorrelationFacts
+    from ....bootstrap.observation_correlation_proof import NativeObservationCorrelationProof
+    app.state.observation_correlations = ObservationCorrelationService(observations=app.state.observations,
+        repository=deps.repos.observation_correlations, facts=SqliteObservationCorrelationFacts())
+    app.state.observation_correlation_proof = NativeObservationCorrelationProof(app.state)
     app.state.workspace_analytics = workspace_analytics
     app.state.workspace_list = workspace_list
     app.state.workspace_health = workspace_health

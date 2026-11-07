@@ -1,0 +1,29 @@
+{
+  "checkpoint": "source-inspector",
+  "viewport": {
+    "width": 1600,
+    "height": 1100
+  },
+  "xssExecuted": false,
+  "rows": [
+    {
+      "id": "external-instance-obs_inst_000000000000000b",
+      "text": "External activity report\nActivity unknown\nObservation unavailable\nCustom integration\nInferred evidence\nSource\nobs_src_000000000000000a\nInstance · generation 11\nobs_inst_000000000000000b\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic source\nObserved at\n07/11/2026, 02:05:52\nValid until\n07/11/2026, 03:05:52\n\nAgent: observed\n\nReceived at: 07/11/2026, 02:05:52 · Sequence: 1\n\nSource contact: delayed · 07/11/2026, 02:05:52. Source contact does not establish this instance's current activity.\n\nReported reason: external_input_required\n\n<svg onload=window.OBS12_XSS=1>synthetic external input</svg>\n\nExternal activity does not confirm task success, presence or available capacity. Inspect this instance in its source environment.",
+      "width": 1278,
+      "scrollWidth": 1278,
+      "clientWidth": 1278,
+      "left": 161,
+      "right": 1439,
+      "parentWidth": 1278
+    }
+  ],
+  "inspection": {
+    "text": "Observed instance\n\nReview any correlated Core facts, then use the source and instance references to locate the external environment.\n\nNo current canonical session correlation is available in this snapshot.\n\nExternal activity report\nActivity unknown\nObservation unavailable\nCustom integration\nInferred evidence\nSource\nobs_src_000000000000000a\nInstance · generation 11\nobs_inst_000000000000000b\nWorkspace\nWorkspace 1\nobs-workspace\nSource instance reference\njavascript:alert(1) <unsafe> synthetic source\nObserved at\n07/11/2026, 02:05:52\nValid until\n07/11/2026, 03:05:52\n\nAgent: observed\n\nReceived at: 07/11/2026, 02:05:52 · Sequence: 1\n\nSource contact: delayed · 07/11/2026, 02:05:52. Source contact does not establish this instance's current activity.\n\nReported reason: external_input_required\n\n<svg onload=window.OBS12_XSS=1>synthetic external input</svg>\n\nExternal activity does not confirm task success, presence or available capacity. Inspect this instance in its source environment.\n\nRefresh observation",
+    "width": 1278,
+    "scrollWidth": 1278,
+    "clientWidth": 1278,
+    "left": 161,
+    "right": 1439,
+    "parentWidth": 1278
+  }
+}

@@ -349,6 +349,7 @@ Initial configurable defaults are proposals, not measured deployment capacity:
 | Reports per minute / burst, installation | 8,192 / 512 |
 | Sources per agent / installation | 32 / 4,096 |
 | Instances per installation | 4,096 |
+| Retained correlation records, including tombstones | 4,096 |
 | Live credentials per source | 8 |
 | Observation event retention / row cap | 7 days / 20,000 |
 
@@ -424,3 +425,74 @@ from the latest instance report. Source-provided references and explanations
 are displayed as text, never executed as commands or opened as links. Existing
 observations remain separate from canonical sessions until an explicitly
 authorized, evidenced correlation is established; equal names are insufficient.
+
+## Explicit native correlation
+
+An operator can associate one observation instance with an existing local Windows
+native session. Management uses `GET`, `POST` and `DELETE` on
+`/api/v1/observations/instances/{observed_instance_id}/correlation`.
+Participant and publisher credentials cannot establish or inspect this private
+management record. The dashboard displays the resulting metadata; it does not
+discover or adopt a process.
+
+`POST` accepts exactly `selection` and `evidence`. The selection contains
+`source_id`, `observed_instance_id`, `source_revision`, `generation`, `server_id`,
+`executor_id`, `session_id`, `open_operation_id`, `stream_epoch`, `binding_id`,
+`workspace_binding_id`, `session_owner_generation` and
+`expected_correlation_revision` (zero for the first record). Evidence contains
+`kind: local_windows_process_v1`, `host_id`, `pid`, `creation_filetime`,
+`image_path` and `binding_hash`. These are explicitly selected operator inputs,
+not a proof supplied by the client. Extra fields, including a client-provided
+native proof, are refused.
+
+The host reads the birth record only from the exact runtime already held by its
+current embedded owner. It neither opens a journal nor starts or acquires a
+runtime for this check. After rechecking current authorization and session/source
+fences, it compares the process identity through a Windows handle held until the
+commit finishes. The comparison verifies the native process birth at that time;
+the external binding itself remains an operator attestation. A remote Connector,
+missing runtime/birth record, changed owner, mismatched identity or unavailable
+proof produces a refusal, with no association inferred from labels or PID alone.
+
+Proof acquisition happens outside a SQLite transaction. A short transaction
+rechecks authority and fences, consumes the existing OBS budget and records the
+selection and private audit atomically. The five-second admission budget is
+checked between stages and before committing effects; it is not a hard upper
+bound on a blocking Windows call or SQLite commit. Cancellation joins the worker
+and closes its handle. After a lost response, use `GET` to recover the revision
+and selection; do not automatically repeat a productive request.
+
+`DELETE` accepts only `expected_revision`. It leaves a revision tombstone and
+removes selection/proof data. It remains available with OBS disabled or the
+source retired. `observation_max_correlation_records` accepts 1–65,536 records
+and counts tombstones as well as selections. A full store refuses new records;
+updating or clearing an existing record still works. Lowering the cap does not
+truncate records. Both database reset modes revoke retained correlations and
+remove their private proof while preserving scope and replay barriers. There is
+no automatic tombstone pruning or claim of unlimited lifetime capacity.
+
+Current instance/list reads and current external attention items may include
+`canonical_session_ref` and `canonical_observation`. They expose only exact
+session references, correlation revision/verification time, two provenance
+labels, session lifecycle and the last received Core receipt's minimal metadata.
+Private evidence, PID, executable path, native frames and credentials are absent.
+One bounded SQLite batch loads these facts in the authorized read snapshot;
+reads perform no OS, runtime, journal or artifact-store I/O.
+
+The provenance labels are `operator_attested_external_binding` and
+`machine_checked_native_birth`. `current` on the management record means its
+association still matches the current fences, not that its process is alive.
+Similarly, `READY` is session lifecycle metadata and a `SUCCEEDED` receipt is a
+historical result received by Nexus; neither means the process is currently idle,
+available or executing. The last received receipt is ordered by receipt time,
+then insertion order for ties, not by operation execution order. Invalid receipt
+provenance is unknown rather than an invitation to display an older success.
+
+The UI presents canonical facts before the separate external report. External
+report updates never replace canonical session or receipt fields and never grant
+approval, dispatch or capacity. The summary remains explicitly external activity.
+An old completion event does not inherit a correlation established later. Changed
+source/session fences, a cleared association or unavailable source remove the
+current canonical fields; an expired external report alone does not erase a
+compatible historical association. A failed or overdue UI refresh hides the
+cached association until the snapshot is refreshed.

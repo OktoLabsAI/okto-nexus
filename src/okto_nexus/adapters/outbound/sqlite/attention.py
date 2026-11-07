@@ -77,22 +77,27 @@ class SqliteAttentionQueries:
                     continue
                 adapter = importlib.import_module('.attention_' + family, __package__)
                 application = importlib.import_module('okto_nexus.application.attention_' + family)
+                # Policy preloads may reuse their source's SQL predicates. Track
+                # successful registrations immediately so policy failures cannot
+                # leave callbacks attached to the pooled connection.
+                for name, arity, function in getattr(adapter, 'SQL_FUNCTIONS', ()):
+                    conn.create_function(name, arity, function, deterministic=True)
+                    functions.append((name, arity, function))
                 sources.append("SELECT '" + family + "' AS family, facts FROM (" + adapter.SOURCE_SQL + ')')
                 extra = ({'decision_registry': self.decision_registry() if self.decision_registry else {}}
                          if family == 'approvals' else {})
-                if family == 'authority':
+                if family in ('authority', 'external'):
                     extra['check_budget'] = check_budget
+                if family == 'external':
+                    extra['filters'] = filters
                 policies[family] = adapter.build_policy(uow, config=config, access=access, context=context, now=now, **extra)
                 projectors[family] = application.project
                 if hasattr(adapter, 'decode_facts'):
                     decoders[family] = adapter.decode_facts
-                functions.extend(getattr(adapter, 'SQL_FUNCTIONS', ()))
             registered = True
             conn.create_function('nexus_attention_project_v1', 3, project, deterministic=True)
             conn.create_function('nexus_attention_preferences_v1', 5, preferences, deterministic=True)
             conn.create_aggregate('nexus_attention_set_digest_v1', 1, _SetDigest)
-            for name, arity, function in functions:
-                conn.create_function(name, arity, function, deterministic=True)
             params = dict(now=now, workspace_id=filters.get('workspace_id'), agent_id=filters.get('agent_id'),
                           external_kind=filters.get('kind'), external_now=stamp(now).replace('+00:00', 'Z'))
             clauses = []
@@ -140,8 +145,8 @@ class SqliteAttentionQueries:
                 conn.create_function('nexus_attention_project_v1', 3, None)
                 conn.create_function('nexus_attention_preferences_v1', 5, None)
                 conn.create_aggregate('nexus_attention_set_digest_v1', 1, None)
-                for name, arity, _ in functions:
-                    conn.create_function(name, arity, None)
+            for name, arity, _ in functions:
+                conn.create_function(name, arity, None)
 
     def snapshot(self, uow, *, filters, now, config, access, context, after=None, limit=50):
         with self._relation(uow, filters=filters, now=now, config=config, access=access, context=context) as (sql, params):

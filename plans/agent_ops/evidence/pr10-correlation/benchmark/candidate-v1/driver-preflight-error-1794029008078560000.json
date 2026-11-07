@@ -1,0 +1,36 @@
+{
+  "status": "ERROR",
+  "phase": "driver_preflight",
+  "error": {
+    "type": "PackageNotFoundError",
+    "code": null,
+    "frames": [
+      {
+        "filename": "benchmark_installed.py",
+        "lineno": 440,
+        "function": "<module>"
+      },
+      {
+        "filename": "benchmark_installed.py",
+        "lineno": 396,
+        "function": "main"
+      },
+      {
+        "filename": "benchmark_installed.py",
+        "lineno": 97,
+        "function": "package_check"
+      },
+      {
+        "filename": "__init__.py",
+        "lineno": 960,
+        "function": "distribution"
+      },
+      {
+        "filename": "__init__.py",
+        "lineno": 409,
+        "function": "from_name"
+      }
+    ]
+  },
+  "finished_at": "2026-11-07T05:23:28.078532+00:00"
+}

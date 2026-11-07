@@ -67,6 +67,10 @@ _OBSERVATION_DESCRIPTIONS = {
     "observation_max_sources_per_agent": "Maximum registered external observation sources for one agent; default 32.",
     "observation_max_sources": "Maximum registered external observation sources in this installation; default 4096.",
     "observation_max_instances": "Maximum registered external observed instances in this installation; default 4096.",
+    "observation_max_correlation_records": (
+        "Maximum external correlation records in this installation, including retained cleared/revoked records; default 4096. "
+        "Clearing does not free a record. Lowering the limit preserves existing records and permits their updates."
+    ),
     "observation_max_tokens_per_source": "Maximum active publish credentials for one observation source; default 8.",
     "observation_event_retention_days": "External observation event history retention in days; default 7. Replay and generation fences are preserved separately.",
     "observation_max_events": "Maximum retained external observation events; default 20000. This does not cap canonical coordination history.",

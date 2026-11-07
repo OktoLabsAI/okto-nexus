@@ -1,0 +1,39 @@
+{
+  "status": "MEASUREMENTS_COMPLETED_WITH_BUDGET_REFUSALS",
+  "samples_total": 90,
+  "samples_successful": 86,
+  "budget_refusals": 4,
+  "sample_retries": 0,
+  "approved_layouts": [
+    1,
+    64
+  ],
+  "scales": [
+    64,
+    512,
+    4096
+  ],
+  "samples_per_read": 3,
+  "states": {
+    "blocked": 0.5,
+    "working": 0.5
+  },
+  "all_correlated": true,
+  "not_qualified": [
+    "4096 unique native sessions",
+    "general latency SLO",
+    "real OS birth proof"
+  ],
+  "canonical_row_fingerprints_unchanged": true,
+  "fingerprint_exclusions": [
+    "observation_*",
+    "attention_*",
+    "events"
+  ],
+  "measured_trace_write_classes": [],
+  "raw_report_sha256": "4e005cf9925dcf1635fdd4bcb30f12a3b9c91d4ea6a1ad2d6d0fe6ab8d9f282b",
+  "v2_preflight_failure": "qualification infrastructure: distribution metadata name; no bootstrap, seed, or timing sample",
+  "comparison_limit": "Earlier OBS11 baseline included completions; this campaign measures correlation and 12 receipts per session.",
+  "factories_closed": true,
+  "process_exit_code": 0
+}

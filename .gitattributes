@@ -17,3 +17,6 @@ plans/agent_ops/evidence/pr09-herdr/** -text -whitespace
 plans/agent_ops/evidence/pr09-herdr*.json -text -whitespace
 # PR-10 retains original qualification bytes for raw-file and staged-blob hashes.
 plans/agent_ops/evidence/pr10-external/** -text -whitespace
+plans/agent_ops/evidence/pr10-correlation/** -text -whitespace
+# The diagnostics contract pin is calculated from the shared original bytes.
+tests/fixtures/diagnostics_v1/** -text -whitespace

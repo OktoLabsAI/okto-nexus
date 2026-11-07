@@ -1,0 +1,172 @@
+{
+  "recorded_at": "2026-11-07T05:25:16.703839+00:00",
+  "requests": 467,
+  "protected_header_counts": {},
+  "literal_bearer_material_found": 0,
+  "methods": {
+    "GET": 467
+  },
+  "response_statuses": {
+    "200": 463,
+    "304": 4
+  },
+  "origins": {
+    "http://127.0.0.1:51764": 467
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents",
+      "requests": 36
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents/observed/runtime-policy",
+      "requests": 69
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/agents/operator/runtime-policy",
+      "requests": 69
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/approvals",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention",
+      "requests": 25
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/attention/summary",
+      "requests": 56
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/capabilities",
+      "requests": 2
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/graph",
+      "requests": 24
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/info",
+      "requests": 2
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/local/summary",
+      "requests": 2
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/metrics/publish-health",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations",
+      "requests": 21
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/instances/obs_inst_0000000000000005",
+      "requests": 13
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/instances/obs_inst_0000000000000008",
+      "requests": 9
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/instances/obs_inst_000000000000000b",
+      "requests": 10
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/observations/summary",
+      "requests": 23
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator-auth/status",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/operator/unread-count",
+      "requests": 84
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/presets",
+      "requests": 2
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sessions",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stream",
+      "requests": 2
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tags",
+      "requests": 2
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspaces",
+      "requests": 5
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-C1ejzFJK.css",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/assets/index-OzUGF4xp.js",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-icon.svg",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-dark.svg",
+      "requests": 1
+    },
+    {
+      "method": "GET",
+      "path": "/logos/nexus-wordmark-light.svg",
+      "requests": 1
+    }
+  ],
+  "trace_events": 1096,
+  "referenced_resource_files": 196,
+  "concurrency": "Installed test suites ran during early UI checks; no performance isolation or SLO claimed.",
+  "private_registry_or_database_read": false
+}

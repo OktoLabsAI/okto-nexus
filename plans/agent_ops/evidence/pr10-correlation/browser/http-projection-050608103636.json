@@ -1,0 +1,811 @@
+{
+  "details": {
+    "working": {
+      "item": {
+        "observed_instance_id": "obs_inst_0000000000000002",
+        "source_id": "obs_src_0000000000000001",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 2,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic working",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "working",
+        "source_last_received_at": "2026-11-07T05:05:51.930793Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "working",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:51.921147Z",
+          "received_at": "2026-11-07T05:05:51.930793Z",
+          "valid_until": "2026-11-07T06:05:51.921147Z",
+          "reason_code": null,
+          "reason_text": null,
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      },
+      "observed_at": "2026-11-07T05:06:06.994822Z",
+      "feature_enabled": true,
+      "next_refresh_at": "2026-11-07T05:06:21.994822Z",
+      "refresh_after_seconds": 15.0
+    },
+    "blocked": {
+      "item": {
+        "observed_instance_id": "obs_inst_0000000000000005",
+        "source_id": "obs_src_0000000000000004",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 5,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic blocked",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "blocked",
+        "source_last_received_at": "2026-11-07T05:05:52.012587Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "blocked",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:52.004629Z",
+          "received_at": "2026-11-07T05:05:52.012587Z",
+          "valid_until": "2026-11-07T06:05:52.004629Z",
+          "reason_code": "external_input_required",
+          "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      },
+      "observed_at": "2026-11-07T05:06:07.665027Z",
+      "feature_enabled": true,
+      "next_refresh_at": "2026-11-07T05:06:22.665027Z",
+      "refresh_after_seconds": 15.0
+    },
+    "generation": {
+      "item": {
+        "observed_instance_id": "obs_inst_0000000000000008",
+        "source_id": "obs_src_0000000000000007",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 8,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic generation",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "blocked",
+        "source_last_received_at": "2026-11-07T05:05:52.091285Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "blocked",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:52.083036Z",
+          "received_at": "2026-11-07T05:05:52.091285Z",
+          "valid_until": "2026-11-07T06:05:52.083036Z",
+          "reason_code": "external_input_required",
+          "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      },
+      "observed_at": "2026-11-07T05:06:07.689492Z",
+      "feature_enabled": true,
+      "next_refresh_at": "2026-11-07T05:06:22.689492Z",
+      "refresh_after_seconds": 15.0
+    },
+    "source": {
+      "item": {
+        "observed_instance_id": "obs_inst_000000000000000b",
+        "source_id": "obs_src_000000000000000a",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 11,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic source",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "blocked",
+        "source_last_received_at": "2026-11-07T05:05:52.201998Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "blocked",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:52.193254Z",
+          "received_at": "2026-11-07T05:05:52.201998Z",
+          "valid_until": "2026-11-07T06:05:52.193254Z",
+          "reason_code": "external_input_required",
+          "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      },
+      "observed_at": "2026-11-07T05:06:07.715263Z",
+      "feature_enabled": true,
+      "next_refresh_at": "2026-11-07T05:06:22.715263Z",
+      "refresh_after_seconds": 15.0
+    }
+  },
+  "page": {
+    "items": [
+      {
+        "observed_instance_id": "obs_inst_0000000000000002",
+        "source_id": "obs_src_0000000000000001",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 2,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic working",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "working",
+        "source_last_received_at": "2026-11-07T05:05:51.930793Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "working",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:51.921147Z",
+          "received_at": "2026-11-07T05:05:51.930793Z",
+          "valid_until": "2026-11-07T06:05:51.921147Z",
+          "reason_code": null,
+          "reason_text": null,
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      },
+      {
+        "observed_instance_id": "obs_inst_0000000000000005",
+        "source_id": "obs_src_0000000000000004",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 5,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic blocked",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "blocked",
+        "source_last_received_at": "2026-11-07T05:05:52.012587Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "blocked",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:52.004629Z",
+          "received_at": "2026-11-07T05:05:52.012587Z",
+          "valid_until": "2026-11-07T06:05:52.004629Z",
+          "reason_code": "external_input_required",
+          "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      },
+      {
+        "observed_instance_id": "obs_inst_0000000000000008",
+        "source_id": "obs_src_0000000000000007",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 8,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic generation",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "blocked",
+        "source_last_received_at": "2026-11-07T05:05:52.091285Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "blocked",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:52.083036Z",
+          "received_at": "2026-11-07T05:05:52.091285Z",
+          "valid_until": "2026-11-07T06:05:52.083036Z",
+          "reason_code": "external_input_required",
+          "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      },
+      {
+        "observed_instance_id": "obs_inst_000000000000000b",
+        "source_id": "obs_src_000000000000000a",
+        "agent_id": "observed",
+        "workspace_id": "obs-workspace",
+        "generation": 11,
+        "external_instance_ref": "javascript:alert(1) <unsafe> synthetic source",
+        "source_kind": "custom",
+        "source_revision": 1,
+        "freshness": "current",
+        "activity_state": "blocked",
+        "source_last_received_at": "2026-11-07T05:05:52.201998Z",
+        "source_continuity": "recent",
+        "last_report": {
+          "sequence": 1,
+          "state": "blocked",
+          "evidence": "inferred",
+          "observed_at": "2026-11-07T05:05:52.193254Z",
+          "received_at": "2026-11-07T05:05:52.201998Z",
+          "valid_until": "2026-11-07T06:05:52.193254Z",
+          "reason_code": "external_input_required",
+          "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+          "current_completion_ref": null,
+          "last_completion_ref": null,
+          "last_completion_received_at": null
+        },
+        "observational_only": true,
+        "canonical_session_ref": {
+          "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+          "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+          "session_id": "correlation-session",
+          "open_operation_id": "correlation-open",
+          "session_owner_generation": 3,
+          "stream_epoch": "correlation-stream"
+        },
+        "canonical_observation": {
+          "correlation_revision": 1,
+          "verified_at": "2026-11-07T05:05:54.986606Z",
+          "provenance": {
+            "external_binding_provenance": "operator_attested_external_binding",
+            "native_birth_provenance": "machine_checked_native_birth"
+          },
+          "session_lifecycle_state": "READY",
+          "last_received_receipt": {
+            "status": "verified",
+            "operation_id": "synthetic-received-turn",
+            "action": "turn.submit",
+            "stage": "SUCCEEDED",
+            "receipt_revision": 3,
+            "received_at": "2026-11-07T05:05:55.916Z",
+            "provenance": "core_committed"
+          },
+          "precedence": "canonical_core_facts"
+        }
+      }
+    ],
+    "next_after": null,
+    "observed_at": "2026-11-07T05:06:07.747157Z",
+    "feature_enabled": true
+  },
+  "summary": {
+    "version": 1,
+    "filters": {
+      "agent_id": "observed"
+    },
+    "feature_enabled": true,
+    "observed_at": "2026-11-07T05:06:07.778266Z",
+    "total_instances": 4,
+    "activity": {
+      "working": 1,
+      "idle": 0,
+      "blocked": 3,
+      "unknown": 0
+    },
+    "freshness": {
+      "current": 4,
+      "stale": 0,
+      "unknown": 0,
+      "unavailable": 0
+    },
+    "agents": [
+      {
+        "agent_id": "observed",
+        "total_instances": 4,
+        "activity": {
+          "working": 1,
+          "idle": 0,
+          "blocked": 3,
+          "unknown": 0
+        },
+        "freshness": {
+          "current": 4,
+          "stale": 0,
+          "unknown": 0,
+          "unavailable": 0
+        }
+      }
+    ],
+    "next_refresh_at": "2026-11-07T05:06:22.778266Z",
+    "refresh_after_seconds": 15.0
+  },
+  "attention": {
+    "total": 3,
+    "snapshot_revision": "efe9780271cc8b6ca3e71ca97459690cd56a8237982e1e2604a249d4effef82b",
+    "counts": {
+      "action_required": 0,
+      "watch": 3,
+      "priority": {
+        "10": 0,
+        "20": 3,
+        "30": 0
+      },
+      "unseen": 3,
+      "snoozed": 0
+    },
+    "event_cursor": 4,
+    "event_low_watermark": 1,
+    "version": 1,
+    "filters": {
+      "state": "all",
+      "seen": "all"
+    },
+    "items": [
+      {
+        "active": true,
+        "agent_id": "observed",
+        "allowed_actions": [
+          "inspect_external_observation"
+        ],
+        "attention_id": "att_6cb965e612b5607a68b1e3d809fa7fc8d502df58a2d78c82bc69cdcfba39124a",
+        "category": "watch",
+        "executor_id": null,
+        "external_observation": {
+          "activity_state": "blocked",
+          "agent_id": "observed",
+          "canonical_observation": {
+            "correlation_revision": 1,
+            "last_received_receipt": {
+              "action": "turn.submit",
+              "operation_id": "synthetic-received-turn",
+              "provenance": "core_committed",
+              "receipt_revision": 3,
+              "received_at": "2026-11-07T05:05:55.916Z",
+              "stage": "SUCCEEDED",
+              "status": "verified"
+            },
+            "precedence": "canonical_core_facts",
+            "provenance": {
+              "external_binding_provenance": "operator_attested_external_binding",
+              "native_birth_provenance": "machine_checked_native_birth"
+            },
+            "session_lifecycle_state": "READY",
+            "verified_at": "2026-11-07T05:05:54.986606Z"
+          },
+          "canonical_session_ref": {
+            "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+            "open_operation_id": "correlation-open",
+            "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+            "session_id": "correlation-session",
+            "session_owner_generation": 3,
+            "stream_epoch": "correlation-stream"
+          },
+          "external_instance_ref": "javascript:alert(1) <unsafe> synthetic blocked",
+          "freshness": "current",
+          "generation": 5,
+          "last_report": {
+            "current_completion_ref": null,
+            "evidence": "inferred",
+            "last_completion_received_at": null,
+            "last_completion_ref": null,
+            "observed_at": "2026-11-07T05:05:52.004629Z",
+            "reason_code": "external_input_required",
+            "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+            "received_at": "2026-11-07T05:05:52.012587Z",
+            "sequence": 1,
+            "state": "blocked",
+            "valid_until": "2026-11-07T06:05:52.004629Z"
+          },
+          "observational_only": true,
+          "observed_instance_id": "obs_inst_0000000000000005",
+          "source_continuity": "recent",
+          "source_id": "obs_src_0000000000000004",
+          "source_kind": "custom",
+          "source_last_received_at": "2026-11-07T05:05:52.012587Z",
+          "source_revision": 1,
+          "workspace_id": "obs-workspace"
+        },
+        "first_detected_at": "2026-11-07T05:05:52.012587+00:00",
+        "freshness": "current",
+        "kind": "external_blocked",
+        "last_changed_at": "2026-11-07T05:05:52.012587+00:00",
+        "message_id": null,
+        "next_change_at": "2026-11-07T06:05:52.004629+00:00",
+        "operation_id": null,
+        "priority": 20,
+        "resolution": "open",
+        "result_id": null,
+        "seen_state": {
+          "revision": 0,
+          "seen": false,
+          "seen_at": null,
+          "snoozed": false,
+          "snoozed_until": null
+        },
+        "session_id": null,
+        "severity": "warning",
+        "source_id": "obs_inst_0000000000000005",
+        "source_revision": "9f77ef0b79e7d0567c9ad980be4203982af4fd6ae86a9c8fde87399faa4270b5",
+        "source_type": "external_observation",
+        "summary_code": "external_blocked",
+        "workspace_id": "obs-workspace"
+      },
+      {
+        "active": true,
+        "agent_id": "observed",
+        "allowed_actions": [
+          "inspect_external_observation"
+        ],
+        "attention_id": "att_4afbdf6e60e2654465e79f9574ebbc400b41966644d4e7a743f54df43e09d5a0",
+        "category": "watch",
+        "executor_id": null,
+        "external_observation": {
+          "activity_state": "blocked",
+          "agent_id": "observed",
+          "canonical_observation": {
+            "correlation_revision": 1,
+            "last_received_receipt": {
+              "action": "turn.submit",
+              "operation_id": "synthetic-received-turn",
+              "provenance": "core_committed",
+              "receipt_revision": 3,
+              "received_at": "2026-11-07T05:05:55.916Z",
+              "stage": "SUCCEEDED",
+              "status": "verified"
+            },
+            "precedence": "canonical_core_facts",
+            "provenance": {
+              "external_binding_provenance": "operator_attested_external_binding",
+              "native_birth_provenance": "machine_checked_native_birth"
+            },
+            "session_lifecycle_state": "READY",
+            "verified_at": "2026-11-07T05:05:54.986606Z"
+          },
+          "canonical_session_ref": {
+            "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+            "open_operation_id": "correlation-open",
+            "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+            "session_id": "correlation-session",
+            "session_owner_generation": 3,
+            "stream_epoch": "correlation-stream"
+          },
+          "external_instance_ref": "javascript:alert(1) <unsafe> synthetic generation",
+          "freshness": "current",
+          "generation": 8,
+          "last_report": {
+            "current_completion_ref": null,
+            "evidence": "inferred",
+            "last_completion_received_at": null,
+            "last_completion_ref": null,
+            "observed_at": "2026-11-07T05:05:52.083036Z",
+            "reason_code": "external_input_required",
+            "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+            "received_at": "2026-11-07T05:05:52.091285Z",
+            "sequence": 1,
+            "state": "blocked",
+            "valid_until": "2026-11-07T06:05:52.083036Z"
+          },
+          "observational_only": true,
+          "observed_instance_id": "obs_inst_0000000000000008",
+          "source_continuity": "recent",
+          "source_id": "obs_src_0000000000000007",
+          "source_kind": "custom",
+          "source_last_received_at": "2026-11-07T05:05:52.091285Z",
+          "source_revision": 1,
+          "workspace_id": "obs-workspace"
+        },
+        "first_detected_at": "2026-11-07T05:05:52.091285+00:00",
+        "freshness": "current",
+        "kind": "external_blocked",
+        "last_changed_at": "2026-11-07T05:05:52.091285+00:00",
+        "message_id": null,
+        "next_change_at": "2026-11-07T06:05:52.083036+00:00",
+        "operation_id": null,
+        "priority": 20,
+        "resolution": "open",
+        "result_id": null,
+        "seen_state": {
+          "revision": 0,
+          "seen": false,
+          "seen_at": null,
+          "snoozed": false,
+          "snoozed_until": null
+        },
+        "session_id": null,
+        "severity": "warning",
+        "source_id": "obs_inst_0000000000000008",
+        "source_revision": "cb78c17b69adc42cd4fcff4ad61b0a87889a8322097cd3d90bfc715210faf27d",
+        "source_type": "external_observation",
+        "summary_code": "external_blocked",
+        "workspace_id": "obs-workspace"
+      },
+      {
+        "active": true,
+        "agent_id": "observed",
+        "allowed_actions": [
+          "inspect_external_observation"
+        ],
+        "attention_id": "att_136876d31bd5b6239aef3b33cdbfe32cfe75053968558c6317e8146ad76d5472",
+        "category": "watch",
+        "executor_id": null,
+        "external_observation": {
+          "activity_state": "blocked",
+          "agent_id": "observed",
+          "canonical_observation": {
+            "correlation_revision": 1,
+            "last_received_receipt": {
+              "action": "turn.submit",
+              "operation_id": "synthetic-received-turn",
+              "provenance": "core_committed",
+              "receipt_revision": 3,
+              "received_at": "2026-11-07T05:05:55.916Z",
+              "stage": "SUCCEEDED",
+              "status": "verified"
+            },
+            "precedence": "canonical_core_facts",
+            "provenance": {
+              "external_binding_provenance": "operator_attested_external_binding",
+              "native_birth_provenance": "machine_checked_native_birth"
+            },
+            "session_lifecycle_state": "READY",
+            "verified_at": "2026-11-07T05:05:54.986606Z"
+          },
+          "canonical_session_ref": {
+            "executor_id": "exe_2bbf6e31b95c1487193fd45107930f80",
+            "open_operation_id": "correlation-open",
+            "server_id": "srv_02d2f231ee21b8214fa471ceb07ff34c",
+            "session_id": "correlation-session",
+            "session_owner_generation": 3,
+            "stream_epoch": "correlation-stream"
+          },
+          "external_instance_ref": "javascript:alert(1) <unsafe> synthetic source",
+          "freshness": "current",
+          "generation": 11,
+          "last_report": {
+            "current_completion_ref": null,
+            "evidence": "inferred",
+            "last_completion_received_at": null,
+            "last_completion_ref": null,
+            "observed_at": "2026-11-07T05:05:52.193254Z",
+            "reason_code": "external_input_required",
+            "reason_text": "<svg onload=window.OBS12_XSS=1>synthetic external input</svg>",
+            "received_at": "2026-11-07T05:05:52.201998Z",
+            "sequence": 1,
+            "state": "blocked",
+            "valid_until": "2026-11-07T06:05:52.193254Z"
+          },
+          "observational_only": true,
+          "observed_instance_id": "obs_inst_000000000000000b",
+          "source_continuity": "recent",
+          "source_id": "obs_src_000000000000000a",
+          "source_kind": "custom",
+          "source_last_received_at": "2026-11-07T05:05:52.201998Z",
+          "source_revision": 1,
+          "workspace_id": "obs-workspace"
+        },
+        "first_detected_at": "2026-11-07T05:05:52.201998+00:00",
+        "freshness": "current",
+        "kind": "external_blocked",
+        "last_changed_at": "2026-11-07T05:05:52.201998+00:00",
+        "message_id": null,
+        "next_change_at": "2026-11-07T06:05:52.193254+00:00",
+        "operation_id": null,
+        "priority": 20,
+        "resolution": "open",
+        "result_id": null,
+        "seen_state": {
+          "revision": 0,
+          "seen": false,
+          "seen_at": null,
+          "snoozed": false,
+          "snoozed_until": null
+        },
+        "session_id": null,
+        "severity": "warning",
+        "source_id": "obs_inst_000000000000000b",
+        "source_revision": "07ca87fec326a93f051e9aa485b5ab262f5196684ec909f52f06724deb2bdd1a",
+        "source_type": "external_observation",
+        "summary_code": "external_blocked",
+        "workspace_id": "obs-workspace"
+      }
+    ],
+    "next_cursor": null,
+    "observed_at": "2026-11-07T05:06:07.791040+00:00",
+    "next_refresh_at": "2026-11-07T05:06:22.791040+00:00",
+    "refresh_after_seconds": 15.0
+  }
+}

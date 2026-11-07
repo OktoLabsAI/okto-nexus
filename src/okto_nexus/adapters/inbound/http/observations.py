@@ -65,7 +65,8 @@ def _query(request, allowed):
 
 def _error(exc):
     if isinstance(exc, OktoNexusError):
-        status = {'FEATURE_DISABLED': 409, 'OBSERVATION_BUSY': 503, 'OBSERVATION_QUERY_BUDGET': 503}.get(exc.code)
+        status = {'FEATURE_DISABLED': 409, 'OBSERVATION_BUSY': 503, 'OBSERVATION_QUERY_BUDGET': 503,
+                  'OBSERVATION_CORRELATION_UNAVAILABLE': 503}.get(exc.code)
         response = (_err(status, exc.code, exc.message, exc.details) if status else _map_error(exc))
         if exc.code in ('OBSERVATION_BUSY', ErrorCode.QUOTA_EXCEEDED):
             response.headers['Retry-After'] = str(max(1, (exc.details or {}).get('retry_after_seconds', 1)))
@@ -110,6 +111,29 @@ def management_router():
     @router.get('/observations/instances/{observed_instance_id}')
     async def instance(request: Request, observed_instance_id: str):
         return await _call(request, 'get_instance', observed_instance_id=observed_instance_id)
+
+    @router.get('/observations/instances/{observed_instance_id}/correlation')
+    @router.post('/observations/instances/{observed_instance_id}/correlation')
+    @router.delete('/observations/instances/{observed_instance_id}/correlation')
+    async def correlation(request: Request, observed_instance_id: str):
+        try:
+            _query(request, set())
+            service = request.app.state.observation_correlations
+            args = dict(context=runtime_request_context(), observed_instance_id=observed_instance_id)
+            if request.method == 'GET':
+                result = await anyio.to_thread.run_sync(partial(service.read, **args))
+            else:
+                with request.app.state.observations.ingress.enter():
+                    args['body'] = await _body(request)
+                    if request.method == 'POST':
+                        result = await request.app.state.observation_correlation_proof.select(service, **args)
+                    else:
+                        result = await anyio.to_thread.run_sync(partial(service.clear, **args))
+            response = _ok(result)
+        except Exception as exc:
+            response = _error(exc)
+        response.headers['Cache-Control'] = 'no-store'
+        return response
 
     @router.get('/observations/sources')
     async def sources(request: Request):

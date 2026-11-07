@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "checkpoints_passed": 8,
+  "dom_checkpoints_passed": 6,
+  "wheel_sha256": "991a1995bec626012d113df12c90e897274a83b320373539c28b73c6b4fb7be1",
+  "screenshots": 8,
+  "http_projection_checks": 4,
+  "canonical_tables_unchanged": 13,
+  "network_requests": 467,
+  "trace_header_audit_passed": true,
+  "browser_session": "obs12-installed",
+  "browser_closed": true,
+  "server_owner_pid": 53804,
+  "process_wait_code": 0,
+  "listener_connect_code": 10035,
+  "server_drain_state": "DRAINED",
+  "product_failures": 0,
+  "retained_driver_failure": "Multiline npx.cmd launch rejected before browser evaluation; fixed with ASCII expression argument.",
+  "qualification": "Real installed HTTP/static/browser with explicit synthetic canonical rows and receipt producer. Not real OS/Core process-birth proof.",
+  "excluded": [
+    "private bearer JSON",
+    "nexus.db",
+    "WAL",
+    "SHM",
+    "server.log",
+    "canonical-before hash snapshot"
+  ],
+  "visual_note": "Initial narrow captures preserved; DOM had no horizontal overflow; wide capture remained readable with wrapped identifiers."
+}

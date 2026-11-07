@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="28.573" timestamp="2026-11-07T01:38:33.676879-03:00" hostname="Alienware_m15"><testcase classname="tests.test_observation_correlation_proof" name="test_malformed_core_birth_never_opens_an_os_identity[boolean_pid]" time="7.227"><failure message="AssertionError: Malformed native evidence reached OS identity acquisition&#10;assert [1] == []&#10;  &#10;  Left contains one more item: 1&#10;  Use -v to get more diff">correlation_http = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...923CE0&gt;, _compose=&lt;function forbidden at 0x000001B284923CE0&gt;, _open_ledger=&lt;function forbidden at 0x000001B284923CE0&gt;))
+case = 'boolean_pid'
+
+    @pytest.mark.parametrize('case', ['boolean_pid','float_pid','unsupported_platform','malformed_birth'])
+    def test_malformed_core_birth_never_opens_an_os_identity(correlation_http, case):
+        env = correlation_http
+        body = deepcopy(env.body)
+        values = dict(platform='win32', pid=1234, birth_token=f'filetime:{CREATED:016x}', containment='owned')
+        if case == 'boolean_pid':
+            values['pid'], body['evidence']['pid'] = True, 1
+        elif case == 'float_pid':
+            values['pid'] = 1234.0
+        elif case == 'unsupported_platform':
+            values['platform'] = 'linux'
+        else:
+            values['birth_token'] = 'invalid-native-birth'
+        # Frozen dataclasses do not themselves validate these field types/shapes.
+        env.birth_record = ProcessBirthRecord(SessionKey(env.scope['server_id'], env.scope['executor_id'],
+            env.scope['session_id']), 'correlation-open', ProcessBirthEvidence(**values))
+        attempted = []
+        @contextmanager
+        def forbidden_identity(pid):
+            attempted.append(pid)
+            raise HerdrObservationError('SYNTHETIC_OS_LOOKUP_NOT_ALLOWED')
+            yield  # pragma: no cover - contextmanager protocol without a real handle
+        env.app.state.observation_correlation_proof = NativeObservationCorrelationProof(
+            env.app.state, identity_guard=forbidden_identity)
+        response = env.client.post(env.path, headers=env.headers, json=body)
+        assert response.status_code in (409,503), response.text
+        assert read(env)['revision'] == 0
+&gt;       assert attempted == [], 'Malformed native evidence reached OS identity acquisition'
+E       AssertionError: Malformed native evidence reached OS identity acquisition
+E       assert [1] == []
+E         
+E         Left contains one more item: 1
+E         Use -v to get more diff
+
+tests\test_observation_correlation_proof.py:40: AssertionError</failure></testcase><testcase classname="tests.test_observation_correlation_proof" name="test_malformed_core_birth_never_opens_an_os_identity[float_pid]" time="5.167"><failure message="AssertionError: Malformed native evidence reached OS identity acquisition&#10;assert [1234] == []&#10;  &#10;  Left contains one more item: 1234&#10;  Use -v to get more diff">correlation_http = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...923CE0&gt;, _compose=&lt;function forbidden at 0x000001B284923CE0&gt;, _open_ledger=&lt;function forbidden at 0x000001B284923CE0&gt;))
+case = 'float_pid'
+
+    @pytest.mark.parametrize('case', ['boolean_pid','float_pid','unsupported_platform','malformed_birth'])
+    def test_malformed_core_birth_never_opens_an_os_identity(correlation_http, case):
+        env = correlation_http
+        body = deepcopy(env.body)
+        values = dict(platform='win32', pid=1234, birth_token=f'filetime:{CREATED:016x}', containment='owned')
+        if case == 'boolean_pid':
+            values['pid'], body['evidence']['pid'] = True, 1
+        elif case == 'float_pid':
+            values['pid'] = 1234.0
+        elif case == 'unsupported_platform':
+            values['platform'] = 'linux'
+        else:
+            values['birth_token'] = 'invalid-native-birth'
+        # Frozen dataclasses do not themselves validate these field types/shapes.
+        env.birth_record = ProcessBirthRecord(SessionKey(env.scope['server_id'], env.scope['executor_id'],
+            env.scope['session_id']), 'correlation-open', ProcessBirthEvidence(**values))
+        attempted = []
+        @contextmanager
+        def forbidden_identity(pid):
+            attempted.append(pid)
+            raise HerdrObservationError('SYNTHETIC_OS_LOOKUP_NOT_ALLOWED')
+            yield  # pragma: no cover - contextmanager protocol without a real handle
+        env.app.state.observation_correlation_proof = NativeObservationCorrelationProof(
+            env.app.state, identity_guard=forbidden_identity)
+        response = env.client.post(env.path, headers=env.headers, json=body)
+        assert response.status_code in (409,503), response.text
+        assert read(env)['revision'] == 0
+&gt;       assert attempted == [], 'Malformed native evidence reached OS identity acquisition'
+E       AssertionError: Malformed native evidence reached OS identity acquisition
+E       assert [1234] == []
+E         
+E         Left contains one more item: 1234
+E         Use -v to get more diff
+
+tests\test_observation_correlation_proof.py:40: AssertionError</failure></testcase><testcase classname="tests.test_observation_correlation_proof" name="test_malformed_core_birth_never_opens_an_os_identity[unsupported_platform]" time="5.516"><failure message="AssertionError: Malformed native evidence reached OS identity acquisition&#10;assert [1234] == []&#10;  &#10;  Left contains one more item: 1234&#10;  Use -v to get more diff">correlation_http = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...923CE0&gt;, _compose=&lt;function forbidden at 0x000001B284923CE0&gt;, _open_ledger=&lt;function forbidden at 0x000001B284923CE0&gt;))
+case = 'unsupported_platform'
+
+    @pytest.mark.parametrize('case', ['boolean_pid','float_pid','unsupported_platform','malformed_birth'])
+    def test_malformed_core_birth_never_opens_an_os_identity(correlation_http, case):
+        env = correlation_http
+        body = deepcopy(env.body)
+        values = dict(platform='win32', pid=1234, birth_token=f'filetime:{CREATED:016x}', containment='owned')
+        if case == 'boolean_pid':
+            values['pid'], body['evidence']['pid'] = True, 1
+        elif case == 'float_pid':
+            values['pid'] = 1234.0
+        elif case == 'unsupported_platform':
+            values['platform'] = 'linux'
+        else:
+            values['birth_token'] = 'invalid-native-birth'
+        # Frozen dataclasses do not themselves validate these field types/shapes.
+        env.birth_record = ProcessBirthRecord(SessionKey(env.scope['server_id'], env.scope['executor_id'],
+            env.scope['session_id']), 'correlation-open', ProcessBirthEvidence(**values))
+        attempted = []
+        @contextmanager
+        def forbidden_identity(pid):
+            attempted.append(pid)
+            raise HerdrObservationError('SYNTHETIC_OS_LOOKUP_NOT_ALLOWED')
+            yield  # pragma: no cover - contextmanager protocol without a real handle
+        env.app.state.observation_correlation_proof = NativeObservationCorrelationProof(
+            env.app.state, identity_guard=forbidden_identity)
+        response = env.client.post(env.path, headers=env.headers, json=body)
+        assert response.status_code in (409,503), response.text
+        assert read(env)['revision'] == 0
+&gt;       assert attempted == [], 'Malformed native evidence reached OS identity acquisition'
+E       AssertionError: Malformed native evidence reached OS identity acquisition
+E       assert [1234] == []
+E         
+E         Left contains one more item: 1234
+E         Use -v to get more diff
+
+tests\test_observation_correlation_proof.py:40: AssertionError</failure></testcase><testcase classname="tests.test_observation_correlation_proof" name="test_malformed_core_birth_never_opens_an_os_identity[malformed_birth]" time="5.125"><failure message="AssertionError: Malformed native evidence reached OS identity acquisition&#10;assert [1234] == []&#10;  &#10;  Left contains one more item: 1234&#10;  Use -v to get more diff">correlation_http = namespace(deps=Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-...923CE0&gt;, _compose=&lt;function forbidden at 0x000001B284923CE0&gt;, _open_ledger=&lt;function forbidden at 0x000001B284923CE0&gt;))
+case = 'malformed_birth'
+
+    @pytest.mark.parametrize('case', ['boolean_pid','float_pid','unsupported_platform','malformed_birth'])
+    def test_malformed_core_birth_never_opens_an_os_identity(correlation_http, case):
+        env = correlation_http
+        body = deepcopy(env.body)
+        values = dict(platform='win32', pid=1234, birth_token=f'filetime:{CREATED:016x}', containment='owned')
+        if case == 'boolean_pid':
+            values['pid'], body['evidence']['pid'] = True, 1
+        elif case == 'float_pid':
+            values['pid'] = 1234.0
+        elif case == 'unsupported_platform':
+            values['platform'] = 'linux'
+        else:
+            values['birth_token'] = 'invalid-native-birth'
+        # Frozen dataclasses do not themselves validate these field types/shapes.
+        env.birth_record = ProcessBirthRecord(SessionKey(env.scope['server_id'], env.scope['executor_id'],
+            env.scope['session_id']), 'correlation-open', ProcessBirthEvidence(**values))
+        attempted = []
+        @contextmanager
+        def forbidden_identity(pid):
+            attempted.append(pid)
+            raise HerdrObservationError('SYNTHETIC_OS_LOOKUP_NOT_ALLOWED')
+            yield  # pragma: no cover - contextmanager protocol without a real handle
+        env.app.state.observation_correlation_proof = NativeObservationCorrelationProof(
+            env.app.state, identity_guard=forbidden_identity)
+        response = env.client.post(env.path, headers=env.headers, json=body)
+        assert response.status_code in (409,503), response.text
+        assert read(env)['revision'] == 0
+&gt;       assert attempted == [], 'Malformed native evidence reached OS identity acquisition'
+E       AssertionError: Malformed native evidence reached OS identity acquisition
+E       assert [1234] == []
+E         
+E         Left contains one more item: 1234
+E         Use -v to get more diff
+
+tests\test_observation_correlation_proof.py:40: AssertionError</failure></testcase></testsuite></testsuites>

@@ -129,7 +129,8 @@ def normalize_evidence(value: dict) -> dict:
                 binding_hash=_matching(value["binding_hash"], _DIGEST))
 
 
-def _normalize_record(value):
+def normalize_native_record(value):
+    """Validate a host-acquired Core record before any independent OS read."""
     _object(value, _RECORD_FIELDS)
     result = {name: _text(value[name]) for name in
               ("server_id", "executor_id", "session_id", "opening_operation_id")}
@@ -151,7 +152,7 @@ def verify_native_birth(selection: dict, evidence: dict, *, native_record: dict,
     """
     selected = normalize_selection(selection)
     external = normalize_evidence(evidence)
-    record = _normalize_record(native_record)
+    record = normalize_native_record(native_record)
     observed = _normalize_os_identity(os_identity)
     if (any(record[name] != selected[name] for name in ("server_id", "executor_id", "session_id"))
             or record["opening_operation_id"] != selected["open_operation_id"]
