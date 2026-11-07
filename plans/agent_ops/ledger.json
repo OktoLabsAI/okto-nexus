@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T14:04:23.126175+00:00",
+  "updated_at": "2026-11-07T14:15:18.756103+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11954,12 +11954,14 @@
       "provider_inference_performed": false,
       "observed_cli_version": "0.167.0",
       "observed_version_command": "codex --version",
-      "build_qualification": "Isolated official Codex0.157.0 exact executable fingerprint matches Core qualification; personal0.167.0 unchanged. No provider execution.",
+      "build_qualification": "Exact official0.157.0 bytes copied into an isolated complete package with additional codex.exe discovery name; passive candidate selected. Native behavior remains unexecuted.",
       "budget_limit": "User permits500000 additional tokens over200000. Operational tolerance700000; preventive interruption100000; native hard cap unavailable.",
-      "proposal": "plans/agent_ops/evidence/r3-m1-budget-update/m1-codex-campaign-proposal-v4.json",
+      "proposal": "plans/agent_ops/evidence/r3-m1-execution-context/m1-codex-campaign-proposal-v5.json",
       "original_token_limit": 200000,
       "additional_token_tolerance": 500000,
-      "preventive_interrupt_tokens": 100000
+      "preventive_interrupt_tokens": 100000,
+      "context_preparation": "plans/agent_ops/evidence/r3-m1-execution-context/context.json",
+      "native_discovery": "plans/agent_ops/evidence/r3-m1-execution-context/discovery.json"
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -13011,6 +13013,15 @@
       "summary": "User allows500k additional tokens:700k total tolerance; preventive100k retained. Preparation and execution authorization remain separate; no provider use.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-budget-update/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Exact M1 execution context prepared",
+      "status": "PREPARED",
+      "summary": "Three installed payloads verified; exact tasks absent, scratch paths absent, candidate provider path and lifecycle argv pinned; passive discovery fixed with isolated byte-identical codex.exe copy. No provider or service effects.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-execution-context/milestone.md"
       ]
     }
   ]

@@ -1,0 +1,20 @@
+{
+  "review": "narrow final correction verification, supersedes outstanding finding in review.json",
+  "status": "NO_BLOCKER_FOUND_IN_REVIEWED_PREPARATION_MILESTONE",
+  "previous_review": "review.json",
+  "previous_review_sha256": "a2bfbe9ec7279283663181d4ba435acc65d63d87b1404d0fe3e73e3d7ac765ae",
+  "reviewed_sha256": {
+    "m1-codex-campaign-proposal-v5.json": "10f894e6261b311e57f2bcd5a4f4fa23c76da790a2c6e0968bc84fde38c0b8fc",
+    "close_milestone.py": "eed41bc634e0e814ff37e8cd47ea9caf1b0f2bc5b54b4f6fb622deae7dfa7a1c",
+    "artifact-manifest.json": "41d5d050ac1170edd19fb440570fa33ddc73a5b8bf70f8cac5aa58ec3e88eb98"
+  },
+  "verified": [
+    "All 13 operator login/remote operator connect/work commands now select --home <operator_home> exactly once.",
+    "Both cleanup lifecycle templates now use timeout45, consistent with the eight exact lifecycle actions.",
+    "Builder reproduces both corrections and the current artifact manifest matches all nine sizes/SHA256 values."
+  ],
+  "limits": [
+    "Narrow read/hash check only; no repeated native-binary hashing, tests, CLI, service, provider, personal-state or credential access.",
+    "No acceptance or execution authorization inferred; collector/driver and real campaign remain pending as documented."
+  ]
+}

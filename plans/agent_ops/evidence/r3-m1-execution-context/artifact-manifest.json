@@ -1,0 +1,45 @@
+{
+  "files": {
+    "close_milestone.py": {
+      "bytes": 7718,
+      "sha256": "eed41bc634e0e814ff37e8cd47ea9caf1b0f2bc5b54b4f6fb622deae7dfa7a1c"
+    },
+    "context.json": {
+      "sha256": "305b9a5855608dd593c68893a643278022ab06a370a6b4845d6f871dd6528673",
+      "bytes": 4061
+    },
+    "discovery.json": {
+      "sha256": "dd576135300847231eb9fd523526d75d3624a281c9b42bb4e8b13458d417f7c3",
+      "bytes": 12308
+    },
+    "m1-codex-campaign-proposal-v5.json": {
+      "bytes": 36065,
+      "sha256": "10f894e6261b311e57f2bcd5a4f4fa23c76da790a2c6e0968bc84fde38c0b8fc"
+    },
+    "milestone.md": {
+      "sha256": "fd98e144b905d54d624bb39ee223ae1ad33550a55f4c4c01afbf627fbd074140",
+      "bytes": 1514
+    },
+    "prepare_commands.py": {
+      "sha256": "3abf2a972f43db294f1890f5e41da94d56d0e370bea44357098a8912e2a994e0",
+      "bytes": 4073
+    },
+    "prepare_context.py": {
+      "sha256": "8d56b0301925772a53f8c850865bf3404b145136495daeed614ab2afc9b36316",
+      "bytes": 3902
+    },
+    "prepare_discovery.py": {
+      "sha256": "3ae4d66106d7230125561bbd537cb6c9a96d36218e95bb74f09db9a7ce468232",
+      "bytes": 2209
+    },
+    "proposed-commands.json": {
+      "sha256": "4b8f438784ca294935ba66e48861a708a3262f0cc1886e65c55b59960ce241f1",
+      "bytes": 9994
+    },
+    "readonly-review.json": {
+      "bytes": 1289,
+      "sha256": "ecbb907b9b40f24c92bd4260556f2f15ffb7a718f096d02594a8b0a605b87ec0"
+    }
+  },
+  "scope": "Preparation only; copied executable/package bytes are retained in Temp and never committed"
+}

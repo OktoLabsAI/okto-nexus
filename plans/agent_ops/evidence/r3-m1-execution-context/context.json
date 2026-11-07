@@ -1,0 +1,89 @@
+{
+  "status": "READ_ONLY_PREPARATION",
+  "proposal_sha256": "833e43376c16fb0d2d28b20a8c37db780c623df777774e57a0ebb63be777494c",
+  "installed_packages": {
+    "nexus": {
+      "import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\okto_nexus",
+      "wheel_sha256": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+      "exact_payload_files": 691
+    },
+    "connector": {
+      "import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\okto_nexus_connector",
+      "wheel_sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "exact_payload_files": 124
+    },
+    "core": {
+      "import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\nexus_connector_core",
+      "wheel_sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+      "exact_payload_files": 166
+    }
+  },
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+      "instance_id": "svc_f7de829cb55f9b4f3f6bc8b06c2325d7baa96f682e5d6319b0b1ad9b7eb1c7e7",
+      "exists": false
+    },
+    "connector": {
+      "name": "OktoNexus-connector-28dba74f7a03c7977c1bbf2521215167dcd4a6b91ef6bc4cee3c215ac60d9103",
+      "instance_id": "svc_28dba74f7a03c7977c1bbf2521215167dcd4a6b91ef6bc4cee3c215ac60d9103",
+      "exists": false
+    }
+  },
+  "proposed_paths": {
+    "campaign_root": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign",
+      "exists": false
+    },
+    "server_home": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home",
+      "exists": false
+    },
+    "operator_home": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\operator-home",
+      "exists": false
+    },
+    "connector_state": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\connector-state",
+      "exists": false
+    },
+    "local_project": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+      "exists": false
+    },
+    "remote_project": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\connector-project",
+      "exists": false
+    },
+    "private_evidence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\private",
+      "exists": false
+    },
+    "public_evidence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public",
+      "exists": false
+    },
+    "local_deliverables": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\local",
+      "exists": false
+    },
+    "remote_deliverables": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\connector",
+      "exists": false
+    }
+  },
+  "origin": "http://127.0.0.1:64507",
+  "port_available_at_preparation": true,
+  "port_recheck_required": true,
+  "provider_home_candidate": "C:/Users/jpamb/.codex",
+  "provider_home_basis": "Parent task observed CODEX_HOME unset; default user-home/.codex. No contents opened.",
+  "native_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+  "native_commands_executed": [],
+  "credentials_read": false,
+  "service_mutations": false,
+  "limits": [
+    "Native provider use and service lifecycle remain unauthorized.",
+    "Exact absence and port availability are point-in-time observations, not reservations.",
+    "Provider home path alone does not prove login, effective policy or credential access from a service."
+  ]
+}
