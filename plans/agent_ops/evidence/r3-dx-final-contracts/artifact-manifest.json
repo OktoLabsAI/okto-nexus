@@ -1,0 +1,89 @@
+{
+  "files": {
+    "audit/artifact-manifest.json": {
+      "sha256": "39567cccb2eef8b3f2de410d165d365cfc62e6995b0cac7afa59aab17a591a52",
+      "bytes": 1059
+    },
+    "audit/input-manifest.json": {
+      "sha256": "c0deefac224ce40391e5b7431f90613dbc6b9f9663a3d369d8942504d3e3fe40",
+      "bytes": 19957
+    },
+    "audit/matrix.json": {
+      "sha256": "439e20756708248c8d9fe4a1abed575587fc2d80ca7cc6fab9baf1fe26aafd3d",
+      "bytes": 320188
+    },
+    "audit/reconcile.py": {
+      "sha256": "593b4f6266dd805452ef87c8c81a0998b5455eb7b1e1119153a3eb607dcbe0b4",
+      "bytes": 28095
+    },
+    "audit/summary.md": {
+      "sha256": "7cb00c794e1b646fbc7a949f460b75734542f95ef945678fdd5a12234539769c",
+      "bytes": 3511
+    },
+    "audit/verification.json": {
+      "sha256": "8f362c47b5b03802f5a786aa7ab64fdd7a595ed7ec0aca97beb02d8a3e6e01b8",
+      "bytes": 123
+    },
+    "close_milestone.py": {
+      "sha256": "885264c6a1c36bcd99ad09338b2b6233c21598a7337f7441cf0bb1204fcc5ed2",
+      "bytes": 6523
+    },
+    "evidence-location-map.json": {
+      "sha256": "7940be8ee48a442adea6e985f97393aab797be023d908e1897243a148f616791",
+      "bytes": 2410
+    },
+    "inbox/canonical/campaign.json": {
+      "sha256": "21a47b6d55997ef81f418ba1081c0a8664f6b6e4f3339e9ab8489bb6bf4224ea",
+      "bytes": 234593
+    },
+    "inbox/canonical/installed.json": {
+      "sha256": "54b25aef4f8387eccf76e14adc1a265e4547af87a2478df341b8f17f02b79e04",
+      "bytes": 756
+    },
+    "inbox/canonical/tests.xml": {
+      "sha256": "b832fbbe1b42c150f5b548e84e1736eb357a8e9112e160df334d17d2ee3af065",
+      "bytes": 657
+    },
+    "inbox/environment.json": {
+      "sha256": "9ed801dee7954186e54c57412093f3aeae7ffcdaae105c323de344d70c86451a",
+      "bytes": 419
+    },
+    "inbox/package-proof.json": {
+      "sha256": "d73d87d5c45f171a90b38d75e586ceb7103a9daa7f693791b1b81df238aa0b4e",
+      "bytes": 874
+    },
+    "inbox/pip-check.txt": {
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31
+    },
+    "inbox/result.json": {
+      "sha256": "9a27a27248fa75fe11e24ac4ad53c8290191781c1f89cb04c754d986e2d50db2",
+      "bytes": 738
+    },
+    "inbox/tests.txt": {
+      "sha256": "d3bacd0bea6d547b8420a9acc6b9b5e6f6754202ffa534568bcf1136dae74c55",
+      "bytes": 3826
+    },
+    "milestone.md": {
+      "sha256": "935c4f8924c8d088ccc32358f065e16d56eaf708ebc6114b6e0f36c3a3806d4c",
+      "bytes": 1071
+    },
+    "preparation-note.json": {
+      "sha256": "e9a94f526412754a877d6fedc014d98395aaf5da6cdaf7546c5f9a5df5958282",
+      "bytes": 253
+    },
+    "prepare_inbox_check.py": {
+      "sha256": "460e149c21c01d8af9d31669b2e4dcc5b7f9bbf907a4e7aaf8b128b8e1ec5d65",
+      "bytes": 467
+    },
+    "public-review.json": {
+      "sha256": "812eedd51c42a6029269c7ba39768a2f269aa919e963cdbdb1a294008caf4747",
+      "bytes": 106
+    },
+    "qualify_inbox.py": {
+      "sha256": "d872c17e70f259956a76dde10c56904b54d310a60392430e357211bc0f4a7885",
+      "bytes": 2882
+    }
+  },
+  "scope": "Exact public milestone bytes; nested audit manifest unchanged"
+}

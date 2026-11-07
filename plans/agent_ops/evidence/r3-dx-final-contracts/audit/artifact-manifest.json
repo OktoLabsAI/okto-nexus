@@ -1,0 +1,43 @@
+{
+  "public_allowlist": [
+    "matrix.json",
+    "summary.md",
+    "input-manifest.json",
+    "verification.json",
+    "reconcile.py"
+  ],
+  "files": [
+    {
+      "path": "matrix.json",
+      "sha256": "439e20756708248c8d9fe4a1abed575587fc2d80ca7cc6fab9baf1fe26aafd3d",
+      "bytes": 320188
+    },
+    {
+      "path": "summary.md",
+      "sha256": "7cb00c794e1b646fbc7a949f460b75734542f95ef945678fdd5a12234539769c",
+      "bytes": 3511
+    },
+    {
+      "path": "input-manifest.json",
+      "sha256": "c0deefac224ce40391e5b7431f90613dbc6b9f9663a3d369d8942504d3e3fe40",
+      "bytes": 19957
+    },
+    {
+      "path": "verification.json",
+      "sha256": "8f362c47b5b03802f5a786aa7ab64fdd7a595ed7ec0aca97beb02d8a3e6e01b8",
+      "bytes": 123
+    },
+    {
+      "path": "reconcile.py",
+      "sha256": "593b4f6266dd805452ef87c8c81a0998b5455eb7b1e1119153a3eb607dcbe0b4",
+      "bytes": 28095
+    }
+  ],
+  "excludes": [
+    "credentials",
+    "private JSON",
+    "DB",
+    "venv",
+    "personal provider state"
+  ]
+}

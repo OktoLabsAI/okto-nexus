@@ -624,3 +624,14 @@ T23/T24 ganham testes focais separados de restart real; sua aceitação ainda n�
 é antecipada. M1/M2 e campanhas reais permanecem abertos.
 
 Evidência: `plans/agent_ops/evidence/r3-contract-closure/milestone.md`.
+
+## 2026-11-07 — cenários DX restantes
+
+Reconciliação literal dos21 cenários DX restantes:16 contratos verificados,
+cinco campanhas reais mantidas pendentes (T34/T38/T39/T40/T43). O caso existente
+de inbox alheia passou nos três parâmetros instalados (`count/peek/history`),
+com as mesmas wheels, ambiente isolado e inputs inalterados. Os92 pares de
+relatório/node da matriz são referências sobrepostas, não novos testes.
+T50 verifica honestidade de aceite; não declara M1 concluído. Não houve produto,
+credencial pessoal, provedor ou Task Scheduler alterado neste milestone.
+Evidência: `plans/agent_ops/evidence/r3-dx-final-contracts/milestone.md`.

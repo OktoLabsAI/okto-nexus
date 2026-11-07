@@ -1,0 +1,20 @@
+{
+  "exit": 0,
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-wheel-v1\\okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-inbox-scope\\canonical",
+    "--tests",
+    "tests/execution_r4/test_session_read_tools.py::test_another_agent_inbox_is_denied"
+  ],
+  "cases": 3,
+  "failures": [],
+  "skips": []
+}

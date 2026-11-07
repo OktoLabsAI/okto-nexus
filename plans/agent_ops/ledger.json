@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T11:28:42.355520+00:00",
+  "updated_at": "2026-11-07T11:38:42.920970+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -8332,8 +8332,18 @@
     },
     "DX-T27": {
       "requirement": "Configuração remota usa diretório/credencial do host correto.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
+      ],
+      "result": "Workspace canônico remoto é separado do diretório físico do Connector. O host resolve referências aprovadas em seu vault e HOME antes do Core; o operador não substitui esses dados por seu próprio diretório/credencial.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Contrato de seleção/materialização do host com diretórios temporários e secret resolver sintético. Não certifica login/provedor nem a configuração efetiva consumida por processo real (T43), nem transporte entre duas máquinas físicas.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T28": {
       "requirement": "Saída JSON e códigos de saída possuem testes de contrato.",
@@ -8405,7 +8415,7 @@
     },
     "DX-T29": {
       "requirement": "Projeto e único harness detectado levam a recomendação concreta sem escolha técnica MCP/runtime inicial.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
         "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
@@ -8418,13 +8428,21 @@
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "Uma instalação detectada gera candidato/recomendação estável com projeto/defaults no mesmo review, sem executar o binário ou perguntar inicialmente por transporte MCP/runtime.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Seleção e UX são predicados contratuais exercitados com inventário sintético; não se promove presença em PATH a login/qualificação.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T30": {
       "requirement": "Vários harnesses válidos pedem somente escolha necessária; PATH não comprova login ou qualificação.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
         "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
@@ -8434,13 +8452,21 @@
         "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-connect.md"
+        "plans/agent_ops/evidence/pr03-terminal-connect.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "Ambiguidade material pergunta uma vez e preserva a instalação exata. Descoberta retorna versão/qualificação ainda desconhecidas; doctor mantém prontidão/login/prova de trabalho separados.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Não exige provedor real para provar a ausência de inferência indevida de PATH; não qualifica os candidatos sintéticos.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T31": {
       "requirement": "Caminho normal gerenciado termina no terminal, com browser opcional e setup transacional reutilizado.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-login-start-cli.json",
         "plans/agent_ops/evidence/pr03-connector-login-start-connector-installed.xml",
@@ -8483,9 +8509,17 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "CLI conclui review/approve/Finish usando o setup existente e entra no trabalho apenas após o checkpoint configurado. A campanha do entrypoint instalado exercita start/reuse/stop sem browser; remoto usa o CLI do operador.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Concluir setup pelo terminal é distinto de trabalho real completo T39/T40. Processo/CLI instalados reais e setup nativo sintético não fecham M1.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T32": {
       "requirement": "Aprovação remota pendente preserva ID e identidade do decisor; terminal participante não a aprova por assentimento local.",
@@ -8507,7 +8541,7 @@
     },
     "DX-T33": {
       "requirement": "connect reutilizado após resposta perdida retoma o mesmo setup sem novo agente, binding ou grant.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-login-start-cli.json",
         "plans/agent_ops/evidence/pr03-connector-login-start-connector-installed.xml",
@@ -8553,18 +8587,38 @@
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-policy.md"
+        "plans/agent_ops/evidence/pr03-terminal-policy.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "Connect persiste o mesmo setup antes dos efeitos; resposta perdida de probe/test/Finish recupera recibo sem novos efeitos. Bootstrap remoto recupera as mesmas referências e nunca reemite a chave.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Recovery do protocolo/objetos canônicos é comprovado; não exige tarefa de provedor para provar deduplicação do setup.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T34": {
       "requirement": "Login de provedor ausente produz instrução concreta e não deixa daemon bloqueado em prompt invisível.",
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
+      ],
+      "result": "Doctor já mantém login/qualificação desconhecidos e não inicia probes. Isso não observa o comportamento de um harness real sem login iniciado pelo serviço.",
+      "remaining": "Executar a campanha instalada com login do provedor ausente no host do serviço; reter instrução concreta emitida e prova de que o owner não fica bloqueado em prompt invisível, com cleanup. Nenhuma lacuna de produto específica foi demonstrada pela leitura.",
+      "remaining_kind": "real_campaign_not_run",
+      "qualification_limit": "Não usar missing MCP credential, variável sintética ou refusal de peer como ausência de login do provedor real.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": [
+        "diagnostic_proof_levels_and_passivity"
+      ]
     },
     "DX-T35": {
       "requirement": "Serviço pronto, MCP negociado, sessão pronta e handoff concluído aparecem como níveis distintos.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
@@ -8582,17 +8636,25 @@
         "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
         "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
         "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
-        "plans/agent_ops/evidence/pr04-participant-guide/reports.json"
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
+      "result": "Checks independentes distinguem serviço/identidade, MCP initialize/list_tools, sessão READY e resultado/handoff. Nenhum nível intermediário implica participação/trabalho concluído.",
       "subscopes": {
         "nexus_project_doctor_installed_contract": "VERIFIED",
         "dashboard_participant_proof_level_guidance": "VERIFIED"
-      }
+      },
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "VERIFIED é a separação/honestidade dos níveis; não certifica o provedor ausente.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T36": {
       "requirement": "Conexão não envia tarefa/smoke pago automaticamente; a tarefa solicitada usa os serviços canônicos.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
         "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
@@ -8604,9 +8666,17 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "Plan/recusa não executam probe nem setup. Após aprovação explícita dos efeitos de conexão, Finish informa work_state=not_submitted; somente entrada explícita do usuário submete trabalho pelos serviços canônicos.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "O teste de conexão potencialmente pago é um efeito separado mostrado no review e autorizado; não é tarefa/smoke produtivo automático. Peers sintéticos não são uso real do provedor.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T37": {
       "requirement": "Início no login pode ser escolhido na revisão inicial; recusar essa opção mantém o uso sob demanda funcional.",
@@ -8659,24 +8729,46 @@
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-policy.md"
+        "plans/agent_ops/evidence/pr03-terminal-policy.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Resumo único, criação autorizada e rollback/recovery estão provados. A pré-condição literal de instalação nova com harness/provedor prontos ainda foi modelada por candidatos/probes sintéticos.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
         "remote_noneditable_joint_packages": "VERIFIED"
-      }
+      },
+      "remaining": "Qualificar a instalação nova instalada com harness/provedor efetivamente prontos, exibindo identidade/workspace/perfil no mesmo resumo e conferindo que a aprovação só cria os objetos autorizados, sem persona manual/dashboard. O contrato de revisão já está provado.",
+      "remaining_kind": "real_campaign_not_run",
+      "qualification_limit": "Não exigir toda a campanha M1 para validar só o resumo; tampouco trocar prontidão real de harness/provedor por fixture.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": [
+        "single_review_and_defaults",
+        "authorized_atomic_identity_workspace_binding",
+        "same_root_recovery"
+      ]
     },
     "DX-T39": {
       "requirement": "Pacote instalado, rota local padrão: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissão, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem edição manual de configuração.",
       "status": "NOT_RUN",
       "evidence": [
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Real productive campaign not run. Synthetic local facade evidence is supporting development only."
+      "result": "Existe fluxo terminal completo com pergunta/resposta/resultado e retorno, mas sua execução usa peer nativo sintético. O literal pede trabalho real na rota local padrão instalada.",
+      "remaining": "Campanha M1 local instalada: trabalho real autorizado, acompanhamento, pergunta/permissão representativa, resposta, resultado correlacionado e continuação terminal; sem dashboard/config manual, com provider explicitamente autorizado.",
+      "remaining_kind": "real_campaign_not_run",
+      "qualification_limit": "Não concatenar initialize, fake native e testes de configuração em uma campanha real.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": [
+        "canonical_terminal_work_contract_with_synthetic_peer"
+      ]
     },
     "DX-T40": {
       "requirement": "A mesma campanha via Connector resolve decisões pelo CLI autenticado do operador, sem credencial administrativa no host remoto e sem aprovação pelo participante.",
@@ -8718,9 +8810,12 @@
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
         "plans/agent_ops/evidence/pr03-terminal-binding.md",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
+      "result": "Operador autenticado separado do host, aprovação/renovação e trabalho remoto canônico têm provas sintéticas; a mesma campanha real de T39 via Connector não foi executada.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
@@ -8731,11 +8826,19 @@
         "remote_rotation_completed_reuse": "VERIFIED",
         "remote_pending_grant_uncertainty": "VERIFIED",
         "remote_confirmed_receipt_read_failure": "VERIFIED"
-      }
+      },
+      "remaining": "Executar M1 instalado via Connector com trabalho/provedor reais e pergunta/permissão resolvida pelo CLI autenticado do operador, provando ausência de credencial administrativa no host remoto e recusa de decisão pelo participante.",
+      "remaining_kind": "real_campaign_not_run",
+      "qualification_limit": "HTTP/WebSocket/IPC reais e vault temporário não substituem provedor nativo real ou o percurso M1 remoto.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": [
+        "operator_authority_separate_from_participant",
+        "remote_setup_and_renewal_real_protocol_synthetic_peer"
+      ]
     },
     "DX-T41": {
       "requirement": "Reconnect e repetição do setup preservam `agent_id`, modelo, papel, configuração, grants e personalizações; não recriam agente nem reaplicam defaults.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
         "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
@@ -8802,9 +8905,12 @@
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-policy.md"
+        "plans/agent_ops/evidence/pr03-terminal-policy.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
+      "result": "Reconnect recupera identidade/binding/grants e lê personalizações posteriores sem reemitir autoridade. Evolução opcional usa merge e Finish separado; defaults não reaplicam silenciosamente.",
       "subscopes": {
         "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
         "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
@@ -8820,11 +8926,16 @@
         "remote_rotation_completed_reuse": "VERIFIED",
         "remote_pending_grant_uncertainty": "VERIFIED",
         "remote_confirmed_receipt_read_failure": "VERIFIED"
-      }
+      },
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Preservação de campos/IDs/defaults é contratual; não prova configuração efetiva dentro do provedor (T43).",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T42": {
       "requirement": "Nome de agente/projeto igual não associa outra identidade; vínculos ausentes ou ambíguos exigem resolução autorizada, inclusive quando duas conexões iniciais concorrem.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
@@ -8851,16 +8962,24 @@
         "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Colisão de agent_id é recusada antes/depois do teste, sem adoção. Duas composições concorrentes do mesmo root criam uma vez; root diferente nunca adota. Conexões locais ambíguas exigem seleção.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
         "remote_noneditable_joint_packages": "VERIFIED"
-      }
+      },
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Concorrência canônica e escolha explícita são comprovadas com SQLite real; não requer login/inferência.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T43": {
       "requirement": "O harness iniciado pelo serviço usa instruções, modelo, ferramentas e limites efetivos revisados; configuração disponível apenas no shell não é presumida nem substituída silenciosamente.",
@@ -8872,23 +8991,48 @@
         "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
         "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
         "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
-        "plans/agent_ops/evidence/pr03-connector-project-review.md"
+        "plans/agent_ops/evidence/pr03-connector-project-review.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete."
+      "result": "Referências, provider_home, configuração e guards são preservados/materializados no host, mas nenhum relatório demonstra o processo de harness real lançado pelo serviço usando todos os valores efetivos revisados.",
+      "remaining": "Campanha no processo real lançado pelo serviço, local e no host Connector aplicável, comparando instruções/modelo/ferramentas/limites revisados e configurados; registrar configuração shell-only como indisponível sem substituição silenciosa.",
+      "remaining_kind": "real_campaign_not_run",
+      "qualification_limit": "O callback de ambiente e fixture nativa não provam instruções/modelo/ferramentas/limites efetivos do provedor. Configuração apenas no shell não pode ser presumida.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": [
+        "reference_only_host_configuration",
+        "approved_provider_home_and_materialization_guards"
+      ]
     },
     "DX-T44": {
       "requirement": "Direitos padrão permitem coordenação útil no workspace autorizado; não permitem ler inbox alheia, cruzar escopo não concedido, administrar globalmente ou mudar políticas.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/inbox/canonical/tests.xml"
       ],
-      "result": "Local new-identity review/transaction/recovery/permission-copy/customization subset verified; full scenario acceptance, productive harness behavior and dashboard presentation remain open."
+      "result": "Flags padrão úteis e limitadas, ator/self, escopo de workspace e recusa de administração/política têm provas retidas. Root concluiu a qualificação instalada focada dos 3 casos de inbox alheia; a leitura desta evidência fecha a única lacuna específica localizada.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Não requer provider/M1. A nova execução foi feita pelo root, não por esta auditoria. Teste usa HTTP MCP/capability e precondição READY sintética; não é qualificação do harness. Root curará os arquivos Temp citados no destino público.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": [
+        "reviewed_bounded_default_permissions",
+        "workspace_refusal",
+        "self_identity_guard",
+        "agent_cannot_administer_operator_account_or_policy"
+      ]
     },
     "DX-T45": {
       "requirement": "Decisão pelo terminal preserva ator, revisão, validade e escopo; texto enviado ao modelo, decisão expirada, recusada ou emitida por ator sem autoridade não aprova trabalho.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/artifact-manifest.json",
@@ -8921,20 +9065,28 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Terminal envia decisão canônica com revisão e resposta explícitas; Core valida resposta. Ator/recipient/hash/revisão/validade/grant/escopo inválidos não criam operação. Texto de prompt não substitui esse endpoint.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
         "remote_noneditable_joint_packages": "VERIFIED"
-      }
+      },
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "VERIFIED para o contrato de decisão e autoridade, com requests sintéticas. M1 real local/remoto permanece T39/T40; não é um gate adicional deste predicado puro.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T46": {
       "requirement": "Perda da resposta de submissão ou decisão em M1 recupera a mesma requisição/resultado, inclusive após restart; não cria operação, pedido ou handoff duplicado.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
         "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
@@ -8980,9 +9132,12 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Remote existing-identity onboarding persists project-generalist revision 1 outside portable JSON and includes its native-decision policy effect in the immutable operator review. Approval and Finish revalidate current policy; explicit false values, pins and legacy provenance are preserved. Configuration, origin, grant and optional policy initialization share one transaction; live policy refresh follows the outer commit. Typed uncertain outcomes resume the same apply intent through Connector background recovery without restoring later disablement or revoked grants. 22 Nexus and 37 Connector source tests passed; 127 Nexus and 285 Connector tests passed in fresh installed artifacts. New remote identity bootstrap, real two-host provider qualification and full M1 remain open. Optional preset adoption/evolution now uses a canonical readonly diff and the existing authorized Test/Finish transaction. A three-way comparison preserves personalized values; the review includes every affected connection, grant revocation and boot disablement. Concurrent configuration/identity/authority changes and hidden effects are refused. Local active updates disclose their model test; remote existing Connector bindings use human operator authority without host probes or local fallback; disabled runtime stays disabled. Lost responses recover one setup receipt, and old committed requests remain replayable after preset revision advancement. Ordinary reconnect preserves configuration and authority. The current shipped preset remains revision 1; future revisions are injected in tests. The final installed artifact passed 148 tests with eight explicitly disabled browser cases, plus overlapping cleanup (4) and reconnect/old-receipt (3) follow-ups. Five actual installed CLI cases passed. Synthetic native/provider effects and memory vault/HTTP bridges do not qualify real productive M1, OS vault/TLS or two-host execution.\n2026-11-07 remote-bootstrap update (supersedes prior bootstrap limitation): Remote identity/workspace bootstrap and the single reviewed project setup are now qualified in Windows loopback with Nexus 187 and Connector 276 installed tests. The six joint cases use real TCP/WSS, a real human operator session, canonical decisions/Finish, durable host state and explicit synthetic native/provider/vault fixtures. Bootstrap is a partial commit with one-shot key delivery, no grant/endpoint or runtime/location activation. Current root/review/credential guards fence prepare, decision and apply. Local amendments retain original bootstrap/history, promote only a matching authenticated handoff and recover a racing prior Finish. Full real-provider/two-host M1/M2, native services, real credential/grant renewal and joint R3 acceptance remain open.",
+      "result": "Recuperação reconstrói a fachada dos checkpoints e recupera o mesmo operation/decision, sem segundo envio. Request/handoff usam IDs duráveis e têm morte real de CLI/retomada no mesmo contrato.",
       "subscopes": {
         "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
         "preset_review_all_binding_authority_effects_and_concurrency": "VERIFIED",
@@ -8994,11 +9149,16 @@
         "remote_one_shot_key_and_current_epoch": "VERIFIED",
         "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
         "remote_noneditable_joint_packages": "VERIFIED"
-      }
+      },
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Work/decision são retomados por nova fachada/checkpoint; o processo real reiniciado é o CLI de coordenação. Esses alcances ficam separados, sem alegar crash de provedor ou campanha M1 real.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T47": {
       "requirement": "Fechar e reabrir o CLI reencontra trabalho e identidade; retoma a conversa somente com suporte comprovado, ou oferece nova sessão explicitamente, sem replay nem contexto fictício.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-reconnect-cli.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed-initial.xml",
@@ -9010,13 +9170,21 @@
         "plans/agent_ops/evidence/pr03-connector-reconnect-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-reconnect.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect resolves a retained canonical project association before credential entry or discovery; bare connect restores its Server, identity and request, while --identity selects an imported identity. The existing vault key is authenticated against current Server/agent/credential revision; approved binding scope and physical root are checked before service effects for completed requests. Reconnect does not reimport a key, reprobe, reapply defaults or renew grants. Revocation, disabled binding, changed mapping and concurrent local edits refuse reuse without fallback. 67 source Connector and 8 source Nexus integration tests passed; the final focused Connector suite passed 37 tests, overlapping those runs. Final installed artifacts passed 180 Connector and 75 Nexus tests. New remote identity bootstrap and full real-provider M1 remain open."
+      "result": "Reabrir a fachada recupera operation/session canônicos e continua só enquanto a sessão permite; sair do CLI não fecha trabalho. Sessão indisponível recusa continuação e orienta --new-session explícito, sem replay/contexto fabricado.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Contrato de reopen e sessão canônica qualificado com peer sintético. Continuidade de conversa de um harness/provedor real só pode ser alegada na campanha desse caminho.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T48": {
       "requirement": "Perfil de execução do resumo admite somente trabalho elegível e autorizado pelas regras atuais; daemon online, mensagem recebida ou grant revogado não bastam para iniciar sessão.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
         "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
@@ -9046,19 +9214,27 @@
         "plans/agent_ops/evidence/pr03-terminal-authorization-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-authorization.md",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-policy.md"
+        "plans/agent_ops/evidence/pr03-terminal-policy.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Connector connect now proposes a sole full host installation without a selection question or executable probe; material ambiguity asks once and Pi keeps its Node/script installation identity. Saved discovery roots and observations are preserved, explicit filters must match inventory, and a changed inventory refuses the review. The existing configure/checkpoint flow supplies current project, label, provider directory and preset defaults; advanced preferences are optional through --customize. Full paths, settings, limits and effects are shown before Finish. Decline performs no registration/probe/daemon effect; canonical operator approval remains separate from participant consent. 90 source tests passed, then 2 full-entry cases passed. The installed packages passed 201 Connector tests plus 2 additional full-entry cases and 22 Nexus integration tests. No production source changed between installed runs. Initial remote identity provisioning, real-provider M1 and the full R3 plan remain incomplete.\n2026-11-07 remote renewal update: Remote grant renewal is qualified with real loopback HTTP/WebSocket, authenticated TCP IPC and DaemonApp: expiry/exhaustion, lost issuance response, same-receipt recovery, unchanged prior leases/sessions, explicit close/new work, canonical key rotation and protected replacement, stale key/ticket/review refusal and historical recovery after revocation. Completed Connector reuse authenticates the current identity and exact approved binding without mutating the old bootstrap or replaying Finish/probe; pending setup remains anchored to its original credential epoch. Submitted issuance stays uncertain during login/vault/recovery failure; a transport failure reading an already confirmed receipt does not reopen issuance uncertainty. Installed tests: Nexus 66, Connector 233. Native/provider behavior remains synthetic; real provider/TLS/two-host, OS-vault lifecycle, native services and complete M1/M2/R3 remain open.",
+      "result": "Perfil/daemon não substituem autoridade: runtime disabled não recebe teste/grant; grant expirado/exaurido só é renovado por revisão explícita; sessão/lease antiga não migra. Política explícita desabilitada é respeitada antes de probes.",
       "subscopes": {
         "remote_grant_renewal_http_ipc_wss": "VERIFIED",
         "remote_rotation_completed_reuse": "VERIFIED",
         "remote_pending_grant_uncertainty": "VERIFIED",
         "remote_confirmed_receipt_read_failure": "VERIFIED"
-      }
+      },
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Regras de admissão e revogação são canônicas e não precisam de provedor real para provar recusa; não qualifica duração infinita ou replay após crash.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T49": {
       "requirement": "Abrir o dashboard depois do uso pelo terminal mostra o mesmo agente e configuração; personalizar nome/papel mantém identidade, histórico e vínculos canônicos.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-project-dashboard-browser.json",
         "plans/agent_ops/evidence/pr03-project-dashboard-installed.xml",
@@ -9067,13 +9243,21 @@
         "plans/agent_ops/evidence/pr03-project-dashboard.md",
         "plans/agent_ops/evidence/pr03-terminal-identity-authority.xml",
         "plans/agent_ops/evidence/pr03-terminal-identity-installed.xml",
-        "plans/agent_ops/evidence/pr03-terminal-identity.md"
+        "plans/agent_ops/evidence/pr03-terminal-identity.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Installed canonical terminal setup followed by real browser name/role editing preserves identity, history, configuration, binding and grant; terminal resume has no new setup effects. Shared-object contract verified with synthetic harness. Productive-harness campaign remains open."
+      "result": "Browser real contra wheel instalado personaliza nome/papel do mesmo agente; identity/key/permissions/configuração/grants/histórico permanecem. Reopen terminal não reaplica defaults nem cria outro vínculo.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "Browser/HTTP/SQLite reais, harness checks sintéticos; prova de continuidade dos objetos e UX, não uso efetivo de provedor.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T50": {
       "requirement": "Adaptador que só inicia o processo, mas exige painel para uma decisão cotidiana, não passa o aceite M1; lacuna fica registrada até existir rota completa qualificada.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
         "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
@@ -9084,9 +9268,17 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
       ],
-      "result": "Human operator login/status/logout reuse existing session authentication and a separate protected-vault namespace. Origin and Server identity are pinned; session-only requests cannot fall back to loopback trust or an agent key. Remote connect reuses an existing approved binding; saved topology is selected before local lifecycle resolution, with no local fallback. Canonical work/receipt recovery, grant renewal and native decisions are verified over human-session HTTP with a synthetic embedded peer. 167 installed regression tests and two focused installed boundary cases passed on the same 427-file Nexus wheel. New remote identity/setup, Connector proposal approval, real OS-vault/TLS accessibility and the two-host productive campaign remain open. The full real-provider/Connector scenario is not claimed."
+      "result": "O aceite não promove processo/sessão pronta a trabalho. Doctor mantém trabalho/participação UNKNOWN e relatórios mantêm M1 aberto enquanto a rota real completa não é qualificada.",
+      "remaining": "None within the literal contract and stated scope.",
+      "remaining_kind": null,
+      "qualification_limit": "VERIFIED é a regra de honestidade/recusa de aceite, não afirmação de M1. T39/T40 e configurações reais permanecem pendentes.",
+      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "verified_contract_subscopes": []
     },
     "DX-T51": {
       "requirement": "Nova revisão do preset apresenta efeitos por diff e respeita mudanças concorrentes; upgrade/reconnect não amplia permissões ou sobrescreve escolhas existentes.",
@@ -11587,6 +11779,16 @@
         "plans/agent_ops/evidence/r3-contract-closure/milestone.md",
         "plans/agent_ops/evidence/r3-contract-closure/artifact-manifest.json"
       ]
+    },
+    "r3_remaining_dx_contracts": {
+      "status": "VERIFIED",
+      "scope": "Reconciliation of21 literal scenarios;16 contractual predicates verified and5 real campaign requirements still open",
+      "new_installed_existing_test_cases": 3,
+      "product_changes": 0,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-final-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json"
+      ]
     }
   },
   "history": [
@@ -12454,6 +12656,15 @@
       "summary": "Corrected8docs, closed16DX andSVC-T26/T28 literal stale statuses plusAC05/08/15. Two current installed actual detached lifecycle tests passed. Core docs f9a5c3b andConnector docs55a14a6 pushed. T23/T24 dedicated restart tests remain separate ongoing work; real campaigns pending.",
       "evidence": [
         "plans/agent_ops/evidence/r3-contract-closure/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Remaining DX literal contracts",
+      "status": "VERIFIED",
+      "summary": "16 additional DX contract predicates verified, T44 inbox isolation3/3 installed. Real provider/login/default-installation/effective-process scopes remain pending in T34/T38/T39/T40/T43. No provider or native task executed.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-final-contracts/milestone.md"
       ]
     }
   ]
