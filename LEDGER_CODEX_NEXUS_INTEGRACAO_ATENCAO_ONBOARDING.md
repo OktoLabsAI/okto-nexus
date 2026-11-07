@@ -427,3 +427,14 @@ O wheel de entrega remove apenas uma linha vazia final; equivalência sintática
 - Wheel final: 478 Python, 163 migrações, 7 assets com conjuntos/bytes idênticos ao fonte/instalado; HTTP serviu os mesmos assets. Instâncias descartáveis encerradas pelo drain canônico.
 - PR-06/07 e ATN-05…08 IMPLEMENTED, com subcontratos verificados; AC-04 verificado. OBS, campanhas reais pendentes e aceite integral R3 continuam abertos. Core/Connector não mudaram neste marco.
 - Evidências e limites: [pr07-attention-ui.md](plans/agent_ops/evidence/pr07-attention-ui.md).
+
+## 2026-11-06 — PR-08: ingestão externa com autoridade restrita
+
+- OBS-01…04 implementados e verificados no Server: fonte aprovada pelo operador, instâncias independentes, geração emitida pelo Server, permissões explícitas e credenciais de publicação restritas. Migração 164 aditiva; histórico anterior preservado.
+- Ingestão valida autoridade atual antes de replay; seq/hash, TTL, quota e eventos ficam na mesma transação. Revogação, rotação e reset não restauram tokens antigos. Leitura/expiração não alteram presença, capacidade ou trabalho canônico.
+- OBS inicia desligado. Settings oferece toggle e 15 limites, com budgets por fonte/agente/instalação, lote atômico de até 100 e fila limitada. Retenção existente preserva fences e não repõe quota após redução de taxa.
+- Qualificação: **525 testes verdes únicos de código**, **14 testes instalados** (repetições identificadas), **49 verificações HTTP reais**, TypeScript/Vite/Ruff e inspeção de Settings em Chrome, claro/escuro/390 px. Toggle/limite sobreviveram a reload; TTL inválido bloqueou salvar; valores do ambiente descartável restaurados.
+- Wheel Nexus `0.3.3`: `85a882cf1ee71ff953e3ce79a25216a1092d0b3a7e314b72527749267e07c130`; **486 Python, 164 migrations e 7 static** com conjuntos/bytes iguais entre origem, wheel e instalação. Server descartável encerrado por shutdown canônico `DRAINED`.
+- Diagnósticos iniciais preservados: fixture HTTP sem `preset_id`, helper de build com `-I` e ajustes de seletores/esperas/viewport da automação visual. Nenhum foi contado como teste aprovado. Falhas de disco/commit são injetadas, não uma campanha de encher disco físico.
+- Evidências e limites: [pr08-observations.md](plans/agent_ops/evidence/pr08-observations.md), [manifesto](plans/agent_ops/evidence/pr08-observations-tests.json) e [contrato de uso](docs/external-observations.md).
+- PR-09 (Herdr real/helper), PR-10 (atenção externa/regressão conjunta) e campanhas reais já nomeadas de M1/M2/serviços continuam abertos. Core/Connector sem alterações neste milestone. Escopo R3 e todos os IDs permanecem fixos.

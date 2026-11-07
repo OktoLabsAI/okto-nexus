@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="11" failures="0" skipped="0" tests="11" time="24.906" timestamp="2026-11-06T21:19:43.195908-03:00" hostname="Alienware_m15"><testcase classname="tests.test_observation_http" name="test_wired_management_publish_and_passive_historical_reads" time="2.190"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_wired_management_publish_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6E40640&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_bounded_strict_http_errors_never_echo_input[duplicate]" time="2.066"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_bounded_strict_http_error0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6E403E0&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_bounded_strict_http_errors_never_echo_input[unknown]" time="1.997"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_bounded_strict_http_error1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6DB70B0&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_bounded_strict_http_errors_never_echo_input[oversize]" time="1.985"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_bounded_strict_http_error2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6E62CF0&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_bounded_strict_http_errors_never_echo_input[batch101]" time="1.994"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_bounded_strict_http_error3')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6F30F30&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_bounded_strict_http_errors_never_echo_input[identity]" time="1.951"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_bounded_strict_http_error4')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6F6D450&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_bounded_strict_http_errors_never_echo_input[bool-sequence]" time="2.033"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_bounded_strict_http_error5')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6F6D750&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_bounded_strict_http_errors_never_echo_input[nan]" time="2.010"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_bounded_strict_http_error6')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6F90500&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_publish_bearer_cannot_reenter_management_or_canonical_audiences" time="1.825"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_publish_bearer_cannot_ree0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6F91220&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_http_storage_failure_never_acknowledges_or_leaks" time="1.782"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_http_storage_failure_neve0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6FB89F0&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase><testcase classname="tests.test_observation_http" name="test_http_backpressure_returns_retry_after_before_storage" time="1.823"><error message="failed on setup with &quot;TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10539/test_http_backpressure_returns0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3C6FB98D0&gt;
+
+    @pytest.fixture
+    def http_obs(tmp_path, monkeypatch):
+        from okto_nexus.bootstrap import embedded_inventory
+        monkeypatch.setattr(embedded_inventory, 'discover_local_candidates',
+                            lambda **_: SimpleNamespace(candidates=()))
+        deps = bootstrap({}, ['--home', str(tmp_path), '--feature-observations', 'true',
+                              '--feature-harness-integrations', 'false', '--embedding-mode', 'off'])
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        _, key = ensure_operator_key(deps, auth)
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.agents.upsert(uow, agent_id='observed')
+            agent_key = auth.issue_key(uow, agent_id='observed')
+&gt;           deps.repos.agents.set_permissions(uow, agent_id='observed', permissions={
+                'observations': {'manage_self': True, 'publish': True}})
+E           TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'
+
+tests\test_observation_http.py:29: TypeError</error></testcase></testsuite></testsuites>

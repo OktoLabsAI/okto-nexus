@@ -398,11 +398,22 @@
       ]
     },
     "PR-08": {
-      "status": "NOT_STARTED",
+      "status": "IMPLEMENTED",
       "dependencies": [
         "PR-00"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json"
+      ],
+      "result": "OBS-01..04 and operational bounds qualified: 525 unique source tests, 14 installed tests (not added as independent source cases), 49 real HTTP assertions, Settings browser verification; wheel payload exact 486 Python/164 migrations/7 static files.",
+      "limitations": [
+        "No implicit canonical session correlation; uncorrelated external instances remain separate.",
+        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
+        "Configured ceilings are safety bounds, not measured production throughput.",
+        "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
+      ]
     },
     "PR-09": {
       "status": "NOT_STARTED",
@@ -5473,67 +5484,176 @@
     },
     "OBS-01": {
       "title": "vÃ­nculo explÃ­cito",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-08"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/external-observations.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "src/okto_nexus/adapters/inbound/http/observations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+        "src/okto_nexus/application/observation_ports.py",
+        "src/okto_nexus/application/observations.py",
+        "src/okto_nexus/migrations/164_external_observations.sql"
+      ],
+      "tests": [
+        "tests/test_observation_audience.py",
+        "tests/test_observation_http.py",
+        "tests/test_observation_service.py",
+        "tests/test_observations_storage.py"
+      ],
+      "result": "Explicit operator approval of existing agent/workspaces; self management inside approval; server-issued instance IDs/generations; independent instances and durable reset fencing.",
+      "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
+      "limitations": [
+        "No implicit canonical session correlation; uncorrelated external instances remain separate.",
+        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
+        "Configured ceilings are safety bounds, not measured production throughput.",
+        "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
+      ],
+      "subscopes": {
+        "explicit_registration_and_workspace_scope": "VERIFIED",
+        "server_generations_and_multiple_instances": "VERIFIED"
+      }
     },
     "OBS-02": {
       "title": "capacidade restrita",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-08"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/external-observations.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "src/okto_nexus/adapters/inbound/http/app.py",
+        "src/okto_nexus/adapters/inbound/http/observations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+        "src/okto_nexus/application/observation_ports.py",
+        "src/okto_nexus/application/observations.py",
+        "src/okto_nexus/domain/observation_tokens.py",
+        "src/okto_nexus/domain/permissions.py",
+        "src/okto_nexus/migrations/164_external_observations.sql"
+      ],
+      "tests": [
+        "tests/test_observation_audience.py",
+        "tests/test_observation_http.py",
+        "tests/test_observation_permissions.py",
+        "tests/test_observation_service.py",
+        "tests/test_observations_storage.py"
+      ],
+      "result": "Exclusive opaque hashed 15-minute publisher credential with immutable instance/generation grants; strict explicit permissions, current authority before replay and permanent revocation on material identity/source/issuer changes.",
+      "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
+      "limitations": [
+        "No implicit canonical session correlation; uncorrelated external instances remain separate.",
+        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
+        "Configured ceilings are safety bounds, not measured production throughput.",
+        "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
+      ],
+      "subscopes": {
+        "exclusive_audience_and_current_authority": "VERIFIED",
+        "durable_revocation_and_canonical_renewal": "VERIFIED"
+      }
     },
     "OBS-03": {
       "title": "ordenaÃ§Ã£o e replay",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-08"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/external-observations.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "src/okto_nexus/adapters/inbound/http/observations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+        "src/okto_nexus/application/database_reset.py",
+        "src/okto_nexus/application/observation_ports.py",
+        "src/okto_nexus/application/observations.py",
+        "src/okto_nexus/domain/observations.py",
+        "src/okto_nexus/migrations/164_external_observations.sql"
+      ],
+      "tests": [
+        "tests/test_observation_http.py",
+        "tests/test_observation_service.py",
+        "tests/test_observations_domain.py",
+        "tests/test_observations_storage.py"
+      ],
+      "result": "Monotonic sequence and server generation fences; exact replay preserves original receipt/TTL and emits no event; state, budgets and material event commit atomically; fault/concurrent/reset qualification.",
+      "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
+      "limitations": [
+        "No implicit canonical session correlation; uncorrelated external instances remain separate.",
+        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
+        "Configured ceilings are safety bounds, not measured production throughput.",
+        "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
+      ],
+      "subscopes": {
+        "sequence_hash_and_generation_fencing": "VERIFIED",
+        "transactional_commit_and_concurrent_admission": "VERIFIED"
+      }
     },
     "OBS-04": {
       "title": "freshness",
-      "status": "NOT_STARTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-08"
       ],
       "dependencies": [
         "PR-00"
       ],
-      "files": [],
-      "tests": [],
-      "result": null,
-      "platform": null,
-      "limitations": [],
-      "subscopes": {}
+      "files": [
+        "docs/external-observations.md",
+        "frontend/src/views/SettingsView.tsx",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md",
+        "src/okto_nexus/adapters/inbound/http/observations.py",
+        "src/okto_nexus/adapters/outbound/sqlite/events_repo.py",
+        "src/okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+        "src/okto_nexus/application/observation_ingress.py",
+        "src/okto_nexus/application/observation_ports.py",
+        "src/okto_nexus/application/observation_validation.py",
+        "src/okto_nexus/application/observations.py",
+        "src/okto_nexus/application/retention.py",
+        "src/okto_nexus/application/settings.py",
+        "src/okto_nexus/config.py",
+        "src/okto_nexus/domain/observations.py",
+        "src/okto_nexus/migrations/164_external_observations.sql"
+      ],
+      "tests": [
+        "tests/test_observation_http.py",
+        "tests/test_observation_retention.py",
+        "tests/test_observation_service.py",
+        "tests/test_observation_settings.py",
+        "tests/test_observations_domain.py",
+        "tests/test_observations_storage.py"
+      ],
+      "result": "Receipt/observed-age validity and bounded future skew; passive stale/unavailable projection; source continuity across independent instances; opt-in configuration, aggregate budgets, bounded ingress and existing retention integration.",
+      "platform": "Windows 11; Python/SQLite source and installed wheel; real loopback HTTP; Chrome 156.0.8078.79 Settings",
+      "limitations": [
+        "No implicit canonical session correlation; uncorrelated external instances remain separate.",
+        "Herdr installed schema and observer/helper qualification remain PR-09; attention provenance/precedence remain PR-10.",
+        "Storage failure/commit errors are injected; this is not a campaign that fills the physical machine disk.",
+        "Configured ceilings are safety bounds, not measured production throughput.",
+        "Real provider/client/service and joint campaign gates remain separately open; no inference or personal service was invoked."
+      ],
+      "subscopes": {
+        "freshness_and_passive_projection": "VERIFIED",
+        "aggregate_limits_and_bounded_retention": "VERIFIED",
+        "settings_installed_http_and_browser": "VERIFIED"
+      }
     },
     "OBS-05": {
       "title": "empacotamento opcional",
@@ -8361,58 +8481,105 @@
     },
     "OB-01": {
       "requirement": "Fonte vinculada somente a agente/workspace autorizado.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Explicit source/agent/workspace approval and canonical self management isolation."
     },
     "OB-02": {
       "requirement": "Token de observaÃ§Ã£o rejeitado em mensagens, handoffs, MCP, runtime e emissÃ£o de tickets.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Exclusive publisher POST audience; MCP/messages/handoffs/runtime/key-renewal/management refusal tested."
     },
     "OB-03": {
       "requirement": "EPT de leitura nÃ£o ganha permissÃ£o de publicar telemetria.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Read EPT cannot publish; OBS bearer does not become canonical identity."
     },
     "OB-04": {
       "requirement": "Agente B nÃ£o publica estado para A por campo no payload.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Closed report schema rejects caller identity fields; source/instance/workspace authority comes from the token and current store."
     },
     "OB-05": {
       "requirement": "Mesmo seq/hash nÃ£o duplica evento nem renova validade.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Same latest sequence/hash returns unchanged received_at/valid_until and no extra event, including after TTL and policy changes."
     },
     "OB-06": {
       "requirement": "Mesmo seq com conteÃºdo diferente conflita; seq antiga nÃ£o sobrescreve.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Different hash at same sequence and old sequences conflict without replacing newer state."
     },
     "OB-07": {
       "requirement": "GeraÃ§Ã£o anterior nÃ£o atualiza instÃ¢ncia nova; reset local nÃ£o remove fencing.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Rotation/reset/recreation require new server generation and exact scoped token; old capability cannot cross the fence."
     },
     "OB-08": {
       "requirement": "RelÃ³gios atrasado/futuro e backlog apÃ³s reconnect nÃ£o tornam dado antigo atual.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Past backlog, future skew and policy bounds tested at domain/service/HTTP boundaries; observer reconnect implementation remains PR-09.",
+      "subscopes": {
+        "pr08_server_contract": "VERIFIED"
+      }
     },
     "OB-09": {
       "requirement": "TTL expirado vira observaÃ§Ã£o stale, nÃ£o idle, offline canÃ´nico ou capacidade livre.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Passive expiry produces stale/unknown activity; whole canonical-table snapshots remain unchanged."
     },
     "OB-10": {
       "requirement": "RevogaÃ§Ã£o de fonte/credencial/identidade impede novos reportes/renovaÃ§Ã£o.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Source/token/identity/issuer revocation is durable and precedes replay; key/permission restore does not revive tokens."
     },
     "OB-11": {
       "requirement": "Duas sessÃµes da mesma identidade preservam estados independentes.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Multiple instances preserve independent state while source continuity aggregates across them."
     },
     "OB-12": {
       "requirement": "InstÃ¢ncias Herdr diferentes com mesmo pane-id nÃ£o colidem.",
@@ -8426,18 +8593,33 @@
     },
     "OB-14": {
       "requirement": "Done/idle de startup/switch sem completion_ref nÃ£o gera conclusÃ£o fictÃ­cia.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Server idle/reason-only reports do not emit completion; real Herdr startup/switch normalization remains PR-09.",
+      "subscopes": {
+        "pr08_server_contract": "VERIFIED"
+      }
     },
     "OB-15": {
       "requirement": "TÃ©rmino observado nÃ£o conclui handoff nem libera claim/capacidade/inbox.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Observed completion writes auxiliary state/private event only; canonical tables remain unchanged."
     },
     "OB-16": {
       "requirement": "Reporte blocked nÃ£o gera aprovaÃ§Ã£o canÃ´nica nem permite responder via token observador.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Observed blocked does not create canonical approval or widen publisher authority."
     },
     "OB-17": {
       "requirement": "Fonte Herdr desconecta e volta: snapshot reconcilia sem replay produtivo.",
@@ -8456,13 +8638,23 @@
     },
     "OB-20": {
       "requirement": "Limites de taxa/tamanho/cardinalidade e falta de disco retornam recusa honesta.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Body/canonical size, batch100, rates/cardinality/backpressure and injected storage/commit failure refuse honestly; no physical-disk-full campaign claimed."
     },
     "OB-21": {
       "requirement": "Fonte maliciosa nÃ£o injeta HTML, URL executÃ¡vel, prompt, comando ou logs secretos na UI.",
       "status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "closed_bounded_payload_and_sanitized_http_errors": "VERIFIED"
+      }
     },
     "OB-22": {
       "requirement": "Observador Herdr nÃ£o chama prompt/start/send-keys/focus/kill.",
@@ -8471,13 +8663,27 @@
     },
     "OB-23": {
       "requirement": "Nexus sem Herdr instalado inicia, testa e opera normalmente.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "Server/package operates independently of Herdr; no Herdr discovery/API invocation or dependency is needed for this milestone.",
+      "subscopes": {
+        "pr08_server_contract": "VERIFIED"
+      }
     },
     "OB-24": {
       "requirement": "Desativar OBS mantÃ©m MCP-only, Core e Connector funcionais.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "result": "OBS opt-in/off is independent of native/runtime/MCP configuration; authorized historical reads survive and project unavailable.",
+      "subscopes": {
+        "pr08_server_contract": "VERIFIED"
+      }
     },
     "RG-01": {
       "requirement": "Dois participantes MCP e um runtime gerenciado cooperam no mesmo workspace sem identidades duplicadas.",
@@ -8609,10 +8815,13 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
       ],
       "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED"
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
       }
     },
     "INV-02": {
@@ -8644,17 +8853,35 @@
     "INV-05": {
       "requirement": "PresenÃ§a, atividade, capacidade, autorizaÃ§Ã£o, tÃ©rmino do turno e conclusÃ£o do handoff sÃ£o fatos diferentes.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      }
     },
     "INV-06": {
       "requirement": "`idle`, `done`, timeout, silÃªncio ou desconexÃ£o nÃ£o autorizam execuÃ§Ã£o, conclusÃ£o, liberaÃ§Ã£o de capacidade ou replay.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      }
     },
     "INV-07": {
       "requirement": "Observar/ler/abrir a central nÃ£o aprova, responde, interrompe, reivindica ou reexecuta trabalho.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      }
     },
     "INV-08": {
       "requirement": "Um observador externo nÃ£o produz recibos nativos, prova de ownership do Core, heartbeat de sessÃ£o MCP ou reserva de capacidade.",
@@ -8666,10 +8893,13 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
       ],
       "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED"
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
       }
     },
     "INV-09": {
@@ -8696,7 +8926,13 @@
     "INV-11": {
       "requirement": "NÃ£o colocar chaves em URLs, argumentos de processo, logs, screenshots, exemplos executÃ¡veis, exportaÃ§Ãµes ou estado do browser.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      }
     },
     "INV-12": {
       "requirement": "NÃ£o fabricar qualificaÃ§Ã£o de harness. Suporte ao formato de configuraÃ§Ã£o MCP Ã© distinto de suporte Ã  execuÃ§Ã£o nativa.",
@@ -8706,7 +8942,13 @@
     "INV-13": {
       "requirement": "A fonte de verdade de mensagens, handoffs, aprovaÃ§Ãµes e execuÃ§Ã£o permanece nos subsistemas atuais. Novas tabelas sÃ£o auxiliares, nÃ£o novas filas de trabalho.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
+      }
     },
     "INV-14": {
       "requirement": "NÃ£o interpretar texto livre de prompt/log como comando Nexus, aprovaÃ§Ã£o, identidade ou conclusÃ£o.",
@@ -8718,10 +8960,13 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
       ],
       "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED"
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "external_observation_admission_and_passive_read_contract": "VERIFIED"
       }
     },
     "INV-15": {
@@ -8850,7 +9095,13 @@
     "AC-02": {
       "requirement": "As frentes SVC, DX, ATN e OBS respeitam suas dependÃªncias e funcionam de modo combinado; Herdr continua opcional.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "pr08_external_observation_server_contract": "VERIFIED"
+      }
     },
     "AC-03": {
       "requirement": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
@@ -8892,7 +9143,13 @@
     "AC-06": {
       "requirement": "Atividade externa nunca se transforma em autorizaÃ§Ã£o, capacidade reservada ou conclusÃ£o de trabalho.",
       "status": "NOT_VERIFIED",
-      "evidence": []
+      "evidence": [
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
+      ],
+      "subscopes": {
+        "pr08_external_observation_server_contract": "VERIFIED"
+      }
     },
     "AC-07": {
       "requirement": "Core e Connector preservam suas fronteiras e o conjunto de dependÃªncias Ã© reproduzÃ­vel.",
@@ -8909,10 +9166,13 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
       ],
       "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED"
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "pr08_external_observation_server_contract": "VERIFIED"
       }
     },
     "AC-09": {
@@ -8925,10 +9185,13 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
       ],
       "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED"
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "pr08_external_observation_server_contract": "VERIFIED"
       }
     },
     "AC-10": {
@@ -8941,10 +9204,13 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
-        "plans/agent_ops/evidence/pr05-coordination-cli.md"
+        "plans/agent_ops/evidence/pr05-coordination-cli.md",
+        "plans/agent_ops/evidence/pr08-observations-tests.json",
+        "plans/agent_ops/evidence/pr08-observations.md"
       ],
       "subscopes": {
-        "generic_coordination_cli_installed_contract": "VERIFIED"
+        "generic_coordination_cli_installed_contract": "VERIFIED",
+        "pr08_external_observation_server_contract": "VERIFIED"
       }
     },
     "AC-11": {

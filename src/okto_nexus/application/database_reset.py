@@ -12,6 +12,9 @@ INSTALLATION_TABLES = frozenset({
     # Retained configuration keeps its original authority episode. Canonical
     # source DELETE triggers remove only the anchors of erased history/resources.
     'attention_operation_epochs',
+    # No identity FKs: keep the allocator and spent rate budget through both
+    # reset modes, without retaining removed agent/source configuration.
+    'observation_installation', 'observation_rate_buckets',
 })
 
 # Preserve the whole configured connection, including its original authority
@@ -32,6 +35,7 @@ AGENT_CONFIGURATION_TABLES = frozenset({
     'agent_policy_bindings', 'policies', 'policy_versions', 'governance_policies',
     'agent_comm_binding', 'comm_presets', 'comm_preset_versions',
     'agent_groups', 'agent_group_members', 'guardrails', 'guardrail_versions', 'guardrail_assignments',
+    'observation_sources', 'observation_source_workspaces',
 })
 
 
@@ -84,16 +88,33 @@ def clear_operational_history(conn, *, keep_agents):
             conn.execute(f'DROP TRIGGER "{name}"')
             triggers.append(trigger[0])
     conn.execute('PRAGMA defer_foreign_keys=ON')
+    # RESTRICT credential/history FKs must be cleared in dependency order.
+    # Configuration may survive, but no old token or instance survives reset.
+    counts = {}
+    observation_tables = ['observation_heads', 'observation_token_instances',
+                          'observation_tokens', 'observation_instances']
+    if not keep_agents:
+        observation_tables += ['observation_source_workspaces', 'observation_sources']
+    for table in observation_tables:
+        if conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone():
+            counts[table] = conn.execute(f'DELETE FROM "{table}"').rowcount
     tables = conn.execute("SELECT name FROM sqlite_master WHERE type='table' "
         "AND name NOT LIKE 'sqlite_%'").fetchall()
-    counts = {}
     for row in tables:
         table = row[0]
         if table not in preserved:
             escaped = table.replace('"', '""')
-            counts[table] = conn.execute(f'DELETE FROM "{escaped}"').rowcount
+            counts[table] = counts.get(table, 0) + conn.execute(f'DELETE FROM "{escaped}"').rowcount
     for sql in triggers:
         conn.execute(sql)
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='observation_rate_buckets'").fetchone():
+        # Keep all surviving identities' spent quota, including management
+        # budgets of agents with no source yet. Removed entities cannot leave
+        # unbounded orphan buckets across repeated full resets.
+        counts['observation_rate_buckets'] = conn.execute(
+            "DELETE FROM observation_rate_buckets AS b WHERE (b.scope_kind='source' AND NOT EXISTS "
+            '(SELECT 1 FROM observation_sources s WHERE s.source_id=b.scope_id)) OR '
+            "(b.scope_kind='agent' AND NOT EXISTS (SELECT 1 FROM agents a WHERE a.agent_id=b.scope_id))").rowcount
     # No operational work survives this explicit reset. Authority tombstones
     # no longer explain a pending reference; retained configuration counters
     # remain intact, including when identities are preserved.

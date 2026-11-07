@@ -7,9 +7,9 @@ The Pulse permission grammar adapted to the Nexus communication domain:
 * built-in presets (Full access / Coordinator / Worker / Observer) defined in
   CODE - custom presets live in the ``permission_presets`` table and are
   managed by the operator through the dashboard;
-* a :class:`PermissionSet` resolver with **default-allow** semantics: an
-  absent flag (or a ``NULL`` permissions column) reads as allowed, so every
-  pre-existing agent keeps working unchanged after migration 011.
+* a :class:`PermissionSet` resolver that preserves **default-allow** for
+  existing communication flags. Observation management and publishing are
+  opt-in: only an explicitly stored boolean ``True`` grants either flag.
 
 Strictly side-effect-free: stdlib + the error catalogue only (the import
 boundary test enforces this). Enforcement happens in the APPLICATION layer
@@ -53,6 +53,10 @@ PERMISSION_REGISTRY: dict[str, dict[str, Any]] = {
     "events": {
         "read": True,
     },
+    "observations": {
+        "manage_self": False,
+        "publish": False,
+    },
     "identity": {
         "update_profile": True,
         "update_capabilities": True,
@@ -89,6 +93,8 @@ PERMISSION_DESCRIPTIONS: dict[str, str] = {
     "channels.create": "Create new channels.",
     "artifacts.put": "Publish artifacts.",
     "events.read": "Read or wait on the workspace event stream (event_get / event_wait).",
+    "observations.manage_self": "Manage own observed instances within operator-approved sources and workspaces. Token issuance also requires observations.publish.",
+    "observations.publish": "Publish external activity for this agent's approved observation instances. Does not authorize messages, runtime execution or source administration.",
     "identity.update_profile": "Update its own role and metadata through agent_register.",
     "identity.update_capabilities": "Update its own advertised capabilities through agent_register.",
     "workspaces.list": "Enumerate registered workspaces.",
@@ -248,7 +254,7 @@ def validate_permission_flags(flags: Any) -> dict[str, dict[str, Any]]:
 
 
 class PermissionSet:
-    """Resolved permissions for one agent, with default-allow semantics."""
+    """Legacy default-allow permissions, with explicit opt-in observation flags."""
 
     __slots__ = ("_flags",)
 
@@ -256,7 +262,10 @@ class PermissionSet:
         self._flags = flags or {}
 
     def allows(self, group: str, flag: str) -> bool:
-        """``True`` unless the flag is explicitly stored as ``False``."""
+        """Require explicit boolean grants for OBS; preserve all legacy defaults."""
+        if group == "observations" and flag in ("manage_self", "publish"):
+            entries = self._flags.get(group) if isinstance(self._flags, dict) else None
+            return isinstance(entries, dict) and entries.get(flag) is True
         value = self._flags.get(group, {}).get(flag)
         if value is None:
             return True

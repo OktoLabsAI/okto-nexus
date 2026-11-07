@@ -7,3 +7,6 @@ plans/agent_ops/evidence/pr06-attention-*.xml text eol=lf
 plans/agent_ops/evidence/pr07-attention-ui*.xml -text
 plans/agent_ops/evidence/pr07-attention-ui*.json -text
 plans/agent_ops/evidence/pr07-attention-ui/** -text
+# PR-08 manifests retain original test, installed-wheel and browser bytes.
+plans/agent_ops/evidence/pr08-observations*.json -text
+plans/agent_ops/evidence/pr08-observations/** -text

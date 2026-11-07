@@ -22,6 +22,7 @@ from ..config import (
     METRICS_MODES,
     MIN_RETENTION_MESSAGES_KEEP_DAYS,
     NexusConfig,
+    OBSERVATION_INTEGER_LIMITS,
     TRUST_MODES,
 )
 from ..errors import ErrorCode, OktoNexusError
@@ -43,10 +44,48 @@ class SettingSpec:
     implemented: bool = True
 
 
+_OBSERVATION_DESCRIPTIONS = {
+    "observation_max_valid_for_seconds": (
+        "Maximum validity in seconds for new external activity reports; default 3600. "
+        "Omitted report TTL is fixed at 90 seconds by the protocol. A lower maximum "
+        "requires an explicit smaller TTL on new reports; accepted replays retain their original expiry."
+    ),
+    "observation_future_tolerance_seconds": (
+        "Allowed future clock skew in seconds for a new external report; default 30. "
+        "Skew never extends validity beyond the report TTL from Server receipt."
+    ),
+    "observation_source_stale_seconds": (
+        "Seconds without a current source report before external source activity is stale; default 30. "
+        "This does not change agent presence, sessions or execution capacity."
+    ),
+    "observation_source_rate_per_minute": "Maximum admitted external reports per minute for one source; default 60.",
+    "observation_source_burst": "Maximum accumulated report burst for one external source; default 20.",
+    "observation_agent_rate_per_minute": "Maximum admitted external reports per minute across one agent's sources; default 1920.",
+    "observation_agent_burst": "Maximum accumulated report burst across one agent's external sources; default 80.",
+    "observation_installation_rate_per_minute": "Maximum admitted external reports per minute across this installation; default 8192.",
+    "observation_installation_burst": "Maximum accumulated external report burst across this installation; default 512.",
+    "observation_max_sources_per_agent": "Maximum registered external observation sources for one agent; default 32.",
+    "observation_max_sources": "Maximum registered external observation sources in this installation; default 4096.",
+    "observation_max_instances": "Maximum registered external observed instances in this installation; default 4096.",
+    "observation_max_tokens_per_source": "Maximum active publish credentials for one observation source; default 8.",
+    "observation_event_retention_days": "External observation event history retention in days; default 7. Replay and generation fences are preserved separately.",
+    "observation_max_events": "Maximum retained external observation events; default 20000. This does not cap canonical coordination history.",
+}
+
+
 #: The dashboard-editable subset of NexusConfig. ``home_dir``/``db_path``
 #: stay CLI/env-only on purpose: repointing storage mid-flight cannot be
 #: applied safely to a running process.
 SETTING_SPECS: tuple[SettingSpec, ...] = (
+    SettingSpec(
+        "feature_observations", "bool",
+        "Opt-in external activity telemetry, disabled by default. Sources require explicit authorization. "
+        "Enabling this does not enable runtime connections, change agent presence or grant permissions.",
+        group="features",
+    ),
+    *(SettingSpec(name, "int", _OBSERVATION_DESCRIPTIONS[name], minimum=low, maximum=high,
+                  group="observations")
+      for name, (_, low, high) in OBSERVATION_INTEGER_LIMITS.items()),
     SettingSpec(
         "remote_machine_policy", "enum",
         "When another registered Connector machine requests the same agent: require approval (default), "
@@ -407,6 +446,12 @@ _SPEC_BY_KEY: dict[str, SettingSpec] = {spec.key: spec for spec in SETTING_SPECS
 
 def _coerce(spec: SettingSpec, raw: Any) -> Any:
     """Validate ``raw`` against the spec; raise CONFIG_ERROR otherwise."""
+    if spec.key in OBSERVATION_INTEGER_LIMITS and type(raw) is not int:
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            f"Setting {spec.key!r} expects an integer, without boolean or numeric coercion.", {})
+    if spec.key == "feature_observations" and type(raw) is not bool:
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            "Setting 'feature_observations' expects a boolean.", {})
     if spec.key in {"attention_unclaimed_seconds", "attention_disconnected_seconds"} and type(raw) is not int:
         # Zero explicitly disables a time rule; never turn false or a fraction
         # into that policy through the legacy integer coercion below.

@@ -67,6 +67,7 @@ from okto_nexus.adapters.outbound.sqlite.policy_repo import (
     SqlitePolicyRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.poll_tokens_repo import SqlitePollTokenRepo
+from okto_nexus.adapters.outbound.sqlite.observations_repo import SqliteObservationRepo
 from okto_nexus.adapters.outbound.sqlite.tag_catalog_repo import SqliteTagCatalogRepo
 from okto_nexus.adapters.outbound.telemetry import LocalTelemetryEventStore, NexusTelemetryHttpSink
 from okto_nexus.adapters.outbound.telemetry.event_emitter import TelemetryEventEmitter
@@ -158,6 +159,7 @@ def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]
         comm_bindings=SqliteAgentCommBindingRepo(clock),
         approvals=SqliteApprovalRepo(),
         poll_tokens=SqlitePollTokenRepo(clock),
+        observations=SqliteObservationRepo(),
     )
     emitter = SqliteEventEmitter(events_repo)
     return repos, emitter

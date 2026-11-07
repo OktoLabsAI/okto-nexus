@@ -1,0 +1,165 @@
+- generic [ref=f2e3]:
+  - banner [ref=f2e4]:
+    - button "Collapse menu" [ref=f2e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=f2e9]
+    - generic [ref=f2e10]: / Settings
+    - generic [ref=f2e11]:
+      - combobox "Workspace scope" [ref=f2e12]:
+        - option "All workspaces" [selected]
+        - option "Workspace 1"
+      - generic [ref=f2e13]: ● Live
+      - button "Refresh Settings" [ref=f2e14] [cursor=pointer]
+      - button [ref=f2e19] [cursor=pointer]
+  - generic [ref=f2e23]:
+    - complementary [ref=f2e24]:
+      - navigation [ref=f2e26]:
+        - heading "Observability" [level=3] [ref=f2e27]
+        - list [ref=f2e28]:
+          - listitem [ref=f2e29]:
+            - button "Attention" [ref=f2e30] [cursor=pointer]
+          - listitem [ref=f2e35]:
+            - button "Graph" [ref=f2e36] [cursor=pointer]
+          - listitem [ref=f2e45]:
+            - button "Messages" [ref=f2e46] [cursor=pointer]
+          - listitem [ref=f2e51]:
+            - button "Handoffs" [ref=f2e52] [cursor=pointer]
+          - listitem [ref=f2e56]:
+            - button "Meta-harness" [ref=f2e57] [cursor=pointer]
+          - listitem [ref=f2e62]:
+            - button "Events" [ref=f2e63] [cursor=pointer]
+          - listitem [ref=f2e67]:
+            - button "Artifacts" [ref=f2e68] [cursor=pointer]
+          - listitem [ref=f2e74]:
+            - button "Workspaces" [ref=f2e75] [cursor=pointer]
+          - listitem [ref=f2e79]:
+            - button "Agents" [ref=f2e80] [cursor=pointer]
+          - listitem [ref=f2e87]:
+            - button "Registry" [ref=f2e88] [cursor=pointer]
+          - listitem [ref=f2e94]:
+            - button "Policies" [ref=f2e95] [cursor=pointer]
+          - listitem [ref=f2e99]:
+            - button "Guardrails" [ref=f2e100] [cursor=pointer]
+          - listitem [ref=f2e104]:
+            - button "Communication" [ref=f2e105] [cursor=pointer]
+          - listitem [ref=f2e109]:
+            - button "Approvals" [ref=f2e110] [cursor=pointer]
+          - listitem [ref=f2e115]:
+            - button "Runtimes" [ref=f2e116] [cursor=pointer]
+          - listitem [ref=f2e121]:
+            - button "Execution log" [ref=f2e122] [cursor=pointer]
+    - main [ref=f2e126]:
+      - generic [ref=f2e127]:
+        - generic [ref=f2e128]:
+          - heading "Settings" [level=1] [ref=f2e129]
+          - paragraph [ref=f2e130]: Configure this Nexus instance. Changes across tabs are saved together.
+          - tablist "Settings categories" [ref=f2e131]:
+            - tab "Interface" [ref=f2e132] [cursor=pointer]
+            - tab "Runtime" [ref=f2e133] [cursor=pointer]
+            - tab "Coordination" [ref=f2e134] [cursor=pointer]
+            - tab "Observations" [selected] [ref=f2e135] [cursor=pointer]
+            - tab "Security" [ref=f2e136] [cursor=pointer]
+            - tab "Storage" [ref=f2e137] [cursor=pointer]
+        - group [ref=f2e139]:
+          - tabpanel "Observations" [ref=f2e140]:
+            - generic [ref=f2e141]:
+              - generic [ref=f2e142]:
+                - heading "External observations" [level=2] [ref=f2e143]
+                - paragraph [ref=f2e147]: External activity reporting is opt-in and disabled by default. Sources and agent permissions require explicit approval. Runtime and coordination have separate controls.
+              - generic [ref=f2e148]:
+                - generic "Opt-in external activity telemetry, disabled by default. Sources require explicit authorization. Enabling this does not enable runtime connections, change agent presence or grant permissions." [ref=f2e149]:
+                  - generic [ref=f2e150]: Feature observations
+                  - paragraph [ref=f2e151]: Opt-in external activity telemetry, disabled by default. Sources require explicit authorization. Enabling this does not enable runtime connections, change agent presence or grant permissions.
+                  - checkbox "Feature observations" [ref=f2e153]
+                - generic "Maximum validity in seconds for new external activity reports; default 3600. Omitted report TTL is fixed at 90 seconds by the protocol. A lower maximum requires an explicit smaller TTL on new reports; accepted replays retain their original expiry." [ref=f2e154]:
+                  - generic [ref=f2e155]: Observation max valid for seconds
+                  - paragraph [ref=f2e156]: Maximum validity in seconds for new external activity reports; default 3600. Omitted report TTL is fixed at 90 seconds by the protocol. A lower maximum requires an explicit smaller TTL on new reports; accepted replays retain their original expiry.
+                  - generic [ref=f2e157]:
+                    - spinbutton "Observation max valid for seconds" [ref=f2e158]: "3600"
+                    - generic [ref=f2e159]: 1–3600
+                - generic "Allowed future clock skew in seconds for a new external report; default 30. Skew never extends validity beyond the report TTL from Server receipt." [ref=f2e160]:
+                  - generic [ref=f2e161]: Observation future tolerance seconds
+                  - paragraph [ref=f2e162]: Allowed future clock skew in seconds for a new external report; default 30. Skew never extends validity beyond the report TTL from Server receipt.
+                  - generic [ref=f2e163]:
+                    - spinbutton "Observation future tolerance seconds" [ref=f2e164]: "30"
+                    - generic [ref=f2e165]: 0–300
+                - generic "Seconds without a current source report before external source activity is stale; default 30. This does not change agent presence, sessions or execution capacity." [ref=f2e166]:
+                  - generic [ref=f2e167]: Observation source stale seconds
+                  - paragraph [ref=f2e168]: Seconds without a current source report before external source activity is stale; default 30. This does not change agent presence, sessions or execution capacity.
+                  - generic [ref=f2e169]:
+                    - spinbutton "Observation source stale seconds" [ref=f2e170]: "30"
+                    - generic [ref=f2e171]: 1–3600
+                - generic "Maximum admitted external reports per minute for one source; default 60." [ref=f2e172]:
+                  - generic [ref=f2e173]: Observation source rate per minute
+                  - paragraph [ref=f2e174]: Maximum admitted external reports per minute for one source; default 60.
+                  - generic [ref=f2e175]:
+                    - spinbutton "Observation source rate per minute" [ref=f2e176]: "60"
+                    - generic [ref=f2e177]: 1–6000
+                - generic "Maximum accumulated report burst for one external source; default 20." [ref=f2e178]:
+                  - generic [ref=f2e179]: Observation source burst
+                  - paragraph [ref=f2e180]: Maximum accumulated report burst for one external source; default 20.
+                  - generic [ref=f2e181]:
+                    - spinbutton "Observation source burst" [ref=f2e182]: "20"
+                    - generic [ref=f2e183]: 1–1024
+                - generic "Maximum admitted external reports per minute across one agent's sources; default 1920." [ref=f2e184]:
+                  - generic [ref=f2e185]: Observation agent rate per minute
+                  - paragraph [ref=f2e186]: Maximum admitted external reports per minute across one agent's sources; default 1920.
+                  - generic [ref=f2e187]:
+                    - spinbutton "Observation agent rate per minute" [ref=f2e188]: "1920"
+                    - generic [ref=f2e189]: 1–60000
+                - generic "Maximum accumulated report burst across one agent's external sources; default 80." [ref=f2e190]:
+                  - generic [ref=f2e191]: Observation agent burst
+                  - paragraph [ref=f2e192]: Maximum accumulated report burst across one agent's external sources; default 80.
+                  - generic [ref=f2e193]:
+                    - spinbutton "Observation agent burst" [ref=f2e194]: "80"
+                    - generic [ref=f2e195]: 1–4096
+                - generic "Maximum admitted external reports per minute across this installation; default 8192." [ref=f2e196]:
+                  - generic [ref=f2e197]: Observation installation rate per minute
+                  - paragraph [ref=f2e198]: Maximum admitted external reports per minute across this installation; default 8192.
+                  - generic [ref=f2e199]:
+                    - spinbutton "Observation installation rate per minute" [ref=f2e200]: "8192"
+                    - generic [ref=f2e201]: 1–600000
+                - generic "Maximum accumulated external report burst across this installation; default 512." [ref=f2e202]:
+                  - generic [ref=f2e203]: Observation installation burst
+                  - paragraph [ref=f2e204]: Maximum accumulated external report burst across this installation; default 512.
+                  - generic [ref=f2e205]:
+                    - spinbutton "Observation installation burst" [ref=f2e206]: "512"
+                    - generic [ref=f2e207]: 1–16384
+                - generic "Maximum registered external observation sources for one agent; default 32." [ref=f2e208]:
+                  - generic [ref=f2e209]: Observation max sources per agent
+                  - paragraph [ref=f2e210]: Maximum registered external observation sources for one agent; default 32.
+                  - generic [ref=f2e211]:
+                    - spinbutton "Observation max sources per agent" [ref=f2e212]: "32"
+                    - generic [ref=f2e213]: 1–1024
+                - generic "Maximum registered external observation sources in this installation; default 4096." [ref=f2e214]:
+                  - generic [ref=f2e215]: Observation max sources
+                  - paragraph [ref=f2e216]: Maximum registered external observation sources in this installation; default 4096.
+                  - generic [ref=f2e217]:
+                    - spinbutton "Observation max sources" [ref=f2e218]: "4096"
+                    - generic [ref=f2e219]: 1–65536
+                - generic "Maximum registered external observed instances in this installation; default 4096." [ref=f2e220]:
+                  - generic [ref=f2e221]: Observation max instances
+                  - paragraph [ref=f2e222]: Maximum registered external observed instances in this installation; default 4096.
+                  - generic [ref=f2e223]:
+                    - spinbutton "Observation max instances" [ref=f2e224]: "4096"
+                    - generic [ref=f2e225]: 1–65536
+                - generic "Maximum active publish credentials for one observation source; default 8." [ref=f2e226]:
+                  - generic [ref=f2e227]: Observation max tokens per source
+                  - paragraph [ref=f2e228]: Maximum active publish credentials for one observation source; default 8.
+                  - generic [ref=f2e229]:
+                    - spinbutton "Observation max tokens per source" [ref=f2e230]: "8"
+                    - generic [ref=f2e231]: 1–64
+                - generic "External observation event history retention in days; default 7. Replay and generation fences are preserved separately." [ref=f2e232]:
+                  - generic [ref=f2e233]: Observation event retention days
+                  - paragraph [ref=f2e234]: External observation event history retention in days; default 7. Replay and generation fences are preserved separately.
+                  - generic [ref=f2e235]:
+                    - spinbutton "Observation event retention days" [ref=f2e236]: "7"
+                    - generic [ref=f2e237]: 1–90
+                - generic "Maximum retained external observation events; default 20000. This does not cap canonical coordination history." [ref=f2e238]:
+                  - generic [ref=f2e239]: Observation max events
+                  - paragraph [ref=f2e240]: Maximum retained external observation events; default 20000. This does not cap canonical coordination history.
+                  - generic [ref=f2e241]:
+                    - spinbutton "Observation max events" [ref=f2e242]: "20000"
+                    - generic [ref=f2e243]: 1–1000000
+        - generic [ref=f2e244]:
+          - paragraph [ref=f2e246]: Settings saved and applied.
+          - button "Save changes" [disabled] [ref=f2e247]

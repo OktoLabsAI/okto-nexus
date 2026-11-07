@@ -1,0 +1,21 @@
+{
+  "canonical_response": {
+    "ok": true,
+    "data": {
+      "instance_id": "svc_cb426ac56520c03f6d49aac7fe1f17e8d3bd9bde5aeb17c1784d6b80ba55c3d2",
+      "generation": "77d9cbce4c0309fe2fa8effa28ab8720",
+      "shutdown": {
+        "state": "DRAINED",
+        "deadline_monotonic": 505465.0273421,
+        "resources": [],
+        "error_codes": []
+      }
+    }
+  },
+  "owner_pid": 22456,
+  "launcher_pid": 28748,
+  "browser_session_closed": true,
+  "owner_and_launcher_processes_absent": true,
+  "tcp_probe": {"port": 49707, "timeout_seconds": 2, "connect_result": 10035, "accepting_connections": false},
+  "windows_diagnostic": "Get-NetTCPConnection briefly retained Listen records with OwningProcess=0 after both known processes exited; the TCP probe could not connect."
+}

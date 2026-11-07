@@ -41,6 +41,10 @@ from ....application.telemetry.schema import EVENT_HTTP, EVENT_LIFECYCLE
 from ....application.workspace_analytics import WorkspaceAnalyticsService
 from ....application.workspace_overview import WorkspaceListService
 from ....domain.approvals import OPERATOR_AGENT_ID
+from ....domain.observation_tokens import (
+    OBSERVATION_TOKEN_PREFIX,
+    is_well_formed_observation_token,
+)
 from ....domain.poll_tokens import POLL_TOKEN_PREFIX, is_well_formed_poll_token
 from ....errors import ErrorCode, OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
@@ -200,6 +204,10 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         """Classify exact read contracts, never a caller-controlled bypass header."""
         if request.method == 'GET' and path == '/v1/connections/participant':
             return True
+        if path == '/api/v1/observations' or path.startswith('/api/v1/observations/'):
+            # Management commands revalidate the current canonical principal
+            # in their own transaction; authentication itself records no activity.
+            return True
         if not is_mcp:
             return False
         if request.method in ('GET', 'DELETE'):
@@ -234,6 +242,25 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path.rstrip("/") or "/"
         is_v1 = path == "/v1" or path.startswith("/v1/")
+        observation_credentials = [
+            *request.query_params.getlist('api_key'),
+            *request.headers.getlist('x-api-key'),
+            *(value[7:].strip() for value in request.headers.getlist('authorization')
+              if value.lower().startswith('bearer ')),
+        ]
+        if request.method == 'POST' and request.url.path == '/v1/observations/activity':
+            if (len(request.headers.getlist('authorization')) != 1 or
+                    not is_well_formed_observation_token(extract_bearer(request)) or
+                    'api_key' in request.query_params or 'x-api-key' in request.headers):
+                return v1_err(401, 'AUTH_FAILED',
+                    'Use only an observation publish-token bearer on this endpoint.')
+            # Shape only: the route authenticates the stored digest, current
+            # source/instance generations and permissions atomically with admission.
+            # Never resolve a canonical agent or inherit local/operator authority.
+            return await call_next(request)
+        if any(value.startswith(OBSERVATION_TOKEN_PREFIX) for value in observation_credentials):
+            return (v1_err if is_v1 else err)(401, 'AUTH_FAILED',
+                'Observation tokens are accepted only on their publish endpoint.')
         if is_v1 and (request.query_params.get("api_key") or
                       request.headers.get("x-api-key")):
             return v1_err(401, "AUTH_FAILED", "Use only the Authorization bearer header on /v1.")
@@ -839,6 +866,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         factory=deps.connection_factory, access=build_execution_access(deps),
         queries=SqliteAttentionQueries(decision_registry=deps.approvals.attention_decision_actions),
         clock=deps.clock, config=deps.config)
+    from ....application.observations import ObservationService
+    app.state.observations = ObservationService(deps=deps, access=build_execution_access(deps))
     app.state.workspace_analytics = workspace_analytics
     app.state.workspace_list = workspace_list
     app.state.workspace_health = workspace_health
@@ -915,6 +944,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     app.include_router(routes.build_router(), prefix="/api/v1")
     from .attention import build_router as attention_router
     app.include_router(attention_router(), prefix="/api/v1")
+    from .observations import management_router as observation_management_router, publish_router as observation_publish_router
+    app.include_router(observation_management_router(), prefix="/api/v1")
+    app.include_router(observation_publish_router(), prefix="/v1")
     app.include_router(stream.build_router(), prefix="/api/v1")
     app.mount("/mcp", mcp_app)
     return app

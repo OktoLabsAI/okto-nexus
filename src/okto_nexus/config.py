@@ -48,6 +48,30 @@ DEFAULT_MAX_EVENT_LIMIT = 1000
 #: Default TTL (seconds) for ephemeral poll tokens used by remote monitors.
 DEFAULT_POLL_TOKEN_TTL_SECONDS = 3600
 
+# External activity telemetry is opt-in and independent of runtime admission.
+# Each entry is (default, inclusive minimum, inclusive hard maximum). These
+# finite bounds prevent unlimited storage/rate policy; they are not throughput
+# measurements. HTTP body/batch/queue and credential lifetime stay protocol
+# constants. Omitted report TTL stays 90s in schema v1 for replay stability;
+# lowering max TTL below 90 requires new reports to specify a smaller TTL.
+OBSERVATION_INTEGER_LIMITS: dict[str, tuple[int, int, int]] = {
+    "observation_max_valid_for_seconds": (3600, 1, 3600),
+    "observation_future_tolerance_seconds": (30, 0, 300),
+    "observation_source_stale_seconds": (30, 1, 3600),
+    "observation_source_rate_per_minute": (60, 1, 6000),
+    "observation_source_burst": (20, 1, 1024),
+    "observation_agent_rate_per_minute": (1920, 1, 60000),
+    "observation_agent_burst": (80, 1, 4096),
+    "observation_installation_rate_per_minute": (8192, 1, 600000),
+    "observation_installation_burst": (512, 1, 16384),
+    "observation_max_sources_per_agent": (32, 1, 1024),
+    "observation_max_sources": (4096, 1, 65536),
+    "observation_max_instances": (4096, 1, 65536),
+    "observation_max_tokens_per_source": (8, 1, 64),
+    "observation_event_retention_days": (7, 1, 90),
+    "observation_max_events": (20000, 1, 1000000),
+}
+
 # --------------------------------------------------------------------------- #
 # Anonymous usage metrics (Pulse-derived pattern). This is opt-in and keeps the
 # Nexus runtime portable: the application layer owns the bounded contract while
@@ -213,6 +237,23 @@ class NexusConfig:
     feature_attention: bool = True
     attention_unclaimed_seconds: int = 300
     attention_disconnected_seconds: int = 300
+    # External observations never enable runtime, HITL or canonical presence.
+    feature_observations: bool = False
+    observation_max_valid_for_seconds: int = 3600
+    observation_future_tolerance_seconds: int = 30
+    observation_source_stale_seconds: int = 30
+    observation_source_rate_per_minute: int = 60
+    observation_source_burst: int = 20
+    observation_agent_rate_per_minute: int = 1920
+    observation_agent_burst: int = 80
+    observation_installation_rate_per_minute: int = 8192
+    observation_installation_burst: int = 512
+    observation_max_sources_per_agent: int = 32
+    observation_max_sources: int = 4096
+    observation_max_instances: int = 4096
+    observation_max_tokens_per_source: int = 8
+    observation_event_retention_days: int = 7
+    observation_max_events: int = 20000
     # Startup rollout gate. Agent/global opt-in remains independently required.
     runtime_handoff_auto_claim_enabled: bool = True
     # Startup-only indexed recovery of lost runtime commit notifications.
@@ -231,6 +272,12 @@ class NexusConfig:
     feature_replay: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.feature_observations) is not bool:
+            raise OktoNexusError(ErrorCode.CONFIG_ERROR, "feature_observations must be a boolean.", {})
+        for name, (_, low, high) in OBSERVATION_INTEGER_LIMITS.items():
+            value = getattr(self, name)
+            if type(value) is not int or not low <= value <= high:
+                raise OktoNexusError(ErrorCode.CONFIG_ERROR, f"{name} must be an integer within {low}..{high}.", {})
         for name, low, high in (("runtime_recovery_interval_seconds", 1, 86400),
                 ("attention_unclaimed_seconds", 0, 86400),
                 ("attention_disconnected_seconds", 0, 86400),
@@ -260,6 +307,8 @@ _PATH_FIELDS: dict[str, tuple[str, str]] = {
 }
 
 _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
+    **{name: ("OKTO_NEXUS_" + name.upper(), "--" + name.replace("_", "-"), default, low)
+       for name, (default, low, _) in OBSERVATION_INTEGER_LIMITS.items()},
     "attention_unclaimed_seconds": (
         "OKTO_NEXUS_ATTENTION_UNCLAIMED_SECONDS", "--attention-unclaimed-seconds", 300, 0,
     ),
@@ -507,6 +556,9 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
     ),
     "feature_attention": (
         "OKTO_NEXUS_FEATURE_ATTENTION", "--feature-attention", True,
+    ),
+    "feature_observations": (
+        "OKTO_NEXUS_FEATURE_OBSERVATIONS", "--feature-observations", False,
     ),
     "feature_health": (
         "OKTO_NEXUS_FEATURE_HEALTH",

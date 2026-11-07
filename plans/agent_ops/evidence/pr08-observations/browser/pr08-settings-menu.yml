@@ -1,0 +1,141 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Graph
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+        - option "Workspace 1"
+      - generic [ref=e13]: ● Live
+      - button "Refresh Graph" [ref=e14] [cursor=pointer]
+      - button [ref=e19] [cursor=pointer]
+  - generic [ref=e232]:
+    - generic [ref=e233]:
+      - generic [ref=e234]:
+        - heading "Metrics opt-in" [level=2] [ref=e235]
+        - paragraph [ref=e239]: "Current setting: Off"
+      - button "Close metrics settings" [ref=e240] [cursor=pointer]
+    - generic [ref=e244]:
+      - generic [ref=e245]: Okto Nexus starts with metrics disabled. Anonymous aggregate publishing is optional and can be changed later.
+      - generic [ref=e246]:
+        - generic [ref=e247]:
+          - generic [ref=e248]: "0"
+          - generic [ref=e249]: events
+        - generic [ref=e250]:
+          - generic [ref=e251]: "0"
+          - generic [ref=e252]: pending
+        - generic [ref=e253]:
+          - generic [ref=e254]: "0"
+          - generic [ref=e255]: sent
+      - generic [ref=e257]:
+        - generic [ref=e258]:
+          - generic [ref=e259]: Send metrics
+          - generic [ref=e260]: "Off"
+        - switch [ref=e261] [cursor=pointer]
+      - generic [ref=e263]:
+        - generic [ref=e264]: Metrics scope
+        - generic [ref=e265]: All eligible anonymous aggregate metrics are included when sending is on.
+      - generic [ref=e266]:
+        - heading "Anonymous metrics included" [level=3] [ref=e267]
+        - generic [ref=e270]:
+          - generic [ref=e275]:
+            - generic [ref=e276]: Telemetry schema reviewed
+            - generic [ref=e277]: Only documented anonymous aggregate fields are eligible.
+          - generic [ref=e282]:
+            - generic [ref=e283]: Privacy terms reviewed
+            - generic [ref=e284]: Metrics sharing is optional and can be turned off here.
+          - generic [ref=e289]:
+            - generic [ref=e290]: Hourly aggregates only
+            - generic [ref=e291]: Events are summarized before upload.
+          - generic [ref=e296]:
+            - generic [ref=e297]: No PII or project content
+            - generic [ref=e298]: Messages, paths, titles and payload bodies are not sent.
+      - generic [ref=e299]:
+        - generic [ref=e300]:
+          - generic [ref=e301]: Schema
+          - generic [ref=e302]: 1.0.0
+        - generic [ref=e303]:
+          - generic [ref=e304]: Publish health
+          - generic [ref=e305]: disabled
+        - generic [ref=e306]:
+          - generic [ref=e307]: Last success
+          - generic [ref=e308]: —
+        - generic [ref=e309]:
+          - generic [ref=e310]: Last failure
+          - generic [ref=e311]: —
+      - generic [ref=e312]: C:\Users\jpamb\AppData\Local\Temp\pr08-installed-wy268uaa\qualified\server-home\metrics
+      - generic [ref=e313]:
+        - button "Refresh" [ref=e314] [cursor=pointer]
+        - button "Save" [disabled] [ref=e318]
+        - button "Not now" [ref=e323] [cursor=pointer]
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - heading "Observability" [level=3] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - button "Attention" [ref=e30] [cursor=pointer]
+          - listitem [ref=e35]:
+            - button "Graph" [ref=e36] [cursor=pointer]
+          - listitem [ref=e45]:
+            - button "Messages" [ref=e46] [cursor=pointer]
+          - listitem [ref=e51]:
+            - button "Handoffs" [ref=e52] [cursor=pointer]
+          - listitem [ref=e56]:
+            - button "Meta-harness" [ref=e57] [cursor=pointer]
+          - listitem [ref=e62]:
+            - button "Events" [ref=e63] [cursor=pointer]
+          - listitem [ref=e67]:
+            - button "Artifacts" [ref=e68] [cursor=pointer]
+          - listitem [ref=e74]:
+            - button "Workspaces" [ref=e75] [cursor=pointer]
+          - listitem [ref=e79]:
+            - button "Agents" [ref=e80] [cursor=pointer]
+          - listitem [ref=e87]:
+            - button "Registry" [ref=e88] [cursor=pointer]
+          - listitem [ref=e94]:
+            - button "Policies" [ref=e95] [cursor=pointer]
+          - listitem [ref=e99]:
+            - button "Guardrails" [ref=e100] [cursor=pointer]
+          - listitem [ref=e104]:
+            - button "Communication" [ref=e105] [cursor=pointer]
+          - listitem [ref=e109]:
+            - button "Approvals" [ref=e110] [cursor=pointer]
+          - listitem [ref=e115]:
+            - button "Runtimes" [ref=e116] [cursor=pointer]
+          - listitem [ref=e121]:
+            - button "Execution log" [ref=e122] [cursor=pointer]
+    - main [ref=e126]:
+      - generic [ref=e128]:
+        - generic [ref=e129]:
+          - generic [ref=e130]: Agent representation
+          - generic [ref=e131]: Drag to pan · Scroll to zoom
+          - button "Fit overview" [ref=e132] [cursor=pointer]
+          - group "Agent representation" [ref=e133]:
+            - button "Detailed" [pressed] [ref=e134] [cursor=pointer]
+            - button "Simple" [ref=e137] [cursor=pointer]
+        - generic [ref=e140]:
+          - button "operator operator no recent activity" [ref=e223] [cursor=pointer]:
+            - generic [ref=e224]:
+              - generic [ref=e225]: operator
+              - generic [ref=e228]: operator
+            - generic [ref=e229]: no recent activity
+          - generic [ref=e142]:
+            - generic [ref=e143]:
+              - generic [ref=e144]: How to read this graph
+              - button "✕" [ref=e145] [cursor=pointer]
+            - generic [ref=e146]: ● online · runtime connected or recent MCP activity
+            - generic [ref=e147]: ● stale · reconnecting or stale MCP activity
+            - generic [ref=e148]: ● offline · runtime disconnected or no recent MCP activity
+            - generic [ref=e149]: → in-flight N ✉ · pulled, processing (no ack yet)
+            - generic [ref=e150]: "⇢ inbox N ⌛ · dashed: delivered, awaiting pull"
+            - generic [ref=e151]: → completed flow · grey fades light→dark over 15 min / 1 h / 4 h, then disappears
+            - generic [ref=e152]: ■ handoff open · awaiting claim
+            - generic [ref=e153]: card header · agent color (auto by identity unless set)
+            - generic [ref=e155]:
+              - generic [ref=e156]: "N"
+              - text: pending inbox ·
+              - generic [ref=e160]: "N"
+              - text: open handoffs · hidden at 0
+            - generic [ref=e164]: Click any element to inspect it.

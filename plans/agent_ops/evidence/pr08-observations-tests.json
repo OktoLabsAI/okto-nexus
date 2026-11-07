@@ -1,0 +1,3442 @@
+{
+  "schema_version": 1,
+  "source_collection": {
+    "scope": "Completed PR08 source JUnits available at the explicit eighteen-report collection checkpoint.",
+    "collector": "plans/agent_ops/evidence/pr08-observations/collect_reports.py",
+    "original_temp_root": "C:/Users/jpamb/AppData/Local/Temp",
+    "retained_report_count": 18,
+    "byte_exact_verified": true,
+    "reports": [
+      {
+        "name": "pr08-observation-audience-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-audience-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-audience-initial.xml",
+        "sha256": "9ab007ab42dcbfbb6a371fae3ace2e3121b38910cf4000f2ce6adaea4f23f87a",
+        "bytes": 4299,
+        "tests": 29,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "128.375",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 19
+      },
+      {
+        "name": "pr08-observation-audience-wiring-final.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-audience-wiring-final.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-audience-wiring-final.xml",
+        "sha256": "e1ba80e078b3a96763a6e3c096342721e44bae729dbdeae9acc1575921457998",
+        "bytes": 1778,
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "33.951",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 10
+      },
+      {
+        "name": "pr08-observation-http-corrected-fixture.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-http-corrected-fixture.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-http-corrected-fixture.xml",
+        "sha256": "dfa9d4f2947fa9fb3816d5de948accafe7c111e84633c946e2ac99a30eb3cfd8",
+        "bytes": 1696,
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "37.186",
+        "classification": "superseded_green_diagnostic",
+        "selected_for_acceptance": false,
+        "note": "Eleven cases with the corrected fixture; superseded by the final twelve-case HTTP run.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 0
+      },
+      {
+        "name": "pr08-observation-http-final.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-http-final.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-http-final.xml",
+        "sha256": "a8cc85073c23126121f00359dd7adbf90909eea411f9241e394e6a4154cf1154",
+        "bytes": 1837,
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "27.610",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 12
+      },
+      {
+        "name": "pr08-observation-http-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-http-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-http-initial.xml",
+        "sha256": "b55b847e94848f347021cc93f39555af8628f5300fed79df884ab00c30f44bb6",
+        "bytes": 17878,
+        "tests": 11,
+        "failures": 0,
+        "errors": 11,
+        "skipped": 0,
+        "duration_seconds": "24.906",
+        "classification": "fixture_failure",
+        "selected_for_acceptance": false,
+        "note": "All eleven cases failed during setup: SqliteAgentRepo.set_permissions() was called without its required keyword-only preset_id. This is retained diagnostic evidence, excluded from acceptance. The corrected fixture and final twelve-case run are both retained.",
+        "problems": [
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_wired_management_publish_and_passive_historical_reads",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_bounded_strict_http_errors_never_echo_input[duplicate]",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_bounded_strict_http_errors_never_echo_input[unknown]",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_bounded_strict_http_errors_never_echo_input[oversize]",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_bounded_strict_http_errors_never_echo_input[batch101]",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_bounded_strict_http_errors_never_echo_input[identity]",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_bounded_strict_http_errors_never_echo_input[bool-sequence]",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_bounded_strict_http_errors_never_echo_input[nan]",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_publish_bearer_cannot_reenter_management_or_canonical_audiences",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_http_storage_failure_never_acknowledges_or_leaks",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          },
+          {
+            "classname": "tests.test_observation_http",
+            "name": "test_http_backpressure_returns_retry_after_before_storage",
+            "kind": "error",
+            "message": "failed on setup with \"TypeError: SqliteAgentRepo.set_permissions() missing 1 required keyword-only argument: 'preset_id'\""
+          }
+        ],
+        "unique_acceptance_cases_attributed": 0
+      },
+      {
+        "name": "pr08-observation-permissions-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-permissions-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-permissions-initial.xml",
+        "sha256": "4087c091c81e7b7d1522e7e57b0ecf57cca460885d355731b41fd18843d19297",
+        "bytes": 6443,
+        "tests": 48,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "68.253",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 48
+      },
+      {
+        "name": "pr08-observation-retention-final.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-retention-final.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-retention-final.xml",
+        "sha256": "a3e77d2b698fbc40674f36f36813a6e397106e75281cabb95ce56c9008498a14",
+        "bytes": 1748,
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "19.955",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 10
+      },
+      {
+        "name": "pr08-observation-retention-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-retention-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-retention-initial.xml",
+        "sha256": "0f7056ddf7a7fbebd5e3cfb9a393ab1ff75e950e048b22706ec360d422392660",
+        "bytes": 1596,
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "15.757",
+        "classification": "superseded_green_diagnostic",
+        "selected_for_acceptance": false,
+        "note": "Nine cases before the orphan-only rate-bucket cleanup correction; superseded by ten final cases.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 0
+      },
+      {
+        "name": "pr08-observation-retention-regression-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-retention-regression-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-retention-regression-initial.xml",
+        "sha256": "e2f80accc72799f89eb9fe6762a6c4f42647d5f835c1546945b44d2a4890410a",
+        "bytes": 3672,
+        "tests": 29,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "46.269",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 29
+      },
+      {
+        "name": "pr08-observation-service-final.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-service-final.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-service-final.xml",
+        "sha256": "c855429b29773cf3042c4f699e491f2b106b809733982c991edf6c501a666005",
+        "bytes": 3666,
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "46.788",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 24
+      },
+      {
+        "name": "pr08-observation-service-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-service-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-service-initial.xml",
+        "sha256": "269f84f9e8c2cdd0882893bd72413b15ab149f3f5b1212ea0818d9bc7f08d15a",
+        "bytes": 3397,
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "44.852",
+        "classification": "superseded_green_diagnostic",
+        "selected_for_acceptance": false,
+        "note": "Initial twenty-two-case service run; superseded by twenty-four final cases.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 0
+      },
+      {
+        "name": "pr08-observation-settings-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-settings-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-settings-initial.xml",
+        "sha256": "2238332d03f9222d66f64ed07be292628c18f849f69e7193eb463d825b3567ab",
+        "bytes": 17205,
+        "tests": 101,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "15.503",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 101
+      },
+      {
+        "name": "pr08-observation-settings-regression-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-settings-regression-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-settings-regression-initial.xml",
+        "sha256": "ddf2c07017b945c913537a11d6c24f9bfa4091de55a8593fae97137f0f558aae",
+        "bytes": 11030,
+        "tests": 77,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "82.881",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 77
+      },
+      {
+        "name": "pr08-observation-structural-regression.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observation-structural-regression.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-structural-regression.xml",
+        "sha256": "0ee5709343e59b9eff75e96a093b3c1b9f59e98288e9fdefa70dad4db7e93dec",
+        "bytes": 3165,
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "82.785",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 21
+      },
+      {
+        "name": "pr08-observations-domain-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observations-domain-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-domain-initial.xml",
+        "sha256": "38161520517b212cbb0ee8c605fd96a14fcc665a7a02125d5a463a9072d75c45",
+        "bytes": 20753,
+        "tests": 135,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "0.610",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 135
+      },
+      {
+        "name": "pr08-observations-storage-faults-concurrency.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observations-storage-faults-concurrency.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-storage-faults-concurrency.xml",
+        "sha256": "891b8821e175eee9ac0fa09c2501716a9a95807d646098bd11d120b5e4c4259e",
+        "bytes": 836,
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "7.607",
+        "classification": "superseded_green_diagnostic",
+        "selected_for_acceptance": false,
+        "note": "Four additional fault/concurrency cases; all included in the final thirty-nine-case storage run.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 0
+      },
+      {
+        "name": "pr08-observations-storage-final.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observations-storage-final.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-storage-final.xml",
+        "sha256": "d8a6b65babf9e55ad62db3066c06e125b4d398dad2a23583d3c5690309d13f3c",
+        "bytes": 6328,
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "69.629",
+        "classification": "selected_acceptance",
+        "selected_for_acceptance": true,
+        "note": "Selected green source report; exact case identity deduplication applies.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 39
+      },
+      {
+        "name": "pr08-observations-storage-initial.xml",
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-observations-storage-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-storage-initial.xml",
+        "sha256": "e5786b1b755cd70d30faf385095b88208355c548e0a120ce8aa017b6f779ea3c",
+        "bytes": 5452,
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "duration_seconds": "63.634",
+        "classification": "superseded_green_diagnostic",
+        "selected_for_acceptance": false,
+        "note": "Initial thirty-three-case storage run before the final rate-retention correction.",
+        "problems": [],
+        "unique_acceptance_cases_attributed": 0
+      }
+    ],
+    "acceptance": {
+      "identity_key": [
+        "classname",
+        "name"
+      ],
+      "selected_reports_in_precedence_order": [
+        "pr08-observations-domain-initial.xml",
+        "pr08-observation-permissions-initial.xml",
+        "pr08-observation-settings-initial.xml",
+        "pr08-observation-settings-regression-initial.xml",
+        "pr08-observation-audience-initial.xml",
+        "pr08-observation-audience-wiring-final.xml",
+        "pr08-observation-service-final.xml",
+        "pr08-observation-http-final.xml",
+        "pr08-observations-storage-final.xml",
+        "pr08-observation-retention-final.xml",
+        "pr08-observation-retention-regression-initial.xml",
+        "pr08-observation-structural-regression.xml"
+      ],
+      "selected_case_records_before_deduplication": 535,
+      "unique_green_cases": 525,
+      "unique_identity_set_sha256": "052bd733d1404a8c4c348a511f065408d5e91cb827c3f172c5339605374093c4",
+      "repeated_case_records_removed": 10,
+      "overlap_case_identities": 10,
+      "overlaps": [
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_auth_is_fresh_readonly_for_every_method_and_retains_key_binding[cold]",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_auth_is_fresh_readonly_for_every_method_and_retains_key_binding[warm]",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_preserves_trusted_operator_context_without_publish_authority[local-operator]",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_preserves_trusted_operator_context_without_publish_authority[operator-session]",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_rejects_revocation_despite_warm_auth_cache[inactive]",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_rejects_revocation_despite_warm_auth_cache[key]",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_obs_family_cannot_enter_any_other_audience_or_public_exception",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_publish_rejects_other_credentials_and_substitutes_before_route",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_publish_shape_only_reaches_exact_route_without_promoting_identity",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_valid_shape_without_installed_publish_route_returns_not_found",
+          "reports": [
+            "pr08-observation-audience-initial.xml",
+            "pr08-observation-audience-wiring-final.xml"
+          ],
+          "selected_origin": "pr08-observation-audience-wiring-final.xml"
+        }
+      ],
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_failed_drain_keeps_history_and_resumes_admission",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_failed_history_reset_rolls_back_data_and_immutability_fence[False]",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_failed_history_reset_rolls_back_data_and_immutability_fence[True]",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_reset_generation_survives_backup_and_cold_start",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_reset_preserves_configured_local_connection_and_can_deliver_again[False]",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_reset_preserves_configured_local_connection_and_can_deliver_again[True]",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_reset_preserves_installation_observation_without_reprobing",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_reset_remote_close_uses_authenticated_dashboard_operator",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_connections",
+          "name": "test_reset_retains_history_until_native_stops",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_independent_inventory",
+          "name": "test_reset_waits_only_for_preserved_selected_harness[codex_app_server]",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.execution_r4.test_reset_independent_inventory",
+          "name": "test_reset_waits_only_for_preserved_selected_harness[pi_rpc]",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_check_inline_size_inclusive_boundary_for_strings",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_check_inline_size_measures_json_for_non_strings",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_check_inline_size_rejects_unserialisable",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_clamp_limit_grammar",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_handoff_claim_rejects_non_lexicographic_clock",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_handoff_lease_default_is_one_hour",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_inbox_pull_rejects_non_lexicographic_clock",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07 00:00:00.000000Z]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07T00:00:00.000000+00:00]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07T00:00:00.123Z]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07T00:00:00Z]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_plus_rejects_non_canonical_clock_value[None]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_plus_rejects_non_canonical_clock_value[]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_plus_shifts_and_stays_fixed_width",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_to_epoch_raises_stdlib_errors",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_iso_to_epoch_tolerates_all_utc_spellings",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_cli_flag_overrides_env[--inbox-lease-ttl-seconds-inbox_lease_ttl_seconds]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_cli_flag_overrides_env[--max-event-limit-max_event_limit]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_cli_flag_overrides_env[--max-shared-md-events-max_shared_md_events]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_cli_flag_overrides_env[--session-stale-ttl-seconds-session_stale_ttl_seconds]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_defaults_when_env_unset[OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_defaults_when_env_unset[OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_defaults_when_env_unset[OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_defaults_when_env_unset[OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_parses_valid_env_value[OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_parses_valid_env_value[OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_parses_valid_env_value[OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_knob_parses_valid_env_value[OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_meta_harness_receipt_display_config_pipeline",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_normalize_cursor_grammar",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_runtime_update_policy_bad_value_fails_closed[]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_runtime_update_policy_bad_value_fails_closed[auto]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_runtime_update_policy_bad_value_fails_closed[latest]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_runtime_update_policy_defaults_to_review",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_config",
+          "name": "test_runtime_update_policy_parses_env_and_cli_flag",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_coordination_passive_auth",
+          "name": "test_tcp_passive_auth_ignores_warm_positive_cache_after_revocation[inactive-False]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_coordination_passive_auth",
+          "name": "test_tcp_passive_auth_ignores_warm_positive_cache_after_revocation[key-False]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_coordination_passive_auth",
+          "name": "test_tcp_passive_classification_does_not_bypass_auth_or_legacy_activity[False]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_coordination_passive_auth",
+          "name": "test_tcp_passive_transport_discovery_and_reads_never_touch_agents[cold-False]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_coordination_passive_auth",
+          "name": "test_tcp_passive_transport_discovery_and_reads_never_touch_agents[warm-False]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_http_api",
+          "name": "test_key_accepted_via_query_header_and_bearer",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_http_api",
+          "name": "test_missing_unknown_and_revoked_keys_are_uniform_401",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_http_api",
+          "name": "test_public_paths_do_not_require_a_key",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_http_api",
+          "name": "test_regenerate_key_invalidates_previous_immediately",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_import_boundary",
+          "name": "test_domain_and_application_do_not_import_infrastructure",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_import_boundary",
+          "name": "test_inner_layers_have_files",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_import_boundary",
+          "name": "test_replay_core_modules_are_in_scope_and_clean",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_migrations",
+          "name": "test_bootstrap_retries_while_another_process_holds_the_lock",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_migrations",
+          "name": "test_concurrent_bootstrap_applies_each_migration_exactly_once",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_migrations",
+          "name": "test_failed_migration_rolls_back_only_itself",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_migrations",
+          "name": "test_lock_retry_exhausted_raises_actionable_migration_error",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_migrations",
+          "name": "test_ts2_migration_022_backfills_comm_scope_into_inline_binding",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_migrations",
+          "name": "test_ts3_migration_022_converts_governance_policies_to_detached_globals",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_migrations",
+          "name": "test_unknown_ledger_version_fails_closed_before_applying_anything",
+          "report": "pr08-observation-structural-regression.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_auth_is_fresh_readonly_for_every_method_and_retains_key_binding[cold]",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_auth_is_fresh_readonly_for_every_method_and_retains_key_binding[warm]",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_preserves_trusted_operator_context_without_publish_authority[local-operator]",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_preserves_trusted_operator_context_without_publish_authority[operator-session]",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_rejects_revocation_despite_warm_auth_cache[inactive]",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_management_rejects_revocation_despite_warm_auth_cache[key]",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_obs_family_cannot_enter_any_other_audience_or_public_exception",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_publish_rejects_other_credentials_and_substitutes_before_route",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_publish_shape_only_reaches_exact_route_without_promoting_identity",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_audience",
+          "name": "test_valid_shape_without_installed_publish_route_returns_not_found",
+          "report": "pr08-observation-audience-wiring-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[batch101]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[bool-sequence]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[canonical-oversize]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[duplicate]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[identity]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[nan]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[oversize]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_bounded_strict_http_errors_never_echo_input[unknown]",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_http_backpressure_returns_retry_after_before_storage",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_http_storage_failure_never_acknowledges_or_leaks",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_publish_bearer_cannot_reenter_management_or_canonical_audiences",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_http",
+          "name": "test_wired_management_publish_and_passive_historical_reads",
+          "report": "pr08-observation-http-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_builtin_and_legacy_custom_presets_do_not_acquire_observation_grants",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_existing_operator_editor_can_explicitly_grant_revoke_and_reset_observations",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[None]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags1]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags2]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags3]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags4]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags5]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags6]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags7]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[flags8]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_missing_or_malformed_observation_group_never_grants_access[observations]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_observation_catalog_is_explicit_and_all_old_defaults_are_preserved",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_observation_grants_are_independent_and_revocable",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[0]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[1]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[False]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[None]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[false]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[true]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[value6]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[value7]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_permissions",
+          "name": "test_only_boolean_true_grants_an_observation_flag[value8]",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_custom_retention_batch_cannot_exceed_observation_store_bound",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_disabled_feature_still_maintains_history_and_preserves_registered_head_and_tokens",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_dry_run_is_passive_and_totals_do_not_double_count_shared_event_rows",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_existing_event_repo_default_keeps_legacy_semantics_without_obs_lane",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_failing_batch_rolls_back_its_deletions_and_does_not_return_success[cleanup]",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_failing_batch_rolls_back_its_deletions_and_does_not_return_success[events]",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_generic_event_override_cannot_shorten_observation_window",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_per_pass_budget_is_shared_by_tokens_and_buckets_and_can_resume",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_pruning_after_rate_reduction_never_refills_an_existing_source_budget",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_retention",
+          "name": "test_startup_uses_existing_batch_budget_for_observation_events",
+          "report": "pr08-observation-retention-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_atomic_batch_failure_rolls_back_head_quota_and_event",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_backlog_and_future_reports_are_rejected_without_writes[-91]",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_backlog_and_future_reports_are_rejected_without_writes[31]",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_batch_100_and_late_validation_failure_are_atomic",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_canonical_self_management_requires_current_key_and_explicit_approval",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_commit_failure_returns_no_receipt_and_rolls_back",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_concurrent_identical_publish_has_one_event_and_original_receipt",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_conflicting_or_old_sequence_cannot_overwrite[changes0]",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_conflicting_or_old_sequence_cannot_overwrite[changes1]",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_continuity_coalesces_but_blocked_and_completion_survive",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_disabled_feature_keeps_historical_reads_passive",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_event_failure_rolls_back_head_and_quota",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_generation_rotation_requires_new_exact_grant",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_idle_without_reference_never_invents_completion",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_independent_instances_and_source_continuity_remain_distinct",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_ingress_is_bounded_before_writer_and_refills",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_publish_changes_no_coordination_presence_or_capacity",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_replay_after_ttl_and_policy_change_returns_exact_receipt",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_revocation_precedes_exact_replay_and_historical_state_unavailable[UPDATE agents SET api_key_hash='rotated' WHERE agent_id='alice']",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_revocation_precedes_exact_replay_and_historical_state_unavailable[UPDATE agents SET is_active=0 WHERE agent_id='alice']",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_revocation_precedes_exact_replay_and_historical_state_unavailable[UPDATE agents SET permissions=NULL WHERE agent_id='alice']",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_revoke_token_hides_current_state_without_erasing_history",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_same_sequence_different_hash_conflicts",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_service",
+          "name": "test_source_registration_idempotency_does_not_grant_permission",
+          "report": "pr08-observation-service-final.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_agent_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_agent_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_event_retention_days]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_future_tolerance_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_installation_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_installation_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_max_events]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_max_instances]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_max_sources]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_max_sources_per_agent]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_max_tokens_per_source]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_max_valid_for_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_source_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_source_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1-observation_source_stale_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_agent_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_agent_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_event_retention_days]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_future_tolerance_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_installation_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_installation_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_max_events]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_max_instances]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_max_sources]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_max_sources_per_agent]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_max_tokens_per_source]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_max_valid_for_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_source_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_source_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[1.0-observation_source_stale_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_agent_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_agent_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_event_retention_days]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_future_tolerance_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_installation_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_installation_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_max_events]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_max_instances]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_max_sources]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_max_sources_per_agent]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_max_tokens_per_source]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_max_valid_for_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_source_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_source_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[False-observation_source_stale_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_agent_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_agent_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_event_retention_days]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_future_tolerance_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_installation_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_installation_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_max_events]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_max_instances]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_max_sources]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_max_sources_per_agent]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_max_tokens_per_source]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_max_valid_for_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_source_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_source_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[None-observation_source_stale_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_agent_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_agent_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_event_retention_days]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_future_tolerance_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_installation_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_installation_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_max_events]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_max_instances]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_max_sources]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_max_sources_per_agent]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_max_tokens_per_source]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_max_valid_for_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_source_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_source_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_direct_config_requires_exact_integer_policy_values[True-observation_source_stale_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_agent_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_agent_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_event_retention_days]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_future_tolerance_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_installation_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_installation_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_max_events]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_max_instances]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_max_sources]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_max_sources_per_agent]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_max_tokens_per_source]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_max_valid_for_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_source_burst]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_source_rate_per_minute]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_every_observation_integer_has_env_cli_precedence_and_hard_bounds[observation_source_stale_seconds]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_explicit_default_false_and_limits_remain_pinned_over_persisted_settings[cli]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_explicit_default_false_and_limits_remain_pinned_over_persisted_settings[env]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_feature_boolean_is_strict_in_programmatic_config",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_lower_ttl_policy_does_not_change_protocol_omission_or_replay_hash",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_observation_defaults_are_opt_in_independent_and_protocol_bounds_are_not_settings",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_observation_patch_becomes_live_only_after_commit_and_persists[False]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_observation_patch_becomes_live_only_after_commit_and_persists[True]",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_old_default_setting_is_not_an_unimplemented_mutable_policy",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_reset_restores_only_observation_defaults_after_commit",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_settings_catalog_exposes_matching_bounds_defaults_and_no_unlimited_switches",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observation_settings",
+          "name": "test_settings_patch_validates_entire_observation_policy_before_any_write",
+          "report": "pr08-observation-settings-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_boundaries_and_untrusted_text_do_not_invent_completion_or_business_status",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_canonical_hash_normalizes_timezone_default_nulls_and_key_order",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_clock_boundaries_and_extreme_policy_do_not_leak_builtin_exceptions",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[current_completion_ref- ref]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[current_completion_ref-]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[current_completion_ref-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[current_completion_ref-ref\\n]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[current_completion_ref-value24]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[evidence-value13]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[evidence-verified]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[observed_instance_id-True]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[observed_instance_id-obs\\n]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[reason_code-<img src=x>]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[reason_code-False]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[reason_code-arbitrary_safe_code]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[reason_text-1]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[reason_text-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[reason_text-bad\\ud800]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[schema_version-2]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[source_id- src_bad]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[source_id-\\xe9]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[source_id-]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[source_id-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[source_id-src/path]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[state-completed]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[state-done]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[state-value11]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_closed_strings_and_bounded_fields[valid_for_seconds-3601]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_configured_defaults_caps_and_zero_future_tolerance",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_direct_report_construction_still_validates_types_and_normalizes_time",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change0]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change10]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change11]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change1]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change2]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change3]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change4]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change5]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change6]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change7]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change8]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_every_semantic_field_changes_replay_hash[change9]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_expired_duplicate_hash_remains_recognizable_without_renewing_receipt",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_freshness_is_minimum_of_server_and_observed_lifetimes[2026-11-06T14:58:30.000001Z-2026-11-06T15:00:00.000001Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_freshness_is_minimum_of_server_and_observed_lifetimes[2026-11-06T14:59:00Z-2026-11-06T15:00:30.000000Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_freshness_is_minimum_of_server_and_observed_lifetimes[2026-11-06T15:00:00Z-2026-11-06T15:01:30.000000Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_freshness_is_minimum_of_server_and_observed_lifetimes[2026-11-06T15:00:30Z-2026-11-06T15:01:30.000000Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_future_skew_and_stale_backlog_are_rejected[2026-11-05T15:00:00Z-observed_at_expired]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_future_skew_and_stale_backlog_are_rejected[2026-11-06T14:58:30Z-observed_at_expired]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_future_skew_and_stale_backlog_are_rejected[2026-11-06T15:00:30.000001Z-observed_at_future]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[agent_id]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[api_key]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[extra]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[frame]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[log]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[prompt]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[session_id]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[session_secret]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[token]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_identity_and_arbitrary_fields_are_refused_without_echo[workspace_id]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[-1-generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[-1-schema_version]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[-1-sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[-1-valid_for_seconds]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[0-generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[0-schema_version]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[0-sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[0-valid_for_seconds]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1-generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1-schema_version]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1-sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1-valid_for_seconds]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1.0-generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1.0-schema_version]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1.0-sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[1.0-valid_for_seconds]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[False-generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[False-schema_version]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[False-sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[False-valid_for_seconds]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[None-generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[None-schema_version]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[None-sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[None-valid_for_seconds]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[True-generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[True-schema_version]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[True-sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_integer_fields_reject_coercion_and_invalid_values[True-valid_for_seconds]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs0]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs10]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs1]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs2]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs3]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs4]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs5]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs6]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs7]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs8]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_limits_are_validated_at_construction[kwargs9]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_missing_fields_and_mapping_subclasses_do_not_become_reports",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_observation_tokens_have_exclusive_family_and_hash_only_representation",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_parse_returns_immutable_detached_canonical_report_without_authority_fields",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_report_requires_exact_object[None]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_report_requires_exact_object[True]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_report_requires_exact_object[value1]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_report_requires_exact_object[value4]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_report_requires_exact_object[{}]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_sequence_and_generation_are_bounded_signed_64_bit_without_wrap[generation]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_sequence_and_generation_are_bounded_signed_64_bit_without_wrap[sequence]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[0001-01-01T00:00:00+01:00]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-02-30T15:00:00Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06 15:00:00Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06T15:00:00+00:60]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06T15:00:00+24:00]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06T15:00:00.1234567Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06T15:00:00Z\\n]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06T15:00:00]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06T15:00:60Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06T24:00:00Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-11-06]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[2026-W45-5T15:00:00Z]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[42]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_timestamp_requires_valid_explicit_zone_without_lossy_precision[9999-12-31T23:59:59-01:00]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[bool]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[bytes]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[capability_family]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[invalid_hex]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[key_family]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[long]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[newline]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[none]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[poll_family]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[short]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[ticket_family]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_domain",
+          "name": "test_token_shape_rejects_other_audiences_and_invalid_forms_without_echo[uppercase]",
+          "report": "pr08-observations-domain-initial.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_aggregate_prevents_multiple_source_amplification",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_material_authority_revokes_durably_and_projects_unavailable[api_key_hash-rotated]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_material_authority_revokes_durably_and_projects_unavailable[deleted_at-2026-11-06T15:00:01.000000Z]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_material_authority_revokes_durably_and_projects_unavailable[is_active-0]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_material_authority_revokes_durably_and_projects_unavailable[permissions-{\"observations\": {\"manage_self\": 1, \"publish\": \"true\"}}]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_material_authority_revokes_durably_and_projects_unavailable[permissions-{\"observations\": {\"manage_self\": false, \"publish\": true}}]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_material_authority_revokes_durably_and_projects_unavailable[permissions-{\"observations\": {\"manage_self\": true, \"publish\": false}}]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_agent_material_authority_revokes_durably_and_projects_unavailable[permissions-{malformed]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_changed_or_older_sequence_conflicts_without_mutation[1-extra0]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_changed_or_older_sequence_conflicts_without_mutation[1-extra1]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_changed_or_older_sequence_conflicts_without_mutation[1-extra2]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_concurrent_publish_has_one_event_and_one_replay_or_conflict[False]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_concurrent_publish_has_one_event_and_one_replay_or_conflict[True]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_events_age_and_count_bounds_only_remove_observation_family",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_injected_sqlite_commit_failure_does_not_persist_receipt_or_event",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_installation_aggregate_and_management_without_source",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_issuer_rotation_revokes_foreign_source_and_physical_agent_delete_restricted",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_last_completion_survives_omission_without_changing_canonical_payload",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_missing_and_current_reads_are_passive_and_queries_bounded",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_noop_or_unrelated_permission_changes_do_not_revoke",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_page_sentinel_and_source_continuity_use_other_instance",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_prune_removes_only_orphan_buckets_with_shared_batch_bound",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_rate_policy_reduction_and_prune_never_restore_existing_entity_budget",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_rate_refill_exact_restart_clock_regression_and_denial_no_write",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_registration_retry_same_source_and_external_ref_never_resets_sequence",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_replay_is_exact_after_validity_and_does_not_renew_or_emit",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_reset_replay_and_quota_fences_survive_and_old_tokens_do_not[False]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_reset_replay_and_quota_fences_survive_and_old_tokens_do_not[True]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_reset_rollback_restores_all_replay_and_authority_fences[False]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_reset_rollback_restores_all_replay_and_authority_fences[True]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_retire_is_cleanup_after_authority_loss_but_keeps_cas[revoked]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_retire_is_cleanup_after_authority_loss_but_keeps_cas[workspace_removed]",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_rotation_and_publication_race_never_admits_old_generation_after_rotation",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_rotation_requires_explicit_new_generation_grant_and_retirement_never_reuses_ids",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_signed64_generation_and_sequence_limits_fail_without_wrap",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_source_cas_noop_scope_change_and_reenable_never_restore_old_token",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_source_instance_token_cardinality_and_referenced_expired_token_retention",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_upgrade_163_additive_no_seed_authority_and_repository_wiring",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_observations_storage",
+          "name": "test_writer_rollback_includes_tokens_budget_heads_and_atomic_event",
+          "report": "pr08-observations-storage-final.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_agent_key_cannot_configure_human_account_and_still_authenticates_agent",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_forwarding_headers_cannot_enable_local_trust",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_https_session_cookie_is_secure",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_local_setup_remote_login_logout_and_transport_separation",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_password_change_revokes_sessions_and_requires_current_password_remotely",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_remote_session_rejects_cross_origin_mutations[headers0]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_remote_session_rejects_cross_origin_mutations[headers1]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_remote_session_rejects_cross_origin_mutations[headers2]",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_session_hashes_expiry_persistence_and_login_throttle",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_operator_auth",
+          "name": "test_validation_never_echoes_password",
+          "report": "pr08-observation-audience-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_agent_created_with_preset_copies_its_flags",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_agent_patch_preset_resets_and_null_restores_full_access",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_agent_register_is_self_only_when_authenticated",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_agent_register_self_updates_are_permission_gated",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_agent_whoami_returns_own_profile_with_permissions",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_allowed_peers_flag_is_gone_from_the_registry",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_broadcast_denied_for_worker_but_direct_allowed",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_builtin_presets_are_read_only",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_builtin_presets_cover_the_registry",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_channel_create_gated_by_caller_identity",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_channel_post_needs_send_channel_only",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_custom_preset_crud_roundtrip",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_deleting_a_custom_preset_keeps_agent_flags",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_experimental_memory_permissions_gate_agent_tools",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_handoff_create_and_work_gates",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_legacy_agent_without_flags_is_unrestricted",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_legacy_allowed_peers_rows_are_inert",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_permission_denied_maps_to_http_403",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_permission_set_default_allow_and_denial_shape",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_presets_endpoint_lists_builtins_registry_and_descriptions",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_rate_limit_blocks_the_next_send",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_session_open_is_self_only_when_authenticated",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_shared_md_and_health_permissions_are_gated",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_validate_rejects_unknown_flags_and_wrong_types",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_permissions",
+          "name": "test_workspace_list_permissions_gate_listing_and_paths",
+          "report": "pr08-observation-permissions-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_admin_prune_cli_bad_project_root_exits_one",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_admin_prune_cli_deletes_and_prints_report",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_admin_prune_cli_dry_run_deletes_nothing",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_admin_prune_cli_vacuum_compacts_freed_pages",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_admin_prune_cli_window_override_flags",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_config_retention_defaults",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_config_retention_env_and_cli_precedence",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_config_retention_invalid_values_fail_closed[env0]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_config_retention_invalid_values_fail_closed[env1]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_config_retention_invalid_values_fail_closed[env2]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_legacy_stdio_flags_do_not_bootstrap_or_prune",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_main_dispatches_admin_prune_subcommand",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_maybe_auto_prune_disabled_by_default_deletes_nothing",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_maybe_auto_prune_enabled_prunes_with_configured_windows",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_maybe_auto_prune_is_bounded_not_a_full_drain",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_batches_drain_fully_and_max_batches_caps_work",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_deletes_events_past_window_and_keeps_recent",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_deletes_old_closed_sessions_keeps_recent_closed_and_active",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_deletes_old_read_deliveries_and_keeps_recent_read",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_dry_run_counts_without_deleting",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_never_deletes_unread_delivered_or_parked_deliveries",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_never_touches_handoffs_messages_or_open_sessions",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_rejects_malformed_inputs_fail_closed[kwargs0]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_rejects_malformed_inputs_fail_closed[kwargs1]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_rejects_malformed_inputs_fail_closed[kwargs2]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_rejects_malformed_inputs_fail_closed[kwargs3]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_rejects_malformed_inputs_fail_closed[kwargs4]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_rejects_malformed_inputs_fail_closed[kwargs5]",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_retention",
+          "name": "test_prune_uses_config_windows_when_args_omitted",
+          "report": "pr08-observation-retention-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_chain_limits_are_listed_and_editable",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_cli_pinned_setting_is_read_only",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_explicit_default_false_remains_pinned_over_stored_true[cli]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_explicit_default_false_remains_pinned_over_stored_true[env]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_meta_harness_receipt_display_defaults_inline_and_persists",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_patch_persists_and_applies_to_live_config",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_patch_rejects_out_of_range_unknown_and_bad_enum",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_remote_machine_policy_defaults_to_manual_and_is_editable",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_runtime_update_policy_is_editable_and_cli_pin_is_read_only",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_settings_catalogue_lists_only_implemented_specs_with_description",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_settings_reset_restores_defaults",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_api",
+          "name": "test_transport_policy_applies_globally_and_persists",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_transactions",
+          "name": "test_concurrent_settings_writers_apply_cache_in_commit_order",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_transactions",
+          "name": "test_live_value_waits_for_commit[reset-False]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_transactions",
+          "name": "test_live_value_waits_for_commit[reset-True]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_transactions",
+          "name": "test_live_value_waits_for_commit[update-False]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_transactions",
+          "name": "test_live_value_waits_for_commit[update-True]",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        },
+        {
+          "classname": "tests.test_settings_transactions",
+          "name": "test_reset_validates_entire_request_before_deleting",
+          "report": "pr08-observation-settings-regression-initial.xml"
+        }
+      ],
+      "note": "Case records from repeated runs are not independent tests. Diagnostic runs do not add acceptance coverage."
+    }
+  },
+  "source_collection_created_at": "2026-11-07T00:31:12.365930+00:00",
+  "installed_collection": {
+    "original_root": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa",
+    "artifacts": [
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/build_release.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/build_release.py",
+        "bytes": 3681,
+        "sha256": "34da40b40f94829f1bd4df7d76abe88b4acc0eff517daa91f6a6e90432909853"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/build_release_v2.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/build_release_v2.py",
+        "bytes": 657,
+        "sha256": "0efea4639efd5d877ed4adca03d03d2238bb626a3e0015036720496f4018a74f"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualify_installed.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualify_installed.py",
+        "bytes": 4507,
+        "sha256": "1dcca21146cf048acdb8a7f2750247c5602a8eb299475b8733af5e70531d7c63"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/server_entry.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/server_entry.py",
+        "bytes": 2294,
+        "sha256": "ba161774984e7b73cd0109125e2108fba4ecb7ff984c1d6677e0fa95e78e19d7"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/start_server.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/start_server.py",
+        "bytes": 2382,
+        "sha256": "8b5babc314f9b750613a02f8b25c0b4d4f659d0032e105d49010c2492703df89"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/smoke_http.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/smoke_http.py",
+        "bytes": 7825,
+        "sha256": "6efeccee4623e5088990b376eb10e47da9724847e1177d0269e436c3d31ad5a9"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/verify_release.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/verify_release.py",
+        "bytes": 1779,
+        "sha256": "0490bbdd28134e1f42d226644303e9890c2dfa98a4c69e1004b109bf7480c5e7"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/stop_server.py",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/stop_server.py",
+        "bytes": 1031,
+        "sha256": "8687fb0caf19b7d65cb08417fb2ed288a9fab0e57ee958e69493442340448e47"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualified/package-proof.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/package-proof.json",
+        "bytes": 220068,
+        "sha256": "048597e31eaf485fbb658f7e42d10f1b9760bc1b3a576cf2669caa11d699096b"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualified/installed-qualification.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/installed-qualification.json",
+        "bytes": 74061,
+        "sha256": "71d6bbaec72ba8461f6a0c71d85c54aa1e9bdeaa91cd25ebb11a8cb9e930750d"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualified/pr08-observation-installed-initial.xml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/pr08-observation-installed-initial.xml",
+        "bytes": 2095,
+        "sha256": "08254abebaa4f045a89055ebefc24aca52399ace1a5a8f8700883a9d321452ca"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualified/real-http-smoke.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/real-http-smoke.json",
+        "bytes": 45703,
+        "sha256": "288921e5e8f6a46acdc7c0cc19c4cc71fd0be302e9e505d3f54c5b1e6306df8c"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualified/server-import-proof.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/server-import-proof.json",
+        "bytes": 39233,
+        "sha256": "db42e4c66f732f63d152e8c2f12a6313337a99481f6946df9540f909e83f0ec7"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualified/server.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/server.json",
+        "bytes": 584,
+        "sha256": "202d44f28e1657f7de20d590a053c094926a6454f7db574a880cc5671e18a784"
+      },
+      {
+        "original_path": "C:/Users/jpamb/AppData/Local/Temp/pr08-installed-wy268uaa/qualified/server-owner.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/server-owner.json",
+        "bytes": 558,
+        "sha256": "6975b6a91a2cd79ffdba31f5199e706aeab01cf89584414c2b51860ada3e4d15"
+      }
+    ],
+    "artifact_count": 15,
+    "artifact_set_sha256": "d80d7978f2e3727d1369ee9d667b49d3bc64de2871ddcbbe5caa1cfccf6a072d",
+    "byte_exact_verified": true,
+    "wheel_sha256": "85a882cf1ee71ff953e3ce79a25216a1092d0b3a7e314b72527749267e07c130",
+    "package_payload": {
+      "python": 486,
+      "migrations": 164,
+      "static": 7,
+      "total": 657
+    },
+    "source_wheel_installed_exact_relative_sets_and_bytes": true,
+    "junit": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": "16.271"
+    },
+    "junit_report": "installed/qualified/pr08-observation-installed-initial.xml",
+    "http_smoke": {
+      "status": "PASS",
+      "checks": 49,
+      "canonical_changed_tables": [],
+      "report": "installed/qualified/real-http-smoke.json",
+      "scope": "Real Uvicorn with ServeLock and synthetic local clients; no real provider participation."
+    },
+    "import_proof": {
+      "nexus_and_core_from_noneditable_venv": true,
+      "shared_third_party_dependency_site": "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\site-packages"
+    },
+    "diagnostic_note": "build_release.py preserves the first diagnostic packaging attempt; build_release_v2.py is the successful follow-up. Launch metadata precedes final browser shutdown.",
+    "counting_note": "Installed pytest cases and HTTP assertions qualify the artifact separately; neither is added to the 525 unique source cases."
+  },
+  "browser_collection": {
+    "original_root": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright",
+    "artifacts": [
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-header-menu.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-header-menu.yml",
+        "bytes": 4783,
+        "sha256": "2d3ba164cbd1fc6722376987e23af391f1e66a9a01278318684acd29bda32540"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-observations-dark.png",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-observations-dark.png",
+        "bytes": 96820,
+        "sha256": "c77b7f51608658a34adce647ec3bee511bc4b22587b1a8171ed1afd70e467e5d"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-observations-default.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-observations-default.yml",
+        "bytes": 12037,
+        "sha256": "f47c0398a45f0e8d5865ae6a68f46620140a63dc1919cf0edca60532caed785c"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-observations-final.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-observations-final.yml",
+        "bytes": 12354,
+        "sha256": "b6e5b9953122f38f1771fe10fdc03f1ec978c9c2aeb50f41ca88cc3f9dac3ac4"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-observations-light.png",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-observations-light.png",
+        "bytes": 108251,
+        "sha256": "7a43125657b78175c70a945949a731aa75c491b7cc1f609b4ef91f77ba2c3d88"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-observations-mobile-dark.png",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-observations-mobile-dark.png",
+        "bytes": 55287,
+        "sha256": "150005d9f44cc87d32fe6fb61720ead507e50dfeecee86543252fbc4f85efd1b"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-observations-saved.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-observations-saved.yml",
+        "bytes": 12048,
+        "sha256": "3efd2b3b0ad1a6ad5cbad840625019dcc2c014341fca89faca6d76de1a009939"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-check-initial.js",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-check-initial.js",
+        "bytes": 3556,
+        "sha256": "efe5d5158fc85fce7b91892861a2176d08f949715056de07821ef6ba68cd51f2"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-check-save-wait.js",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-check-save-wait.js",
+        "bytes": 3561,
+        "sha256": "86e3dc292c2edd9d368373db8338467021eca8fb717c4df6f86f4727e863add2"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-check-viewport.js",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-check-viewport.js",
+        "bytes": 4201,
+        "sha256": "db6177cfc0a712b4769a1afba70fd3f9faf45ae025ceb2fde91803791972d39c"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-check.js",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-check.js",
+        "bytes": 4364,
+        "sha256": "03b5d93dbec7b2ace2409bae155b6a8b9dfd6ad804769792e0d6c7eb0d4d61ed"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-initial.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-initial.yml",
+        "bytes": 6539,
+        "sha256": "edcdf82daa11048053f9849b04765540c8d0af8639da8bf071e0a65e5c9691e1"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-menu.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-menu.yml",
+        "bytes": 6728,
+        "sha256": "f464a182d146d4e29e0a955a98292230ee03fa3acc7b8b3c9a36d70a515e977b"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-reload-diagnostic.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-reload-diagnostic.yml",
+        "bytes": 12583,
+        "sha256": "2ca6f860d30cc96ad1dd996b169152fce2a76337ffd58b710b2e01bea782d0e6"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-result.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-result.json",
+        "bytes": 986,
+        "sha256": "f59c9dc71e606a6f1b3b6dc75fae9e9f02c92756940dc2c869060e97e60c0748"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-settings-save-diagnostic.yml",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-settings-save-diagnostic.yml",
+        "bytes": 12363,
+        "sha256": "844868f8439d36cd726e8612d5d3a27b9031451c2d23b84b86d1c4446a9fdb9f"
+      },
+      {
+        "original_path": "D:/Projetos/Techridy/okto_labs_okto_nexus/output/playwright/pr08-shutdown.json",
+        "retained_path": "plans/agent_ops/evidence/pr08-observations/browser/pr08-shutdown.json",
+        "bytes": 780,
+        "sha256": "ddbbb12cbe03d2122fea00c94e91839fd2d90a3316bd33a408de11f486d3185f"
+      }
+    ],
+    "artifact_count": 17,
+    "artifact_set_sha256": "1ccf2f05a30261665ae8908f510c34f30048a1d30ad843531fb698bfff50b56e",
+    "byte_exact_verified": true,
+    "result": {
+      "status": "PASS",
+      "browser": "156.0.8078.79",
+      "controls": 16,
+      "saved": {
+        "enabled": true,
+        "sourceBurst": 21
+      },
+      "reloadPreserved": true,
+      "invalidTtlDisablesSave": true,
+      "restored": {
+        "enabled": false,
+        "sourceBurst": 20
+      },
+      "unrelatedSettingsUnchanged": true,
+      "dimensions": {
+        "viewport": 390,
+        "document": 390
+      },
+      "screenshots": 3,
+      "diagnostics": [
+        "Initial helper exact numeric accessible name stopped matching after the modified badge appeared; fixed the locator and reran.",
+        "Second helper expected All changes saved after save; actual confirmation is Settings saved and applied.; fixed wait and reran.",
+        "Third helper had no explicit original viewport in headed mode; all assertions/screenshots completed but viewport restoration failed. Added an explicit fallback and reran successfully.",
+        "First attempt to open the header menu was blocked by the first-run metrics opt-in panel. Closed it without opting in."
+      ]
+    },
+    "shutdown": {
+      "canonical_response": {
+        "ok": true,
+        "data": {
+          "instance_id": "svc_cb426ac56520c03f6d49aac7fe1f17e8d3bd9bde5aeb17c1784d6b80ba55c3d2",
+          "generation": "77d9cbce4c0309fe2fa8effa28ab8720",
+          "shutdown": {
+            "state": "DRAINED",
+            "deadline_monotonic": 505465.0273421,
+            "resources": [],
+            "error_codes": []
+          }
+        }
+      },
+      "owner_pid": 22456,
+      "launcher_pid": 28748,
+      "browser_session_closed": true,
+      "owner_and_launcher_processes_absent": true,
+      "tcp_probe": {
+        "port": 49707,
+        "timeout_seconds": 2,
+        "connect_result": 10035,
+        "accepting_connections": false
+      },
+      "windows_diagnostic": "Get-NetTCPConnection briefly retained Listen records with OwningProcess=0 after both known processes exited; the TCP probe could not connect."
+    },
+    "diagnostic_note": "Original failed helper attempts and diagnostic snapshots are preserved. Their recorded locator/wait/viewport failures required helper-only corrections.",
+    "visual_review": "Parent agent inspected the three PNGs; collection verifies hashes and recorded outcomes.",
+    "shutdown_interpretation": "Canonical DRAINED; both known processes absent; probe returned 10035 and did not connect. No claim of connection-refused. Transient Windows Listen PID0 records are recorded in the original JSON.",
+    "counting_note": "Browser controls and actions are not pytest cases and do not change source acceptance counts."
+  },
+  "qualification_summary": {
+    "source_unique_green_cases": 525,
+    "installed_pytest": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": "16.271"
+    },
+    "real_http_assertions": {
+      "passed": 49
+    },
+    "browser_status": "PASS",
+    "retained_original_artifact_count": 50,
+    "retained_original_artifact_set_sha256": "7efef925c7e2bc74bd9046e724731910347766e784a89cb3c5daa7d88d855d49",
+    "note": "These are distinct evidence categories, not an additive test total."
+  }
+}

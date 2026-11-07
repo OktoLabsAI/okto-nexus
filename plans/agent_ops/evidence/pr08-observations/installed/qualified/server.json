@@ -1,0 +1,9 @@
+{
+  "url": "http://127.0.0.1:49707",
+  "pid": 28748,
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr08-installed-wy268uaa\\qualified\\server-home",
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr08-installed-wy268uaa\\qualified\\server.log",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr08-installed-wy268uaa\\qualified\\venv\\Scripts\\python.exe",
+  "shutdown": "GET /api/v1/service then POST /api/v1/service/stop with current instance_id and generation",
+  "launcher": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pr08-installed-wy268uaa\\server_entry.py"
+}

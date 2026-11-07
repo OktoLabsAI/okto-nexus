@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "browser": "156.0.8078.79",
+  "controls": 16,
+  "saved": {
+    "enabled": true,
+    "sourceBurst": 21
+  },
+  "reloadPreserved": true,
+  "invalidTtlDisablesSave": true,
+  "restored": {
+    "enabled": false,
+    "sourceBurst": 20
+  },
+  "unrelatedSettingsUnchanged": true,
+  "dimensions": {
+    "viewport": 390,
+    "document": 390
+  },
+  "screenshots": 3,
+  "diagnostics": [
+    "Initial helper exact numeric accessible name stopped matching after the modified badge appeared; fixed the locator and reran.",
+    "Second helper expected All changes saved after save; actual confirmation is Settings saved and applied.; fixed wait and reran.",
+    "Third helper had no explicit original viewport in headed mode; all assertions/screenshots completed but viewport restoration failed. Added an explicit fallback and reran successfully.",
+    "First attempt to open the header menu was blocked by the first-run metrics opt-in panel. Closed it without opting in."
+  ]
+}

@@ -26,6 +26,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
+from .observation_ports import ObservationRepo
+
 from ..domain.approvals import Approval
 from ..domain.handoff_origin import HandoffOrigin
 from ..domain.artifacts import StoredArtifactPayload
@@ -2969,5 +2971,6 @@ class Repos:
     comm_bindings: AgentCommBindingRepo | None = None
     approvals: ApprovalRepo | None = None
     poll_tokens: PollTokenRepo | None = None
+    observations: ObservationRepo | None = None
     harness_sessions: HarnessSessionRepo | None = None
     harness_events: HarnessEventRepo | None = None

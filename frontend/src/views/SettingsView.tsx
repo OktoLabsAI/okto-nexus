@@ -26,6 +26,8 @@ import { useTheme } from "../hooks/useTheme";
 import { OperatorAccess } from "../components/OperatorAccess";
 import { RuntimePolicy } from "../components/RuntimePolicy";
 
+const SETTINGS_TABS = ['Interface', 'Runtime', 'Coordination', 'Observations', 'Security', 'Storage'];
+
 function labelOf(key: string): string {
   return key
     .replace(/_/g, " ")
@@ -69,7 +71,7 @@ function SettingField({
 
   return (
     <div title={item.description} data-testid={`setting-${item.key}`}>
-      <label className="text-xs font-medium text-surface-700 dark:text-surface-200 mb-0.5 flex items-center gap-2">
+      <label htmlFor={`setting-input-${item.key}`} className="text-xs font-medium text-surface-700 dark:text-surface-200 mb-0.5 flex items-center gap-2">
         {labelOf(item.key)}
         {!item.editable && (
           <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
@@ -91,6 +93,7 @@ function SettingField({
       <div className="flex items-center gap-2">
         {item.type === "bool" ? (
           <input
+            id={`setting-input-${item.key}`}
             type="checkbox"
             checked={Boolean(value)}
             disabled={!item.editable}
@@ -99,6 +102,7 @@ function SettingField({
           />
         ) : item.type === "enum" ? (
           <select
+            id={`setting-input-${item.key}`}
             value={String(value)}
             disabled={!item.editable}
             onChange={(e) => onChange(e.target.value)}
@@ -113,6 +117,7 @@ function SettingField({
         ) : (
           <>
             <input
+              id={`setting-input-${item.key}`}
               type="number"
               min={item.min ?? undefined}
               max={item.max ?? undefined}
@@ -191,7 +196,11 @@ export function SettingsView({
     [items],
   );
   const featureItems = useMemo(
-    () => items.filter((i) => i.group === "features"),
+    () => items.filter((i) => i.group === "features" && i.key !== "feature_observations"),
+    [items],
+  );
+  const observationItems = useMemo(
+    () => items.filter((i) => i.group === "observations" || i.key === "feature_observations"),
     [items],
   );
   const dirty = dirtyKeys.length > 0 || themeDraft !== theme || Object.values(sections).some(s => s.dirty);
@@ -255,8 +264,8 @@ export function SettingsView({
         <h1 className="text-lg font-semibold">Settings</h1>
         <p className="mt-1 mb-4 text-xs text-surface-500">Configure this Nexus instance. Changes across tabs are saved together.</p>
         <div role="tablist" aria-label="Settings categories" className="flex gap-1 overflow-x-auto">
-          {['Interface', 'Runtime', 'Coordination', 'Security', 'Storage'].map(name => <button key={name} id={`settings-tab-${name}`} role="tab" aria-selected={tab === name} aria-controls={`settings-panel-${name}`} tabIndex={tab === name ? 0 : -1}
-            onKeyDown={event => {const names = ['Interface', 'Runtime', 'Coordination', 'Security', 'Storage']; const index = names.indexOf(name); const next = event.key === 'ArrowRight' ? names[(index+1)%names.length] : event.key === 'ArrowLeft' ? names[(index+names.length-1)%names.length] : event.key === 'Home' ? names[0] : event.key === 'End' ? names[names.length-1] : null; if (next) {event.preventDefault(); setTab(next); document.getElementById(`settings-tab-${next}`)?.focus();}}}
+          {SETTINGS_TABS.map(name => <button key={name} id={`settings-tab-${name}`} role="tab" aria-selected={tab === name} aria-controls={`settings-panel-${name}`} tabIndex={tab === name ? 0 : -1}
+            onKeyDown={event => {const names = SETTINGS_TABS; const index = names.indexOf(name); const next = event.key === 'ArrowRight' ? names[(index+1)%names.length] : event.key === 'ArrowLeft' ? names[(index+names.length-1)%names.length] : event.key === 'Home' ? names[0] : event.key === 'End' ? names[names.length-1] : null; if (next) {event.preventDefault(); setTab(next); document.getElementById(`settings-tab-${next}`)?.focus();}}}
             onClick={() => setTab(name)} className={`px-4 py-3 text-sm whitespace-nowrap border-b-2 ${tab === name ? 'border-accent-500 text-accent-600 dark:text-accent-400' : 'border-transparent text-surface-500 hover:text-surface-900 dark:hover:text-white'}`}>{name}</button>)}
         </div>
       </header>
@@ -418,6 +427,31 @@ export function SettingsView({
           </section>
         )}
 
+        </div>
+        <div role="tabpanel" id="settings-panel-Observations" aria-labelledby="settings-tab-Observations" hidden={tab !== 'Observations'}>
+          <section className="panel p-5 space-y-4" data-testid="observation-settings">
+            <div>
+              <h2 className="font-display font-semibold text-sm flex items-center gap-2">
+                <ToggleLeft size={14} /> External observations
+              </h2>
+              <p className="mt-1 text-[11px] text-surface-400 dark:text-surface-500">
+                External activity reporting is opt-in and disabled by default. Sources and agent
+                permissions require explicit approval. Runtime and coordination have separate controls.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              {observationItems.map((item) => (
+                <SettingField
+                  key={item.key}
+                  item={item}
+                  draft={drafts[item.key]}
+                  onChange={(value) =>
+                    setDrafts((current) => ({ ...current, [item.key]: value }))
+                  }
+                />
+              ))}
+            </div>
+          </section>
         </div>
         <div hidden={tab !== 'Storage'} className="space-y-5">
         <section className="panel p-5"><h2 className="text-sm font-semibold mb-4">Retention</h2><div className="grid sm:grid-cols-2 gap-5">{items.filter(i => i.key.startsWith('retention_') || i.key === 'auto_prune_on_start').map(item => <SettingField key={item.key} item={item} draft={drafts[item.key]} onChange={value => setDrafts(d => ({...d, [item.key]: value}))}/>)}</div></section>

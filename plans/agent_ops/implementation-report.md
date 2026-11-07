@@ -472,3 +472,23 @@ Evidence: [effective policy](evidence/pr06-attention-effective-policy.md).
 Attention dashboard and workspace badge now consume the canonical versioned projection. A single client queue batches SSE invalidations, handles opaque cursors/CAS and bounded time refresh, preserves stale authorized snapshots, and clears protected content on forbidden/disabled states. Exact references reuse approval/question, handoff, message, execution and cleanup controls. Canonical revision/claim fences, confirmation, draft preservation on transient reads, explicit invalidation and post-success modal guard reset are implemented. 100 final frontend tests and 10 installed backend contracts passed with zero failures/errors/skips; overlapping reports are not summed. Real Chrome/HTTP/SQLite campaigns exercised preferences, concurrent approval conflict, verification, synthetic native permission/question/denial/120-second expiry, reconnection, feature toggle, stale/403 rendering, keyboard focus and light/dark/narrow/escaped-text presentation. The final 478-Python/163-migration/7-asset wheel matches source and installed bytes. These synthetic-peer campaigns do not qualify real providers, external clients, native user services or full R3.
 
 Evidence: [attention dashboard](evidence/pr07-attention-ui.md). The fixed plan hash and 59 tasks, 132 scenarios, 28 invariants and 17 completion criteria remain unchanged.
+
+## PR-08 — External observation admission
+
+OBS-01..04 are implemented and qualified in Nexus 0.3.3: explicit source consent,
+server-owned instance/generation fences, exclusive short-lived publisher tokens,
+current authorization before replay, atomic head/event/budget updates, passive
+freshness projection, opt-in settings and bounded existing retention maintenance.
+Core/Connector are unchanged in this milestone.
+
+525 unique source cases passed, plus 14 installed cases recorded separately and 49
+real loopback HTTP assertions. Settings was inspected in Chrome 156, light/dark
+and 390 px, including save/reload, invalid TTL refusal and restoration. The package
+matches all 486 Python, 164 migration and 7 static payload files byte for byte in
+source/wheel/installed form. The disposable Server drained canonically.
+
+See `evidence/pr08-observations.md` and its manifest for original diagnostics,
+scope, deduplication and exact artifacts. Injected storage failures are not a
+physical-disk-full campaign. Herdr/schema/helper qualification remains PR-09;
+external attention and joint regression remain PR-10. Existing real provider,
+client and user-service acceptance gates remain open. Full R3 is still in progress.

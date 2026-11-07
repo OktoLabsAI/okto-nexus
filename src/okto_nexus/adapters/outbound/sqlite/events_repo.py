@@ -193,21 +193,25 @@ class SqliteEventRepo:
             raise _db_error("resolving max event_id", exc) from exc
         return int(row[0]) if row is not None and row[0] is not None else 0
 
-    def count_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
-        """Count events with ``created_at < cutoff`` (the prune dry-run view)."""
+    def count_before(self, uow: UnitOfWork, *, cutoff: str,
+                     exclude_observations: bool = False) -> int:
+        """Count old events, optionally leaving the separate OBS retention lane."""
         try:
             row = uow.connection.execute(
-                "SELECT COUNT(*) FROM events WHERE created_at < ?", (cutoff,)
+                "SELECT COUNT(*) FROM events WHERE created_at < ?"
+                + (" AND type NOT GLOB 'observation.*'" if exclude_observations else ""),
+                (cutoff,),
             ).fetchone()
         except sqlite3.Error as exc:
             raise _db_error("counting prunable events", exc) from exc
         return int(row[0])
 
-    def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
+    def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int,
+                     exclude_observations: bool = False) -> int:
         """Delete up to ``limit`` events with ``created_at < cutoff``; return count.
 
-        The ONLY delete path on the events table, used exclusively by the
-        retention slice (the log stays append-only for every other caller).
+        Used exclusively by retention (the log stays append-only for ordinary
+        callers). When OBS has its own age/cap lane, exclude that family here.
         Oldest first, bounded by ``limit`` so each retention batch holds the
         WAL writer lock briefly instead of blocking the bus for one giant
         DELETE. ``event_id`` monotonicity survives pruning: the column is
@@ -215,14 +219,10 @@ class SqliteEventRepo:
         """
         try:
             cur = uow.connection.execute(
-                """
-                DELETE FROM events WHERE event_id IN (
-                    SELECT event_id FROM events
-                    WHERE created_at < ?
-                    ORDER BY event_id ASC
-                    LIMIT ?
-                )
-                """,
+                "DELETE FROM events WHERE event_id IN (SELECT event_id FROM events "
+                "WHERE created_at < ?"
+                + (" AND type NOT GLOB 'observation.*'" if exclude_observations else "")
+                + " ORDER BY event_id ASC LIMIT ?)",
                 (cutoff, int(limit)),
             )
         except sqlite3.Error as exc:

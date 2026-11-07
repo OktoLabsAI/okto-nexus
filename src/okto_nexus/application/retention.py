@@ -45,6 +45,7 @@ Protocols below; the SQLite repos satisfy them structurally.
 
 from __future__ import annotations
 
+from functools import partial
 from typing import Any, Protocol, runtime_checkable
 
 from ..config import MIN_RETENTION_MESSAGES_KEEP_DAYS, NexusConfig
@@ -63,6 +64,7 @@ DEFAULT_PRUNE_BATCH_SIZE = 500
 #: start), trading completeness for a fast, predictable boot. Backlog drains
 #: incrementally across starts, or in one pass via ``okto-nexus admin prune``.
 AUTO_PRUNE_MAX_BATCHES = 4
+OBSERVATION_PRUNE_BATCH_MAX = 1000
 
 _SECONDS_PER_DAY = 86400.0
 
@@ -76,10 +78,12 @@ _SECONDS_PER_DAY = 86400.0
 class PrunableEventRepo(Protocol):
     """Events: count/delete rows older than a cutoff (terminal by nature)."""
 
-    def count_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
+    def count_before(self, uow: UnitOfWork, *, cutoff: str,
+                     exclude_observations: bool = False) -> int:
         ...
 
-    def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
+    def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int,
+                     exclude_observations: bool = False) -> int:
         ...
 
 
@@ -122,6 +126,20 @@ class PrunableMessageRepo(Protocol):
 
     def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
         ...
+
+
+class PrunableObservationRepo(Protocol):
+    """Auxiliary cleanup preserves heads, generation fences and their tokens."""
+
+    def count_prunable(self, uow: UnitOfWork, *, now: str) -> dict[str, int]: ...
+
+    def prune(self, uow: UnitOfWork, *, now: str, limit: int) -> dict[str, int]: ...
+
+    def count_prunable_events(self, uow: UnitOfWork, *, cutoff: str,
+                              max_events: int) -> int: ...
+
+    def prune_events(self, uow: UnitOfWork, *, cutoff: str, max_events: int,
+                     limit: int) -> int: ...
 
 
 def _validate_keep_days(name: str, value: Any) -> int:
@@ -186,6 +204,7 @@ class RetentionService:
         sessions: PrunableSessionRepo,
         messages: PrunableMessageRepo,
         coordination_requests: CoordinationRequestRepo | None = None,
+        observations: PrunableObservationRepo | None = None,
         batch_size: int = DEFAULT_PRUNE_BATCH_SIZE,
     ) -> None:
         self._cf = connection_factory
@@ -196,6 +215,7 @@ class RetentionService:
         self._sessions = sessions
         self._messages = messages
         self._coordination_requests = coordination_requests
+        self._observations = observations
         self._batch_size = max(1, int(batch_size))
 
     @classmethod
@@ -217,6 +237,7 @@ class RetentionService:
             sessions=repos.sessions,
             messages=repos.messages,
             coordination_requests=repos.coordination_requests,
+            observations=getattr(repos, "observations", None),
         )
 
     # ------------------------------------------------------------------ #
@@ -297,12 +318,19 @@ class RetentionService:
             key: iso_plus(now, -days * _SECONDS_PER_DAY)
             for key, days in windows.items()
         }
+        event_count, event_delete = self._events.count_before, self._events.prune_before
+        if self._observations is not None:
+            # OBS events live in the same physical log, but have their own age
+            # and row cap. Disjoint predicates keep dry-run totals accurate and
+            # prevent the generic event window from bypassing OBS policy.
+            event_count = partial(event_count, exclude_observations=True)
+            event_delete = partial(event_delete, exclude_observations=True)
 
         tables = {
             "events": self._run_table(
                 cutoffs["events"],
-                count=self._events.count_before,
-                delete=self._events.prune_before,
+                count=event_count,
+                delete=event_delete,
                 dry_run=dry_run,
                 budget=budget,
             ),
@@ -344,6 +372,22 @@ class RetentionService:
                 delete=self._coordination_requests.prune_expired,
                 dry_run=dry_run, budget=budget)
 
+        row_limits = {}
+        if self._observations is not None:
+            windows["observation_events"] = self._config.observation_event_retention_days
+            cutoffs["observation_events"] = iso_plus(
+                now, -windows["observation_events"] * _SECONDS_PER_DAY)
+            row_limits["observation_events"] = self._config.observation_max_events
+            tables["observation_events"] = self._run_table(
+                cutoffs["observation_events"],
+                count=partial(self._observations.count_prunable_events,
+                              max_events=row_limits["observation_events"]),
+                delete=partial(self._observations.prune_events,
+                               max_events=row_limits["observation_events"]),
+                dry_run=dry_run, budget=budget,
+                batch_size=min(self._batch_size, OBSERVATION_PRUNE_BATCH_MAX))
+            tables.update(self._run_observation_cleanup(now, dry_run=dry_run, budget=budget))
+
         vacuum_report = self._maybe_vacuum(requested=vacuum, dry_run=dry_run)
 
         return {
@@ -351,6 +395,7 @@ class RetentionService:
             "now": now,
             "windows_days": windows,
             "cutoffs": cutoffs,
+            "row_limits": row_limits,
             "tables": tables,
             "total_deleted": sum(t["deleted"] for t in tables.values()),
             "protected": (
@@ -359,7 +404,10 @@ class RetentionService:
                 "workspaces/artifacts are never pruned. Messages ARE pruned by "
                 "age (>= 7-day window), except runtime evidence and causal fences; taking unprotected deliveries and "
                 "embeddings with them. Coordination references survive resource deletion "
-                "until their fixed 30-day expiry; expired references are pruned in bounded batches"
+                "until their fixed 30-day expiry; expired references are pruned in bounded batches. "
+                "Registered external observation heads, sequence/hash fences and their publisher tokens "
+                "are preserved; only unreferenced expired/revoked tokens and orphaned source/agent rate buckets "
+                "are pruned. Installation and existing identity/source budgets are preserved"
             ),
             "vacuum": vacuum_report,
         }
@@ -394,6 +442,7 @@ class RetentionService:
         delete: Any,
         dry_run: bool,
         budget: int | None,
+        batch_size: int | None = None,
     ) -> dict[str, Any]:
         """Prune (or count) ONE table; return ``{"deleted", "complete"}``.
 
@@ -408,14 +457,45 @@ class RetentionService:
                 return {"deleted": int(count(uow, cutoff=cutoff)), "complete": True}
         deleted = 0
         batches = 0
+        size = self._batch_size if batch_size is None else batch_size
         while budget is None or batches < budget:
             with self._cf.unit_of_work() as uow:
-                n = int(delete(uow, cutoff=cutoff, limit=self._batch_size))
+                n = int(delete(uow, cutoff=cutoff, limit=size))
             deleted += n
             batches += 1
-            if n < self._batch_size:
+            if n < size:
                 return {"deleted": deleted, "complete": True}
         return {"deleted": deleted, "complete": False}
+
+    def _run_observation_cleanup(self, now, *, dry_run, budget):
+        """Share one bounded batch budget across auxiliary tokens and buckets.
+
+        Keep table counts flat in the ordinary retention report. The adapter's
+        limit applies to tokens plus buckets together, not once per table.
+        Finishing the budget uses one passive count to report each backlog.
+        """
+        repo = self._observations
+        if dry_run:
+            with self._cf.unit_of_work(write=False) as uow:
+                counts = repo.count_prunable(uow, now=now)
+            return {"observation_" + key: {"deleted": int(counts[key]), "complete": True}
+                    for key in ("tokens", "rate_buckets")}
+        deleted = {"tokens": 0, "rate_buckets": 0}
+        size = min(self._batch_size, OBSERVATION_PRUNE_BATCH_MAX)
+        batches = 0
+        while budget is None or batches < budget:
+            with self._cf.unit_of_work() as uow:
+                counts = repo.prune(uow, now=now, limit=size)
+            for key in deleted:
+                deleted[key] += int(counts[key])
+            batches += 1
+            if sum(counts.values()) < size:
+                return {"observation_" + key: {"deleted": count, "complete": True}
+                        for key, count in deleted.items()}
+        with self._cf.unit_of_work(write=False) as uow:
+            remaining = repo.count_prunable(uow, now=now)
+        return {"observation_" + key: {"deleted": count, "complete": remaining[key] == 0}
+                for key, count in deleted.items()}
 
     def _maybe_vacuum(self, *, requested: bool, dry_run: bool) -> dict[str, Any]:
         """Run ``VACUUM`` when requested on a real prune; report what happened.
