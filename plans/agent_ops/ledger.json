@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T14:56:16.485592+00:00",
+  "updated_at": "2026-11-07T16:09:11.961418+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11778,14 +11778,16 @@
   },
   "campaigns": {
     "windows_temporary_user_tasks": {
-      "status": "AWAITING_AUTHORIZATION",
+      "status": "AUTHORIZED_PENDING_PREFLIGHT",
       "plan": "plans/agent_ops/campaigns/windows-user-service.md",
       "snapshot": "plans/agent_ops/evidence/r3-campaign-proposals/native-service-campaign-proposal.json",
       "snapshot_sha256": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a",
       "native_preflight": "Selected task names absent; no registration or app state created",
       "limits": "Temporary isolated tasks only; no personal app state, provider, credential, logout or reboot",
       "payload_refresh_required": false,
-      "payload_refresh_reason": "Current qualified wheel hashes pinned in revision4; exact two tasks remain absent and no registration performed."
+      "payload_refresh_reason": "Current qualified wheel hashes pinned in revision4; exact two tasks remain absent and no registration performed.",
+      "execution_authorized": true,
+      "execution_authorization": "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json"
     },
     "pr09_windows_herdr": {
       "status": "VERIFIED",
@@ -11945,11 +11947,11 @@
       ]
     },
     "m1_codex_real": {
-      "status": "PROPOSAL_READY_AWAITING_EXECUTION_AUTHORIZATION",
+      "status": "AUTHORIZED_PENDING_PREFLIGHT",
       "harness": "Codex CLI",
       "account_selection": "already authenticated CLI account",
       "total_token_limit": 700000,
-      "execution_authorized": false,
+      "execution_authorized": true,
       "credential_access_performed": false,
       "provider_inference_performed": false,
       "observed_cli_version": "0.167.0",
@@ -11980,7 +11982,8 @@
         "final_unique_passes": 14,
         "evidence": "plans/agent_ops/evidence/r3-m1-controller/artifact-manifest.json",
         "real_campaign_executed": false
-      }
+      },
+      "execution_authorization": "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json"
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -13068,6 +13071,15 @@
       "summary": "14final installed synthetic cases qualify setup/work shared accounting, recovery and owned abort;994inputs unchanged. Initial intervened run retained. Proposal v7 ready for explicit execution approval; no provider or OS effects.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-controller/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Finite real campaign explicitly authorized",
+      "status": "AUTHORIZED",
+      "summary": "User authorizes v7: six serial admissions, 700k tolerance, 100k preventive stop and32actions across4exact temporary user tasks. Historical proposals preserved; no acceptance promoted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-campaign-execution-authorization/authorization.json"
       ]
     }
   ]

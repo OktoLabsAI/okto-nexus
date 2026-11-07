@@ -1,0 +1,47 @@
+{
+  "recorded_at": "2026-11-07T16:09:11.961418+00:00",
+  "status": "AUTHORIZED_PENDING_PREFLIGHT",
+  "user_message_verbatim": "sim pode executar",
+  "applies_to": "The preceding concrete approval request for proposal v7: six serial productive admissions and 32 service actions across four exact temporary Windows user tasks.",
+  "proposals": {
+    "plans/agent_ops/evidence/r3-m1-controller/m1-codex-campaign-proposal-v7.json": "a5a01d1dd858e18645b020b4b604d09a8becab61c34b288ec524c34392da4371",
+    "plans/agent_ops/evidence/r3-campaign-proposals/native-service-campaign-proposal.json": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a"
+  },
+  "authorization": {
+    "provider": "Codex0.157.0 isolated official package; native use of existing authenticated C:/Users/jpamb/.codex context, without reading/copying its credential files by the agent.",
+    "productive_admissions_maximum": 6,
+    "serial": true,
+    "total_token_tolerance": 700000,
+    "preventive_threshold": 100000,
+    "m1_service_tasks": 2,
+    "m1_lifecycle_actions": 8,
+    "separate_empty_service_tasks": 2,
+    "separate_empty_lifecycle_actions": 24,
+    "excludes": [
+      "Personal executable/config replacement",
+      "Unowned tasks/processes",
+      "Logout/reboot",
+      "Merge/package publication",
+      "Extra autonomous turns"
+    ]
+  },
+  "native_empty_task_names": {
+    "nexus": "OktoNexus-server-8bfef9d6027a66372f8a7740fe8b0f3cffe7cbeb16a8a0eeff2084be2b53de9b",
+    "connector": "OktoNexus-connector-803538d0fe8d0385e7509b2101331869b261ad04581caeb47e5fce03bb66570b"
+  },
+  "execution_ownership": {
+    "m1": "/root/ac03_review",
+    "empty_service_campaign": "/root/pr10_frontend",
+    "independent_readonly_review": "/root/coordination_review",
+    "ledger_and_commits": "/root"
+  },
+  "boundaries": [
+    "Preserve approved proposals as immutable historical preparation records.",
+    "Recheck exact bytes, task absence, own paths and ports before effects; no silent substitution.",
+    "No direct agent access to personal provider credentials, configuration or transcripts. Only approved native use of authenticated provider home.",
+    "Reserve durably before every setup/work request; keep approved monitor and owned stop callbacks active.",
+    "No blind replay after uncertain results; preserve canonical IDs and receipts.",
+    "No logout/reboot, unowned resources, forced termination, merge, release or publication."
+  ],
+  "acceptance_promoted": false
+}
