@@ -564,3 +564,8 @@ Revisados 1.822 arquivos públicos dos três repos. Dois valores foram redigidos
 ## 2026-11-07 — R3: versões, imports e pacotes
 
 Quatro pares instalados qualificados: versões Core alinhadas aceitas; dois pares cruzados recusados com VERSION_INCOMPATIBLE antes de efeitos. 131 módulos Core importados sob guards, nove controles negativos e stdout bruto retido; fronteiras atuais sem violação. Pacotes completos: Nexus690/Connector123/Core165 arquivos, sem recurso-fonte omitido. RG06/07/08 e AC07 verificados para o snapshot Windows atual. Documentação de compatibilidade e proposta Windows vigente atualizadas. Rastreabilidade vinculada sem somar reruns; RG09, AC09/10 e campanhas reais continuam abertos. Revisão tarefa/cenário a tarefa/cenário segue somente leitura. Evidência: `plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md`.
+
+
+## 2026-11-07 — R3: reconciliação literal e lacuna SVC07
+
+Revisados os59 IDs sem novas execuções: BASE/SVC18, DX21, ATN/OBS20. Corrigidos195campos com acentos corrompidos, comprovando apenas reparo de codificação; checker passa a exigir texto literal do plano. ATN/OBS e14contratosDX verificados; seteDX implementados aguardam qualificação real. Contratos puros SVC reconciliados sem transformar adapter injetado em serviço real. AC06/09 e AC10 no escopo dos artefatos entregues verificados; risco histórico UAT/Git continua registrado fora desse aceite, sem novo requisito de reescrita/revogação. Lacuna concreta SVC07 (drain antes de contenção e decisão explícita de força) continua aberta; T06/T12/T13 em qualificação segura. M1/M2/R3 não concluídos. Evidência: `plans/agent_ops/evidence/r3-task-reconciliation/milestone.md`.

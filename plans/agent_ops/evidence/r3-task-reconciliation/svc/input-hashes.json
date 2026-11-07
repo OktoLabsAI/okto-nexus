@@ -1,0 +1,415 @@
+{
+  "heads": {
+    "nexus": "20b6584229957526441c9aa5066029a78ce1d5a2",
+    "connector": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+    "core": "5d31784362676e7231b5c612c458a4d8f4b5db4a"
+  },
+  "inputs": [
+    {
+      "repository": "nexus",
+      "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/ledger.json",
+      "sha256": "0cfd7ed04d2a581eab2cceafcb782aa5eec3cf9c045abd3e35e3c1db758f9c6a"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/baseline.md",
+      "sha256": "88daf6b2202daa7baf3e4863cc044a6bdc387d296f9685dd3c254b2ed02a7f3e"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/adr.md",
+      "sha256": "cff9c9d49af28f6d4e0f69d3674e9ec658cf6a4addfc831720a63da3392e884c"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr00-validation.md",
+      "sha256": "53b316f3804b2e596e6b846eccc96dcbf1a3cb0613bff0aeb3850bbd94436fff"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/baseline-startup.json",
+      "sha256": "0d34ddc70df4499d1b7df557baa0264956250d2f9bf08218fea464658472b40b"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-locks.md",
+      "sha256": "011b05aa5a4859e74bd7e040dd68dbf61df3f8a337a6768fb47bfd2cd0b7ea1b"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-readiness.md",
+      "sha256": "b4217daf1bb048efa59caf98847f73707b8deeed485143d10cd33b04ad754d8d"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-start-stop.md",
+      "sha256": "0213a52992047036610d56cb2309fe6a9f533511140643ec7382eaf59820aabe"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+      "sha256": "c5fc439bfe81f8bb7636ae66330855a65f2bb3cc87ec4c8d00d95fb2cf865d7e"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-connector-user-service.md",
+      "sha256": "aa3235a08931093c7dbf97361265475ec4be4267953930373b22536a4dd95b7a"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-enablement.md",
+      "sha256": "95bf46bd833ccebd5caea4c41c18a83eb1cbe1f8641a94deef080bbfb15c94ca"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-launch-recovery.md",
+      "sha256": "d82ba542ef6cecc31d5e9a4ebc1a3f2226c4a806a9f9e37702a3ea0bec9b9fa3"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-upgrade.md",
+      "sha256": "7df97ea61e138712d80c2961e0b82f18ecfbe0336e885dbf7e1098be08d5d0f5"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor.md",
+      "sha256": "7f4c3fc083c21c717b25204a8c87529ba4702477ee92feae4bfe8b83b532f7be"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal.md",
+      "sha256": "820114df1be4959f7c556b26ed4e929fc3eb05f03d2068a1be6753f7bb56f469"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-ledger-reconciliation.md",
+      "sha256": "e7678c38e9f7f9abb5048f9b3d4730218ef39c259cf87664a8855fd0e521c9f1"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/artifact-manifest.json",
+      "sha256": "a19eaa2b8f8ff10206a8768aaa37195301fd237a6edbfa8121895c1801db47a0"
+    },
+    {
+      "repository": "nexus",
+      "path": "docs/service-lifecycle.md",
+      "sha256": "6d7257bb2faa6acafbf387b01d305e62af2a5e50285a690ad6f39a6c3df81470"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/baseline-paths.xml",
+      "sha256": "ef7a75ebc7012120bea8fc4cc370c4c3906a3b98deac4d0fedaf4e517c351fb0"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-detached-process.xml",
+      "sha256": "5ef5be7d67ad8cbe394ac68269c2bbda8683de759107893402e27a371c6583bc"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+      "sha256": "081e92da91fba93f7fade288a067c3a61df1151b326589c0526d74b1f407c373"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-locks.xml",
+      "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-readiness.xml",
+      "sha256": "b72f35f83ae7b84873c99dcd5d192e5a914170527f49433765e0d768e56691f8"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-start-stop.xml",
+      "sha256": "ef194a3594fe3d124b2912c4990cd006c2a04127f9025c4b4371181524651c7b"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+      "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+      "sha256": "7c4b58373b18fca73bede77df6ebd9075ce1f5670708841ddc98bba7aea34c26"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
+      "sha256": "2629642cb5c39608779025be284ebaaf49a8696fff293930958d888d336a1754"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+      "sha256": "b51fe62f729834894267631af475539b4356daa7ccfcd76815898586d31ae7d6"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+      "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+      "sha256": "7e9ddaac7548a768dbea79efcb9e35e9e65267defe52365e5c2493aaf956d241"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+      "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+      "sha256": "5deea2f609889b212f31ed9fdd9e245900892d412c788a08c96852c291665708"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+      "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+      "sha256": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+      "sha256": "e4f2ef4cb33218011bb2d5248f985ce6ee7ad9933c1a94a80f1c7de2d398ccac"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+      "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa"
+    }
+  ],
+  "implementation": {
+    "facade": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/service_lifecycle.py",
+      "sha256": "57a2f683540f696a0b9681caceb15fb610bb8a758c95e546a0573f6299438c5f",
+      "symbol": "ServiceLifecycle",
+      "line": 7
+    },
+    "readiness": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/service_lifecycle.py",
+      "sha256": "57a2f683540f696a0b9681caceb15fb610bb8a758c95e546a0573f6299438c5f",
+      "symbol": "project_server_readiness",
+      "line": 119
+    },
+    "instance": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/service_lifecycle.py",
+      "sha256": "8f7c37a75548395c98840b96020fc2b00930755558e8685cf5555dbb8d57c7df"
+    },
+    "lock": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/http/lock.py",
+      "sha256": "0d4f71f6c30ab9eecc827fdb6cf5c6006c48a739391fd10df8118618f294bbc5",
+      "symbol": "ServeLock",
+      "line": 27
+    },
+    "locking": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/locking.py",
+      "sha256": "4fd47c0c89cc220ca9301e6e927ef0098ed537592d5e5323fb5f2f07d662a425"
+    },
+    "local": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/local.py",
+      "sha256": "07367190e7436fbc323bdfcf764a1170a48245488ea89f5eae290678974085a6",
+      "symbol": "LocalServerLifecycle",
+      "line": 38
+    },
+    "inspect": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+      "sha256": "365bb1671c2e2eb2802345ebefb41afbb9879bd0aa203ae1f1e236c0d69fd123",
+      "symbol": "inspect_local_server",
+      "line": 35
+    },
+    "context": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/context.py",
+      "sha256": "8f54e12b9c6d657a44ae3ed178e2efbc60782b4479e1b0f5f516d4bbee397e06",
+      "symbol": "execution_context",
+      "line": 64
+    },
+    "installation": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/installation.py",
+      "sha256": "4a3df9d200b1e4875c48aa4d9e874f93477c7f458f36f2c6b81a8950a451dcaa",
+      "symbol": "ServerInstallation",
+      "line": 38
+    },
+    "windows": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
+      "sha256": "ba70980f4c072080ad78907a11dcab5e80c31342531748c921a5522b130f05ba"
+    },
+    "service_cli": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/service.py",
+      "sha256": "c465b88382d649f18d9f3b7dab82a3bc1b3e23605fb274f5689d8403591c85e3",
+      "symbol": "run_service",
+      "line": 19
+    },
+    "foreground": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/serve.py",
+      "sha256": "b69750a2eba99c5878b3446c4ab10e28d5fac6f5548abe3ac64fb493033f0861",
+      "symbol": "run_serve",
+      "line": 429
+    },
+    "supervised": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+      "sha256": "4cb4f62d878dad0b3dcad8c486e46d5c2c9b6acc864fadcc1cf737bbecfd3fc8"
+    },
+    "detached": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/service_process.py",
+      "sha256": "39f11bbfbd0e599909cd035e2e1deba53a9bb3027591b536d84391d39c2e2642"
+    },
+    "logs": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/logs.py",
+      "sha256": "871335fa8397f3adef50ee566be4354b409ec8c7506533e9cdfdee2ae8a5ad98"
+    },
+    "shutdown": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/bootstrap/server_shutdown.py",
+      "sha256": "8a2ef4fdf5ed1c213b64261316bead85de3e449d3efd953272408c9aa93037fb",
+      "symbol": "ServerShutdownCoordinator",
+      "line": 11
+    },
+    "shutdown_http": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
+      "sha256": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2",
+      "symbol": "ShutdownRequest",
+      "line": 210
+    },
+    "upgrade": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/service_upgrade.py",
+      "sha256": "5b8ebf6da20e9d72493080dbd3ce88ab50eff42967880d0c25a10f03112815c1"
+    },
+    "upgrade_adapter": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
+      "sha256": "8c8d79fd4d133dc993d4167636b3eea2348c4ac9c116246dd7018a0dfe807f09"
+    },
+    "connect": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3",
+      "symbol": "run_connect",
+      "line": 120
+    },
+    "topology": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
+      "sha256": "8143e47af4bd50614d7ba280b6d6e0c8fe9d7df85e99eb4db2b56b7137c2b1a6"
+    },
+    "doctor": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/doctor.py",
+      "sha256": "cfa4139879ca6757ef1248226935cb331b67c8abb0e620f881566e062fcdea90"
+    },
+    "setup": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/connection_setup.py",
+      "sha256": "ed43ab293fe8c8834897c98cc627399526c467f771982f74d91edff12f7ac287"
+    },
+    "handoff": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/handoff.py",
+      "sha256": "ddd4512c4b381fa257941c79e1fdabedc7a069d00a785d910973f952b78b453e"
+    },
+    "messages": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/messages.py",
+      "sha256": "6248700d433aa5a26d3faebadc5b8ebfcf0e6b47ed13c274b59a97c59c040d31"
+    },
+    "native": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/execution_native_decisions.py",
+      "sha256": "dc3c0fd0f8868c3c2b8cad8dd91332c152b65f859076c8ec925a918d487d2e4e"
+    },
+    "connector_lifecycle": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/daemon/lifecycle.py",
+      "sha256": "f94adbf6d9eae5e5d98d4d40cd616933c9991e5917fd5abfd8e92fad3d6224f5"
+    },
+    "connector_context": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/service_context.py",
+      "sha256": "7871f6e2d90cb6ed82ab50a1897610edf8316e6e1c71b8133682526b28b7954d"
+    },
+    "connector_install": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/user_service.py",
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804"
+    },
+    "connector_cli": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/service.py",
+      "sha256": "32f6765aeb9301e1e74264644c0f9ca7bf1f487e3927cc028d95db242ec4a576"
+    },
+    "connector_doctor": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/doctor.py",
+      "sha256": "f3308b16d9979a9db8425e19bb02d59f1cb830b001102837618f7963326c0d57"
+    },
+    "connector_upgrade": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/service_upgrade.py",
+      "sha256": "a12bd6546b0b6a26fd41a8308e9a793aa63e97b2583ec6d5ae7861b90d29254f"
+    },
+    "connector_connect": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect.py",
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4"
+    },
+    "connector_reuse": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+      "sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925"
+    },
+    "core_definition": {
+      "repository": "core",
+      "path": "src/nexus_connector_core/user_service_definition.py",
+      "sha256": "f17acb3edf7e4fc3ed671a92412b004610db30ba20f9f2499276d5e478a25788"
+    },
+    "core_config": {
+      "repository": "core",
+      "path": "src/nexus_connector_core/config_document.py",
+      "sha256": "ada269c555e38a4d8670ecbcbf712cb8a929339898ead4e76b0544464bc967df"
+    },
+    "baseline": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/baseline.md",
+      "sha256": "88daf6b2202daa7baf3e4863cc044a6bdc387d296f9685dd3c254b2ed02a7f3e"
+    },
+    "adr": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/adr.md",
+      "sha256": "cff9c9d49af28f6d4e0f69d3674e9ec658cf6a4addfc831720a63da3392e884c"
+    },
+    "checker": {
+      "repository": "nexus",
+      "path": "scripts/check_agent_ops_ledger.py",
+      "sha256": "70da4a71acdb8a35928798202a40ecb82ce200cd359e35a3fde473eea0cf6613"
+    }
+  }
+}

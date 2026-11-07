@@ -1,0 +1,2947 @@
+{
+  "schema": "r3.safe_trace.services.audit.v1",
+  "date": "2026-11-07",
+  "mode": "read_only_retained_evidence_audit",
+  "tests_executed": 0,
+  "services_started": 0,
+  "checkout_changes_by_auditor": false,
+  "scope": {
+    "tasks": 18,
+    "scenarios": 30
+  },
+  "repository_heads": {
+    "nexus": "20b6584229957526441c9aa5066029a78ce1d5a2",
+    "connector": "fb3fff473ff246adcffa9e91573ac85f7a394170",
+    "core": "5d31784362676e7231b5c612c458a4d8f4b5db4a"
+  },
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "ledger_sha256_at_report": "0cfd7ed04d2a581eab2cceafcb782aa5eec3cf9c045abd3e35e3c1db758f9c6a",
+  "method": [
+    "Literal task paragraphs and scenario rows extracted directly from unchanged fixed plan.",
+    "Current implementation/test assertions read, historical JUnit testcase status parsed without reading/copying failure bodies. E12/E21 explicitly remain source-only: no matching retained report was located; no passing execution is inferred.",
+    "Current source hash and historical report hash are separate facts; no claim that every historical test fixture equals current bytes.",
+    "Cases/reports overlap. No aggregate passing-test count is offered and no status is changed.",
+    "Parent may concurrently repair ledger literal text; no product tests or live services run by this audit."
+  ],
+  "tasks": [
+    {
+      "id": "BASE-01",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 235,
+        "text": "**BASE-01 — registrar baseline.** Produzir `plans/agent_ops/baseline.md` com commits reais, versões, branches, instruções locais, comandos de teste disponíveis e funcionalidades já presentes."
+      },
+      "ledger_status_read": "VERIFIED",
+      "implementation_refs": [
+        "baseline"
+      ],
+      "evidence_refs": [
+        "E22"
+      ],
+      "audit_conclusion": "Baseline records exact three main commits/version/branches, local instructions and commands; historical start/bump issues separated.",
+      "recommended_status": "VERIFIED",
+      "remaining": "Keep historical baseline immutable; no new platform acceptance follows.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "BASE-02",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 237,
+        "text": "**BASE-02 — rastrear caminhos.** Seguir pelo menos: pergunta nativa → decisão; handoff broadcast → claim MCP/runtime; criação de mensagem → inbox/outbox; setup → teste → Finish; renderer MCP → gravação do arquivo do cliente. Registrar os serviços e fronteiras transacionais encontrados."
+      },
+      "ledger_status_read": "VERIFIED",
+      "implementation_refs": [
+        "baseline",
+        "native",
+        "handoff",
+        "messages",
+        "setup",
+        "core_config"
+      ],
+      "evidence_refs": [
+        "E22"
+      ],
+      "audit_conclusion": "Canonical flow map identifies service/repo/UoW boundaries and renderer reuse. Baseline 64 route cases plus Core/Connector configuration reports exist.",
+      "recommended_status": "VERIFIED",
+      "remaining": "This mapping is historical inventory, not blanket proof of every future change.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "BASE-03",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 239,
+        "text": "**BASE-03 — separar documentação vigente e legado.** Corrigir, no escopo tocado, orientações conflitantes sobre `automatic_reply`, persistência em Next versus Finish, versões e credencial em query string. Não reativar controles removidos. O código e os testes vigentes decidem o comportamento; inconsistência documental deve gerar tarefa, não suposição."
+      },
+      "ledger_status_read": "VERIFIED",
+      "implementation_refs": [
+        "baseline",
+        "adr"
+      ],
+      "evidence_refs": [],
+      "audit_conclusion": "Baseline records current-versus-legacy decisions (automatic_reply, Next/Finish, exact version and no query credentials); later docs keep authority distinctions.",
+      "recommended_status": "VERIFIED",
+      "remaining": "No product gap identified by this finite documentation audit; untouched legacy docs are not silently certified.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "BASE-04",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 241,
+        "text": "**BASE-04 — criar ADR curto.** Formalizar dimensões ortogonais, fonte de verdade da central, telemetria sem autoridade e separação entre configuração de participante e configuração de runtime."
+      },
+      "ledger_status_read": "VERIFIED",
+      "implementation_refs": [
+        "adr"
+      ],
+      "evidence_refs": [],
+      "audit_conclusion": "ADR explicitly covers orthogonal identity/activity/capacity/authority, canonical Attention sources, read-only telemetry, participant vs managed config and instance/supervision/stop ownership.",
+      "recommended_status": "VERIFIED",
+      "remaining": "No new runtime acceptance asserted.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "BASE-05",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 243,
+        "text": "**BASE-05 — ledger de evidências.** Criar `plans/agent_ops/ledger.json` com tarefa, dependências, arquivos, testes, resultado, plataforma e limitações. Estados: `NOT_STARTED`, `IN_PROGRESS`, `IMPLEMENTED`, `VERIFIED`, `BLOCKED`. Só marcar VERIFIED com evidência correspondente."
+      },
+      "ledger_status_read": "VERIFIED",
+      "implementation_refs": [
+        "checker"
+      ],
+      "evidence_refs": [],
+      "audit_conclusion": "Ledger has fixed task/scenario/invariant/completion inventories, evidence and authorization gates. Parent is repairing text encoding only; this report recommends status reconciliation without changing it.",
+      "recommended_status": "VERIFIED",
+      "remaining": "Stale SVC limitations/scenario NOT_RUN fields must be reconciled by evidence, not by totals.",
+      "remaining_kind": "documentary_reconciliation"
+    },
+    {
+      "id": "BASE-06",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 245,
+        "text": "**BASE-06 — lifecycle e primeiro uso reais.** Localizar entrypoints foreground/background, arquivos de configuração, diretórios de dados, locks/PIDs, gerenciadores de serviço, vault, descoberta de harnesses, startup/shutdown, reconciliação e empacotamento nos três repositórios. Registrar a matriz real de plataformas e escolher um harness já suportado para a primeira campanha local e remota. Medir as etapas atuais entre instalação e primeira sessão útil. Não presumir ausência de daemon porque o fluxo atual exige um comando manual.\n\nPara a rota padrão de R3, mapear também envio de solicitação à sessão, contexto efetivo do harness, perguntas/permissões, correlação de resultados e reencontro do trabalho após fechar o CLI. Registrar quais etapas já existem no terminal e quais exigem uma fachada pequena sobre os serviços atuais. Qualificar a rota por esse ciclo completo, não somente pelo suporte do adaptador à inicialização.\n\nAmpliar BASE-04 com ADR de instância/supervisão, on-demand versus login, propriedade dos processos e semântica de stop/restart. Ampliar BASE-05 com componente, topologia, mecanismo de inicialização e prova de sobrevivência efetivamente executada."
+      },
+      "ledger_status_read": "IMPLEMENTED",
+      "implementation_refs": [
+        "baseline",
+        "facade",
+        "connector_lifecycle",
+        "core_definition"
+      ],
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E15"
+      ],
+      "audit_conclusion": "Three-repo lifecycle/storage/config/vault map and first Windows/codex_app_server target exist; disposable initial liveness 7.811s is recorded separately.",
+      "recommended_status": "IMPLEMENTED",
+      "remaining": "Installation-to-first-useful-provider-session/full result/native interaction timing remains NOT_RUN; liveness and synthetic cycles do not replace it.",
+      "remaining_kind": "real_provider_campaign"
+    },
+    {
+      "id": "SVC-01",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 282,
+        "text": "**SVC-01 — fachada de lifecycle.** Definir operações internas equivalentes a `inspect`, `ensure_running`, `start`, `stop`, `restart`, `install_user_service`, `uninstall_user_service` e `logs`. Reutilizar implementações existentes. CLI, onboarding e gerenciador do SO chamam o mesmo entrypoint de aplicação, com os mesmos dados e regras. Não criar um processo supervisor próprio de longa duração se o SO já atende ao contrato.\n\nO contrato retorna componente, identidade da instância, versão ativa/instalada, configuração efetiva com segredos ocultados, supervisor, estado, prontidão, motivo e próxima ação. O Core pode compartilhar tipos puros e utilitários portáveis se isso reduzir duplicação; não recebe o banco, a política do Server nem efeitos no import."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "facade",
+        "local",
+        "connector_lifecycle",
+        "core_definition"
+      ],
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E05",
+        "E06",
+        "E08",
+        "E13"
+      ],
+      "audit_conclusion": "Both hosts expose the shared lifecycle facade; CLI/native entrypoints converge. Passive diagnostics, logs, enablement, recovery and upgrades are implemented, contrary to old limitation text.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "First supported Windows real user-service acceptance remains open; other platforms need only retain their explicit qualification limits. Keep individual verified subcontracts.",
+      "remaining_kind": "qualification"
+    },
+    {
+      "id": "SVC-02",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 288,
+        "text": "**SVC-02 — propriedade e exclusão mútua.** Identificar a instância por configuração e diretório de dados canônicos, usuário efetivo e componente. Resolver aliases antes de adquirir lock. Usar exclusão mútua do SO/armazenamento com semântica documentada e revalidar após adquirir o lock. Não manter lock de banco/transação durante espera por rede.\n\nUm PID, arquivo antigo ou porta aberta não basta para comprovar propriedade: correlacionar identidade da instância, processo e geração/início disponíveis. Tratar lock obsoleto e PID reutilizado sem matar processos alheios. Conflito de porta não autoriza mudar endpoint, abrir outra base ou iniciar segunda instância silenciosamente. Instâncias explicitamente diferentes permanecem isoladas."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "instance",
+        "lock",
+        "locking",
+        "local",
+        "connector_lifecycle"
+      ],
+      "evidence_refs": [
+        "E03",
+        "E04",
+        "E05",
+        "E07"
+      ],
+      "audit_conclusion": "Canonical home/DB/effective-user identity and held OS exclusion precede bootstrap; metadata/PID/port never independently prove ownership.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Full occupied-socket startup diagnostic/fixed-endpoint case not located. It is a safe test gap, not Windows installation permission.",
+      "remaining_kind": "focused_safe_qualification"
+    },
+    {
+      "id": "SVC-03",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 292,
+        "text": "**SVC-03 — iniciar ou reutilizar.** Resolver primeiro o perfil local/remoto. Se houver instância compatível pronta, reutilizar. Se estiver iniciando, aguardar a mesma inicialização com prazo limitado. Se existir serviço instalado, acioná-lo pelo supervisor; caso contrário, lançar o entrypoint existente em background de forma adequada à plataforma, sem shell interpolado e sem dependência do terminal pai.\n\nNão implementar somente `nohup` e tratar isso como suporte completo. Desacoplamento de stdin/stdout/stderr, grupos de processo e sinais devem ser testados no SO alvo. Sob `launchd` ou outro supervisor, o processo principal permanece em foreground para ser acompanhado corretamente; a camada supervisionada não destaca outro processo e termina. [S03]"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "connect",
+        "topology",
+        "facade",
+        "detached",
+        "supervised",
+        "connector_lifecycle"
+      ],
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E07",
+        "E08",
+        "E16",
+        "E17"
+      ],
+      "audit_conclusion": "Detached lifecycle and installed-supervisor routing exist; topology is resolved before local effects; start only once then observes.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Connect-to-facade composition and real process lifecycle are complementary evidence; actual supervised user context/terminal-close work remains distinct.",
+      "remaining_kind": "qualification"
+    },
+    {
+      "id": "SVC-04",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 298,
+        "text": "**SVC-04 — prova de prontidão.** Distinguir `stopped`, `starting`, `ready`, `degraded`, `stopping` e `failed`, adaptando nomes à convenção vigente. Porta acessível não significa Nexus pronto: verificar identidade/compatibilidade, configuração carregada, armazenamento/migrações e condições seguras de admissão. No Connector, separar processo local saudável de vínculo remoto autenticado e capacidade de receber trabalho.\n\nRestaurar/reconciliar fatos de execução antes de admitir trabalho nos escopos afetados. Operação incerta pode manter esse escopo bloqueado sem indisponibilizar consultas e escopos independentes. Falha de credencial, rede, versão, configuração ou migração deve apresentar causa específica. Timeout do cliente não mata automaticamente o serviço nem dispara outra inicialização; uma nova consulta recupera o estado existente. Cancelar a espera de conexão não cancela tarefas em andamento."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "readiness",
+        "inspect",
+        "shutdown",
+        "connector_lifecycle"
+      ],
+      "evidence_refs": [
+        "E05",
+        "E06",
+        "E19",
+        "E20"
+      ],
+      "audit_conclusion": "Explicit state/readiness correlates owner/version; local query readiness is not provider/authority readiness; failure and stopping stay observable.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "No direct retained Ctrl+C-connect or startup migration-failure diagnostic assertion located; real provider readiness still open.",
+      "remaining_kind": "mixed_safe_and_real_qualification"
+    },
+    {
+      "id": "SVC-05",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 304,
+        "text": "**SVC-05 — integração com o gerenciador do SO.** Instalar, habilitar, iniciar, parar, desabilitar e remover somente os recursos da instância selecionada. Operações repetidas devem reconhecer o estado atual. Registrar proprietário e revisão da definição instalada; configuração alterada pelo usuário exige reconciliação, não sobrescrita cega. Desinstalar o serviço preserva dados, histórico, projetos e credenciais; se estiver ativo, aplicar antes a parada controlada.\n\n| Plataforma | Mecanismo candidato | Limite a declarar e testar |\n|---|---|---|\n| Linux com systemd | Unidade de usuário e supervisão pelo gerenciador do usuário | Linger é configuração separada para boot/continuidade após logout; não ativar implicitamente. Políticas de sessão podem encerrar processos apenas destacados. [S01, S02] |\n| macOS | LaunchAgent do usuário | O agente pertence à sessão logada; LaunchDaemon de sistema é outro escopo. Validar comandos na versão alvo, pois a referência Apple é arquivada. [S03] |\n| Windows | Tarefa no login no contexto do usuário ou mecanismo já adotado pelo projeto | Especificar gatilho, principal e tipo de logon; não chamar tarefa no login de Windows Service. S4U não é fallback universal para Connector, pois limita rede/arquivos criptografados. [S04] |\n| Windows sem login | Windows Service, se houver requisito e suporte explícitos | Boot e identidade de serviço exigem campanha própria; interação com o usuário ocorre por interface separada. Não é requisito implícito do primeiro caminho local. [S05, S06] |\n\nBASE-06 fecha a matriz apoiada pelo produto e o primeiro ambiente de campanha. O marco inicial deve comprovar Server e Connector em pelo menos uma plataforma real; não bloquear esse benefício até terminar todas as plataformas. Também não declarar uma plataforma suportada só porque seu template foi gerado. Qualificação adicional integra SVC-12 e o rollout."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "installation",
+        "windows",
+        "connector_install",
+        "core_definition"
+      ],
+      "evidence_refs": [
+        "E08",
+        "E09",
+        "E13"
+      ],
+      "audit_conclusion": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Real two-task Windows campaign not executed; login and other OSes have separate unqualified scope. Windows definition validation is not installation.",
+      "remaining_kind": "authorized_native_campaign_pending"
+    },
+    {
+      "id": "SVC-06",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 317,
+        "text": "**SVC-06 — contexto estável de execução.** Persistir referências necessárias a executável, ambiente/venv, configuração, dados e diretórios de trabalho usando caminhos resolvidos. Projetos mantêm seus caminhos próprios. Não depender de alias de shell, diretório corrente ou PATH do terminal usado no setup; não copiar indiscriminadamente todo o ambiente para a definição do serviço.\n\nVerificar o acesso a credenciais no usuário e contexto reais do serviço. Login de provedor disponível no terminal pode não estar disponível em sessão não interativa ou cofre bloqueado. Exibir correção específica e usar mecanismos existentes, sem inserir segredos em argv, plist/unit, descrição de tarefa, logs ou URL. Segredo do operador não deve ser copiado para o host do Connector para facilitar onboarding.\n\nIniciar o serviço mantém as políticas de bind/origem/TLS e a superfície de rede configurada. Não expor interfaces administrativas remotamente para permitir controle local do daemon. Identidade técnica de serviço não substitui identidade de agente nem credencial de participante."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "context",
+        "supervised",
+        "connector_context",
+        "connector_install"
+      ],
+      "evidence_refs": [
+        "E10",
+        "E02"
+      ],
+      "audit_conclusion": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified.",
+      "remaining_kind": "real_service_context_campaign"
+    },
+    {
+      "id": "SVC-07",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 325,
+        "text": "**SVC-07 — parada controlada.** Implementar política explícita de drain: bloquear novas admissões do escopo, persistir estado, aguardar operações em andamento conforme contrato e prazo, e só então encerrar. Se o prazo expirar, informar trabalhos ainda ativos/incertos e permitir decisão explícita de força; não converter timeout em sucesso ou cancelamento automático. Cancelar um pedido de parada e reabrir admissão exige transição clara e autorizada.\n\nNo fluxo solicitado pelo CLI, concluir o drain pela aplicação antes de pedir stop ao supervisor; não iniciar uma contagem de encerramento forçado do SO enquanto a interface ainda promete aguardar uma decisão do usuário. Coordenar os prazos e a política de processos filhos com o gerenciador escolhido. Quando o encerramento vier de fora — logout, shutdown, administrador ou falha — aplicar persistência/encerramento dentro do prazo disponível e registrar estado incerto para reconciliação posterior; não prometer que todo término externo pode ser impedido.\n\nSolicitar drain pelo canal autorizado existente e manter disponíveis as operações necessárias para terminar trabalho já admitido: resultados, decisões autorizadas e reconciliação. Bloquear novas admissões produtivas, sem derrubar prematuramente os canais usados pelas operações em andamento. Um connect concorrente informa que a instância está parando; não cancela o drain nem inicia outra instância. Informar o alcance da parada quando vários projetos compartilham o mesmo serviço.\n\nDefinir a política de processos filhos com base no Core real. Não prometer preservar um harness após matar seu dono se não houver mecanismo comprovado de reconexão. `restart` segue o mesmo protocolo; parar serviço e cancelar tarefa são operações distintas. Uma parada solicitada não aciona recuperação automática. Um novo `connect` pode iniciar a instância novamente segundo a política documentada."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "facade",
+        "shutdown",
+        "shutdown_http",
+        "service_cli",
+        "installation",
+        "connector_lifecycle"
+      ],
+      "evidence_refs": [
+        "E11",
+        "E12",
+        "E23"
+      ],
+      "audit_conclusion": "Canonical drain fences admissions, keeps recovery available, retains unknown ownership, correlates generation and never forces on observation timeout.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Literal line325 explicit force decision is not exposed by inspected CLI/request/coordinator; do not equate this with absence of Core containment escalation. External logout/shutdown/context campaign still pending.",
+      "remaining_kind": "product_gap_plus_real_campaign"
+    },
+    {
+      "id": "SVC-08",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 335,
+        "text": "**SVC-08 — reconciliação sem repetição de efeitos.** Reinício do serviço restaura configuração/estado e reutiliza recibos, identidades, bindings, grants e processos conforme os contratos atuais. Verificar ownership e estado real antes de retomar admissão. Processo supervisor perdido não comprova morte dos filhos nem permite liberar imediatamente claims, leases ou slots.\n\nGrants expirados continuam expirados. Trabalho com resultado desconhecido permanece incerto; startup não cria outra tentativa, mensagem ou aprovação para resolvê-lo. Recuperação de falha usa backoff e limite observável pelo supervisor escolhido. Após esgotamento, expor falha acionável. O modo apenas destacado pode ter garantias menores de recuperação que um serviço supervisionado; declarar essa diferença.\n\nSuspensão, perda de rede e retorno do Server exigem revalidação de autoridade e reconciliação. Reinício automático do daemon não equivale a reinício automático de inferências. Trabalho novo/previamente autorizado só avança pelo caminho canônico de admissão."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "shutdown",
+        "local",
+        "connector_lifecycle"
+      ],
+      "evidence_refs": [
+        "E07",
+        "E11",
+        "E18",
+        "E21"
+      ],
+      "audit_conclusion": "Durable launch/mutation/drain recovery and exact receipt reuse are implemented. Synthetic recovery preserves occupied Core resources and grant authority.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Real supervisor crash/backoff/limit and suspend/return context still not qualified; OS loss is not proof of child death.",
+      "remaining_kind": "real_supervisor_campaign"
+    },
+    {
+      "id": "SVC-09",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 343,
+        "text": "**SVC-09 — versão ativa e upgrade controlado.** Distinguir versão do CLI/pacote instalado da versão do daemon ativo. Reutilizar versões compatíveis; para incompatibilidade, apresentar atualização/retomada explícitas. Não atualizar nem matar trabalho silenciosamente durante `connect`.\n\nCoordenar substituição do executável, ambiente, arquivos de serviço e migrações. Guardar referências suficientes para recuperação, mas não assumir rollback binário seguro depois de migração incompatível. Arquivos de serviço não podem continuar apontando para venv removido sem diagnóstico. Atualização concorrente com conexão preserva exclusão mútua e propriedade da instância."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "upgrade",
+        "upgrade_adapter",
+        "connector_upgrade"
+      ],
+      "evidence_refs": [
+        "E14",
+        "E15"
+      ],
+      "audit_conclusion": "Reviewed target environment and generation/config fingerprints gate upgrade; interrupted effects recover; downgrade refused; no implicit connect upgrade.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Actual registered-task update and real historical migration recovery are not proved by disposable same-version environment switching.",
+      "remaining_kind": "real_native_and_migration_qualification"
+    },
+    {
+      "id": "SVC-10",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 349,
+        "text": "**SVC-10 — controles simples.** Expor status, logs, start, stop, restart e instalação/remoção do serviço, além de manter o entrypoint foreground atual. Os nomes seguintes são **propostas de interface**, a reconciliar com o parser; não são comandos já confirmados:\n\n```bash\nokto-nexus service status\nokto-nexus service start\nokto-nexus service logs --follow\nokto-nexus service stop\nokto-nexus service restart\nokto-nexus service install --user --start-at-login\nokto-nexus service uninstall --user\n```\n\nO CLI do Connector deve oferecer operações equivalentes em seu próprio namespace; preservar aliases e comandos existentes, sem impor um nome de executável não verificado. Status/logs/doctor são diagnósticos sem inicialização implícita. Aplicar ocultação de segredos, rotação/retenção e saída JSON/códigos estáveis. Logs inacessíveis ou endpoint indisponível não significam ausência de trabalho.\n\nO sistema não precisa consultar um modelo para gerenciar o serviço. Supervisor do SO e serviço não dependem de dashboard aberto. Fechar o CLI após sucesso deixa o componente ativo; fechar o browser apenas encerra sua interface."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "service_cli",
+        "logs",
+        "doctor",
+        "connector_cli",
+        "connector_doctor"
+      ],
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E06",
+        "E09",
+        "E14"
+      ],
+      "audit_conclusion": "Terminal-only start/stop/restart/install/uninstall/log/status/doctor and retained foreground commands exist; passive commands do not infer work absence.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Keep verified passive/CLI subcontracts; real terminal-independent productive operation plus SVC07 explicit-force gap remain unclosed.",
+      "remaining_kind": "mixed_product_and_qualification"
+    },
+    {
+      "id": "SVC-11",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 367,
+        "text": "**SVC-11 — mesmo lifecycle no Connector.** Implementar start/reuse, serviço do usuário, prontidão e parada no host de execução, usando configuração e vault atuais. Descoberta de diretório/harness ocorre nesse host. Reutilizar vínculo e identidade de executor no Server; queda/reconexão não refaz cadastro, não duplica executor e não repete trabalho.\n\nQuando houver aprovação remota pendente, preservar seu identificador e mostrar estado/ação. O CLI autenticado do operador deve poder tomar a decisão canônica pelo terminal; o CLI participante sem essa autoridade apenas acompanha. Não copiar credencial administrativa para o host do Connector nem aceitar assentimento local do participante como decisão do operador. O link de painel é complementar, sem chaves. Política organizacional preexistente que exija outro canal deve ser identificada como tal, sem virar requisito da instalação padrão. Server remoto indisponível gera diagnóstico/retry de transporte limitado, nunca instalação de Server local ou fallback de identidade."
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "connector_lifecycle",
+        "connector_connect",
+        "connector_reuse",
+        "topology"
+      ],
+      "evidence_refs": [
+        "E02",
+        "E08",
+        "E17",
+        "E18"
+      ],
+      "audit_conclusion": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Loopback synthetic native/provider tests do not prove physical remote host/TLS/service-user vault/productive M1/M2.",
+      "remaining_kind": "real_remote_provider_campaign"
+    },
+    {
+      "id": "SVC-12",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 373,
+        "text": "**SVC-12 — empacotamento, campanha e documentação.** Empacotar recursos de serviço, helpers e configuração necessários ao wheel/artefato final. Testar a instalação pelo pacote, sem depender do checkout. Produzir matriz por SO, versão, topologia, supervisor, sobrevivência ao terminal, recuperação de falha, início no login e acesso a credenciais. Testes isolados não alteram a instalação pessoal do usuário; campanhas reais seguem autorização já concedida no ambiente.\n\nO primeiro marco SVC + DX exige: Server local e Connector remoto iniciados/reutilizados corretamente; preset útil aplicado e ciclo de trabalho completo com um harness nativo suportado pelo terminal; fechamento do terminal sem encerrar componentes de ownership do serviço; instância única sob concorrência; modo de serviço do usuário exercitado na plataforma da campanha; diagnóstico honesto quando faltam login/credencial/aprovação. A campanha inclui decisão canônica, resultado e reencontro do trabalho conforme DX-20. Início antes de login e restauração de um processo após reboot não são garantias desse aceite.\n\nConexão pronta é uma etapa intermediária de M1. O aceite também exige trabalho útil real solicitado de forma autorizada, acompanhado e concluído pelo fluxo canônico no terminal. Isso é uma exigência da campanha de validação, não autorização para enviar tarefa ou executar teste pago implicitamente ao iniciar o daemon. Sem ambiente/provedor autorizado para a campanha real, registrar o aceite correspondente como pendente.\n\n# 8. Frente DX — onboarding e operações simplificadas"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "implementation_refs": [
+        "baseline",
+        "core_definition",
+        "facade",
+        "connector_lifecycle"
+      ],
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E15",
+        "E18"
+      ],
+      "audit_conclusion": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications.",
+      "recommended_status": "IN_PROGRESS",
+      "remaining": "Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN.",
+      "remaining_kind": "real_native_provider_campaign"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SVC-T01",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 827,
+        "text": "| SVC-T01 | Primeiro connect local inicia o Server em background e aguarda prontidão real. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E01",
+        "E16"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Actual service start/readiness proven; connect invokes same facade through an injected seam.",
+      "remaining": "Composition is supported by the actual connect→ensure_running source seam, injected seam assertion and real facade/process readiness test; it does not qualify a registered task or provider.",
+      "remaining_kind": "qualified_composition_with_explicit_scope_boundary"
+    },
+    {
+      "id": "SVC-T02",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 828,
+        "text": "| SVC-T02 | Segundo connect reutiliza a mesma instância; projetos distintos não duplicam serviço por acidente. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E03",
+        "E16"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Actual repeat start reuses PID/generation; identity excludes project/agent and connect reuses saved profile.",
+      "remaining": "Canonical service identity depends on configuration/data/user, not project; the shared facade and repeat-start checks compose. Do not require one monolithic campaign merely because assertions are separate.",
+      "remaining_kind": "qualified_composition_with_explicit_scope_boundary"
+    },
+    {
+      "id": "SVC-T03",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 829,
+        "text": "| SVC-T03 | Dois connects simultâneos iniciam uma única instância e observam o mesmo resultado. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E03",
+        "E16"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Three real concurrent service launchers converge on one owner and ready result.",
+      "remaining": "The real concurrent start and connect→same-facade assertion compose; no extra protocol/provider effects are inferred.",
+      "remaining_kind": "qualified_composition_with_explicit_scope_boundary"
+    },
+    {
+      "id": "SVC-T04",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 830,
+        "text": "| SVC-T04 | Perfis que apontam ao mesmo diretório canônico compartilham exclusão mútua; instâncias diferentes ficam isoladas. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E03"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Canonical aliases/shared database exclude; independent home+DB succeeds; failed second-lock acquisition releases first.",
+      "remaining": "Windows held-lock contract verified; do not claim all filesystems/OSes.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T05",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 831,
+        "text": "| SVC-T05 | Lock obsoleto/PID reutilizado não permite matar processo alheio nem comprova serviço ativo. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E04"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Stale/unknown/reused PID does not prove death and cannot steal live OS ownership; no historical-PID killing.",
+      "remaining": "",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T06",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 832,
+        "text": "| SVC-T06 | Porta ocupada por outro processo produz diagnóstico; não muda endpoint ou base silenciosamente. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E05"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Foreign endpoint is not ready; no fallback logic in inspected lifecycle.",
+      "remaining": "A real occupied TCP socket during start and no endpoint/DB fallback assertion not located. Safe isolated test gap, not authorization.",
+      "remaining_kind": "focused_safe_qualification"
+    },
+    {
+      "id": "SVC-T07",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 833,
+        "text": "| SVC-T07 | Serviço instalado e parado é iniciado por seu supervisor, sem daemon avulso concorrente. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E08"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Injected installed-stopped integration uses only its scheduler, preserving pending start and refusing detached fallback.",
+      "remaining": "Actual Task Scheduler start remains the explicit native campaign; scope label must retain injected adapter.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T08",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 834,
+        "text": "| SVC-T08 | Perfil remoto indisponível não inicia Server local substituto. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E06",
+        "E17"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Remote topology/metadata failure cannot invoke local startup; remote-login option rejected.",
+      "remaining": "Synthetic transport/topology scope; real external network availability is not claimed.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T09",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 835,
+        "text": "| SVC-T09 | Fechar terminal e dashboard mantém Server/Connector e execução conforme o contrato de ownership. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E01",
+        "E02"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Parent launcher exit survival proven for both actual detached processes.",
+      "remaining": "Literal terminal/dashboard closure with admitted work and maintained native ownership remains real campaign.",
+      "remaining_kind": "real_terminal_work_campaign"
+    },
+    {
+      "id": "SVC-T10",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 836,
+        "text": "| SVC-T10 | Consulta status/logs/doctor em instância parada não a inicia e não executa inferência. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E06"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Absent status/log/doctor paths preserve storage and do not start or infer; doctor remote default does not vault/network.",
+      "remaining": "Explicit doctor probes are separate opt-in checks.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T11",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 837,
+        "text": "| SVC-T11 | Endpoint acessível de instância/versão errada não vira prontidão válida. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E05"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Wrong instance/generation/version is refused despite HTTP reachability; live unreachable owner is not declared stopped.",
+      "remaining": "",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T12",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 838,
+        "text": "| SVC-T12 | Falha de migração/configuração/armazenamento impede prontidão ou admissão afetada e informa causa. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E19",
+        "E05"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Lock-storage/bootstrap failures do not declare ready; ownership released or retained conservatively.",
+      "remaining": "Startup invalid-config/migration diagnostic cases not mapped; no blanket permission barrier.",
+      "remaining_kind": "focused_safe_qualification"
+    },
+    {
+      "id": "SVC-T13",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 839,
+        "text": "| SVC-T13 | Timeout/Ctrl+C do connect interrompe espera sem matar serviço, repetir setup ou cancelar tarefas. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E20",
+        "E12"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Wait timeout cannot restart/stop; cancelled shutdown observer cannot cancel retained recovery.",
+      "remaining": "Retained Ctrl+C during actual connect not located. Log-follow Ctrl+C is not a substitute.",
+      "remaining_kind": "focused_safe_qualification"
+    },
+    {
+      "id": "SVC-T14",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 840,
+        "text": "| SVC-T14 | Serviço iniciado com cwd/PATH diferentes encontra executável, configuração e projeto corretos. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E10",
+        "E01",
+        "E02"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Saved absolute executable/cwd/paths/environment contracts and changed launcher cwd tested.",
+      "remaining": "Actual registered service with reduced/different PATH/cwd and correct project still needs service context campaign.",
+      "remaining_kind": "real_service_context_campaign"
+    },
+    {
+      "id": "SVC-T15",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 841,
+        "text": "| SVC-T15 | Credencial só disponível no terminal ou cofre bloqueado gera diagnóstico no contexto real do serviço. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E06",
+        "E10"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Diagnostic layers distinguish credential/auth/service state; safe/default checks avoid credential reads.",
+      "remaining": "Real terminal-only credential and locked OS vault under service user is unexecuted.",
+      "remaining_kind": "real_service_vault_campaign"
+    },
+    {
+      "id": "SVC-T16",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 842,
+        "text": "| SVC-T16 | Definições de serviço, argv, logs e saída JSON não expõem segredos nem ampliam bind/permissões. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E02",
+        "E06",
+        "E10"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Allowlist/sentinel assertions show no secret in saved context/JSON/logs; existing auth/origin scope remains unchanged.",
+      "remaining": "Finite synthetic sentinel/definition coverage, not proof of arbitrary unknown secret formats.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T17",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 843,
+        "text": "| SVC-T17 | Instalar/habilitar serviço repetidamente não duplica recursos; alteração externa de definição é preservada. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E08",
+        "E09",
+        "E13"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Repeated scoped install/enable is no-op; native fingerprint edits and foreign definitions refuse, preserving them.",
+      "remaining": "Scheduler effects injected; real native integration remains separately pending.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T18",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 844,
+        "text": "| SVC-T18 | Início no login é comprovado em SO real; resultado não é apresentado como prova de boot sem login. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E08",
+        "E09"
+      ],
+      "recommendation": "NOT_RUN_REAL",
+      "assertion_scope": "Only logon task definition and injected login facts proven.",
+      "remaining": "Actual OS logon startup must be observed; no boot-without-login claim.",
+      "remaining_kind": "real_login_campaign"
+    },
+    {
+      "id": "SVC-T19",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 845,
+        "text": "| SVC-T19 | Crash supervisionado reinicia com backoff/limite; falha persistente fica visível e acionável. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E08",
+        "E11"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Definition/recovery suppression and failure exit codes implemented/injected.",
+      "remaining": "Real supervised crash/backoff/limit exhaustion and actionable persistent failure not executed.",
+      "remaining_kind": "real_supervisor_crash_campaign"
+    },
+    {
+      "id": "SVC-T20",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 846,
+        "text": "| SVC-T20 | Stop explícito não aciona autorressurreição; próximo connect segue a política documentada. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E11"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Explicit stop reaches stopped and no detached auto-resurrection; generation/token fences and injected same-login recovery suppression.",
+      "remaining": "Do not call injected OS suppression actual scheduler crash qualification.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T21",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 847,
+        "text": "| SVC-T21 | Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E11",
+        "E12",
+        "E23"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "CLI drain before scheduler effects, timeout pending, same generation receipts and authorized recovery paths verified.",
+      "remaining": "External logout/shutdown bounded persistence unqualified; explicit-force UI path is separate SVC07 product gap.",
+      "remaining_kind": "real_external_shutdown_and_product_gap"
+    },
+    {
+      "id": "SVC-T22",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 848,
+        "text": "| SVC-T22 | Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E12",
+        "E21"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Synthetic late native open/unknown close and occupied slots retain ownership; shutdown observer does not replay/release.",
+      "remaining": "Real service restart with surviving native child/uncertain operation remains unexecuted; no new general product defect established.",
+      "remaining_kind": "real_native_recovery_campaign"
+    },
+    {
+      "id": "SVC-T23",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 849,
+        "text": "| SVC-T23 | Restart preserva identidade, bindings e limites; grant expirado/revogado continua inválido. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E15",
+        "E18",
+        "E21"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Saved config/DB/ledger survive detached restart/upgrade; remote grants remain current/expired/revoked under separate canonical campaign.",
+      "remaining": "Available proofs compose restart persistence with canonical grant authority. If wiring needs an additional assertion, it is a safe disposable restart test; neither registered OS service nor provider is required by T23.",
+      "remaining_kind": "safe_disposable_qualification_if_wiring_uncovered"
+    },
+    {
+      "id": "SVC-T24",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 850,
+        "text": "| SVC-T24 | Queda/retorno do Server mantém vínculo do Connector sem novo executor ou execução duplicada. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E18"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Remote loopback DaemonApp and current auth/binding reuse are proven; no Finish/probe replay after rotation.",
+      "remaining": "Dedicated continuity/remote suite assertions still need read-only mapping; renewal alone is not substituted. This is safe evidence reconciliation, not a requirement for physical hosts.",
+      "remaining_kind": "evidence_mapping_or_safe_qualification"
+    },
+    {
+      "id": "SVC-T25",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 851,
+        "text": "| SVC-T25 | CLI novo/daemon antigo informa compatibilidade e não atualiza/interrompe trabalho implicitamente. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E05",
+        "E14"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Exact active-version mismatch refuses readiness and never implicitly replaces/interrupts it; explicit upgrade separate.",
+      "remaining": "Metadata seam version test; protocol-only RG07 old/new client/server campaign does not itself qualify old daemon supervision.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T26",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 852,
+        "text": "| SVC-T26 | Upgrade interrompido permite recuperação documentada sem downgrade destrutivo da base. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E14",
+        "E15"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Interrupted upgrade writes/native response loss retain reviewed intent; edited/downgrade/unknown refuse; disposable installed environment resumes without DB/ledger mutation.",
+      "remaining": "No historical schema binary downgrade recovery or real task upgrade claimed.",
+      "remaining_kind": "none"
+    },
+    {
+      "id": "SVC-T27",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 853,
+        "text": "| SVC-T27 | Desinstalação remove só a integração selecionada, preservando dados e execução foreground posterior. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E13"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Injected uninstall requires inactive/drained selected integration and preserves DB/credentials/context; repeated absence passive.",
+      "remaining": "Actual native removal followed by same preserved data in foreground remains native campaign scope.",
+      "remaining_kind": "authorized_native_campaign_pending"
+    },
+    {
+      "id": "SVC-T28",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 854,
+        "text": "| SVC-T28 | Container/supervisor externo usa foreground sem dupla supervisão ou dupla daemonização. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [
+        "E10"
+      ],
+      "recommendation": "PARTIAL",
+      "assertion_scope": "Supervised Windows entry invokes foreground without creating detached supervisor; foreground contract retained.",
+      "remaining": "Container/external-supervisor real execution not located; POSIX templates explicitly unqualified.",
+      "remaining_kind": "platform_qualification"
+    },
+    {
+      "id": "SVC-T29",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 855,
+        "text": "| SVC-T29 | Suspensão/retorno, logout e reboot são campanhas distintas; não há retomada produtiva por inferência de disponibilidade. |"
+      },
+      "ledger_status_read": "NOT_RUN",
+      "evidence_refs": [],
+      "recommendation": "NOT_RUN_REAL",
+      "assertion_scope": "No suspension/resume/logout/reboot productive survival inferred from availability.",
+      "remaining": "Separate actual-context campaigns, neither prepared finite install lifecycle nor synthetic runtime proves them.",
+      "remaining_kind": "real_platform_campaign"
+    },
+    {
+      "id": "SVC-T30",
+      "literal_plan": {
+        "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+        "line": 856,
+        "text": "| SVC-T30 | Wheel/artefato instalado contém os recursos necessários e funciona sem checkout ou terminal de instalação. |"
+      },
+      "ledger_status_read": "IN_PROGRESS",
+      "evidence_refs": [
+        "E01",
+        "E02",
+        "E15"
+      ],
+      "recommendation": "VERIFIED_SCOPED",
+      "assertion_scope": "Installed noneditable package proofs and out-of-checkout disposable service/upgrade campaigns retain resource bytes and executable origins.",
+      "remaining": "Does not promote real registered user-service/login/provider context. Included because literal plan has T30 in addition to parent-requested T01..29.",
+      "remaining_kind": "none"
+    }
+  ],
+  "implementation": {
+    "facade": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/service_lifecycle.py",
+      "sha256": "57a2f683540f696a0b9681caceb15fb610bb8a758c95e546a0573f6299438c5f",
+      "symbol": "ServiceLifecycle",
+      "line": 7
+    },
+    "readiness": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/service_lifecycle.py",
+      "sha256": "57a2f683540f696a0b9681caceb15fb610bb8a758c95e546a0573f6299438c5f",
+      "symbol": "project_server_readiness",
+      "line": 119
+    },
+    "instance": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/service_lifecycle.py",
+      "sha256": "8f7c37a75548395c98840b96020fc2b00930755558e8685cf5555dbb8d57c7df"
+    },
+    "lock": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/http/lock.py",
+      "sha256": "0d4f71f6c30ab9eecc827fdb6cf5c6006c48a739391fd10df8118618f294bbc5",
+      "symbol": "ServeLock",
+      "line": 27
+    },
+    "locking": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/locking.py",
+      "sha256": "4fd47c0c89cc220ca9301e6e927ef0098ed537592d5e5323fb5f2f07d662a425"
+    },
+    "local": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/local.py",
+      "sha256": "07367190e7436fbc323bdfcf764a1170a48245488ea89f5eae290678974085a6",
+      "symbol": "LocalServerLifecycle",
+      "line": 38
+    },
+    "inspect": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+      "sha256": "365bb1671c2e2eb2802345ebefb41afbb9879bd0aa203ae1f1e236c0d69fd123",
+      "symbol": "inspect_local_server",
+      "line": 35
+    },
+    "context": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/context.py",
+      "sha256": "8f54e12b9c6d657a44ae3ed178e2efbc60782b4479e1b0f5f516d4bbee397e06",
+      "symbol": "execution_context",
+      "line": 64
+    },
+    "installation": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/installation.py",
+      "sha256": "4a3df9d200b1e4875c48aa4d9e874f93477c7f458f36f2c6b81a8950a451dcaa",
+      "symbol": "ServerInstallation",
+      "line": 38
+    },
+    "windows": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
+      "sha256": "ba70980f4c072080ad78907a11dcab5e80c31342531748c921a5522b130f05ba"
+    },
+    "service_cli": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/service.py",
+      "sha256": "c465b88382d649f18d9f3b7dab82a3bc1b3e23605fb274f5689d8403591c85e3",
+      "symbol": "run_service",
+      "line": 19
+    },
+    "foreground": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/serve.py",
+      "sha256": "b69750a2eba99c5878b3446c4ab10e28d5fac6f5548abe3ac64fb493033f0861",
+      "symbol": "run_serve",
+      "line": 429
+    },
+    "supervised": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+      "sha256": "4cb4f62d878dad0b3dcad8c486e46d5c2c9b6acc864fadcc1cf737bbecfd3fc8"
+    },
+    "detached": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/service_process.py",
+      "sha256": "39f11bbfbd0e599909cd035e2e1deba53a9bb3027591b536d84391d39c2e2642"
+    },
+    "logs": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/logs.py",
+      "sha256": "871335fa8397f3adef50ee566be4354b409ec8c7506533e9cdfdee2ae8a5ad98"
+    },
+    "shutdown": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/bootstrap/server_shutdown.py",
+      "sha256": "8a2ef4fdf5ed1c213b64261316bead85de3e449d3efd953272408c9aa93037fb",
+      "symbol": "ServerShutdownCoordinator",
+      "line": 11
+    },
+    "shutdown_http": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/http/runtime_v1.py",
+      "sha256": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2",
+      "symbol": "ShutdownRequest",
+      "line": 210
+    },
+    "upgrade": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/service_upgrade.py",
+      "sha256": "5b8ebf6da20e9d72493080dbd3ce88ab50eff42967880d0c25a10f03112815c1"
+    },
+    "upgrade_adapter": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
+      "sha256": "8c8d79fd4d133dc993d4167636b3eea2348c4ac9c116246dd7018a0dfe807f09"
+    },
+    "connect": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3",
+      "symbol": "run_connect",
+      "line": 120
+    },
+    "topology": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
+      "sha256": "8143e47af4bd50614d7ba280b6d6e0c8fe9d7df85e99eb4db2b56b7137c2b1a6"
+    },
+    "doctor": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/doctor.py",
+      "sha256": "cfa4139879ca6757ef1248226935cb331b67c8abb0e620f881566e062fcdea90"
+    },
+    "setup": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/connection_setup.py",
+      "sha256": "ed43ab293fe8c8834897c98cc627399526c467f771982f74d91edff12f7ac287"
+    },
+    "handoff": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/handoff.py",
+      "sha256": "ddd4512c4b381fa257941c79e1fdabedc7a069d00a785d910973f952b78b453e"
+    },
+    "messages": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/messages.py",
+      "sha256": "6248700d433aa5a26d3faebadc5b8ebfcf0e6b47ed13c274b59a97c59c040d31"
+    },
+    "native": {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/execution_native_decisions.py",
+      "sha256": "dc3c0fd0f8868c3c2b8cad8dd91332c152b65f859076c8ec925a918d487d2e4e"
+    },
+    "connector_lifecycle": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/daemon/lifecycle.py",
+      "sha256": "f94adbf6d9eae5e5d98d4d40cd616933c9991e5917fd5abfd8e92fad3d6224f5"
+    },
+    "connector_context": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/service_context.py",
+      "sha256": "7871f6e2d90cb6ed82ab50a1897610edf8316e6e1c71b8133682526b28b7954d"
+    },
+    "connector_install": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/user_service.py",
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804"
+    },
+    "connector_cli": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/service.py",
+      "sha256": "32f6765aeb9301e1e74264644c0f9ca7bf1f487e3927cc028d95db242ec4a576"
+    },
+    "connector_doctor": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/doctor.py",
+      "sha256": "f3308b16d9979a9db8425e19bb02d59f1cb830b001102837618f7963326c0d57"
+    },
+    "connector_upgrade": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/service_upgrade.py",
+      "sha256": "a12bd6546b0b6a26fd41a8308e9a793aa63e97b2583ec6d5ae7861b90d29254f"
+    },
+    "connector_connect": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect.py",
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4"
+    },
+    "connector_reuse": {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+      "sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925"
+    },
+    "core_definition": {
+      "repository": "core",
+      "path": "src/nexus_connector_core/user_service_definition.py",
+      "sha256": "f17acb3edf7e4fc3ed671a92412b004610db30ba20f9f2499276d5e478a25788"
+    },
+    "core_config": {
+      "repository": "core",
+      "path": "src/nexus_connector_core/config_document.py",
+      "sha256": "ada269c555e38a4d8670ecbcbf712cb8a929339898ead4e76b0544464bc967df"
+    },
+    "baseline": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/baseline.md",
+      "sha256": "88daf6b2202daa7baf3e4863cc044a6bdc387d296f9685dd3c254b2ed02a7f3e"
+    },
+    "adr": {
+      "repository": "nexus",
+      "path": "plans/agent_ops/adr.md",
+      "sha256": "cff9c9d49af28f6d4e0f69d3674e9ec658cf6a4addfc831720a63da3392e884c"
+    },
+    "checker": {
+      "repository": "nexus",
+      "path": "scripts/check_agent_ops_ledger.py",
+      "sha256": "70da4a71acdb8a35928798202a40ecb82ce200cd359e35a3fde473eea0cf6613"
+    }
+  },
+  "evidence": {
+    "E01": {
+      "assertion_read": "Three actual launcher processes converge to one PID/generation, ready; launcher exit does not stop it. Reuse keeps generation; explicit restart changes it; stale stop rejected; DRAINED receipt/run marker agree; DB retained.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-detached-process.xml",
+          "classname": "tests.test_service_process",
+          "name": "test_concurrent_detached_start_survives_cli_exit_reuses_and_drains",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_concurrent_detached_start_survives_cli_exit_reuses_and_drains",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_process.py",
+              "line": 14,
+              "sha256": "c635ee28ee66580bf406b13fb863f247b94d09655feafb9f5074579a68efd50b"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_concurrent_detached_start_survives_cli_exit_reuses_and_drains"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Actual disposable detached service, no provider. Launcher exit is narrower than terminal/dashboard closure with admitted work."
+    },
+    "E02": {
+      "assertion_read": "Connector: three actual starts, exactly one started=true/PID/generation; late launch token refused; secret sentinel absent from context; restart/drain receipt agree; state/journal survive.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+          "classname": "tests.integration.test_detached_service_lifecycle",
+          "name": "test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner",
+          "locations": [
+            {
+              "repository": "connector",
+              "path": "tests/integration/test_detached_service_lifecycle.py",
+              "line": 10,
+              "sha256": "116d079f14a89b6e3e17c7f4a86f4cb600c996cc16ed4337067ce4a5668b87cc"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "No remote Server/provider or registered Windows task in this process case."
+    },
+    "E03": {
+      "assertion_read": "Alias paths and shared DB exclude; independent DB/home acquires; two real processes yield one owner and OS lock releases after actual death; loser never bootstraps/migrates.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_canonical_home_alias_and_shared_database_are_exclusive",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_two_real_processes_one_owner_and_crash_releases_os_lock",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_serve_loser_does_not_bootstrap_or_migrate",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_canonical_home_alias_and_shared_database_are_exclusive",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 71,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        },
+        {
+          "test": "test_two_real_processes_one_owner_and_crash_releases_os_lock",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 139,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        },
+        {
+          "test": "test_serve_loser_does_not_bootstrap_or_migrate",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 165,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_canonical_home_alias_and_shared_database_are_exclusive",
+        "test_two_real_processes_one_owner_and_crash_releases_os_lock",
+        "test_serve_loser_does_not_bootstrap_or_migrate"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": ""
+    },
+    "E04": {
+      "assertion_read": "Old heartbeat cannot steal a live OS lock; stale/reused/unknown PID is not death proof; old generation release cannot erase new owner.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_stale_heartbeat_never_steals_live_os_lock",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_legacy_stale_or_reused_pid_is_not_dead_proof[False]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_legacy_stale_or_reused_pid_is_not_dead_proof[None]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_old_owner_release_cannot_remove_changed_generation",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_stale_heartbeat_never_steals_live_os_lock",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 41,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        },
+        {
+          "test": "test_legacy_stale_or_reused_pid_is_not_dead_proof",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 88,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        },
+        {
+          "test": "test_old_owner_release_cannot_remove_changed_generation",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 110,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_stale_heartbeat_never_steals_live_os_lock",
+        "test_legacy_stale_or_reused_pid_is_not_dead_proof",
+        "test_old_owner_release_cannot_remove_changed_generation"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": ""
+    },
+    "E05": {
+      "assertion_read": "Readiness correlates held OS ownership, generation, PID, instance and exact active/installed version; wrong endpoint does not become ready; race in owner metadata is rechecked.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-readiness.xml",
+          "classname": "tests.test_service_inspection",
+          "name": "test_another_instance_on_the_port_is_not_ready",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-readiness.xml",
+          "classname": "tests.test_service_inspection",
+          "name": "test_active_version_drift_requires_explicit_review",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+          "classname": "tests.test_service_inspection",
+          "name": "test_owner_change_during_response_requires_another_observation",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_another_instance_on_the_port_is_not_ready",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_inspection.py",
+              "line": 79,
+              "sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140"
+            }
+          ]
+        },
+        {
+          "test": "test_active_version_drift_requires_explicit_review",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_inspection.py",
+              "line": 85,
+              "sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140"
+            }
+          ]
+        },
+        {
+          "test": "test_owner_change_during_response_requires_another_observation",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_inspection.py",
+              "line": 118,
+              "sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_another_instance_on_the_port_is_not_ready",
+        "test_active_version_drift_requires_explicit_review",
+        "test_owner_change_during_response_requires_another_observation"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Wrong endpoint tests use a controlled response. This is not the full occupied-socket startup campaign."
+    },
+    "E06": {
+      "assertion_read": "Status is passive on absent storage; logs only coded bounded records with corrupt/secret lines withheld; Ctrl+C follow ends observation; default doctor does not vault/network/start; remote failure has no local fallback.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-readiness.xml",
+          "classname": "tests.test_service_inspection",
+          "name": "test_status_of_absent_instance_does_not_create_home_or_start_process",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "classname": "tests.test_project_doctor_cli",
+          "name": "test_absent_instance_is_not_started_or_initialized",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "classname": "tests.test_project_doctor_cli",
+          "name": "test_remote_default_reads_metadata_without_vault_network_or_local_service",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "classname": "tests.test_project_doctor_cli",
+          "name": "test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_LOGIN_REQUIRED-FAIL]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "classname": "tests.test_project_doctor_cli",
+          "name": "test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_VAULT_UNAVAILABLE-UNKNOWN]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+          "classname": "tests.test_project_doctor_cli",
+          "name": "test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[SERVER_UNREACHABLE-UNKNOWN]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "classname": "test_service_logs",
+          "name": "test_absent_logs_are_passive_and_do_not_require_saved_python",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "classname": "test_service_logs",
+          "name": "test_tail_and_json_expose_only_coded_records",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "classname": "test_service_logs",
+          "name": "test_corrupt_or_secret_bearing_lines_are_withheld",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "classname": "test_service_logs",
+          "name": "test_read_and_retention_are_bounded",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+          "classname": "test_service_logs",
+          "name": "test_ctrl_c_ends_follow_without_lifecycle_mutation",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_status_of_absent_instance_does_not_create_home_or_start_process",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_inspection.py",
+              "line": 17,
+              "sha256": "7d9f1587c2aa14dca878e4b2678372d887680b41be4742c7f43caf5171e5e140"
+            }
+          ]
+        },
+        {
+          "test": "test_absent_instance_is_not_started_or_initialized",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_project_doctor_cli.py",
+              "line": 36,
+              "sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571"
+            }
+          ]
+        },
+        {
+          "test": "test_remote_default_reads_metadata_without_vault_network_or_local_service",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_project_doctor_cli.py",
+              "line": 50,
+              "sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571"
+            }
+          ]
+        },
+        {
+          "test": "test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_project_doctor_cli.py",
+              "line": 74,
+              "sha256": "6748d07c9d47c6ae5c906f21bde22942691d2b18f086bbd12f221e0c193fe571"
+            }
+          ]
+        },
+        {
+          "test": "test_absent_logs_are_passive_and_do_not_require_saved_python",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_logs.py",
+              "line": 19,
+              "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7"
+            }
+          ]
+        },
+        {
+          "test": "test_tail_and_json_expose_only_coded_records",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_logs.py",
+              "line": 36,
+              "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7"
+            }
+          ]
+        },
+        {
+          "test": "test_corrupt_or_secret_bearing_lines_are_withheld",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_logs.py",
+              "line": 53,
+              "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7"
+            }
+          ]
+        },
+        {
+          "test": "test_read_and_retention_are_bounded",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_logs.py",
+              "line": 104,
+              "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7"
+            }
+          ]
+        },
+        {
+          "test": "test_ctrl_c_ends_follow_without_lifecycle_mutation",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_logs.py",
+              "line": 126,
+              "sha256": "59526b146634652c3f8075e344f3b764a4dceea46ccc1a62b1cea07d4a6f08b7"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_status_of_absent_instance_does_not_create_home_or_start_process",
+        "test_absent_instance_is_not_started_or_initialized",
+        "test_remote_default_reads_metadata_without_vault_network_or_local_service",
+        "test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload",
+        "test_absent_logs_are_passive_and_do_not_require_saved_python",
+        "test_tail_and_json_expose_only_coded_records",
+        "test_corrupt_or_secret_bearing_lines_are_withheld",
+        "test_read_and_retention_are_bounded",
+        "test_ctrl_c_ends_follow_without_lifecycle_mutation"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": ""
+    },
+    "E07": {
+      "assertion_read": "Pending launch is durable and not repeated; explicit recover-start fences late child without bootstrap; changed receipt or live owner refuses; lost reply recovers same intent.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-start-stop.xml",
+          "classname": "tests.test_service_start",
+          "name": "test_pending_launch_is_not_repeated_and_uses_detached_non_shell_entrypoint",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
+          "classname": "tests.okto_nexus.test_service_launch_recovery",
+          "name": "test_actual_cli_recovery_and_late_child_are_fenced",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
+          "classname": "tests.okto_nexus_connector.test_launch_recovery",
+          "name": "test_actual_cli_recovery_and_late_child_are_fenced",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_pending_launch_is_not_repeated_and_uses_detached_non_shell_entrypoint",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_start.py",
+              "line": 45,
+              "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a"
+            }
+          ]
+        },
+        {
+          "test": "test_actual_cli_recovery_and_late_child_are_fenced",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_launch_recovery.py",
+              "line": 128,
+              "sha256": "adf3b14ed35ec578b667409737569261fe715c47a724c3518785e28a33669933"
+            },
+            {
+              "repository": "connector",
+              "path": "tests/unit/test_launch_recovery.py",
+              "line": 111,
+              "sha256": "d42bbe0584f74a12cbc76f1f44e7fc84ed24b84e9d229776dcee350e80565c70"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_pending_launch_is_not_repeated_and_uses_detached_non_shell_entrypoint",
+        "test_actual_cli_recovery_and_late_child_are_fenced"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": ""
+    },
+    "E08": {
+      "assertion_read": "Installed start calls native scheduler, not detached launch; known pending start not resubmitted. Edited/foreign task and context mismatch refuse without overwrite.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_installed_start_uses_scheduler_and_reuses_pending_task",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_edited_task_is_retained_for_every_mutation[install_user_service]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_edited_task_is_retained_for_every_mutation[start]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_edited_task_is_retained_for_every_mutation[uninstall_user_service]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_foreign_task_conflicts_before_context_or_os_mutation",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_installed_start_uses_scheduler_and_reuses_pending_task",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 123,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_edited_task_is_retained_for_every_mutation",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 102,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_foreign_task_conflicts_before_context_or_os_mutation",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 93,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_installed_start_uses_scheduler_and_reuses_pending_task",
+        "test_edited_task_is_retained_for_every_mutation",
+        "test_foreign_task_conflicts_before_context_or_os_mutation"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Task mutations are injected; native XML validation is not registration."
+    },
+    "E09": {
+      "assertion_read": "Enable/disable exact owned definition idempotently, with no start/drain; active disable keeps generation; lost enablement reply reconciles only exact effect.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+          "classname": "test_user_service_installation",
+          "name": "test_enable_disable_are_scoped_idempotent_and_do_not_start_or_drain",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+          "classname": "test_user_service_installation",
+          "name": "test_disabling_active_task_preserves_existing_generation_and_control",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+          "classname": "test_user_service_installation",
+          "name": "test_enablement_response_loss_is_reconciled_only_for_the_same_intent",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_enable_disable_are_scoped_idempotent_and_do_not_start_or_drain",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 369,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_disabling_active_task_preserves_existing_generation_and_control",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 387,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_enablement_response_loss_is_reconciled_only_for_the_same_intent",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 398,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_enable_disable_are_scoped_idempotent_and_do_not_start_or_drain",
+        "test_disabling_active_task_preserves_existing_generation_and_control",
+        "test_enablement_response_loss_is_reconciled_only_for_the_same_intent"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Injected scheduler, not real OS enablement/login."
+    },
+    "E10": {
+      "assertion_read": "Saved execution context uses resolved paths and allowlist, no terminal secrets; supervised entry verifies lock/token and restores caller environment after foreground call.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-start-stop.xml",
+          "classname": "tests.test_service_start",
+          "name": "test_background_context_retains_resolved_settings_without_terminal_secrets",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_supervised_entry_is_foreground_fenced_and_uses_saved_context",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_background_context_retains_resolved_settings_without_terminal_secrets",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_start.py",
+              "line": 30,
+              "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a"
+            }
+          ]
+        },
+        {
+          "test": "test_supervised_entry_is_foreground_fenced_and_uses_saved_context",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 204,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_background_context_retains_resolved_settings_without_terminal_secrets",
+        "test_supervised_entry_is_foreground_fenced_and_uses_saved_context"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Pure/injected context validation; service-user OS vault/PATH still requires its real campaign."
+    },
+    "E11": {
+      "assertion_read": "Stop latches before canonical shutdown; pending drain does not start/restart/force Task Scheduler; stale generation cannot latch successor; durable same-generation receipt recovers lost response.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_stop_persists_recovery_latch_before_request_and_never_stops_os_task",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_stale_stop_cannot_latch_new_generation",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-start-stop.xml",
+          "classname": "tests.test_service_start",
+          "name": "test_restart_does_not_start_when_drain_is_pending",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-start-stop.xml",
+          "classname": "tests.test_service_start",
+          "name": "test_lost_shutdown_response_is_recovered_by_correlated_durable_receipt",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_stop_persists_recovery_latch_before_request_and_never_stops_os_task",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 280,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_stale_stop_cannot_latch_new_generation",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 297,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_restart_does_not_start_when_drain_is_pending",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_start.py",
+              "line": 210,
+              "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a"
+            }
+          ]
+        },
+        {
+          "test": "test_lost_shutdown_response_is_recovered_by_correlated_durable_receipt",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_start.py",
+              "line": 221,
+              "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_stop_persists_recovery_latch_before_request_and_never_stops_os_task",
+        "test_stale_stop_cannot_latch_new_generation",
+        "test_restart_does_not_start_when_drain_is_pending",
+        "test_lost_shutdown_response_is_recovered_by_correlated_durable_receipt"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": ""
+    },
+    "E12": {
+      "assertion_read": "Administrative HTTP/TCP drain returns pending, preserves owner/store/tasks and read/recovery channels; current authority required; repeated request keeps original deadline; observer cancellation cannot cancel recovery.",
+      "retained_passes": [],
+      "current_test_sources": [
+        {
+          "test": "test_operator_shutdown_returns_pending_and_keeps_recovery_available",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_server_shutdown.py",
+              "line": 57,
+              "sha256": "173cc414bbae36d3ff53e069fc6db83c8585c52e62aa0b08639033a61a9a9c61"
+            }
+          ]
+        },
+        {
+          "test": "test_shutdown_cli_over_tcp_retains_server_until_recovery",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_server_shutdown.py",
+              "line": 119,
+              "sha256": "173cc414bbae36d3ff53e069fc6db83c8585c52e62aa0b08639033a61a9a9c61"
+            }
+          ]
+        },
+        {
+          "test": "test_shutdown_retry_recovers_inventory_release_and_cancelled_observer",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_server_shutdown.py",
+              "line": 187,
+              "sha256": "173cc414bbae36d3ff53e069fc6db83c8585c52e62aa0b08639033a61a9a9c61"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [
+        "test_operator_shutdown_returns_pending_and_keeps_recovery_available",
+        "test_shutdown_cli_over_tcp_retains_server_until_recovery",
+        "test_shutdown_retry_recovers_inventory_release_and_cancelled_observer"
+      ],
+      "requested_test_names": [
+        "test_operator_shutdown_returns_pending_and_keeps_recovery_available",
+        "test_shutdown_cli_over_tcp_retains_server_until_recovery",
+        "test_shutdown_retry_recovers_inventory_release_and_cancelled_observer"
+      ],
+      "qualification": "source_assertions_only_no_retained_report_located",
+      "limits": "Native/provider doubles. The audit did not execute these reports again."
+    },
+    "E13": {
+      "assertion_read": "Repeated install no duplicate; foreign/user-edited definitions preserved. Uninstall requires inactive/drained integration and retains DB/credential/context sentinels, then repeats without effects.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_install_is_scoped_idempotent_and_preserves_context",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_uninstall_waits_for_task_exit_then_preserves_all_user_data",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+          "classname": "tests.test_user_service_installation",
+          "name": "test_lost_removal_response_recovers_only_from_positive_absence",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_install_is_scoped_idempotent_and_preserves_context",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 78,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_uninstall_waits_for_task_exit_then_preserves_all_user_data",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 165,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        },
+        {
+          "test": "test_lost_removal_response_recovers_only_from_positive_absence",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_user_service_installation.py",
+              "line": 180,
+              "sha256": "bdcf1dce7db6be29fbbaacf6ab8f499a14e0e20bada178bcad9b953423466f65"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_install_is_scoped_idempotent_and_preserves_context",
+        "test_uninstall_waits_for_task_exit_then_preserves_all_user_data",
+        "test_lost_removal_response_recovers_only_from_positive_absence"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Injected task mutation; actual unregister plus usable foreground afterward remains unqualified."
+    },
+    "E14": {
+      "assertion_read": "Upgrade requires reviewed source generation/context and DRAINED latest run, resumes every write boundary, recognizes exact lost native effect, refuses edits/downgrade/unknown runtime and never auto-starts/migrates.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_connector_service_upgrade",
+          "name": "test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_service_upgrade",
+          "name": "test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_connector_service_upgrade",
+          "name": "test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_service_upgrade",
+          "name": "test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_connector_service_upgrade",
+          "name": "test_drain_receipt_must_match_reviewed_generation_and_latest_run",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_service_upgrade",
+          "name": "test_drain_receipt_must_match_reviewed_generation_and_latest_run",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_upgrade.py",
+              "line": 139,
+              "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3"
+            },
+            {
+              "repository": "connector",
+              "path": "tests/unit/test_service_upgrade.py",
+              "line": 138,
+              "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef"
+            }
+          ]
+        },
+        {
+          "test": "test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_upgrade.py",
+              "line": 229,
+              "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3"
+            },
+            {
+              "repository": "connector",
+              "path": "tests/unit/test_service_upgrade.py",
+              "line": 228,
+              "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef"
+            }
+          ]
+        },
+        {
+          "test": "test_drain_receipt_must_match_reviewed_generation_and_latest_run",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_upgrade.py",
+              "line": 212,
+              "sha256": "fa908a391d20933aedf758bf92ae3acce7f1ff523638bb42918839a9e0fd9da3"
+            },
+            {
+              "repository": "connector",
+              "path": "tests/unit/test_service_upgrade.py",
+              "line": 211,
+              "sha256": "871afc386be7a8078b432afa9e851e62074bc82e9629465750e25e2ef5454cef"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_lost_native_response_keeps_fence_and_recognizes_only_exact_effect",
+        "test_downgrade_and_unconfirmed_existing_runtime_are_refused",
+        "test_drain_receipt_must_match_reviewed_generation_and_latest_run"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": ""
+    },
+    "E15": {
+      "assertion_read": "Two installed disposable environments: live apply refused; stop then apply preserves raw DB/ownership ledger; repeated apply no change; executable changes, saved config stable; restart new generation ready and drains.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_service_upgrade_process",
+          "name": "test_reviewed_upgrade_between_installed_environments_preserves_database",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+          "classname": "tests.test_connector_service_upgrade_process",
+          "name": "test_reviewed_upgrade_between_installed_environments_preserves_journal",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_reviewed_upgrade_between_installed_environments_preserves_database",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_upgrade_process.py",
+              "line": 13,
+              "sha256": "5374fe6a203478caf24b66a38268b82009c9afbc3d48bca791a422cb49e5d258"
+            }
+          ]
+        },
+        {
+          "test": "test_reviewed_upgrade_between_installed_environments_preserves_journal",
+          "locations": [
+            {
+              "repository": "connector",
+              "path": "tests/integration/test_service_upgrade_process.py",
+              "line": 12,
+              "sha256": "7c77997bff90d6a74437ac889e82e758caf1e34be23bd6bec9567408757c6f15"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_reviewed_upgrade_between_installed_environments_preserves_database",
+        "test_reviewed_upgrade_between_installed_environments_preserves_journal"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Actual environment switch, same package/version family; no real registered-task update, historical migration rollback or provider."
+    },
+    "E16": {
+      "assertion_read": "Connect --plan invokes inspect only; approve/reconnect invoke ensure_running; one probe/test/Finish and saved-profile reconnect. Lifecycle itself is injected at this CLI seam.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+          "classname": "tests.execution_r4.test_terminal_connect",
+          "name": "test_cli_plan_apply_and_reconnect_use_saved_profile",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+          "classname": "tests.execution_r4.test_terminal_connect",
+          "name": "test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_cli_plan_apply_and_reconnect_use_saved_profile",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_terminal_connect.py",
+              "line": 125,
+              "sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a"
+            }
+          ]
+        },
+        {
+          "test": "test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_terminal_connect.py",
+              "line": 62,
+              "sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_cli_plan_apply_and_reconnect_use_saved_profile",
+        "test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Together with E01 this validates composition, not a single real first-connect-to-detached-start execution."
+    },
+    "E17": {
+      "assertion_read": "Explicit login review shares setup consent; declines preserve on-demand; partial install resumes without another model test/setup; remote operator cannot initiate local startup.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+          "classname": "tests.execution_r4.test_connect_login_start",
+          "name": "test_remote_operator_option_never_resolves_local_startup",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+          "classname": "tests.execution_r4.test_connect_login_start",
+          "name": "test_partial_install_resumes_without_new_setup_or_model_test[checkpoint_loss]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+          "classname": "tests.execution_r4.test_connect_login_start",
+          "name": "test_partial_install_resumes_without_new_setup_or_model_test[drain_timeout]",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_remote_operator_option_never_resolves_local_startup",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_connect_login_start.py",
+              "line": 194,
+              "sha256": "0d775901018513cd07b53468916e750c81d5ca328d077320b0c6e0d8819df328"
+            }
+          ]
+        },
+        {
+          "test": "test_partial_install_resumes_without_new_setup_or_model_test",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_connect_login_start.py",
+              "line": 109,
+              "sha256": "0d775901018513cd07b53468916e750c81d5ca328d077320b0c6e0d8819df328"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_remote_operator_option_never_resolves_local_startup",
+        "test_partial_install_resumes_without_new_setup_or_model_test"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Review/install effect doubles; no real logon."
+    },
+    "E18": {
+      "assertion_read": "Expired/exhausted remote grant renewal uses one committed issue/receipt after reply loss; old leases/session not migrated; explicit new work uses new grant. Rotation fences old keys/tickets/reviews; completed reuse preserves canonical binding and Finish.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+          "classname": "tests.execution_r4.test_remote_renewal",
+          "name": "test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_remote_renewal.py",
+              "line": 91,
+              "sha256": "0fe4eddb6ec28419014707090305d78e5f73f16061c378d96f07932e9d38df61"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Real loopback HTTP/WS/IPC and DaemonApp, synthetic native/provider, temporary vault. Does not prove OS-service restart or two physical hosts."
+    },
+    "E19": {
+      "assertion_read": "Lock storage/failed bootstrap prevents readiness/bootstrap or releases both locks rather than declaring ready.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_unavailable_lock_storage_reports_failure_without_bootstrap",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-locks.xml",
+          "classname": "tests.test_serve_lock",
+          "name": "test_failed_bootstrap_releases_both_locks",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_unavailable_lock_storage_reports_failure_without_bootstrap",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 185,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        },
+        {
+          "test": "test_failed_bootstrap_releases_both_locks",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_serve_lock.py",
+              "line": 174,
+              "sha256": "6a288c7bc5abb4e3224d0d981dc8a1bb8877d9d5879d8a00cd4d1144b8c64d41"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_unavailable_lock_storage_reports_failure_without_bootstrap",
+        "test_failed_bootstrap_releases_both_locks"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "No all-migration-failure process matrix is asserted."
+    },
+    "E20": {
+      "assertion_read": "Wait timeout only returns timed-out observation, no relaunch/stop; restart pending refuses new start.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-start-stop.xml",
+          "classname": "tests.test_service_start",
+          "name": "test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-start-stop.xml",
+          "classname": "tests.test_service_start",
+          "name": "test_restart_does_not_start_when_drain_is_pending",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_start.py",
+              "line": 174,
+              "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a"
+            }
+          ]
+        },
+        {
+          "test": "test_restart_does_not_start_when_drain_is_pending",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/test_service_start.py",
+              "line": 210,
+              "sha256": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection",
+        "test_restart_does_not_start_when_drain_is_pending"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Ctrl+C during actual connect needs a focused retained assertion; log-follow cancellation is not substituted for it."
+    },
+    "E21": {
+      "assertion_read": "Retirement/preopen recovery refuses release while Core owns slots/resources and never reopens an already verified journal; limited synthetic-runtime recovery.",
+      "retained_passes": [],
+      "current_test_sources": [
+        {
+          "test": "test_restart_uses_verified_retirement_unless_core_still_owns_resources",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_local_retirement.py",
+              "line": 172,
+              "sha256": "a5b8d9bb2435d3314ee1d6a628adf8f6a57360bd79048061227bb099de172395"
+            }
+          ]
+        },
+        {
+          "test": "test_preopen_failure_recovers_only_with_empty_owned_resources",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_preopen_recovery.py",
+              "line": 45,
+              "sha256": "70563901044b673a7ceb33b75c519a7d69c14aa666574164b383af9b1afc397c"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [
+        "test_restart_uses_verified_retirement_unless_core_still_owns_resources",
+        "test_preopen_failure_recovers_only_with_empty_owned_resources"
+      ],
+      "requested_test_names": [
+        "test_restart_uses_verified_retirement_unless_core_still_owns_resources",
+        "test_preopen_failure_recovers_only_with_empty_owned_resources"
+      ],
+      "qualification": "source_assertions_only_no_retained_report_located",
+      "limits": "Not real OS crash/suspend or native provider recovery."
+    },
+    "E23": {
+      "assertion_read": "Actual foreground process retains HTTP/owner until controlled inventory release after HTTP-first/signal-first shutdown; repeated requests preserve deadline; failed startup never force-exits.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+          "classname": "tests.execution_r4.test_server_signal_shutdown",
+          "name": "test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGINT]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+          "classname": "tests.execution_r4.test_server_signal_shutdown",
+          "name": "test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGTERM]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+          "classname": "tests.execution_r4.test_server_signal_shutdown",
+          "name": "test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGINT]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+          "classname": "tests.execution_r4.test_server_signal_shutdown",
+          "name": "test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGTERM]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+          "classname": "tests.execution_r4.test_server_signal_shutdown",
+          "name": "test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[False]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+          "classname": "tests.execution_r4.test_server_signal_shutdown",
+          "name": "test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[True]",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_signal_keeps_serve_process_and_http_until_inventory_release",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_server_signal_shutdown.py",
+              "line": 59,
+              "sha256": "a2db1b6989666e310e4c90ddbe084d935ef101795ae95922603902be45e83146"
+            }
+          ]
+        },
+        {
+          "test": "test_signal_during_startup_waits_for_owner_without_hanging_failed_startup",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_server_signal_shutdown.py",
+              "line": 139,
+              "sha256": "a2db1b6989666e310e4c90ddbe084d935ef101795ae95922603902be45e83146"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_signal_keeps_serve_process_and_http_until_inventory_release",
+        "test_signal_during_startup_waits_for_owner_without_hanging_failed_startup"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Disposable process/simulated signal path; not actual user logout, Task Scheduler stop or provider survival."
+    },
+    "E22": {
+      "assertion_read": "Canonical request decision CAS and transactional Finish/claim remain the reused authoritative paths.",
+      "retained_passes": [
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_connection_setup",
+          "name": "test_setup_transport_requires_operator",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_connection_setup",
+          "name": "test_finish_refuses_unchecked_or_stale_installation_revision",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[cas]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[expired]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[generation]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[grant]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[hash]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[other]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[profile]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[revision]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[scope]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[subject]",
+          "status": "passed"
+        },
+        {
+          "report": "plans/agent_ops/evidence/baseline-paths.xml",
+          "classname": "tests.execution_r4.test_native_decisions",
+          "name": "test_invalid_or_stale_decision_cannot_create_an_operation[terminal]",
+          "status": "passed"
+        }
+      ],
+      "current_test_sources": [
+        {
+          "test": "test_setup_transport_requires_operator",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_connection_setup.py",
+              "line": 186,
+              "sha256": "a3f3bf2d3a01289850fdae92e925df6d1cf2063213657688cc1555cf2ea38cb3"
+            }
+          ]
+        },
+        {
+          "test": "test_finish_refuses_unchecked_or_stale_installation_revision",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_connection_setup.py",
+              "line": 345,
+              "sha256": "a3f3bf2d3a01289850fdae92e925df6d1cf2063213657688cc1555cf2ea38cb3"
+            }
+          ]
+        },
+        {
+          "test": "test_invalid_or_stale_decision_cannot_create_an_operation",
+          "locations": [
+            {
+              "repository": "nexus",
+              "path": "tests/execution_r4/test_native_decisions.py",
+              "line": 165,
+              "sha256": "3c790a408f966403969897a4c647949720e059ddf02013e13ae87eb9f3da3228"
+            }
+          ]
+        }
+      ],
+      "unmatched_requested_test_names": [],
+      "requested_test_names": [
+        "test_setup_transport_requires_operator",
+        "test_finish_refuses_unchecked_or_stale_installation_revision",
+        "test_invalid_or_stale_decision_cannot_create_an_operation"
+      ],
+      "qualification": "retained_passes_located",
+      "limits": "Historical baseline passes; current source hashes are separate observations, not a claim of historical fixture byte equality."
+    }
+  },
+  "documentary_inputs": [
+    {
+      "repository": "nexus",
+      "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/ledger.json",
+      "sha256": "0cfd7ed04d2a581eab2cceafcb782aa5eec3cf9c045abd3e35e3c1db758f9c6a"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/baseline.md",
+      "sha256": "88daf6b2202daa7baf3e4863cc044a6bdc387d296f9685dd3c254b2ed02a7f3e"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/adr.md",
+      "sha256": "cff9c9d49af28f6d4e0f69d3674e9ec658cf6a4addfc831720a63da3392e884c"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr00-validation.md",
+      "sha256": "53b316f3804b2e596e6b846eccc96dcbf1a3cb0613bff0aeb3850bbd94436fff"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/baseline-startup.json",
+      "sha256": "0d34ddc70df4499d1b7df557baa0264956250d2f9bf08218fea464658472b40b"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-locks.md",
+      "sha256": "011b05aa5a4859e74bd7e040dd68dbf61df3f8a337a6768fb47bfd2cd0b7ea1b"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-readiness.md",
+      "sha256": "b4217daf1bb048efa59caf98847f73707b8deeed485143d10cd33b04ad754d8d"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-start-stop.md",
+      "sha256": "0213a52992047036610d56cb2309fe6a9f533511140643ec7382eaf59820aabe"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+      "sha256": "c5fc439bfe81f8bb7636ae66330855a65f2bb3cc87ec4c8d00d95fb2cf865d7e"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-connector-user-service.md",
+      "sha256": "aa3235a08931093c7dbf97361265475ec4be4267953930373b22536a4dd95b7a"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-enablement.md",
+      "sha256": "95bf46bd833ccebd5caea4c41c18a83eb1cbe1f8641a94deef080bbfb15c94ca"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-launch-recovery.md",
+      "sha256": "d82ba542ef6cecc31d5e9a4ebc1a3f2226c4a806a9f9e37702a3ea0bec9b9fa3"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-upgrade.md",
+      "sha256": "7df97ea61e138712d80c2961e0b82f18ecfbe0336e885dbf7e1098be08d5d0f5"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor.md",
+      "sha256": "7f4c3fc083c21c717b25204a8c87529ba4702477ee92feae4bfe8b83b532f7be"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal.md",
+      "sha256": "820114df1be4959f7c556b26ed4e929fc3eb05f03d2068a1be6753f7bb56f469"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-ledger-reconciliation.md",
+      "sha256": "e7678c38e9f7f9abb5048f9b3d4730218ef39c259cf87664a8855fd0e521c9f1"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/artifact-manifest.json",
+      "sha256": "a19eaa2b8f8ff10206a8768aaa37195301fd237a6edbfa8121895c1801db47a0"
+    },
+    {
+      "repository": "nexus",
+      "path": "docs/service-lifecycle.md",
+      "sha256": "6d7257bb2faa6acafbf387b01d305e62af2a5e50285a690ad6f39a6c3df81470"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/baseline-paths.xml",
+      "sha256": "ef7a75ebc7012120bea8fc4cc370c4c3906a3b98deac4d0fedaf4e517c351fb0"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-detached-process.xml",
+      "sha256": "5ef5be7d67ad8cbe394ac68269c2bbda8683de759107893402e27a371c6583bc"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+      "sha256": "081e92da91fba93f7fade288a067c3a61df1151b326589c0526d74b1f407c373"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-locks.xml",
+      "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-readiness.xml",
+      "sha256": "b72f35f83ae7b84873c99dcd5d192e5a914170527f49433765e0d768e56691f8"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-start-stop.xml",
+      "sha256": "ef194a3594fe3d124b2912c4990cd006c2a04127f9025c4b4371181524651c7b"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+      "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+      "sha256": "7c4b58373b18fca73bede77df6ebd9075ce1f5670708841ddc98bba7aea34c26"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
+      "sha256": "2629642cb5c39608779025be284ebaaf49a8696fff293930958d888d336a1754"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+      "sha256": "b51fe62f729834894267631af475539b4356daa7ccfcd76815898586d31ae7d6"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+      "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+      "sha256": "7e9ddaac7548a768dbea79efcb9e35e9e65267defe52365e5c2493aaf956d241"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
+      "sha256": "d1f09ad1e7335a762f801c5daa3a95f01697ebce3c8c24f1a556c693f253ac16"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+      "sha256": "5deea2f609889b212f31ed9fdd9e245900892d412c788a08c96852c291665708"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+      "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+      "sha256": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+      "sha256": "e4f2ef4cb33218011bb2d5248f985ce6ee7ad9933c1a94a80f1c7de2d398ccac"
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+      "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F01",
+      "classification": "product_gap",
+      "task": "SVC-07",
+      "plan_line": 325,
+      "claim": "No explicit user-facing force decision after pending drain exists in the inspected service CLI/admin request/coordinator. This is distinct from automatic Core process containment escalation, which is not evaluated or weakened here.",
+      "refs": [
+        "service_cli",
+        "shutdown_http",
+        "shutdown",
+        "connector_cli"
+      ],
+      "next_step": "Separate design of authorized explicit force semantics against real Core shutdown ownership, not a blind kill wrapper."
+    },
+    {
+      "id": "F02",
+      "classification": "stale_documentary_limits",
+      "tasks": [
+        "SVC-01",
+        "SVC-02",
+        "SVC-03",
+        "SVC-04",
+        "SVC-07",
+        "SVC-08",
+        "SVC-10",
+        "SVC-11",
+        "SVC-12"
+      ],
+      "claim": "Old limitations still describe passive doctor, enable/disable, launch receipt recovery, reviewed upgrade or remote setup as not implemented, despite later retained evidence. Reconcile subscopes; keep full task status IN_PROGRESS."
+    },
+    {
+      "id": "F03",
+      "classification": "safe_qualification_gap",
+      "scenarios": [
+        "SVC-T06",
+        "SVC-T12",
+        "SVC-T13"
+      ],
+      "claim": "Composition supports T01..03 without requiring one monolithic campaign. Occupied-socket start, explicit migration/config error and Ctrl+C-connect observations were not located. These are safe disposable qualification gaps, not persistent-service permission gates."
+    },
+    {
+      "id": "F04",
+      "classification": "mandatory_real_campaigns",
+      "scenarios": [
+        "SVC-T09",
+        "SVC-T14",
+        "SVC-T15",
+        "SVC-T18",
+        "SVC-T19",
+        "SVC-T21",
+        "SVC-T29"
+      ],
+      "claim": "Keep terminal work ownership, actual service cwd/PATH/vault, OS login/crash/backoff/external shutdown and suspend/reboot contexts explicitly unqualified."
+    }
+  ],
+  "authorization_boundary": "Prepared windows_temporary_user_tasks scope remains pending; no authorization inferred. Actual paid/provider/native user work and M1/M2 remain open."
+}

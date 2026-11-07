@@ -1,0 +1,17 @@
+# R3 — reconciliação literal de tarefas e cenários
+
+As três revisões somente leitura cobrem todos os 59 IDs: BASE/SVC (18 tarefas e 30 cenários), DX (21 tarefas, com snapshot dos cenários pendentes) e ATN/OBS (20 tarefas e 40 cenários). Cada matriz liga implementação, assertions/oráculos, fonte e evidência PASS existente, com limites. Nenhum teste foi repetido nesta revisão e nenhuma contagem histórica é somada como nova execução.
+
+195 títulos/requisitos do ledger tinham texto UTF-8 interpretado como Latin-1/CP1252. A correção comprovou essa transformação para cada campo e os recuperou diretamente do plano fixo. O checker agora exige igualdade literal de títulos/requisitos, além dos IDs e SHA. Plano e escopo não foram alterados.
+
+ATN/OBS ficam verificados no escopo Windows declarado. AC06 é atendido por autoridade observacional restrita, snapshots canônicos, fila/turnos e as seis provas RG03. DX tem 14 tarefas verificadas e sete implementadas com qualificação real pendente. Overrides revisados DX02/DX05: os contratos de formatos e init não herdam indevidamente a pendência de cofre→cliente/cooperação de DX04/AC03; os limites reais permanecem nessas linhas.
+
+SVC preserva o aceite nativo pendente e qualifica os contratos puros/processos descartáveis que já tinham prova. Não se exige uma única campanha monolítica quando o código de ligação e as provas compostas cobrem o mesmo caminho. As integrações injetadas de supervisor continuam subscopes explícitos; não se apresentam como Task Scheduler executado. Não foi introduzido requisito de todas as plataformas, TLS ou dois hosts físicos onde o plano não o exige.
+
+Há uma lacuna de produto concreta: SVC07 não oferece decisão explícita de força após o prazo. O shutdown Core existente já agenda contenção/interrupt; expor timeout=0 não resolve o requisito. A correção precisa separar drain dos hosts da liberação dessa contenção, mantendo decisões/resultados admitidos durante a espera. Cancelamento/reabertura não será inferido de connect, timeout ou nova chamada. Esse trabalho continua aberto, além de SVC-T06/T12/T13 com qualificação segura em andamento. Assim, AC01 e M1/M2/R3 não são declarados completos.
+
+AC09 fica verificado como relato honesto do snapshot: pending-qualification.json nomeia os cenários sem aceite, a lacuna de produto, trabalho seguro e campanhas reais. AC10 fica verificado no escopo dos artefatos entregues: revisão/redação pública1822 e proteções retidas, mais allowlists dos relatórios novos. A retenção em commits anteriores e validade desconhecida da chave UAT antiga permanecem riscos registrados; reescrever Git ou revogar uma chave anterior ao R3 não é requisito adicional do critério literal. A decisão corrige a formulação excessivamente ampla do relatório anterior, sem apagar aquele histórico.
+
+Provedor real, cadeia completa de dois clientes, tarefas Windows e interrupções reais permanecem explicitamente não executados/não qualificados. A proposta de duas tarefas temporárias aguarda resposta; a seleção de harness/provedor/custo foi solicitada para preparar M1, sem tratar silêncio como autorização. A implementação e os testes seguros prosseguem.
+
+Os manifests de cada revisão estão preservados. decisions.json registra cada mudança de status e overrides; requirement-encoding.json prova a correção textual. Contagens atuais são metadados de rastreabilidade, não substituem evidências ou execução real.

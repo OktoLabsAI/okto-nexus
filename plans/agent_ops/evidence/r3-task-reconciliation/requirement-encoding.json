@@ -1,0 +1,1567 @@
+{
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "changed_fields": [
+    {
+      "section": "tasks",
+      "id": "BASE-03",
+      "field": "title",
+      "previous_sha256": "c3b5649800a0851ec8848b1a4d13e74a4fe51536ae7461c28aa45666ff5aad04",
+      "corrected_text": "separar documentação vigente e legado",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "BASE-05",
+      "field": "title",
+      "previous_sha256": "d1f78ceb52ec26710c5705e25ada3b4f361f10ef823a4031de0e2a35ac80db96",
+      "corrected_text": "ledger de evidências",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-02",
+      "field": "title",
+      "previous_sha256": "1a5a90e49c82e27648f46abd391253aabf11f55802ff70074b11131fbeb4f12b",
+      "corrected_text": "propriedade e exclusão mútua",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-04",
+      "field": "title",
+      "previous_sha256": "8daa291d4a00e3a106adc01173d7eae9bf846f67e4a0ba7af9ef875dfafa3fb3",
+      "corrected_text": "prova de prontidão",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-05",
+      "field": "title",
+      "previous_sha256": "499780240352695c7892d3ee7328742c94a51562be0ec8bf36e8a5e220499156",
+      "corrected_text": "integração com o gerenciador do SO",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-06",
+      "field": "title",
+      "previous_sha256": "d5af045d1285cbc0753d096488788b0ba2c8543bac2aa377261b3330e0bb62f4",
+      "corrected_text": "contexto estável de execução",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-08",
+      "field": "title",
+      "previous_sha256": "e2a4896bac237399849c0f6f700d627b2bc676b5ff81b30ede157802f735a49b",
+      "corrected_text": "reconciliação sem repetição de efeitos",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-09",
+      "field": "title",
+      "previous_sha256": "259217487193ba1c7e1b2028ec1fb0699e9d027978dff68b5c2de6f6010e780e",
+      "corrected_text": "versão ativa e upgrade controlado",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-12",
+      "field": "title",
+      "previous_sha256": "277ea6fe77e2ecd4420fa37c8869ce8a4f2450ba0cbac44110014d86bb595ef3",
+      "corrected_text": "empacotamento, campanha e documentação",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-01",
+      "field": "title",
+      "previous_sha256": "637cf504d08c6f36437f17212408c2c2d23bf32e000f41385ac5996bd282816c",
+      "corrected_text": "modelo declarativo próprio",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-16",
+      "field": "title",
+      "previous_sha256": "9687e5f92b29a0c5dc487ac527bdf2cb3e17f27e5875a40154c4dd40e381c647",
+      "corrected_text": "descoberta e revisão mínima",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-17",
+      "field": "title",
+      "previous_sha256": "ca995bdbb68015da949db0db25028dff193cb8047b2cdc2e741673ca081dd53c",
+      "corrected_text": "progresso, retomada e primeira sessão",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-06",
+      "field": "title",
+      "previous_sha256": "a80bc2ab014670f6f9dcef9a5bc3286ff6fb65f178a3d1f149473dc53688be97",
+      "corrected_text": "sem transação distribuída fictícia",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-08",
+      "field": "title",
+      "previous_sha256": "6b99334923efe429b1d7b63fbf39016adf98222e653ff11d7402508e811139da",
+      "corrected_text": "smoke de cooperação",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-09",
+      "field": "title",
+      "previous_sha256": "fb2ec111843fb5ab1e1ec3b8519c670909620ffbded13b0731e79c2464e481f9",
+      "corrected_text": "cliente fino, não orquestrador",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-10",
+      "field": "title",
+      "previous_sha256": "d5550a1df09aa81578f240bab6167df6fd11fc1e86012a8a53f244251856f104",
+      "corrected_text": "verificar e complementar deduplicação",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-12",
+      "field": "title",
+      "previous_sha256": "2028b351d183432ce168da57472326eab72022eb68708a9a7006a6b0025b3cde",
+      "corrected_text": "UI orientada à intenção",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-19",
+      "field": "title",
+      "previous_sha256": "254f520e09d6449dbafd80d0e3605d73dd7ae60532cc8b7a9f25c443d3491d38",
+      "corrected_text": "uma revisão significativa para aplicar o preset",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-21",
+      "field": "title",
+      "previous_sha256": "6f21d6ce600ce3360aad21170b2973facfde2d6a1d932dfdbb6083eab16c4437",
+      "corrected_text": "preservar configuração e permitir evolução opcional",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-01",
+      "field": "title",
+      "previous_sha256": "a6360840057d516a07310f9c60f0f397273dde5e5fed9b1ea5562a24dabf906b",
+      "corrected_text": "serviço de projeção",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-03",
+      "field": "title",
+      "previous_sha256": "9fc785c11c35aec9554e62fab32a65ac7c105e828d6c14effb3e2281ebd0002d",
+      "corrected_text": "transações e leitura",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-05",
+      "field": "title",
+      "previous_sha256": "55813ef838bbecfdf64e747577c8f4d0d80bca7f3c6764fb1d276ac573f59f8f",
+      "corrected_text": "SSE e reconciliação da visão",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-07",
+      "field": "title",
+      "previous_sha256": "64b4d8b8914649333e6e8af940dce563c29333dcf076d3e2f5c043f03eaf37d3",
+      "corrected_text": "interação segura",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-01",
+      "field": "title",
+      "previous_sha256": "9de4fc43a2fa003a0731243e927ed09a44cbe6dd49630dab5a0bcb808869e921",
+      "corrected_text": "vínculo explícito",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-03",
+      "field": "title",
+      "previous_sha256": "22b14764f71c0317d7f6319813dc248b1ceaef816816caf65b73736c425ce8cf",
+      "corrected_text": "ordenação e replay",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-09",
+      "field": "title",
+      "previous_sha256": "4eae6af60ca94d3517c96e2a42e4615b6bbc984f6dd4d8c21f0f93ae063ea6bf",
+      "corrected_text": "semântica de término",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-10",
+      "field": "title",
+      "previous_sha256": "16b387a60f5e6b3d5f2bfc3d47de16f2e18ca050580feb6e98dff28fdbcc5ae5",
+      "corrected_text": "exemplo mínimo",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-11",
+      "field": "title",
+      "previous_sha256": "beac6c27b92ad20f20c69f258260ba9960c77cd08679e0fecee640e6e61a6e51",
+      "corrected_text": "projeção",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T01",
+      "field": "requirement",
+      "previous_sha256": "ad4293c387ed6b22f9309b9e4372320b7df4322c0c9c5fbb1bcfea7cf5f37983",
+      "corrected_text": "Primeiro connect local inicia o Server em background e aguarda prontidão real.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T02",
+      "field": "requirement",
+      "previous_sha256": "ae808db611a0fc0a25c6298fe13a9a4f31ef00fc44f7716efff960995c9cf562",
+      "corrected_text": "Segundo connect reutiliza a mesma instância; projetos distintos não duplicam serviço por acidente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T03",
+      "field": "requirement",
+      "previous_sha256": "8d8061f7c821f4d47abccef7f4134f453f4233effe0a131cfd40dd012246ed6b",
+      "corrected_text": "Dois connects simultâneos iniciam uma única instância e observam o mesmo resultado.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T04",
+      "field": "requirement",
+      "previous_sha256": "a770ab9e9ec30465a615a59622cc90675b5e48a28e40667bde2cef7999568ede",
+      "corrected_text": "Perfis que apontam ao mesmo diretório canônico compartilham exclusão mútua; instâncias diferentes ficam isoladas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T05",
+      "field": "requirement",
+      "previous_sha256": "199b62439f526d7df7d2de196dea9f21d47094ddc32c2c68eb51c00d3cfb2221",
+      "corrected_text": "Lock obsoleto/PID reutilizado não permite matar processo alheio nem comprova serviço ativo.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T06",
+      "field": "requirement",
+      "previous_sha256": "5e549a511e765ea079b81b57c7c8f8458a67cc134bdc7d58655a43c54a291a01",
+      "corrected_text": "Porta ocupada por outro processo produz diagnóstico; não muda endpoint ou base silenciosamente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T07",
+      "field": "requirement",
+      "previous_sha256": "c6c3db79a8b222176f9c68b08d74c23924574d9881d82e0df941fa397c179036",
+      "corrected_text": "Serviço instalado e parado é iniciado por seu supervisor, sem daemon avulso concorrente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T08",
+      "field": "requirement",
+      "previous_sha256": "fee1df4b252b5985b4d72ea259d238a74e8b35da3bc3fd31ad5472799a59126b",
+      "corrected_text": "Perfil remoto indisponível não inicia Server local substituto.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T09",
+      "field": "requirement",
+      "previous_sha256": "435b40ef8929b9fbd4a07d842e6aa5f91e2d012ffc945685c54f8e54756cc861",
+      "corrected_text": "Fechar terminal e dashboard mantém Server/Connector e execução conforme o contrato de ownership.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T10",
+      "field": "requirement",
+      "previous_sha256": "5970e7053e1243da90d330c263734e86ea212ffca057daf3b0024aa58775497b",
+      "corrected_text": "Consulta status/logs/doctor em instância parada não a inicia e não executa inferência.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T11",
+      "field": "requirement",
+      "previous_sha256": "3e9bfb048df702fb87e34c18f71338718dba28392c666a7ca5ca87e9c5348e35",
+      "corrected_text": "Endpoint acessível de instância/versão errada não vira prontidão válida.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T12",
+      "field": "requirement",
+      "previous_sha256": "6e67c0c53df6bdfe4685c5bf3dc74eec64b4fcd154d0a9c4c82e030a0d0e3159",
+      "corrected_text": "Falha de migração/configuração/armazenamento impede prontidão ou admissão afetada e informa causa.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T13",
+      "field": "requirement",
+      "previous_sha256": "bd2f75df65d336fc43f6e522b1f514c994b7dd38a9f0152a6da839501b06ca8b",
+      "corrected_text": "Timeout/Ctrl+C do connect interrompe espera sem matar serviço, repetir setup ou cancelar tarefas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T14",
+      "field": "requirement",
+      "previous_sha256": "8bb8ec87d27930d216b76f2a483267ad1f6d8027fd1d01f3e2527bbad12865ef",
+      "corrected_text": "Serviço iniciado com cwd/PATH diferentes encontra executável, configuração e projeto corretos.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T15",
+      "field": "requirement",
+      "previous_sha256": "69480084029dee9dd533598c935b4f21999c482ae60ff06a555df2c3dfcefc91",
+      "corrected_text": "Credencial só disponível no terminal ou cofre bloqueado gera diagnóstico no contexto real do serviço.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T16",
+      "field": "requirement",
+      "previous_sha256": "26cd2961804a3fc7f2529c0d519f3195db6d02bc4129f4154f8f1413e9e8d248",
+      "corrected_text": "Definições de serviço, argv, logs e saída JSON não expõem segredos nem ampliam bind/permissões.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T17",
+      "field": "requirement",
+      "previous_sha256": "50bdf48b82764eed3a3873b3aba067f029e9936b89c4cad6054ad715190d0629",
+      "corrected_text": "Instalar/habilitar serviço repetidamente não duplica recursos; alteração externa de definição é preservada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T18",
+      "field": "requirement",
+      "previous_sha256": "bd652a807dfe7a0751604b5ddee0b7702854e308ba7e226db8bfd3b3980f70a5",
+      "corrected_text": "Início no login é comprovado em SO real; resultado não é apresentado como prova de boot sem login.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T19",
+      "field": "requirement",
+      "previous_sha256": "9abecbaf57ea65b091bc498f21ac5674e83090adb3b3be9f62f446ad12af49c2",
+      "corrected_text": "Crash supervisionado reinicia com backoff/limite; falha persistente fica visível e acionável.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T20",
+      "field": "requirement",
+      "previous_sha256": "2cf14118ced2393fb772859f01f31db95608b7355b4847fc7218f08e6e2a65ef",
+      "corrected_text": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T21",
+      "field": "requirement",
+      "previous_sha256": "c8c9c5cf88859527b06405113d929db45445a1cb8ebfc0684430b5335594eabc",
+      "corrected_text": "Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T22",
+      "field": "requirement",
+      "previous_sha256": "8ff64540de8f336241f9b43ec9a2b1c453abfd2d342760579461b221094fedf3",
+      "corrected_text": "Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T23",
+      "field": "requirement",
+      "previous_sha256": "092d1b1ca23e22e9f7b54f81f49338420fdf683791f75853c26b1b867a166ba9",
+      "corrected_text": "Restart preserva identidade, bindings e limites; grant expirado/revogado continua inválido.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T24",
+      "field": "requirement",
+      "previous_sha256": "d23921a95b5adafeabcbebae655b0f4ec0c6479eeef325027c43a44952d2933b",
+      "corrected_text": "Queda/retorno do Server mantém vínculo do Connector sem novo executor ou execução duplicada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T25",
+      "field": "requirement",
+      "previous_sha256": "8ec422bb1fd14a9bb20f0925aa2c05cbb6d1a9e86cb26bb4d536644c21b39ee1",
+      "corrected_text": "CLI novo/daemon antigo informa compatibilidade e não atualiza/interrompe trabalho implicitamente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T26",
+      "field": "requirement",
+      "previous_sha256": "5194eb3dc8a2ab8a904daad193ff6078591d2bf8ac245e2b977f0faf14d9d06b",
+      "corrected_text": "Upgrade interrompido permite recuperação documentada sem downgrade destrutivo da base.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T27",
+      "field": "requirement",
+      "previous_sha256": "fd824d14244e2ce42c1db06047306393af90ac23f60d33f855e6d71b0f49f1d2",
+      "corrected_text": "Desinstalação remove só a integração selecionada, preservando dados e execução foreground posterior.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T28",
+      "field": "requirement",
+      "previous_sha256": "c64f75ea0b812af687361da078bb33775180c169c64fb9573581e89fc91cda36",
+      "corrected_text": "Container/supervisor externo usa foreground sem dupla supervisão ou dupla daemonização.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T29",
+      "field": "requirement",
+      "previous_sha256": "feefeb26ab787a025babcc20277d7bc9e733db6253c14e51b1189839f68c4122",
+      "corrected_text": "Suspensão/retorno, logout e reboot são campanhas distintas; não há retomada produtiva por inferência de disponibilidade.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T30",
+      "field": "requirement",
+      "previous_sha256": "5b11eb6796a720266dc0d8d9d43f6b387faf46307c46dfd895bb3c9c48f45684",
+      "corrected_text": "Wheel/artefato instalado contém os recursos necessários e funciona sem checkout ou terminal de instalação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T01",
+      "field": "requirement",
+      "previous_sha256": "aff36affcf6d91694bd557146a801409d29fec7758501efc6d9d6d03094e9e47",
+      "corrected_text": "Init usa agente existente e não cria/rotaciona identidade implicitamente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T02",
+      "field": "requirement",
+      "previous_sha256": "f3289abc00c9a447c0e8635c86c62f77137d864f881194fb3176c88b8f73d516",
+      "corrected_text": "Participante sem permissão não cria agentes, grants ou bindings.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T03",
+      "field": "requirement",
+      "previous_sha256": "217ad29d8f0c4dec9cd5f1f704079e986fb276206c010c3cfb92478264e309b6",
+      "corrected_text": "Adicionar cliente MCP não desativa runtime já existente da identidade.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T04",
+      "field": "requirement",
+      "previous_sha256": "18275017316df3b19779ee2ba576e53b67c304ee6f18fb66c419268452ccb0c4",
+      "corrected_text": "Plan não muda configuração; apply só altera entrada revisada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T05",
+      "field": "requirement",
+      "previous_sha256": "d22ec1712caa5e2c3b0dd7d394b943296c718b58a495b9e9f53176efaa290b99",
+      "corrected_text": "Arquivo editado após plan causa conflito, sem sobrescrever mudança concorrente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T06",
+      "field": "requirement",
+      "previous_sha256": "bd6ff9a0507af28ad1e6c8ba3ec2902783bb0088ef70ab618a1f6f2e995d928f",
+      "corrected_text": "Arquivo com outros MCPs e preferências conserva conteúdo alheio.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T07",
+      "field": "requirement",
+      "previous_sha256": "e8208df217461dc2bd6c64675256abbde43ebb6cbf56c35a474977fb1eebe93c",
+      "corrected_text": "Round-trip JSON/TOML, espaços, Unicode, formatos inválidos e duplicatas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T08",
+      "field": "requirement",
+      "previous_sha256": "26b1ea3d586df668ea98c9d6ec6b8ff8d0a39948095911eec6069a7b9331ee2f",
+      "corrected_text": "Interrupção durante escrita/backup deixa original ou substituto íntegro e recuperação explícita.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T09",
+      "field": "requirement",
+      "previous_sha256": "04959db1676c1fc57a6bca566a39b8cdef0e230449d9550696d9fd8c95d6cf9e",
+      "corrected_text": "Segredos ausentes de argv, URL, logs, JSON de resultado, arquivos portáveis e browser.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T10",
+      "field": "requirement",
+      "previous_sha256": "b1385b1939829390db01479b7ae0f97ccda8d97232408df755fa0b5bf150d715",
+      "corrected_text": "Variável referenciada mas indisponível ao harness produz diagnóstico, não sucesso.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T11",
+      "field": "requirement",
+      "previous_sha256": "af32cd22271165d586f2b08cbc6584a2ff97b750c388c84195454d10000da0c3",
+      "corrected_text": "Origem trocada/redirect não recebe a credencial da origem aprovada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T12",
+      "field": "requirement",
+      "previous_sha256": "5c3798c6a5c45dc9505adc0cd72bd3fabdf873b45d99a6d130ee6d14e97990d4",
+      "corrected_text": "Doctor padrão não inicia turnos/probes nativos nem muda configurações.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T13",
+      "field": "requirement",
+      "previous_sha256": "263cfe70ef888f42b126846312a96594bccd3cc59ce639c815b06e5593243811",
+      "corrected_text": "MCP conectado sem chamada de ferramenta não é participação comprovada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T14",
+      "field": "requirement",
+      "previous_sha256": "fc5f0ca71a08d36c4325c8cce804ca1eda44c1ea25af8496095135e58be8358f",
+      "corrected_text": "Teste de conexão nativa não é apresentado como prova de comunicação entre agentes.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T15",
+      "field": "requirement",
+      "previous_sha256": "252b1dd1b2175bbfcc480c17bfe02830994c5bac57ec481b5ded62be087bcb04",
+      "corrected_text": "Duas requisições simultâneas com mesmo ID/hash criam um único recurso/recibo.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T17",
+      "field": "requirement",
+      "previous_sha256": "f4f67bd1dc7b8de72e3b5347e82cc7e77fb15e677d362e60a15f9e5f6a883b2d",
+      "corrected_text": "Falha entre evento, inbox/outbox e recibo reverte toda transação nova.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T18",
+      "field": "requirement",
+      "previous_sha256": "9d25b49c06f43b0099fa78a08d7819fddd27d148270d90628867ea71bcc6cb91",
+      "corrected_text": "Resposta perdida após commit e restart recuperam objeto original sem reenvio produtivo.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T19",
+      "field": "requirement",
+      "previous_sha256": "7ad7feafad3c299c6d71d475ad2f8a7c3d70e41a62a74e6f4df0fe7c9681556a",
+      "corrected_text": "Pending approval repetido mantém uma aprovação; decisão posterior preserva correlação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T20",
+      "field": "requirement",
+      "previous_sha256": "368b9322fbb7158df973b1b95a70a624a33790657efac4c909f00ebb8a9f086b",
+      "corrected_text": "Credencial revogada não recupera conteúdo protegido por dedupe.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T21",
+      "field": "requirement",
+      "previous_sha256": "3dc7d966847d85f32da6cdfef49a3d84f4ac9e717bdb7be6ef89d4745b5d05e2",
+      "corrected_text": "Conclusão anterior à assinatura de wait é detectada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T22",
+      "field": "requirement",
+      "previous_sha256": "3d95e30cde6699a6d77c60d3454f6e4ee9720a1c66e3eccea1bd931abb60089c",
+      "corrected_text": "Timeout/Ctrl+C de wait não cancelam, reexecutam ou concluem o trabalho.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T23",
+      "field": "requirement",
+      "previous_sha256": "16b267a6d9a23821097aefae04b26feb126c2acbf97ecb8d8782a05e626de8e8",
+      "corrected_text": "Entrega/read receipt/idle externo não satisfazem espera de conclusão de handoff.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T24",
+      "field": "requirement",
+      "previous_sha256": "1fe6df04c81c99e616061cf218b8519c1fda57acda0ece2765eea71181a16308",
+      "corrected_text": "Server antigo sem idempotência/capacidade nova apresenta degradação explícita.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T25",
+      "field": "requirement",
+      "previous_sha256": "39c23645eeb1c855d1762ad16be519dfb5d2de66bef2f9912bfddbefb394de00",
+      "corrected_text": "Requisição fora da janela de dedupe não é repetida automaticamente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T26",
+      "field": "requirement",
+      "previous_sha256": "986e527cfdab3bb4f856a9d22e5e1782ecb731b067b95d0df2a1751c743de89a",
+      "corrected_text": "Setup gerenciado continua transacional; alteração concorrente não amplia grants.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T27",
+      "field": "requirement",
+      "previous_sha256": "92b9dd1f45d84907f486b4ab2468f4e5efe2997573f04f30b95a503446ee1795",
+      "corrected_text": "Configuração remota usa diretório/credencial do host correto.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T28",
+      "field": "requirement",
+      "previous_sha256": "76c8875bf4267ba546f14d35d36a213fc0aa1c8c7edf486667a80e121bfa38d4",
+      "corrected_text": "Saída JSON e códigos de saída possuem testes de contrato.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T29",
+      "field": "requirement",
+      "previous_sha256": "2af7dfd64a411e599cb1c195bd9c08b87ae3b35bcefb5370fa839ba485d4f85d",
+      "corrected_text": "Projeto e único harness detectado levam a recomendação concreta sem escolha técnica MCP/runtime inicial.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T30",
+      "field": "requirement",
+      "previous_sha256": "5cdb25cc4658ff383c8c5b49cd88f0306fd620da47d54a31804828d8a12ceda4",
+      "corrected_text": "Vários harnesses válidos pedem somente escolha necessária; PATH não comprova login ou qualificação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T32",
+      "field": "requirement",
+      "previous_sha256": "418750dddb1c2745cbe796150770af36cef6b4958a72be249e413751f77357e6",
+      "corrected_text": "Aprovação remota pendente preserva ID e identidade do decisor; terminal participante não a aprova por assentimento local.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T33",
+      "field": "requirement",
+      "previous_sha256": "0e13ebbe413e823e790dfab4c7672dfbcea3bf81d9a3ff7424a9017578ef40ba",
+      "corrected_text": "connect reutilizado após resposta perdida retoma o mesmo setup sem novo agente, binding ou grant.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T34",
+      "field": "requirement",
+      "previous_sha256": "69c3d89c678ed141c9a46be5def5d66cfcb1a89bedcb0ed8b134089b4258c0c3",
+      "corrected_text": "Login de provedor ausente produz instrução concreta e não deixa daemon bloqueado em prompt invisível.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T35",
+      "field": "requirement",
+      "previous_sha256": "e190205429aac4b684e49fdac9fb97adf8d4231dfeb581ea7bed361312a9fcf5",
+      "corrected_text": "Serviço pronto, MCP negociado, sessão pronta e handoff concluído aparecem como níveis distintos.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T36",
+      "field": "requirement",
+      "previous_sha256": "b70e8a90515b0c097f3890cfcdf69774838104ad5b445136db4e2eaec6a645b0",
+      "corrected_text": "Conexão não envia tarefa/smoke pago automaticamente; a tarefa solicitada usa os serviços canônicos.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T38",
+      "field": "requirement",
+      "previous_sha256": "9956357191d47013ea9ab33e467cb5c3dd9900e62c2f039edf172e0cc9c1c056",
+      "corrected_text": "Instalação nova com harness/provedor prontos propõe identidade, workspace e perfil úteis no mesmo resumo; aceitar os efeitos cria apenas os objetos autorizados e não exige definir persona ou visitar o painel.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T39",
+      "field": "requirement",
+      "previous_sha256": "24472af587f6561e1aa7cfd557380b67aa9afd8993623ee2eaedcea77862c78c",
+      "corrected_text": "Pacote instalado, rota local padrão: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissão, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem edição manual de configuração.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T40",
+      "field": "requirement",
+      "previous_sha256": "34cf68a0bbc497c9b6ef9f76a93fa2537a930411c3e2fa03a7bb6940802b3a4c",
+      "corrected_text": "A mesma campanha via Connector resolve decisões pelo CLI autenticado do operador, sem credencial administrativa no host remoto e sem aprovação pelo participante.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T41",
+      "field": "requirement",
+      "previous_sha256": "e28cd603c54d4489c3284abae51b0faa8cf708bb682c992a4b23cfbbdc0a2e61",
+      "corrected_text": "Reconnect e repetição do setup preservam `agent_id`, modelo, papel, configuração, grants e personalizações; não recriam agente nem reaplicam defaults.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T42",
+      "field": "requirement",
+      "previous_sha256": "30cf663f2cd75005e9a5f9933ecf93604c2a4df6ffc3f2ea3cc7fc8ad926f4bf",
+      "corrected_text": "Nome de agente/projeto igual não associa outra identidade; vínculos ausentes ou ambíguos exigem resolução autorizada, inclusive quando duas conexões iniciais concorrem.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T43",
+      "field": "requirement",
+      "previous_sha256": "841b5db2e0242fad78aef112b35885928d64103bf8e9ccad9b6a4b9cc1a5867e",
+      "corrected_text": "O harness iniciado pelo serviço usa instruções, modelo, ferramentas e limites efetivos revisados; configuração disponível apenas no shell não é presumida nem substituída silenciosamente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T44",
+      "field": "requirement",
+      "previous_sha256": "4c6bc1bfa0e01c59db12663fa5cafb6dd8a3dd47c9014bcb16f0a10a160dbb8d",
+      "corrected_text": "Direitos padrão permitem coordenação útil no workspace autorizado; não permitem ler inbox alheia, cruzar escopo não concedido, administrar globalmente ou mudar políticas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T45",
+      "field": "requirement",
+      "previous_sha256": "bde2815dd6d7e95018b31b573a041402971f18a42ffd7f463e9429f6389df120",
+      "corrected_text": "Decisão pelo terminal preserva ator, revisão, validade e escopo; texto enviado ao modelo, decisão expirada, recusada ou emitida por ator sem autoridade não aprova trabalho.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T46",
+      "field": "requirement",
+      "previous_sha256": "b22e4aad1702897e4549050daf4bafac6cbe9c5a0526d405999c855f4e62a303",
+      "corrected_text": "Perda da resposta de submissão ou decisão em M1 recupera a mesma requisição/resultado, inclusive após restart; não cria operação, pedido ou handoff duplicado.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T47",
+      "field": "requirement",
+      "previous_sha256": "381398e08cc2cea236de2cfd1aac6923d09afeca022147a2e9170b27e0f18131",
+      "corrected_text": "Fechar e reabrir o CLI reencontra trabalho e identidade; retoma a conversa somente com suporte comprovado, ou oferece nova sessão explicitamente, sem replay nem contexto fictício.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T48",
+      "field": "requirement",
+      "previous_sha256": "1b3830a68ce47b6b19f0adb9d8eb9ddd51b036067cba1b6fd56aec7f572442fb",
+      "corrected_text": "Perfil de execução do resumo admite somente trabalho elegível e autorizado pelas regras atuais; daemon online, mensagem recebida ou grant revogado não bastam para iniciar sessão.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T49",
+      "field": "requirement",
+      "previous_sha256": "33bdf964bd66c7ae5f75516db1b2b9c95dc6a283305d208c54d66c34ad8db735",
+      "corrected_text": "Abrir o dashboard depois do uso pelo terminal mostra o mesmo agente e configuração; personalizar nome/papel mantém identidade, histórico e vínculos canônicos.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T50",
+      "field": "requirement",
+      "previous_sha256": "367c48cdd52c8229a92d802f68312ae8e2e84d09cde785cfa650e44399d8025c",
+      "corrected_text": "Adaptador que só inicia o processo, mas exige painel para uma decisão cotidiana, não passa o aceite M1; lacuna fica registrada até existir rota completa qualificada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "DX-T51",
+      "field": "requirement",
+      "previous_sha256": "3c145b870505121f808210eac30e57a2799585aabf638cfcdd42b4020214747a",
+      "corrected_text": "Nova revisão do preset apresenta efeitos por diff e respeita mudanças concorrentes; upgrade/reconnect não amplia permissões ou sobrescreve escolhas existentes.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-01",
+      "field": "requirement",
+      "previous_sha256": "8915d4aab34aeda21359de34a60a0140f2e0ce56cec0561ec96723d66c23cc34",
+      "corrected_text": "Aprovação pendente aparece para operador autorizado.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-02",
+      "field": "requirement",
+      "previous_sha256": "d59036229342984a0a7ace13cc18cae6b54c47873d3afb0f79ed13da1504c194",
+      "corrected_text": "Aprovação expirada perde ação e preserva referência histórica adequada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-03",
+      "field": "requirement",
+      "previous_sha256": "5ffd01d2dbedb8f6d7407ca2d3290aeed01bc312a8b062ca3c4c05c2394dff62",
+      "corrected_text": "Pergunta destinada ao agente A não vira pergunta respondível pelo operador como A.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-04",
+      "field": "requirement",
+      "previous_sha256": "f66b66175797ba819726ee65d599e1e76eadcb66cf2163ad60d213ccd52d3621",
+      "corrected_text": "CLAIMED normal e inferência sem eventos não geram incidente de travamento.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-05",
+      "field": "requirement",
+      "previous_sha256": "d2f89065676ab90f7aed0da23e71ac2b65f2b21d1e2c9d247a34ff9b0116fdfc",
+      "corrected_text": "VERIFYING automático permanece acompanhamento, sem inventar verificador humano.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-06",
+      "field": "requirement",
+      "previous_sha256": "7ab0366d912c0b48377423d0d1de11acd3855f4265d9b51fe2a8eba28fd2b67c",
+      "corrected_text": "Resultado desconhecido não oferece retry automático.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-07",
+      "field": "requirement",
+      "previous_sha256": "3950e7d29eb9a95b2b3c01d92f3fa1465c168ebebb8ae7e388d3fcf87b816a23",
+      "corrected_text": "Marcar visto/adiar não altera aprovação, inbox, handoff ou operação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-08",
+      "field": "requirement",
+      "previous_sha256": "d1d2375e0cc4e2f16ea279a801c300d12c8f0810e007537a8caa5f719092b72d",
+      "corrected_text": "Mesmo episódio resiste a refresh/reconnect; episódio posterior do mesmo objeto volta a aparecer.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-09",
+      "field": "requirement",
+      "previous_sha256": "eb856e13ec95f56061010dc7a49192652a5aa9e6bb2ce606b7711dccb876cbb7",
+      "corrected_text": "Ação com revisão antiga conflita e recarrega o fato; não decide pedido novo.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-10",
+      "field": "requirement",
+      "previous_sha256": "6ccc3ca4e5d53cd32c4f7cdbf6344658a3926b979c0554639aa7cd915453f302",
+      "corrected_text": "Lista, total e filtros respeitam a mesma autorização e paginação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-11",
+      "field": "requirement",
+      "previous_sha256": "f8b975692dcdc36945e817fe177f4a87a1b431e26e7ab62e667decb87204ecb4",
+      "corrected_text": "Falha de leitura mostra dado stale; 403/revogação remove conteúdo protegido.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-12",
+      "field": "requirement",
+      "previous_sha256": "b8efbcc5493eda0b430519bddc560db74790e17aad9982a4374b8acc82c30ec7",
+      "corrected_text": "SSE perdido/gap resulta em resnapshot, sem sumir com pendências ou duplicar toasts.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-13",
+      "field": "requirement",
+      "previous_sha256": "ad1735fc866ae697daeff812e1437df4032e50164687cb0e8e821fb1833c9172",
+      "corrected_text": "Limiares temporais mudam a visão sem exigir novo evento de domínio.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-14",
+      "field": "requirement",
+      "previous_sha256": "e8a72d86d9ec04e7e909d2f57b3401abb99b8b24f2d17aed11dae14947d7c0d9",
+      "corrected_text": "Sucesso produtivo com limpeza pendente não vira tarefa fracassada.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-15",
+      "field": "requirement",
+      "previous_sha256": "fb863537f30e27c9372057fbb5e040389742e5b0699d70d85d5ece3f79d251fc",
+      "corrected_text": "UI teclado/foco/leitores de tela/light-dark e textos longos sem execução de HTML.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-16",
+      "field": "requirement",
+      "previous_sha256": "3b186e56189fdf7aa7917b2b87645b3f18d5e1324585f2b28de3aeee51fa6272",
+      "corrected_text": "Consulta em lote não cresce em N+1 por ocorrência/agente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-02",
+      "field": "requirement",
+      "previous_sha256": "ceadf33924c7f37473e7a413d3cc5d5aae68bd6d3e815af171cf944eb6e207aa",
+      "corrected_text": "Token de observação rejeitado em mensagens, handoffs, MCP, runtime e emissão de tickets.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-03",
+      "field": "requirement",
+      "previous_sha256": "eacef1f1632c4df663489c44b8620c5677e78e05b7562fac8786109e27b8cdad",
+      "corrected_text": "EPT de leitura não ganha permissão de publicar telemetria.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-04",
+      "field": "requirement",
+      "previous_sha256": "8f1dc369321bd090d7fa728eaf2fe9dbef184ece478518c0d23c040accc99d2d",
+      "corrected_text": "Agente B não publica estado para A por campo no payload.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-05",
+      "field": "requirement",
+      "previous_sha256": "60dafe53777117d6b78e45df2b515f093ec66072875c91344427b55ac61b045d",
+      "corrected_text": "Mesmo seq/hash não duplica evento nem renova validade.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-06",
+      "field": "requirement",
+      "previous_sha256": "642a8253670ef8f33fa1e9b012acddb1279e4bae15aa2110cf9d20fcc42d472b",
+      "corrected_text": "Mesmo seq com conteúdo diferente conflita; seq antiga não sobrescreve.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-07",
+      "field": "requirement",
+      "previous_sha256": "8da6204d5bd0c060d0d038546f4b4661a3062d2f35ea9c25bb496047de81632b",
+      "corrected_text": "Geração anterior não atualiza instância nova; reset local não remove fencing.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-08",
+      "field": "requirement",
+      "previous_sha256": "11833878a8ac54fd48c5f819b34a48b05e44f72e492546833c2701fd009cf88f",
+      "corrected_text": "Relógios atrasado/futuro e backlog após reconnect não tornam dado antigo atual.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-09",
+      "field": "requirement",
+      "previous_sha256": "aee73e87e7f5ee2fe756d2fa6f5d497ddbac2cc7283c045222ae22afcf86d419",
+      "corrected_text": "TTL expirado vira observação stale, não idle, offline canônico ou capacidade livre.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-10",
+      "field": "requirement",
+      "previous_sha256": "b295abd7a647b8b5224b8c5b7d6a362750d512f0863aeccaf43aacaa98202666",
+      "corrected_text": "Revogação de fonte/credencial/identidade impede novos reportes/renovação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-11",
+      "field": "requirement",
+      "previous_sha256": "37c923cbad7a85a4d4522e375915afbea7b870d9d84c23503d8bb0aeba40ea9e",
+      "corrected_text": "Duas sessões da mesma identidade preservam estados independentes.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-12",
+      "field": "requirement",
+      "previous_sha256": "24922f500a426ab63cf807ee94f32edf126d59aac7479979a10ac6ce3f522e9c",
+      "corrected_text": "Instâncias Herdr diferentes com mesmo pane-id não colidem.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-13",
+      "field": "requirement",
+      "previous_sha256": "4e77772e5afcee665e7e7fc39a9ff4281fdd40dec30c3256ec7b88e8cd6c6359",
+      "corrected_text": "Pane renomeado/movido/substituído respeita evidência de ocupante ou exige reassociação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-14",
+      "field": "requirement",
+      "previous_sha256": "e06263e8f789891ee7dba076286ed77997ebd273ac9ab899a18b4725f57b990e",
+      "corrected_text": "Done/idle de startup/switch sem completion_ref não gera conclusão fictícia.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-15",
+      "field": "requirement",
+      "previous_sha256": "21f87e9c67c352da3d790c2404910af7c4157b4f6aec63f8a37c2b1e778f7bd5",
+      "corrected_text": "Término observado não conclui handoff nem libera claim/capacidade/inbox.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-16",
+      "field": "requirement",
+      "previous_sha256": "f7c814a800f42c4d8c165f6994344d08e48e253651a76a620c3a0f07f55bc1f7",
+      "corrected_text": "Reporte blocked não gera aprovação canônica nem permite responder via token observador.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-18",
+      "field": "requirement",
+      "previous_sha256": "26bccce985ec3d6b172e1df176abc069f76e824ddb335e40c9d68ba53d533e69",
+      "corrected_text": "Schema/versionamento incompatível gera indisponibilidade explícita, sem campos adivinhados.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-19",
+      "field": "requirement",
+      "previous_sha256": "af0aea89de47c3c481081649f8eaac45d22a68e0e238e8af175c80b9f5ac8237",
+      "corrected_text": "Estado inferido não sobrescreve evento canônico correlacionado do Core.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-21",
+      "field": "requirement",
+      "previous_sha256": "097d7a86454ef889c5436d4ab41a8a0b94d36ac185ae29034555cf452ca28339",
+      "corrected_text": "Fonte maliciosa não injeta HTML, URL executável, prompt, comando ou logs secretos na UI.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-22",
+      "field": "requirement",
+      "previous_sha256": "a8cfe34fa24bbc08f1e1f4e684c8fe8c6ff83668f043bc7506439d7ad831e774",
+      "corrected_text": "Observador Herdr não chama prompt/start/send-keys/focus/kill.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-24",
+      "field": "requirement",
+      "previous_sha256": "718116e7222c3f8cb7ea29ed92b786b1df9b68796479bde454af985b4428ad7a",
+      "corrected_text": "Desativar OBS mantém MCP-only, Core e Connector funcionais.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-02",
+      "field": "requirement",
+      "previous_sha256": "0924e188d850f723533fa4f2af724bb9151f956b8f0da1122840fc4d50a014db",
+      "corrected_text": "Broadcast handoff disputado por MCP/runtime continua com um único vencedor.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-03",
+      "field": "requirement",
+      "previous_sha256": "7b84ff6a818284c843772ff011c4f3b92751f049b70f94a3f647f4ec2749e72f",
+      "corrected_text": "Observação idle não muda prioridade, fairness, elegibilidade ou reservas de claims.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-04",
+      "field": "requirement",
+      "previous_sha256": "2de5679fb529f2681848c8465d640be57f6dfbffd5672b3fa661ecd2d8423459",
+      "corrected_text": "Isolamento shared/per_sender/per_sender_session/one_shot mantém semântica existente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-05",
+      "field": "requirement",
+      "previous_sha256": "abf6069fcf0653054ffd65799196afc4ea47f85276006ed999f390e711d1dbbe",
+      "corrected_text": "Reinício/queda de rede com operação incerta não dispara replay por nenhum dos novos caminhos.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-06",
+      "field": "requirement",
+      "previous_sha256": "96ac7c3c5a23a73f06a5255db97ac4715fa896c01fb387b6a452ad94f4a45f4c",
+      "corrected_text": "Core importado sem sockets/processos/credenciais; dependências entre aplicações continuam proibidas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-07",
+      "field": "requirement",
+      "previous_sha256": "4386dc6ec16529ef93bce286fc76ca649d428948528f065e2b8e686b057e1b78",
+      "corrected_text": "Cliente antigo + Server novo e cliente novo + Server antigo têm comportamento documentado.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-08",
+      "field": "requirement",
+      "previous_sha256": "8ea9839ebe830e230bc9f242306da5226eb76232b898734b0e5bc0b9efa52c31",
+      "corrected_text": "Pacotes finais contêm UI, schemas, migrações e recursos necessários, sem depender de checkout irmão.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-09",
+      "field": "requirement",
+      "previous_sha256": "d2a81392008314d713db14df661667df1991a1636d4165ae3dc9badde9ab6038",
+      "corrected_text": "Campanha usa homes/workspaces temporários e não modifica contas/configurações pessoais.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-10",
+      "field": "requirement",
+      "previous_sha256": "139005d32e93046579fb290f0d7e4aeab14ccacdee6010a4a67ba8800f2c60c8",
+      "corrected_text": "Validação de browser usa o backend real; snapshot/string test não substitui interação.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "scenarios",
+      "id": "RG-11",
+      "field": "requirement",
+      "previous_sha256": "460da9926f5e8bc0582fa28b62ba91b5bab704f2b47478c17846a2ba423bbed2",
+      "corrected_text": "Mesmo agente com MCP externo e runtime gerenciado mantém uma entrega lógica exclusiva, sem fan-out involuntário por canal.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-01",
+      "field": "requirement",
+      "previous_sha256": "c3c34367d46143aabeb634827a0834d80ea779e764f875122aadfb918e51c8a2",
+      "corrected_text": "A identidade canônica continua sendo `agent_id`. Harness, transporte, pane, host, sessão e observador não criam automaticamente outro agente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-02",
+      "field": "requirement",
+      "previous_sha256": "3e1a1a6b65668e86a90ad1b136164443081ed74eb881994a1228597c8286f158",
+      "corrected_text": "MCP do Nexus permanece HTTP direto no Server. Não adicionar servidor/proxy/fachada MCP no Connector ou no observador. Não reintroduzir MCP stdio do Nexus.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-03",
+      "field": "requirement",
+      "previous_sha256": "6a23bbef79889c66f26c77e213685163a39e1704806e10188904e61d532092f4",
+      "corrected_text": "Core continua independente das aplicações; não recebe banco de identidades, inbox, HTTP de produto, UI ou autorização canônica.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-04",
+      "field": "requirement",
+      "previous_sha256": "21cb4ebb443153ab2011b0f76771ab3bf039fd5f747b529871baee93fd650194",
+      "corrected_text": "Connector continua host/cliente remoto de execução. Não passa a decidir handoffs nem a possuir inbox própria.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-05",
+      "field": "requirement",
+      "previous_sha256": "9fc7b14f1ab09f198a626303dee0d1ced10d7ac381e7b8652efb2adab3092bba",
+      "corrected_text": "Presença, atividade, capacidade, autorização, término do turno e conclusão do handoff são fatos diferentes.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-06",
+      "field": "requirement",
+      "previous_sha256": "415c8ec94727936d1e3955a3b5243d5999089359b3375fe7253c5e8d1329f6a6",
+      "corrected_text": "`idle`, `done`, timeout, silêncio ou desconexão não autorizam execução, conclusão, liberação de capacidade ou replay.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-07",
+      "field": "requirement",
+      "previous_sha256": "fe5a1f3f251c3a905447b5f9f41f78f0e719cc52779cc53c66c9178787199f4a",
+      "corrected_text": "Observar/ler/abrir a central não aprova, responde, interrompe, reivindica ou reexecuta trabalho.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-08",
+      "field": "requirement",
+      "previous_sha256": "58671f6e697a9a44ec9011f2acc6954831bd9dfc45ee6bbdf08025b3ad023985",
+      "corrected_text": "Um observador externo não produz recibos nativos, prova de ownership do Core, heartbeat de sessão MCP ou reserva de capacidade.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-09",
+      "field": "requirement",
+      "previous_sha256": "2e32d2b0c38fcaad4354f9641c6d515a42e636689cdf51dc017cb334b6a3baaf",
+      "corrected_text": "Handoffs preservam claim canônico único. MCP-only continua elegível conforme o contrato existente, sem obrigação de reportar capacidade externa.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-10",
+      "field": "requirement",
+      "previous_sha256": "f46928ce4381b145224a9697a236ed89fc8c698b8561cb98a8d20e79a2b283e3",
+      "corrected_text": "Uma requisição repetida para recuperação mantém a identidade original. Nova tentativa produtiva exige intenção explícita e as regras canônicas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-11",
+      "field": "requirement",
+      "previous_sha256": "783569898e8a79e504942dbd8a2988ec1bfca93edea70a805a1fb31e382579bb",
+      "corrected_text": "Não colocar chaves em URLs, argumentos de processo, logs, screenshots, exemplos executáveis, exportações ou estado do browser.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-12",
+      "field": "requirement",
+      "previous_sha256": "51eeb2287861f986488cc2032aa893cd4444fc0ecc54190f891cb86e82d19259",
+      "corrected_text": "Não fabricar qualificação de harness. Suporte ao formato de configuração MCP é distinto de suporte à execução nativa.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-13",
+      "field": "requirement",
+      "previous_sha256": "6325c61942c4cae3b9ba388e3d866839613023b8277f368c50a90813af2fa1c6",
+      "corrected_text": "A fonte de verdade de mensagens, handoffs, aprovações e execução permanece nos subsistemas atuais. Novas tabelas são auxiliares, não novas filas de trabalho.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-14",
+      "field": "requirement",
+      "previous_sha256": "9a78efc547b01269836f751e2e0dc17e65883a270f59938ea7e8e3f199e7abc9",
+      "corrected_text": "Não interpretar texto livre de prompt/log como comando Nexus, aprovação, identidade ou conclusão.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-15",
+      "field": "requirement",
+      "previous_sha256": "ec4323c50faa34961bcc43963ac093e168138b5727f5e176f518715cfb4fa996",
+      "corrected_text": "Não aumentar a superfície MCP indiscriminadamente. Priorizar ferramentas existentes e APIs específicas; qualquer parâmetro novo deve ter schema, testes e revisão de superfície.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-16",
+      "field": "requirement",
+      "previous_sha256": "980cee72698d8c64237e5b54f4ebba66362f024335769af56cbc27ba0b72d9e6",
+      "corrected_text": "O daemon é um modo de operação do Server/Connector existente; não cria outro domínio de execução, fila, scheduler ou identidade de agente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-17",
+      "field": "requirement",
+      "previous_sha256": "e1ea5c7a2913fcde7948d8c11e01e1190519f58830b82515ffc061d24cff5997",
+      "corrected_text": "Identidade da instância do serviço é distinta de agent_id, workspace e sessão. Perfis que usam a mesma instância não iniciam processos concorrentes sobre seus dados.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-19",
+      "field": "requirement",
+      "previous_sha256": "5aabe63fa5086674aef52a3951016f4dad252ea7cc9bb40366b8ed74e2c629ce",
+      "corrected_text": "Só existe um supervisor ativo por instância. Serviço instalado é acionado pelo gerenciador correspondente, sem daemon avulso concorrente.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-20",
+      "field": "requirement",
+      "previous_sha256": "3f1c5c997726e9fb2cb04528becce099478d6f1fa27b23a632ab47a7eea63b1f",
+      "corrected_text": "Iniciar/reiniciar serviço não concede autoridade nova, não renova grants e não repete operações de resultado incerto. Trabalho previamente autorizado segue admissão/reconciliação canônicas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-21",
+      "field": "requirement",
+      "previous_sha256": "1b6b4cedf736d796223f9ddd2e09ccfa6772fa10bd7cb40e35fb17188b91ec4f",
+      "corrected_text": "Fechar CLI/dashboard não significa parar serviço ou cancelar trabalho. Parada explícita não é tratada como crash para ressuscitar a instância.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-22",
+      "field": "requirement",
+      "previous_sha256": "798e12ba89b340a64922be2ed1c0b295e9d3a48a63d5f890ef8902d9562593f6",
+      "corrected_text": "Estado do processo, prontidão do serviço, conexão do harness e sucesso de uma tarefa são provas diferentes.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-23",
+      "field": "requirement",
+      "previous_sha256": "b7aa6f4657eb582b99647795c3cf9f2c3adf9c436d050fbd483240afddad9c23",
+      "corrected_text": "Consultas de status, logs e doctor padrão não iniciam o serviço nem inferência. A inicialização automática pertence a comandos de ação documentados.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-24",
+      "field": "requirement",
+      "previous_sha256": "66f862d07d3ecacc34b2fbfa2efe8bb61ab6a73361bfe9ea22ca81f3319e3865",
+      "corrected_text": "Sobreviver ao terminal, reiniciar após falha, iniciar no login e operar sem login exigem evidências separadas; não prometer sobrevivência do processo a reboot.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-25",
+      "field": "requirement",
+      "previous_sha256": "adfc49d3ed5b0d06dcdd4e0afe5316b8a24b46b9efb37457c0d03e4eed482e1c",
+      "corrected_text": "O caminho padrão de conexão e uso cotidiano é completo pelo terminal, incluindo decisões com autoridade válida. Política organizacional explicitamente preexistente continua obrigatória; a configuração padrão nova não introduz dependência do dashboard.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-26",
+      "field": "requirement",
+      "previous_sha256": "a8cba66667b105404bba27c525eb98fcbdcf162c7410f84dd80e558eac0d03c1",
+      "corrected_text": "O preset preenche a configuração comum do produto. Generalista é um perfil reutilizável, não uma identidade global compartilhada; reconnect não recria agente nem reaplica defaults sobre escolhas do usuário.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-27",
+      "field": "requirement",
+      "previous_sha256": "a73b4c39ef2a981d50590bbad97ddd7656a61dd61fa4466733e9fa5e731f3fef",
+      "corrected_text": "O preset preserva instruções, modelo, ferramentas e limites efetivos do harness quando suportados e verificáveis. Integração com Nexus não remove sandbox, não desabilita perguntas nativas nem concede administração global.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "invariants",
+      "id": "INV-28",
+      "field": "requirement",
+      "previous_sha256": "e1fc2a6125d92b12f73926173b38393896a676bfdf4c7b7ec48b2d84fe078b3d",
+      "corrected_text": "Serviço ativo ou sessão pronta não encerram M1: solicitar trabalho, decidir pedidos autorizados e recuperar resultados pelo terminal precisam estar demonstrados no caminho escolhido.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-01",
+      "field": "requirement",
+      "previous_sha256": "f8a6e5a482fc3562f37d5405b7ec73a0ecbaad7cf2eae3470cac06ba5974f887",
+      "corrected_text": "Cada tarefa obrigatória tem implementação ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-02",
+      "field": "requirement",
+      "previous_sha256": "596cc328e4f6c90177eabddb8de9a79217fe69a25b4bd7512afb76f8a7bcb7b0",
+      "corrected_text": "As frentes SVC, DX, ATN e OBS respeitam suas dependências e funcionam de modo combinado; Herdr continua opcional.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-04",
+      "field": "requirement",
+      "previous_sha256": "d7342f89c83e3843129f9d41ecc374c3448f76ef5e8aa2a477c2c7e1d6a54077",
+      "corrected_text": "A central oferece ações reais e autorizadas, sem virar fonte paralela de lifecycle.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-05",
+      "field": "requirement",
+      "previous_sha256": "45135d26feb1e590af254355b0536a81f536d44e605048dd6595bd421103e27e",
+      "corrected_text": "Repetição/timeout/restart preservam IDs e não duplicam mensagens, aprovações ou handoffs dentro do contrato de idempotência.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-06",
+      "field": "requirement",
+      "previous_sha256": "3e96e3876a6cd07b0f095cce3f834998c39aae1101ae6ae227b9420969665995",
+      "corrected_text": "Atividade externa nunca se transforma em autorização, capacidade reservada ou conclusão de trabalho.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-07",
+      "field": "requirement",
+      "previous_sha256": "3677e22a42657b01e502f9bfb86dabe1508d5593c44cd39ba421f6d0b656c0ff",
+      "corrected_text": "Core e Connector preservam suas fronteiras e o conjunto de dependências é reproduzível.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-08",
+      "field": "requirement",
+      "previous_sha256": "f179fd94969b39541bc4054116d9f4a9cb2d24139851ecc82aaa10cfe7e0107b",
+      "corrected_text": "Documentação, schemas e ajuda da CLI descrevem o comportamento realmente entregue.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-09",
+      "field": "requirement",
+      "previous_sha256": "26b569f6cd3f9cf5a593a8451bc919e15236f0954bb583035fd2a6e830a6d9be",
+      "corrected_text": "Testes não executados estão nomeados; nenhuma fixture é apresentada como campanha de provedor ou plataforma real.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-10",
+      "field": "requirement",
+      "previous_sha256": "62531761a1ff4af27778026122cfd9a6399296597888b26ea38216cd84930b9a",
+      "corrected_text": "Não há segredo em artefatos, logs, exemplos, URLs ou configurações exportadas.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-11",
+      "field": "requirement",
+      "previous_sha256": "a51879e6ea4d977323f010b1a92850c9ba911e75a3a94d7b2a79ed171b5028cf",
+      "corrected_text": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-12",
+      "field": "requirement",
+      "previous_sha256": "30f32f2e1284e65d7d7e83bd4bee4756dd6a43d2c3b60cd2099ac289fe783c6b",
+      "corrected_text": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-13",
+      "field": "requirement",
+      "previous_sha256": "f878be597bc9fa91773c0d0a920bfe0aa54ce409e392a9e2ec81837a015f0de1",
+      "corrected_text": "Serviço do usuário foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execução validados.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-14",
+      "field": "requirement",
+      "previous_sha256": "daa5f0fd15c54dcfc006998dedc5955d9c260e89496b6ed058cd2d54849e3fb1",
+      "corrected_text": "Restart, suspensão e queda de conexão preservam contratos de autoridade, ownership e incerteza, sem repetição produtiva implícita.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-15",
+      "field": "requirement",
+      "previous_sha256": "31a99b981e53cf26fa0453a90faba24c89110ea2b2aed760a2b23d458d2c648f",
+      "corrected_text": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnóstico inicie daemon ou inferência.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-16",
+      "field": "requirement",
+      "previous_sha256": "2749b4ae5a9a3b8cac138872013c6531fc6bb1d6ed6c9186d430d8f431d8ac76",
+      "corrected_text": "O agente padrão tem identidade persistente, perfil generalista útil e coordenação no escopo aprovado; preserva limites efetivos do harness e não recebe administração global ou poder de aprovar seus próprios pedidos.",
+      "source": "fixed plan literal; only repaired encoding"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-17",
+      "field": "requirement",
+      "previous_sha256": "7690f5d866ebe396cc798cd21689f37897acb7462bc39449ad7cc5719fb69fa6",
+      "corrected_text": "Reconnect, atualização e abertura posterior da interface preservam a configuração e a identidade; personalização é opcional e o uso padrão continua completo pelo terminal.",
+      "source": "fixed plan literal; only repaired encoding"
+    }
+  ],
+  "statuses_changed": false,
+  "scope_changed": false
+}

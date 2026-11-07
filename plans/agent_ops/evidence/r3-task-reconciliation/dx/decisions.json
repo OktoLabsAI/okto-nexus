@@ -1,0 +1,177 @@
+[
+  {
+    "id":"DX-01","recommendation":"VERIFIED",
+    "implementation":"Contrato puro ParticipantClientConfig separado de HarnessHTTPTemplate, com cliente/build/formato/revisão, origem/endpoint, entrada, referência de ambiente e escopo. Exportação contém referências; contrato gerenciado mantém suas próprias guardas.",
+    "sources":["Core:src/nexus_connector_core/participant_config.py#ParticipantClientConfig","Core:src/nexus_connector_core/participant_config.py#export_participant_config","Core:src/nexus_connector_core/config_document.py#plan_json_entry"],
+    "tests":["Core:tests/test_participant_config.py#test_reference_only_round_trip_and_selected_entry_ownership","Core:tests/test_participant_config.py#test_participant_contract_cannot_substitute_for_managed_capability_or_qualification","Core:tests/test_participant_config.py#test_generic_export_is_manual_and_pi_has_no_invented_http_adapter"],
+    "pending":[],"status_reason":"Requisito declarativo tem evidência correspondente. Campanhas cliente/cofre não são uma condição adicional deste contrato puro.",
+    "stale":"O resultado histórico ainda diz participant init/launcher/recovery pendentes; esses produtos foram entregues em milestones posteriores. Os subscopes compartilhados de autenticação real não rebaixam o contrato puro."
+  },
+  {
+    "id":"DX-02","recommendation":"IMPLEMENTED",
+    "implementation":"Claude JSON, Codex TOML e exportação genérica manual implementados. Campanhas com binários reais leram configuração; outra campanha resolve referência sintética de ambiente e faz initialize autenticado, sem demonstrar a cadeia completa do launcher/cofre.",
+    "sources":["Core:src/nexus_connector_core/participant_config.py#ParticipantClientConfig","Core:src/nexus_connector_core/participant_config.py#export_participant_config","Nexus:scripts/qualify_participant_formats.py","Nexus:plans/agent_ops/campaigns/participant-environment.py"],
+    "tests":["Core:tests/test_participant_config.py#test_unobserved_build_is_explicitly_unknown_without_inventing_qualification","Core:tests/test_participant_config.py#test_reference_only_round_trip_and_selected_entry_ownership","Core:tests/test_participant_config.py#test_generic_export_is_manual_and_pi_has_no_invented_http_adapter"],
+    "reports":["plans/agent_ops/evidence/pr04-participant-contract-client-formats.json","plans/agent_ops/evidence/pr04-participant-launch-native.json","plans/agent_ops/evidence/pr04-participant-guide/reports.json"],
+    "pending":["Manter actual_client_credential_resolution NOT_RUN para cofre real -> CLI launch distribuído -> cliente real -> cooperação canônica; initialize com variável injetada manualmente não fecha a cadeia.","Qualificar participação/cooperação dos dois clientes nas versões declaradas antes de fechar a frente M2; generic continua manual, sem promessa de cliente instalado."],
+    "status_reason":"Formatos e leitura por binários estão verificados; o aceite integral de clientes externos continua dependente da campanha declarada. Não é lacuna de implementação demonstrada.",
+    "stale":"A prova antiga de parsing não deve apagar a prova posterior mais estreita de initialize; esta também não deve promover o subscope amplo de credenciais."
+  },
+  {
+    "id":"DX-03","recommendation":"VERIFIED",
+    "implementation":"Plans JSON/TOML com hash/CAS e ownership de entrada; persistência com lock, backup protegido, replace e observação de resultado incerto; compensação remove só entrada pertencente ao setup. Dashboard apenas gera orientação pública para executar no host escolhido.",
+    "sources":["Core:src/nexus_connector_core/config_document.py#apply_json_plan","Core:src/nexus_connector_core/config_document.py#apply_toml_plan","Core:src/nexus_connector_core/config_persistence.py#_apply_plan_file","Nexus:src/okto_nexus/adapters/outbound/participant_files.py","Nexus:frontend/src/participantGuide.ts#buildParticipantGuide"],
+    "tests":["Core:tests/test_config_persistence.py#test_create_and_update_preserve_source_backup_and_other_entries","Core:tests/test_config_persistence.py#test_noncooperating_edit_during_apply_detected_before_replace","Core:tests/test_config_persistence.py#test_host_protection_runs_before_sensitive_bytes_and_failure_preserves_source","Nexus:tests/execution_r4/test_participant_removal.py#test_remove_only_owned_entry_preserves_other_values_and_server"],
+    "reports":["plans/agent_ops/evidence/pr04-participant-guide/reports.json"],
+    "pending":[],"status_reason":"Plan/apply, CAS, preservação e compensação têm assertions e execução instalada; cliente efetivamente usar a credencial é DX-04/campanha separada.",
+    "stale":"Marcações compartilhadas de cliente/MCP não representam escrita/configuração ainda não implementada. Limite documentado: writer não cooperante ainda pode correr na última janela compare/replace; não se promete transação global."
+  },
+  {
+    "id":"DX-04","recommendation":"IMPLEMENTED",
+    "implementation":"Importação protegida da chave existente; cofre escopado por perfil/setup; launcher fornece a referência só ao processo filho; Bearer para origem fixada sem redirects. Entrada pública do dashboard não inclui chave em comando/URL e não substitui entrega one-shot autorizada.",
+    "sources":["Nexus:src/okto_nexus/adapters/inbound/cli/participant.py","Nexus:src/okto_nexus/adapters/outbound/participant_client.py#ParticipantVault","Nexus:src/okto_nexus/application/participant_launch.py#apply","Nexus:src/okto_nexus/adapters/outbound/participant_process.py","Nexus:frontend/src/participantGuide.ts#buildParticipantGuide"],
+    "tests":["Nexus:tests/execution_r4/test_participant_init.py#test_cli_never_falls_back_to_echoing_key","Nexus:tests/execution_r4/test_participant_init.py#test_actual_http_redirect_does_not_forward_bearer","Nexus:tests/execution_r4/test_participant_launch.py#test_real_subprocess_receives_reference_without_parent_mutation","Nexus:tests/execution_r4/test_participant_removal.py#test_windows_participant_vault_compensation_and_absent_replay"],
+    "reports":["plans/agent_ops/evidence/pr04-participant-launch-native.json","plans/agent_ops/evidence/pr04-participant-guide/reports.json"],
+    "pending":["Linha 411 exige testar como o processo real do harness obtém o valor: ainda falta juntar cofre do SO real, launcher distribuído e cliente real na mesma campanha.","GUI/TUI herança/reload e cooperação canônica de cliente real não foram qualificados; resultados atuais devem continuar UNKNOWN quando não observados."],
+    "status_reason":"Há provas separadas de vault Windows, processo filho e initialize real com env sintético; não existe a prova composta exigida. Sem novo defeito concreto de produto demonstrado.",
+    "stale":"actual_client_credential_resolution VERIFIED em alguns IDs é o subscope estreito de variável sintética/initialize; participant_os_vault_client_end_to_end continua NOT_RUN. Não tratá-los como equivalentes."
+  },
+  {
+    "id":"DX-05","recommendation":"IMPLEMENTED",
+    "implementation":"init participant e connect participant usam TerminalParticipant; selecionam identidade/workspace existentes por Bearer, revisam contexto e arquivo, aplicam por aprovação exata e mantêm checkpoints. Ausência/autoridade incompatível recusa, sem criação implícita ou elevação.",
+    "sources":["Nexus:src/okto_nexus/adapters/inbound/cli/participant.py","Nexus:src/okto_nexus/adapters/inbound/cli/connect.py#run_connect","Nexus:src/okto_nexus/application/terminal_participant.py#review","Nexus:src/okto_nexus/application/terminal_participant.py#apply","Nexus:src/okto_nexus/application/participant_setup.py#participant_context"],
+    "tests":["Nexus:tests/execution_r4/test_participant_init.py#test_init_and_connect_participant_share_review_and_cli_checkpoints","Nexus:tests/execution_r4/test_participant_init.py#test_participant_context_uses_bearer_identity_without_self_elevation","Nexus:tests/execution_r4/test_participant_init.py#test_review_apply_reconnect_preserves_runtime_and_other_configuration"],
+    "pending":["Qualificação de participante real com reload, credencial obtida no contexto efetivo e cooperação; a implementação já informa configuração aplicada separadamente de cliente/MCP/trabalho comprovados."],
+    "status_reason":"O caminho de produto está implementado e seus contratos locais instalados passaram; manter aceite integral de participante pendente, sem inventar lacuna de API.",
+    "stale":"Resultado antigo que diz init/launcher ausentes foi superado; a pendência atual é qualificação da cadeia real."
+  },
+  {
+    "id":"DX-06","recommendation":"VERIFIED",
+    "implementation":"Estados review/credential_pending/credential_stored/file_pending/done gravam intenção antes de cada efeito; retomada observa efeito incerto. Remoção tem file_pending/vault_pending e aposenta perfil antes de compensar. Finish gerenciado mantém transação canônica no Server.",
+    "sources":["Nexus:src/okto_nexus/application/terminal_participant.py#apply","Nexus:src/okto_nexus/application/participant_removal.py","Nexus:src/okto_nexus/application/connection_setup.py"],
+    "tests":["Nexus:tests/execution_r4/test_participant_init.py#test_lost_checkpoint_resumes_same_intent_by_observing_effect","Nexus:tests/execution_r4/test_participant_init.py#test_vault_failure_leaves_file_and_server_intact_and_retains_intent","Nexus:tests/execution_r4/test_participant_removal.py#test_lost_removal_checkpoint_recovers_without_restoring_or_rewriting","Nexus:tests/execution_r4/test_terminal_identity.py#test_late_finish_failure_rolls_back_identity_key_and_every_setup_object"],
+    "pending":[],"status_reason":"O requisito é a separação das etapas e recuperação/compensação, diretamente exercitadas. Não exige uma transação distribuída nem uma campanha produtiva para validá-las.",
+    "stale":"Pendências compartilhadas de cliente/cofre fim a fim não são falta de checkpoints ou compensação."
+  },
+  {
+    "id":"DX-07","recommendation":"VERIFIED",
+    "implementation":"ProjectDiagnostics/ParticipantDiagnostics mantêm checagens independentes; modos ativos explícitos e default passivo. Adaptador comum v1 controla status/código/reason/next_action, preservando legado e separando metadata de prova.",
+    "sources":["Nexus:src/okto_nexus/application/project_diagnostics.py#inspect_project","Nexus:src/okto_nexus/application/participant_diagnostics.py#inspect_participant","Nexus:src/okto_nexus/domain/diagnostic_report.py","Nexus:src/okto_nexus/adapters/inbound/cli/doctor.py","Nexus:src/okto_nexus/adapters/inbound/cli/participant_doctor.py"],
+    "tests":["Nexus:tests/execution_r4/test_participant_doctor.py#test_passive_doctor_preserves_files_without_vault_http_process_or_recovery","Nexus:tests/execution_r4/test_participant_doctor.py#test_actual_tcp_mcp_is_not_agent_participation_or_model_work","Nexus:tests/execution_r4/test_project_diagnostics.py#test_ready_connection_does_not_prove_provider_login_participation_or_work","Nexus:tests/test_diagnostic_report_contract.py#test_common_artifact_digest_and_emitted_vocabulary","Nexus:tests/test_doctor_diagnostic_format.py#test_managed_legacy_shape_and_exit_are_unchanged"],
+    "reports":["plans/agent_ops/evidence/pr10-correlation/diagnostics/shared-contract-comparison.json"],
+    "pending":[],"status_reason":"As checagens provam apenas o nível observado e mantêm UNKNOWN para o resto. Falta de campanha produtiva é resultado honesto do diagnóstico, não ausência deste requisito.",
+    "stale":"participant_client_validation/participant_mcp_and_cooperation_checks IMPLEMENTED têm provas posteriores instaladas; consolidar nomes sem promover participação real."
+  },
+  {
+    "id":"DX-08","recommendation":"IMPLEMENTED",
+    "implementation":"TerminalCooperation exige consentimento separado para troca dirigida e handoff, persiste IDs antes de enviar, observa reply/claim/resultado canônicos e preserva incerteza. Doctor lê histórico sem qualificá-lo como fato atual.",
+    "sources":["Nexus:src/okto_nexus/application/terminal_cooperation.py#review_exchange","Nexus:src/okto_nexus/application/terminal_cooperation.py#review_handoff","Nexus:src/okto_nexus/application/terminal_cooperation.py#_handoff_evidence","Nexus:src/okto_nexus/adapters/inbound/cli/cooperation.py"],
+    "tests":["Nexus:tests/execution_r4/test_cooperation_cli.py#test_separate_consents_canonical_reply_after_other_session_ack_and_claim_result","Nexus:tests/execution_r4/test_cooperation_cli.py#test_text_or_unrelated_reply_cannot_qualify_exchange","Nexus:tests/test_terminal_cooperation.py#test_exchange_consent_never_authorizes_handoff","Nexus:tests/test_terminal_cooperation.py#test_completion_requires_exact_scope_peer_claim_and_result"],
+    "pending":["Executar cooperação com os clientes externos qualificados e operadores/autorização apropriados; testes atuais usam peers/atores sintéticos, não demonstram comportamento de um modelo real."],
+    "status_reason":"Mecanismo e prova canônica estão exercitados; o smoke real de cooperação M2 continua NOT_RUN. Nenhuma nova falha concreta do mecanismo encontrada.",
+    "stale":"Não confundir NEXUS_CONNECTION_OK gerenciado ou texto gerado com a cadeia de cooperação nova."
+  },
+  {
+    "id":"DX-09","recommendation":"VERIFIED",
+    "implementation":"CLI coordination/work delega a fachadas de aplicação e clientes HTTP/MCP; ator vem da credencial, destino não substitui principal; sessão/contexto aprovados ficam vinculados ao request. A CLI remota não grava domínio SQLite nem implementa servidor/proxy MCP.",
+    "sources":["Nexus:src/okto_nexus/adapters/inbound/cli/coordination.py","Nexus:src/okto_nexus/application/terminal_coordination.py#submit","Nexus:src/okto_nexus/adapters/outbound/participant_coordination_mcp.py","Nexus:src/okto_nexus/application/terminal_work.py#submit"],
+    "tests":["Nexus:tests/execution_r4/test_coordination_cli.py#test_commands_resume_latest_and_explicit_new_request_preserve_private_content","Nexus:tests/execution_r4/test_coordination_cli.py#test_explicit_session_context_survives_resume_without_storing_its_secret","Nexus:tests/execution_r4/test_coordination_cli.py#test_handoff_visibility_is_preserved_by_canonical_creation","Nexus:tests/execution_r4/test_coordination_cli.py#test_workspace_visibility_is_rejected_before_any_server_effect"],
+    "pending":[],"status_reason":"Cliente fino e fronteiras de ator/escopo possuem prova instalada correspondente. Campanha combinada nativa/externa é aceite M1/M2 separado, não uma segunda implementação da fachada.",
+    "stale":"Renovação remota e rotação já entregues; qualificações produtivas permanecem abertas nos IDs de ciclo, sem reapresentá-las como fachada faltante."
+  },
+  {
+    "id":"DX-10","recommendation":"VERIFIED",
+    "implementation":"CoordinationRequestKey/hash semântico e recibo na UoW de criação; chave inclui instalação/ator/workspace/operação/request. CLI salva ID/hash antes da transmissão e só reinspeciona a mesma identidade dentro da janela. Pending approval/tombstone e autenticação corrente preservados.",
+    "sources":["Nexus:src/okto_nexus/domain/coordination_requests.py#CoordinationRequestKey","Nexus:src/okto_nexus/application/coordination_requests.py#CoordinationCreation","Nexus:src/okto_nexus/adapters/outbound/sqlite/coordination_requests.py#SqliteCoordinationRequestRepo","Nexus:src/okto_nexus/application/terminal_coordination.py#submit"],
+    "tests":["Nexus:tests/test_coordination_creation.py#test_same_request_concurrent_retry_recovers_one_canonical_object","Nexus:tests/test_coordination_creation.py#test_commit_cuts_leave_no_partial_creation","Nexus:tests/test_coordination_requests.py#test_semantic_hash_preserves_content_target_and_context","Nexus:tests/test_coordination_requests.py#test_message_pruning_preserves_tombstone_and_refuses_replacement","Nexus:tests/execution_r4/test_coordination_cli.py#test_real_process_death_after_commit_recovers_through_installed_entrypoint","Nexus:tests/test_terminal_coordination.py#test_not_found_after_original_local_or_server_deadline_refuses_replay"],
+    "pending":[],"status_reason":"Dedupe transacional/retentativa limitada não depende de inferência para ser verificado. Não promove exactly-once de efeitos externos nem campanha produtiva.",
+    "stale":"Subscopes herdados de M1 e renovação não indicam deduplicação ainda ausente; nova prova remota complementa autoridade corrente."
+  },
+  {
+    "id":"DX-11","recommendation":"VERIFIED",
+    "implementation":"Wait usa ID exato, cursor antes do snapshot e releitura canônica; acompanha verificação/resultado sem inferir conclusão de delivery/idle. Timeout/interrupt encerram observador, com IDs e estado incerto recuperáveis; saída/exitcodes documentados/testados.",
+    "sources":["Nexus:src/okto_nexus/application/terminal_coordination.py#_wait_handoff","Nexus:src/okto_nexus/application/terminal_coordination.py#wait_request","Nexus:src/okto_nexus/application/terminal_work.py#observe","Nexus:src/okto_nexus/adapters/inbound/cli/coordination.py"],
+    "tests":["Nexus:tests/test_terminal_coordination.py#test_wait_captures_cursor_before_snapshot_and_detects_existing_completion","Nexus:tests/test_terminal_coordination.py#test_wait_timeout_keeps_nonterminal_work_and_never_cancels_or_creates","Nexus:tests/test_terminal_coordination.py#test_delivery_read_and_native_idle_events_never_complete_handoff_wait","Nexus:tests/execution_r4/test_coordination_cli.py#test_wait_interrupt_or_unknown_read_does_not_cancel_or_resubmit","Nexus:tests/execution_r4/test_coordination_cli.py#test_usage_errors_have_exit_two_and_no_server_effect"],
+    "pending":[],"status_reason":"Contrato de observação e saídas tem testes correspondentes sem exigir um provider real para produzir estados canônicos sintéticos.",
+    "stale":"Campanha M1/M2 combinada continua aberta; não confundi-la com implementação ou teste do observador."
+  },
+  {
+    "id":"DX-12","recommendation":"VERIFIED",
+    "implementation":"Introdução lê o preset canônico; identidade existente evita novo intro; personalização usa objetos atuais. Caminho cliente existente usa guia público com origem real e comandos existentes, sem executar efeito remoto ou emitir prontidão fictícia.",
+    "sources":["Nexus:frontend/src/components/onboarding/OnboardingModal.tsx#OnboardingModal","Nexus:frontend/src/components/ParticipantGuide.tsx#ParticipantGuide","Nexus:frontend/src/participantGuide.ts#buildParticipantGuide","Nexus:src/okto_nexus/application/project_preset.py#read_project_preset"],
+    "tests":["Nexus:tests/execution_r4/test_project_dashboard.py#test_project_recommendation_is_the_terminal_contract_and_applies_nothing","Nexus:tests/execution_r4/test_project_dashboard.py#test_dashboard_personalization_and_terminal_reopen_preserve_identity_history_and_grants"],
+    "reports":["plans/agent_ops/evidence/pr03-project-dashboard-browser.json","plans/agent_ops/evidence/pr04-participant-guide/reports.json"],
+    "pending":[],"status_reason":"Browser real contra pacote instalado verificou a UI e preservação de identidade/configuração; isso não promove uso efetivo de cliente/provedor.",
+    "stale":"Placeholder e snippets com segredo/origem inadequada foram substituídos no milestone do guia. DX-12 ainda IN_PROGRESS sem subscope aberto é status global candidato a reconciliação."
+  },
+  {
+    "id":"DX-13","recommendation":"VERIFIED",
+    "implementation":"Connections/Finish existentes continuam kernel gerenciado; configuração é normalizada pelo contrato comum. Participante adiciona entrada/credencial local sem desabilitar runtime de toda identidade.",
+    "sources":["Nexus:src/okto_nexus/application/connection_setup.py","Nexus:src/okto_nexus/application/terminal_connection.py#apply","Nexus:src/okto_nexus/application/participant_setup.py#participant_context","Core:src/nexus_connector_core/connection_configuration.py#parse_connection_configuration"],
+    "tests":["Nexus:tests/execution_r4/test_participant_init.py#test_review_apply_reconnect_preserves_runtime_and_other_configuration","Nexus:tests/execution_r4/test_terminal_connect.py#test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration","Nexus:tests/execution_r4/test_project_preset_update.py#test_disabled_runtime_stays_disabled_without_test_or_grant"],
+    "pending":[],"status_reason":"Manter VERIFIED: os invariantes específicos têm execução instalada e não exigem nova rota gerenciada.","stale":"Nenhuma pendência concreta neste ID; limites de ciclo real pertencem a DX-20/M1."
+  },
+  {
+    "id":"DX-14","recommendation":"VERIFIED",
+    "implementation":"Connector conserva connect/configure/status/doctor, cofre e aprovação assíncrona; reuse verifica identidade/epoch/binding atuais. Diagnóstico v1 comum opt-in preserva legado/exitcodes e evita tradução cega de warn. Remote bootstrap/renewal integram controles existentes.",
+    "sources":["Connector:src/okto_nexus_connector/cli/commands/connect.py#run_connect","Connector:src/okto_nexus_connector/cli/commands/connect_reuse.py#completed_remote_reuse","Connector:src/okto_nexus_connector/cli/commands/configure_local.py#configure_local","Connector:src/okto_nexus_connector/cli/commands/doctor.py","Connector:src/okto_nexus_connector/cli/diagnostic_report.py"],
+    "tests":["Connector:tests/unit/test_connect_reuse.py#test_bare_connect_reuses_project_and_current_authority_without_rewrite","Connector:tests/unit/test_diagnostic_report_contract.py#test_default_legacy_shape_and_call_graph_are_preserved","Connector:tests/unit/test_diagnostic_report_contract.py#test_no_probe_does_not_resolve_credentials_or_contact_server","Connector:tests/unit/test_diagnostic_report_contract.py#test_shared_artifacts_match_the_installed_contract_pin","Nexus:tests/execution_r4/test_remote_renewal.py#test_remote_renewal_lost_issue_recovers_one_grant_without_migrating_session"],
+    "reports":["plans/agent_ops/evidence/pr10-correlation/diagnostics/shared-contract-comparison.json","plans/agent_ops/evidence/pr03-remote-renewal/reports.json"],
+    "pending":[],"status_reason":"Integrações de produto/contrato preservadas e qualificadas em pacotes. Campanha nativa SVC/M1 remota permanece separada e não é promovida.","stale":"Todos os subscopes próprios listados já VERIFIED; descrições antigas de diagnóstico não alinhado e renovação remota ausente foram superadas."
+  },
+  {
+    "id":"DX-15","recommendation":"IMPLEMENTED",
+    "implementation":"connect resolve perfil/projeto/topologia, inicia/reutiliza o dono apropriado e delega revisão/Finish; existente reusa binding sem wizard. Rotas locais, operador remoto e Connector compartilham preset e encaminham à CLI work.",
+    "sources":["Nexus:src/okto_nexus/adapters/inbound/cli/connect.py#run_connect","Nexus:src/okto_nexus/application/terminal_connection.py#review","Nexus:src/okto_nexus/application/remote_terminal_setup.py#RemoteProjectSetup","Connector:src/okto_nexus_connector/cli/commands/connect.py#run_connect"],
+    "tests":["Nexus:tests/test_terminal_connect_process.py#test_connect_starts_reuses_and_leaves_service_owned_until_explicit_stop","Nexus:tests/execution_r4/test_terminal_connect.py#test_interactive_connect_enters_work_only_after_configuration","Connector:tests/unit/test_connect_reuse.py#test_bare_connect_reuses_project_and_current_authority_without_rewrite","Nexus:tests/execution_r4/test_remote_setup_integration.py#test_operator_and_connector_cli_complete_same_root_once"],
+    "pending":["M1 real instalado, local e via Connector: serviço persistente + preset + trabalho/decisão/resultado/reabertura, sem dashboard e sem configuração manual; não executado.","Campanhas nativas de início no login/SVC permanecem separadas; seleção/recusa da opção já tem prova de contrato."],
+    "status_reason":"Fachada está entregue; falta qualificar o percurso padrão real ao qual este ID encaminha. Sem nova lacuna concreta de implementação encontrada.","stale":"Bootstrap de identidade remota, revisão única, retomada, renovação e rotação já entregues; não os listar como produto ausente."
+  },
+  {
+    "id":"DX-16","recommendation":"IMPLEMENTED",
+    "implementation":"Resolução de projeto/candidato no host correto, recomendação única quando não ambígua e escolha pontual quando necessária. Revisão inclui identidade/workspace, configuração/efeitos, grants e início no login; PATH permanece somente descoberta.",
+    "sources":["Nexus:src/okto_nexus/application/terminal_connection.py#review","Connector:src/okto_nexus_connector/cli/commands/connect.py#_choose_harness","Connector:src/okto_nexus_connector/cli/commands/configure_local.py#configure_local","Nexus:src/okto_nexus/application/remote_terminal_setup.py#review"],
+    "tests":["Connector:tests/unit/test_connect_project_review.py#test_one_detected_installation_is_recommended_without_executing_or_prompting","Connector:tests/unit/test_connect_project_review.py#test_material_ambiguity_asks_once_and_preserves_exact_candidate","Connector:tests/unit/test_connect_project_review.py#test_one_project_review_submits_existing_canonical_defaults","Nexus:tests/execution_r4/test_terminal_identity.py#test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations"],
+    "pending":["Campanha de instalação nova com harness/provedor realmente prontos e configuração efetiva no host local/remoto; os testes de recomendação atuais usam inventário/candidatos sintéticos e não confirmam login."],
+    "status_reason":"Contrato de descoberta/revisão está verificado; qualificação do caminho padrão com instalação real continua pendente no escopo R3.","stale":"Não confundir escolha/revisão de início no login entregue com campanha real de login não executada."
+  },
+  {
+    "id":"DX-17","recommendation":"IMPLEMENTED",
+    "implementation":"Setup/profile persiste IDs/revisões/recibos, observa resposta perdida, distingue estados e não reenvia teste incerto. Work guarda request/operation exatos; diagnóstico não confunde serviço, sessão e tarefa. Reconnect e renovação consultam autoridade atual.",
+    "sources":["Nexus:src/okto_nexus/application/terminal_connection.py#observe","Nexus:src/okto_nexus/application/remote_terminal_setup.py#recover_review","Nexus:src/okto_nexus/application/terminal_work.py#resume","Nexus:src/okto_nexus/application/project_diagnostics.py#inspect_project"],
+    "tests":["Nexus:tests/execution_r4/test_terminal_connect.py#test_response_loss_resumes_without_repeating_native_effects","Nexus:tests/execution_r4/test_terminal_connect.py#test_submitted_test_with_lost_cache_is_not_replayed","Nexus:tests/execution_r4/test_project_diagnostics.py#test_ready_session_open_is_not_a_productive_result","Nexus:tests/execution_r4/test_terminal_work.py#test_lost_submission_response_recovers_same_work_without_duplicate_dispatch"],
+    "pending":["Primeira solicitação real, progresso/decisão/resultado e reencontro após restart com provider efetivo no serviço local e no Connector; sessões/peers sintéticos não são M1."],
+    "status_reason":"Retomada/proveniência foram exercitadas; a primeira sessão produtiva real obrigatória não foi qualificada.","stale":"terminal_grant_renewal e remote_terminal_grant_renewal genéricos ainda aparecem IN_PROGRESS apesar dos subscopes específicos VERIFIED. Consolidar sem fechar M1."
+  },
+  {
+    "id":"DX-18","recommendation":"IMPLEMENTED",
+    "implementation":"Preset project-generalist revision 1 resolve identidade/permissões/configuração para contratos comuns; defaults preservam modelo/instruções existentes, decisões nativas e limites de autorização. Novo agente/workspace só na revisão/Finish autorizados, sem associação por nome/pasta.",
+    "sources":["Nexus:src/okto_nexus/application/project_preset.py#identity_defaults","Nexus:src/okto_nexus/application/project_preset.py#configuration","Nexus:src/okto_nexus/application/project_preset.py#effects","Nexus:src/okto_nexus/application/remote_setup.py#bootstrap"],
+    "tests":["Nexus:tests/execution_r4/test_terminal_identity.py#test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key","Nexus:tests/execution_r4/test_terminal_identity.py#test_colliding_identity_is_never_adopted_or_modified","Nexus:tests/execution_r4/test_terminal_identity.py#test_late_finish_failure_rolls_back_identity_key_and_every_setup_object","Nexus:tests/execution_r4/test_remote_setup_integration.py#test_operator_and_connector_cli_complete_same_root_once"],
+    "pending":["Validar configuração efetiva no processo real lançado pelo serviço e demonstrar utilidade do preset com trabalho completo local/remoto, sem ampliar permissões ou substituir instruções; aceitação M1 ainda NOT_RUN."],
+    "status_reason":"Preset/autoridade estão implementados; a cláusula de configuração efetiva e utilidade real não é provada por serialização/configuração sintética.","stale":"remote_terminal_grant_renewal NOT_RUN é obsoleto para o contrato de renovação: os subscopes remote_grant_renewal_http_ipc_wss e rotation_completed_reuse já passaram. Não altera a pendência produtiva."
+  },
+  {
+    "id":"DX-19","recommendation":"VERIFIED",
+    "implementation":"Revisão local/remota reúne identidade/workspace, configuração e autorização; usa IDs/revisões canônicos e Finish. Bootstrap remoto operador-only entrega chave one-shot separada do JSON/checkpoint; perda retorna material indisponível, nunca rotação/recriação implícita.",
+    "sources":["Nexus:src/okto_nexus/application/terminal_connection.py#review","Nexus:src/okto_nexus/application/remote_terminal_setup.py#review","Nexus:src/okto_nexus/application/remote_terminal_setup.py#apply","Nexus:src/okto_nexus/application/remote_setup.py#bootstrap","Nexus:src/okto_nexus/adapters/inbound/cli/remote_setup_io.py"],
+    "tests":["Nexus:tests/execution_r4/test_terminal_identity.py#test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations","Nexus:tests/test_remote_setup_server.py#test_participant_and_revoked_principal_cannot_read_or_bootstrap","Nexus:tests/test_remote_setup_server.py#test_failure_rolls_back_agent_workspace_epoch_and_checkpoint","Nexus:tests/test_remote_setup_server.py#test_lost_response_recovers_same_references_never_key_or_rotation","Nexus:tests/execution_r4/test_remote_setup_integration.py#test_operator_and_connector_cli_complete_same_root_once"],
+    "pending":[],"status_reason":"A revisão única e suas fronteiras de consentimento/autoridade/recovery têm evidência integrada correspondente. Trabalho efetivo após ela pertence ao aceite DX-18/20/M1.","stale":"A antiga limitação 'remote identity/workspace bootstrap missing' foi resolvida no milestone e607d012/7091ef2 e complementada pela renovação."
+  },
+  {
+    "id":"DX-20","recommendation":"IMPLEMENTED",
+    "implementation":"Fachada work usa operações/sessões/perguntas/decisões canônicas, preserva ator/revisão/escopo e resposta perdida. Sair interrompe só observação; reopen recupera IDs/resultados, sem attach/continuidade inventada ou envio automático.",
+    "sources":["Nexus:src/okto_nexus/application/terminal_work.py#submit","Nexus:src/okto_nexus/application/terminal_work.py#observe","Nexus:src/okto_nexus/application/terminal_work.py#decide","Nexus:src/okto_nexus/adapters/inbound/cli/work.py","Nexus:src/okto_nexus/adapters/inbound/cli/native_input.py"],
+    "tests":["Nexus:tests/execution_r4/test_terminal_work.py#test_interactive_cli_request_question_answer_result_and_return","Nexus:tests/execution_r4/test_terminal_work.py#test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile","Nexus:tests/execution_r4/test_terminal_work.py#test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work","Nexus:tests/execution_r4/test_terminal_work.py#test_send_result_reopen_continue_and_close_share_canonical_session"],
+    "pending":["DX-T39/T40/T43/T45/T46/T47/T50 no percurso padrão real instalado local e via Connector, com serviço persistente, provider autorizado, pergunta/permissão representativa, resultado e reabertura; campanha M1 não executada."],
+    "status_reason":"Produto/fachada e isolamento são exercitados com peer sintético; isso não substitui o caminho padrão qualificado explicitamente exigido pelo ID.","stale":"CLI de trabalho/decisões e renovação já existem. A pendência atual é campanha real, não construir outro histórico/orquestrador."
+  },
+  {
+    "id":"DX-21","recommendation":"VERIFIED",
+    "implementation":"Origem/revisão/defaults do preset ficam no setup existente; merge de três vias só propõe defaults não customizados, revisão lista efeitos/autoridades e Finish usa CAS. Reconnect lê configurações atuais; dashboard personaliza mesmos objetos. Renovação preserva escopo/revogação e não reaplica preset.",
+    "sources":["Nexus:src/okto_nexus/application/project_preset_update.py#merge_defaults","Nexus:src/okto_nexus/application/project_preset_update.py#review_in_uow","Nexus:src/okto_nexus/application/terminal_preset.py#apply","Nexus:src/okto_nexus/application/terminal_connection.py#current","Connector:src/okto_nexus_connector/cli/commands/connect_reuse.py#completed_remote_reuse"],
+    "tests":["Nexus:tests/execution_r4/test_project_preset_update.py#test_review_advances_only_unchanged_defaults_and_finish_recovers_once","Nexus:tests/execution_r4/test_project_preset_update.py#test_concurrent_change_refuses_finish_without_repair_or_authority","Nexus:tests/execution_r4/test_project_preset_update.py#test_disabled_runtime_stays_disabled_without_test_or_grant","Nexus:tests/execution_r4/test_project_dashboard.py#test_dashboard_personalization_and_terminal_reopen_preserve_identity_history_and_grants","Nexus:tests/execution_r4/test_remote_renewal.py#test_remote_revocation_keeps_recovered_receipt_historical_and_participant_cannot_renew"],
+    "reports":["plans/agent_ops/evidence/pr03-project-dashboard-browser.json","plans/agent_ops/evidence/pr03-remote-renewal/reports.json"],
+    "pending":[],"status_reason":"Preservação/evolução opcional têm provas de contrato, UI instalada e recovery. Não significa promessa de execução infinita, reboot ou aceite produtivo M1.","stale":"Renovação remota/rotação e atualização de preset não são mais lacunas de produto; consolidar os rótulos genéricos antigos, mantendo as campanhas reais em seus IDs."
+  }
+]

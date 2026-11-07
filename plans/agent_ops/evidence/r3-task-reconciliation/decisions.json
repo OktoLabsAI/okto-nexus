@@ -1,0 +1,1067 @@
+{
+  "decisions": [
+    {
+      "section": "tasks",
+      "id": "BASE-01",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Baseline records exact three main commits/version/branches, local instructions and commands; historical start/bump issues separated. Remaining: Keep historical baseline immutable; no new platform acceptance follows.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "BASE-02",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Canonical flow map identifies service/repo/UoW boundaries and renderer reuse. Baseline 64 route cases plus Core/Connector configuration reports exist. Remaining: This mapping is historical inventory, not blanket proof of every future change.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "BASE-03",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Baseline records current-versus-legacy decisions (automatic_reply, Next/Finish, exact version and no query credentials); later docs keep authority distinctions. Remaining: No product gap identified by this finite documentation audit; untouched legacy docs are not silently certified.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "BASE-04",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "ADR explicitly covers orthogonal identity/activity/capacity/authority, canonical Attention sources, read-only telemetry, participant vs managed config and instance/supervision/stop ownership. Remaining: No new runtime acceptance asserted.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "BASE-05",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Ledger has fixed task/scenario/invariant/completion inventories, evidence and authorization gates. Parent is repairing text encoding only; this report recommends status reconciliation without changing it. Remaining: Stale SVC limitations/scenario NOT_RUN fields must be reconciled by evidence, not by totals.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "BASE-06",
+      "before": "IMPLEMENTED",
+      "after": "IMPLEMENTED",
+      "reason": "Three-repo lifecycle/storage/config/vault map and first Windows/codex_app_server target exist; disposable initial liveness 7.811s is recorded separately. Remaining: Installation-to-first-useful-provider-session/full result/native interaction timing remains NOT_RUN; liveness and synthetic cycles do not replace it.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-01",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Both hosts expose the shared lifecycle facade; CLI/native entrypoints converge. Passive diagnostics, logs, enablement, recovery and upgrades are implemented, contrary to old limitation text. Remaining: First supported Windows real user-service acceptance remains open; other platforms need only retain their explicit qualification limits. Keep individual verified subcontracts.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-02",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Canonical home/DB/effective-user identity and held OS exclusion precede bootstrap; metadata/PID/port never independently prove ownership. Remaining: Full occupied-socket startup diagnostic/fixed-endpoint case not located. It is a safe test gap, not Windows installation permission.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-03",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Detached lifecycle and installed-supervisor routing exist; topology is resolved before local effects; start only once then observes. Remaining: Connect-to-facade composition and real process lifecycle are complementary evidence; actual supervised user context/terminal-close work remains distinct.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-04",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Explicit state/readiness correlates owner/version; local query readiness is not provider/authority readiness; failure and stopping stay observable. Remaining: No direct retained Ctrl+C-connect or startup migration-failure diagnostic assertion located; real provider readiness still open.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-05",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite. Remaining: Real two-task Windows campaign not executed; login and other OSes have separate unqualified scope. Windows definition validation is not installation.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-06",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions. Remaining: Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-07",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Canonical drain fences admissions, keeps recovery available, retains unknown ownership, correlates generation and never forces on observation timeout. Remaining: Literal line325 explicit force decision is not exposed by inspected CLI/request/coordinator; do not equate this with absence of Core containment escalation. External logout/shutdown/context campaign still pending.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-08",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Durable launch/mutation/drain recovery and exact receipt reuse are implemented. Synthetic recovery preserves occupied Core resources and grant authority. Remaining: Real supervisor crash/backoff/limit and suspend/return context still not qualified; OS loss is not proof of child death.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-09",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Reviewed target environment and generation/config fingerprints gate upgrade; interrupted effects recover; downgrade refused; no implicit connect upgrade. Remaining: Actual registered-task update and real historical migration recovery are not proved by disposable same-version environment switching.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-10",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Terminal-only start/stop/restart/install/uninstall/log/status/doctor and retained foreground commands exist; passive commands do not infer work absence. Remaining: Keep verified passive/CLI subcontracts; real terminal-independent productive operation plus SVC07 explicit-force gap remain unclosed.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-11",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback. Remaining: Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "SVC-12",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications. Remaining: Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T01",
+      "before": "NOT_RUN",
+      "after": "VERIFIED",
+      "reason": "Actual service start/readiness proven; connect invokes same facade through an injected seam. Scope/remaining: Composition is supported by the actual connect→ensure_running source seam, injected seam assertion and real facade/process readiness test; it does not qualify a registered task or provider.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T02",
+      "before": "NOT_RUN",
+      "after": "VERIFIED",
+      "reason": "Actual repeat start reuses PID/generation; identity excludes project/agent and connect reuses saved profile. Scope/remaining: Canonical service identity depends on configuration/data/user, not project; the shared facade and repeat-start checks compose. Do not require one monolithic campaign merely because assertions are separate.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T03",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Three real concurrent service launchers converge on one owner and ready result. Scope/remaining: The real concurrent start and connect→same-facade assertion compose; no extra protocol/provider effects are inferred.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T04",
+      "before": "NOT_RUN",
+      "after": "VERIFIED",
+      "reason": "Canonical aliases/shared database exclude; independent home+DB succeeds; failed second-lock acquisition releases first. Scope/remaining: Windows held-lock contract verified; do not claim all filesystems/OSes.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T05",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Stale/unknown/reused PID does not prove death and cannot steal live OS ownership; no historical-PID killing. Scope/remaining: ",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T06",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Foreign endpoint is not ready; no fallback logic in inspected lifecycle. Scope/remaining: A real occupied TCP socket during start and no endpoint/DB fallback assertion not located. Safe isolated test gap, not authorization.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T07",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Injected installed-stopped integration uses only its scheduler, preserving pending start and refusing detached fallback. Scope/remaining: Actual Task Scheduler start remains the explicit native campaign; scope label must retain injected adapter.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T08",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Remote topology/metadata failure cannot invoke local startup; remote-login option rejected. Scope/remaining: Synthetic transport/topology scope; real external network availability is not claimed.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T09",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Parent launcher exit survival proven for both actual detached processes. Scope/remaining: Literal terminal/dashboard closure with admitted work and maintained native ownership remains real campaign.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T10",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Absent status/log/doctor paths preserve storage and do not start or infer; doctor remote default does not vault/network. Scope/remaining: Explicit doctor probes are separate opt-in checks.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T11",
+      "before": "NOT_RUN",
+      "after": "VERIFIED",
+      "reason": "Wrong instance/generation/version is refused despite HTTP reachability; live unreachable owner is not declared stopped. Scope/remaining: ",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T12",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Lock-storage/bootstrap failures do not declare ready; ownership released or retained conservatively. Scope/remaining: Startup invalid-config/migration diagnostic cases not mapped; no blanket permission barrier.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T13",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Wait timeout cannot restart/stop; cancelled shutdown observer cannot cancel retained recovery. Scope/remaining: Retained Ctrl+C during actual connect not located. Log-follow Ctrl+C is not a substitute.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T14",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Saved absolute executable/cwd/paths/environment contracts and changed launcher cwd tested. Scope/remaining: Actual registered service with reduced/different PATH/cwd and correct project still needs service context campaign.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T15",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Diagnostic layers distinguish credential/auth/service state; safe/default checks avoid credential reads. Scope/remaining: Real terminal-only credential and locked OS vault under service user is unexecuted.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T16",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Allowlist/sentinel assertions show no secret in saved context/JSON/logs; existing auth/origin scope remains unchanged. Scope/remaining: Finite synthetic sentinel/definition coverage, not proof of arbitrary unknown secret formats.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T17",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Repeated scoped install/enable is no-op; native fingerprint edits and foreign definitions refuse, preserving them. Scope/remaining: Scheduler effects injected; real native integration remains separately pending.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T18",
+      "before": "NOT_RUN",
+      "after": "NOT_RUN",
+      "reason": "Only logon task definition and injected login facts proven. Scope/remaining: Actual OS logon startup must be observed; no boot-without-login claim.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T19",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Definition/recovery suppression and failure exit codes implemented/injected. Scope/remaining: Real supervised crash/backoff/limit exhaustion and actionable persistent failure not executed.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T20",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Explicit stop reaches stopped and no detached auto-resurrection; generation/token fences and injected same-login recovery suppression. Scope/remaining: Do not call injected OS suppression actual scheduler crash qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T21",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "CLI drain before scheduler effects, timeout pending, same generation receipts and authorized recovery paths verified. Scope/remaining: External logout/shutdown bounded persistence unqualified; explicit-force UI path is separate SVC07 product gap.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T22",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Synthetic late native open/unknown close and occupied slots retain ownership; shutdown observer does not replay/release. Scope/remaining: Real service restart with surviving native child/uncertain operation remains unexecuted; no new general product defect established.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T23",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Saved config/DB/ledger survive detached restart/upgrade; remote grants remain current/expired/revoked under separate canonical campaign. Scope/remaining: Available proofs compose restart persistence with canonical grant authority. If wiring needs an additional assertion, it is a safe disposable restart test; neither registered OS service nor provider is required by T23.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T24",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Remote loopback DaemonApp and current auth/binding reuse are proven; no Finish/probe replay after rotation. Scope/remaining: Dedicated continuity/remote suite assertions still need read-only mapping; renewal alone is not substituted. This is safe evidence reconciliation, not a requirement for physical hosts.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T25",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Exact active-version mismatch refuses readiness and never implicitly replaces/interrupts it; explicit upgrade separate. Scope/remaining: Metadata seam version test; protocol-only RG07 old/new client/server campaign does not itself qualify old daemon supervision.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T26",
+      "before": "IN_PROGRESS",
+      "after": "IN_PROGRESS",
+      "reason": "Interrupted upgrade writes/native response loss retain reviewed intent; edited/downgrade/unknown refuse; disposable installed environment resumes without DB/ledger mutation. Scope/remaining: No historical schema binary downgrade recovery or real task upgrade claimed.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T27",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Injected uninstall requires inactive/drained selected integration and preserves DB/credentials/context; repeated absence passive. Scope/remaining: Actual native removal followed by same preserved data in foreground remains native campaign scope.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T28",
+      "before": "NOT_RUN",
+      "after": "IN_PROGRESS",
+      "reason": "Supervised Windows entry invokes foreground without creating detached supervisor; foreground contract retained. Scope/remaining: Container/external-supervisor real execution not located; POSIX templates explicitly unqualified.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T29",
+      "before": "NOT_RUN",
+      "after": "NOT_RUN",
+      "reason": "No suspension/resume/logout/reboot productive survival inferred from availability. Scope/remaining: Separate actual-context campaigns, neither prepared finite install lifecycle nor synthetic runtime proves them.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "SVC-T30",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Installed noneditable package proofs and out-of-checkout disposable service/upgrade campaigns retain resource bytes and executable origins. Scope/remaining: Does not promote real registered user-service/login/provider context. Included because literal plan has T30 in addition to parent-requested T01..29.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-01",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Contrato puro ParticipantClientConfig separado de HarnessHTTPTemplate, com cliente/build/formato/revisão, origem/endpoint, entrada, referência de ambiente e escopo. Exportação contém referências; contrato gerenciado mantém suas próprias guardas. Requisito declarativo tem evidência correspondente. Campanhas cliente/cofre não são uma condição adicional deste contrato puro.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-02",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Claude JSON, Codex TOML e exportação genérica manual implementados. Campanhas com binários reais leram configuração; outra campanha resolve referência sintética de ambiente e faz initialize autenticado, sem demonstrar a cadeia completa do launcher/cofre. Format testing is the literal requirement: actual versioned parsing/initialize plus Core tests qualify the two formats. Full vault→launcher→client cooperation remains in DX04/AC03, not an additional format gate.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-03",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Plans JSON/TOML com hash/CAS e ownership de entrada; persistência com lock, backup protegido, replace e observação de resultado incerto; compensação remove só entrada pertencente ao setup. Dashboard apenas gera orientação pública para executar no host escolhido. Plan/apply, CAS, preservação e compensação têm assertions e execução instalada; cliente efetivamente usar a credencial é DX-04/campanha separada.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-04",
+      "before": "IN_PROGRESS",
+      "after": "IMPLEMENTED",
+      "reason": "Importação protegida da chave existente; cofre escopado por perfil/setup; launcher fornece a referência só ao processo filho; Bearer para origem fixada sem redirects. Entrada pública do dashboard não inclui chave em comando/URL e não substitui entrega one-shot autorizada. Há provas separadas de vault Windows, processo filho e initialize real com env sintético; não existe a prova composta exigida. Sem novo defeito concreto de produto demonstrado.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-05",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "init participant e connect participant usam TerminalParticipant; selecionam identidade/workspace existentes por Bearer, revisam contexto e arquivo, aplicam por aprovação exata e mantêm checkpoints. Ausência/autoridade incompatível recusa, sem criação implícita ou elevação. Installed init/connect, consent, durable setup identity, privilege separation and preserved runtime are qualified. Honest UNKNOWN client/reload/MCP and NOT_SUBMITTED work states satisfy reporting the observed level; full real-client cooperation is not an additional init gate.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-06",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Estados review/credential_pending/credential_stored/file_pending/done gravam intenção antes de cada efeito; retomada observa efeito incerto. Remoção tem file_pending/vault_pending e aposenta perfil antes de compensar. Finish gerenciado mantém transação canônica no Server. O requisito é a separação das etapas e recuperação/compensação, diretamente exercitadas. Não exige uma transação distribuída nem uma campanha produtiva para validá-las.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-07",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "ProjectDiagnostics/ParticipantDiagnostics mantêm checagens independentes; modos ativos explícitos e default passivo. Adaptador comum v1 controla status/código/reason/next_action, preservando legado e separando metadata de prova. As checagens provam apenas o nível observado e mantêm UNKNOWN para o resto. Falta de campanha produtiva é resultado honesto do diagnóstico, não ausência deste requisito.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-08",
+      "before": "IMPLEMENTED",
+      "after": "IMPLEMENTED",
+      "reason": "TerminalCooperation exige consentimento separado para troca dirigida e handoff, persiste IDs antes de enviar, observa reply/claim/resultado canônicos e preserva incerteza. Doctor lê histórico sem qualificá-lo como fato atual. Mecanismo e prova canônica estão exercitados; o smoke real de cooperação M2 continua NOT_RUN. Nenhuma nova falha concreta do mecanismo encontrada.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-09",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "CLI coordination/work delega a fachadas de aplicação e clientes HTTP/MCP; ator vem da credencial, destino não substitui principal; sessão/contexto aprovados ficam vinculados ao request. A CLI remota não grava domínio SQLite nem implementa servidor/proxy MCP. Cliente fino e fronteiras de ator/escopo possuem prova instalada correspondente. Campanha combinada nativa/externa é aceite M1/M2 separado, não uma segunda implementação da fachada.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-10",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "CoordinationRequestKey/hash semântico e recibo na UoW de criação; chave inclui instalação/ator/workspace/operação/request. CLI salva ID/hash antes da transmissão e só reinspeciona a mesma identidade dentro da janela. Pending approval/tombstone e autenticação corrente preservados. Dedupe transacional/retentativa limitada não depende de inferência para ser verificado. Não promove exactly-once de efeitos externos nem campanha produtiva.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-11",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "Wait usa ID exato, cursor antes do snapshot e releitura canônica; acompanha verificação/resultado sem inferir conclusão de delivery/idle. Timeout/interrupt encerram observador, com IDs e estado incerto recuperáveis; saída/exitcodes documentados/testados. Contrato de observação e saídas tem testes correspondentes sem exigir um provider real para produzir estados canônicos sintéticos.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-12",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Introdução lê o preset canônico; identidade existente evita novo intro; personalização usa objetos atuais. Caminho cliente existente usa guia público com origem real e comandos existentes, sem executar efeito remoto ou emitir prontidão fictícia. Browser real contra pacote instalado verificou a UI e preservação de identidade/configuração; isso não promove uso efetivo de cliente/provedor.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-13",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Connections/Finish existentes continuam kernel gerenciado; configuração é normalizada pelo contrato comum. Participante adiciona entrada/credencial local sem desabilitar runtime de toda identidade. Manter VERIFIED: os invariantes específicos têm execução instalada e não exigem nova rota gerenciada.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-14",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Connector conserva connect/configure/status/doctor, cofre e aprovação assíncrona; reuse verifica identidade/epoch/binding atuais. Diagnóstico v1 comum opt-in preserva legado/exitcodes e evita tradução cega de warn. Remote bootstrap/renewal integram controles existentes. Integrações de produto/contrato preservadas e qualificadas em pacotes. Campanha nativa SVC/M1 remota permanece separada e não é promovida.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-15",
+      "before": "IN_PROGRESS",
+      "after": "IMPLEMENTED",
+      "reason": "connect resolve perfil/projeto/topologia, inicia/reutiliza o dono apropriado e delega revisão/Finish; existente reusa binding sem wizard. Rotas locais, operador remoto e Connector compartilham preset e encaminham à CLI work. Fachada está entregue; falta qualificar o percurso padrão real ao qual este ID encaminha. Sem nova lacuna concreta de implementação encontrada.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-16",
+      "before": "IN_PROGRESS",
+      "after": "IMPLEMENTED",
+      "reason": "Resolução de projeto/candidato no host correto, recomendação única quando não ambígua e escolha pontual quando necessária. Revisão inclui identidade/workspace, configuração/efeitos, grants e início no login; PATH permanece somente descoberta. Contrato de descoberta/revisão está verificado; qualificação do caminho padrão com instalação real continua pendente no escopo R3.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-17",
+      "before": "IN_PROGRESS",
+      "after": "IMPLEMENTED",
+      "reason": "Setup/profile persiste IDs/revisões/recibos, observa resposta perdida, distingue estados e não reenvia teste incerto. Work guarda request/operation exatos; diagnóstico não confunde serviço, sessão e tarefa. Reconnect e renovação consultam autoridade atual. Retomada/proveniência foram exercitadas; a primeira sessão produtiva real obrigatória não foi qualificada.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-18",
+      "before": "IN_PROGRESS",
+      "after": "IMPLEMENTED",
+      "reason": "Preset project-generalist revision 1 resolve identidade/permissões/configuração para contratos comuns; defaults preservam modelo/instruções existentes, decisões nativas e limites de autorização. Novo agente/workspace só na revisão/Finish autorizados, sem associação por nome/pasta. Preset/autoridade estão implementados; a cláusula de configuração efetiva e utilidade real não é provada por serialização/configuração sintética.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-19",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Revisão local/remota reúne identidade/workspace, configuração e autorização; usa IDs/revisões canônicos e Finish. Bootstrap remoto operador-only entrega chave one-shot separada do JSON/checkpoint; perda retorna material indisponível, nunca rotação/recriação implícita. A revisão única e suas fronteiras de consentimento/autoridade/recovery têm evidência integrada correspondente. Trabalho efetivo após ela pertence ao aceite DX-18/20/M1.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-20",
+      "before": "IN_PROGRESS",
+      "after": "IMPLEMENTED",
+      "reason": "Fachada work usa operações/sessões/perguntas/decisões canônicas, preserva ator/revisão/escopo e resposta perdida. Sair interrompe só observação; reopen recupera IDs/resultados, sem attach/continuidade inventada ou envio automático. Produto/fachada e isolamento são exercitados com peer sintético; isso não substitui o caminho padrão qualificado explicitamente exigido pelo ID.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "DX-21",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Origem/revisão/defaults do preset ficam no setup existente; merge de três vias só propõe defaults não customizados, revisão lista efeitos/autoridades e Finish usa CAS. Reconnect lê configurações atuais; dashboard personaliza mesmos objetos. Renovação preserva escopo/revogação e não reaplica preset. Preservação/evolução opcional têm provas de contrato, UI instalada e recovery. Não significa promessa de execução infinita, reboot ou aceite produtivo M1.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-01",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "Closed metadata-only canonical predicates combine native requests, verification, unknown/recovery, authority, aged handoffs, results and cleanup in one bounded relation; no payload hydration or per-item graph query. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-02",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "Auxiliary seen/snooze belong to the existing shared operator principal; exact CAS and transactional anchors preserve episodes without touching canonical rows. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-03",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "GET/snapshot and preferences preserve canonical rows; source commits and rollback create auxiliary metadata atomically while existing authentication remains separate. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-04",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "Operator API has versioned envelopes, exact filters, stable cursor ties and same-relation page/count authorization; preferences retain source and preference CAS. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-05",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "SSE metadata invalidates bounded snapshots; gaps/reconnect/time deadlines refresh, transient errors retain stale data and current authorization loss clears protected content. Threshold and TTL changes use explicit time policy without writing lifecycle or generating a new episode on refresh. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-06",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "Menu/badge and grouped view preserve existing pages and resolve exact source records through shared canonical inspection and decision controls. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-07",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "Viewing state is not resolution; stale command revisions conflict, unknown outcomes offer inspection, and lost preference replies reconcile via reads without replay. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "ATN-08",
+      "before": "IMPLEMENTED",
+      "after": "VERIFIED",
+      "reason": "Accessible grouping, explicit labels/status, keyboard focus restoration, light/dark/narrow layout and escaped untrusted text are observed in actual browser plus semantic/unit checks. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-01",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Explicit existing agent and workspace selection creates only auxiliary sources/instances; strict payload rejects caller-supplied identity and server owns generation. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-02",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Opaque hashed short-lived observation credentials authorize only literal activity publication. Current source/agent/workspace/generation and explicit permissions are checked before replay; management/reissue use canonical credentials. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-03",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Sequence/hash and source/instance generation fences are durable; exact replay returns original receipt without TTL renewal/event, conflicts roll back and reset does not reuse fences. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-04",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Receipt and observed age bound validity; future/backlog refusal and temporal expiry yield stale/unknown, never canonical idle, free capacity or refreshed MCP presence. Strict bounded report/batch/text/instance/token/cardinality and durable aggregate rates plus bounded retention provide honest backpressure; storage/commit refusal never acknowledges unpersisted data. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-05",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Observer is an explicit optional CLI/helper command; Server bootstrap and canonical routes have no Herdr execution prerequisite or Connector executor registration side effect. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-06",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Explicit installed version/schema hash plus live status are validated; bounded degraded polling takes a fresh snapshot after reconnect and incompatible shapes are explicit unavailability. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-07",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Installation/session/pane plus host-owned process birth/image identity form the binding; names/paths are aliases and move/replacement/PID reuse require reassociation. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-08",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Fixed Herdr command allowlist reads version/schema/status/snapshot/process-info only, no shell/terminal content or control commands; local user-code permission is not a Nexus-token sandbox. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-09",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Initial done/switch/idle without a new coherent counter has no completion; retained completion ref is observational and stable, never a task verifier or productive command. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-10",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Small separate HTTP publisher plus example document registration/token/sequence/TTL/revoke/exit; token is confined to exact endpoint and retries preserve uncertainty/explicit intent. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-11",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Three stable external occurrences are inspection-only; current/stale/history and per-agent/per-instance aggregation remain explicitly observational, independent of presence/capacity. Publication/seen cannot create authority, reservations, work or task success; only correlated canonical terminal event can settle the current turn and admit execution of queued work. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "tasks",
+      "id": "OBS-12",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Operator-selected/fenced native evidence produces minimum passive Core facts with provenance ahead of separate external signal; unrelated/stale sources remain uncorrelated and historical completion cannot inherit a later selection. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-01",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Request recipient and present canonical authority determine action; expired requests retain historical inspection and do not become operator-answerable when directed to an agent. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-02",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Request recipient and present canonical authority determine action; expired requests retain historical inspection and do not become operator-answerable when directed to an agent. Threshold and TTL changes use explicit time policy without writing lifecycle or generating a new episode on refresh. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-03",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Request recipient and present canonical authority determine action; expired requests retain historical inspection and do not become operator-answerable when directed to an agent. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-04",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Normal CLAIMED/silence or dependency waiting is not an incident; verifier authorization and actual current unknown/cleanup facts determine action, keeping successful results successful. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-05",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Normal CLAIMED/silence or dependency waiting is not an incident; verifier authorization and actual current unknown/cleanup facts determine action, keeping successful results successful. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-06",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Viewing state is not resolution; stale command revisions conflict, unknown outcomes offer inspection, and lost preference replies reconcile via reads without replay. Normal CLAIMED/silence or dependency waiting is not an incident; verifier authorization and actual current unknown/cleanup facts determine action, keeping successful results successful. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-07",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Auxiliary seen/snooze belong to the existing shared operator principal; exact CAS and transactional anchors preserve episodes without touching canonical rows. GET/snapshot and preferences preserve canonical rows; source commits and rollback create auxiliary metadata atomically while existing authentication remains separate. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-08",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Auxiliary seen/snooze belong to the existing shared operator principal; exact CAS and transactional anchors preserve episodes without touching canonical rows. Threshold and TTL changes use explicit time policy without writing lifecycle or generating a new episode on refresh. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-09",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Viewing state is not resolution; stale command revisions conflict, unknown outcomes offer inspection, and lost preference replies reconcile via reads without replay. Request recipient and present canonical authority determine action; expired requests retain historical inspection and do not become operator-answerable when directed to an agent. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-10",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Operator API has versioned envelopes, exact filters, stable cursor ties and same-relation page/count authorization; preferences retain source and preference CAS. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-11",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "SSE metadata invalidates bounded snapshots; gaps/reconnect/time deadlines refresh, transient errors retain stale data and current authorization loss clears protected content. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-12",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "SSE metadata invalidates bounded snapshots; gaps/reconnect/time deadlines refresh, transient errors retain stale data and current authorization loss clears protected content. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-13",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Threshold and TTL changes use explicit time policy without writing lifecycle or generating a new episode on refresh. SSE metadata invalidates bounded snapshots; gaps/reconnect/time deadlines refresh, transient errors retain stale data and current authorization loss clears protected content. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-14",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Normal CLAIMED/silence or dependency waiting is not an incident; verifier authorization and actual current unknown/cleanup facts determine action, keeping successful results successful. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-15",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Accessible grouping, explicit labels/status, keyboard focus restoration, light/dark/narrow layout and escaped untrusted text are observed in actual browser plus semantic/unit checks. Closed schema and bounded text reject identity/secret/command fields; source values are escaped literal UI data without active links/HTML; errors do not echo input. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "AT-16",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Closed metadata-only canonical predicates combine native requests, verification, unknown/recovery, authority, aged handoffs, results and cleanup in one bounded relation; no payload hydration or per-item graph query. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-01",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Explicit existing agent and workspace selection creates only auxiliary sources/instances; strict payload rejects caller-supplied identity and server owns generation. Opaque hashed short-lived observation credentials authorize only literal activity publication. Current source/agent/workspace/generation and explicit permissions are checked before replay; management/reissue use canonical credentials. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-02",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Opaque hashed short-lived observation credentials authorize only literal activity publication. Current source/agent/workspace/generation and explicit permissions are checked before replay; management/reissue use canonical credentials. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-03",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Opaque hashed short-lived observation credentials authorize only literal activity publication. Current source/agent/workspace/generation and explicit permissions are checked before replay; management/reissue use canonical credentials. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-04",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Explicit existing agent and workspace selection creates only auxiliary sources/instances; strict payload rejects caller-supplied identity and server owns generation. Opaque hashed short-lived observation credentials authorize only literal activity publication. Current source/agent/workspace/generation and explicit permissions are checked before replay; management/reissue use canonical credentials. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-05",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Sequence/hash and source/instance generation fences are durable; exact replay returns original receipt without TTL renewal/event, conflicts roll back and reset does not reuse fences. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-06",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Sequence/hash and source/instance generation fences are durable; exact replay returns original receipt without TTL renewal/event, conflicts roll back and reset does not reuse fences. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-07",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Sequence/hash and source/instance generation fences are durable; exact replay returns original receipt without TTL renewal/event, conflicts roll back and reset does not reuse fences. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-08",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Receipt and observed age bound validity; future/backlog refusal and temporal expiry yield stale/unknown, never canonical idle, free capacity or refreshed MCP presence. Explicit installed version/schema hash plus live status are validated; bounded degraded polling takes a fresh snapshot after reconnect and incompatible shapes are explicit unavailability. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-09",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Receipt and observed age bound validity; future/backlog refusal and temporal expiry yield stale/unknown, never canonical idle, free capacity or refreshed MCP presence. Three stable external occurrences are inspection-only; current/stale/history and per-agent/per-instance aggregation remain explicitly observational, independent of presence/capacity. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-10",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Opaque hashed short-lived observation credentials authorize only literal activity publication. Current source/agent/workspace/generation and explicit permissions are checked before replay; management/reissue use canonical credentials. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-11",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Explicit existing agent and workspace selection creates only auxiliary sources/instances; strict payload rejects caller-supplied identity and server owns generation. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-12",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Installation/session/pane plus host-owned process birth/image identity form the binding; names/paths are aliases and move/replacement/PID reuse require reassociation. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-13",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Installation/session/pane plus host-owned process birth/image identity form the binding; names/paths are aliases and move/replacement/PID reuse require reassociation. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-14",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Initial done/switch/idle without a new coherent counter has no completion; retained completion ref is observational and stable, never a task verifier or productive command. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-15",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Publication/seen cannot create authority, reservations, work or task success; only correlated canonical terminal event can settle the current turn and admit execution of queued work. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-16",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Publication/seen cannot create authority, reservations, work or task success; only correlated canonical terminal event can settle the current turn and admit execution of queued work. Opaque hashed short-lived observation credentials authorize only literal activity publication. Current source/agent/workspace/generation and explicit permissions are checked before replay; management/reissue use canonical credentials. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-17",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Explicit installed version/schema hash plus live status are validated; bounded degraded polling takes a fresh snapshot after reconnect and incompatible shapes are explicit unavailability. Sequence/hash and source/instance generation fences are durable; exact replay returns original receipt without TTL renewal/event, conflicts roll back and reset does not reuse fences. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-18",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Explicit installed version/schema hash plus live status are validated; bounded degraded polling takes a fresh snapshot after reconnect and incompatible shapes are explicit unavailability. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-19",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Operator-selected/fenced native evidence produces minimum passive Core facts with provenance ahead of separate external signal; unrelated/stale sources remain uncorrelated and historical completion cannot inherit a later selection. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-20",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Strict bounded report/batch/text/instance/token/cardinality and durable aggregate rates plus bounded retention provide honest backpressure; storage/commit refusal never acknowledges unpersisted data. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-21",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Closed schema and bounded text reject identity/secret/command fields; source values are escaped literal UI data without active links/HTML; errors do not echo input. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-22",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Fixed Herdr command allowlist reads version/schema/status/snapshot/process-info only, no shell/terminal content or control commands; local user-code permission is not a Nexus-token sandbox. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-23",
+      "before": "VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Observer is an explicit optional CLI/helper command; Server bootstrap and canonical routes have no Herdr execution prerequisite or Connector executor registration side effect. Explicit OBS true-to-false toggle leaves canonical Core local queue/control working. Current mixed MCP-only/runtime and actual HTTP/WSS Connector cases use bootstrap({}, isolatedhome) with default feature_observations=false and prove canonical cooperation/delivery. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "scenarios",
+      "id": "OB-24",
+      "before": "IN_PROGRESS",
+      "after": "VERIFIED",
+      "reason": "Explicit OBS true-to-false toggle leaves canonical Core local queue/control working. Current mixed MCP-only/runtime and actual HTTP/WSS Connector cases use bootstrap({}, isolatedhome) with default feature_observations=false and prove canonical cooperation/delivery. Qualified at the recorded Windows contract/browser/Herdr scope; synthetic peers are not provider qualification.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-06",
+      "before": "NOT_VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Canonical snapshots and observation-only authority, idle/blocked/completion/seen queue isolation and current RG03 reservation/TTL/fairness checks prove external activity does not grant authority, capacity or completion. No provider campaign is required for this prohibition.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-09",
+      "before": "NOT_VERIFIED",
+      "after": "VERIFIED",
+      "reason": "The reconciled task/scenario inventory explicitly names unqualified scopes, current safe qualification gaps and mandatory real campaigns. Existing reports preserve failed attempts and distinguish synthetic peers, actual HTTP/browser/Herdr and unexecuted provider/native-service contexts. No pending test is labeled passed.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/pending-qualification.json"
+    },
+    {
+      "section": "completion_criteria",
+      "id": "AC-10",
+      "before": "NOT_VERIFIED",
+      "after": "VERIFIED",
+      "reason": "Delivered public snapshot reviewed: 1822 allowlisted files, two historical credential values redacted with provenance, 35 invalid synthetic parameters classified, retained protection tests and browser/trace reviews. Current appended audit artifacts are allowlisted and scanned before inclusion. Historical Git objects/UAT credential validity remain recorded risks; rewriting history or revoking a prior UAT key is not an extra acceptance condition invented for the delivered-artifact criterion.",
+      "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/milestone.md"
+    }
+  ],
+  "task_count": 59,
+  "dx_overrides": {
+    "DX-02": "Format testing is the literal requirement: actual versioned parsing/initialize plus Core tests qualify the two formats. Full vault→launcher→client cooperation remains in DX04/AC03, not an additional format gate.",
+    "DX-05": "Installed init/connect, consent, durable setup identity, privilege separation and preserved runtime are qualified. Honest UNKNOWN client/reload/MCP and NOT_SUBMITTED work states satisfy reporting the observed level; full real-client cooperation is not an additional init gate."
+  },
+  "svc_scope_decision": "Injected scheduler integration T07/T17/T20/T26 stays IN_PROGRESS with verified contract subscopes until the corresponding native effects are qualified. Pure/default process composition and packaging scenarios are qualified without an invented monolithic campaign.",
+  "ac10_scope_correction": "Earlier review kept AC10 open solely for prior Git objects/UAT credential validity. Current acceptance evaluates delivered artifacts; historical risk remains explicit, without adding unrelated history rewrite/revocation as a required task."
+}

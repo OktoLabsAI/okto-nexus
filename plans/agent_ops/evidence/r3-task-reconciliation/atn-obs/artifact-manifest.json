@@ -1,0 +1,28 @@
+{
+  "format": "r3.atn-obs.trace.allowlist",
+  "version": 1,
+  "files": {
+    "matrix.json": {
+      "bytes": 342617,
+      "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd"
+    },
+    "matrix.md": {
+      "bytes": 16385,
+      "sha256": "0449ff438f12ddcecb9981269b0e4e8a6ee130101dd4378d8cc88926387128d5"
+    },
+    "snapshot.json": {
+      "bytes": 212,
+      "sha256": "9a2e42ab04809cd3c1a22e023955d0b3ac8ea91b671a91fb8bbb46ca66c4a8fc"
+    },
+    "build_matrix.py": {
+      "bytes": 37206,
+      "sha256": "a43d69cfadfaa8747315e795bd5ea52f0539c1ec697659382ea019ef5fa7fef1"
+    }
+  },
+  "excluded": [
+    "test-index-private.json: uncurated intermediate source/assertion catalogue, no qualification output",
+    "index_existing.py/read_assertions.py: inspection helpers only"
+  ],
+  "tests_executed": false,
+  "status_promoted": false
+}

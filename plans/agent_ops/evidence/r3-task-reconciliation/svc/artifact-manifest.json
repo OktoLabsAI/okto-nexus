@@ -1,0 +1,36 @@
+{
+  "schema": "r3.audit.allowlist.v1",
+  "allowlist": [
+    {
+      "path": "audit.json",
+      "bytes": 136618,
+      "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75"
+    },
+    {
+      "path": "retained-evidence.json",
+      "bytes": 59833,
+      "sha256": "13cc9a32160804ef446ab67425c0c12c6b8f0aac9e581d461bbfc9b881b4aa4c"
+    },
+    {
+      "path": "input-hashes.json",
+      "bytes": 16010,
+      "sha256": "f98e9725fd5eb010aab9c3c65d1b5cd5fe17585dc0ee5a6678065f4baa417c04"
+    },
+    {
+      "path": "audit.md",
+      "bytes": 10094,
+      "sha256": "aaa1a16e025b6274ce1cd4be43e7848b68e13edd486d4fb718a417a5348167ee"
+    }
+  ],
+  "aggregate_sha256": "00f8b4cfe733279a2fd6542bd25dfa1654a9b8a294974cff79d14954c76fb73e",
+  "exclusions": [
+    "private search indexes",
+    "repository files or copies",
+    "XML payloads and failure bodies",
+    "credentials",
+    "homes/databases",
+    "venvs/wheels",
+    "live logs"
+  ],
+  "tests_executed": 0
+}

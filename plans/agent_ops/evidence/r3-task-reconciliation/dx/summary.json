@@ -1,0 +1,28 @@
+{
+  "tasks": 21,
+  "recommended_statuses": {
+    "VERIFIED": 12,
+    "IMPLEMENTED": 9
+  },
+  "additional_dx_product_gaps_demonstrated": 0,
+  "known_external_dependency": "Dependência informada pelo root, não reavaliada nesta auditoria DX: no serviço atual, CLI/API/coordenador não expõem decisão explícita de força após timeout de drain exigida no plano, linha 325. Core.shutdown já possui escalada automática de contenção, que não substitui essa decisão. O caminho de parada controlada exige correção coordenada sem enfraquecer ownership/recuperação.",
+  "pending_scenarios": 37,
+  "new_test_runs": 0,
+  "ledger_edited": false,
+  "key_pending": [
+    "DX-02 broad real-vault/client chain remains NOT_RUN",
+    "DX-04 actual protected credential delivery chain",
+    "DX-08 external-client canonical cooperation",
+    "DX-15/16/17/18/20 real qualified local and Connector default path"
+  ],
+  "stale_metadata": [
+    "generic terminal/remote grant renewal statuses after the delivered renewal milestone",
+    "old participant init/launcher missing-product language",
+    "old remote identity/workspace bootstrap missing-product language",
+    "old dashboard secret/origin snippet language"
+  ],
+  "global_limits": [
+    "No automatic promotion of AC01/full R3 or M1/M2",
+    "Historical XML PASS is not a new current-wheel run"
+  ]
+}
