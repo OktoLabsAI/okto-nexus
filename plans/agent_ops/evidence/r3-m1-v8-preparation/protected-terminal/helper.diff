@@ -1,0 +1,77 @@
+--- v4/protected_pty.py
++++ v5/protected_pty.py
+@@ -22,6 +22,7 @@
+ SITE = HERE.parent / 'venv/Lib/site-packages'
+ HEADER = 'Canonical agent key — shown once. Paste it into the Connector masked prompt:'
+ FOOTER = 'Keep this key if you need to resume import; the Server cannot recover its plaintext.'
++READY_PREFIX = 'Host handoff (contains no key): '
+ KEY = re.compile(r'nxs_[0-9a-f]{48}')
+ ANSI = re.compile(r'\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))')
+ 
+@@ -93,14 +94,28 @@
+             clean = ANSI.sub('', raw).replace('\r', '')
+             if time.monotonic() >= deadline:
+                 raise TransferError('TRANSFER_DEADLINE')
++            marker = spec.get('consumer_ready_marker')
++            ready = marker is None
++            if marker is not None:
++                # Only complete lines count. A path prefix or another handoff
++                # marker does not authorize importing this one-shot material.
++                announced = [line for line in clean.split('\n')[:-1] if line.startswith(READY_PREFIX)]
++                if announced:
++                    if len(announced) != 1 or announced[0] != marker:
++                        raise TransferError('CONSUMER_READY_MARKER_MISMATCH')
++                    ready = True
++                    progress['consumer_ready_marker_observed'] = True
+             # Deliver at the complete block, not process exit. The real producer
+             # waits for the consumer to finish materialization before it exits.
+             if FOOTER in clean:
+                 candidate = extract(raw)
+                 if material is not None and candidate != material:
+                     raise TransferError('MATERIAL_CHANGED_AFTER_DELIVERY')
+-                if consumer is None:
++                if material is None:
+                     material = candidate
++                    progress['material_block_observed'] = True
++                    progress['material_seen_before_ready_marker'] = marker is not None and not ready
++                if consumer is None and ready:
+                     if any(material in arg for arg in producer + spec['consumer_argv']):
+                         raise TransferError('MATERIAL_IN_ARGV')
+                     if any(material in value for mapping in (spec['env'], spec['consumer_env']) for value in mapping.values()):
+@@ -142,6 +157,8 @@
+                 if eof:
+                     break
+             if eof and consumer is None:
++                if material is not None and marker is not None:
++                    raise TransferError('CONSUMER_READY_MARKER_MISSING')
+                 raise TransferError('MATERIAL_MISSING')
+             if time.monotonic() >= deadline:
+                 raise TransferError('TRANSFER_DEADLINE')
+@@ -168,12 +185,18 @@
+         # closes the exact Job, then observes active0. No service belongs here.
+         del pty
+ 
+-def transfer_once(*, producer_argv, consumer_argv, env, cwd, timeout_seconds=30, synthetic_probe=False, consumer_env=None):
++def transfer_once(*, producer_argv, consumer_argv, env, cwd, timeout_seconds=30, synthetic_probe=False, consumer_env=None, consumer_ready_marker=None):
+     if not 1 <= timeout_seconds <= 120:
+         raise ValueError('invalid deadline')
+     for argv in (producer_argv, consumer_argv):
+         if not argv or not Path(argv[0]).is_absolute() or any(KEY.search(item) for item in argv):
+             raise ValueError('public absolute argv required')
++    if consumer_ready_marker is not None:
++        if (type(consumer_ready_marker) is not str or not consumer_ready_marker.isprintable()
++                or not consumer_ready_marker.startswith(READY_PREFIX)
++                or not Path(consumer_ready_marker[len(READY_PREFIX):]).is_absolute()
++                or KEY.search(consumer_ready_marker)):
++            raise ValueError('public canonical handoff marker required')
+     job = Job()
+     startup = subprocess.STARTUPINFO()
+     startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+@@ -189,6 +212,7 @@
+         spec = {'job_name': job.name, 'producer_argv': producer_argv, 'consumer_argv': consumer_argv,
+                 'env': env, 'consumer_env': env if consumer_env is None else consumer_env,
+                 'cwd': str(cwd), 'timeout_seconds': timeout_seconds,
++                'consumer_ready_marker': consumer_ready_marker,
+                 'synthetic_probe': synthetic_probe}
+         try:
+             output, error = worker.communicate(json.dumps(spec).encode(), timeout=timeout_seconds + 5)

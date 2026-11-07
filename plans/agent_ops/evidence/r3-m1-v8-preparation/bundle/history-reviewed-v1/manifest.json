@@ -1,0 +1,125 @@
+{
+  "format": "okto.m1.preparation.bundle",
+  "revision": 8,
+  "status": "READY_FOR_EXECUTION_REVIEW",
+  "execution_authorized": false,
+  "proposal_sha256": "eeff7487cfe6dff7e1c865541437d160594e9059482adc795b91b09506e5ec0b",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "a446a85082972c39bf3b88c26f5ce28dac88e9d900f0edc5df6167003d3a8b6d",
+      "bytes": 4196
+    },
+    {
+      "path": "campaign_context.py",
+      "sha256": "7ae7777215bfffe22dbf5ffd5f25938b6f306898adb50723e4d1ea592454f84e",
+      "bytes": 7129
+    },
+    {
+      "path": "composition-proof.json",
+      "sha256": "18217c0e8ebe6c873016c7d6a2d6f98361d3fcd10bd0f013fcd0092582d2c9b7",
+      "bytes": 983
+    },
+    {
+      "path": "controller-review-addendum.json",
+      "sha256": "39c67a3880f89f1a8ab7e7a2fdc4c7488e153d977b2f3a92f0b627c2e65a9c39",
+      "bytes": 1190
+    },
+    {
+      "path": "final-preflight.json",
+      "sha256": "62b8413ca2b06102720a30f7675ce776d46ad44f27a9fe6e2ce1dc74df68422e",
+      "bytes": 3119
+    },
+    {
+      "path": "freeze_bundle.py",
+      "sha256": "91edfd54a6abc811d4b6fbf44ab262b939e83883aee4184e053f77d561dc52d5",
+      "bytes": 17039
+    },
+    {
+      "path": "guard-result.json",
+      "sha256": "2bf9892401b242aea347534134ea85a9899544fcb50114a8990b18749ad2e8bb",
+      "bytes": 3263
+    },
+    {
+      "path": "installed-fg-guard-result.json",
+      "sha256": "3cff36534481edd08d555c5fc1ed738e6851f377631dde22996c6120a6da9ea7",
+      "bytes": 2130
+    },
+    {
+      "path": "m1-codex-campaign-proposal-v8.json",
+      "sha256": "eeff7487cfe6dff7e1c865541437d160594e9059482adc795b91b09506e5ec0b",
+      "bytes": 322928
+    },
+    {
+      "path": "m1_v8_lifecycle.py",
+      "sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+      "bytes": 3597
+    },
+    {
+      "path": "m1_v8_remote_setup.py",
+      "sha256": "69cd978c8866e2edc9ad948068bd7114d2de40def4f40069fe0f5b4fb8154485",
+      "bytes": 5477
+    },
+    {
+      "path": "m1_v8_setup.py",
+      "sha256": "a2a2b6c2959df45ee0030cbb5dccb678c5224fbac79f78c07b3409d784f11dd4",
+      "bytes": 5468
+    },
+    {
+      "path": "m1_v8_work.py",
+      "sha256": "ea12d334a0510ca3e5e902321c22f9bbdaec0255a251acb94e3c354b3fba19b3",
+      "bytes": 16155
+    },
+    {
+      "path": "planning-commands.json",
+      "sha256": "314b6d935771ac0024b22b7ffef88dc91bb78a408dbc6e76f7284862f9718b95",
+      "bytes": 4981
+    },
+    {
+      "path": "proposed-commands.json",
+      "sha256": "5777305b8ec10fb5fbd466b1cd6239beeede79f4af813a4c021166fb5ebd5394",
+      "bytes": 10936
+    },
+    {
+      "path": "publication-adaptation.json",
+      "sha256": "1dcf783103ebaa1a26c17ed30a0acea6916a11c6ced20028ebd60c542666854f",
+      "bytes": 1389
+    },
+    {
+      "path": "publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "bytes": 1676
+    },
+    {
+      "path": "response_loss.py",
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "bytes": 8755
+    },
+    {
+      "path": "source-proof.json",
+      "sha256": "f0f1876656ea0a197d4ef54544c85773ace274d8b36f2603ffb0246a84e454f1",
+      "bytes": 3910
+    },
+    {
+      "path": "supervisor_check.py",
+      "sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+      "bytes": 2251
+    },
+    {
+      "path": "test_entry_guards.py",
+      "sha256": "f5f0d1561cf8656b218abb765195d14fd14486f0553757312e35630d53e25cfc",
+      "bytes": 3260
+    },
+    {
+      "path": "test_installed_fg_guard.py",
+      "sha256": "613fdf0282978600657dcd0a5284cab805e8fac5475d86498e0807cf247f4693",
+      "bytes": 4191
+    }
+  ],
+  "excluded": [
+    "guard-invalid-receipt.json",
+    "fg-* synthetic fixture directories",
+    "__pycache__"
+  ],
+  "scope": "Static composition, 12 entry refusal guards and 3 installed FG control-path tests. No approved execution, product installation, services, native CLI, vault or provider calls."
+}

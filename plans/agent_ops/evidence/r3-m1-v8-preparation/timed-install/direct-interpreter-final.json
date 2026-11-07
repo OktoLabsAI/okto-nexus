@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope": "Benign interpreter metadata only; no product install",
+  "metadata": {
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+    "pid": 15444,
+    "pip_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Lib\\site-packages\\pip\\__init__.py",
+    "products_absent": true
+  },
+  "launcher_pid_matches_child": true,
+  "observed_pid": 15444,
+  "returncode": 0,
+  "base_executable": "C:\\Python313\\python.exe",
+  "base_executable_sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+  "venv_python_sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+  "requirements_sha256": "86526f256478d173e74a535b918714988aac60abee1c5736f577e5bd6eb65f0c"
+}

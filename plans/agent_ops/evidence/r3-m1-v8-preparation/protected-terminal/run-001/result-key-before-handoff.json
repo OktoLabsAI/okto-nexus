@@ -1,0 +1,51 @@
+{
+  "status": "TRANSFERRED_ONCE",
+  "possible_effect": true,
+  "delivery_attempted": true,
+  "consumer_started": true,
+  "worker_pid": 54276,
+  "worker_birth_filetime": 134385554882819629,
+  "forced_owned_cleanup": false,
+  "worker_assigned_before_gate": true,
+  "producer_started": true,
+  "consumer_start_count": 1,
+  "possible_consumer_effect": true,
+  "consumer_io_completed": true,
+  "producer": {
+    "pid": 56472,
+    "birth_filetime": 134385554887608682,
+    "exact_job_member": true
+  },
+  "material_block_observed": true,
+  "material_seen_before_ready_marker": true,
+  "consumer_ready_marker_observed": true,
+  "producer_alive_at_consumer_start": true,
+  "consumer": {
+    "pid": 53840,
+    "birth_filetime": 134385554954856428,
+    "exact_job_member": true
+  },
+  "consumer_exit": 0,
+  "producer_exit": 0,
+  "material_in_public_result": false,
+  "material_in_argv_or_env": false,
+  "consumer_did_not_echo": true,
+  "tty_probe": {
+    "pid": 56472,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    },
+    "visible": false
+  },
+  "consumer_material_matches": true,
+  "material_absent_from_synthetic_files": true,
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "case": "key-before-handoff",
+  "consumer_marker": true,
+  "material_received_marker": true,
+  "handoff_exists": true,
+  "producer_saw_ack": true
+}

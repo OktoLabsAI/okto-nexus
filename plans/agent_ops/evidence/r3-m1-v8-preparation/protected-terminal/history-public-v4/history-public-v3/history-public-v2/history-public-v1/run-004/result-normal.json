@@ -1,0 +1,37 @@
+{
+  "status": "TRANSFERRED_ONCE",
+  "worker_pid": 51456,
+  "worker_birth_filetime": 134385523356574005,
+  "forced_owned_cleanup": false,
+  "worker_assigned_before_gate": true,
+  "producer": {
+    "pid": 56324,
+    "birth_filetime": 134385523365013570,
+    "exact_job_member": true
+  },
+  "consumer": {
+    "pid": 49828,
+    "birth_filetime": 134385523411495647,
+    "exact_job_member": true
+  },
+  "producer_exit": 0,
+  "consumer_exit": 0,
+  "material_in_public_result": false,
+  "material_in_argv_or_env": false,
+  "consumer_did_not_echo": true,
+  "tty_probe": {
+    "pid": 56324,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    },
+    "visible": false
+  },
+  "consumer_material_matches": true,
+  "material_absent_from_synthetic_files": true,
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "case": "normal",
+  "consumer_started": true
+}

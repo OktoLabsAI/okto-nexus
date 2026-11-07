@@ -1,0 +1,248 @@
+--- historical/controller.py
++++ v8/controller.py
+@@ -5,8 +5,10 @@
+ controls or an exact pre-reviewed owner service stop callback may be selected.
+ """
+ from copy import deepcopy
++import hashlib
+ import json
+ import os
++import re
+ from pathlib import Path
+ import time
+ from urllib.parse import quote
+@@ -21,10 +23,34 @@
+     pass
+ 
+ 
++POLICY = {'revision': 8, 'carry_in_admissions': 2, 'carry_in_tokens': 45843,
++          'max_cumulative_admissions': 8, 'max_new_admissions': 6,
++          'preventive_cumulative_tokens': 200000, 'operational_tolerance': 700000,
++          'deadline_seconds': 120}
++ANCESTRY = {
++    'closure_sha256': '8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b',
++    'checkpoint_sha256': '78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e',
++    'predecessor_faults': ['CAMPAIGN_RUNNER_EXCEPTION'],
++}
++
++
++def digest(document):
++    return hashlib.sha256(json.dumps(document, sort_keys=True, separators=(',', ':'),
++                                    allow_nan=False).encode()).hexdigest()
++
++
++def seal(document):
++    return digest({key: value for key, value in document.items() if key != 'state_sha256'})
++
++
+ class Controller:
+-    def __init__(self, path, campaign_root, *, create=False, clock=time.time):
++    def __init__(self, path, campaign_root, *, create=False, clock=time.time,
++                 approval_path=None, approval_sha256=None, expected_proposal_sha256=None):
+         self.path, self.root, self.clock = Path(path), Path(campaign_root).resolve(), clock
+         self.flows, self.stops = {}, {}
++        self.approval_path = Path(approval_path) if approval_path is not None else None
++        self.approval_sha256 = approval_sha256
++        self.expected_proposal_sha256 = expected_proposal_sha256
+         self._lock = self.path.with_name(self.path.name+'.lock').open('a+b')
+         if self._lock.tell()==0:
+             self._lock.write(b'0'); self._lock.flush()
+@@ -33,17 +59,67 @@
+         except OSError:
+             self._lock.close(); self._lock=None
+             raise Refused('CONTROLLER_ALREADY_OWNED') from None
+-        if create:
+-            self.data = {'format':1, 'collector': tokens.checkpoint(tokens.initial_state()),
+-                         'requests':{}, 'owners':{}, 'faults':[], 'last_clock':clock()}
+-            with self.path.open('x', encoding='utf-8') as stream:
+-                json.dump(self.data, stream)
+-                stream.flush(); os.fsync(stream.fileno())
+-        self.raw = self.path.read_bytes()
+-        self.data = json.loads(self.raw)
++        try:
++            if create:
++                self.data = {'format':8, 'collector': tokens.checkpoint(tokens.initial_state()),
++                             'requests':{}, 'owners':{}, 'faults':[], 'last_clock':clock(),
++                             'policy':deepcopy(POLICY), 'ancestry':deepcopy(ANCESTRY),
++                             'root':str(self.root), 'authorization_sha256':None, 'proposal_sha256':None}
++                self.data['state_sha256'] = seal(self.data)
++                with self.path.open('x', encoding='utf-8') as stream:
++                    json.dump(self.data, stream)
++                    stream.flush(); os.fsync(stream.fileno())
++            self.raw = self.path.read_bytes()
++            self.data = json.loads(self.raw)
++            self._validate()
++            if (self.data['proposal_sha256'] is not None and expected_proposal_sha256 is not None
++                    and self.data['proposal_sha256'] != expected_proposal_sha256):
++                raise Refused('PROPOSAL_CHANGED')
++            if self._approval_valid():
++                pinned = self.data['authorization_sha256']
++                if pinned is not None and pinned != self.approval_sha256:
++                    raise Refused('APPROVAL_CHANGED')
++                if pinned is None:
++                    self.data['authorization_sha256'] = self.approval_sha256
++                    self.data['proposal_sha256'] = self.expected_proposal_sha256
++                    self.persist()
++        except BaseException:
++            self.close()
++            raise
++
++    def _validate(self):
+         tokens.restore(self.data['collector'])
+-        if self.data.get('format') != 1 or len(self.data['requests']) > 6:
++        if (type(self.data.get('format')) is not int or self.data['format'] != 8
++                or digest(self.data.get('policy')) != digest(POLICY)
++                or digest(self.data.get('ancestry')) != digest(ANCESTRY) or self.data.get('root') != str(self.root)
++                or len(self.data['requests']) > 6 or self.data.get('state_sha256') != seal(self.data)):
+             raise Refused('CONTROLLER_STATE_INVALID')
++
++    def _approval_valid(self):
++        if self.approval_path is None or self.approval_sha256 is None:
++            return False
++        if (type(self.expected_proposal_sha256) is not str
++                or re.fullmatch(r'[0-9a-f]{64}', self.expected_proposal_sha256) is None):
++            return False
++        try:
++            raw = self.approval_path.read_bytes()
++            receipt = json.loads(raw)
++            return (hashlib.sha256(raw).hexdigest() == self.approval_sha256
++                    and receipt.get('status') == 'USER_APPROVED'
++                    and receipt.get('proposal_revision') == 8
++                    and receipt.get('proposal_sha256') == self.expected_proposal_sha256
++                    and digest(receipt.get('policy')) == digest(POLICY)
++                    and digest(receipt.get('ancestry')) == digest(ANCESTRY)
++                    and type(receipt.get('user_quote')) is str and bool(receipt['user_quote'].strip())
++                    and receipt.get('campaign_root') == str(self.root))
++        except (OSError, ValueError, TypeError):
++            return False
++
++    def _require_authorized(self):
++        if (not self._approval_valid()
++                or self.data.get('authorization_sha256') != self.approval_sha256
++                or self.data.get('proposal_sha256') != self.expected_proposal_sha256):
++            raise Refused('V8_APPROVAL_REQUIRED')
+ 
+     def close(self):
+         if self._lock is not None:
+@@ -62,6 +138,27 @@
+             raise Refused('CONTROLLER_CHANGED')
+         if accounting is not None:
+             self.data['collector'] = tokens.checkpoint(accounting)
++        previous = json.loads(self.raw)
++        if (digest(self.data.get('policy')) != digest(POLICY)
++                or digest(self.data.get('ancestry')) != digest(ANCESTRY)
++                or self.data.get('root') != str(self.root)
++                or not set(previous['requests']).issubset(self.data['requests'])
++                or not set(previous['faults']).issubset(self.data['faults'])
++                or (previous['authorization_sha256'] is not None
++                    and self.data['authorization_sha256'] != previous['authorization_sha256'])
++                or (previous['proposal_sha256'] is not None
++                    and self.data['proposal_sha256'] != previous['proposal_sha256'])
++                or tokens.summary(self.accounting)['known_observed_tokens'] <
++                    tokens.summary(tokens.restore(previous['collector']))['known_observed_tokens']):
++            raise Refused('CONTROLLER_REGRESSION')
++        for key, request in previous['requests'].items():
++            current = self.data['requests'][key]
++            if (current['kind'] != request['kind'] or current['lane'] != request['lane']
++                    or (request['kind'] == 'setup'
++                        and current['monitor']['high_water'] < request['monitor']['high_water'])):
++                raise Refused('CONTROLLER_REGRESSION')
++        self.data['state_sha256'] = seal(self.data)
++        self._validate()
+         raw = (json.dumps(self.data, sort_keys=True, indent=2)+'\n').encode()
+         pending = self.path.with_name(self.path.name+'.pending')
+         with pending.open('xb') as stream:
+@@ -77,15 +174,23 @@
+     def summary(self):
+         work = tokens.summary(self.accounting)
+         setup = sum(r['monitor']['high_water'] for r in self.data['requests'].values() if r['kind']=='setup')
+-        total = setup + work['known_observed_tokens']
++        total = POLICY['carry_in_tokens'] + setup + work['known_observed_tokens']
+         current = [k for k,r in self.data['requests'].items() if not r.get('settled')]
+         reasons = list(self.data['faults'])
++        if (not self._approval_valid() or self.data['authorization_sha256'] != self.approval_sha256
++                or self.data['proposal_sha256'] != self.expected_proposal_sha256):
++            reasons.append('V8_APPROVAL_REQUIRED')
+         if any(r['kind']=='work' for r in self.data['requests'].values()):
+             reasons += work['reasons']
+         if current: reasons.append('SERIAL_REQUEST_UNSETTLED')
+         if len(self.data['requests']) >= 6: reasons.append('GLOBAL_ALLOCATION_EXHAUSTED')
+-        if total >= 100000: reasons.append('PREVENTIVE_THRESHOLD_REACHED')
+-        return {'known_observed_tokens':total, 'reserved_requests':len(self.data['requests']),
++        if total >= POLICY['preventive_cumulative_tokens']: reasons.append('PREVENTIVE_THRESHOLD_REACHED')
++        return {'known_observed_tokens':total,
++                'new_observed_tokens':setup + work['known_observed_tokens'],
++                'carry_in_tokens':POLICY['carry_in_tokens'],
++                'reserved_requests':POLICY['carry_in_admissions'] + len(self.data['requests']),
++                'new_reserved_requests':len(self.data['requests']), 'policy':deepcopy(POLICY),
++                'ancestry':deepcopy(ANCESTRY),
+                 'current':current, 'can_admit':not reasons, 'reasons':sorted(set(reasons)),
+                 'final_or_billed_usage':False, 'operational_tolerance':700000}
+ 
+@@ -110,6 +215,7 @@
+         self.attach_owner(r['lane'],owner_home,stop)
+ 
+     def _reserve(self, request_id, record):
++        self._require_authorized()
+         if record['lane'] not in self.stops: raise Refused('OWNER_STOP_NOT_ATTACHED')
+         self.poll()
+         if request_id in self.data['requests'] or not self.summary()['can_admit']:
+@@ -118,6 +224,7 @@
+         self.data['requests'][request_id] = record
+ 
+     def setup(self, request_id, lane, owner_home, dispatch, stop_owner):
++        self._require_authorized()
+         if lane not in ('local','connector'): raise Refused('LANE_INVALID')
+         self.attach_owner(lane,owner_home,stop_owner)
+         prior=[r['monitor'] for r in self.data['requests'].values()
+@@ -132,6 +239,7 @@
+             raise
+ 
+     def work(self, request_id, lane, text, *, stage='useful_work'):
++        self._require_authorized()
+         flow = self.flows[lane]
+         binding = flow.binding()
+         scope = {k:binding[k] for k in tokens.PRE_SCOPE}
+@@ -228,8 +336,8 @@
+         if missing_usage: self.fault('WORK_TERMINAL_USAGE_MISSING')
+         for key,r in self.data['requests'].items():
+             reason = ('OBSERVATION_UNKNOWN' if self.data['faults'] or bad_work else
+-                      'PREVENTIVE_THRESHOLD' if total>=100000 else
+-                      'DEADLINE120' if not r['settled'] and now-r['started']>=120 else None)
++                      'PREVENTIVE_THRESHOLD' if total>=POLICY['preventive_cumulative_tokens'] else
++                      'DEADLINE120' if not r['settled'] and now-r['started']>=POLICY['deadline_seconds'] else None)
+             if reason and not r['settled'] and r['stop_selected'] is None:
+                 terminal = any(t['operation_id']==r.get('operation') and t['stream']==r.get('stream') and t['terminal']
+                                for t in token_state['turns'].values())
+--- historical/token_collector.py
++++ v8/token_collector.py
+@@ -46,7 +46,7 @@
+ 
+ 
+ def initial_state():
+-    return {'version': 1, 'revision': 0, 'stop_at': 100000, 'tolerance': 700000, 'max_requests': 6,
++    return {'version': 1, 'revision': 0, 'stop_at': 200000, 'tolerance': 700000, 'max_requests': 6,
+             'streams': {}, 'threads': {}, 'turns': {}, 'requests': {},
+             'current_request': None, 'faults': []}
+ 
+@@ -413,7 +413,7 @@
+ 
+ def checkpoint(state):
+     body = deepcopy(state)
+-    return {'format': 'm1-token-collector-v1', 'state': body, 'sha256': fingerprint(body)}
++    return {'format': 'm1-token-collector-v8', 'state': body, 'sha256': fingerprint(body)}
+ 
+ 
+ def restore(document):
+@@ -421,9 +421,9 @@
+ 
+     No fallback to a zero state on failure. A fresh campaign must be explicit.
+     """
+-    require(type(document) is dict and document.get('format') == 'm1-token-collector-v1', 'CHECKPOINT_INVALID')
++    require(type(document) is dict and document.get('format') == 'm1-token-collector-v8', 'CHECKPOINT_INVALID')
+     state = document.get('state')
+-    require(type(state) is dict and state.get('version') == 1 and state.get('stop_at') == 100000
++    require(type(state) is dict and state.get('version') == 1 and state.get('stop_at') == 200000
+             and state.get('tolerance') == 700000 and state.get('max_requests') == 6
+             and document.get('sha256') == fingerprint(state), 'CHECKPOINT_INVALID')
+     require(set(state) == set(initial_state()), 'CHECKPOINT_INVALID')

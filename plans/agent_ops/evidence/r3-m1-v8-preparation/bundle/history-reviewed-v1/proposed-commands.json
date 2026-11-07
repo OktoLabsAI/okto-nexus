@@ -1,0 +1,296 @@
+{
+  "status": "PROPOSED_NOT_EXECUTED",
+  "native": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+  "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+  "provider_home": "C:/Users/jpamb/.codex",
+  "origin": "http://127.0.0.1:49807",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "instance_id": "svc_23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "exists": false
+    },
+    "connector": {
+      "name": "OktoNexus-connector-a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "instance_id": "svc_a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "exists": false
+    }
+  },
+  "steps": [
+    {
+      "component": "nexus",
+      "action": "install",
+      "task_name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "install",
+        "--user",
+        "--start-at-login",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "49807",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\local-project",
+        "--embedding-mode",
+        "off",
+        "--feature-harness-integrations",
+        "true",
+        "--metrics-mode",
+        "disabled",
+        "--harness-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+        "--timeout",
+        "45",
+        "--json"
+      ]
+    },
+    {
+      "component": "nexus",
+      "action": "start",
+      "task_name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "start",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "49807",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\local-project",
+        "--embedding-mode",
+        "off",
+        "--feature-harness-integrations",
+        "true",
+        "--metrics-mode",
+        "disabled",
+        "--harness-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+        "--timeout",
+        "45",
+        "--json"
+      ]
+    },
+    {
+      "component": "nexus",
+      "action": "stop",
+      "task_name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "stop",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "49807",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\local-project",
+        "--embedding-mode",
+        "off",
+        "--feature-harness-integrations",
+        "true",
+        "--metrics-mode",
+        "disabled",
+        "--harness-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+        "--timeout",
+        "45",
+        "--json"
+      ]
+    },
+    {
+      "component": "nexus",
+      "action": "uninstall",
+      "task_name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "service",
+        "uninstall",
+        "--user",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "49807",
+        "--project-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\local-project",
+        "--embedding-mode",
+        "off",
+        "--feature-harness-integrations",
+        "true",
+        "--metrics-mode",
+        "disabled",
+        "--harness-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+        "--timeout",
+        "45",
+        "--json"
+      ]
+    },
+    {
+      "component": "connector",
+      "action": "install",
+      "task_name": "OktoNexus-connector-a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\connector-state",
+        "--non-interactive",
+        "service",
+        "install",
+        "--json"
+      ]
+    },
+    {
+      "component": "connector",
+      "action": "start",
+      "task_name": "OktoNexus-connector-a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\connector-state",
+        "--non-interactive",
+        "daemon",
+        "start",
+        "--timeout",
+        "45",
+        "--json"
+      ]
+    },
+    {
+      "component": "connector",
+      "action": "stop",
+      "task_name": "OktoNexus-connector-a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\connector-state",
+        "--non-interactive",
+        "daemon",
+        "stop",
+        "--timeout",
+        "45",
+        "--json"
+      ]
+    },
+    {
+      "component": "connector",
+      "action": "uninstall",
+      "task_name": "OktoNexus-connector-a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\connector-state",
+        "--non-interactive",
+        "service",
+        "uninstall",
+        "--json"
+      ]
+    }
+  ],
+  "service_selection_args": [
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "49807",
+    "--project-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\local-project",
+    "--embedding-mode",
+    "off",
+    "--feature-harness-integrations",
+    "true",
+    "--metrics-mode",
+    "disabled",
+    "--harness-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+  ],
+  "required_parent_path": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+    "C:/Windows/System32",
+    "C:/Program Files/Git/cmd"
+  ],
+  "environment_scope": "Use a dedicated bootstrap environment with this PATH; do not inherit provider keys or personal CLI settings into service definitions.",
+  "phases": [
+    "Install/start Nexus before local connect.",
+    "Install/start Connector before remote connect.",
+    "After both finite work lanes are terminal, stop/drain and uninstall each owned task."
+  ],
+  "guards": [
+    "Recheck pinned artifacts, exact task absence, empty homes and port before effects.",
+    "Create only the reviewed scratch paths/fixture files before install; never overwrite existing paths.",
+    "Registration generates ownership tokens privately; never export raw task XML or token-bearing argv.",
+    "No restart, force, logout or reboot is included here. Unconfirmed stop/cleanup is reported, not bypassed.",
+    "No action here is approved yet. No force/restart/replay. Uninstall only after exact owned PID/birth exit and stopped task are confirmed.",
+    "One final explicit approval is still required. Eight explicit commands plus at most one implicit Scheduler start; no force/replay/additional connect --identity."
+  ],
+  "counts": {
+    "m1_service_mutations": 8,
+    "m1_user_tasks": 2,
+    "provider_new_admissions_max": 6,
+    "provider_cumulative_admissions_max": 8,
+    "explicit_lifecycle_commands": 8,
+    "implicit_ensure_start_calls_maximum": 1,
+    "implicit_scheduler_start_maximum": 1,
+    "maximum_service_start_stop_install_uninstall_effects": 9
+  },
+  "commands_executed": 0,
+  "authorization_received": false,
+  "package_pin_status": "QUALIFIED_WHEELS_INSTALL_RECEIPT_REQUIRED",
+  "execution_blocked": true,
+  "baseline_preflight": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\preflight.json",
+    "sha256": "360e6a86c1fdefef6c52c0aeac2bfff554c0c4ddddbe744935ffdff43211dfc4",
+    "not_current_new_environment_proof": true
+  },
+  "implicit_ensure": {
+    "command": "Single Connector connect --setup-receipt consumer",
+    "environment_override_consumer_only": {
+      "OKTO_NEXUS_CONNECTER_DAEMON_FG": "1"
+    },
+    "allowed": "Reuse ready owner or at most one Scheduler start of the same registered task; no detached fallback.",
+    "not_atomic": "Preflight is not a fence; same task/digest/supervisor and post-Finish PID/birth/generation are checked before work."
+  }
+}

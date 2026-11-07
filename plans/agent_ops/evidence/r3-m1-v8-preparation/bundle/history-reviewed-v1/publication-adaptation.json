@@ -1,0 +1,22 @@
+{
+  "status": "PREPARATION_ONLY",
+  "change": "Repeated pending-native-request snapshot uses publish_live with separate diagnostics and returns before decision when publication is deferred; matching reviewed approval ID/revision still required. Private checkpoints and single-use decision/intent writes remain outside catch.",
+  "work_sha256": "ea12d334a0510ca3e5e902321c22f9bbdaec0255a251acb94e3c354b3fba19b3",
+  "helper_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+  "reused_helper_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-publication-fix-yyrrsn1l\\results.xml",
+    "sha256": "f92ea344d3219fd59cf1b59f52d9e573ba59a2dd967db2d7f2511ea7af54b5b0",
+    "counts": {
+      "tests": 10,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "rerun": false
+  },
+  "guard_result_sha256": "2bf9892401b242aea347534134ea85a9899544fcb50114a8990b18749ad2e8bb",
+  "provider_calls": 0,
+  "historical_work_sha256": "16756138e2d99cf8aed0e15c4bbdb20e48104c4973d513ebd92ef30d39c774d5",
+  "historical_guard_result_sha256": "31302c1a59b46521b73f15f7c1263e13d8c42df7c398a593b7ff189b5fb6c69e",
+  "qualification_limit": "Unchanged publication helper retains its historical 10-case qualification. The composed approved work path has not executed; current validation is static compile and 12 refusal guards."
+}

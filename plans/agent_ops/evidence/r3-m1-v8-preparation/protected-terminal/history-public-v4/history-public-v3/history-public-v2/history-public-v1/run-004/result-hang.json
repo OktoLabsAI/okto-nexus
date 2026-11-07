@@ -1,0 +1,25 @@
+{
+  "status": "UNCONFIRMED",
+  "worker_pid": 43692,
+  "worker_birth_filetime": 134385523477109323,
+  "forced_owned_cleanup": false,
+  "worker_assigned_before_gate": true,
+  "error_type": "TransferError",
+  "error_frames": [
+    {
+      "file": "protected_pty.py",
+      "function": "<module>",
+      "line": 179
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "_worker",
+      "line": 70
+    }
+  ],
+  "reason": "PRODUCER_DEADLINE",
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "case": "hang",
+  "consumer_started": false
+}

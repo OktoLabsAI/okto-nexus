@@ -1,0 +1,15 @@
+{
+  "case": "producer-identity-failure",
+  "status": "PASS",
+  "kind": "injected_boundary_model",
+  "actual_processes_started": 0,
+  "progress": {
+    "producer_started": true,
+    "consumer_started": false,
+    "consumer_start_count": 0,
+    "delivery_attempted": false,
+    "possible_effect": true,
+    "possible_consumer_effect": false,
+    "consumer_io_completed": false
+  }
+}

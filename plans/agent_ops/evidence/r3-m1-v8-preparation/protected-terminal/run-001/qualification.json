@@ -1,0 +1,156 @@
+{
+  "status": "SYNTHETIC_ONLY_PASS",
+  "case_count": 3,
+  "cases": [
+    {
+      "status": "TRANSFERRED_ONCE",
+      "possible_effect": true,
+      "delivery_attempted": true,
+      "consumer_started": true,
+      "worker_pid": 54276,
+      "worker_birth_filetime": 134385554882819629,
+      "forced_owned_cleanup": false,
+      "worker_assigned_before_gate": true,
+      "producer_started": true,
+      "consumer_start_count": 1,
+      "possible_consumer_effect": true,
+      "consumer_io_completed": true,
+      "producer": {
+        "pid": 56472,
+        "birth_filetime": 134385554887608682,
+        "exact_job_member": true
+      },
+      "material_block_observed": true,
+      "material_seen_before_ready_marker": true,
+      "consumer_ready_marker_observed": true,
+      "producer_alive_at_consumer_start": true,
+      "consumer": {
+        "pid": 53840,
+        "birth_filetime": 134385554954856428,
+        "exact_job_member": true
+      },
+      "consumer_exit": 0,
+      "producer_exit": 0,
+      "material_in_public_result": false,
+      "material_in_argv_or_env": false,
+      "consumer_did_not_echo": true,
+      "tty_probe": {
+        "pid": 56472,
+        "streams": {
+          "stdin": true,
+          "stdout": true,
+          "stderr": true
+        },
+        "visible": false
+      },
+      "consumer_material_matches": true,
+      "material_absent_from_synthetic_files": true,
+      "active_job_processes_after": 0,
+      "worker_exit": 0,
+      "case": "key-before-handoff",
+      "consumer_marker": true,
+      "material_received_marker": true,
+      "handoff_exists": true,
+      "producer_saw_ack": true
+    },
+    {
+      "status": "UNCONFIRMED",
+      "possible_effect": true,
+      "delivery_attempted": false,
+      "consumer_started": false,
+      "worker_pid": 8760,
+      "worker_birth_filetime": 134385554968882716,
+      "forced_owned_cleanup": false,
+      "worker_assigned_before_gate": true,
+      "producer_started": true,
+      "consumer_start_count": 0,
+      "possible_consumer_effect": false,
+      "consumer_io_completed": false,
+      "producer": {
+        "pid": 53828,
+        "birth_filetime": 134385554975396741,
+        "exact_job_member": true
+      },
+      "material_block_observed": true,
+      "material_seen_before_ready_marker": true,
+      "error_type": "TransferError",
+      "error_frames": [
+        {
+          "file": "protected_pty.py",
+          "function": "<module>",
+          "line": 253
+        },
+        {
+          "file": "protected_pty.py",
+          "function": "_worker",
+          "line": 96
+        }
+      ],
+      "reason": "TRANSFER_DEADLINE",
+      "active_job_processes_after": 0,
+      "worker_exit": 0,
+      "case": "marker-absent",
+      "consumer_marker": false,
+      "material_received_marker": false,
+      "handoff_exists": false,
+      "producer_saw_ack": false
+    },
+    {
+      "status": "UNCONFIRMED",
+      "possible_effect": true,
+      "delivery_attempted": false,
+      "consumer_started": false,
+      "worker_pid": 31472,
+      "worker_birth_filetime": 134385555072536658,
+      "forced_owned_cleanup": false,
+      "worker_assigned_before_gate": true,
+      "producer_started": true,
+      "consumer_start_count": 0,
+      "possible_consumer_effect": false,
+      "consumer_io_completed": false,
+      "producer": {
+        "pid": 59320,
+        "birth_filetime": 134385555077445589,
+        "exact_job_member": true
+      },
+      "material_block_observed": true,
+      "material_seen_before_ready_marker": true,
+      "error_type": "TransferError",
+      "error_frames": [
+        {
+          "file": "protected_pty.py",
+          "function": "<module>",
+          "line": 253
+        },
+        {
+          "file": "protected_pty.py",
+          "function": "_worker",
+          "line": 105
+        }
+      ],
+      "reason": "CONSUMER_READY_MARKER_MISMATCH",
+      "active_job_processes_after": 0,
+      "worker_exit": 0,
+      "case": "marker-divergent",
+      "consumer_marker": false,
+      "material_received_marker": false,
+      "handoff_exists": false,
+      "producer_saw_ack": false
+    }
+  ],
+  "product_cli_calls": 0,
+  "real_credentials": 0,
+  "providers": 0,
+  "installed_functions": [
+    "remote_setup_io.material_sink",
+    "remote_setup_io.handoff_sink"
+  ],
+  "limit": "Only delayed handoff publication/marker gate. No CLI/service/account or full canonical handoff schema validation.",
+  "source_hashes": {
+    "protected_pty.py": "3e9819f37d7bd04a55dc094f3e05d62f13eb8fcbf0b404abf3f2f1e9279291b1",
+    "owned_job.py": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+    "marker_producer.py": "37702c0fcbeb578a932cd2b7cdf3b62282d336825413e7fbf157c66d2b52bea0",
+    "marker_consumer.py": "ac3f4cef70b97fc5127ce76e7e64a9212d80e0fe6c5a0f8bf2a6f9142174cf40",
+    "qualify.py": "29b8f2719668e28258a59c8f9877c6c5735b1ed9827d108945475742f8db00cf"
+  }
+}

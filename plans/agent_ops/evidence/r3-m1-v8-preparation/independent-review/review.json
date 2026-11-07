@@ -1,0 +1,76 @@
+{
+  "status": "CONCRETE_COMPOSITION_BLOCKER",
+  "review_mode": "read_only_no_execution",
+  "proposal_sha256": "eeff7487cfe6dff7e1c865541437d160594e9059482adc795b91b09506e5ec0b",
+  "bundle_manifest_sha256": "4e037c5e1a54acf9bd5005488027114747bad88cdbcfd8f8fb9f5292f462cc34",
+  "findings": [
+    {
+      "id": "HANDOFF_PUBLICATION_AFTER_MATERIAL",
+      "severity": "blocker_before_remote_one_shot_execution",
+      "source": [
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\application\\remote_terminal_setup.py",
+          "lines": [
+            202,
+            207,
+            208,
+            209,
+            211
+          ]
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\connect_setup.py",
+          "lines": [
+            105,
+            133
+          ]
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\revision-4\\protected_pty.py",
+          "function": "_worker"
+        },
+        {
+          "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-ready-_t6016fl\\m1_v8_remote_setup.py",
+          "function": "top-level transfer composition"
+        }
+      ],
+      "observation": "Nexus prints the complete one-shot material block before saving material_delivery and exporting the public handoff. V4 starts Connector immediately at that block, while Connector reads the handoff before stdin.",
+      "consequence": "Connector can read a still-absent handoff and fail the single reserved transfer. The existing conservative refusal prevents replay but does not eliminate this ordering race.",
+      "minimal_resolution": "Require handoff initially absent in wrapper; keep producer drained and defer consumer until the exact canonical public handoff marker emitted after atomic_json. Keep canonical Connector content/scope validation and deadline; no retry.",
+      "resolution_at_snapshot": "not implemented; parent approved a separate V5 preparation after this review"
+    }
+  ],
+  "confirmed_checks": [
+    "The four entry scripts call the exact proposal/approval gate before product imports or effects; timed-install receipt and actual payload pins are required before campaign entry.",
+    "Producer argv uses current review approval and no JSON; consumer correctly omits --non-interactive/--json and selects --setup-receipt, --credential-stdin and --no-start-at-login.",
+    "Consumer-only FG=1 refuses detached fallback. Installed lifecycle source selects ready reuse or one owned UserService Scheduler start; postcheck verifies same task/digest/instance and live PID/birth/generation before remote work.",
+    "Auxiliary Job containment has no breakaway and is distinct from the externally supervised service. This is static composition reasoning, not a real Scheduler-race qualification.",
+    "Installation, lifecycle and remote transfer reserve exclusively before effects; controller/response-loss state prevents productive POST replay. Unknown stop does not authorize force or repeated cleanup.",
+    "Timed install uses three exact hashed wheels, offline/no-deps pip, a durable one-shot reservation, 982 payload comparison, import-prefix and pip-check receipt bound to proposal/approval/reservation."
+  ],
+  "retained_evidence_read": {
+    "entry_guards": {
+      "cases": 12,
+      "effects": {
+        "popen": 0,
+        "socket": 0,
+        "vault": 0
+      }
+    },
+    "installed_fg_branches": {
+      "cases": 3,
+      "real_scheduler": false
+    },
+    "tests_executed_by_reviewer": 0
+  },
+  "limits": [
+    "No authorization exists or was created by this review.",
+    "No product CLI, service, provider, account, vault or personal configuration was accessed.",
+    "No live campaign, actual service race, install duration or BASE-06/M1 success was qualified.",
+    "Package/bundle hashes were checked read-only; installed function sources were inspected, without importing product modules.",
+    "This report applies only to snapshot eeff7487; later fixes require a new pin or focused addendum."
+  ],
+  "bundle_payloads_verified": 22,
+  "execution_dependency_pins_verified": 27,
+  "other_concrete_blockers_found": []
+}

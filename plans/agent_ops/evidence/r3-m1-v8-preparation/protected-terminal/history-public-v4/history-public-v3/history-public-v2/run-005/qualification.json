@@ -1,0 +1,152 @@
+{
+  "status": "SYNTHETIC_ONLY_PASS",
+  "cases": [
+    {
+      "status": "TRANSFERRED_ONCE",
+      "worker_pid": 32512,
+      "worker_birth_filetime": 134385526608572312,
+      "forced_owned_cleanup": false,
+      "worker_assigned_before_gate": true,
+      "producer": {
+        "pid": 58124,
+        "birth_filetime": 134385526615573439,
+        "exact_job_member": true
+      },
+      "consumer": {
+        "pid": 48980,
+        "birth_filetime": 134385526661552547,
+        "exact_job_member": true
+      },
+      "producer_exit": 0,
+      "consumer_exit": 0,
+      "material_in_public_result": false,
+      "material_in_argv_or_env": false,
+      "consumer_did_not_echo": true,
+      "tty_probe": {
+        "pid": 58124,
+        "streams": {
+          "stdin": true,
+          "stdout": true,
+          "stderr": true
+        },
+        "visible": false
+      },
+      "consumer_material_matches": true,
+      "material_absent_from_synthetic_files": true,
+      "active_job_processes_after": 0,
+      "worker_exit": 0,
+      "case": "normal",
+      "consumer_started": true
+    },
+    {
+      "status": "UNCONFIRMED",
+      "worker_pid": 54356,
+      "worker_birth_filetime": 134385526667682993,
+      "forced_owned_cleanup": false,
+      "worker_assigned_before_gate": true,
+      "error_type": "TransferError",
+      "error_frames": [
+        {
+          "file": "protected_pty.py",
+          "function": "<module>",
+          "line": 186
+        },
+        {
+          "file": "protected_pty.py",
+          "function": "_worker",
+          "line": 93
+        },
+        {
+          "file": "protected_pty.py",
+          "function": "extract",
+          "line": 34
+        }
+      ],
+      "reason": "MATERIAL_NOT_UNIQUE",
+      "active_job_processes_after": 0,
+      "worker_exit": 0,
+      "case": "ambiguous",
+      "consumer_started": false
+    },
+    {
+      "status": "UNCONFIRMED",
+      "worker_pid": 24188,
+      "worker_birth_filetime": 134385526723589745,
+      "forced_owned_cleanup": false,
+      "worker_assigned_before_gate": true,
+      "error_type": "TransferError",
+      "error_frames": [
+        {
+          "file": "protected_pty.py",
+          "function": "<module>",
+          "line": 186
+        },
+        {
+          "file": "protected_pty.py",
+          "function": "_worker",
+          "line": 78
+        }
+      ],
+      "reason": "PRODUCER_DEADLINE",
+      "active_job_processes_after": 0,
+      "worker_exit": 0,
+      "case": "hang",
+      "consumer_started": false
+    },
+    {
+      "status": "TRANSFERRED_ONCE",
+      "worker_pid": 4432,
+      "worker_birth_filetime": 134385526778469203,
+      "forced_owned_cleanup": false,
+      "worker_assigned_before_gate": true,
+      "producer": {
+        "pid": 39648,
+        "birth_filetime": 134385526783930297,
+        "exact_job_member": true
+      },
+      "consumer": {
+        "pid": 48916,
+        "birth_filetime": 134385526856203445,
+        "exact_job_member": true
+      },
+      "producer_exit": 0,
+      "consumer_exit": 0,
+      "material_in_public_result": false,
+      "material_in_argv_or_env": false,
+      "consumer_did_not_echo": true,
+      "tty_probe": {
+        "pid": 39648,
+        "streams": {
+          "stdin": true,
+          "stdout": true,
+          "stderr": true
+        },
+        "visible": false,
+        "installed_sink": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\remote_setup_io.py"
+      },
+      "consumer_material_matches": true,
+      "material_absent_from_synthetic_files": true,
+      "active_job_processes_after": 0,
+      "worker_exit": 0,
+      "case": "installed-functions",
+      "consumer_started": true
+    }
+  ],
+  "product_cli_calls": 0,
+  "providers": 0,
+  "real_credentials": 0,
+  "installed_functions": [
+    "okto_nexus.adapters.inbound.cli.remote_setup_io.material_sink",
+    "okto_nexus_connector.identity.import_flow.read_secret_stdin"
+  ],
+  "source_hashes": {
+    "consumer.py": "e35f85e2f6fa536a9ff096c76c35e210b97bcfd40bd7bae40b90e04fb34d730b",
+    "owned_job.py": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+    "prepare.py": "5f59d9147cc6cc51d51573233acb1e66d49a1fc6dd8de33aa7323085de3d25b3",
+    "producer.py": "2ae3a8d4eb4bb1b963d9863c82489d6ec8625d0d936dd67e017eae88b06e083f",
+    "product_consumer.py": "bb1a866bc9d0073f63f004ac4c94f850b0c70da791c96c21f0d91aaf6b081a3e",
+    "product_producer.py": "a8e5fe7ef05a9961a0631d8e630733bda74bbfe1b21e7f1838c422075e92509e",
+    "protected_pty.py": "2a5b628625054b8353bbc953dd6be7ec628f468af4606707110adac229710c32",
+    "qualify.py": "b2716dc4137684662fd755e48ec051512b9304ce67453194a7c963c3b83ee17e"
+  }
+}

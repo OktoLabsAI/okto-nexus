@@ -1,0 +1,34 @@
+{
+  "status": "HELPER_ORDERING_FIX_QUALIFIED_WITH_WRAPPER_PRECONDITION",
+  "historical_review_sha256": "d82a81a95ad4aa18faee21302e6dd8a877cee4cde9ef418d7082d188e42908b2",
+  "historical_proposal_sha256": "eeff7487cfe6dff7e1c865541437d160594e9059482adc795b91b09506e5ec0b",
+  "finding": "HANDOFF_PUBLICATION_AFTER_MATERIAL",
+  "resolution": "V5 holds the key block and waits for the exact complete public handoff marker before one consumer start, while draining the producer. Canonical installed marker is emitted after atomic_json.",
+  "caller_preconditions": [
+    "Require the public handoff initially absent before reserving transfer.",
+    "Pass the exact canonical marker with the absolute handoff path.",
+    "Keep canonical Connector handoff scope/content validation and no replay."
+  ],
+  "current_cases": 3,
+  "source_hashes": {
+    "protected_pty.py": "3e9819f37d7bd04a55dc094f3e05d62f13eb8fcbf0b404abf3f2f1e9279291b1",
+    "owned_job.py": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+    "marker_producer.py": "37702c0fcbeb578a932cd2b7cdf3b62282d336825413e7fbf157c66d2b52bea0",
+    "marker_consumer.py": "ac3f4cef70b97fc5127ce76e7e64a9212d80e0fe6c5a0f8bf2a6f9142174cf40",
+    "qualify.py": "29b8f2719668e28258a59c8f9877c6c5735b1ed9827d108945475742f8db00cf"
+  },
+  "positive_oracles": [
+    "material_seen_before_ready_marker=true",
+    "consumer_ready_marker_observed=true",
+    "consumer_start_count=1",
+    "producer_alive_at_consumer_start=true",
+    "producer_exit=consumer_exit=0",
+    "active_job_processes_after=0"
+  ],
+  "negative_oracles": "Missing/deadline and divergent marker both refuse with zero consumers and no delivery attempt; possible producer effects remain true.",
+  "limits": [
+    "No real product CLI, service, provider or account ran.",
+    "Direct installed terminal/handoff IO functions plus synthetic consumer only; no full handoff schema/authentication qualification.",
+    "Root reviews the new wrapper/pins separately. The old eeff snapshot remains blocked and unchanged."
+  ]
+}

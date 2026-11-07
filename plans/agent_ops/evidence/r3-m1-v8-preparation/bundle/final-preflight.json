@@ -1,0 +1,55 @@
+{
+  "status": "PASS_READ_ONLY_FINAL_PRODUCT_PINS",
+  "time_utc": "2026-11-07T19:15:22.662505+00:00",
+  "package_proof_sha256": "a9b2bae40cbf6e066ad459b69eb4d2debe8f255bcd9ae7c19d3f02a6a6d6ab26",
+  "packages": {
+    "okto_nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-path-fix-8rktvrtc\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "fdb8f37866f5332244a6916d6e6eaac433cd317d4ed2792a81bd4a3f426b49c2",
+      "files": 691,
+      "package": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus",
+      "installed_files_verified": 691,
+      "import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py"
+    },
+    "okto_nexus_connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "files": 124,
+      "package": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector",
+      "installed_files_verified": 124,
+      "import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py"
+    },
+    "nexus_connector_core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\wheel\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+      "files": 167,
+      "package": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\nexus_connector_core",
+      "installed_files_verified": 167,
+      "import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+    }
+  },
+  "installed_product_files_verified": 982,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Scripts\\python.exe",
+  "native_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "instance_id": "svc_23bf0bda2edd25da4ebd5285eebf0b136f7add0f62d54d6935493b094d5851fd",
+      "exists": false
+    },
+    "connector": {
+      "name": "OktoNexus-connector-a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "instance_id": "svc_a3617912bc046e241431263aad37b26a00e7dd33a5a84ca6a299602791543d77",
+      "exists": false
+    }
+  },
+  "all_targets_absent": true,
+  "origin": "http://127.0.0.1:49807",
+  "exclusive_port_probe_passed_not_reserved": true,
+  "predecessor_checkpoint_unchanged": true,
+  "recheck_before_effects_required": true,
+  "service_mutations": 0,
+  "native_processes": 0,
+  "provider_calls": 0,
+  "credential_reads": 0
+}

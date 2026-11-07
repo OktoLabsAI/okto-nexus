@@ -1,0 +1,24 @@
+{
+  "status": "UNCONFIRMED",
+  "worker_pid": 52740,
+  "worker_birth_filetime": 134385522960847846,
+  "forced_owned_cleanup": true,
+  "worker_assigned_before_gate": true,
+  "error_type": "WinptyError",
+  "error_frames": [
+    {
+      "file": "protected_pty.py",
+      "function": "<module>",
+      "line": 166
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "_worker",
+      "line": 69
+    }
+  ],
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "case": "normal",
+  "consumer_started": false
+}

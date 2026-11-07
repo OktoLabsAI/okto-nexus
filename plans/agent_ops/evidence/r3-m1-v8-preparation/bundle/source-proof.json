@@ -1,0 +1,50 @@
+{
+  "status": "INSTALLED_SOURCE_READ_ONLY",
+  "files": {
+    "okto_nexus_connector/platform/user_service.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\platform\\user_service.py",
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804"
+    },
+    "okto_nexus_connector/daemon/lifecycle.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\daemon\\lifecycle.py",
+      "sha256": "3b7541b832ed1ff7eaba213ddefbc841a56d869754a7eb863f3930ada420c4d8"
+    },
+    "okto_nexus_connector/cli/commands/connect.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\connect.py",
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4"
+    },
+    "okto_nexus_connector/cli/commands/connect_setup.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\connect_setup.py",
+      "sha256": "dce10c03c58b5a827b7aad83b09abc1fd252729366493b654385bc3424c55983"
+    },
+    "okto_nexus_connector/cli/commands/configure_local.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+      "sha256": "eff8932363be322af0107bbaea1ead053c18a3b8203583315829e966ff53f166"
+    },
+    "okto_nexus_connector/services/installation_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\services\\installation_observation.py",
+      "sha256": "9dd372da93d4d998f9cb7c526f690882b55c95d6e7391c97d05e025a0cc20b52"
+    },
+    "okto_nexus/adapters/inbound/cli/connect.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py",
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3"
+    },
+    "okto_nexus/application/remote_terminal_setup.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\application\\remote_terminal_setup.py",
+      "sha256": "c5919c1e317dd0357dba3870b43ecb83e8a91f095ca5c2d77a770e7de3c577d1"
+    }
+  },
+  "facts": [
+    "UserService.observe rejects foreign/missing/changed task ownership/context; start uses Scheduler task.start only after validation.",
+    "lifecycle.start reuses ready owner; when stopped, at most one UserService.start selection occurs. With consumer-only FG=1 the direct manager._spawn fallback is refused.",
+    "connect --setup-receipt returns directly through run_setup; configure_local has one manager.start call. Repeated connect --identity is excluded from this campaign.",
+    "Connector connect rejects --non-interactive/--json before setup routing; consumer uses explicit credential-stdin instead.",
+    "Canonical setup includes bounded version/protocol probes within auxiliary Job; no model turn is submitted by this setup path.",
+    "Operator producer waits for materialization/Finish after printing one-shot key, so producer and consumer must run concurrently."
+  ],
+  "limits": [
+    "Three installed tests use fake service/status and prove branches, not an OS race.",
+    "Before/after owner checks are observations, not an atomic fence. A possible one Scheduler launch is proposed explicitly; no second ensure or replay.",
+    "No service or productive native session may belong to the auxiliary Job; only own CLI/probe processes may be cleaned at its deadline."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "status": "PREPARATION_ONLY",
+  "predecessor": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-ready-_t6016fl\\m1-codex-campaign-proposal-v8.json",
+    "sha256": "eeff7487cfe6dff7e1c865541437d160594e9059482adc795b91b09506e5ec0b",
+    "review_status": "REJECTED_HANDOFF_ORDERING_RACE",
+    "immutable": true
+  },
+  "finding": "Nexus prints the key before persisting/exporting the handoff; Connector reads the handoff before credential stdin. Key footer alone did not prove receipt availability.",
+  "correction": "Require own handoff initially absent and exact canonical post-atomic_json public marker before spawning consumer; preserve concurrent producer draining, one-shot reservation and deadline.",
+  "helper": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\revision-5\\protected_pty.py",
+    "sha256": "3e9819f37d7bd04a55dc094f3e05d62f13eb8fcbf0b404abf3f2f1e9279291b1",
+    "manifest_sha256": "7fe34853d978401caf3502b0e0d608c1a6ac91f3c008b8f84fe51a2d215e58a5"
+  },
+  "no_product_change": true,
+  "execution_authorized": false,
+  "no_service_provider_vault_or_native_execution": true
+}

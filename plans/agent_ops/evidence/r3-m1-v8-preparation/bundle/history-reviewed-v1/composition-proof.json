@@ -1,0 +1,26 @@
+{
+  "status": "READY_FOR_EXECUTION_REVIEW",
+  "helper_manifest_payloads": 93,
+  "installer_manifest_payloads": 23,
+  "helper_origin_preserved": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\revision-4",
+  "pty_dependency_payloads_verified": 12,
+  "target_products_absent": true,
+  "installation_not_executed": true,
+  "static_compile": "PASS",
+  "explicit_lifecycle_commands": 8,
+  "implicit_scheduler_start_maximum": 1,
+  "no_real_authorization_receipt_created": true,
+  "no_provider_or_service_execution": true,
+  "entry_guards": {
+    "unique_cases": 12,
+    "status": "PASS_ENTRY_GUARDS_ONLY",
+    "sha256": "2bf9892401b242aea347534134ea85a9899544fcb50114a8990b18749ad2e8bb",
+    "approved_execution_tested": false
+  },
+  "installed_fg_guards": {
+    "unique_cases": 3,
+    "sha256": "3cff36534481edd08d555c5fc1ed738e6851f377631dde22996c6120a6da9ea7",
+    "real_scheduler_race_tested": false
+  },
+  "execution_authorized": false
+}

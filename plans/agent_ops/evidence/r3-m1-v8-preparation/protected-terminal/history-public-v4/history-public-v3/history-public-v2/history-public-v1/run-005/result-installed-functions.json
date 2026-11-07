@@ -1,0 +1,38 @@
+{
+  "status": "TRANSFERRED_ONCE",
+  "worker_pid": 4432,
+  "worker_birth_filetime": 134385526778469203,
+  "forced_owned_cleanup": false,
+  "worker_assigned_before_gate": true,
+  "producer": {
+    "pid": 39648,
+    "birth_filetime": 134385526783930297,
+    "exact_job_member": true
+  },
+  "consumer": {
+    "pid": 48916,
+    "birth_filetime": 134385526856203445,
+    "exact_job_member": true
+  },
+  "producer_exit": 0,
+  "consumer_exit": 0,
+  "material_in_public_result": false,
+  "material_in_argv_or_env": false,
+  "consumer_did_not_echo": true,
+  "tty_probe": {
+    "pid": 39648,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    },
+    "visible": false,
+    "installed_sink": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\remote_setup_io.py"
+  },
+  "consumer_material_matches": true,
+  "material_absent_from_synthetic_files": true,
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "case": "installed-functions",
+  "consumer_started": true
+}

@@ -1,0 +1,70 @@
+--- C:\Users\jpamb\AppData\Local\Temp\m1-controller-v8-bfx9ol3t\controller.py
++++ C:\Users\jpamb\AppData\Local\Temp\m1-controller-v8-bfx9ol3t\revision-2\controller.py
+@@ -246,6 +246,9 @@
+         current_session = flow.document.get('session_id')
+         known = [k for k,s in self.accounting['streams'].items()
+                  if s['scope']['session_id'] == current_session and all(s['scope'][n]==v for n,v in scope.items())]
++        if current_session is not None and (len(known) != 1
++                or self.accounting['streams'][known[0]]['retired']):
++            raise Refused('SESSION_NOT_OWNED_BY_CONTROLLER')
+         self._reserve(request_id, {'kind':'work', 'lane':lane, 'stage':stage, 'operation':None,
+                                  'session':None, 'stream':None, 'recover':False,'scope':scope})
+         state, allowed = (tokens.reserve(self.accounting, request_id=request_id, stream=known[0], stage=stage)
+--- C:\Users\jpamb\AppData\Local\Temp\m1-controller-v8-bfx9ol3t\test_v8.py
++++ C:\Users\jpamb\AppData\Local\Temp\m1-controller-v8-bfx9ol3t\revision-2\test_v8.py
+@@ -42,6 +42,7 @@
+         self.document = {}
+         self.events = []
+         self.productive = []
++        self.new_sessions = []
+         self.controls = []
+         self.binding_reads = 0
+ 
+@@ -54,6 +55,7 @@
+             self.controls.append((kwargs['action'], client_intent_id))
+             return {}
+         self.productive.append(client_intent_id)
++        self.new_sessions.append(new_session)
+         self.document['session_id'] = scope()['session_id']
+         return {'scope': scope(), 'operation_id': 'op-' + client_intent_id}
+ 
+@@ -110,6 +112,7 @@
+         assert result['known_observed_tokens'] == 145844 and result['can_admit']
+         control.work('two', 'local', 'synthetic', stage='continuation')
+         assert flow.productive == ['one', 'two'] and not flow.controls
++        assert flow.new_sessions == [True, False]
+         assert control.accounting['max_requests'] == 6 and control.accounting['stop_at'] == 200000
+     finally:
+         control.close()
+@@ -275,3 +278,31 @@
+     checkpoint['format'] = 'm1-token-collector-v1'
+     with pytest.raises(tokens.Invalid, match='CHECKPOINT_INVALID'):
+         tokens.restore(checkpoint)
++
++
++@pytest.mark.parametrize('case', ['foreign', 'scope_mismatch', 'ambiguous', 'retired'])
++def test_existing_session_requires_one_owned_active_stream_before_reservation(tmp_path, case):
++    from canonical_fixture import enroll_ready
++
++    control, flow, _, _, _ = owned(tmp_path)
++    flow.document['session_id'] = scope()['session_id']
++    try:
++        if case != 'foreign':
++            selected = scope()
++            if case == 'scope_mismatch':
++                selected['binding_id'] = 'another-binding'
++            state, stream = enroll_ready(selected=selected)
++            if case == 'retired':
++                state['streams'][stream]['retired'] = True
++            elif case == 'ambiguous':
++                state, _ = enroll_ready(state, selected=selected, epoch='other-epoch')
++            control.persist(state)
++        before = control.path.read_bytes()
++        with pytest.raises(Refused, match='SESSION_NOT_OWNED_BY_CONTROLLER'):
++            control.work('foreign-work', 'local', 'must not dispatch')
++        assert flow.productive == [] and flow.controls == []
++        assert control.data['requests'] == {} and control.accounting['requests'] == {}
++        assert control.path.read_bytes() == before
++        assert control.summary()['reserved_requests'] == 2
++    finally:
++        control.close()

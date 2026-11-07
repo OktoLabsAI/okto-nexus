@@ -1,0 +1,91 @@
+{
+  "status": "MATCH",
+  "dependency_and_installed_functions": {
+    "status": "MATCH",
+    "wheel": {
+      "name": "pywinpty",
+      "version": "3.0.3",
+      "wheel": "pywinpty-3.0.3-cp313-cp313-win_amd64.whl",
+      "sha256": "9c91dbb026050c77bdcef964e63a4f10f01a639113c4d3658332614544c467ab",
+      "url": "https://files.pythonhosted.org/packages/e5/cb/58d6ed3fd429c96a90ef01ac9a617af10a6d41469219c25e7dc162abbb71/pywinpty-3.0.3-cp313-cp313-win_amd64.whl",
+      "source": "https://github.com/andfoy/pywinpty/tree/v3.0.3"
+    },
+    "package_payload_count": 12,
+    "package_payloads": {
+      "winpty/OpenConsole.exe": {
+        "sha256": "6b2915a9a91c0738346a6c6a7b3ee2b74e26582b0c92b1b16066e72570dddd68",
+        "bytes": 1149472
+      },
+      "winpty/__init__.py": {
+        "sha256": "95a4e2f6c2e308bc9cc9a4183b7c0cbe164d20adaf87fa4ebc64c94f639de10b",
+        "bytes": 402
+      },
+      "winpty/conpty.dll": {
+        "sha256": "1f5ffd52ff118db975eeb25bac0051f4ceff3e051313fa03a5afffa9e75ee502",
+        "bytes": 109600
+      },
+      "winpty/enums.py": {
+        "sha256": "2809bb5c914f93b9cc5b0509c6f60796a97dd9cafacbe636e081caddf7342435",
+        "bytes": 1860
+      },
+      "winpty/ptyprocess.py": {
+        "sha256": "86e70255f06b89d1d173820f88416b124745854f9429241bc9951af7b11c7837",
+        "bytes": 12209
+      },
+      "winpty/tests/__init__.py": {
+        "sha256": "7f36fd7039cfb764776ffad687ab2a0e021b890399b4195fb15d5aabe50b4f64",
+        "bytes": 53
+      },
+      "winpty/tests/test_pty.py": {
+        "sha256": "017ba34326d784aaf4b7450aa4d052a9e01fb26e1f1e853fa209db8a87011792",
+        "bytes": 3947
+      },
+      "winpty/tests/test_ptyprocess.py": {
+        "sha256": "31e1a9fcffb392c784a748977225a1f456b9e3c85819dbe571a1f2fd6344c17a",
+        "bytes": 6112
+      },
+      "winpty/winpty-agent.exe": {
+        "sha256": "44467a83d86b6127bc7b876e8b2fb33fa75fde09d9b9ff27c7f8ef84ba969b29",
+        "bytes": 2627338
+      },
+      "winpty/winpty.cp313-win_amd64.pyd": {
+        "sha256": "50b107ec1a9393a464071459023e8c6fc4b0f236e97731c31a741dcd56524df8",
+        "bytes": 553472
+      },
+      "winpty/winpty.dll": {
+        "sha256": "5177f321aac2fa85436dd6ec6bfc6d41459d25f5b533aa03349ef513461b4c79",
+        "bytes": 2509089
+      },
+      "winpty/winpty.pyi": {
+        "sha256": "f957a7a300afcbcb63219502bef6f9559c3947573a0135c451fb22132219c231",
+        "bytes": 1176
+      }
+    },
+    "installed_function_sources": {
+      "okto_nexus/adapters/inbound/cli/remote_setup_io.py": {
+        "sha256": "3244aac9c49b9a94bf86f00cc4e99cc084a10481d5d5afe2c3ecf3326dbaf3df",
+        "bytes": 6833,
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\remote_setup_io.py"
+      },
+      "okto_nexus/domain/keys.py": {
+        "sha256": "bfa92216586cbef347ef75255d4704104ecf35d5f295edaa24760e54dabd8790",
+        "bytes": 1785,
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus\\domain\\keys.py"
+      },
+      "okto_nexus_connector/identity/import_flow.py": {
+        "sha256": "80cd0ad011ffd633640440d954d90da49befd2a93ee58fa48881c652bb3db602",
+        "bytes": 14022,
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\identity\\import_flow.py"
+      }
+    },
+    "limit": "Focused dependency/function input proof, not a replacement for the host package proof."
+  },
+  "final_sources": {
+    "protected_pty.py": "ddfb1febc2849573cdf64042f10339163a0a9c31240c98c4a3821c891a6f3d8a",
+    "owned_job.py": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+    "cooperative_producer.py": "0ae30da45838c3b803285f07c6f41c292a1af7c61b42d129c20b962e548a40ec",
+    "cooperative_consumer.py": "eca640d9b260144665495016b4c762d01931ec109bf3683deb7a4fc0a12d6097",
+    "qualify.py": "d97d09f78ad9371bf7812bdaf86fd5933ca72b3153c31b1e456cc2d47e883310"
+  },
+  "limit": "Read-only input recheck; no new product package or campaign qualification."
+}

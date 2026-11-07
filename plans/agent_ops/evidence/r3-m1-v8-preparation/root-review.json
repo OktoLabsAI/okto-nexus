@@ -1,0 +1,94 @@
+{
+  "status": "PREPARED_REVIEWED_NOT_AUTHORIZED_NOT_EXECUTED",
+  "plan_unchanged": true,
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "predecessor_closed_fault_preserved": true,
+  "productive_admissions_carried": 2,
+  "minimum_observed_tokens_carried": 45843,
+  "productive_calls_during_preparation": 0,
+  "service_actions_during_preparation": 0,
+  "controller_focused_cases": 23,
+  "timed_installer_guard_cases": 27,
+  "prepared_dependency_file_count": 3209,
+  "historical_bundle_entry_guard_cases": 12,
+  "installed_connector_supervisor_cases": 3,
+  "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+  "independent_review_finding": "HANDOFF_PUBLICATION_AFTER_MATERIAL",
+  "independent_review_resolution": "RESOLVED_BY_V5_EXACT_CANONICAL_MARKER_AND_ABSENT_HANDOFF_GATE",
+  "protected_terminal_current_cases": 3,
+  "protected_terminal_cooperative_revision_historical_cases": 7,
+  "root_review": [
+    "Fixed plan requires reopening the observer and recovering the same work/session. Operator work status/resume meets that scope without another Connector connect; physical reconnect remains a separate qualification.",
+    "Canonical remote apply waits for materialization/Finish after delivering the one-shot key. Protected helper starts its consumer on the complete key block while continuing to drain the producer.",
+    "Late ambiguity or failed identity observation is not evidence of zero effects. The helper and remote reservation refuse replay.",
+    "The temporary Job owns auxiliary CLIs and bounded version/protocol probes only. It must not own persistent services or productive harness sessions.",
+    "A fresh dependency-only environment is necessary to time the product installation boundary honestly. Historical qualified environments remain unchanged.",
+    "Reported Codex configuration fields are observation, not proof of enforcement or the complete available tool inventory. Missing fields remain missing.",
+    "Reviewed V5 diff and final wrapper against the canonical installed order: handoff_sink announces the exact path only after atomic_json; wrapper rejects a pre-existing handoff and passes that complete line to the helper. Consumer starts once after both material and marker, while producer continues draining. The three focused marker cases and three changed-wrapper entry guards pass. The rejected prior snapshot and independent finding remain byte-exact history. This resolves the static composition blocker; it does not claim real CLI or M1 execution."
+  ],
+  "protected_terminal_identity_revision_historical_cases": 3,
+  "current_remote_wrapper_entry_guard_cases": 3,
+  "final_source_hashes": {
+    "campaign_context.py": "7ae7777215bfffe22dbf5ffd5f25938b6f306898adb50723e4d1ea592454f84e",
+    "m1_v8_remote_setup.py": "52f6e2863ffff81a51dced3ccee1d22b8b43510a3c01779eadc98f5c1c9a7d5f",
+    "m1_v8_work.py": "ea12d334a0510ca3e5e902321c22f9bbdaec0255a251acb94e3c354b3fba19b3",
+    "supervisor_check.py": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "protected_pty.py": "3e9819f37d7bd04a55dc094f3e05d62f13eb8fcbf0b404abf3f2f1e9279291b1"
+  },
+  "prepared_at_utc": "2026-11-07T20:08:15.790841+00:00",
+  "sources": [
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-controller-v8-bfx9ol3t\\revision-2\\public",
+      "manifest": "artifact-manifest.json",
+      "sha256": "8e5091801fb5f17863b1711e4737eaf807cd5bbb91aac647c2aeb743fa2ea253",
+      "payload_count": 44
+    },
+    {
+      "name": "protected-terminal",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\revision-5\\public",
+      "manifest": "artifact-manifest.json",
+      "sha256": "7fe34853d978401caf3502b0e0d608c1a6ac91f3c008b8f84fe51a2d215e58a5",
+      "payload_count": 108
+    },
+    {
+      "name": "timed-install",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\public",
+      "manifest": "artifact-manifest.json",
+      "sha256": "43d2232b2cc2d7d39eba0fe8a36612d04a2262bd299e4986e28761eeebe708fe",
+      "payload_count": 23
+    },
+    {
+      "name": "bundle",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28",
+      "manifest": "manifest.json",
+      "sha256": "c71f11d51edcf3f0e90ffe09b986a815cc8ffb95c7713a88b220f067ccbf4818",
+      "payload_count": 47
+    },
+    {
+      "name": "independent-review",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-bundle-readonly-5v6lf2u1",
+      "manifest": "artifact-manifest.json",
+      "sha256": "de9952f7ad11e1841bf3c2da29b18b42d1532991e38a8bff1e49f74ff4ea0176",
+      "payload_count": 2
+    }
+  ],
+  "execution_authorized": false,
+  "executed": false,
+  "scenario_statuses_unchanged": {
+    "tasks": {
+      "VERIFIED": 43,
+      "IMPLEMENTED": 6,
+      "IN_PROGRESS": 10
+    },
+    "scenarios": {
+      "VERIFIED": 118,
+      "IN_PROGRESS": 11,
+      "NOT_RUN": 3
+    },
+    "completion_criteria": {
+      "NOT_VERIFIED": 4,
+      "VERIFIED": 13
+    }
+  }
+}

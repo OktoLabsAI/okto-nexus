@@ -1,0 +1,50 @@
+{
+  "status": "UNCONFIRMED",
+  "possible_effect": true,
+  "delivery_attempted": true,
+  "consumer_started": true,
+  "worker_pid": 55632,
+  "worker_birth_filetime": 134385539129484240,
+  "forced_owned_cleanup": false,
+  "worker_assigned_before_gate": true,
+  "producer_started": true,
+  "consumer_start_count": 1,
+  "possible_consumer_effect": true,
+  "consumer_io_completed": false,
+  "producer": {
+    "pid": 47924,
+    "birth_filetime": 134385539134969463,
+    "exact_job_member": true
+  },
+  "producer_alive_at_consumer_start": true,
+  "consumer": {
+    "pid": 6076,
+    "birth_filetime": 134385539179725490,
+    "exact_job_member": true
+  },
+  "error_type": "TransferError",
+  "error_frames": [
+    {
+      "file": "protected_pty.py",
+      "function": "<module>",
+      "line": 229
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "_worker",
+      "line": 99
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "extract",
+      "line": 35
+    }
+  ],
+  "reason": "MATERIAL_NOT_UNIQUE",
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "case": "ambiguous-after",
+  "consumer_marker": true,
+  "material_received_marker": true,
+  "producer_finished_after_consumer_signal": true
+}

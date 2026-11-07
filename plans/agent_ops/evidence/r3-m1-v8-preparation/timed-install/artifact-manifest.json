@@ -1,0 +1,143 @@
+{
+  "format": "okto.evidence.allowlist",
+  "version": 1,
+  "artifacts": {
+    "README.md": {
+      "sha256": "a1e5361cdd9b51b54133e9a923720e37784e7069ca5616ee0bbf4ca22654d7f6",
+      "bytes": 3974,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\README.md",
+      "byte_exact": true
+    },
+    "timed_install.py": {
+      "sha256": "c7b4ff53aac0ac0c121557320b146d5536775fc20f2b388e0a2af2b334c5955e",
+      "bytes": 17449,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\timed_install.py",
+      "byte_exact": true
+    },
+    "prepare_dependencies.py": {
+      "sha256": "8143f263d641301461ebb45b7c5bb0f0257bc27ce4d52199240071a42180d807",
+      "bytes": 5308,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\prepare_dependencies.py",
+      "byte_exact": true
+    },
+    "finalize_preparation.py": {
+      "sha256": "fbf3beee19e6eb4d67c53ceec0d7a9b186fcef844be04352c0ea8263db5969e9",
+      "bytes": 2634,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\finalize_preparation.py",
+      "byte_exact": true
+    },
+    "test_timed_install.py": {
+      "sha256": "bd0666cb7c7ad71219219e53f1f8172322ef049cfb964d2ed1a2819ce9f66d60",
+      "bytes": 7789,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\test_timed_install.py",
+      "byte_exact": true
+    },
+    "curate.py": {
+      "sha256": "2602c19d7516cc8cd48d9a0cd632bf16a2ff91480d4697cea566619f8d00c327",
+      "bytes": 2994,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\curate.py",
+      "byte_exact": true
+    },
+    "base06-contract.json": {
+      "sha256": "eff24177488ec83811ecc3abb2fa5274e1a49efc17ffa15ddbfb7e0328546a54",
+      "bytes": 1473,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\base06-contract.json",
+      "byte_exact": true
+    },
+    "products-requirements.txt": {
+      "sha256": "86526f256478d173e74a535b918714988aac60abee1c5736f577e5bd6eb65f0c",
+      "bytes": 600,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\products-requirements.txt",
+      "byte_exact": true
+    },
+    "environment.json": {
+      "sha256": "aa5c0b389eeabf39947540697f9e3c5f43cce60f61eafa0dfbdf2e6632a523d6",
+      "bytes": 962,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\environment.json",
+      "byte_exact": true
+    },
+    "dependency-manifest.json": {
+      "sha256": "f4270ca418ced7faff9cb982f8ac9e21f6b09d0f3394b0321f1c4a48187008d0",
+      "bytes": 348424,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\dependency-manifest.json",
+      "byte_exact": true
+    },
+    "dependency-preparation.json": {
+      "sha256": "f639242bcdc50ccd32e8b3ff62b525a024b6cf4e4796a109fcdb4d7ab0cddef5",
+      "bytes": 1391,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\dependency-preparation.json",
+      "byte_exact": true
+    },
+    "dependency-probe.stdout.txt": {
+      "sha256": "fa098a5c197db41e9219956ace5d6c5bb348cd8fb01e0548ab760accd2890c08",
+      "bytes": 542,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\dependency-probe.stdout.txt",
+      "byte_exact": true
+    },
+    "dependency-probe.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\dependency-probe.stderr.txt",
+      "byte_exact": true
+    },
+    "direct-interpreter-probe.json": {
+      "sha256": "496f7565383c2edac7554688096aa607a5223a6ef0f615814af3b500595d65f6",
+      "bytes": 406,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\direct-interpreter-probe.json",
+      "byte_exact": true
+    },
+    "direct-interpreter-final.json": {
+      "sha256": "826d1ce110f8de73437cb6eb536df788ca6bc80312e8ac0123335591ce3f1b9f",
+      "bytes": 921,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\direct-interpreter-final.json",
+      "byte_exact": true
+    },
+    "direct-interpreter-final.stdout.txt": {
+      "sha256": "5f28900c4d25ac0cde017eeff7620a3443fc3528b27ceec6f46f703ca6e19f87",
+      "bytes": 362,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\direct-interpreter-final.stdout.txt",
+      "byte_exact": true
+    },
+    "direct-interpreter-final.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\direct-interpreter-final.stderr.txt",
+      "byte_exact": true
+    },
+    "gates-initial.xml": {
+      "sha256": "f08203ebbe35c731040b95b4a421f07792eafbdbb7c64df2a969a1272f4b38fe",
+      "bytes": 3665,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\gates-initial.xml",
+      "byte_exact": true
+    },
+    "tested-before-lint/timed_install.py": {
+      "sha256": "40a5918615f9218842360fa995a18c50a8f8b2201ad2cf8b7dd9992c02471cb3",
+      "bytes": 17460,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\tested-before-lint\\timed_install.py",
+      "byte_exact": true
+    },
+    "tested-before-lint/finalize_preparation.py": {
+      "sha256": "003d4581f26241d93f3930cd3f03c2be4761eb0ec06465bd8aab004649c8b20b",
+      "bytes": 2636,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\tested-before-lint\\finalize_preparation.py",
+      "byte_exact": true
+    },
+    "tested-before-lint/test_timed_install.py": {
+      "sha256": "bd0666cb7c7ad71219219e53f1f8172322ef049cfb964d2ed1a2819ce9f66d60",
+      "bytes": 7789,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\tested-before-lint\\test_timed_install.py",
+      "byte_exact": true
+    },
+    "tested-before-lint/note.json": {
+      "sha256": "187431a5ba0b010ea7500d6fd3983a5eb6574b455ea1b77df00de7ae2b0ae7b0",
+      "bytes": 185,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\tested-before-lint\\note.json",
+      "byte_exact": true
+    },
+    "summary.json": {
+      "sha256": "2b178c2fd8f8e90771470a943e32ee420cd28e63b9a20b8fe21128b96b6022a7",
+      "bytes": 442,
+      "generated": true
+    }
+  }
+}

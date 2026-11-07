@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T19:08:13.379066+00:00",
+  "updated_at": "2026-11-07T20:08:15.790841+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12247,6 +12247,34 @@
       "scope": "Reported response metadata through installed synthetic Core and consumer event pipelines; not provider enforcement or real DX-T43/M1 acceptance.",
       "evidence": "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json",
       "connector_commit": "ef216b1fa48ac89675685bc0aaecb8afa2b11534"
+    },
+    "r3_m1_v8_preparation": {
+      "status": "PREPARED_NOT_AUTHORIZED_NOT_EXECUTED",
+      "predecessor_status": "PARTIAL_REAL_CAMPAIGN_CLOSED_NO_M1_ACCEPTANCE",
+      "new_productive_admissions": 0,
+      "carry_in_admissions": 2,
+      "carry_in_minimum_observed_tokens": 45843,
+      "proposed_new_admissions_maximum": 6,
+      "proposed_cumulative_admissions_maximum": 8,
+      "proposed_preventive_cumulative_tokens": 200000,
+      "retained_operational_tolerance_tokens": 700000,
+      "proposed_tasks": 2,
+      "proposed_explicit_lifecycle_actions": 8,
+      "proposed_implicit_scheduler_ensure_start_maximum": 1,
+      "service_force_authorized": false,
+      "limits": [
+        "No new real inference, service action, credential access, or product installation during preparation.",
+        "BASE-06, DX-T39, DX-T40, DX-T43 and M1 still require actual execution and evidence.",
+        "Installed/synthetic helper checks do not promote scenario or acceptance status.",
+        "The closed v7 campaign, its fault and consumed forced-stop authorization are preserved."
+      ],
+      "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+      "reviewed_prior_snapshot_rejected_and_preserved": "eeff7487cfe6dff7e1c865541437d160594e9059482adc795b91b09506e5ec0b",
+      "handoff_publication_race": "Resolved in helper V5 plus final wrapper; real campaign remains unexecuted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v8-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-v8-preparation/artifact-manifest.json"
+      ]
     }
   },
   "history": [
@@ -13295,6 +13323,16 @@
       "summary": "Retain reported thread reply metadata as a redacted session lifecycle event, without extra RPC or authority.126Core/7Nexus/26Connector installed PASS; equal consumer wheel pins. RealDX43/M1 remain open.",
       "evidence": [
         "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Finite M1 successor preparation",
+      "status": "PREPARED_NOT_EXECUTED",
+      "summary": "Prepared a finite fresh M1 successor with carried usage/fault ancestry, cooperative one-shot terminal key transfer and timed offline product installation. Preparation is not execution; fixed plan and all scenario/acceptance statuses remain unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v8-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-v8-preparation/artifact-manifest.json"
       ]
     }
   ]

@@ -1049,3 +1049,37 @@ Os dois consumidores fixam esses mesmos bytes. Não houve chamada real ao proved
 ou ação de serviço nesta entrega; DX-T43 e M1 continuam pendentes de campanha real.
 
 Evidência: `plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json`.
+
+## 2026-11-07 — preparação executável da sucessora M1
+
+A preparação v8 preserva o encerramento e a falha da v7, carregando suas duas
+admissões e 45.843 tokens mínimos observados. A proposta é de até seis novas
+admissões, oito cumulativas, com limite preventivo cumulativo de 200.000 tokens
+e tolerância operacional de 700.000. A execução desta nova alocação depende
+da aprovação do snapshot final; nenhuma autorização de força é reutilizada.
+
+O auxiliar de terminal foi corrigido para iniciar o consumidor após o bloco
+completo da chave, enquanto o produtor aguarda Finish. Os sete casos da revisão
+cooperativa e três verificações do delta de relato foram preservados. Ambiguidade
+após entrega ou falha de observação não se torna prova de ausência de efeitos.
+O controlador v8 passou nos 23 casos focais e conserva ancestralidade e limites.
+
+O procedimento usa ambiente novo com dependências preparadas e sem os três
+produtos. A instalação offline dos wheels qualificados terá horários próprios,
+correlacionados ao primeiro resultado útil. O ambiente histórico permanece
+inalterado. Os serviços persistentes ficam fora do Job dos auxiliares de CLI.
+A proposta explicita oito ações de lifecycle e no máximo um ensure/start pelo
+Scheduler durante a importação canônica do Connector.
+
+A revisão independente encontrou que a chave é exibida antes da exportação
+do recibo público. O snapshot afetado foi preservado como rejeitado. A revisão
+final exige recibo inicialmente ausente e aguarda a linha canônica completa
+emitida após sua gravação atômica antes de iniciar o consumidor. Três casos
+focais do helper e três guards do wrapper alterado passaram; os demais
+scripts mantêm os hashes dos guards históricos. Não houve replay da entrega.
+
+Não houve nova inferência, serviço, acesso a credencial real ou instalação dos
+produtos nesta preparação. BASE-06, DX-T39, DX-T40, DX-T43 e M1 continuam pendentes
+da evidência real. O plano e os estados dos cenários e critérios não mudaram.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v8-preparation/root-review.json`.

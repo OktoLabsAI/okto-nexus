@@ -1,0 +1,20 @@
+{
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv",
+  "script": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\timed_install.py",
+  "script_sha256": "c7b4ff53aac0ac0c121557320b146d5536775fc20f2b388e0a2af2b334c5955e",
+  "requirements_sha256": "86526f256478d173e74a535b918714988aac60abee1c5736f577e5bd6eb65f0c",
+  "dependency_manifest_sha256": "f4270ca418ced7faff9cb982f8ac9e21f6b09d0f3394b0321f1c4a48187008d0",
+  "result": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\installation-result.json",
+  "reservation": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\installation-reserved.json",
+  "status": "DEPENDENCIES_ONLY_READY_INSTALL_NOT_AUTHORIZED",
+  "products_installed": false,
+  "gates_tests": {
+    "passed": 27,
+    "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\gates-initial.xml",
+    "sha256": "f08203ebbe35c731040b95b4a421f07792eafbdbb7c64df2a969a1272f4b38fe",
+    "scope": "No Popen/pip/network; post-test change only unused import removal"
+  },
+  "base_interpreter_proof": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\direct-interpreter-final.json",
+  "preparation": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\dependency-preparation.json"
+}

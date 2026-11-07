@@ -1,0 +1,26 @@
+{
+  "status": "PREPARATION_ONLY_NOT_AUTHORIZED",
+  "revision": 2,
+  "tests": 23,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 6.55,
+  "previous_tests": 19,
+  "previous_artifacts_preserved": true,
+  "guard": "Existing session requires exactly one known non-retired controller stream with matching binding scope before reservation.",
+  "negative_cases": [
+    "foreign_session",
+    "scope_mismatch",
+    "ambiguous_epochs",
+    "retired_stream"
+  ],
+  "negative_oracles": [
+    "zero_dispatch",
+    "zero_reservation",
+    "checkpoint_unchanged"
+  ],
+  "positive_oracle": "First work new_session=True; known own continuation=False.",
+  "historical_sources_unchanged": true,
+  "campaign_effects": 0
+}

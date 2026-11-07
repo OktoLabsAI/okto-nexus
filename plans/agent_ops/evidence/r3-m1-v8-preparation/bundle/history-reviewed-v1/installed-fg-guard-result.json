@@ -1,0 +1,74 @@
+{
+  "status": "PASS_INSTALLED_SYNTHETIC_BRANCHES",
+  "unique_cases": 3,
+  "cases": [
+    {
+      "case": "ready_reuses",
+      "status": "PASS",
+      "counts": {
+        "service_start": 0,
+        "spawn": 0,
+        "popen": 0,
+        "socket": 0,
+        "vault": 0,
+        "status": 2
+      },
+      "result": {
+        "started": false,
+        "already_running": true,
+        "spawned_pid": null,
+        "state": "ready",
+        "instance_id": "synthetic-instance",
+        "generation": "synthetic-generation"
+      }
+    },
+    {
+      "case": "scheduler_selected",
+      "status": "PASS",
+      "counts": {
+        "service_start": 1,
+        "spawn": 0,
+        "popen": 0,
+        "socket": 0,
+        "vault": 0,
+        "status": 2
+      },
+      "result": {
+        "started": true,
+        "already_running": false,
+        "spawned_pid": null,
+        "state": "ready",
+        "instance_id": "synthetic-instance",
+        "generation": "synthetic-generation"
+      }
+    },
+    {
+      "case": "fallback_refused",
+      "status": "PASS",
+      "counts": {
+        "service_start": 1,
+        "spawn": 0,
+        "popen": 0,
+        "socket": 0,
+        "vault": 0,
+        "status": 1
+      },
+      "result": {
+        "refused": true,
+        "code": "DAEMON_UNAVAILABLE"
+      }
+    }
+  ],
+  "inputs_unchanged": true,
+  "source_hashes": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\daemon\\lifecycle.py": "3b7541b832ed1ff7eaba213ddefbc841a56d869754a7eb863f3930ada420c4d8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Lib\\site-packages\\okto_nexus_connector\\platform\\user_service.py": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804"
+  },
+  "effects": {
+    "service_actions": 0,
+    "native_processes": 0,
+    "provider": 0,
+    "vault": 0
+  },
+  "limits": "UserService and status are fakes; proves installed branch behavior under FG=1, not a real Scheduler race or process containment."
+}

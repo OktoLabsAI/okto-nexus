@@ -1,0 +1,31 @@
+{
+  "status": "UNCONFIRMED",
+  "worker_pid": 32472,
+  "worker_birth_filetime": 134385528568437514,
+  "forced_owned_cleanup": false,
+  "worker_assigned_before_gate": true,
+  "error_type": "TransferError",
+  "error_frames": [
+    {
+      "file": "protected_pty.py",
+      "function": "<module>",
+      "line": 187
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "_worker",
+      "line": 93
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "extract",
+      "line": 34
+    }
+  ],
+  "reason": "MATERIAL_NOT_UNIQUE",
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "case": "ambiguous",
+  "consumer_started": false,
+  "consumer_only_guard_environment": true
+}
