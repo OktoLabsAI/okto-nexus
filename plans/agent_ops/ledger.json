@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T13:48:59.405838+00:00",
+  "updated_at": "2026-11-07T14:04:23.126175+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11945,18 +11945,21 @@
       ]
     },
     "m1_codex_real": {
-      "status": "PROPOSAL_READY_AWAITING_BUDGET_CLARIFICATION_AND_AUTHORIZATION",
+      "status": "BUDGET_CLARIFIED_PREPARATION_AND_AUTHORIZATION_PENDING",
       "harness": "Codex CLI",
       "account_selection": "already authenticated CLI account",
-      "total_token_limit": 200000,
+      "total_token_limit": 700000,
       "execution_authorized": false,
       "credential_access_performed": false,
       "provider_inference_performed": false,
       "observed_cli_version": "0.167.0",
       "observed_version_command": "codex --version",
       "build_qualification": "Isolated official Codex0.157.0 exact executable fingerprint matches Core qualification; personal0.167.0 unchanged. No provider execution.",
-      "budget_limit": "A hard cumulative token cap is not exposed by the current native turn contract; proposal must state this impasse explicitly.",
-      "proposal": "plans/agent_ops/evidence/r3-campaign-proposals/m1-codex-campaign-proposal.json"
+      "budget_limit": "User permits500000 additional tokens over200000. Operational tolerance700000; preventive interruption100000; native hard cap unavailable.",
+      "proposal": "plans/agent_ops/evidence/r3-m1-budget-update/m1-codex-campaign-proposal-v4.json",
+      "original_token_limit": 200000,
+      "additional_token_tolerance": 500000,
+      "preventive_interrupt_tokens": 100000
     },
     "r3_cooperative_drain": {
       "status": "VERIFIED",
@@ -12999,6 +13002,15 @@
       "summary": "Preserved harness failure, benign correction and native login gate. DX04 remains IMPLEMENTED; no provider use or product change.",
       "evidence": [
         "plans/agent_ops/evidence/r3-dx04-native-startup/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "M1 budget tolerance clarified",
+      "status": "PREPARED",
+      "summary": "User allows500k additional tokens:700k total tolerance; preventive100k retained. Preparation and execution authorization remain separate; no provider use.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-budget-update/milestone.md"
       ]
     }
   ]

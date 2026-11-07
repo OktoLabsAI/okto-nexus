@@ -1,0 +1,450 @@
+{
+  "format": "okto.m1.codex-real-campaign-proposal",
+  "revision": 4,
+  "status": "BUDGET_CLARIFIED_PREPARATION_AND_EXECUTION_AUTHORIZATION_PENDING",
+  "preparation_date": "2026-11-07",
+  "intent": "Qualify the fixed M1 terminal cycle locally and through the Connector, using a real qualified Codex build and a real explicitly authorized account. Synthetic tests and byte identity do not close M1.",
+  "authorization": {
+    "received": "Account already authenticated in Codex CLI. User subsequently said \"pode exceder o limite em 500k tokens\": interpreted as 500000 additional tokens over the original 200000, for a 700000 total tolerance. This budget clarification does not authorize separate service installation or native credential use/inference previously reserved for explicit execution approval.",
+    "inference_authorized": false,
+    "credential_use_authorized": false,
+    "service_install_authorized": false,
+    "this_preparation_permitted": [
+      "Read repository contracts and historical public evidence",
+      "Download official release metadata/ZIP to this new Temp root",
+      "Hash/extract bytes and evaluate pure Core qualification functions"
+    ],
+    "executed_native_commands": [],
+    "models_called": 0,
+    "budget_clarification": {
+      "status": "RESOLVED",
+      "original_tokens": 200000,
+      "additional_tolerance_tokens": 500000,
+      "total_tolerance_tokens": 700000,
+      "interpretation": "Additional allowance, not a replacement 500000 total."
+    }
+  },
+  "source_heads_at_preparation": {
+    "nexus": "21c5b7573316a2571a5378e479dbc7511e32fa70",
+    "connector": "ef8e267b8aa58eb5dd8c28387c8cc418551c0f2c",
+    "core": "3cdba87857e25b4ad5bdbaed91647bfa55873f91",
+    "qualification": "Commit context before Nexus milestone publication; immutable package hashes and source qualification identify the exact candidate."
+  },
+  "package_pins": {
+    "nexus": {
+      "status": "QUALIFIED_WINDOWS_CONTRACTS_ONLY",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "wheel_sha256": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+      "python_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\python.exe",
+      "installed_import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\okto_nexus",
+      "installed_payload_verified": true
+    },
+    "connector": {
+      "status": "QUALIFIED_WINDOWS_CONTRACTS_ONLY",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "wheel_sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "python_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\python.exe",
+      "installed_import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\okto_nexus_connector",
+      "installed_payload_verified": true
+    },
+    "core": {
+      "status": "QUALIFIED_WINDOWS_CONTRACTS_ONLY",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "wheel_sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+      "python_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\python.exe",
+      "installed_import_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Lib\\site-packages\\nexus_connector_core",
+      "installed_payload_verified": true
+    }
+  },
+  "paths": {
+    "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign",
+    "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\nexus-home",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\operator-home",
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\connector-state",
+    "local_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\local-project",
+    "remote_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\connector-project",
+    "private_evidence": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\private",
+    "public_evidence": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\public",
+    "codex_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-codex-campaign-proposal-ynzvp8yx\\artifacts\\codex-0.157.0-windows-x64\\codex-x86_64-pc-windows-msvc.exe",
+    "local_deliverables": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\local",
+    "remote_deliverables": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\connector"
+  },
+  "native_selection": {
+    "personal_cli_observation_from_root": {
+      "version": "0.167.0",
+      "qualified_for_this_campaign": false,
+      "reason": "Current exact-build native request/control allowlists do not qualify this version."
+    },
+    "selected_version": "0.157.0",
+    "platform": "Windows x86_64",
+    "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-codex-campaign-proposal-ynzvp8yx\\artifacts\\codex-0.157.0-windows-x64\\codex-x86_64-pc-windows-msvc.exe",
+    "fingerprint": "sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "current_build_identity": "sha256:0bf80fe3ec18c1061c053a3e0f43dd07430ef53827ccd822a649246897526535",
+    "qualified_by": "exact executable fingerprint, not the legacy portable identity entry",
+    "qualified_native_requests": [
+      "item/commandExecution/requestApproval"
+    ],
+    "required_binding": "Fresh explicit local selection and canonical approval of this absolute path/project; byte qualification never grants authority.",
+    "supporting_proof": "prepared-v1/codex-0.157.0-pure-qualification.json",
+    "alternatives_not_selected": [
+      {
+        "version": "0.159.0",
+        "reason": "Qualified conversation/controls but no qualified native permission/question method; insufficient alone for the requested representative native decision."
+      },
+      {
+        "version": "0.159.0-alpha.12.1",
+        "reason": "Qualified requestUserInput only; optional separate exact build, not downloaded or selected for this finite proposal."
+      }
+    ],
+    "limits": [
+      "No binary version/help/schema process has been run in this preparation.",
+      "A matching executable does not independently qualify every bundled helper/DLL or provider-home behavior; the official complete ZIP is retained, without executing installers or sandbox setup helpers."
+    ]
+  },
+  "topology": {
+    "initial_platform": "Windows, user service context",
+    "campaign_lanes": [
+      "Nexus owns local Codex process",
+      "Connector owns Codex process; separate human OperatorProfile owns decisions"
+    ],
+    "network": "Separate isolated processes and homes on loopback for the Connector protocol lane; no claim of a second physical host or cross-host network qualification.",
+    "scope": "Fresh project identities, two scratch workspaces, bounded fixture files, no personal project files.",
+    "supervisor": "Windows user tasks through canonical service/connection commands only after their exact final paths/task names/argv are pinned and approved.",
+    "native_service_proposal_reference": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-campaign-proposals\\native-service-campaign-proposal.json",
+    "native_service_proposal_limit": "Separate exact two-task proposal is prepared, not authorized or executed. Its homes qualify only the empty service cycle; M1 uses the separately listed campaign homes and requires its own reviewed canonical setup. Do not silently register additional tasks under the empty-service authorization."
+  },
+  "provider_context": {
+    "provider_home": null,
+    "status": "Exact user-approved native authentication context still needs to be pinned without reading its credential contents.",
+    "agent_must_not_read": [
+      "auth.json",
+      "credential stores",
+      "personal config files",
+      "personal transcripts"
+    ],
+    "native_behavior_requiring_authorization": "The selected native CLI may read its existing login/config and write its own session history or refresh login material. An isolated executable/project is not an isolated authenticated home.",
+    "credential_copy": false,
+    "new_auth_channel": false,
+    "effective_model": null,
+    "effective_policy": "Preserve canonically reviewed defaults; record reported model, instructions source, approval policy, sandbox, inherited MCP/tool settings and provider-home selection. Do not assume the service inherited an interactive shell configuration.",
+    "decision_gate": "The sibling deliverable remains outside project writable roots under the actual reviewed policy; only a genuine qualified commandExecution/requestApproval is accepted. No request means this gate remains pending. Never change a personal/global sandbox policy merely to force a request."
+  },
+  "finite_work": {
+    "fixture": {
+      "numbers.csv": "value\n1\n2\n3\n4\n",
+      "expected_rows": 4,
+      "expected_sum": 10
+    },
+    "maximum_productive_admissions": 6,
+    "allocation": "At most one local setup test, one remote setup test if the actual canonical path performs it, one useful request and one short explicit continuation per topology. Unused slots stay unused; no extra retry turns to chase a desired approval.",
+    "request": "Read only <project>/numbers.csv. Calculate its data row count, sum and SHA-256. Write exactly one JSON object with keys row_count, sum and input_sha256 to <lane_deliverables>/report.json. The deliverables directory is a precreated disposable sibling outside this project writable root but inside the campaign Temp root. Do not change permissions, sandbox, writable roots or global policy to perform this task. If the actual native policy requires a command permission, request it through the native mechanism and wait for the human decision. Do not read or write other paths, use the network, install tools, spawn subagents or retry a denied command with another method.",
+    "continuation": "Using only the existing canonical result, state the reported sum once. Do not run another command or write another file.",
+    "native_decision": "Review one genuine item/commandExecution/requestApproval per topology. Approve only the actual exact command that reads the lane numbers.csv and writes its one report.json. No broad prefix or persistent approval; no policy/sandbox modification. If policy admits the write without a request, record native-decision evidence as pending, not inferred. If denied, do not bypass the decision through another tool or output path.",
+    "serial_execution": true,
+    "parallel_provider_turns": false,
+    "connection_tests_count_toward_tokens": true,
+    "delivery": {
+      "local_output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\local\\report.json",
+      "connector_output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\m1-campaign\\deliverables\\connector\\report.json",
+      "setup": "After authorization only, controller creates empty lane deliverables directories; no report exists before the productive request.",
+      "expected_shape": {
+        "row_count": 4,
+        "sum": 10,
+        "input_sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b"
+      },
+      "scope": "Each source is only its selected project/numbers.csv and each output is only its lane report.json. No overwrite of any pre-existing file.",
+      "writable_root_check": "Use reported effective native policy to verify the sibling is outside the project writable roots. This proposal does not modify sandbox or widen allowed paths. If effective roots already include it, do not pretend a native approval occurred.",
+      "native_request_review": "A future approval covers only the actual exact command and these source/output paths; reject any additional command/path, persistent prefix, external network use or policy relaxation.",
+      "non_guarantee": "The sibling output can provoke a legitimate native request under a restricting policy, but is not guaranteed to do so. If no qualified request appears, the useful result may pass while the native-decision M1 case remains pending."
+    }
+  },
+  "steps": [
+    {
+      "id": "00-package-and-byte-gate",
+      "commands": [],
+      "required_evidence": "Final noneditable wheels/import hashes, pure recheck of exact Codex fingerprint, no source mixing; confirm current candidate path and readiness version.",
+      "proposed_effects": "No model inference.",
+      "gate": "All final SVC07 packages pinned; artifact/hash still equal; no personal configuration read."
+    },
+    {
+      "id": "01-context-and-service-review",
+      "commands": [
+        "<NEXUS> service status --home <server_home> --json",
+        "<CONNECTOR> --state-dir <connector_state> daemon status --json"
+      ],
+      "required_evidence": "Review exact owned task names, homes, executable/argv, provider context and initial platform. Use separately approved canonical user-service plan/startup review.",
+      "proposed_effects": "Only after explicit authorization: isolated service/task lifecycle; no logout/reboot or personal task changes.",
+      "gate": "Task targets absent or exactly owned; packages and launch context reviewed; token policy clarified."
+    },
+    {
+      "id": "02-local-connect-review-apply",
+      "commands": [
+        "<NEXUS> connect --profile m1-local --client codex --project <local_project> --candidate-ref <observed_exact_ref> --provider-home <approved_home> --new-agent m1-local --plan <service-selection-args>",
+        "<NEXUS> connect --profile m1-local --approve <exact_review_revision> --no-chat --timeout 120 <service-selection-args>"
+      ],
+      "required_evidence": "Capture reviewed identity/workspace/preset/effective policy and immutable setup/test/Finish IDs. Local setup test is real inference and belongs in the campaign total.",
+      "proposed_effects": "New isolated identity/workspace, reviewed binding/grant and local setup test.",
+      "gate": "Explicit review approval; provider use authorized; usage collection armed before the first setup test."
+    },
+    {
+      "id": "03-local-work-decision-result",
+      "commands": [
+        "<NEXUS> work send --profile m1-local --request-id m1-local-work-01 --message <finite_work.request> --json <service-selection-args>",
+        "<NEXUS> work watch --profile m1-local --timeout 120 --json <service-selection-args>",
+        "<NEXUS> work answer --profile m1-local --approval-id <actual_id> --json <service-selection-args>",
+        "<NEXUS> work answer --profile m1-local --approval-id <actual_id> --decision <reviewed_approve_or_deny> --review <actual_revision_hash> --json <service-selection-args>"
+      ],
+      "required_evidence": "Actual permission current actor/revision/scope, canonical ACK/terminal outcome, correct fixture answer, result reference and complete token cursor. Confirm report.json exists only at the exact lane destination and its parsed row_count/sum/input_sha256 match the fixture. Preserve the actual native permission request and reviewed command/path metadata. A successful write alone does not prove permission handling.",
+      "proposed_effects": "One useful request and at most one tightly reviewed native permission; no automatic reattempt. One report.json in the authorized sibling directory; no policy change or extra filesystem writes.",
+      "gate": "Real native request, no textual substitute; accounting current and within the agreed operational gate."
+    },
+    {
+      "id": "04-local-return-and-continuity",
+      "commands": [
+        "<NEXUS> work status --profile m1-local --json <service-selection-args>",
+        "<NEXUS> work resume --profile m1-local --json <service-selection-args>",
+        "<NEXUS> work send --profile m1-local --request-id m1-local-work-02 --message <finite_work.continuation> --json <service-selection-args>"
+      ],
+      "required_evidence": "Exit and reopen only the terminal observer, recover the same request/session/result. No new native session or duplicated productive request for recovery. Continuation is separately explicit and optional only if the existing session remains supported.",
+      "proposed_effects": "At most one explicitly requested continuation.",
+      "gate": "Unsupported native context continuation is reported; never fabricate resume or automatically use --new-session."
+    },
+    {
+      "id": "05-connector-root-review-finish",
+      "commands": [
+        "<CONNECTOR> --state-dir <connector_state> connect --server <loopback_origin> --harness codex_app_server --executable <codex_executable> --project <remote_project> --provider-home <approved_home> --request-id m1-connector-setup --setup-draft <public_host_draft>",
+        "<NEXUS> operator login --profile m1-human --server <loopback_origin> --username <approved_human>",
+        "<NEXUS> connect --operator-profile m1-human --remote-draft <public_host_draft> --profile m1-remote --plan",
+        "<NEXUS> connect --operator-profile m1-human --remote-draft <public_host_draft> --profile m1-remote --approve <exact_review_revision> --setup-receipt-output <public_handoff> --no-chat --timeout 120",
+        "<CONNECTOR> --state-dir <connector_state> connect --setup-receipt <public_handoff> --alias m1-remote",
+        "<NEXUS> connect --operator-profile m1-human --profile m1-remote --no-chat --timeout 120",
+        "<CONNECTOR> --state-dir <connector_state> connect --identity m1-remote"
+      ],
+      "required_evidence": "Persisted root/children, one-shot host key only through existing protected prompt, human canonical approval, exact Finish receipt and binding; host never receives the operator credential.",
+      "proposed_effects": "New remote project identity/workspace/binding and reviewed host launch configuration, no auto project work.",
+      "gate": "Current root/map and canonical metadata match. All generated key material excluded from stdout/evidence/checkpoints."
+    },
+    {
+      "id": "06-connector-work-decision-loss-recovery",
+      "commands": [
+        "<NEXUS> work send --operator-profile m1-human --profile m1-remote --request-id m1-remote-work-01 --message <finite_work.request> --json",
+        "<NEXUS> work resume --operator-profile m1-human --profile m1-remote --json",
+        "<NEXUS> work watch --operator-profile m1-human --profile m1-remote --timeout 120 --json",
+        "<NEXUS> work answer --operator-profile m1-human --profile m1-remote --approval-id <actual_id> --json",
+        "<NEXUS> work answer --operator-profile m1-human --profile m1-remote --approval-id <actual_id> --decision <reviewed_approve_or_deny> --review <actual_revision_hash> --json"
+      ],
+      "required_evidence": "Real HTTP/WebSocket/Core/provider path. One response-loss injection only after canonical submission admission and one after a decision ACK if technically controlled; then recover the saved same IDs without a second issue/decision. Retain uncertainty until a canonical receipt resolves it. Confirm report.json exists only at the exact lane destination and its parsed row_count/sum/input_sha256 match the fixture. Preserve the actual native permission request and reviewed command/path metadata. A successful write alone does not prove permission handling.",
+      "proposed_effects": "One useful request and reviewed permission; injected local client response loss is explicit instrumentation, not a claim of a naturally failing network. One report.json in the authorized sibling directory; no policy change or extra filesystem writes.",
+      "gate": "Temporary client fault harness must be reviewed before execution and may only discard a known response. It must not log auth headers, touch provider transport, or mutate product binaries."
+    },
+    {
+      "id": "07-connector-reconnect-and-result",
+      "commands": [
+        "<CONNECTOR> --state-dir <connector_state> connect --identity m1-remote",
+        "<NEXUS> work status --operator-profile m1-human --profile m1-remote --json",
+        "<NEXUS> work resume --operator-profile m1-human --profile m1-remote --json",
+        "<NEXUS> work send --operator-profile m1-human --profile m1-remote --request-id m1-remote-work-02 --message <finite_work.continuation> --json"
+      ],
+      "required_evidence": "Completed setup reconnect preserves bootstrap/Finish/binding/config/IDs; reopened observer finds the same canonical result. Check productive operation cardinality, not only friendly output. At most one explicit continuation.",
+      "proposed_effects": "Read/reconnect, then optional explicit continuation within the finite allocation.",
+      "gate": "Do not force native process restart or claim resume without an exact supported grant; no hidden fresh session."
+    },
+    {
+      "id": "08-close-drain-cleanup",
+      "commands": [
+        "<NEXUS> work close --profile m1-local --request-id m1-local-close --json <service-selection-args>",
+        "<NEXUS> work close --operator-profile m1-human --profile m1-remote --request-id m1-remote-close --json",
+        "<CONNECTOR> --state-dir <connector_state> daemon stop --timeout 60",
+        "<NEXUS> service stop --home <server_home> --timeout 60 --json"
+      ],
+      "required_evidence": "Canonical close results, drain state, owned PID/birth exit, exact owned task disable/uninstall receipts under the separately reviewed service plan, final usage high-water per thread and no surviving owned process.",
+      "proposed_effects": "Only campaign sessions/services/tasks. Keep uncertain receipts for recovery; do not delete native personal history or authentication.",
+      "gate": "If BUSY/UNKNOWN, inspect and use an explicit already approved containment decision tied to the reviewed generation; never label timeout drained."
+    }
+  ],
+  "token_accounting": {
+    "user_requested_total": 700000,
+    "unit": "Aggregate native tokenUsage.total.totalTokens for this campaign, across both topologies and setup tests, including cached input as represented by the provider total.",
+    "hard_cap_supported_by_current_flow": false,
+    "no_goal_workaround": "Do not call thread/goal/set. It creates a persistent goal, is not the canonical work flow, and its tokenBudget has not been established as a campaign-wide hard cap.",
+    "accounting_algorithm": [
+      "Arm before any setup test. Replay committed canonical session events with native_type/native_event thread/tokenUsage/updated; validate complete contiguous cursors, namespace and stream_epoch.",
+      "Keep one monotone high-water total.totalTokens per actual native thread. Map canonical stream epochs/sessions to that thread; resuming the same native thread must not count its cumulative total twice.",
+      "Use fresh campaign threads. If an existing thread is ever reused, establish its pre-campaign high-water baseline first; otherwise accounting is UNKNOWN and no new work is submitted.",
+      "Sum high-water deltas once across unique native threads; never add last and total or sum reasoning/cached subfields on top of totalTokens.",
+      "Reject malformed, negative or regressing counters. Replay duplicates do not add usage. A gap, unavailable setup-test event stream, missing terminal usage or concurrent unknown native thread makes the total incomplete.",
+      "On incomplete accounting: stop new admissions, request explicit canonical interrupt/close of the owned work, retain uncertainty and report known minimum only. Do not infer zero usage from absent events."
+    ],
+    "estimated_account_usage_endpoint": "Not a substitute for campaign accounting; schema labels its thread usage estimated and the account may include unrelated activity.",
+    "original_requested_total": 200000,
+    "additional_tolerance_tokens": 500000,
+    "operational_limit_accepted": true,
+    "limitation": "Usage updates are observations after computation. Current TurnStartParams/harness settings expose no hard per-turn/output/aggregate token cap. Interrupt and force contain later, not at an atomically enforced token boundary. A finite number of turns and a large margin do not prove an atomic hard ceiling.",
+    "operational_policy": {
+      "new_admission_stop_threshold": 100000,
+      "interrupt_threshold": 100000,
+      "serial_turn_deadline_seconds": 120,
+      "meaning": "Stop new admissions and request preventive interruption at 100000 reported aggregate tokens, retaining the conservative threshold. The user allows up to 500000 overshoot over the original 200000 budget, hence 700000 total tolerance. Reporting and interruption remain asynchronous; this is operational monitoring, not an atomic native hard cap. Missing/incomplete accounting stops admission. No extra turns are admitted to consume the allowance. Execution authorization is separate."
+    }
+  },
+  "fixed_plan_map": [
+    {
+      "requirement": "M1 / DX-T39",
+      "proof": "Steps02-04 local real terminal cycle; native service context additionally requires the approved platform lifecycle evidence."
+    },
+    {
+      "requirement": "M1 / DX-T40",
+      "proof": "Steps05-07 actual Connector execution and authenticated human operator; loopback process topology is not a second physical host."
+    },
+    {
+      "requirement": "DX-T43",
+      "proof": "Record service effective instructions/model/tools/limits and explicit provider context; unknown values stay unknown."
+    },
+    {
+      "requirement": "DX-T45",
+      "proof": "Actual native command permission/current actor/revision, never a model-authored permission sentence."
+    },
+    {
+      "requirement": "DX-T46",
+      "proof": "Controlled response loss + same-ID canonical recovery without repeated productive admission; if injection cannot be established, retain this case pending."
+    },
+    {
+      "requirement": "DX-T47 / DX-T50",
+      "proof": "Reopened CLI retrieves work and result without a dashboard; native context resumes only where supported."
+    }
+  ],
+  "blocking_preconditions_before_execution_request": [
+    "Candidate SVC07 wheel hashes are pinned, but final installed qualification/import proofs remain pending for M1 execution.",
+    "Pin the native authentication context and authorize only its native use; current prepared artifact has no login configured or inspected.",
+    "Pin exact service homes/task names/argv/port and verify target ownership/absence immediately before requesting service effects; no broad user service authorization is inferred.",
+    "Confirm the canonical effective policy can produce the qualified permission method without manual personal config edits; otherwise that native-decision gate remains pending.",
+    "Implement/review the finite usage collector and response-loss harness against installed canonical event shapes before running a paid campaign; they are not supplied as completed runtime tooling in this proposal."
+  ],
+  "excluded": [
+    "Personal file discovery",
+    "Reading/copying authentication files",
+    "Replacing/updating the personal Codex installation",
+    "Unqualified0.167 capability promotion",
+    "Persistent Codex goals",
+    "Background autonomous turns",
+    "Agent spawning",
+    "Unreviewed model/tool/sandbox changes",
+    "Remote administrator credential on Connector",
+    "Reboot/logout",
+    "Force closing any unowned process",
+    "Deleting personal provider history",
+    "M2/global acceptance from this preparation"
+  ],
+  "evidence_policy": {
+    "public_allowlist": [
+      "JSON metadata/hashes/counters/status/IDs",
+      "reviewed nonsecret command templates",
+      "sanitized event metadata and operation cardinalities",
+      "synthetic fixture hashes"
+    ],
+    "private_only": [
+      "raw local outputs until curated",
+      "operator/host checkpoint material when sensitive"
+    ],
+    "never_collect": [
+      "auth headers",
+      "API keys",
+      "operator cookies",
+      "provider auth/config files",
+      "personal native transcripts"
+    ],
+    "never_commit": [
+      "downloaded executables/ZIPs",
+      "homes/databases/vaults"
+    ]
+  },
+  "references": [
+    {
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.157.0",
+      "basis": "Official release page opened during this preparation; exact asset obtained from official GitHub release metadata."
+    },
+    {
+      "url": "https://learn.chatgpt.com/docs/app-server",
+      "basis": "Official documentation context supplied by root; local pinned schema independently confirms token usage and persistent goal fields. No hard-cap assertion is derived from that page."
+    }
+  ],
+  "read_source_snapshots": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\cli\\connect.py",
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\cli\\work.py",
+      "sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\terminal_connection.py",
+      "sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\terminal_work.py",
+      "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\project_preset.py",
+      "sha256": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_event_views.py",
+      "sha256": "d9368565a574769dcb05c0051b85bdfc1b3ab922fbe74c949fde262586b24057"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\docs\\terminal-work.md",
+      "sha256": "4d7c54c5ea55e4d46b417d70b26834f73154cf7048524c014ce469aef6cc2a9e"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\docs\\remote-project-setup.md",
+      "sha256": "c71cbf03c18c6a167bef87e2ba79922037da9b01ae00ca774d23cb2dd19e855a"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\main.py",
+      "sha256": "0ab9fe7e9f6b6680699e127f32c0377a553459e0791a5276adf0d4a726b48c4b"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\adapters\\compatibility.py",
+      "sha256": "1b2adaf98a0dd2ebb7b04d348a9bdc79ee6b35680cdb97b1dcb0ad89694ec7ab"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\build_identity.py",
+      "sha256": "d88ed79ddb2b07204330610d6908f91f538013a794f0c5fe95b6a4685630b6ab"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\discovery.py",
+      "sha256": "add88263115f95877127fc32a5e5de2ebf035fe847f4d578d153c24f9a0cbaa7"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\harness_configuration.py",
+      "sha256": "23c5fbdbf53b6782ffabcfebe4e062fd3cc34cf2d63f5be7305003974217c9eb"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\codex_app_server_0_157_0.schemas.json",
+      "sha256": "2719fccd25a97a7ce355497ca5e9123a63f6dce7f9f83724a5b73fd927811f59"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\adapters\\codex.py",
+      "sha256": "6b6d2f87df8bac2e15e8eff6015c9d4d012126a38d9023703c143ad27c5bc78c"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\plans\\implementation\\evidence\\codex-real-turn-controls-2026-09-26.md",
+      "sha256": "2b9a7e32ac5076f2198a38faceb88ebbe6b2776d6b93184faecd8763b2e8098e"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\plans\\implementation\\evidence\\codex-native-questions-0-159-alpha-20261003.md",
+      "sha256": "112b1c9d06ae5a645ee1ca0705f5971641b64a5d31ef677b56fb4d542047c0a3"
+    }
+  ],
+  "acceptance": "No M1 status promotion. Preparation-only; binary bytes and pure compatibility predicate checked, no native provider or service campaign executed.",
+  "supersedes_proposal_sha256": "075e082cddfe40eb6337cb068e0b40e89b009adb42bf5b2269582854d829dc75",
+  "prior_public_manifest_sha256": "36cf3f603c80e6ef154a195637043f957a8e256844b58adfaa7f98a561a340ee",
+  "revision_note": "User budget clarification only. Original proposal v3 and its manifests remain unchanged. Total tolerance700000; preventive stop100000; finite maximum6 admissions unchanged. Preparation gaps and execution approval remain explicit; no new acceptance or provider execution.",
+  "supersedes_proposal_path": "plans/agent_ops/evidence/r3-campaign-proposals/m1-codex-campaign-proposal.json"
+}
