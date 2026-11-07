@@ -20,7 +20,7 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 ws = &lt;starlette.testclient.WebSocketTestSession object at 0x0000026667243250&gt;
 info = {'management_revision': 'nexus-connections-2026-09-29-r4', 'protocol_major': 1, 'nxl_accepted': ['nxl-1-agent-centric-http-only-2026-09-29-r4'], 'nxl_historical_revision': 'nxl-1-agent-centric-http-only-2026-09-25-r3', ...}
 revisions = AgentExecutionRevisions(authorization=1, configuration=1, credential_epoch=1)
-lane_ticket = 'nxt4_vW_z9_KeMQHNrSsYv8JyH49HrBUQ_uBPcwe79EOckaQ9M5AP'
+lane_ticket = '[REDACTED_SYNTHETIC_LANE_TICKET]'
 server_id = 'srv_34f387ead2b2c833927fe654a33f1f94'
 executor_id = 'exe_d084172a53f04165237716d138d519f6', binding_id = 'binding'
 agent_id = 'subject', control_capabilities = ()

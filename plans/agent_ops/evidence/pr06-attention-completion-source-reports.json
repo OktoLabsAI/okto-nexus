@@ -6,7 +6,8 @@
     "key_redaction": "Only complete nxs_ tokens with 48 lowercase hexadecimal characters accepted by domain.keys.is_well_formed_api_key. No other text is redacted.",
     "line_endings": "CRLF and CR normalized to LF before artifact hashing; full parsed XML after approved key redaction must remain identical.",
     "whitespace": "Trailing spaces/tabs encoded as numeric XML character entities, preserving parsed text, attributes and tails.",
-    "provenance": "Original SHA256 and absolute source path are retained separately from normalized artifact SHA256. These are report hashes, not claims about the Python source loaded by a test process."
+    "provenance": "Original SHA256 and absolute source path are retained separately from normalized artifact SHA256. These are report hashes, not claims about the Python source loaded by a test process.",
+    "security_amendment_2026_11_07": "The single synthetic lane ticket in the historical r3-messages-migration traceback was additionally redacted. The report entry records the previous artifact SHA and current SHA; all failures and testcase identities are preserved."
   },
   "limitations": [
     "The 67-case core-source-initial run loaded an older storage test version while root edited that source during execution. Traceback rendering can therefore show newer source lines. No fixture/source-content hash is claimed for that process.",
@@ -2833,7 +2834,7 @@
       "artifact": "plans/agent_ops/evidence/pr06-attention-completion-authority-r3-messages-migration.xml",
       "collection_mode": "explicit_copy",
       "original_sha256": "6b84efa9b72a6fb9b2e8f8bc86badd1283687a371f0759599632d3bf200f3591",
-      "artifact_sha256": "09e70fd6d6e397f1ef75d2d9301aca21f7eda1c59ce546f35f0dd4ee619ac473",
+      "artifact_sha256": "d81590cccd5d6efffb434ad41cd0a64e6d2fe8a1cd8bf1f2b291fe2624dff6e3",
       "test_count": 13,
       "passed": 12,
       "errors": 1,
@@ -2935,7 +2936,13 @@
           "status": "passed",
           "suite_started_at": "2026-11-06T17:12:03.753730-03:00"
         }
-      ]
+      ],
+      "security_redaction_2026_11_07": {
+        "prior_artifact_sha256": "09e70fd6d6e397f1ef75d2d9301aca21f7eda1c59ce546f35f0dd4ee619ac473",
+        "synthetic_lane_tickets_redacted": 1,
+        "correction_record": "plans/agent_ops/evidence/r3-public-artifact-review/corrections.json",
+        "results_unchanged": true
+      }
     },
     {
       "source": "C:/Users/jpamb/AppData/Local/Temp/attention-authority-r3-message-fence.xml",

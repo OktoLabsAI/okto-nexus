@@ -10493,13 +10493,20 @@
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/classifications.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/corrections.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+        "plans/agent_ops/evidence/r3-public-artifact-review/verification.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
         "pr08_external_observation_server_contract": "VERIFIED",
-        "pr09_optional_windows_observer_contract": "VERIFIED"
-      }
+        "pr09_optional_windows_observer_contract": "VERIFIED",
+        "current_public_allowlist_review_and_two_historical_redactions": "VERIFIED"
+      },
+      "remaining": "Current public snapshot reviewed and two raw credential values removed. Historical UAT key validity/revocation and prior Git objects were not checked or modified. Pattern scan does not cover arbitrary secrets or binary visual content; future campaign artifacts remain subject to review."
     },
     "AC-11": {
       "requirement": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisÃ£o e resultado, sem dashboard obrigatÃ³rio nem terminal exclusivo para manter o serviÃ§o.",
@@ -10690,6 +10697,20 @@
         "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json"
+      ]
+    },
+    "r3_public_artifact_review": {
+      "status": "VERIFIED",
+      "scope": "Current tracked public allowlist only; no universal secret/history or revocation claim",
+      "public_files": 1822,
+      "redacted_values": 2,
+      "synthetic_parameter_occurrences": 35,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+        "plans/agent_ops/evidence/r3-public-artifact-review/corrections.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/classifications.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/verification.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/artifact-manifest.json"
       ]
     }
   },
@@ -11483,6 +11504,19 @@
         "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "Reviewed 1822 tracked public files across three repos. Removed one historical UAT API key and one synthetic lane ticket from two retained reports; preserved JSON/XML outcomes and amended original hash provenance. Classified 35 remaining matches as invalid synthetic test parameters. AC-10 remains NOT_VERIFIED: no credential revocation or Git history rewrite, and pattern/binary limits remain explicit. No product or personal-state change.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+        "plans/agent_ops/evidence/r3-public-artifact-review/corrections.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/classifications.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/verification.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/artifact-manifest.json"
       ]
     }
   ]

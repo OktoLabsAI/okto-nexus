@@ -1,0 +1,11 @@
+# R3 — revisão dos artefatos públicos e correção de redação
+
+Revisados 1.822 arquivos públicos rastreados: 1.727 Nexus, 70 Connector e 25 Core. A allowlist contém docs, exemplos, plans/agent_ops e metadados/documentação da raiz. Hashes por arquivo e exclusões binárias estão em scan-before.json/scan-after.json. A revisão não enumera cofres, bancos privados, contas, configurações pessoais ou histórico Git.
+
+As 37 ocorrências iniciais foram classificadas individualmente, sem copiar os valores. Duas exigiram correção: api_key do registro de um operador em evidência UAT de setembro e lane_ticket sintético num traceback histórico PR-06. Foram substituídas por marcadores explícitos. JSON/estrutura XML, identidades, estados, contagens e falhas permanecem preservados. O registro de proveniência PR-06 mantém o hash anterior e documenta o hash corrigido; nenhum resultado foi promovido. corrections.json registra hashes antes/depois e a razão da transformação.
+
+As outras 35 ocorrências são parâmetros de recusa: 32 URLs sintéticas com userinfo, rastreadas aos respectivos testes, e três chaves propositalmente inválidas por alfabeto/tamanho. Não são credenciais de contas. A segunda varredura encontrou somente esses parâmetros; zero novos valores com os padrões de chave Nexus, provedor, GitHub, chave privada ou URL sensível examinados.
+
+Limites: varredura por padrões não comprova ausência universal de segredos, nem inspeciona conteúdo visual de binários. Não houve autenticação, revogação ou consulta da chave UAT histórica; sua validade atual é desconhecida. Commits anteriores não foram reescritos e podem reter os valores anteriores. AC-10 permanece NOT_VERIFIED; a fatia de revisão/correção do snapshot público atual está verificada. Campanhas futuras precisam manter a mesma revisão de artefatos. Não houve mudança de aplicação, wheel ou configuração pessoal.
+
+Validação desta correção: comparação estrutural JSON/XML e contagens originais, mapeamento dos 35 falsos positivos à fonte dos testes, segunda varredura dos mesmos 1.822 arquivos, hashes exatos e checker do ledger fixo. Não se repetiram suites de produto para esta redação documental. Este marco não conclui M1/M2 ou R3.

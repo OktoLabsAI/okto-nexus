@@ -1,0 +1,26 @@
+{
+  "corrections": [
+    {
+      "path": "docs/harness-integrations/evidence/EV-UAT-05-target-grammar-results.json",
+      "before_sha256": "e0ff97a7082ca97440bc787ce884a713ab4489acb94845c6d7b0626cd9d15b22",
+      "after_sha256": "f14c1ba8fec5d84b2ce5af859044aceb4d92a2cd27e9cde3cace031d2108f634",
+      "redactions": 1,
+      "removed_literal_sha256": "904b6c330b070906868dbc09db45ed28d15f04879c21d295986da018cd4fcaa4",
+      "marker": "[REDACTED_HISTORICAL_UAT_API_KEY]",
+      "outcomes_preserved": true
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr06-attention-completion-authority-r3-messages-migration.xml",
+      "before_sha256": "09e70fd6d6e397f1ef75d2d9301aca21f7eda1c59ce546f35f0dd4ee619ac473",
+      "after_sha256": "d81590cccd5d6efffb434ad41cd0a64e6d2fe8a1cd8bf1f2b291fe2624dff6e3",
+      "redactions": 1,
+      "removed_literal_sha256": "578d939e9301918020be2a34550c4a78ee694391ffb7aeb11b9eae6423574652",
+      "marker": "[REDACTED_SYNTHETIC_LANE_TICKET]",
+      "outcomes_preserved": true
+    }
+  ],
+  "scope": "Exactly two public report values; no database, personal account or secret store accessed.",
+  "historical_git_objects": "Unchanged. This corrects current public files; it does not revoke credentials or rewrite existing Git history.",
+  "historical_uat_key_validity": "Unknown; no authentication attempt or credential rotation performed.",
+  "raw_values_retained_in_new_artifacts": false
+}

@@ -554,3 +554,8 @@ CI now pins the published Connector renewal wheel a8cf1810 instead of stale 63d9
 ## 2026-11-07 — R3: contratos conjuntos instalados
 
 71 casos únicos passaram: 9 de coordenação/entrega mista, 6 de isolamento idle, 17 de modos de sessão e 39 de recuperação selecionada. Dez casos novos e correção mínima da geração da fixture remota; aplicações e wheels inalterados. RG-01/02/03/04/11 verificados no escopo canônico Windows com peers sintéticos. RG-05/06 permanecem em progresso; import audit Core cobre 131 módulos com limites explícitos. Não há promoção de M1/M2 ou aceite global. Evidências e tentativas iniciais: `plans/agent_ops/evidence/r3-joint-contracts/milestone.md` e manifesto adjacente. Compatibilidade, rastreabilidade/revisão pública final e campanhas reais continuam pendentes.
+
+
+## 2026-11-07 — R3: revisão e redação de artefatos públicos
+
+Revisados 1.822 arquivos públicos dos três repos. Dois valores foram redigidos em relatórios históricos: uma chave UAT e um ticket sintético de fixture. Hashes antes/depois, fonte e falhas originais permanecem documentados; 35 ocorrências restantes são parâmetros inválidos de testes. A segunda varredura confirmou essa classificação. AC-10 permanece aberto: a validade/revogação da chave UAT e commits anteriores não foram alterados ou verificados, e a varredura tem limites declarados. Aplicações/wheels e configurações pessoais inalterados. Evidência: `plans/agent_ops/evidence/r3-public-artifact-review/milestone.md`.
