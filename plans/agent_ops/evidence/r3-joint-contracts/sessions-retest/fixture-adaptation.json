@@ -1,0 +1,7 @@
+{
+  "scope": "test-only lifecycle setup; no production edits",
+  "original_sha256": "69a81c770d6acdf27f2c45c1fbb6939dea1aef468763349c1893d5f1566dc0b7",
+  "adapted_sha256": "d74ca53fc282cce450f010260bc38c534445fa8b2a98fa561fa93259d524255d",
+  "upstream_patch_sha256": "c3d3bcddfd924c23d8be174f5e4b4442086d300c22b2e7eb622a054ea5706528",
+  "reason": "Manual fixture bypasses DaemonApp._run_forever initialization but calls _shutdown. Preserve canonical shutdown; supply distinct synthetic generations."
+}

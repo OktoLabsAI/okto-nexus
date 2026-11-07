@@ -549,3 +549,8 @@ Dashboard guidance now uses the existing participant CLI for a selected identity
 ## R3 CI and qualification readiness — 2026-11-07
 
 CI now pins the published Connector renewal wheel a8cf1810 instead of stale 63d99d16. All 123 Connector files match source. A fresh isolated environment resolves declared dependencies with MCP 1.30.0 and passes pip check. The actual installed CI runner passed 8 cases (four remote-renewal and four artifact/pin checks), with unchanged inputs. The finite audit maps 17 completion criteria and 11 RG scenarios without promotion; exact joint, compatibility and public-evidence reviews remain alongside authorized real campaigns. The updated 24-action native-service proposal is prepared only, with no registration/start performed. See [evidence](evidence/r3-qualification-readiness/milestone.md).
+
+
+## 2026-11-07 — R3: contratos conjuntos instalados
+
+71 casos únicos passaram: 9 de coordenação/entrega mista, 6 de isolamento idle, 17 de modos de sessão e 39 de recuperação selecionada. Dez casos novos e correção mínima da geração da fixture remota; aplicações e wheels inalterados. RG-01/02/03/04/11 verificados no escopo canônico Windows com peers sintéticos. RG-05/06 permanecem em progresso; import audit Core cobre 131 módulos com limites explícitos. Não há promoção de M1/M2 ou aceite global. Evidências e tentativas iniciais: `plans/agent_ops/evidence/r3-joint-contracts/milestone.md` e manifesto adjacente. Compatibilidade, rastreabilidade/revisão pública final e campanhas reais continuam pendentes.

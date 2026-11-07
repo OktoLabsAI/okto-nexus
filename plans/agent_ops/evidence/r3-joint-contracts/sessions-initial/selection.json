@@ -1,0 +1,17 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo",
+  "repo": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "python": "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/venv/Scripts/python.exe",
+  "wheel": "C:/Users/jpamb/AppData/Local/Temp/dx04-mcp-guide-installed-sk13m28a/candidate-v1/wheels/okto_nexus-0.3.3-py3-none-any.whl",
+  "tests": [
+    "tests/execution_r4/test_sender_sessions.py::test_same_agent_source_sessions_are_isolated_only_in_new_mode",
+    "tests/execution_r4/test_sender_sessions.py::test_parallel_senders_separate_sessions_reuse_and_correct_replies",
+    "tests/execution_r4/test_sender_sessions.py::test_shared_default_reuses_session_across_senders",
+    "tests/execution_r4/test_one_shot_runtime.py::test_one_shot_closes_then_serves_queue_in_fresh_session",
+    "tests/execution_r4/test_one_shot_runtime.py::test_warm_instance_is_claimed_only_once",
+    "tests/execution_r4/test_one_shot_handoffs.py::test_managed_handoffs_share_capacity_and_keep_distinct_sessions",
+    "tests/execution_r4/test_one_shot_remote.py::test_remote_connector_queues_disposes_and_opens_fresh_session",
+    "tests/execution_r4/test_coordination_managed.py::test_message_request_retry_has_one_canonical_delivery_and_one_execution_charge"
+  ],
+  "expected_identities": 17
+}

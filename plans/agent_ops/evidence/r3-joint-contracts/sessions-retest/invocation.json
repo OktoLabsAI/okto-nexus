@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/venv/Scripts/python.exe",
+    "-X",
+    "utf8",
+    "-I",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\project\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:/Users/jpamb/AppData/Local/Temp/dx04-mcp-guide-installed-sk13m28a/candidate-v1/wheels/okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\reports",
+    "--tests",
+    "tests/execution_r4/test_one_shot_remote.py::test_remote_connector_queues_disposes_and_opens_fresh_session"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936",
+  "environment": {
+    "COMSPEC": "C:\\WINDOWS\\system32\\cmd.exe",
+    "NUMBER_OF_PROCESSORS": "16",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW;.CPL",
+    "PROCESSOR_ARCHITECTURE": "AMD64",
+    "SYSTEMDRIVE": "C:",
+    "SYSTEMROOT": "C:\\WINDOWS",
+    "WINDIR": "C:\\WINDOWS",
+    "PATH": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\nexus-ci-connector-refresh-la1tb1l6\\venv\\Scripts;C:\\WINDOWS\\System32",
+    "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\private\\temp",
+    "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\private\\temp",
+    "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\private\\home",
+    "HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\private\\home",
+    "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\private\\appdata",
+    "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\private\\localappdata",
+    "NO_COLOR": "1"
+  },
+  "synthetic_native_peers": true,
+  "real_provider_qualification": false,
+  "shared_environment_mutation": false
+}

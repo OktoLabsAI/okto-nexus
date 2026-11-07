@@ -117,6 +117,9 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
         StateStore(state_file(daemon_root)).save(state)
         monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
         daemon = DaemonApp(daemon_root)
+        # This fixture owns components manually instead of entering run_forever.
+        # Supply only its shutdown-receipt generation; no readiness is claimed.
+        daemon.service_generation = '11111111111111111111111111111111'
         if automatic or publication_failure:
             key = headers['subject']['Authorization'].removeprefix('Bearer ')
             handle = daemon.vault.store('subject', key)
@@ -666,6 +669,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     if event_recovery.startswith('cold_'):
                         assert await daemon._shutdown() == 0
                         daemon = DaemonApp(daemon_root)
+                        # Replacement is another manually owned fixture generation.
+                        daemon.service_generation = '22222222222222222222222222222222'
                         daemon._start_transports()
                         control = daemon.r4_controls[server_id]
                         assert not control._retained_lanes

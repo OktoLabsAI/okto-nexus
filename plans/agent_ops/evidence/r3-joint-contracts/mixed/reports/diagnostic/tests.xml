@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="13.867" timestamp="2026-11-07T05:56:49.025823-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_r3_mixed_coordination" name="test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[mcp_first]" time="9.284"><failure message="AssertionError: {'code': 'VALIDATION_ERROR', 'message': 'Managed claim options require runtime_endpoint_id.'}&#10;assert True == ('mcp_first' == 'runtime_first'&#10;  &#10;  - runtime_first&#10;  + mcp_first)">tests\execution_r4\test_r3_mixed_coordination.py:149: in test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect
+    assert managed_won == (ordering == 'runtime_first'), replies[0].get('error', {})
+E   AssertionError: {'code': 'VALIDATION_ERROR', 'message': 'Managed claim options require runtime_endpoint_id.'}
+E   assert True == ('mcp_first' == 'runtime_first'
+E     
+E     - runtime_first
+E     + mcp_first)</failure></testcase></testsuite></testsuites>

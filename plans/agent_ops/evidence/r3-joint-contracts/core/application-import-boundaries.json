@@ -1,0 +1,17 @@
+{
+  "scope": "AST literal imports across application source trees; dynamic imports not covered here",
+  "results": [
+    {
+      "root": "src",
+      "forbidden": "okto_nexus_connector",
+      "python_files": 513,
+      "literal_import_violations": []
+    },
+    {
+      "root": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src",
+      "forbidden": "okto_nexus",
+      "python_files": 122,
+      "literal_import_violations": []
+    }
+  ]
+}

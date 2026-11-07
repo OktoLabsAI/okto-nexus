@@ -543,3 +543,8 @@ Somente subescopos de DX-03/04/05/12 e DX-T01/03/09/11/35 foram verificados. Os 
 O pin CI do Connector foi corrigido para o wheel publicado a8cf1810, com 123 arquivos iguais à fonte. Venv limpa com MCP 1.30.0 passou no pip check e nos 8 testes instalados pelo runner CI, sem alterações de inputs. O ambiente histórico de browser tinha MCP 1.29.1 abaixo do mínimo declarado; não é usado como prova de resolução de dependências.
 
 Matriz finita dos17 critérios e11 RG registrada; ainda há verificações conjuntas, compatibilidade e revisão de evidências que podem avançar sem autorização. A proposta atualizada de duas tarefas temporárias Windows está preparada e aguardando resposta; nenhuma tarefa foi registrada. Aceites reais e plano integral continuam abertos. [Evidências e proposta](plans/agent_ops/evidence/r3-qualification-readiness/milestone.md).
+
+
+## 2026-11-07 — R3: contratos conjuntos instalados
+
+71 casos únicos passaram: 9 de coordenação/entrega mista, 6 de isolamento idle, 17 de modos de sessão e 39 de recuperação selecionada. Dez casos novos e correção mínima da geração da fixture remota; aplicações e wheels inalterados. RG-01/02/03/04/11 verificados no escopo canônico Windows com peers sintéticos. RG-05/06 permanecem em progresso; import audit Core cobre 131 módulos com limites explícitos. Não há promoção de M1/M2 ou aceite global. Evidências e tentativas iniciais: `plans/agent_ops/evidence/r3-joint-contracts/milestone.md` e manifesto adjacente. Compatibilidade, rastreabilidade/revisão pública final e campanhas reais continuam pendentes.

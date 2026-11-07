@@ -1,0 +1,112 @@
+{
+  "scenario": "RG-04",
+  "counts": {
+    "passed": 16,
+    "failure": 1,
+    "error": 0,
+    "skipped": 0
+  },
+  "unique_cases": 17,
+  "cases": [
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-codex_app_server]",
+      "status": "passed",
+      "seconds": 16.497
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-claude_stream]",
+      "status": "passed",
+      "seconds": 13.254
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-pi_rpc]",
+      "status": "passed",
+      "seconds": 15.729
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-codex_app_server]",
+      "status": "passed",
+      "seconds": 10.555
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-claude_stream]",
+      "status": "passed",
+      "seconds": 11.009
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-pi_rpc]",
+      "status": "passed",
+      "seconds": 10.74
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[codex_app_server]",
+      "status": "passed",
+      "seconds": 13.816
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[claude_stream]",
+      "status": "passed",
+      "seconds": 12.303
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[pi_rpc]",
+      "status": "passed",
+      "seconds": 13.775
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_shared_default_reuses_session_across_senders",
+      "status": "passed",
+      "seconds": 9.949
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[codex_app_server]",
+      "status": "passed",
+      "seconds": 10.53
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[claude_stream]",
+      "status": "passed",
+      "seconds": 9.987
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[pi_rpc]",
+      "status": "passed",
+      "seconds": 13.316
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_warm_instance_is_claimed_only_once",
+      "status": "passed",
+      "seconds": 10.261
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_handoffs::test_managed_handoffs_share_capacity_and_keep_distinct_sessions",
+      "status": "passed",
+      "seconds": 9.365
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_remote::test_remote_connector_queues_disposes_and_opens_fresh_session[connector-configured]",
+      "status": "failure",
+      "seconds": 15.142
+    },
+    {
+      "identity": "tests.execution_r4.test_coordination_managed::test_message_request_retry_has_one_canonical_delivery_and_one_execution_charge",
+      "status": "passed",
+      "seconds": 7.37
+    }
+  ],
+  "runner_exit_code": 1,
+  "runner_elapsed_seconds": 224.23092729994096,
+  "input_count": 2057,
+  "changed_inputs": [],
+  "campaign_status": "FAIL",
+  "claims": {
+    "installed_artifacts_verified": true,
+    "synthetic_native_peers": true,
+    "real_provider_qualified": false,
+    "real_personal_credentials": false,
+    "native_windows_service_campaign": false,
+    "global_acceptance_promoted": false
+  },
+  "raw_xml_sha256": "8d9f661b93b7708778d279f14515f254d1b528e3146c18be9810472107480dfe",
+  "raw_log_sha256": "a978c575fb10bd4470226b3eb527669a60dc453dd6c2ff253f3c56116e391656"
+}

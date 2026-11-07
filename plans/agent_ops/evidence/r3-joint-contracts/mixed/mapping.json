@@ -1,0 +1,533 @@
+{
+  "format": "okto.r3.safe-rg-map",
+  "version": 1,
+  "published_nexus_snapshot": "af056bb10d1c1a8602bbeb64a4be352918834a84",
+  "fixed_plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "scope": "Fixed RG-01/RG-02/RG-11 only. Candidate tests and one shared fixture correction outside checkout; no product/ledger edit or global acceptance promotion.",
+  "installed_artifacts": {
+    "nexus": {
+      "version": "0.3.3",
+      "sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f"
+    },
+    "connector": {
+      "version": "0.0.12",
+      "sha256": "a8cf18105fa1cdca0443b6a3be08972d5576f72f3ce07e5a19dd9fc7cd59ae5a"
+    },
+    "core": {
+      "version": "0.0.14",
+      "sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb"
+    },
+    "interpreter": "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/venv/Scripts/python.exe",
+    "mcp": "1.30.0",
+    "authority": "Existing clean CI qualification selected by root; this audit additionally guards loaded module origins in every executed test. Shared environment is never modified."
+  },
+  "mapping": [
+    {
+      "id": "RG-01",
+      "requirement": "Dois participantes MCP e um runtime gerenciado cooperam no mesmo workspace sem identidades duplicadas.",
+      "existing_inspected": [
+        {
+          "path": "tests/execution_r4/test_handoff_ordinary_fanout.py",
+          "function": "test_ordinary_broadcast_reaches_two_runtimes_and_mcp_but_direct_handoff_only_one",
+          "line": 14,
+          "last_line": 76,
+          "file_sha256": "0159964d2ee6bd8e5909dde447d6ff05181bf068537657b7ec1dab9b20ee3325",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        }
+      ],
+      "existing_exact_assertions": [
+        "The old case creates two managed runtimes and one MCP-only actor; checks two native sends, distinct recipient claims and an unconsumed MCP delivery row. It is the reverse population and does not demonstrate two MCP participants exchanging work with one runtime."
+      ],
+      "retained_result_limit": "No exact test-name match for ordinary_fanout was found in retained plans XMLs; no fabricated passing result is inferred.",
+      "candidate": {
+        "path": "tests/execution_r4/test_r3_mixed_coordination.py",
+        "function": "test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities",
+        "line": 55,
+        "last_line": 111,
+        "file_sha256": "22f7b5b4af430f2226f135c1744b3792969acd4c9d60f6ed0d9880bf495e8b22",
+        "source": "outside-checkout candidate"
+      },
+      "candidate_assertions": [
+        "Two separately authenticated canonical MCP actors open their sessions in one workspace.",
+        "MCP caller sends to MCP peer; peer pulls/acks then sends to the managed subject.",
+        "Synthetic native terminal event flows through actual Core receipt and canonical runtime-result publication; peer pulls that exact reply and sends a correlated response to caller.",
+        "Agent IDs before/after are identical; one binding/session/turn/native send and one delivery per tracked message; canonical result parent, sender and workspace are exact.",
+        "Foreign-key consistency and canonical runtime close are asserted."
+      ],
+      "qualified_result": "1 current installed passing identity; actual ASGI HTTP/MCP/SQLite/application/Core, explicit synthetic native I/O.",
+      "not_claimed": "Not two real external client binaries, actual provider work, real TCP for this new local fixture, or AC-03/M1/M2 acceptance."
+    },
+    {
+      "id": "RG-02",
+      "requirement": "Broadcast handoff disputado por MCP/runtime continua com um único vencedor.",
+      "existing_inspected": [
+        {
+          "path": "tests/execution_r4/test_canonical_consumption.py",
+          "function": "test_handoff_pull_and_runtime_compete_for_one_claim",
+          "line": 224,
+          "last_line": 258,
+          "file_sha256": "c0b6edcf19983a480b018300d000d5dc9b06880f57af1d0e212905c57a2f8662",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        },
+        {
+          "path": "tests/execution_r4/test_canonical_handoff.py",
+          "function": "prepare",
+          "line": 14,
+          "last_line": 37,
+          "file_sha256": "787943df6bdbe21fca9bb4167ef3c76466f11b1ad3daa4547a6a3439c98f73b2",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        },
+        {
+          "path": "tests/execution_r4/test_canonical_admission_races.py",
+          "function": "test_competitive_handoff_pool_has_one_executor_across_agents_and_bindings",
+          "line": 140,
+          "last_line": 205,
+          "file_sha256": "828840af1683a97f70fa0911458e660e597e9c51ac101be61e2cfa8e0417c8dc",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        },
+        {
+          "path": "tests/execution_r4/test_handoff_broadcast_scale.py",
+          "function": "test_hundred_runtime_candidates_have_one_winner_and_no_loser_native_invocation",
+          "line": 25,
+          "last_line": 147,
+          "file_sha256": "d9131bc5531dfd35847e3cb0d67874193963c8923cb36f09d7844119681f4ce5",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        }
+      ],
+      "existing_exact_assertions": [
+        "Mixed pull/runtime test uses a DIRECT target from prepare, not broadcast.",
+        "Current old pull helper sends idempotency_key without runtime_endpoint_id; that option is managed-only. Its historical passing result cannot prove both current contenders are valid.",
+        "Other inspected races compare only managed candidates (role target or 100 runtime broadcast candidates), not a MCP pull contender."
+      ],
+      "candidate": {
+        "path": "tests/execution_r4/test_r3_mixed_coordination.py",
+        "function": "test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect",
+        "line": 115,
+        "last_line": 177,
+        "file_sha256": "22f7b5b4af430f2226f135c1744b3792969acd4c9d60f6ed0d9880bf495e8b22",
+        "source": "outside-checkout candidate"
+      },
+      "candidate_assertions": [
+        "Actual handoff_create uses target.strategy=broadcast, not a mutated row or role/direct target.",
+        "One regular MCP actor competes with a separately authorized managed subject using current canonical call shapes.",
+        "MCP-first and runtime-first each prove that specific valid actor wins; concurrent case starts both through a barrier.",
+        "Exactly one claim event, claimed_by and epoch=1; only the managed winner may create one runtime binding/turn/outbox or charge one work grant.",
+        "Losing retry stays refused; no identity duplication; native opens/sends equal the managed-winning indicator."
+      ],
+      "qualified_result": "3 current installed passing identities after fixing a test-only invalid MCP managed option.",
+      "not_claimed": "No new scheduler, fairness target, provider, native service or global R3 acceptance."
+    },
+    {
+      "id": "RG-11",
+      "requirement": "Mesmo agente com MCP externo e runtime gerenciado mantém uma entrega lógica exclusiva, sem fan-out involuntário por canal.",
+      "existing_inspected": [
+        {
+          "path": "tests/execution_r4/test_canonical_consumption.py",
+          "function": "test_canonical_push_reservation_excludes_mcp_pull",
+          "line": 23,
+          "last_line": 78,
+          "file_sha256": "c0b6edcf19983a480b018300d000d5dc9b06880f57af1d0e212905c57a2f8662",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        },
+        {
+          "path": "tests/execution_r4/test_remote_connection.py",
+          "function": "test_remote_domain_delivery_keeps_exclusive_claim_from_mcp",
+          "line": 880,
+          "last_line": 882,
+          "file_sha256": "69a81c770d6acdf27f2c45c1fbb6939dea1aef468763349c1893d5f1566dc0b7",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        },
+        {
+          "path": "tests/execution_r4/test_remote_connection.py",
+          "function": "test_owned_connector_reader_dispatches_five_actions_over_real_websocket",
+          "line": 34,
+          "last_line": 858,
+          "file_sha256": "69a81c770d6acdf27f2c45c1fbb6939dea1aef468763349c1893d5f1566dc0b7",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        }
+      ],
+      "existing_exact_assertions": [
+        "Local admitted/accepted/terminal/closed: same subject MCP pull returns empty twice; consumer_kind/operation/attempts remain unchanged; one outbox and one turn; one native open/send.",
+        "Remote wrapper passes domain_delivery=True. That branch creates one push claim/domain-delivery, and same subject MCP inbox_pull returns empty; owned reader uses actual loopback HTTP/WebSocket and synthetic native factory.",
+        "The broad remote fixture also exercises steer/interrupt/close; those are not additional deliveries and are not counted as duplicate native sends."
+      ],
+      "historical_reports": [
+        "plans/r4_execution/evidence/ns06-05-consumption-r4.xml",
+        "plans/r4_execution/evidence/ns06-05-combined-r4.xml",
+        "plans/r4_execution/evidence/r4-053-full/tests.xml",
+        "plans/r4_execution/evidence/vault-fixed-r4-campaign/tests.xml"
+      ],
+      "qualified_result": "5 current installed passing identities: four unchanged local phases plus remote wrapper with explicit manual-lifecycle fixture generation.",
+      "new_test_needed": false,
+      "not_counted": {
+        "source": {
+          "path": "tests/execution_r4/test_combined_consumption.py",
+          "function": "verify_competition",
+          "line": 50,
+          "last_line": 93,
+          "file_sha256": "a0a09b89e5a16865b5cfc02a2e47588e10d00c6714daed42eed56107edbf1bda",
+          "source": "af056bb10d1c1a8602bbeb64a4be352918834a84"
+        },
+        "reason": "Strong assertions exist in this helper, but no current invocation supplies non-null combined_winner. Historical test_ns06_05 case names without retained wrapper bytes do not establish its exact invocation. Not used as proof."
+      },
+      "not_claimed": "Actual external MCP binary or real provider behavior; no need to require embedded+remote runtimes simultaneously for this literal same-agent MCP/runtime criterion."
+    }
+  ],
+  "historical_reports": [
+    {
+      "path": "plans/r4_execution/evidence/ns06-05-consumption-r4.xml",
+      "sha256": "4a5b77d01f75c61919fe8328ad076b4bf49025664e2768450421ad6826e7c522",
+      "counts": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      },
+      "matching_rg11_cases": [
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[admitted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[accepted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[closed]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+          "status": "passed"
+        }
+      ],
+      "scope": "Historical report, not a rerun of current installed payload; matching assertions were inspected in current source separately."
+    },
+    {
+      "path": "plans/r4_execution/evidence/ns06-05-combined-r4.xml",
+      "sha256": "4a5003aca7e37178114f05194fe9a77d1002e1c2ae7daf6c13054dbd9ec7807a",
+      "counts": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0
+      },
+      "matching_rg11_cases": [
+        {
+          "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+          "status": "passed"
+        }
+      ],
+      "scope": "Historical report, not a rerun of current installed payload; matching assertions were inspected in current source separately."
+    },
+    {
+      "path": "plans/r4_execution/evidence/r4-053-full/tests.xml",
+      "sha256": "5ce5c55f860d79c457cf441ba5f341c0192a59f95da02e83d9a0bb63e56c6b4c",
+      "counts": {
+        "passed": 708,
+        "failed": 8,
+        "skipped": 6
+      },
+      "matching_rg11_cases": [
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[admitted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[accepted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[closed]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+          "status": "passed"
+        }
+      ],
+      "scope": "Historical report, not a rerun of current installed payload; matching assertions were inspected in current source separately."
+    },
+    {
+      "path": "plans/r4_execution/evidence/vault-fixed-r4-campaign/tests.xml",
+      "sha256": "470cec768820cdcc96563868ae63059297086bdf3733437766817388e62ff8fe",
+      "counts": {
+        "passed": 702,
+        "failed": 3,
+        "skipped": 6
+      },
+      "matching_rg11_cases": [
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[admitted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[accepted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[closed]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+          "status": "passed"
+        }
+      ],
+      "scope": "Historical report, not a rerun of current installed payload; matching assertions were inspected in current source separately."
+    }
+  ],
+  "current_attempts": [
+    {
+      "path": "reports/initial/tests.xml",
+      "sha256": "17d488658332780e486a83c064979e3af9ac1adbb8233479ccf6c0717ea9a068",
+      "cases": [
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[mcp_first]",
+          "status": "failed"
+        },
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[runtime_first]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[concurrent]",
+          "status": "passed"
+        }
+      ],
+      "counts": {
+        "passed": 3,
+        "failed": 1,
+        "skipped": 0
+      },
+      "attempt": "initial",
+      "qualification": "reports/initial/qualification.json",
+      "qualification_sha256": "68f9cfdf1b188daf5a03ddd93f8e5d795bd2bd50111c768ec4b19799a04ac843"
+    },
+    {
+      "path": "reports/diagnostic/tests.xml",
+      "sha256": "f58ed5b61563a7f03a3f30f2131e9adfe8ce2e4c3001ce4056aeefba13d19ecb",
+      "cases": [
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[mcp_first]",
+          "status": "failed"
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0
+      },
+      "attempt": "diagnostic",
+      "qualification": "reports/diagnostic/qualification.json",
+      "qualification_sha256": "088d76412331611d5e8d1bbdf76f86ccef5e38437208e37147f48a4c79003e92"
+    },
+    {
+      "path": "reports/final/tests.xml",
+      "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+      "cases": [
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[mcp_first]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[runtime_first]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[concurrent]",
+          "status": "passed"
+        }
+      ],
+      "counts": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      "attempt": "final",
+      "qualification": "reports/final/qualification.json",
+      "qualification_sha256": "1361a5b02219cc4036c453718f0915b2bcdc537c541a11e083c80bfa31717ccb"
+    },
+    {
+      "path": "reports/rg11-current/tests.xml",
+      "sha256": "df6d4a737ec3dcabb05cd5be49aa8c301e1d6ec85262755c6fcc1995fed0ef90",
+      "cases": [
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[admitted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[accepted]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[terminal]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[closed]",
+          "status": "passed"
+        },
+        {
+          "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+          "status": "failed"
+        }
+      ],
+      "counts": {
+        "passed": 4,
+        "failed": 1,
+        "skipped": 0
+      },
+      "attempt": "rg11-current",
+      "qualification": "reports/rg11-current/qualification.json",
+      "qualification_sha256": "fcfebfa5838eab377bdd2eaabd8f6d77d1387fa0f7376f8abd8612861f092385"
+    },
+    {
+      "path": "reports/rg11-remote-final/tests.xml",
+      "sha256": "8a5170f398505cd3ffbf1b5c663fba3019a0152ea4f77457c680ac5ad117582c",
+      "cases": [
+        {
+          "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+          "status": "passed"
+        }
+      ],
+      "counts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "attempt": "rg11-remote-final",
+      "qualification": "reports/rg11-remote-final/qualification.json",
+      "qualification_sha256": "7f64041f929bedcf54effeb80426c110a2b78864f0c729f95d72eb458c32303d"
+    },
+    {
+      "path": "reports/rg11-shared-fixture-final/tests.xml",
+      "sha256": "7f5bf911cbc48c6f7f38080d6a323d309dd8ec8aa7a07c4a48fa2614c7cb5289",
+      "cases": [
+        {
+          "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+          "status": "passed"
+        }
+      ],
+      "counts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "attempt": "rg11-shared-fixture-final",
+      "qualification": "reports/rg11-shared-fixture-final/qualification.json",
+      "qualification_sha256": "15c47ad4b7bf9a61444c76443adb0557ebb70ef09c31fb282daa2ad54092f287"
+    }
+  ],
+  "latest_unique_cases": [
+    {
+      "identity": "execution_r4.test_r3_mixed_coordination::test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities",
+      "status": "passed",
+      "report": "reports/final/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[mcp_first]",
+      "status": "passed",
+      "report": "reports/final/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[runtime_first]",
+      "status": "passed",
+      "report": "reports/final/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[concurrent]",
+      "status": "passed",
+      "report": "reports/final/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[admitted]",
+      "status": "passed",
+      "report": "reports/rg11-current/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[accepted]",
+      "status": "passed",
+      "report": "reports/rg11-current/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[terminal]",
+      "status": "passed",
+      "report": "reports/rg11-current/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[closed]",
+      "status": "passed",
+      "report": "reports/rg11-current/tests.xml"
+    },
+    {
+      "identity": "execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]",
+      "status": "passed",
+      "report": "reports/rg11-shared-fixture-final/tests.xml"
+    }
+  ],
+  "current_qualified_unique_count": 9,
+  "new_case_count": 4,
+  "reused_case_count": 5,
+  "overlap_policy": "Initial, diagnostic and repeated remote fixture attempts are retained separately; latest passing identities replace previous results without adding to 9.",
+  "initial_findings": [
+    {
+      "attempts": [
+        "initial",
+        "diagnostic"
+      ],
+      "classification": "candidate_test_input_error",
+      "detail": "MCP pull claim incorrectly supplied managed-only idempotency_key, causing VALIDATION_ERROR before competition. Removed from that contender only; both deterministic orderings then pass. Runtime-first/concurrent passes before correction are not relied upon as valid mixed-race proof."
+    },
+    {
+      "attempts": [
+        "rg11-current"
+      ],
+      "classification": "legacy_fixture_lifecycle_omission",
+      "detail": "The remote helper constructs DaemonApp and controls components manually, never entering run_forever; shutdown.json now needs service_generation. Business assertions completed before cleanup AttributeError. Product/public startup already sets generation before waiting/shutdown."
+    },
+    {
+      "attempts": [
+        "rg11-remote-final",
+        "rg11-shared-fixture-final"
+      ],
+      "classification": "fixture_correction_and_consolidation",
+      "detail": "First confirmed the isolated shutdown-generation diagnosis. Final shared patch supplies separate 32-hex synthetic generations after both manual DaemonApp constructions; final remote case passes unchanged production. No shutdown call/assertion is bypassed."
+    }
+  ],
+  "fixture_patch": {
+    "path": "fixture.patch",
+    "sha256": "c3d3bcddfd924c23d8be174f5e4b4442086d300c22b2e7eb622a054ea5706528",
+    "final_file_sha256": "d74ca53fc282cce450f010260bc38c534445fa8b2a98fa561fa93259d524255d",
+    "scope": "Only synthetic service_generation values and comments after the two existing manual constructions; no lifecycle capability or readiness claim."
+  },
+  "new_tests_patch": {
+    "path": "new-tests.patch",
+    "sha256": "4721a0555cddf7b8f4b6062da000b58b29d781c5e7dd81d85eea720555b91c3c",
+    "final_file_sha256": "22f7b5b4af430f2226f135c1744b3792969acd4c9d60f6ed0d9880bf495e8b22"
+  },
+  "combined_patch": {
+    "path": "candidate.patch",
+    "sha256": "4b2f3356345e75588c4ee20fef3c4a796e8759cc2c8baf52dfb53b68c9bd662d"
+  },
+  "lint": {
+    "command": "rtk proxy ruff check <candidate test> --output-format json --output-file ruff-final.json",
+    "new_test_full_check": "passed",
+    "diagnostics": [],
+    "existing_helper": "Only assignments/comments changed; inherited whole-file lint is not represented as clean."
+  },
+  "boundaries": [
+    "No checkout or ledger edits; no commit/push; candidate patch is for root review/application.",
+    "No shared venv change. -I, isolated cwd and USERPROFILE/APPDATA/LOCALAPPDATA, cleared application/provider environment before imports; only fixture-generated credentials in disposable approved file vault.",
+    "No provider executable or registered native service. Existing synthetic inventory and native factories are reused; no new authority/readiness bypass introduced.",
+    "New local tests use the actual ASGI application/MCP mount, not a network socket. The reused remote test uses real loopback HTTP/WebSocket.",
+    "Private fixture homes/databases/vaults/bearer material are excluded from public manifest. They are not hashed or copied into the candidate evidence.",
+    "No real-client/M1/M2/native-platform/global acceptance promotion follows from these fixture contracts."
+  ]
+}

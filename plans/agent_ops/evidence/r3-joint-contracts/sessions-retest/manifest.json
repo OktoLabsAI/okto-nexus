@@ -1,0 +1,136 @@
+{
+  "format": "r3-rg04-curated-evidence-v1",
+  "artifacts": [
+    {
+      "path": "run.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\run.py",
+      "original_sha256": "727551904d26989c8bf8fda2c8b796064c510a07b152c5acdd0f53bdb5eb2271",
+      "artifact_sha256": "727551904d26989c8bf8fda2c8b796064c510a07b152c5acdd0f53bdb5eb2271",
+      "bytes": 2078,
+      "redactions": {}
+    },
+    {
+      "path": "curate.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\curate.py",
+      "original_sha256": "eaff86f08d64c23d57a89e548f730c3dac3c6a3f5b7c43948fc01e3ba5a5de17",
+      "artifact_sha256": "eaff86f08d64c23d57a89e548f730c3dac3c6a3f5b7c43948fc01e3ba5a5de17",
+      "bytes": 4381,
+      "redactions": {}
+    },
+    {
+      "path": "selection.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\selection.json",
+      "original_sha256": "d2dc34ccaa1eabaec9b0be7f58648ac9f98a685cab1da06b47e1702fb5e8e249",
+      "artifact_sha256": "d2dc34ccaa1eabaec9b0be7f58648ac9f98a685cab1da06b47e1702fb5e8e249",
+      "bytes": 593,
+      "redactions": {}
+    },
+    {
+      "path": "invocation.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\invocation.json",
+      "original_sha256": "df4b871f5190a97d354d9d539c04fbb26ce0faeff7c86f31cf0d2c58c6dc3b92",
+      "artifact_sha256": "df4b871f5190a97d354d9d539c04fbb26ce0faeff7c86f31cf0d2c58c6dc3b92",
+      "bytes": 1988,
+      "redactions": {}
+    },
+    {
+      "path": "coverage-map.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\coverage-map.json",
+      "original_sha256": "8ca84a84906318269208eb2b647f0629334c896a83022579663f75d8305de0b7",
+      "artifact_sha256": "8ca84a84906318269208eb2b647f0629334c896a83022579663f75d8305de0b7",
+      "bytes": 6331,
+      "redactions": {}
+    },
+    {
+      "path": "process-result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\process-result.json",
+      "original_sha256": "36ea2bf3fb0437f3e5d47e0a0fdd322598c57a66fb02e067ef44cfff70558483",
+      "artifact_sha256": "36ea2bf3fb0437f3e5d47e0a0fdd322598c57a66fb02e067ef44cfff70558483",
+      "bytes": 66,
+      "redactions": {}
+    },
+    {
+      "path": "summary.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\summary.json",
+      "original_sha256": "78388e968f9c3e3662c2a51178976598a6b0ed7c6057659016a37d8ab94da005",
+      "artifact_sha256": "78388e968f9c3e3662c2a51178976598a6b0ed7c6057659016a37d8ab94da005",
+      "bytes": 978,
+      "redactions": {}
+    },
+    {
+      "path": "reports/installed.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\reports\\installed.json",
+      "original_sha256": "e0dadb9dce6de43bab086b2ca7bf10deb6191a9843c66cb802b129113b8d5a04",
+      "artifact_sha256": "e0dadb9dce6de43bab086b2ca7bf10deb6191a9843c66cb802b129113b8d5a04",
+      "bytes": 774,
+      "redactions": {}
+    },
+    {
+      "path": "reports/campaign.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\reports\\campaign.json",
+      "original_sha256": "c08ee69fc31ffdc0b872bd79c7be2bcefa26caa67eab21710122591a44d06d84",
+      "artifact_sha256": "c08ee69fc31ffdc0b872bd79c7be2bcefa26caa67eab21710122591a44d06d84",
+      "bytes": 145559,
+      "redactions": {}
+    },
+    {
+      "path": "reports/tests.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\reports\\tests.xml",
+      "original_sha256": "28d63b37d352a738bd6d5ab00b0bfb74282ec15b447ec959a8670391d2f05a91",
+      "artifact_sha256": "28d63b37d352a738bd6d5ab00b0bfb74282ec15b447ec959a8670391d2f05a91",
+      "bytes": 419,
+      "redactions": {}
+    },
+    {
+      "path": "prepare.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\prepare.py",
+      "original_sha256": "dff6632fdc2297a6257c5868719751c9dd4a6a69e02e5644f2469a2f668c2014",
+      "artifact_sha256": "dff6632fdc2297a6257c5868719751c9dd4a6a69e02e5644f2469a2f668c2014",
+      "bytes": 2293,
+      "redactions": {}
+    },
+    {
+      "path": "finalize.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\finalize.py",
+      "original_sha256": "47aeeb74ca63e06dc414665db77179bb4fbe801e0014b1c3d942041bdf781795",
+      "artifact_sha256": "47aeeb74ca63e06dc414665db77179bb4fbe801e0014b1c3d942041bdf781795",
+      "bytes": 3486,
+      "redactions": {}
+    },
+    {
+      "path": "fixture.patch",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\fixture.patch",
+      "original_sha256": "c3d3bcddfd924c23d8be174f5e4b4442086d300c22b2e7eb622a054ea5706528",
+      "artifact_sha256": "c3d3bcddfd924c23d8be174f5e4b4442086d300c22b2e7eb622a054ea5706528",
+      "bytes": 1273,
+      "redactions": {}
+    },
+    {
+      "path": "fixture-adaptation.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\fixture-adaptation.json",
+      "original_sha256": "9970396f7dfef7483d0816f21be348e98e93846f1d88e99d102d6d14215acfb3",
+      "artifact_sha256": "9970396f7dfef7483d0816f21be348e98e93846f1d88e99d102d6d14215acfb3",
+      "bytes": 509,
+      "redactions": {}
+    },
+    {
+      "path": "input-stability.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\input-stability.json",
+      "original_sha256": "a964da1c0a8ae9522d7b9a04f374a975222665db9f4e8ea7ab3afbcc7738e4e2",
+      "artifact_sha256": "a964da1c0a8ae9522d7b9a04f374a975222665db9f4e8ea7ab3afbcc7738e4e2",
+      "bytes": 620,
+      "redactions": {}
+    },
+    {
+      "path": "qualification.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\qualification.json",
+      "original_sha256": "c12a133485b293f30f7b5a2bbced3bb17bb83b646263226aef188a70bb57d66e",
+      "artifact_sha256": "c12a133485b293f30f7b5a2bbced3bb17bb83b646263226aef188a70bb57d66e",
+      "bytes": 8393,
+      "redactions": {}
+    }
+  ],
+  "aggregate_sha256": "618621f08268229668f73f1837c4c0323d68722a384bf3120277f9c17a65079c",
+  "raw_logs_and_test_homes_excluded": true,
+  "historical_artifacts_modified": false
+}

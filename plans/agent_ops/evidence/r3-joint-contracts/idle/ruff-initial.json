@@ -1,0 +1,20 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "ruff",
+    "check",
+    "C:/Users/jpamb/AppData/Local/Temp/r3-rg03-idle-7kvw51zk/snapshot/tests/execution_r4/test_external_idle_scheduler_isolation.py",
+    "--no-cache",
+    "--output-format",
+    "concise"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg03-idle-7kvw51zk\\snapshot",
+  "started_at": "2026-11-07T09:05:12.479602+00:00",
+  "ended_at": "2026-11-07T09:05:12.616435+00:00",
+  "elapsed_seconds": 0.13684150006156415,
+  "exit_code": 1,
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg03-idle-7kvw51zk\\ruff-initial.log",
+  "raw_output_stored": false,
+  "bytecode_writes_disabled": false
+}

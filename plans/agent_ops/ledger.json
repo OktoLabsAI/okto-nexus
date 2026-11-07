@@ -482,7 +482,10 @@
         "plans/agent_ops/evidence/pr10-external/final/followup/installed.xml",
         "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
         "plans/agent_ops/evidence/pr10-external/final/package-proof.json",
-        "plans/agent_ops/evidence/pr10-external/reports.json"
+        "plans/agent_ops/evidence/pr10-external/reports.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
       ]
     }
   },
@@ -9817,33 +9820,58 @@
     },
     "RG-01": {
       "requirement": "Dois participantes MCP e um runtime gerenciado cooperam no mesmo workspace sem identidades duplicadas.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ],
+      "result": "Qualified current installed Windows canonical contract with real SQLite/Core and synthetic native peers. Exact assertions, identities, attempts and limitations retained in the joint milestone; no real-client/provider or global acceptance claim."
     },
     "RG-02": {
       "requirement": "Broadcast handoff disputado por MCP/runtime continua com um Ãºnico vencedor.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ],
+      "result": "Qualified current installed Windows canonical contract with real SQLite/Core and synthetic native peers. Exact assertions, identities, attempts and limitations retained in the joint milestone; no real-client/provider or global acceptance claim."
     },
     "RG-03": {
       "requirement": "ObservaÃ§Ã£o idle nÃ£o muda prioridade, fairness, elegibilidade ou reservas de claims.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ],
+      "result": "Qualified current installed Windows canonical contract with real SQLite/Core and synthetic native peers. Exact assertions, identities, attempts and limitations retained in the joint milestone; no real-client/provider or global acceptance claim."
     },
     "RG-04": {
       "requirement": "Isolamento shared/per_sender/per_sender_session/one_shot mantÃ©m semÃ¢ntica existente.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ],
+      "result": "Qualified current installed Windows canonical contract with real SQLite/Core and synthetic native peers. Exact assertions, identities, attempts and limitations retained in the joint milestone; no real-client/provider or global acceptance claim."
     },
     "RG-05": {
       "requirement": "ReinÃ­cio/queda de rede com operaÃ§Ã£o incerta nÃ£o dispara replay por nenhum dos novos caminhos.",
-      "status": "NOT_RUN",
+      "status": "IN_PROGRESS",
       "evidence": [
         "plans/agent_ops/evidence/pr09-herdr.md",
-        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json"
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
       ],
       "subscopes": {
-        "pr09_optional_windows_observer_contract": "VERIFIED"
+        "pr09_optional_windows_observer_contract": "VERIFIED",
+        "selected_39_current_recovery_cases": "VERIFIED"
       }
     },
     "RG-06": {
@@ -9870,13 +9898,18 @@
         "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-nexus-source.xml",
         "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
-        "plans/agent_ops/evidence/pr04-participant-init.md"
+        "plans/agent_ops/evidence/pr04-participant-init.md",
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
       ],
       "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
       "subscopes": {
         "shared_participant_contract_and_editor": "VERIFIED",
         "participant_init_review_apply_recovery_windows": "VERIFIED",
-        "participant_actual_harness_environment": "NOT_RUN"
+        "participant_actual_harness_environment": "NOT_RUN",
+        "current_131_core_imports_and_literal_application_boundaries": "VERIFIED"
       }
     },
     "RG-07": {
@@ -9948,8 +9981,13 @@
     },
     "RG-11": {
       "requirement": "Mesmo agente com MCP externo e runtime gerenciado mantÃ©m uma entrega lÃ³gica exclusiva, sem fan-out involuntÃ¡rio por canal.",
-      "status": "NOT_RUN",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+      ],
+      "result": "Qualified current installed Windows canonical contract with real SQLite/Core and synthetic native peers. Exact assertions, identities, attempts and limitations retained in the joint milestone; no real-client/provider or global acceptance claim."
     }
   },
   "invariants": {
@@ -10640,6 +10678,18 @@
         "plans/agent_ops/evidence/r3-qualification-readiness/audit/completion-matrix.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/artifact-manifest.json"
+      ]
+    },
+    "r3_joint_installed_contracts": {
+      "status": "VERIFIED",
+      "unique_cases": 71,
+      "new_cases": 10,
+      "product_changed": false,
+      "scope": "Windows canonical contracts, synthetic native peers; no global acceptance",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json"
       ]
     }
   },
@@ -11422,6 +11472,17 @@
         "plans/agent_ops/evidence/r3-qualification-readiness/audit/completion-matrix.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "71 unique installed cases passed: 9 mixed delivery, 6 idle isolation, 17 session modes and 39 selected recovery. Ten new tests and a manually owned remote fixture generation fix; no product change. RG-01/02/03/04/11 verified at canonical Windows contract scope; RG-05/06 remain in progress. Current Core import audit is narrowly scoped and honestly retains only an observed stdout summary. Full M1/M2, compatibility, final trace/public artifact review and real campaigns remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json"
       ]
     }
   ]

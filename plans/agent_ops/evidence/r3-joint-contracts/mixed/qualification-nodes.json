@@ -1,0 +1,10 @@
+{
+  "nodes": [
+    "tests/execution_r4/test_r3_mixed_coordination.py",
+    "tests/execution_r4/test_canonical_consumption.py::test_canonical_push_reservation_excludes_mcp_pull",
+    "tests/execution_r4/test_remote_connection.py::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp"
+  ],
+  "expected_case_count": 9,
+  "new_cases": 4,
+  "existing_cases": 5
+}

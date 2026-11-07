@@ -1,0 +1,17 @@
+{
+  "status": "PASS_OBSERVED_TOOL_OUTPUT",
+  "command": "rtk proxy CIvenv/Scripts/python.exe -I C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-current-audit-dth2i_fh\\audit.py",
+  "static_python_files": 131,
+  "imported_modules": 131,
+  "denied_events": [],
+  "reads_within_python_installations": 731,
+  "script_sha256": "37baaf4635f5e599a6d3ce57d9dc4790aa49ad7a0a7ce8b83427f08debbfc44c",
+  "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+  "exit_code": 0,
+  "raw_stdout_retained_locally": false,
+  "limitations": [
+    "Full stdout was observed in tool output; this is a manually retained result summary, not a raw subprocess report.",
+    "Checks socket/process/thread/file-write/outside-Python-installation file-read events and static import boundaries. Does not instrument arbitrary environment lookups or direct native credential APIs.",
+    "No adapter, native provider or user-service execution."
+  ]
+}

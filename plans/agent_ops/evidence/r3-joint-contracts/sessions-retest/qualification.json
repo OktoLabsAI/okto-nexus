@@ -1,0 +1,123 @@
+{
+  "scenario": "RG-04",
+  "unique_qualified_test_identities": 17,
+  "historical_executions": 18,
+  "historical_passes": 17,
+  "historical_failures": 1,
+  "final_by_identity": {
+    "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-codex_app_server]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-claude_stream]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-pi_rpc]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-codex_app_server]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-claude_stream]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-pi_rpc]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[codex_app_server]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[claude_stream]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[pi_rpc]": "passed",
+    "tests.execution_r4.test_sender_sessions::test_shared_default_reuses_session_across_senders": "passed",
+    "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[codex_app_server]": "passed",
+    "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[claude_stream]": "passed",
+    "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[pi_rpc]": "passed",
+    "tests.execution_r4.test_one_shot_runtime::test_warm_instance_is_claimed_only_once": "passed",
+    "tests.execution_r4.test_one_shot_handoffs::test_managed_handoffs_share_capacity_and_keep_distinct_sessions": "passed",
+    "tests.execution_r4.test_one_shot_remote::test_remote_connector_queues_disposes_and_opens_fresh_session[connector-configured]": "passed",
+    "tests.execution_r4.test_coordination_managed::test_message_request_retry_has_one_canonical_delivery_and_one_execution_charge": "passed"
+  },
+  "records": [
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-codex_app_server]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-claude_stream]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender_session-pi_rpc]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-codex_app_server]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-claude_stream]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_same_agent_source_sessions_are_isolated_only_in_new_mode[per_sender-pi_rpc]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[codex_app_server]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[claude_stream]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_parallel_senders_separate_sessions_reuse_and_correct_replies[pi_rpc]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_sender_sessions::test_shared_default_reuses_session_across_senders",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[codex_app_server]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[claude_stream]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_one_shot_closes_then_serves_queue_in_fresh_session[pi_rpc]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_runtime::test_warm_instance_is_claimed_only_once",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_handoffs::test_managed_handoffs_share_capacity_and_keep_distinct_sessions",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_remote::test_remote_connector_queues_disposes_and_opens_fresh_session[connector-configured]",
+      "status": "failure",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_coordination_managed::test_message_request_retry_has_one_canonical_delivery_and_one_execution_charge",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml"
+    },
+    {
+      "identity": "tests.execution_r4.test_one_shot_remote::test_remote_connector_queues_disposes_and_opens_fresh_session[connector-configured]",
+      "status": "passed",
+      "report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\reports\\tests.xml"
+    }
+  ],
+  "initial_failure": "The manually assembled DaemonApp fixture did not initialize service_generation before canonical shutdown. The initial report is immutable.",
+  "affected_retest": "One existing remote one-shot case only, using the shared proposed test-helper adaptation in a Temp mirror. No production or installed package bytes changed.",
+  "checkout_patch_applied": false,
+  "global_plan_or_ledger_status_changed": false,
+  "scope_limit": "Synthetic native peers and provider candidates; real installed Nexus/Core/Connector, SQLite, MCP/HTTP and selected remote WebSocket path. This is not real-provider or native-service qualification."
+}

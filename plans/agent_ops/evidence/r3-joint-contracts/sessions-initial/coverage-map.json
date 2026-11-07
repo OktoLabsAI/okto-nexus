@@ -1,0 +1,82 @@
+{
+  "scenario": "RG-04",
+  "requirement": "Isolamento shared/per_sender/per_sender_session/one_shot mantém semântica existente.",
+  "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md:971",
+  "source_commit": "af056bb10d1c1a8602bbeb64a4be352918834a84",
+  "selection": "selection.json",
+  "expected_unique_test_identities": 17,
+  "rows": [
+    {
+      "mode": "shared",
+      "node": "tests/execution_r4/test_sender_sessions.py::test_shared_default_reuses_session_across_senders",
+      "count": 1,
+      "assertion_lines": [211, 212, 215, 218, 219, 222],
+      "assertions": ["The default policy is shared.", "Messages from different senders reuse the same runtime session.", "The reused session can be closed canonically."]
+    },
+    {
+      "mode": "per_sender",
+      "node": "tests/execution_r4/test_sender_sessions.py::test_parallel_senders_separate_sessions_reuse_and_correct_replies",
+      "count": 3,
+      "adapter_labels": ["codex_app_server", "claude_stream", "pi_rpc"],
+      "assertion_lines": [155, 158, 168, 170, 172, 175, 190, 193, 196, 201],
+      "assertions": ["Concurrent senders get distinct sessions and both dispatch before either completes.", "A follow-up reuses its sender's session and preserves ordering.", "Reversed completion order preserves exact parent message, body and recipient attribution.", "A fresh DB connection resolves durable sender affinity; after close a new session is opened.", "Changing policy while sessions are active is refused."]
+    },
+    {
+      "mode": "per_sender_session compared with per_sender",
+      "node": "tests/execution_r4/test_sender_sessions.py::test_same_agent_source_sessions_are_isolated_only_in_new_mode",
+      "count": 6,
+      "adapter_labels": ["codex_app_server", "claude_stream", "pi_rpc"],
+      "assertion_lines": [101, 106, 110, 113, 119, 120, 124, 128, 137, 138],
+      "assertions": ["Two verified source sessions of the same actor separate only in per_sender_session mode.", "Separate source sessions dispatch concurrently in that mode; per_sender serializes them.", "A verified source-session follow-up reuses its prior runtime session.", "Sessionless traffic has its own scope only in per_sender_session; unverified attribution cannot create a privileged scope.", "Published runtime-origin references and foreign keys remain coherent."]
+    },
+    {
+      "mode": "one_shot",
+      "node": "tests/execution_r4/test_one_shot_runtime.py::test_one_shot_closes_then_serves_queue_in_fresh_session",
+      "count": 3,
+      "adapter_labels": ["codex_app_server", "claude_stream", "pi_rpc"],
+      "assertion_lines": [351, 353, 357, 358, 360],
+      "assertions": ["The second call queues while the first runs.", "The first call succeeds and its session is CLOSED before the next call uses a distinct session.", "All one-shot slots are released after completion."]
+    },
+    {
+      "mode": "one_shot warm",
+      "node": "tests/execution_r4/test_one_shot_runtime.py::test_warm_instance_is_claimed_only_once",
+      "count": 1,
+      "assertion_lines": [377, 380, 382],
+      "assertions": ["The first call claims the prepared warm session exactly.", "That session closes and is not reused for the next call."]
+    },
+    {
+      "mode": "one_shot handoff",
+      "node": "tests/execution_r4/test_one_shot_handoffs.py::test_managed_handoffs_share_capacity_and_keep_distinct_sessions",
+      "count": 1,
+      "assertion_lines": [25, 27, 31, 32, 35, 36],
+      "assertions": ["Handoffs share the one-shot capacity and queue.", "Each handoff retains its exact canonical claim and a distinct session."]
+    },
+    {
+      "mode": "one_shot remote Connector",
+      "node": "tests/execution_r4/test_one_shot_remote.py::test_remote_connector_queues_disposes_and_opens_fresh_session",
+      "count": 1,
+      "assertion_lines": [28, 42, 43, 44, 45, 46, 51, 53],
+      "assertions": ["The real Connector WebSocket path queues two calls, receives canonical results and stops each synthetic native peer.", "The two calls open exactly two distinct sessions; both session and lease states become CLOSED."]
+    },
+    {
+      "mode": "new R3 receipt seam, without an invented cross-product requirement",
+      "node": "tests/execution_r4/test_coordination_managed.py::test_message_request_retry_has_one_canonical_delivery_and_one_execution_charge",
+      "count": 1,
+      "assertion_lines": [212, 221, 222, 223, 225, 226, 227, 228, 229],
+      "assertions": ["A client_request_id creates one canonical delivery, one open/turn pair and one execution charge.", "Three identical retries reuse the same receipt and do not change the snapshot or create a second native open/send."]
+    }
+  ],
+  "prior_retained_evidence": {
+    "behavioral_mode_cases": "No testcase with any of the selected sender_sessions/one_shot classnames was found in retained evidence XMLs; a filename or traceback mention was not treated as a pass.",
+    "configuration_only": "plans/agent_ops/evidence/pr06-attention-authority-installed.xml: tests.execution_r4.test_runtime_policy_defaults::test_source_session_policy_global_and_agent_override passed; it does not substitute for runtime isolation assertions.",
+    "receipt_seam": "plans/agent_ops/evidence/pr05-coordination-cli-regression-installed.xml: tests.execution_r4.test_coordination_managed::test_message_request_retry_has_one_canonical_delivery_and_one_execution_charge passed, as did the late-receipt rollback case. Other historical source/installed repeats are not added to unique coverage."
+  },
+  "scope_limits": [
+    "Native peers, provider candidates and identities are synthetic. Adapter labels do not qualify installed provider binaries or paid turns.",
+    "SQLite, application transactions, canonical MCP/HTTP paths, the installed Core contract and the selected remote Connector WebSocket path are real.",
+    "Shared/per_sender/per_sender_session coverage is embedded; only the selected one_shot case exercises remote Connector transport.",
+    "This does not claim a client_request_id-by-four-modes Cartesian matrix; RG-04 does not explicitly require that new target.",
+    "No personal vault, native Windows service, user credentials, reboot/logon or real-client M1/M2 campaign is exercised.",
+    "No checkout, ledger, plan or historical artifact change is authorized or performed by this campaign."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "command": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/venv/Scripts/python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "pytest.ini",
+    "tests/execution_r4/test_external_idle_scheduler_isolation.py",
+    "-q",
+    "--tb=short",
+    "--basetemp=C:/Users/jpamb/AppData/Local/Temp/r3-rg03-idle-7kvw51zk/pytest-initial",
+    "--junitxml=C:/Users/jpamb/AppData/Local/Temp/r3-rg03-idle-7kvw51zk/rg03-initial.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg03-idle-7kvw51zk\\snapshot",
+  "started_at": "2026-11-07T08:58:11.782976+00:00",
+  "ended_at": "2026-11-07T08:59:03.412886+00:00",
+  "elapsed_seconds": 51.62990629998967,
+  "exit_code": 1,
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg03-idle-7kvw51zk\\rg03-initial.log",
+  "raw_output_stored": false,
+  "bytecode_writes_disabled": false,
+  "runner_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg03-idle-7kvw51zk",
+  "metadata_correction": "Actual pytest cwd is snapshot. Python -I ignores PYTHONDONTWRITEBYTECODE; any bytecode stays in own Temp snapshot or own isolated venv."
+}

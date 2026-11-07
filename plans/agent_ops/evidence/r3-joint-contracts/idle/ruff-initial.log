@@ -1,0 +1,11 @@
+tests/execution_r4/test_external_idle_scheduler_isolation.py:36:21: F811 Redefinition of unused `observed_runtime` from line 19: `observed_runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:40:26: F811 Redefinition of unused `observed_runtime` from line 19: `observed_runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:50:74: F811 Redefinition of unused `observed_runtime` from line 19: `observed_runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:76:63: F811 Redefinition of unused `runtime` from line 25: `runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:76:72: F811 Redefinition of unused `observed_runtime` from line 19: `observed_runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:126:59: F811 Redefinition of unused `observed_runtime` from line 19: `observed_runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:158:65: F811 Redefinition of unused `runtime` from line 25: `runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:158:74: F811 Redefinition of unused `observed_runtime` from line 19: `observed_runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:182:69: F811 Redefinition of unused `runtime` from line 25: `runtime` redefined here
+tests/execution_r4/test_external_idle_scheduler_isolation.py:182:78: F811 Redefinition of unused `observed_runtime` from line 19: `observed_runtime` redefined here
+Found 10 errors.

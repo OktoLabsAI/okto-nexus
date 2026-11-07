@@ -1,0 +1,88 @@
+{
+  "format": "r3-rg04-curated-evidence-v1",
+  "artifacts": [
+    {
+      "path": "run.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\run.py",
+      "original_sha256": "727551904d26989c8bf8fda2c8b796064c510a07b152c5acdd0f53bdb5eb2271",
+      "artifact_sha256": "727551904d26989c8bf8fda2c8b796064c510a07b152c5acdd0f53bdb5eb2271",
+      "bytes": 2078,
+      "redactions": {}
+    },
+    {
+      "path": "curate.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\curate.py",
+      "original_sha256": "86c7bab7c267e47218351d84805a07926ee218a5754848bc5fdf00aee385f05e",
+      "artifact_sha256": "86c7bab7c267e47218351d84805a07926ee218a5754848bc5fdf00aee385f05e",
+      "bytes": 4230,
+      "redactions": {}
+    },
+    {
+      "path": "selection.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\selection.json",
+      "original_sha256": "0a2772e748fafae39f89f64c9ba21fe08883df4ddd1159071d82e104251bb12f",
+      "artifact_sha256": "0a2772e748fafae39f89f64c9ba21fe08883df4ddd1159071d82e104251bb12f",
+      "bytes": 1345,
+      "redactions": {}
+    },
+    {
+      "path": "invocation.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\invocation.json",
+      "original_sha256": "16f9838ba192e923c430313787ec333d052dd4f4f4e3bac8544f0af077020f2e",
+      "artifact_sha256": "16f9838ba192e923c430313787ec333d052dd4f4f4e3bac8544f0af077020f2e",
+      "bytes": 2711,
+      "redactions": {}
+    },
+    {
+      "path": "coverage-map.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\coverage-map.json",
+      "original_sha256": "8ca84a84906318269208eb2b647f0629334c896a83022579663f75d8305de0b7",
+      "artifact_sha256": "8ca84a84906318269208eb2b647f0629334c896a83022579663f75d8305de0b7",
+      "bytes": 6331,
+      "redactions": {}
+    },
+    {
+      "path": "process-result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\process-result.json",
+      "original_sha256": "6fed743ef01e3c237479a241f4445ee5d63fe31f3d29cc4a391bc3c485b36894",
+      "artifact_sha256": "6fed743ef01e3c237479a241f4445ee5d63fe31f3d29cc4a391bc3c485b36894",
+      "bytes": 66,
+      "redactions": {}
+    },
+    {
+      "path": "summary.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\summary.json",
+      "original_sha256": "df7f19838e5f798ebd5e59f2c0fd9b8f067f53f4ef0cdc778d04f607bfa35f0e",
+      "artifact_sha256": "df7f19838e5f798ebd5e59f2c0fd9b8f067f53f4ef0cdc778d04f607bfa35f0e",
+      "bytes": 4290,
+      "redactions": {}
+    },
+    {
+      "path": "reports/installed.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\installed.json",
+      "original_sha256": "e0dadb9dce6de43bab086b2ca7bf10deb6191a9843c66cb802b129113b8d5a04",
+      "artifact_sha256": "e0dadb9dce6de43bab086b2ca7bf10deb6191a9843c66cb802b129113b8d5a04",
+      "bytes": 774,
+      "redactions": {}
+    },
+    {
+      "path": "reports/campaign.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\campaign.json",
+      "original_sha256": "b531ca289197e4c893ca2e8e9a34a17fba46d0fcb09e0ecc73ff60b795670071",
+      "artifact_sha256": "b531ca289197e4c893ca2e8e9a34a17fba46d0fcb09e0ecc73ff60b795670071",
+      "bytes": 259217,
+      "redactions": {}
+    },
+    {
+      "path": "reports/tests.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-installed-9h8px6xo\\reports\\tests.xml",
+      "original_sha256": "8d9f661b93b7708778d279f14515f254d1b528e3146c18be9810472107480dfe",
+      "artifact_sha256": "8d9f661b93b7708778d279f14515f254d1b528e3146c18be9810472107480dfe",
+      "bytes": 4475,
+      "redactions": {}
+    }
+  ],
+  "aggregate_sha256": "64c6ffe8993848c27a431b8b513c95533acb9af3344cd8d1004163006b3a2d23",
+  "raw_logs_and_test_homes_excluded": true,
+  "historical_artifacts_modified": false
+}

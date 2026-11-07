@@ -1,0 +1,83 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Scripts\python.exe
+cachedir: C:\Users\jpamb\AppData\Local\Temp\r3-rg05-current-9j7cz3cz\pytest-cache
+rootdir: D:\Projetos\Techridy\okto_labs_okto_nexus
+configfile: C:\Users\jpamb\AppData\Local\Temp\r3-rg05-current-9j7cz3cz\runtime-temp\nexus-ci-installed-yts12170\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 39 items
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_work.py::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[intents:resolve] PASSED [  2%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_work.py::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[/runtime/operations] PASSED [  5%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_work.py::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True] PASSED [  7%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_work.py::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True] PASSED [ 10%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_work.py::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False] PASSED [ 12%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_participant_launch.py::test_checkpoint_loss_preserves_uncertainty_without_respawn[starting-0] PASSED [ 15%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_participant_launch.py::test_checkpoint_loss_preserves_uncertainty_without_respawn[started-1] PASSED [ 17%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_participant_launch.py::test_checkpoint_loss_preserves_uncertainty_without_respawn[exited-1] PASSED [ 20%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_participant_init.py::test_lost_checkpoint_resumes_same_intent_by_observing_effect[credential_stored] PASSED [ 23%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_participant_init.py::test_lost_checkpoint_resumes_same_intent_by_observing_effect[done] PASSED [ 25%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_participant_init.py::test_uncertain_file_with_later_edit_is_preserved_without_new_intent PASSED [ 28%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-message_create] PASSED [ 30%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-handoff_create] PASSED [ 33%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[created-save_result-message_create] PASSED [ 35%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[created-save_result-handoff_create] PASSED [ 38%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-message_create] PASSED [ 41%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-handoff_create] PASSED [ 43%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-message_create] PASSED [ 46%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-handoff_create] PASSED [ 48%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[submit] PASSED [ 51%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_coordination.py::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[inspect] PASSED [ 53%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[before-exchange] PASSED [ 56%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[before-handoff] PASSED [ 58%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[after-exchange] PASSED [ 61%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[after-handoff] PASSED [ 64%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-exchange] PASSED [ 66%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-handoff] PASSED [ 69%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-exchange] PASSED [ 71%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-handoff] PASSED [ 74%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-exchange] PASSED [ 76%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-handoff] PASSED [ 79%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-exchange] PASSED [ 82%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-handoff] PASSED [ 84%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_terminal_cooperation.py::test_missing_request_file_does_not_reset_a_confirmed_request_window PASSED [ 87%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_terminal_setup.py::test_lost_bootstrap_response_recovers_references_without_reissue PASSED [ 89%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_terminal_setup.py::test_lost_decision_resumes_same_approval_then_only_host_finish_completes PASSED [ 92%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_terminal_setup.py::test_checkpoint_failure_after_bootstrap_reports_uncertainty_without_reissue PASSED [ 94%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_identity.py::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False] PASSED [ 97%]
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_terminal_identity.py::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True] PASSED [100%]
+
+============================== warnings summary ===============================
+..\..\..\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\nexus-ci-connector-refresh-la1tb1l6\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\r3-rg05-current-9j7cz3cz\ci\tests.xml -
+================== 39 passed, 1 warning in 95.11s (0:01:35) ===================

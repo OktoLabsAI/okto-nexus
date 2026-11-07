@@ -1,0 +1,177 @@
+"""Fixed R3 RG-01/RG-02: real ASGI/MCP/SQLite/Core with synthetic native I/O.
+
+The two MCP participants use fixture-only canonical agent keys. No native
+executable, provider, user vault or registered operating-system service is used.
+RG-11 reuses the existing canonical-consumption tests instead of duplicating them.
+"""
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
+
+import pytest
+
+from test_agent_recovery_isolation import create_agent
+from test_canonical_delivery import connected_local as connected_local, enable
+from test_canonical_handoff_regressions import (
+    call,
+    claim,
+    grant,
+    runtime as runtime,
+)
+from test_canonical_result_publication import current_turn, emit, wait_result, workspace
+from test_embedded_dispatch import (
+    admit,
+    local_setup as local_setup,
+    qualified_contract as qualified_contract,
+    wait_receipt,
+)
+
+
+def successful(reply):
+    assert reply.get('ok'), reply.get('error', {})
+    return reply['data']
+
+
+@pytest.fixture
+def mixed(request):
+    environment = request.getfixturevalue('runtime')
+    setup, _, _ = environment
+    peer = create_agent(setup, 'mcp-peer')
+    setup[3]['mcp-peer'] = peer[3]['subject']
+    with setup[0].connection_factory.unit_of_work(write=False) as uow:
+        before = tuple(row[0] for row in uow.connection.execute(
+            'SELECT agent_id FROM agents ORDER BY agent_id'))
+    for actor in ('caller', 'mcp-peer'):
+        successful(call(environment, 'session_open', actor=actor, agent_id=actor))
+    return environment, before
+
+
+def delivery_to(environment, actor, message_id):
+    messages = successful(call(environment, 'inbox_pull', actor=actor, agent_id=actor))['messages']
+    found = [message for message in messages if message['message_id'] == message_id]
+    assert len(found) == 1
+    return found[0]
+
+
+def test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities(mixed):
+    environment, identities = mixed
+    setup, binding, native = environment
+    deps = setup[0]
+    wid = workspace(setup)
+    enable(setup, binding)
+    request = successful(call(
+        environment, 'message_create', actor='caller', from_agent_id='caller',
+        target={'strategy': 'direct', 'agent_id': 'mcp-peer'},
+        subject='R3 scoped peer exchange', body='Ask the managed reviewer.'))
+    delivery_to(environment, 'mcp-peer', request['message_id'])
+    successful(call(environment, 'inbox_ack', actor='mcp-peer', agent_id='mcp-peer',
+                    message_ids=[request['message_id']]))
+    governed = successful(call(
+        environment, 'message_create', actor='mcp-peer', from_agent_id='mcp-peer',
+        target={'strategy': 'direct', 'agent_id': 'subject'},
+        subject='R3 managed review', body='Review the shared fixture project.'))
+    assert governed['recipients'] == ['subject']
+    assert len(governed['runtime_operations']) == 1
+    turn = current_turn(setup)
+    wait_receipt(setup, turn)
+    assert native.opens == len(native.native.sent) == 1
+
+    # The native double provides a technical terminal event. The production
+    # result publisher creates the canonical reply; the test does not insert it.
+    emit(setup, native, turn, 'Scoped fixture review completed.')
+    result = wait_result(setup, 'PUBLISHED')
+    reply_id = result['publication_message_id']
+    assert reply_id
+    delivery_to(environment, 'mcp-peer', reply_id)
+    returned = successful(call(
+        environment, 'message_create', actor='mcp-peer', from_agent_id='mcp-peer',
+        target={'strategy': 'direct', 'agent_id': 'caller'},
+        parent_message_id=request['message_id'],
+        subject='R3 peer result', body='The canonical managed review is available.'))
+    delivery_to(environment, 'caller', returned['message_id'])
+
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        assert tuple(row[0] for row in conn.execute(
+            'SELECT agent_id FROM agents ORDER BY agent_id')) == identities
+        assert set(identities) == {'operator', 'subject', 'caller', 'mcp-peer'}
+        assert {row[0] for row in conn.execute('SELECT agent_id FROM sessions')} == {'caller', 'mcp-peer'}
+        assert conn.execute('SELECT COUNT(*) FROM execution_bindings').fetchone()[0] == 1
+        assert conn.execute('SELECT COUNT(*) FROM execution_sessions').fetchone()[0] == 1
+        for mid in (request['message_id'], governed['message_id'], reply_id, returned['message_id']):
+            assert conn.execute('SELECT workspace_id FROM messages WHERE message_id=?', (mid,)).fetchone()[0] == wid
+            assert conn.execute('SELECT COUNT(*) FROM message_deliveries WHERE message_id=?', (mid,)).fetchone()[0] == 1
+        assert conn.execute('SELECT from_agent_id,parent_message_id FROM messages WHERE message_id=?',
+                            (reply_id,)).fetchone()[:] == ('subject', governed['message_id'])
+        assert conn.execute("SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+        assert conn.execute('SELECT COUNT(*) FROM runtime_results WHERE canonical_operation_id=?',
+                            (turn['operation_id'],)).fetchone()[0] == 1
+        assert conn.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == 1
+        assert conn.execute('PRAGMA foreign_key_check').fetchall() == []
+    wait_receipt(setup, admit(setup, binding, 'rg01-close', 'runtime.close',
+                             session_id=turn['session_id']), stages=('SUCCEEDED',))
+
+
+@pytest.mark.parametrize('ordering', ['mcp_first', 'runtime_first', 'concurrent'])
+def test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect(mixed, ordering):
+    environment, identities = mixed
+    setup, binding, native = environment
+    deps = setup[0]
+    made = successful(call(
+        environment, 'handoff_create', from_agent_id='caller', visibility='eligible',
+        target={'strategy': 'broadcast'}, payload='One shared fixture review.'))
+    hid = made['handoff_id']
+    gid = grant(environment)
+
+    def mcp_claim():
+        return call(environment, 'handoff_claim', actor='mcp-peer', agent_id='mcp-peer',
+                    handoff_id=hid, idempotency_key='rg02-mcp')
+
+    def managed_claim():
+        return claim(environment, hid, gid, key='rg02-managed')
+
+    contenders = [mcp_claim, managed_claim]
+    if ordering == 'concurrent':
+        barrier = Barrier(2)
+
+        def compete(fn):
+            barrier.wait(timeout=10)
+            return fn()
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            replies = list(pool.map(compete, contenders))
+    else:
+        order = (0, 1) if ordering == 'mcp_first' else (1, 0)
+        indexed = {index: contenders[index]() for index in order}
+        replies = [indexed[0], indexed[1]]
+    assert sum(bool(reply.get('ok')) for reply in replies) == 1
+    managed_won = bool(replies[1].get('ok'))
+    if ordering != 'concurrent':
+        assert managed_won == (ordering == 'runtime_first')
+    loser = replies[0 if managed_won else 1]
+    assert not loser['ok']
+    # Repeating the losing attempt cannot switch channels or open work.
+    assert not contenders[0 if managed_won else 1]()['ok']
+
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        assert conn.execute('SELECT status,claimed_by,claim_epoch FROM handoffs WHERE handoff_id=?',
+                            (hid,)).fetchone()[:] == ('CLAIMED', 'subject' if managed_won else 'mcp-peer', 1)
+        assert conn.execute("SELECT COUNT(*) FROM events WHERE type='handoff.claimed'").fetchone()[0] == 1
+        assert conn.execute('SELECT COUNT(*) FROM runtime_handoff_bindings WHERE handoff_id=?',
+                            (hid,)).fetchone()[0] == int(managed_won)
+        assert conn.execute('SELECT used_executions FROM runtime_execution_grants WHERE grant_id=?',
+                            (gid,)).fetchone()[0] == int(managed_won)
+        turns = [dict(row) for row in conn.execute(
+            "SELECT operation_id,session_id FROM execution_operations WHERE action='turn.submit'")]
+        assert len(turns) == int(managed_won)
+        assert conn.execute('SELECT COUNT(*) FROM delivery_outbox').fetchone()[0] == int(managed_won)
+        assert tuple(row[0] for row in conn.execute(
+            'SELECT agent_id FROM agents ORDER BY agent_id')) == identities
+        assert conn.execute('PRAGMA foreign_key_check').fetchall() == []
+    if managed_won:
+        wait_receipt(setup, turns[0])
+        assert native.opens == len(native.native.sent) == 1
+        wait_receipt(setup, admit(setup, binding, 'rg02-close', 'runtime.close',
+                                 session_id=turns[0]['session_id']), stages=('SUCCEEDED',))
+    else:
+        assert native.opens == 0

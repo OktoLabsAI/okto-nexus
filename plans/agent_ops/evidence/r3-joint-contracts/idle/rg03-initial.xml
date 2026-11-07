@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="47.048" timestamp="2026-11-07T05:58:13.794706-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_external_idle_scheduler_isolation" name="test_external_idle_preserves_endpoint_priority_and_existing_affinity" time="9.167" /><testcase classname="tests.execution_r4.test_external_idle_scheduler_isolation" name="test_external_idle_cannot_overtake_existing_one_shot_fifo" time="7.361" /><testcase classname="tests.execution_r4.test_external_idle_scheduler_isolation" name="test_external_idle_preserves_shared_dispatch_fairness" time="9.036" /><testcase classname="tests.execution_r4.test_external_idle_scheduler_isolation" name="test_external_idle_cannot_make_auto_claim_disabled_agent_eligible" time="6.816" /><testcase classname="tests.execution_r4.test_external_idle_scheduler_isolation" name="test_external_idle_preserves_exact_unconsumed_claim_reservation" time="6.628"><failure message="AssertionError: assert CapacityReser...sumption=None) == CapacityReser...sumption=None)&#10;  &#10;  Omitting 5 identical items, use -vv to show&#10;  Differing attributes:&#10;  ['remaining_ms']&#10;  &#10;  Drill down into differing attribute remaining_ms:&#10;    remaining_ms: 59926 != 60000">tests\execution_r4\test_external_idle_scheduler_isolation.py:189: in test_external_idle_preserves_exact_unconsumed_claim_reservation
+    assert client.portal.call(port.get_capacity_reservation, held.request) == held.reservation
+E   AssertionError: assert CapacityReser...sumption=None) == CapacityReser...sumption=None)
+E     
+E     Omitting 5 identical items, use -vv to show
+E     Differing attributes:
+E     ['remaining_ms']
+E     
+E     Drill down into differing attribute remaining_ms:
+E       remaining_ms: 59926 != 60000</failure></testcase></testsuite></testsuites>

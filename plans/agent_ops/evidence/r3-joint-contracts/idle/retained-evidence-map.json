@@ -1,0 +1,158 @@
+[
+  {
+    "path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-service-final.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr08-observations/pr08-observation-service-initial.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/candidate-v2/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/installed/pr10-external-installed-initial.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/installed/pr10-external-installed-initial.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-backend-regression.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-http-runtime-initial.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": false
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-http-runtime-initial.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": false
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-query-optimization-initial.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-runtime-final.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/source/pr10-external-runtime-final.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+    "name": "test_later_external_reports_preserve_canonical_facts_and_all_canonical_rows",
+    "classname": "tests.test_observation_correlation_reads",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/source/pr10b-correlation-read-regressions-initial.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/source/pr10b-correlation-reads-initial.xml",
+    "name": "test_later_external_reports_preserve_canonical_facts_and_all_canonical_rows",
+    "classname": "tests.test_observation_correlation_reads",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+    "name": "test_later_external_reports_preserve_canonical_facts_and_all_canonical_rows",
+    "classname": "tests.test_observation_correlation_reads",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/installed/regression/installed.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/installed/regression/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr10-correlation/installed/regression/installed.xml",
+    "name": "test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]",
+    "classname": "tests.execution_r4.test_external_observation_isolation",
+    "passed": true
+  },
+  {
+    "path": "plans/agent_ops/evidence/pr08-observations/installed/qualified/pr08-observation-installed-initial.xml",
+    "name": "test_publish_changes_no_coordination_presence_or_capacity",
+    "classname": "tests.test_observation_service",
+    "passed": true
+  }
+]

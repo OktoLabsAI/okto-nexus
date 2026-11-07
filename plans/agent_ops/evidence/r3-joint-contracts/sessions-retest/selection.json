@@ -1,0 +1,10 @@
+{
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936",
+  "repo": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-rg04-remote-retest-3kxmt936\\project",
+  "python": "C:/Users/jpamb/AppData/Local/Temp/nexus-ci-connector-refresh-la1tb1l6/venv/Scripts/python.exe",
+  "wheel": "C:/Users/jpamb/AppData/Local/Temp/dx04-mcp-guide-installed-sk13m28a/candidate-v1/wheels/okto_nexus-0.3.3-py3-none-any.whl",
+  "tests": [
+    "tests/execution_r4/test_one_shot_remote.py::test_remote_connector_queues_disposes_and_opens_fresh_session"
+  ],
+  "expected_identities": 1
+}

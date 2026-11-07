@@ -1,0 +1,32 @@
+{
+  "scenario": "RG-04",
+  "counts": {
+    "passed": 1,
+    "failure": 0,
+    "error": 0,
+    "skipped": 0
+  },
+  "unique_cases": 1,
+  "cases": [
+    {
+      "identity": "tests.execution_r4.test_one_shot_remote::test_remote_connector_queues_disposes_and_opens_fresh_session[connector-configured]",
+      "status": "passed",
+      "seconds": 18.867
+    }
+  ],
+  "runner_exit_code": 0,
+  "runner_elapsed_seconds": 47.468770000035875,
+  "input_count": 1183,
+  "changed_inputs": [],
+  "campaign_status": "PASS",
+  "claims": {
+    "installed_artifacts_verified": true,
+    "synthetic_native_peers": true,
+    "real_provider_qualified": false,
+    "real_personal_credentials": false,
+    "native_windows_service_campaign": false,
+    "global_acceptance_promoted": false
+  },
+  "raw_xml_sha256": "28d63b37d352a738bd6d5ab00b0bfb74282ec15b447ec959a8670391d2f05a91",
+  "raw_log_sha256": "7aeb2702848e5e1c54cc6be1f6393dd98caa931c43c5d6bbc6fb99f59edbd02f"
+}

@@ -1,0 +1,70 @@
+{
+  "requirement": "RG-03",
+  "base_head": "af056bb10d1c1a8602bbeb64a4be352918834a84",
+  "result": "PASS",
+  "passed": 6,
+  "failed": 0,
+  "skipped": 0,
+  "cases": [
+    {
+      "name": "test_external_idle_preserves_endpoint_priority_and_existing_affinity",
+      "passed": true
+    },
+    {
+      "name": "test_external_idle_cannot_overtake_existing_one_shot_fifo",
+      "passed": true
+    },
+    {
+      "name": "test_external_idle_preserves_shared_dispatch_fairness",
+      "passed": true
+    },
+    {
+      "name": "test_external_idle_cannot_make_ineligible_agent_a_candidate[auto_claim_disabled]",
+      "passed": true
+    },
+    {
+      "name": "test_external_idle_cannot_make_ineligible_agent_a_candidate[creator_audience]",
+      "passed": true
+    },
+    {
+      "name": "test_external_idle_preserves_exact_unconsumed_claim_reservation",
+      "passed": true
+    }
+  ],
+  "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+  "production_changes": false,
+  "checkout_changes": false,
+  "ledger_changes": false,
+  "initial_attempt": {
+    "passed": 4,
+    "failed": 1,
+    "cause": "Candidate incorrectly required stable remaining_ms; Core TTL naturally decreased."
+  },
+  "scope": [
+    "HTTP TestClient",
+    "real migrated SQLite",
+    "installed Core and Nexus",
+    "synthetic native peers",
+    "synthetic fixture credentials only",
+    "endpoint priority",
+    "one-shot FIFO",
+    "dispatch fairness",
+    "auto-claim opt-in",
+    "creator audience",
+    "unconsumed claim reservation and no TTL renewal"
+  ],
+  "excludes": [
+    "personal credentials or vault",
+    "real provider",
+    "native user service",
+    "M1/M2",
+    "benchmark",
+    "automatic ledger promotion"
+  ],
+  "subprocesses_finished": true,
+  "proposal_path": "tests/execution_r4/test_external_idle_scheduler_isolation.py",
+  "candidate_sha256": "ae9597ae5470cd8ba41492861e332e633508637475ad44cf320d36b5190cb02d",
+  "patch_sha256": "81ddf988497452624be9284be8ec92e66f0086d8a518ba896e0adaae95667f73",
+  "ruff_result": "PASS",
+  "qualified_run": "rg03-qualified.xml"
+}
