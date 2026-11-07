@@ -2,6 +2,17 @@
 
 Core 0.0.14 is pinned by Nexus 0.3.3 and Connector 0.0.12. Both consumers use
 the same unpublished validation wheel with SHA-256
+`609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd`.
+
+This candidate retains bounded, redacted Codex thread response configuration
+as a session-scoped lifecycle observation without changing native execution.
+126 Core, 7 Nexus and 26 Connector installed cases passed. This observes reported
+metadata and does not qualify a real provider campaign or publish a release.
+
+## Previous dependency record
+
+Core 0.0.14 is pinned by Nexus 0.3.3 and Connector 0.0.12. Both consumers use
+the same unpublished validation wheel with SHA-256
 `4e677a205f5a486ef7134b8411983420c1c763c3dda274128a9c623ad1b1775d`.
 
 This candidate preserves exact local release evidence during cooperative drain,

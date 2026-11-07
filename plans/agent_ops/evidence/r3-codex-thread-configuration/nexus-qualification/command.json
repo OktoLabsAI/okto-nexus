@@ -1,0 +1,19 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\nexus-source\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:/Users/jpamb/AppData/Local/Temp/m1-path-fix-8rktvrtc/wheels/okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-hosts-ai03jk1l\\nexus-qualification\\canonical",
+    "--tests",
+    "tests/execution_r4/test_canonical_event_views.py"
+  ],
+  "real_provider": false,
+  "real_os_services": false,
+  "personal_profile_forwarded": false
+}

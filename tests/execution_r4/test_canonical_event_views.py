@@ -82,6 +82,60 @@ def test_event_replay_rejects_foreign_scope_and_invalid_queries(connected_local)
     wait_receipt(setup, admit(setup, binding, 'scope-close', 'runtime.close', session_id=session), stages=('SUCCEEDED',))
 
 
+def test_thread_configuration_replays_without_becoming_work_or_a_decision(connected_local):
+    """Launch observations survive canonical replay but authorize no action."""
+    from test_agent_recovery_isolation import eventually
+    from okto_nexus.adapters.inbound.mcp.tools.inbox import build_service
+
+    setup, binding, native, session = start(connected_local)
+    deps, _, client, headers, *_ = setup
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = dict(uow.connection.execute(
+            'SELECT * FROM execution_local_streams WHERE session_id=?', (session,)).fetchone())
+        decisions_before = uow.connection.execute('SELECT count(*) FROM approvals').fetchone()[0]
+    payload = {
+        'schema_version': 1,
+        'adapter_id': 'codex_app_server',
+        'source': 'thread/start/response',
+        'thread_id': 'thread-configuration-fixture',
+        'fields': {
+            'model': {'status': 'reported', 'value': 'fixture-model'},
+            'approvalPolicy': {'status': 'reported', 'value': 'on-request'},
+            'sandbox': {'status': 'reported', 'value': {'type': 'readOnly'}},
+            'instructionSources': {'status': 'missing'},
+        },
+    }
+    client.portal.call(native.native.queue.put, RuntimeEvent(
+        stream['server_id'], stream['executor_id'], session, stream['stream_epoch'],
+        0, 'lifecycle', 'core/codex_thread_configuration', payload))
+    path = f'/v1/runtime/sessions/{session}/events'
+
+    def captured():
+        response = client.get(path, headers=headers['subject'])
+        assert response.status_code == 200, response.text
+        return response.json()['events']
+
+    eventually(captured)
+    events = captured()
+    assert len(events) == 1
+    event = events[0]
+    assert event['native_type'] == 'core/codex_thread_configuration'
+    assert event['payload'] == payload
+    assert event['session_id'] == session and event['stream_epoch'] == stream['stream_epoch']
+    assert event.get('operation_id') is None
+    operator = client.get(path, headers=headers['operator'])
+    assert operator.status_code == 200 and operator.json()['events'] == events
+    assert build_service(deps).consume_canonical_runtime_results() == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute('SELECT count(*) FROM runtime_results').fetchone()[0] == 0
+        assert uow.connection.execute('SELECT count(*) FROM approvals').fetchone()[0] == decisions_before
+        assert uow.connection.execute('SELECT count(*) FROM execution_native_requests').fetchone()[0] == 0
+        assert uow.connection.execute("SELECT count(*) FROM messages WHERE from_agent_id='subject'").fetchone()[0] == 0
+    wait_receipt(setup, admit(setup, binding, 'configuration-close', 'runtime.close',
+                             session_id=session), stages=('SUCCEEDED',))
+    assert client.get(path, headers=headers['subject']).json()['events'] == events
+
+
 @pytest.mark.parametrize('local_setup', ['pi_rpc'], indirect=True)
 def test_unbound_terminal_is_retained_without_authorizing_a_broadcast(connected_local):
     from test_agent_recovery_isolation import eventually

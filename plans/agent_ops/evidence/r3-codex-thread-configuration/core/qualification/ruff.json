@@ -1,0 +1,211 @@
+{
+  "bridge_existing_diagnostics_unchanged": true,
+  "baseline": [
+    {
+      "cell": null,
+      "code": "F401",
+      "end_location": {
+        "column": 34,
+        "row": 15
+      },
+      "filename": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\baseline-runtime-bridge.py",
+      "fix": {
+        "applicability": "safe",
+        "edits": [
+          {
+            "content": "from dataclasses import replace",
+            "end_location": {
+              "column": 43,
+              "row": 15
+            },
+            "location": {
+              "column": 1,
+              "row": 15
+            }
+          }
+        ],
+        "message": "Remove unused import: `dataclasses.dataclass`"
+      },
+      "location": {
+        "column": 25,
+        "row": 15
+      },
+      "message": "`dataclasses.dataclass` imported but unused",
+      "noqa_row": 15,
+      "url": "https://docs.astral.sh/ruff/rules/unused-import"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 49,
+        "row": 39
+      },
+      "filename": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\baseline-runtime-bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 39
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 39,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 78,
+        "row": 40
+      },
+      "filename": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\baseline-runtime-bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 40
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 40,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 63,
+        "row": 41
+      },
+      "filename": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\baseline-runtime-bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 41
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 41,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 50,
+        "row": 42
+      },
+      "filename": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\baseline-runtime-bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 42
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 42,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    }
+  ],
+  "current": [
+    {
+      "cell": null,
+      "code": "F401",
+      "end_location": {
+        "column": 34,
+        "row": 15
+      },
+      "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\runtime_bridge.py",
+      "fix": {
+        "applicability": "safe",
+        "edits": [
+          {
+            "content": "from dataclasses import replace",
+            "end_location": {
+              "column": 43,
+              "row": 15
+            },
+            "location": {
+              "column": 1,
+              "row": 15
+            }
+          }
+        ],
+        "message": "Remove unused import: `dataclasses.dataclass`"
+      },
+      "location": {
+        "column": 25,
+        "row": 15
+      },
+      "message": "`dataclasses.dataclass` imported but unused",
+      "noqa_row": 15,
+      "url": "https://docs.astral.sh/ruff/rules/unused-import"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 49,
+        "row": 39
+      },
+      "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\runtime_bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 39
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 39,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 78,
+        "row": 40
+      },
+      "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\runtime_bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 40
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 40,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 63,
+        "row": 41
+      },
+      "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\runtime_bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 41
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 41,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    },
+    {
+      "cell": null,
+      "code": "E402",
+      "end_location": {
+        "column": 50,
+        "row": 42
+      },
+      "filename": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\runtime_bridge.py",
+      "fix": null,
+      "location": {
+        "column": 1,
+        "row": 42
+      },
+      "message": "Module level import not at top of file",
+      "noqa_row": 42,
+      "url": "https://docs.astral.sh/ruff/rules/module-import-not-at-top-of-file"
+    }
+  ],
+  "other_touched_files": [],
+  "other_returncode": 0
+}

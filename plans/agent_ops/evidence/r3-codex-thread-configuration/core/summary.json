@@ -1,0 +1,81 @@
+{
+  "status": "QUALIFIED_SYNTHETIC_INSTALLED",
+  "component": "okto-nexus-connector-core",
+  "version": "0.0.14",
+  "wheel_sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+  "payloads_equal": 167,
+  "source_unique_passed": 126,
+  "new_test_identities": 40,
+  "regression_identities": 86,
+  "installed": {
+    "tests": 126,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "core_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+    "dependency_versions": {
+      "okto-nexus-connector-core": "0.0.14",
+      "mcp": "1.29.1",
+      "rfc8785": "0.1.4",
+      "jsonschema": "4.26.0",
+      "anyio": "4.14.2",
+      "pytest": "8.3.4"
+    }
+  },
+  "attempts": [
+    {
+      "label": "source-initial",
+      "tests": 43,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "label": "source-correction",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "label": "source-regression",
+      "tests": 78,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "initial_failure_cause": "Three synthetic transport fixtures bypassed handshake without setting _compatibility_report. Fixed only the fixture; initial XML/log/hashes retained.",
+  "product_change_after_first_run": "Reordered the text length check before strip to bound work on oversized values; no policy or native command change.",
+  "lint": "Zero new diagnostics. Five existing runtime_bridge diagnostics match HEAD; all other touched Python files pass.",
+  "event": {
+    "category": "lifecycle",
+    "native_type": "core/codex_thread_configuration",
+    "schema_version": 1,
+    "sources": [
+      "thread/start/response",
+      "thread/resume/response"
+    ],
+    "statuses": [
+      "reported",
+      "missing",
+      "invalid"
+    ],
+    "invalid_reasons": [
+      "invalid_value",
+      "limit_exceeded",
+      "unknown_policy_field",
+      "redacted"
+    ],
+    "max_payload_bytes": 48000
+  },
+  "limits": [
+    "Snapshot of reported thread-response metadata at start/resume, not enforcement, live policy, authority, or a provider qualification.",
+    "No native CLI/provider, personal configuration, credentials, account, service or paid turn used. Regression peers are owned synthetic Python subprocesses.",
+    "No consumer code, pins, ledger, versions, commits or pushes changed by this agent.",
+    "Only paths/references are projected; instruction contents, full thread transcripts and unknown top-level response fields are excluded.",
+    "Package qualification used an isolated non-editable venv and explicit read-only dependency path; no historical environment was mutated."
+  ],
+  "redactions": [],
+  "artifact_policy": "Explicit allowlist, exact bytes. No credential-bearing artifact created; retained synthetic markers are intentional test data."
+}

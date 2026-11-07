@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T18:36:17.623718+00:00",
+  "updated_at": "2026-11-07T19:08:13.379066+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -5759,7 +5759,8 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-regression.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-source.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
-        "tests/execution_r4/test_project_dashboard.py"
+        "tests/execution_r4/test_project_dashboard.py",
+        "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json"
       ],
       "result": "Origem/revisão/defaults do preset ficam no setup existente; merge de três vias só propõe defaults não customizados, revisão lista efeitos/autoridades e Finish usa CAS. Reconnect lê configurações atuais; dashboard personaliza mesmos objetos. Renovação preserva escopo/revogação e não reaplica preset. Preservação/evolução opcional têm provas de contrato, UI instalada e recovery. Não significa promessa de execução infinita, reboot ou aceite produtivo M1.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -5823,7 +5824,8 @@
         "remote_grant_renewal_http_ipc_wss": "VERIFIED",
         "remote_rotation_completed_reuse": "VERIFIED",
         "remote_pending_grant_uncertainty": "VERIFIED",
-        "remote_confirmed_receipt_read_failure": "VERIFIED"
+        "remote_confirmed_receipt_read_failure": "VERIFIED",
+        "reported_thread_configuration_event": "VERIFIED"
       },
       "reconciliation": {
         "superseded_text": "Renovação remota/rotação e atualização de preset não são mais lacunas de produto; consolidar os rótulos genéricos antigos, mantendo as campanhas reais em seus IDs.",
@@ -9163,16 +9165,18 @@
         "plans/agent_ops/evidence/pr03-connector-project-review.md",
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+        "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json"
       ],
-      "result": "Referências, provider_home, configuração e guards são preservados/materializados no host, mas nenhum relatório demonstra o processo de harness real lançado pelo serviço usando todos os valores efetivos revisados.",
+      "result": "Host configuration guards remain qualified. The new installed Core event preserves bounded reported model/provider/effort/cwd/policy/reviewer/sandbox/instruction-source metadata from thread start/resume; synthetic Core journal and both consumer pipelines are verified. No new real provider execution or effective-tool/enforcement acceptance is claimed.",
       "remaining": "Campanha no processo real lançado pelo serviço, local e no host Connector aplicável, comparando instruções/modelo/ferramentas/limites revisados e configurados; registrar configuração shell-only como indisponível sem substituição silenciosa.",
       "remaining_kind": "real_campaign_not_run",
       "qualification_limit": "O callback de ambiente e fixture nativa não provam instruções/modelo/ferramentas/limites efetivos do provedor. Configuração apenas no shell não pode ser presumida.",
       "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
       "verified_contract_subscopes": [
         "reference_only_host_configuration",
-        "approved_provider_home_and_materialization_guards"
+        "approved_provider_home_and_materialization_guards",
+        "reported_thread_configuration_installed_event_pipeline"
       ]
     },
     "DX-T44": {
@@ -12220,6 +12224,29 @@
       ],
       "global_acceptance_promoted": false,
       "evidence": "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/artifact-manifest.json"
+    },
+    "r3_codex_thread_configuration": {
+      "status": "INSTALLED_CONSUMER_CONTRACT_VERIFIED",
+      "core_commit": "7f69d866f19616fcdd1ee83984f3806b1eb85ff5",
+      "core_wheel_sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+      "core_unique_installed": 126,
+      "core_new_cases": 40,
+      "nexus_unique_installed": 7,
+      "connector_unique_installed": 26,
+      "new_consumer_cases": 2,
+      "nexus_inputs": 1419,
+      "connector_inputs": 1125,
+      "inputs_unchanged": true,
+      "package_payloads": 982,
+      "nexus_test_sha256": "e9ca2d81b88c96e8f96ea4b274d7967a11d9daa14ec6bfac79cf851d3e03c5cf",
+      "connector_test_sha256": "c578c35e9cb57684de0bf823afa3073f74a3361a30f95606c1029c2bf31602e9",
+      "provider_admissions": 0,
+      "native_service_actions": 0,
+      "real_campaign_rerun": false,
+      "acceptance_promoted": false,
+      "scope": "Reported response metadata through installed synthetic Core and consumer event pipelines; not provider enforcement or real DX-T43/M1 acceptance.",
+      "evidence": "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json",
+      "connector_commit": "ef216b1fa48ac89675685bc0aaecb8afa2b11534"
     }
   },
   "history": [
@@ -13259,6 +13286,15 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/review.json",
         "plans/agent_ops/evidence/r3-m1-onboarding-reconciliation/verification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Bounded Codex thread configuration and consumer pins",
+      "status": "IMPLEMENTED",
+      "summary": "Retain reported thread reply metadata as a redacted session lifecycle event, without extra RPC or authority.126Core/7Nexus/26Connector installed PASS; equal consumer wheel pins. RealDX43/M1 remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json"
       ]
     }
   ]

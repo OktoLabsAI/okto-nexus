@@ -1,0 +1,21 @@
+{
+  "status": "INSTALLED_CONSUMER_CONTRACT_VERIFIED",
+  "core_commit": "7f69d866f19616fcdd1ee83984f3806b1eb85ff5",
+  "core_wheel_sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+  "core_unique_installed": 126,
+  "core_new_cases": 40,
+  "nexus_unique_installed": 7,
+  "connector_unique_installed": 26,
+  "new_consumer_cases": 2,
+  "nexus_inputs": 1419,
+  "connector_inputs": 1125,
+  "inputs_unchanged": true,
+  "package_payloads": 982,
+  "nexus_test_sha256": "e9ca2d81b88c96e8f96ea4b274d7967a11d9daa14ec6bfac79cf851d3e03c5cf",
+  "connector_test_sha256": "c578c35e9cb57684de0bf823afa3073f74a3361a30f95606c1029c2bf31602e9",
+  "provider_admissions": 0,
+  "native_service_actions": 0,
+  "real_campaign_rerun": false,
+  "acceptance_promoted": false,
+  "scope": "Reported response metadata through installed synthetic Core and consumer event pipelines; not provider enforcement or real DX-T43/M1 acceptance."
+}

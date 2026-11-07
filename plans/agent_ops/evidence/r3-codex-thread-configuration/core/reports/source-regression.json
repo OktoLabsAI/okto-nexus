@@ -1,0 +1,29 @@
+{
+  "label": "source-regression",
+  "exit_code": 0,
+  "python": "C:\\Python313\\python.exe",
+  "core_import": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\__init__.py",
+  "nodes": [
+    "tests/test_native_runtime_bridge.py",
+    "tests/test_codex_extracted.py",
+    "tests/test_codex_handshake.py",
+    "tests/test_codex_output_correlation.py",
+    "tests/test_codex_mcp_elicitation.py",
+    "tests/test_codex_0159_qualification.py"
+  ],
+  "input_hashes": {
+    "src/nexus_connector_core/native/codex_thread_configuration.py": "ccca14af719f36b95d0909e0fe08c525e1825678c0383c187b52570e9737fa5c",
+    "src/nexus_connector_core/native/adapters/codex.py": "e303a11c20a2c4747afa93280e721630e9e6cfc9e4db907863fc481f1e7bfa55",
+    "src/nexus_connector_core/native/runtime_bridge.py": "5e93a69ed79b9ed95cbb83bc628a137782c2658658fe5b1a12d9b33a0b01c824",
+    "tests/test_codex_thread_configuration.py": "611b26cb027bb34993c19f140b5b5ac40ec3ad4d437fa24d18bd805b77833b51",
+    "tests/test_codex_resume.py": "249e1fdf0912f94ed6f3341a960d42fb855c0d03b5118d95be30b036544a2565"
+  },
+  "inputs_unchanged": true,
+  "tests": 78,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-regression.xml",
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-regression.log",
+  "provider_or_native_process": false
+}

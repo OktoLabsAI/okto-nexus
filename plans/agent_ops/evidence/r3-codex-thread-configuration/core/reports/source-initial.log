@@ -1,0 +1,36 @@
+................................FFF........                              [100%]
+================================== FAILURES ===================================
+__ test_bridge_emits_before_discovery_and_masks_secrets_in_valid_references ___
+tests\test_codex_thread_configuration.py:182: in test_bridge_emits_before_discovery_and_masks_secrets_in_valid_references
+    session = connector.start(owning_agent_id="agent")
+src\nexus_connector_core\native\adapters\codex.py:796: in start
+    compatibility_report=dict(self._compatibility_report),
+E   AttributeError: 'CodexAppServerConnector' object has no attribute '_compatibility_report'
+____ test_two_sessions_reverse_consumption_and_resume_keep_response_scope _____
+tests\test_codex_thread_configuration.py:214: in test_two_sessions_reverse_consumption_and_resume_keep_response_scope
+    sessions = [connector.start(owning_agent_id="first-agent"),
+src\nexus_connector_core\native\adapters\codex.py:796: in start
+    compatibility_report=dict(self._compatibility_report),
+E   AttributeError: 'CodexAppServerConnector' object has no attribute '_compatibility_report'
+________ test_bridge_observation_is_durable_session_scoped_core_event _________
+tests\test_codex_thread_configuration.py:268: in test_bridge_observation_is_durable_session_scoped_core_event
+    receipt = await runtime.open(OpenOperation("opening", "public-session", "public-epoch", prepared), context())
+src\nexus_connector_core\runtime.py:712: in open
+    return await self._kernel.execute(semantic, context, effect,
+src\nexus_connector_core\kernel.py:28: in execute
+    return await self._execute(operation, context, effect, **kwargs)
+src\nexus_connector_core\kernel.py:123: in _execute
+    native_id = await effect()
+src\nexus_connector_core\runtime.py:634: in effect
+    native = await asyncio.shield(open_task)
+tests\test_codex_thread_configuration.py:252: in open
+    session = connector.start(owning_agent_id=authority.agent_id)
+src\nexus_connector_core\native\adapters\codex.py:796: in start
+    compatibility_report=dict(self._compatibility_report),
+E   AttributeError: 'CodexAppServerConnector' object has no attribute '_compatibility_report'
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\core-dx43-observation-du1arc40\source-initial.xml -
+=========================== short test summary info ===========================
+FAILED tests/test_codex_thread_configuration.py::test_bridge_emits_before_discovery_and_masks_secrets_in_valid_references
+FAILED tests/test_codex_thread_configuration.py::test_two_sessions_reverse_consumption_and_resume_keep_response_scope
+FAILED tests/test_codex_thread_configuration.py::test_bridge_observation_is_durable_session_scoped_core_event
+3 failed, 40 passed in 4.62s

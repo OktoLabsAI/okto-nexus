@@ -1,0 +1,88 @@
+{
+  "status": "READONLY_NO_BLOCKING_FINDINGS",
+  "head": "830f7ce8ef55f018fd4ad6301f97001a6a05bb93",
+  "scope": "DX43 thread/start and thread/resume response projection, bridge lifecycle event, tests and pinned schema0.157",
+  "files": {
+    "src/nexus_connector_core/native/codex_thread_configuration.py": {
+      "sha256": "ccca14af719f36b95d0909e0fe08c525e1825678c0383c187b52570e9737fa5c",
+      "bytes": 7576
+    },
+    "src/nexus_connector_core/native/adapters/codex.py": {
+      "sha256": "e303a11c20a2c4747afa93280e721630e9e6cfc9e4db907863fc481f1e7bfa55",
+      "bytes": 92592
+    },
+    "src/nexus_connector_core/native/runtime_bridge.py": {
+      "sha256": "5e93a69ed79b9ed95cbb83bc628a137782c2658658fe5b1a12d9b33a0b01c824",
+      "bytes": 64836
+    },
+    "src/nexus_connector_core/native/redaction.py": {
+      "sha256": "f2913754ee329b79f45162df35656429b60798779f978d4a7089e0ad25b613a1",
+      "bytes": 6795
+    },
+    "src/nexus_connector_core/native/codex_app_server_0_157_0.schemas.json": {
+      "sha256": "2719fccd25a97a7ce355497ca5e9123a63f6dce7f9f83724a5b73fd927811f59",
+      "bytes": 618802
+    },
+    "src/nexus_connector_core/protocol.py": {
+      "sha256": "610b4b0f925d6b01c8f1474790e749416d7410c4c1a3e5597c4522d8b23cdc61",
+      "bytes": 4028
+    },
+    "src/nexus_connector_core/runtime.py": {
+      "sha256": "f60e8006f95906b14d8846182e8583a718e4444353cf04c5fc811ba1f03e7c5f",
+      "bytes": 170837
+    },
+    "tests/test_codex_thread_configuration.py": {
+      "sha256": "611b26cb027bb34993c19f140b5b5ac40ec3ad4d437fa24d18bd805b77833b51",
+      "bytes": 15448
+    },
+    "tests/test_codex_resume.py": {
+      "sha256": "249e1fdf0912f94ed6f3341a960d42fb855c0d03b5118d95be30b036544a2565",
+      "bytes": 8023
+    },
+    "docs/harness-configuration.md": {
+      "sha256": "9157fd9a19821ba0bf870d314c9f75262021e58e99b50446b4d8164d7dfb45d9",
+      "bytes": 7025
+    }
+  },
+  "findings": [],
+  "checks": [
+    {
+      "area": "honesty",
+      "source": "native/codex_thread_configuration.py:observe_thread_response/_value/_approval/_sandbox",
+      "conclusion": "Missing properties stay missing; malformed, oversized, redacted or unknown policy properties stay invalid; optional false/null/empty are preserved only when actually reported. ReasoningEffort is an open nonempty string in the pinned schema, not a closed guessed enum."
+    },
+    {
+      "area": "privacy_bounds",
+      "source": "native/codex_thread_configuration.py:_text/_paths/bound_observation/redact_observation; native/redaction.py:NativeSecretRedactor.clean",
+      "conclusion": "Allowlist8fields;32references;4096bytes per path;16384bytes per field;48000bytes observation. Transcript/thread body and instruction contents are excluded. Redaction-changing values become invalid/redacted rather than masked policy facts. No filesystem or credential lookup added."
+    },
+    {
+      "area": "correlation",
+      "source": "native/adapters/codex.py:742-795; native/runtime_bridge.py:450-461",
+      "conclusion": "Observation is detached from the exact RPC response after thread identity validation, before early-notification registration. Bridge binds canonical server/executor/session/epoch and emits lifecycle with operation_id absent; reversed consumption and resume tests exercise distinct responses."
+    },
+    {
+      "area": "execution_safety",
+      "source": "native/adapters/codex.py:start; native/runtime_bridge.py:events",
+      "conclusion": "No change to launch arguments, approval requests, command effects or native policy. No additional native RPC. Existing discovery still follows the new Core-originated observation."
+    },
+    {
+      "area": "transport_boundary",
+      "source": "native/adapters/codex.py:466/747; protocol.py:strict_json",
+      "conclusion": "Actual native transport rejects invalid JSON Unicode; thread identity is bounded to256characters before projection. Direct helper calls outside this validated adapter path are not a newly supported untrusted API."
+    },
+    {
+      "area": "tests_read",
+      "source": "tests/test_codex_thread_configuration.py;tests/test_codex_resume.py",
+      "conclusion": "Read schema validation, missing/default distinction, unknown/malformed/oversized policies, secret-redaction, reversed session consumption, resume source, SQLite durability/replay and foreign namespace assertions. No tests executed by this reviewer."
+    }
+  ],
+  "limits": [
+    "Read-only source review only; no suite, browser, native CLI, provider, service or credential access.",
+    "Reported means metadata returned by the start/resume response; not proof of enforcement, instructions contents, file existence, later policy changes, successful tool use, model output or billing.",
+    "NativeSecretRedactor uses known injected child secrets plus existing generic patterns; this change is not a universal detector for arbitrary unknown secrets.",
+    "Protocol fixtures and SQLite replay tests do not establish a real provider campaign or DX43 runtime acceptance by themselves."
+  ],
+  "product_edits": false,
+  "tests_executed": 0
+}

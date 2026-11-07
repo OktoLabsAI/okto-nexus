@@ -1,0 +1,214 @@
+{
+  "schema": 1,
+  "artifacts": {
+    "reports/source-initial.json": {
+      "sha256": "ca7ab4a19e2660073058d7dfbcecab66683980040460ca6f357095918ede9910",
+      "bytes": 1333,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-initial.json",
+      "byte_exact": true
+    },
+    "reports/source-initial.xml": {
+      "sha256": "59ab3c31b9a179d2c1c26c55b951bacdff0bfa0a924b43788ac89a735baaeadb",
+      "bytes": 9083,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-initial.xml",
+      "byte_exact": true
+    },
+    "reports/source-initial.log": {
+      "sha256": "8e24aaee2d13efb9e702d526bbdd87738d959ab6d755fbd0bf334de0401c6847",
+      "bytes": 2769,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-initial.log",
+      "byte_exact": true
+    },
+    "reports/source-correction.json": {
+      "sha256": "c678ef732c451e27440d392d1a2200955ba8e9e1f70e98ef87a2c4833afbc961",
+      "bytes": 1689,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-correction.json",
+      "byte_exact": true
+    },
+    "reports/source-correction.xml": {
+      "sha256": "631b43dee3f436f825dfd47f8a4667bb58e42386ce0d2b4ea310d2dbeda1e02b",
+      "bytes": 1535,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-correction.xml",
+      "byte_exact": true
+    },
+    "reports/source-correction.log": {
+      "sha256": "ed246f4dc8bd225a241454f2285c0d9c4852f733de3816f4174697ceafa1c043",
+      "bytes": 212,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-correction.log",
+      "byte_exact": true
+    },
+    "reports/source-regression.json": {
+      "sha256": "0ce2a08ecad504f0bef41360da9e258dd10b77c32ebfd20365da7ee20f1cab65",
+      "bytes": 1473,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-regression.json",
+      "byte_exact": true
+    },
+    "reports/source-regression.xml": {
+      "sha256": "5228f6fece407e4e2b627597ab252015fdb9a8704842f3f14ba06bf0c6cdc256",
+      "bytes": 11712,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-regression.xml",
+      "byte_exact": true
+    },
+    "reports/source-regression.log": {
+      "sha256": "ca8ca2c0801ba20104f7f2c09709ca63c8ddea3e4f088499ae5931bebd200e6a",
+      "bytes": 295,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\source-regression.log",
+      "byte_exact": true
+    },
+    "reports/installed-final.json": {
+      "sha256": "5dde116f3b70e4b3df763acff07be5cf24e154603cbdb34cd57c28dd3cfadd0d",
+      "bytes": 19805,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\installed-final.json",
+      "byte_exact": true
+    },
+    "reports/installed-final.xml": {
+      "sha256": "6dbbb046da8a9e10bd2328a269c04e4d869d2b0b71a6d451cb312bc4dff9825d",
+      "bytes": 19254,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\installed-final.xml",
+      "byte_exact": true
+    },
+    "reports/installed-final.log": {
+      "sha256": "ae7a21248ad339994e628dfa512379bbde1717d09c40d439b48fdfcfffc05ae0",
+      "bytes": 294,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\installed-final.log",
+      "byte_exact": true
+    },
+    "qualification/package-proof.json": {
+      "sha256": "e60b496744178505e606ce484db59213a7be62cd98c58001bfff986290b28410",
+      "bytes": 20828,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\package-proof.json",
+      "byte_exact": true
+    },
+    "qualification/final-source-hashes.json": {
+      "sha256": "db53e4d96246c3c94df91d5dfdb8d01bbde9ce0d6d193807f876ecfdeac0f0dd",
+      "bytes": 709,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\final-source-hashes.json",
+      "byte_exact": true
+    },
+    "qualification/ruff.json": {
+      "sha256": "408a6a8cd4fc820b77789559457ca428afb847a456e6b47c38c6e522a261c4ab",
+      "bytes": 6145,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\ruff.json",
+      "byte_exact": true
+    },
+    "qualification/build.json": {
+      "sha256": "1340107e79de5879e285f3c412a1252de637a7c9d5401cca900d3692a9532dc5",
+      "bytes": 530,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\build.json",
+      "byte_exact": true
+    },
+    "qualification/build.log": {
+      "sha256": "d643231766e8a4da3aec33bbf59cd4d24e760de395aed9196abc17ce3d498dab",
+      "bytes": 51662,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\build.log",
+      "byte_exact": true
+    },
+    "qualification/venv.json": {
+      "sha256": "6e05a771094667ea6f906ac5cf5c4129b26a613a8fe55b59e5c1931533f8a748",
+      "bytes": 386,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\venv.json",
+      "byte_exact": true
+    },
+    "qualification/venv.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\venv.log",
+      "byte_exact": true
+    },
+    "qualification/install.json": {
+      "sha256": "935a14b01097dda62b69a7d7d5172596602db6e5e67e29220949a38875f537c5",
+      "bytes": 563,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\install.json",
+      "byte_exact": true
+    },
+    "qualification/install.log": {
+      "sha256": "ccee53ec306e886e316174b7f4cd6346431cfee6eb219f0921de9577b8b4641f",
+      "bytes": 248,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\install.log",
+      "byte_exact": true
+    },
+    "qualification/installed-run.json": {
+      "sha256": "436de65f8d9d03e408ef7283fa5d90ae70589db0592b8fef4727a59a06337a48",
+      "bytes": 460,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\installed-run.json",
+      "byte_exact": true
+    },
+    "qualification/installed-run.log": {
+      "sha256": "1ba194840b0e5868936b72a7774203a790325de29dce90c7d26f475a39e5dc6a",
+      "bytes": 1048,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\installed-run.log",
+      "byte_exact": true
+    },
+    "scripts/run_source.py": {
+      "sha256": "a2e5da35a701bcf495b2a06b72330f900fef8344730366846c96dddc2aa978a9",
+      "bytes": 1953,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\run_source.py",
+      "byte_exact": true
+    },
+    "scripts/run_installed.py": {
+      "sha256": "b5ed67a23dae3662f313dc788b6cf5d4be58ec455a0f9d2bc0e7e850b67f234f",
+      "bytes": 2472,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\run_installed.py",
+      "byte_exact": true
+    },
+    "scripts/qualify_installed.py": {
+      "sha256": "57be11b54b0d69b632a69bdbca7f91703ce0d3dfdf423222043ddf8f9de86ae8",
+      "bytes": 3233,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\qualify_installed.py",
+      "byte_exact": true
+    },
+    "scripts/curate.py": {
+      "sha256": "ae5151cca5e70d22a5084d91d8ebcdff9e95f921edc675a79dff8abe4ff44c5e",
+      "bytes": 5739,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\curate.py",
+      "byte_exact": true
+    },
+    "final-source/src/nexus_connector_core/native/codex_thread_configuration.py": {
+      "sha256": "ccca14af719f36b95d0909e0fe08c525e1825678c0383c187b52570e9737fa5c",
+      "bytes": 7576,
+      "source": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\codex_thread_configuration.py",
+      "byte_exact": true
+    },
+    "final-source/src/nexus_connector_core/native/adapters/codex.py": {
+      "sha256": "e303a11c20a2c4747afa93280e721630e9e6cfc9e4db907863fc481f1e7bfa55",
+      "bytes": 92592,
+      "source": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\adapters\\codex.py",
+      "byte_exact": true
+    },
+    "final-source/src/nexus_connector_core/native/runtime_bridge.py": {
+      "sha256": "5e93a69ed79b9ed95cbb83bc628a137782c2658658fe5b1a12d9b33a0b01c824",
+      "bytes": 64836,
+      "source": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\runtime_bridge.py",
+      "byte_exact": true
+    },
+    "final-source/tests/test_codex_thread_configuration.py": {
+      "sha256": "611b26cb027bb34993c19f140b5b5ac40ec3ad4d437fa24d18bd805b77833b51",
+      "bytes": 15448,
+      "source": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_codex_thread_configuration.py",
+      "byte_exact": true
+    },
+    "final-source/tests/test_codex_resume.py": {
+      "sha256": "249e1fdf0912f94ed6f3341a960d42fb855c0d03b5118d95be30b036544a2565",
+      "bytes": 8023,
+      "source": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_codex_resume.py",
+      "byte_exact": true
+    },
+    "final-source/docs/harness-configuration.md": {
+      "sha256": "9157fd9a19821ba0bf870d314c9f75262021e58e99b50446b4d8164d7dfb45d9",
+      "bytes": 7025,
+      "source": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\docs\\harness-configuration.md",
+      "byte_exact": true
+    },
+    "review/independent-review.json": {
+      "sha256": "ac6ed5b070c8da0cfbc5ffbc83be09f2c20922f457bcceca8262abf002b9aee9",
+      "bytes": 5168,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-readonly-q20ilu5n\\review.json",
+      "byte_exact": true
+    },
+    "summary.json": {
+      "sha256": "453639d10bd1636c471a6e9d2b21960c40b2ff2fe4ff94aa3262ae3c03a646cf",
+      "bytes": 3022,
+      "generated": true
+    }
+  }
+}
