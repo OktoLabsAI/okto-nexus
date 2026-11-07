@@ -1,0 +1,581 @@
+diff --git a/docs/terminal-participant.md b/docs/terminal-participant.md
+--- a/docs/terminal-participant.md
++++ b/docs/terminal-participant.md
+@@ -217,3 +217,32 @@
+ remain `UNKNOWN/HISTORICAL_EVIDENCE_ONLY` until an explicit current observation;
+ doctor itself never sends or repeats the test. See
+ [`participant smoke`](terminal-cooperation.md) for review, consent and recovery.
++
++
++## Starting from the dashboard
++
++Choose **Use my existing client** in the introduction, or **Existing client** on
++an existing agent. The guide generates public CLI commands for Claude Code,
++Codex, or manual generic configuration. It does not edit files, create an
++identity, issue a key, change runtime access or execute a client.
++
++Use a Server origin reachable from the client computer. The dashboard's HTTPS
++scheme, host and port are retained; a loopback address is usable only when the
++Server and client run on the same computer. Select an existing workspace ID and
++reuse the same participant profile for recovery. Run the commands on the client
++host, in its project folder. Paths on the Server do not select a remote project.
++
++One-shot key delivery remains separate. Transfer the existing key through a
++protected channel and enter it at the hidden CLI prompt; the review and apply
++each require it. Do not put it in generated commands, copied configuration, a
++URL or shell history. Closing the key panel still makes its one-shot value
++unrecoverable; opening the guide never issues another one.
++
++Copying the public commands does not require another approval. The CLI's
++review/apply flow remains the place to approve concrete effects.
++
++The guide presents review, explicit apply, supported foreground launch and
++passive doctor as separate steps. Its optional MCP check runs in the doctor
++process. Configuration, exit status and authenticated MCP initialize do not
++prove that the actual client is ready, participated in a handoff or completed
++work. Generic guidance does not install or qualify an unknown client.
+diff --git a/frontend/src/api.ts b/frontend/src/api.ts
+--- a/frontend/src/api.ts
++++ b/frontend/src/api.ts
+@@ -1929,38 +1929,3 @@
+     return downloadExport(path, `okto-nexus-events-${workspaceId.slice(0, 8)}.ndjson`);
+   },
+ };
+-
+-// MCP snippets per client format (mirrors the Pulse getMcpConfigJson).
+-// The key goes in an Authorization: Bearer header, never in the URL (the
+-// query-key form is kept by the server only for migration).
+-export function mcpSnippet(format: string, apiKey: string): string {
+-  const url = `http://${location.hostname}:${location.port || "8202"}/mcp`;
+-  const headers = { Authorization: `Bearer ${apiKey}` };
+-  switch (format) {
+-    case "claude-cli":
+-      return `claude mcp add -t http okto-nexus "${url}" --header "Authorization: Bearer ${apiKey}"`;
+-    case "codex":
+-      // codex has no inline header option: it reads the bearer token from an
+-      // environment variable that the operator exports first.
+-      return [
+-        `export OKTO_NEXUS_API_KEY="${apiKey}"`,
+-        `codex mcp add okto-nexus --url "${url}" --bearer-token-env-var OKTO_NEXUS_API_KEY`,
+-      ].join("\n");
+-    case "vscode":
+-      return JSON.stringify(
+-        { servers: { "okto-nexus": { type: "http", url, headers } } },
+-        null,
+-        2,
+-      );
+-    case "claude":
+-    case "cursor":
+-    case "windsurf":
+-      return JSON.stringify(
+-        { mcpServers: { "okto-nexus": { url, headers } } },
+-        null,
+-        2,
+-      );
+-    default:
+-      return url;
+-  }
+-}
+diff --git a/frontend/src/components/ParticipantGuide.tsx b/frontend/src/components/ParticipantGuide.tsx
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/components/ParticipantGuide.tsx
+@@ -0,0 +1,67 @@
++import {useId, useRef, useState} from 'react';
++import {buildParticipantGuide, participantOrigin, type CommandShell, type ParticipantClient} from '../participantGuide';
++
++const input = 'block w-full rounded border border-surface-300 dark:border-surface-600 p-2 bg-white dark:bg-surface-800';
++const code = 'whitespace-pre-wrap break-all rounded bg-surface-100 dark:bg-surface-900 p-3 text-xs';
++
++export function ParticipantGuide({agentId, workspaceId = '', initialOrigin = typeof window === 'undefined' ? '' : window.location.origin}: {
++  agentId?: string; workspaceId?: string; initialOrigin?: string;
++}) {
++  const prefix = useId();
++  const [agent, setAgent] = useState(agentId || '');
++  const [workspace, setWorkspace] = useState(workspaceId);
++  const [origin, setOrigin] = useState(initialOrigin);
++  const [profile, setProfile] = useState('participant');
++  const [client, setClient] = useState<ParticipantClient>('claude');
++  const [shell, setShell] = useState<CommandShell>(typeof navigator !== 'undefined' && navigator.userAgent.includes('Windows') ? 'powershell' : 'posix');
++  const [notice, setNotice] = useState('');
++  const generation = useRef(0);
++  const changed = () => {generation.current += 1; setNotice('');};
++  const address = participantOrigin(origin);
++  const guide = buildParticipantGuide({origin,
++    agentId: agentId || agent, workspaceId: workspace, profile, client, shell});
++  const copy = async (command: string) => {
++    const current = ++generation.current;
++    setNotice('');
++    try {
++      await navigator.clipboard.writeText(command);
++      if (current === generation.current) setNotice('Public command copied. Enter the key only at the hidden terminal prompt.');
++    } catch {
++      if (current === generation.current) setNotice('Clipboard unavailable. Select the public command and copy it manually.');
++    }
++  };
++  return <section aria-labelledby={prefix + '-title'} className="space-y-4 text-sm" data-testid="participant-guide">
++    <h2 id={prefix + '-title'} className="font-semibold">Use your existing MCP client</h2>
++    <p>Add coordination to an existing agent and workspace. Missing identities require a separate explicit operator decision.</p>
++    <p>Install Nexus with its <code>serve-lite</code> extra on the computer running the client, without starting a local Server. Run these commands in that computer's project folder.</p>
++    <div className="grid gap-3 sm:grid-cols-2">
++      <label>Existing agent ID<input className={input} value={agentId || agent} readOnly={agentId !== undefined}
++        autoComplete="off" onChange={event => {setAgent(event.target.value); changed();}} /></label>
++      <label>Existing workspace ID<input className={input} value={workspace} autoComplete="off"
++        onChange={event => {setWorkspace(event.target.value); changed();}} /></label>
++      <label>Local participant profile<input className={input} value={profile} maxLength={80} autoComplete="off"
++        onChange={event => {setProfile(event.target.value); changed();}} /></label>
++      <label>Client<select className={input} value={client} onChange={event => {setClient(event.target.value as ParticipantClient); changed();}}>
++        <option value="claude">Claude Code</option><option value="codex">Codex</option><option value="generic">Other client — manual guidance</option>
++      </select></label>
++      <label>Server origin reachable from the client<input className={input} type="url" value={origin} autoComplete="off" spellCheck={false}
++        onChange={event => {setOrigin(event.target.value); changed();}} /></label>
++      <label>Terminal<select className={input} value={shell} onChange={event => {setShell(event.target.value as CommandShell); changed();}}>
++        <option value="powershell">PowerShell</option><option value="posix">Bash / zsh</option>
++      </select></label>
++    </div>
++    <p>Reuse the same local profile to resume this setup. These public commands guide the CLI review; copying them applies no changes.</p>
++    {address?.loopback && <p role="note">Loopback refers to the client computer. If the Server runs elsewhere, enter its reachable HTTPS origin.{address.plaintext ? ' HTTP sends plaintext on this host.' : ''}</p>}
++    <p>Init review and apply each request the existing key at a hidden CLI prompt. Transfer it through a protected channel; one-shot key delivery stays separate from these public commands.</p>
++    {client === 'generic' && <p role="note">Generic returns reference-only manual guidance. It does not install or qualify an unknown client; use that client's supported configuration and credential delivery. Foreground launch is available only for Claude Code and Codex.</p>}
++    {!guide.ok ? <p role="status">{guide.message}</p> : <ol className="space-y-4">
++      {guide.steps.map(step => <li key={step.id} className="space-y-2" data-testid={'participant-step-' + step.id}>
++        <h3 className="font-medium">{step.title}</h3><pre className={code}>{step.command}</pre>
++        <button type="button" className="btn btn-secondary" aria-label={'Copy command: ' + step.title}
++          onClick={() => void copy(step.command)}>Copy public command</button><p>{step.explanation}</p>
++      </li>)}
++    </ol>}
++    {notice && <p role="status">{notice}</p>}
++    <p>Configuration, credential delivery to a client, MCP negotiation and completed work are separate proofs. Verify trust and reload in the actual client; process exit does not prove participation or completed work.</p>
++  </section>;
++}
+diff --git a/frontend/src/components/onboarding/OnboardingModal.tsx b/frontend/src/components/onboarding/OnboardingModal.tsx
+--- a/frontend/src/components/onboarding/OnboardingModal.tsx
++++ b/frontend/src/components/onboarding/OnboardingModal.tsx
+@@ -3,6 +3,7 @@
+ import { useTheme } from '../../hooks/useTheme';
+ import { runtimeApi, type ProjectPresetOverview } from '../../runtimeApi';
+ import { markCompleted } from './onboardingStorage';
++import { ParticipantGuide } from '../ParticipantGuide';
+ 
+ const TITLE = 'onboarding-title';
+ const button = 'rounded-lg border border-surface-300 dark:border-surface-600 px-4 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500';
+@@ -86,14 +87,7 @@
+           <div><h2 className="font-semibold mb-2">Start work when you are ready</h2><code className={command}>okto-nexus work</code>
+             <p className="text-sm mt-2 text-surface-600 dark:text-surface-300">After local setup, use the same project terminal to request work, follow progress and answer authorized questions. Reopen it to find the same project. Closing this guide does not stop the service or submit work.</p></div>
+         </section> : <section aria-label="Existing client connection" className="space-y-3">
+-          <h2 className="font-semibold">Add coordination to your existing client</h2>
+-          <p className="text-sm">Use the existing agent identity and its approved MCP HTTP configuration. Another client does not require a new managed runtime or disabling an existing connection.</p>
+-          <ol className="list-decimal pl-5 space-y-2 text-sm">
+-            <li>Open Agents and choose the intended identity. An absent identity requires explicit operator creation.</li>
+-            <li>Use the client's supported HTTP configuration and protected credential input. Keep the key out of URLs and retain unrelated client settings.</li>
+-            <li>Reconnect the client and verify authentication and available tools. These checks do not prove that a task or handoff completed.</li>
+-          </ol>
+-          <p className="text-sm text-surface-600 dark:text-surface-300">Configuration on another computer must be applied there. Opening this guide does not edit client files, issue a key or change runtime access.</p>
++          <ParticipantGuide />
+         </section>}
+         <aside className="border-t border-surface-200 dark:border-surface-700 pt-4 text-sm text-surface-600 dark:text-surface-300">
+           <h2 className="font-semibold text-surface-900 dark:text-white mb-1">Already connected from the terminal?</h2>
+diff --git a/frontend/src/participantGuide.ts b/frontend/src/participantGuide.ts
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/participantGuide.ts
+@@ -0,0 +1,74 @@
++// Public terminal guidance only. This module never accepts or resolves a credential.
++export type ParticipantClient = 'claude' | 'codex' | 'generic';
++export type CommandShell = 'powershell' | 'posix';
++export interface ParticipantGuideOptions {
++  origin: string;
++  agentId: string;
++  workspaceId: string;
++  profile: string;
++  client: ParticipantClient;
++  shell: CommandShell;
++}
++export interface ParticipantGuideStep { id: string; title: string; command: string; explanation: string }
++export type ParticipantGuideResult = {ok: false; message: string} | {
++  ok: true; origin: string; plaintext: boolean; steps: ParticipantGuideStep[];
++};
++
++export function participantOrigin(value: string): {origin: string; loopback: boolean; plaintext: boolean} | null {
++  if (/[\u0000-\u0020\u007f\s\\]/u.test(value)) return null;
++  try {
++    const url = new URL(value);
++    const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
++    if (!['https:', 'http:'].includes(url.protocol) || !url.hostname || url.username || url.password ||
++        url.search || url.hash || url.port === '0' || (url.pathname !== '/' && url.pathname !== '') ||
++        (url.protocol === 'http:' && !loopback)) return null;
++    return {origin: url.origin, loopback, plaintext: url.protocol === 'http:'};
++  } catch { return null; }
++}
++
++export function quoteParticipantArgument(value: string, shell: CommandShell): string {
++  return shell === 'powershell'
++    ? "'" + value.replace(/['\u2018\u2019\u201a\u201b]/g, character => character + character) + "'"
++    : "'" + value.replace(/'/g, "'\"'\"'") + "'";
++}
++
++function publicIdentifier(value: string): boolean {
++  return value.length > 0 && value.length <= 128 && value === value.trim() &&
++    !/[\u0000-\u001f\u007f-\u009f]/u.test(value) && !/^nxs_[a-f0-9]{48}$/i.test(value);
++}
++
++export function buildParticipantGuide(options: ParticipantGuideOptions): ParticipantGuideResult {
++  const address = participantOrigin(options.origin);
++  if (!address) return {ok: false, message: 'Use an HTTPS Server origin without credentials, path, query or fragment. HTTP is limited to loopback.'};
++  if (!publicIdentifier(options.agentId) || !publicIdentifier(options.workspaceId)) return {ok: false, message: 'Enter the existing agent ID and workspace ID. Never enter a key in these fields.'};
++  if (!/^[A-Za-z0-9_-]{1,80}$/.test(options.profile) || !publicIdentifier(options.profile)) return {ok: false, message: 'Choose a profile using 1–80 letters, digits, hyphens or underscores. Never use a key as its name.'};
++  if (!['claude', 'codex', 'generic'].includes(options.client) || !['powershell', 'posix'].includes(options.shell)) return {ok: false, message: 'Choose a supported guide and terminal.'};
++  const quote = (value: string) => quoteParticipantArgument(value, options.shell);
++  const profile = '--profile=' + quote(options.profile);
++  const init = 'okto-nexus init --mode participant ' + profile;
++  const doctor = 'okto-nexus doctor --mode participant ' + profile;
++  const steps: ParticipantGuideStep[] = [
++    {id: 'review', title: '1. Review on the client computer', command: init +
++      ' --server=' + quote(address.origin) + ' --agent=' + quote(options.agentId) +
++      ' --workspace-id=' + quote(options.workspaceId) + ' --client=' + options.client + ' --project . --plan',
++    explanation: 'Run in the intended project folder. Review identity, workspace, origin and local effects before applying them.'},
++    {id: 'apply', title: '2. Apply the exact review', command: init + ' --approve=REVIEW_REVISION',
++    explanation: 'Replace REVIEW_REVISION with the revision just reviewed. Reuse this profile to recover the same setup after a lost reply.'},
++  ];
++  if (options.client !== 'generic') {
++    const launch = 'okto-nexus participant launch ' + profile;
++    steps.push(
++      {id: 'launch-review', title: '3. Review a foreground launch', command: launch + ' --plan',
++      explanation: 'Review the native executable, project and client configuration before starting it.'},
++      {id: 'launch', title: '4. Launch after approval', command: launch + ' --approve=LAUNCH_REVIEW_REVISION',
++      explanation: 'Replace LAUNCH_REVIEW_REVISION with the launch revision. The existing vault entry supplies only the new foreground process. The client retains its provider login and trust requirements; existing GUIs do not inherit this environment.'},
++    );
++  }
++  steps.push(
++    {id: 'doctor', title: 'Inspect the saved profile', command: doctor,
++    explanation: 'Passive checks of this saved profile. Use another terminal while the foreground client is running.'},
++    {id: 'mcp', title: 'Optionally check authentication and MCP', command: doctor + ' --check-server --check-mcp',
++    explanation: 'Explicitly contacts the Server using the protected credential to initialize MCP and list tools. The check runs in the doctor process.'},
++  );
++  return {ok: true, origin: address.origin, plaintext: address.plaintext, steps};
++}
+diff --git a/frontend/src/views/AgentsView.tsx b/frontend/src/views/AgentsView.tsx
+--- a/frontend/src/views/AgentsView.tsx
++++ b/frontend/src/views/AgentsView.tsx
+@@ -1,3 +1,4 @@
++import { ParticipantGuide } from "../components/ParticipantGuide";
+ import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
+ import { displayName, otherMetadata, identityMetadata } from '../projectIdentity';
+ import { AgentRuntimeAdministration } from '../components/AgentRuntimeAdministration';
+@@ -18,10 +19,8 @@
+ import { Fragment, useEffect, useMemo, useState } from "react";
+ import {
+   Cable,
+-  Check,
+   Copy,
+   Eye,
+-  FileJson,
+   KeyRound,
+   MessageSquare,
+   Pencil,
+@@ -35,7 +34,6 @@
+ } from "lucide-react";
+ import {
+   api,
+-  mcpSnippet,
+   type AgentRow,
+   type CapabilityRow,
+   type PermissionFlags,
+@@ -64,17 +62,6 @@
+   uniqueImportedName,
+ } from "../components/CatalogTransfer";
+ 
+-// MCP consumers (the Pulse AgentsModal grammar): one button per client,
+-// clicking copies that client's ready-to-paste command/config.
+-const MCP_CONSUMERS = [
+-  { format: "claude-cli", label: "Claude Code (CLI)", file: "terminal", icon: "terminal" },
+-  { format: "claude", label: "Claude Desktop / Claude Code", file: "claude_desktop_config.json", icon: "json" },
+-  { format: "codex", label: "Codex (CLI)", file: "terminal", icon: "terminal" },
+-  { format: "cursor", label: "Cursor", file: ".cursor/mcp.json", icon: "json" },
+-  { format: "vscode", label: "VS Code (Copilot)", file: ".vscode/mcp.json", icon: "json" },
+-  { format: "windsurf", label: "Windsurf / Cline", file: "cline_mcp_settings.json", icon: "json" },
+-] as const;
+-
+ const inputCls =
+   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
+ 
+@@ -105,7 +92,7 @@
+   const [freshKey, setFreshKey] = useState<{ agentId: string; key: string } | null>(
+     null,
+   );
+-  const [copied, setCopied] = useState<string | null>(null);
++  const [participantOpen, setParticipantOpen] = useState<string | null>(null);
+   const [creating, setCreating] = useState(false);
+   const [actionBusy, setActionBusy] = useState(false);
+   const [newAgent, setNewAgent] = useState<{
+@@ -170,15 +157,6 @@
+   // Steering composer (spec 2948b2a2 FR9): direct message as "operator".
+   const [steering, setSteering] = useState<AgentRow | null>(null);
+ 
+-  const copySnippet = (format: string, key: string) => {
+-    navigator.clipboard.writeText(mcpSnippet(format, key));
+-    setCopied(format);
+-    window.setTimeout(
+-      () => setCopied((current) => (current === format ? null : current)),
+-      1600,
+-    );
+-  };
+-
+   const reload = () =>
+     Promise.all([api.agents(), api.presets(), api.tags(), api.capabilities()])
+       .then(([a, p, t, c]) => {
+@@ -345,6 +323,12 @@
+   return (
+     <PageContainer width="wide" scroll="y">
+       {dialog}
++      {participantOpen && <AgentActionModal title={'Existing client · ' + participantOpen} wide guardChanges={false}
++        testId="participant-guide-modal" onClose={() => setParticipantOpen(null)}>
++        <ParticipantGuide key={participantOpen + ':' + workspace} agentId={participantOpen}
++          workspaceId={workspace === 'all' ? '' : workspace} />
++        <AgentModalFooter><button className="btn btn-secondary" onClick={() => setParticipantOpen(null)}>Close guide</button></AgentModalFooter>
++      </AgentActionModal>}
+       {editorOpen && presets && (
+         <PresetEditorModal
+           preset={editorOpen.preset}
+@@ -788,6 +772,11 @@
+                         onClick={() => setConnectionsOpen(open => open === agent.agent_id ? null : agent.agent_id)}>
+                         <Cable size={14} />
+                       </button>
++                      {agent.agent_id !== 'operator' && <button className={ICON_BTN}
++                        title="Use an existing MCP client" aria-label={`Existing client for ${agent.agent_id}`}
++                        data-testid={`participant-guide-${agent.agent_id}`} onClick={() => setParticipantOpen(agent.agent_id)}>
++                        <Terminal size={14} />
++                      </button>}
+                       {/* Steering to yourself is a no-op — hide it for the
+                           reserved operator identity. */}
+                       {agent.connection?.runtime_integrated && agent.connection.status !== 'MCP only' && <button
+@@ -919,36 +908,11 @@
+                             ⚠ This key will not be shown again. Store it now — closing this
+                             panel makes it unrecoverable (regenerating issues a new one).
+                           </p>
+-                          <div>
+-                            <div className="text-[11px] font-medium uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-1">
+-                              MCP configuration
+-                            </div>
+-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+-                              {MCP_CONSUMERS.map(({ format, label, file, icon }) => (
+-                                <button
+-                                  key={format}
+-                                  onClick={() => copySnippet(format, freshKey.key)}
+-                                  className="flex items-center gap-2 px-3 py-2 text-xs rounded-lg text-left
+-                                    bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-700
+-                                    hover:bg-accent-50 dark:hover:bg-accent-900/20
+-                                    text-surface-700 dark:text-surface-300 transition-colors"
+-                                  title={icon === "terminal" ? "Terminal command" : file}
+-                                  data-testid={`mcp-copy-${format}`}
+-                                >
+-                                  {copied === format ? (
+-                                    <Check size={14} className="shrink-0 text-emerald-500" />
+-                                  ) : icon === "terminal" ? (
+-                                    <Terminal size={14} className="shrink-0 text-surface-400 dark:text-surface-500" />
+-                                  ) : (
+-                                    <FileJson size={14} className="shrink-0 text-surface-400 dark:text-surface-500" />
+-                                  )}
+-                                  <span className="truncate">
+-                                    {copied === format ? "Copied!" : label}
+-                                  </span>
+-                                </button>
+-                              ))}
+-                            </div>
+-                          </div>
++                          <p className="text-xs text-surface-600 dark:text-surface-300">
++                            Transfer this one-shot key manually through a protected channel. Enter it only at the hidden CLI prompt.
++                            After storing it, close this panel and open this agent's Existing client guide for public setup commands.
++                            The guide can be opened without issuing another key.
++                          </p>
+                           <AgentModalFooter><button className="btn btn-secondary" onClick={() => setFreshKey(null)}>
+                             Close key panel
+                           </button></AgentModalFooter>
+diff --git a/frontend/tests/mcpSnippet.test.mjs b/frontend/tests/mcpSnippet.test.mjs
+--- a/frontend/tests/mcpSnippet.test.mjs
++++ b/frontend/tests/mcpSnippet.test.mjs
+@@ -3,32 +3,83 @@
+ import test from 'node:test';
+ import ts from 'typescript';
+ 
+-globalThis.location = {hostname: '127.0.0.1', port: '8202'};
+-const source = await readFile(new URL('../src/api.ts', import.meta.url), 'utf8');
++const source = await readFile(new URL('../src/participantGuide.ts', import.meta.url), 'utf8');
+ const compiled = ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022}}).outputText;
+-const {mcpSnippet} = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+-const KEY = 'nxs_example';
++const {buildParticipantGuide, participantOrigin, quoteParticipantArgument} = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
++const options = (overrides = {}) => ({origin: 'https://nexus.example',
++  agentId: 'reviewer', workspaceId: 'workspace-1', profile: 'reviewer',
++  client: 'claude', shell: 'powershell', ...overrides});
++const commands = value => {assert.equal(value.ok, true); return value.steps.map(step => step.command).join('\n');};
+ 
+-test('no format puts the key in the URL', () => {
+-  for (const format of ['claude-cli', 'codex', 'vscode', 'claude', 'cursor', 'windsurf', 'other']) {
+-    assert.ok(!mcpSnippet(format, KEY).includes('api_key='), format);
++test('current HTTPS origin retains host and non-default port, without inventing 8202', () => {
++  for (const origin of ['https://nexus.example', 'https://nexus.example:9443', 'https://[2001:db8::10]:9443']) {
++    assert.equal(participantOrigin(origin).origin, origin);
++    const text = commands(buildParticipantGuide(options({origin})));
++    assert.ok(text.includes('--server=\'' + origin + '\''));
++    assert.ok(!text.includes('http://') && !text.includes(':8202'));
+   }
+ });
+ 
+-test('the claude command sends the key in a Bearer header', () => {
+-  assert.equal(mcpSnippet('claude-cli', KEY),
+-    'claude mcp add -t http okto-nexus "http://127.0.0.1:8202/mcp" --header "Authorization: Bearer nxs_example"');
++test('unsafe origins produce no command, including userinfo, query and remote plaintext', () => {
++  for (const origin of ['http://nexus.example', 'https://user:token@nexus.example', 'https://nexus.example/mcp',
++    'https://nexus.example?next=https://other.example', 'https://nexus.example#key', 'file:///config',
++    'javascript:alert(1)', 'https://nexus.example\n', 'https://nexus.example\\other', '//nexus.example',
++    'http://127.0.0.2:8202', 'https://nexus.example:0', 'https://nexus.example\u0000']) {
++    const result = buildParticipantGuide(options({origin}));
++    assert.equal(result.ok, false, origin);
++    assert.equal(result.steps, undefined);
++  }
+ });
+ 
+-test('the codex command reads the key from OKTO_NEXUS_API_KEY', () => {
+-  const [exportLine, addLine] = mcpSnippet('codex', KEY).split('\n');
+-  assert.equal(exportLine, 'export OKTO_NEXUS_API_KEY="nxs_example"');
+-  assert.equal(addLine, 'codex mcp add okto-nexus --url "http://127.0.0.1:8202/mcp" --bearer-token-env-var OKTO_NEXUS_API_KEY');
++test('valid origins generate public commands without a second approval gate', () => {
++  assert.equal(buildParticipantGuide(options()).ok, true);
++  for (const origin of ['http://127.0.0.1:8202', 'http://localhost:8202', 'http://[::1]:8202', 'https://localhost']) {
++    const accepted = buildParticipantGuide(options({origin}));
++    assert.equal(accepted.ok, true);
++    assert.equal(accepted.plaintext, origin.startsWith('http:'));
++  }
+ });
+ 
+-test('JSON formats carry the Bearer header next to the URL', () => {
+-  const vscode = JSON.parse(mcpSnippet('vscode', KEY));
+-  assert.deepEqual(vscode.servers['okto-nexus'].headers, {Authorization: 'Bearer nxs_example'});
+-  const claude = JSON.parse(mcpSnippet('claude', KEY));
+-  assert.deepEqual(claude.mcpServers['okto-nexus'], {url: 'http://127.0.0.1:8202/mcp', headers: {Authorization: 'Bearer nxs_example'}});
++test('guidance carries no credential even when a legacy caller supplies an extra key property', () => {
++  const marker = 'nxs_' + 'f'.repeat(48);
++  for (const client of ['claude', 'codex', 'generic']) {
++    const value = buildParticipantGuide(options({client, apiKey: marker}));
++    assert.ok(!JSON.stringify(value).includes(marker));
++    assert.ok(!commands(value).match(/export |Authorization:|--header|api_key=|--key=/));
++  }
++  for (const field of ['agentId', 'workspaceId', 'profile']) assert.equal(buildParticipantGuide(options({[field]: marker})).ok, false);
+ });
++
++test('commands use existing CLI entry points and retain the same profile for recovery', () => {
++  const result = buildParticipantGuide(options({client: 'codex'}));
++  assert.equal(result.ok, true);
++  assert.equal(result.steps[0].command, "okto-nexus init --mode participant --profile='reviewer' --server='https://nexus.example' --agent='reviewer' --workspace-id='workspace-1' --client=codex --project . --plan");
++  assert.equal(result.steps[1].command, "okto-nexus init --mode participant --profile='reviewer' --approve=REVIEW_REVISION");
++  assert.equal(result.steps[2].command, "okto-nexus participant launch --profile='reviewer' --plan");
++  assert.equal(result.steps[3].command, "okto-nexus participant launch --profile='reviewer' --approve=LAUNCH_REVIEW_REVISION");
++  assert.equal(result.steps[4].command, "okto-nexus doctor --mode participant --profile='reviewer'");
++  assert.equal(result.steps[5].command, "okto-nexus doctor --mode participant --profile='reviewer' --check-server --check-mcp");
++  assert.ok(!commands(result).match(/rotate|regenerate|new-agent|work |smoke /));
++});
++
++test('generic guidance makes no client launch or readiness claim', () => {
++  const result = buildParticipantGuide(options({client: 'generic'}));
++  assert.ok(commands(result).includes('--client=generic'));
++  assert.ok(!commands(result).includes('participant launch'));
++  assert.deepEqual(result.steps.map(step => step.id), ['review', 'apply', 'doctor', 'mcp']);
++  assert.ok(result.steps.at(-1).explanation.includes('doctor process'));
++});
++
++test('shell quoting keeps punctuation in public IDs inside one argument', () => {
++  const agentId = "worker'project";
++  assert.equal(quoteParticipantArgument(agentId, 'powershell'), "'worker''project'");
++  assert.equal(quoteParticipantArgument(agentId, 'posix'), "'worker'\"'\"'project'");
++  assert.equal(quoteParticipantArgument('worker’project', 'powershell'), "'worker’’project'");
++  for (const shell of ['powershell', 'posix']) {
++    const value = buildParticipantGuide(options({agentId, shell}));
++    assert.ok(commands(value).includes('--agent=' + quoteParticipantArgument(agentId, shell)));
++  }
++  for (const overrides of [{agentId: 'line\nbreak'}, {workspaceId: '\u001b[31m'}, {profile: '../other'}, {client: 'cursor'}, {shell: 'cmd'}]) {
++    assert.equal(buildParticipantGuide(options(overrides)).ok, false);
++  }
++});
+diff --git a/frontend/tests/participantGuide.test.mjs b/frontend/tests/participantGuide.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/frontend/tests/participantGuide.test.mjs
+@@ -0,0 +1,77 @@
++import assert from 'node:assert/strict';
++import {existsSync, readFileSync} from 'node:fs';
++import {createRequire} from 'node:module';
++import {fileURLToPath} from 'node:url';
++import test from 'node:test';
++import React from 'react';
++import {renderToStaticMarkup} from 'react-dom/server';
++import ts from 'typescript';
++
++const require = createRequire(import.meta.url), modules = new Map();
++function load(url) {
++  const filename = fileURLToPath(url);
++  if (modules.has(filename)) return modules.get(filename).exports;
++  const module = {exports: {}};
++  modules.set(filename, module);
++  const compiled = ts.transpileModule(readFileSync(filename, 'utf8'), {fileName: filename, compilerOptions: {
++    module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX,
++  }}).outputText;
++  const localRequire = name => {
++    if (!name.startsWith('.')) return require(name);
++    const candidate = ['.ts', '.tsx'].map(extension => new URL(name + extension, url)).find(path => existsSync(path));
++    assert.ok(candidate, `Local module exists: ${name}`);
++    return load(candidate);
++  };
++  new Function('require', 'module', 'exports', compiled)(localRequire, module, module.exports);
++  return module.exports;
++}
++const {ParticipantGuide} = load(new URL('../src/components/ParticipantGuide.tsx', import.meta.url));
++const render = props => renderToStaticMarkup(React.createElement(ParticipantGuide,
++  {initialOrigin: 'https://nexus.example:9443', ...props}));
++
++test('an existing identity opens guidance without key input, network or implicit setup', () => {
++  const originalFetch = globalThis.fetch;
++  globalThis.fetch = () => {throw new Error('Guidance must not make a request');};
++  try {
++    const html = render({agentId: 'existing-agent', workspaceId: 'workspace-1'});
++    assert.match(html, /readonly=""[^>]*value="existing-agent"/);
++    assert.ok(html.includes('value="workspace-1"'));
++    assert.ok(html.includes('value="https://nexus.example:9443"'));
++    assert.ok(html.includes('copying them applies no changes'));
++    assert.ok(!html.includes('type="password"') && !html.includes('Authorization: Bearer'));
++    assert.ok(html.includes('Copy public command'));
++    assert.ok(!html.includes('type="checkbox"'));
++  } finally {globalThis.fetch = originalFetch;}
++});
++
++test('onboarding requires explicit identity and workspace and labels unknown clients honestly', () => {
++  const html = render({});
++  assert.ok(html.includes('Existing agent ID') && html.includes('Existing workspace ID'));
++  assert.ok(!html.includes('readonly=""'));
++  assert.ok(html.includes('Claude Code') && html.includes('Codex'));
++  assert.ok(html.includes('Other client — manual guidance'));
++  assert.ok(html.includes('Missing identities require a separate explicit operator decision'));
++});
++
++test('the guide separates one-shot delivery and proof levels from public commands', () => {
++  const html = render({agentId: 'existing-agent'});
++  for (const expected of ['one-shot key delivery stays separate', 'hidden CLI prompt',
++    'Configuration, credential delivery to a client, MCP negotiation and completed work are separate proofs',
++    'process exit does not prove participation or completed work']) {
++    assert.ok(html.includes(expected), expected);
++  }
++  assert.ok(!html.includes('mcp-copy-') && !html.includes('export OKTO_NEXUS_API_KEY'));
++});
++
++test('loopback has contextual guidance without blocking public commands', () => {
++  const html = render({initialOrigin: 'http://127.0.0.1:8202', agentId: 'existing-agent', workspaceId: 'workspace-1'});
++  assert.ok(html.includes('Loopback refers to the client computer'));
++  assert.ok(html.includes('HTTP sends plaintext on this host'));
++  assert.ok(!html.includes('type="checkbox"') && html.includes('Copy public command'));
++});
++
++test('untrusted identity text stays escaped', () => {
++  const html = render({agentId: '<script>alert(1)</script>'});
++  assert.ok(!html.includes('<script>'));
++  assert.ok(html.includes('&lt;script&gt;alert(1)&lt;/script&gt;'));
++});

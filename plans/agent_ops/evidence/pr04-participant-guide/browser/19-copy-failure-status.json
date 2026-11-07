@@ -1,0 +1,12 @@
+{
+  "name": "19-copy-failure-status",
+  "args": [
+    "eval",
+    "() => ({status:[...document.querySelectorAll('[role=status]')].map(e=>e.textContent)})"
+  ],
+  "started": "2026-11-07T08:24:50.588721+00:00",
+  "ended": "2026-11-07T08:24:55.527407+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"status\": [\n    \"Clipboard unavailable. Select the public command and copy it manually.\"\n  ]\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({status:[...document.querySelectorAll(\\'[role=status]\\')].map(e=>e.textContent)})');\n```\n",
+  "stderr": ""
+}

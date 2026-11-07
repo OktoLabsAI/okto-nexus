@@ -217,3 +217,32 @@ evidence with a separate `last_observed_status`. Participation and handoff check
 remain `UNKNOWN/HISTORICAL_EVIDENCE_ONLY` until an explicit current observation;
 doctor itself never sends or repeats the test. See
 [`participant smoke`](terminal-cooperation.md) for review, consent and recovery.
+
+
+## Starting from the dashboard
+
+Choose **Use my existing client** in the introduction, or **Existing client** on
+an existing agent. The guide generates public CLI commands for Claude Code,
+Codex, or manual generic configuration. It does not edit files, create an
+identity, issue a key, change runtime access or execute a client.
+
+Use a Server origin reachable from the client computer. The dashboard's HTTPS
+scheme, host and port are retained; a loopback address is usable only when the
+Server and client run on the same computer. Select an existing workspace ID and
+reuse the same participant profile for recovery. Run the commands on the client
+host, in its project folder. Paths on the Server do not select a remote project.
+
+One-shot key delivery remains separate. Transfer the existing key through a
+protected channel and enter it at the hidden CLI prompt; the review and apply
+each require it. Do not put it in generated commands, copied configuration, a
+URL or shell history. Closing the key panel still makes its one-shot value
+unrecoverable; opening the guide never issues another one.
+
+Copying the public commands does not require another approval. The CLI's
+review/apply flow remains the place to approve concrete effects.
+
+The guide presents review, explicit apply, supported foreground launch and
+passive doctor as separate steps. Its optional MCP check runs in the doctor
+process. Configuration, exit status and authenticated MCP initialize do not
+prove that the actual client is ready, participated in a handoff or completed
+work. Generic guidance does not install or qualify an unknown client.

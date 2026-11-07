@@ -1,3 +1,4 @@
+import { ParticipantGuide } from "../components/ParticipantGuide";
 import { AgentConnectionsPanel } from "../components/AgentConnectionsPanel";
 import { displayName, otherMetadata, identityMetadata } from '../projectIdentity';
 import { AgentRuntimeAdministration } from '../components/AgentRuntimeAdministration';
@@ -18,10 +19,8 @@ import { RuntimeRecovery } from "../components/RuntimeRecovery";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import {
   Cable,
-  Check,
   Copy,
   Eye,
-  FileJson,
   KeyRound,
   MessageSquare,
   Pencil,
@@ -35,7 +34,6 @@ import {
 } from "lucide-react";
 import {
   api,
-  mcpSnippet,
   type AgentRow,
   type CapabilityRow,
   type PermissionFlags,
@@ -63,17 +61,6 @@ import {
   catalogEntityFilename,
   uniqueImportedName,
 } from "../components/CatalogTransfer";
-
-// MCP consumers (the Pulse AgentsModal grammar): one button per client,
-// clicking copies that client's ready-to-paste command/config.
-const MCP_CONSUMERS = [
-  { format: "claude-cli", label: "Claude Code (CLI)", file: "terminal", icon: "terminal" },
-  { format: "claude", label: "Claude Desktop / Claude Code", file: "claude_desktop_config.json", icon: "json" },
-  { format: "codex", label: "Codex (CLI)", file: "terminal", icon: "terminal" },
-  { format: "cursor", label: "Cursor", file: ".cursor/mcp.json", icon: "json" },
-  { format: "vscode", label: "VS Code (Copilot)", file: ".vscode/mcp.json", icon: "json" },
-  { format: "windsurf", label: "Windsurf / Cline", file: "cline_mcp_settings.json", icon: "json" },
-] as const;
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -105,7 +92,7 @@ export function AgentsView({
   const [freshKey, setFreshKey] = useState<{ agentId: string; key: string } | null>(
     null,
   );
-  const [copied, setCopied] = useState<string | null>(null);
+  const [participantOpen, setParticipantOpen] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [actionBusy, setActionBusy] = useState(false);
   const [newAgent, setNewAgent] = useState<{
@@ -169,15 +156,6 @@ export function AgentsView({
   } | null>(null);
   // Steering composer (spec 2948b2a2 FR9): direct message as "operator".
   const [steering, setSteering] = useState<AgentRow | null>(null);
-
-  const copySnippet = (format: string, key: string) => {
-    navigator.clipboard.writeText(mcpSnippet(format, key));
-    setCopied(format);
-    window.setTimeout(
-      () => setCopied((current) => (current === format ? null : current)),
-      1600,
-    );
-  };
 
   const reload = () =>
     Promise.all([api.agents(), api.presets(), api.tags(), api.capabilities()])
@@ -345,6 +323,12 @@ export function AgentsView({
   return (
     <PageContainer width="wide" scroll="y">
       {dialog}
+      {participantOpen && <AgentActionModal title={'Existing client · ' + participantOpen} wide guardChanges={false}
+        testId="participant-guide-modal" onClose={() => setParticipantOpen(null)}>
+        <ParticipantGuide key={participantOpen + ':' + workspace} agentId={participantOpen}
+          workspaceId={workspace === 'all' ? '' : workspace} />
+        <AgentModalFooter><button className="btn btn-secondary" onClick={() => setParticipantOpen(null)}>Close guide</button></AgentModalFooter>
+      </AgentActionModal>}
       {editorOpen && presets && (
         <PresetEditorModal
           preset={editorOpen.preset}
@@ -788,6 +772,11 @@ export function AgentsView({
                         onClick={() => setConnectionsOpen(open => open === agent.agent_id ? null : agent.agent_id)}>
                         <Cable size={14} />
                       </button>
+                      {agent.agent_id !== 'operator' && <button className={ICON_BTN}
+                        title="Use an existing MCP client" aria-label={`Existing client for ${agent.agent_id}`}
+                        data-testid={`participant-guide-${agent.agent_id}`} onClick={() => setParticipantOpen(agent.agent_id)}>
+                        <Terminal size={14} />
+                      </button>}
                       {/* Steering to yourself is a no-op — hide it for the
                           reserved operator identity. */}
                       {agent.connection?.runtime_integrated && agent.connection.status !== 'MCP only' && <button
@@ -919,36 +908,11 @@ export function AgentsView({
                             ⚠ This key will not be shown again. Store it now — closing this
                             panel makes it unrecoverable (regenerating issues a new one).
                           </p>
-                          <div>
-                            <div className="text-[11px] font-medium uppercase tracking-wide text-surface-500 dark:text-surface-400 mb-1">
-                              MCP configuration
-                            </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-                              {MCP_CONSUMERS.map(({ format, label, file, icon }) => (
-                                <button
-                                  key={format}
-                                  onClick={() => copySnippet(format, freshKey.key)}
-                                  className="flex items-center gap-2 px-3 py-2 text-xs rounded-lg text-left
-                                    bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-700
-                                    hover:bg-accent-50 dark:hover:bg-accent-900/20
-                                    text-surface-700 dark:text-surface-300 transition-colors"
-                                  title={icon === "terminal" ? "Terminal command" : file}
-                                  data-testid={`mcp-copy-${format}`}
-                                >
-                                  {copied === format ? (
-                                    <Check size={14} className="shrink-0 text-emerald-500" />
-                                  ) : icon === "terminal" ? (
-                                    <Terminal size={14} className="shrink-0 text-surface-400 dark:text-surface-500" />
-                                  ) : (
-                                    <FileJson size={14} className="shrink-0 text-surface-400 dark:text-surface-500" />
-                                  )}
-                                  <span className="truncate">
-                                    {copied === format ? "Copied!" : label}
-                                  </span>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
+                          <p className="text-xs text-surface-600 dark:text-surface-300">
+                            Transfer this one-shot key manually through a protected channel. Enter it only at the hidden CLI prompt.
+                            After storing it, close this panel and open this agent's Existing client guide for public setup commands.
+                            The guide can be opened without issuing another key.
+                          </p>
                           <AgentModalFooter><button className="btn btn-secondary" onClick={() => setFreshKey(null)}>
                             Close key panel
                           </button></AgentModalFooter>

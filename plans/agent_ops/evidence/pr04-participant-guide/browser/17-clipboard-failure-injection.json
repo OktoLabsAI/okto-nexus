@@ -1,0 +1,12 @@
+{
+  "name": "17-clipboard-failure-injection",
+  "args": [
+    "eval",
+    "() => { window.dx04ClipboardOriginal = navigator.clipboard.writeText; navigator.clipboard.writeText = async () => { throw new DOMException('QA denied', 'NotAllowedError'); }; return {injection:'clipboard write rejected only'}; }"
+  ],
+  "started": "2026-11-07T08:24:38.623588+00:00",
+  "ended": "2026-11-07T08:24:44.855030+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"injection\": \"clipboard write rejected only\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => { window.dx04ClipboardOriginal = navigator.clipboard.writeText; navigator.clipboard.writeText = async () => { throw new DOMException(\\'QA denied\\', \\'NotAllowedError\\'); }; return {injection:\\'clipboard write rejected only\\'}; }');\n```\n",
+  "stderr": ""
+}

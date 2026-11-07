@@ -1,0 +1,7 @@
+[
+ {"name":"40-mobile-tab","args":["press","Tab"]},
+ {"name":"41-mobile-focus","args":["eval","() => ({focusInside:!!document.activeElement?.closest('dialog'),label:document.activeElement?.getAttribute('aria-label')})"]},
+ {"name":"42-close-existing","args":["press","Escape"]},
+ {"name":"43-onboarding-open","args":["tab-new","http://127.0.0.1:65032"]},
+ {"name":"44-onboarding-snapshot","args":["snapshot"]}
+]

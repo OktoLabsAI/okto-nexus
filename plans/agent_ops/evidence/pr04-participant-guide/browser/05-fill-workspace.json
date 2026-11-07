@@ -1,0 +1,13 @@
+{
+  "name": "05-fill-workspace",
+  "args": [
+    "fill",
+    "e468",
+    "dx04-workspace-alpha"
+  ],
+  "started": "2026-11-07T08:23:08.140858+00:00",
+  "ended": "2026-11-07T08:23:13.990507+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByRole('textbox', { name: 'Existing workspace ID' }).fill('dx04-workspace-alpha');\n```\n",
+  "stderr": ""
+}

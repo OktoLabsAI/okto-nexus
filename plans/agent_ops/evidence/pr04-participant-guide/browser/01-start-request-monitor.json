@@ -1,0 +1,12 @@
+{
+  "name": "01-start-request-monitor",
+  "args": [
+    "run-code",
+    "async page => { globalThis.dx04Requests = []; page.on('request', req => { const u = new URL(req.url()); globalThis.dx04Requests.push({method:req.method(),origin:u.origin,path:u.pathname}); }); console.log(JSON.stringify({monitor:'method/origin/path only; no headers, bodies, cookies or query'})); }"
+  ],
+  "started": "2026-11-07T08:22:28.621825+00:00",
+  "ended": "2026-11-07T08:22:33.851853+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait (async page => { globalThis.dx04Requests = []; page.on('request', req => { const u = new URL(req.url()); globalThis.dx04Requests.push({method:req.method(),origin:u.origin,path:u.pathname}); }); console.log(JSON.stringify({monitor:'method/origin/path only; no headers, bodies, cookies or query'})); })(page);\n```\n",
+  "stderr": ""
+}

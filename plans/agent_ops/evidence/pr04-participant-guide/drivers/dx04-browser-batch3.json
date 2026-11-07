@@ -1,0 +1,9 @@
+[
+ {"name":"10-public-command-dom","args":["eval","() => ({commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),inputs:[...document.querySelectorAll('[data-testid=participant-guide] input')].map(e=>({value:e.value,readOnly:e.readOnly})),viewport:innerWidth,body:document.documentElement.scrollWidth,focusInsideDialog:!!document.activeElement?.closest('dialog'),dialog:document.querySelector('dialog').getBoundingClientRect().toJSON()})"]},
+ {"name":"11-copy-public-command","args":["click","e488"]},
+ {"name":"12-copy-success","args":["eval","() => ({status:[...document.querySelectorAll('[role=status]')].map(e=>e.textContent)})"]},
+ {"name":"13-codex","args":["select","e472","codex"]},
+ {"name":"14-https-origin","args":["fill","e474","https://nexus.example.test:9443"]},
+ {"name":"15-codex-https-snapshot","args":["snapshot"]},
+ {"name":"16-requests-so-far","args":["run-code","async page => { return globalThis.dx04Requests; }"]}
+]

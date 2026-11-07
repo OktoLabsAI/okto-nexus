@@ -209,6 +209,11 @@
         "plans/agent_ops/evidence/pr04-participant-doctor-source.xml",
         "plans/agent_ops/evidence/pr04-participant-doctor-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-doctor.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
         "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
@@ -2053,6 +2058,10 @@
         "../okto-nexus-connector-core/tests/test_participant_config.py",
         "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
         "docs/terminal-participant.md",
+        "frontend/src/components/ParticipantGuide.tsx",
+        "frontend/src/components/onboarding/OnboardingModal.tsx",
+        "frontend/src/participantGuide.ts",
+        "frontend/src/views/AgentsView.tsx",
         "plans/agent_ops/adr.md",
         "plans/agent_ops/evidence/pr04-participant-contract.md",
         "scripts/qualify_participant_formats.py",
@@ -2075,6 +2084,8 @@
         "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
       ],
       "tests": [
+        "frontend/tests/mcpSnippet.test.mjs",
+        "frontend/tests/participantGuide.test.mjs",
         "plans/agent_ops/evidence/pr04-participant-contract-client-formats-source.json",
         "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
         "plans/agent_ops/evidence/pr04-participant-contract-connector-installed.xml",
@@ -2108,7 +2119,7 @@
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "Real binary campaign is configuration parsing only; it does not initialize MCP, resolve a real credential or prove participation.",
@@ -2133,8 +2144,16 @@
         "participant_removal_recovery_windows": "VERIFIED",
         "participant_os_vault_storage_removal_windows": "VERIFIED",
         "participant_retired_profile_guards": "VERIFIED",
-        "participant_os_vault_client_end_to_end": "NOT_RUN"
-      }
+        "participant_os_vault_client_end_to_end": "NOT_RUN",
+        "dashboard_participant_guidance_host_boundary": "VERIFIED"
+      },
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json"
+      ]
     },
     "DX-04": {
       "title": "credenciais",
@@ -2155,6 +2174,10 @@
         "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
         "docs/terminal-doctor.md",
         "docs/terminal-participant.md",
+        "frontend/src/components/ParticipantGuide.tsx",
+        "frontend/src/components/onboarding/OnboardingModal.tsx",
+        "frontend/src/participantGuide.ts",
+        "frontend/src/views/AgentsView.tsx",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/doctor.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
@@ -2181,6 +2204,8 @@
         "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
       ],
       "tests": [
+        "frontend/tests/mcpSnippet.test.mjs",
+        "frontend/tests/participantGuide.test.mjs",
         "plans/agent_ops/campaigns/participant-environment.py",
         "plans/agent_ops/evidence/pr04-participant-doctor-cli.json",
         "plans/agent_ops/evidence/pr04-participant-doctor-installed.xml",
@@ -2217,7 +2242,7 @@
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md"
       ],
-      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open.",
+      "result": "PR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "This increment validates init on Windows using real HTTP handlers/SQLite, temporary client files and a synthetic vault backend. OS-vault storage is implemented but no real user credential was stored; actual launcher/GUI inheritance, MCP negotiation and cooperation remain unqualified. Approved policy drift requires inspection; automated compensation/removal and other-platform campaigns are pending.",
@@ -2242,8 +2267,16 @@
         "participant_os_vault_client_end_to_end": "NOT_RUN",
         "participant_removal_recovery_windows": "VERIFIED",
         "participant_os_vault_storage_removal_windows": "VERIFIED",
-        "participant_retired_profile_guards": "VERIFIED"
-      }
+        "participant_retired_profile_guards": "VERIFIED",
+        "dashboard_public_commands_and_origin": "VERIFIED"
+      },
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json"
+      ]
     },
     "DX-15": {
       "title": "connect como entrada principal",
@@ -3194,6 +3227,10 @@
         "../okto-nexus-connector-core/tests/test_participant_config.py",
         "../okto-nexus-connector/vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
         "docs/terminal-participant.md",
+        "frontend/src/components/ParticipantGuide.tsx",
+        "frontend/src/components/onboarding/OnboardingModal.tsx",
+        "frontend/src/participantGuide.ts",
+        "frontend/src/views/AgentsView.tsx",
         "src/okto_nexus/adapters/inbound/cli/connect.py",
         "src/okto_nexus/adapters/inbound/cli/main.py",
         "src/okto_nexus/adapters/inbound/cli/participant.py",
@@ -3216,6 +3253,8 @@
         "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
       ],
       "tests": [
+        "frontend/tests/mcpSnippet.test.mjs",
+        "frontend/tests/participantGuide.test.mjs",
         "plans/agent_ops/campaigns/participant-environment.py",
         "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
@@ -3246,7 +3285,7 @@
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md"
       ],
-      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open.",
+      "result": "PR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "This increment validates init on Windows using real HTTP handlers/SQLite, temporary client files and a synthetic vault backend. OS-vault storage is implemented but no real user credential was stored; actual launcher/GUI inheritance, MCP negotiation and cooperation remain unqualified. Approved policy drift requires inspection; automated compensation/removal and other-platform campaigns are pending.",
@@ -3267,8 +3306,16 @@
         "participant_os_vault_client_end_to_end": "NOT_RUN",
         "participant_removal_recovery_windows": "VERIFIED",
         "participant_os_vault_storage_removal_windows": "VERIFIED",
-        "participant_retired_profile_guards": "VERIFIED"
-      }
+        "participant_retired_profile_guards": "VERIFIED",
+        "dashboard_existing_participant_cli_guidance": "VERIFIED"
+      },
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json"
+      ]
     },
     "DX-06": {
       "title": "sem transaÃ§Ã£o distribuÃ­da fictÃ­cia",
@@ -4265,10 +4312,13 @@
         "PR-03"
       ],
       "files": [
+        "docs/terminal-participant.md",
         "frontend/src/App.tsx",
         "frontend/src/components/AgentConnectionsPanel.tsx",
+        "frontend/src/components/ParticipantGuide.tsx",
         "frontend/src/components/onboarding/OnboardingModal.tsx",
         "frontend/src/components/onboarding/onboardingStorage.ts",
+        "frontend/src/participantGuide.ts",
         "frontend/src/projectIdentity.ts",
         "frontend/src/runtimeApi.ts",
         "frontend/src/views/AgentsView.tsx",
@@ -4280,6 +4330,8 @@
         "tests/execution_r4/test_project_dashboard.py"
       ],
       "tests": [
+        "frontend/tests/mcpSnippet.test.mjs",
+        "frontend/tests/participantGuide.test.mjs",
         "frontend/tests/projectIdentity.test.mjs",
         "plans/agent_ops/evidence/pr03-project-dashboard-browser.json",
         "plans/agent_ops/evidence/pr03-project-dashboard-installed.xml",
@@ -4287,7 +4339,7 @@
         "plans/agent_ops/evidence/pr03-project-dashboard-wheels.json",
         "tests/execution_r4/test_project_dashboard.py"
       ],
-      "result": "Project introduction reads the canonical preset and suppresses automatic onboarding for existing identities, including setup from the terminal. Connections displays stored origin/current configuration; display name and role edits preserve the canonical identity, metadata, history, bindings and grants. 40 frontend, 32 source integration and 76 installed integration tests passed (overlapping suites). Real Chromium interaction against installed FastAPI/SQLite backends verified first/existing use, personalization, focus, themes/mobile and retry; native checks were synthetic. Productive M1, participant setup and preset evolution remain open.",
+      "result": "Project introduction reads the canonical preset and suppresses automatic onboarding for existing identities, including setup from the terminal. Connections displays stored origin/current configuration; display name and role edits preserve the canonical identity, metadata, history, bindings and grants. 40 frontend, 32 source integration and 76 installed integration tests passed (overlapping suites). Real Chromium interaction against installed FastAPI/SQLite backends verified first/existing use, personalization, focus, themes/mobile and retry; native checks were synthetic. Productive M1, participant setup and preset evolution remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "platform": "Windows-11-10.0.26300-SP0",
       "limitations": [
         "UI campaign uses a real installed backend and synthetic harness; productive M1 and complete participant/preset evolution are not qualified."
@@ -4295,8 +4347,16 @@
       "subscopes": {
         "project_intro_reads_canonical_preset": "VERIFIED",
         "existing_identity_does_not_restart_intro": "VERIFIED",
-        "browser_personalization_preserves_identity_configuration_history": "VERIFIED"
-      }
+        "browser_personalization_preserves_identity_configuration_history": "VERIFIED",
+        "dashboard_existing_client_public_guide": "VERIFIED"
+      },
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json"
+      ]
     },
     "DX-13": {
       "title": "caminho gerenciado",
@@ -6863,6 +6923,11 @@
       "requirement": "Init usa agente existente e nÃ£o cria/rotaciona identidade implicitamente.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
         "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
@@ -6874,10 +6939,11 @@
         "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
         "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.",
+      "result": "PR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "subscopes": {
         "participant_init_review_apply_recovery_windows": "VERIFIED",
-        "participant_actual_harness_environment": "NOT_RUN"
+        "participant_actual_harness_environment": "NOT_RUN",
+        "dashboard_guidance_without_identity_mutation": "VERIFIED"
       }
     },
     "DX-T02": {
@@ -6917,6 +6983,11 @@
       "requirement": "Adicionar cliente MCP nÃ£o desativa runtime jÃ¡ existente da identidade.",
       "status": "IN_PROGRESS",
       "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
         "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
@@ -6939,11 +7010,12 @@
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md"
       ],
-      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open.",
+      "result": "PR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "subscopes": {
         "participant_init_review_apply_recovery_windows": "VERIFIED",
         "participant_actual_harness_environment": "NOT_RUN",
-        "participant_owned_removal_windows": "VERIFIED"
+        "participant_owned_removal_windows": "VERIFIED",
+        "dashboard_guidance_preserves_runtime": "VERIFIED"
       }
     },
     "DX-T04": {
@@ -7169,6 +7241,11 @@
         "plans/agent_ops/evidence/pr04-participant-doctor-source.xml",
         "plans/agent_ops/evidence/pr04-participant-doctor-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-doctor.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
         "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
@@ -7198,7 +7275,7 @@
         "plans/agent_ops/evidence/pr04-participant-removal-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-removal.md"
       ],
-      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open.",
+      "result": "Core now provides a separate pure ParticipantClientConfig with client/build, format/revision, approved origin, selected file scope and an environment credential reference. Claude JSON, Codex TOML and explicit manual export reuse existing owned-entry planning/CAS without weakening managed capability or format qualification. Unrelated configuration and comments are preserved, invalid/duplicate documents and stale plans are refused, and compensation removes only the still-owned entry. 100 source Core tests passed; installed artifacts passed 97 Core, 74 Connector and nine Nexus cases (five Nexus fixture-path errors corrected by copying wheel SQL resources, with both reports retained). Actual Claude Code 2.1.317 and Codex CLI 0.166.0 read generated configs in isolated homes with zero MCP HTTP requests; this proves parsing, not credential resolution, MCP negotiation or participation. The same 131-file Core wheel is vendored in both consumers. Participant init, protected credential/launcher integration, partial-stage recovery and cooperation remain pending.\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending.\n\nParticipant launch reviews the existing authenticated profile, native executable, physical project, file and client home context before a foreground spawn. Only the new child receives the protected credential reference; other participant references are removed without changing the parent environment. Codex requires --no-daemon and a supported actual configuration location; Claude preserves its trust flow and selected file. Durable starting/started/exited receipts fence automatic replay after spawn or checkpoint uncertainty. 19 source and 74 installed tests passed. Initial adapter-name and test-fixture mistakes were corrected; the fixture failure report is retained. Four installed native-client cases exercised Claude Code 2.1.317 and Codex 0.166.0 with present/missing references in isolated homes and protocol modes. Only present credentials produced authenticated MCP initialize against the synthetic responder; absent credentials still yielded zero process exits, so exit is never readiness. No prompts, model turns or tool calls were submitted. The final wheel has 447 Python files and seven static assets matched to source. Real OS-vault/native-client end-to-end use, interactive GUI/TUI qualification, canonical cooperation, compensation and full R3/M1/M2 remain pending.\n\nParticipant remove now reviews and compensates only the owned local file entry and isolated setup vault credential, with no Server requests. Retirement precedes effects and separate file/vault checkpoints recover uncertainty without restoring stale backups, rewriting confirmed later edits or reactivating the profile through init/launch. Explicit keep-config preserves changed/manual/unavailable files. Doctor reports retirement without active checks. 24 source cases and one additional native Windows vault case passed; 108 installed regressions passed, followed by four overlapping checks on the final wheel after a removal-error guidance improvement. An initial TOML test expectation was corrected; a real protected-DACL AUTO_INHERITED preservation failure was fixed, with both failed reports retained. Actual Windows Credential Manager tests used only fixture keys in temporary namespaces and confirmed cleanup/absent replay. The final 449-Python-file wheel and seven assets match source; Core/Connector remain unchanged. Canonical cooperation, real-vault/interactive-client end-to-end use, other platforms, native services and productive M1/M2 remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "subscopes": {
         "shared_participant_contract_and_editor": "VERIFIED",
         "participant_init_review_apply_recovery_windows": "VERIFIED",
@@ -7207,7 +7284,8 @@
         "actual_external_client": "IN_PROGRESS",
         "participant_launch_windows": "VERIFIED",
         "real_client_protocol_environment_present_missing": "VERIFIED",
-        "participant_owned_removal_windows": "VERIFIED"
+        "participant_owned_removal_windows": "VERIFIED",
+        "dashboard_generated_guidance_contains_no_credential": "VERIFIED"
       }
     },
     "DX-T10": {
@@ -7259,6 +7337,11 @@
         "plans/agent_ops/evidence/pr04-participant-doctor-source.xml",
         "plans/agent_ops/evidence/pr04-participant-doctor-wheel.json",
         "plans/agent_ops/evidence/pr04-participant-doctor.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
         "plans/agent_ops/evidence/pr04-participant-init-connector-installed.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-docs-final.xml",
         "plans/agent_ops/evidence/pr04-participant-init-core-followup.xml",
@@ -7270,12 +7353,13 @@
         "plans/agent_ops/evidence/pr04-participant-init-wheels.json",
         "plans/agent_ops/evidence/pr04-participant-init.md"
       ],
-      "result": "\n\nPR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending.",
+      "result": "PR-04 participant init and connect now share existing-identity setup: explicit origin/workspace, hidden/stdin/selected-environment key import, Bearer preparation GET, review hash approval, isolated protected vault entry and selected JSON/TOML apply. Separate durable credential/file checkpoints recover the same setup after lost replies; file drift is preserved and runtime/bindings are not changed. Windows backups are restricted before bytes are written and existing replacement ACLs are preserved. Core exposes an optional empty-file protection hook. Source validation passed 105 Core and 22 Nexus cases; final installed validation passed 105 unique Core, 80 Connector and 36 Nexus cases, including an additional uncertain-write recovery case and managed connect regressions. One Core documentation link case initially failed twice because copied fixture references were missing; it passed after copying those files, with all reports retained. Client credential inheritance, participant doctor/MCP negotiation, cleanup/compensation UX, cooperation and full M1/M2 qualification remain pending. No actual user vault, client configuration, service registration or provider inference was used.\n\nParticipant doctor now separates profile/file, credential store/current doctor environment, current identity, MCP negotiation/basic surface, client reload, participation, handoff and work. Passive mode does not read credentials, use HTTP, start processes or write files. Explicit --check-server authenticates the existing key; --check-environment refuses missing references without vault fallback and labels proof doctor_process. Explicit --check-mcp initializes/lists through the existing SDK with pinned origin/mount, bounded time/requests/pages/tools/bytes and private raw diagnostics. Real TCP Nexus negotiation preserves existing agent sessions/runtime/bindings/grants and leaves participation/work unknown. 32 source and 55 installed cases passed; one initial oversized buffered-response failure was fixed and its report retained. The final 444-Python-file Nexus wheel matches source; Core/Connector are unchanged. Actual external harness credential delivery, client-side MCP behavior, OS-vault qualification, cooperation and complete R3/M1/M2 remain pending. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "subscopes": {
         "participant_init_review_apply_recovery_windows": "VERIFIED",
         "participant_actual_harness_environment": "NOT_RUN",
         "participant_doctor_windows": "VERIFIED",
-        "actual_external_client": "NOT_RUN"
+        "actual_external_client": "NOT_RUN",
+        "dashboard_public_origin_preservation": "VERIFIED"
       }
     },
     "DX-T12": {
@@ -8022,11 +8106,17 @@
         "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
         "plans/agent_ops/evidence/pr03-terminal-connect.md",
         "plans/agent_ops/evidence/pr03-terminal-work-final.xml",
-        "plans/agent_ops/evidence/pr03-terminal-work.md"
+        "plans/agent_ops/evidence/pr03-terminal-work.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json"
       ],
-      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open.",
+      "result": "Passive Nexus doctor separates local service, remote reachability, current operator authority, project identity, binding, runtime eligibility, saved session and exact productive result. Remote default reads metadata without vault/network or local fallback; --check-server permits bounded GETs only. Pending identity creation, absent inventory probes, revoked grants and uncertain submissions remain explicit without repair or replay. 52 source tests and 82 installed regressions passed; the final wheel passed 45 focused installed tests and three actual CLI cases outside checkout. These suites overlap. Participant configuration/authentication, MCP, coordination smoke, real-provider/native service qualification and complete R3/M1 remain open. Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
       "subscopes": {
-        "nexus_project_doctor_installed_contract": "VERIFIED"
+        "nexus_project_doctor_installed_contract": "VERIFIED",
+        "dashboard_participant_proof_level_guidance": "VERIFIED"
       }
     },
     "DX-T36": {
@@ -10516,6 +10606,21 @@
       "connector_installed": 233,
       "connector_commit": "fb3fff473ff246adcffa9e91573ac85f7a394170",
       "core_changed": false
+    },
+    "pr04_dashboard_participant_guide": {
+      "status": "VERIFIED",
+      "scope": "Windows installed dashboard public guidance only",
+      "frontend_unique_tests": 138,
+      "browser_checkpoints": 22,
+      "db_comparisons_per_fixture": 34,
+      "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json"
+      ]
     }
   },
   "history": [
@@ -11272,6 +11377,19 @@
         "plans/agent_ops/evidence/pr03-remote-renewal.md"
       ],
       "connector_commit": "fb3fff473ff246adcffa9e91573ac85f7a394170"
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-04",
+      "status": "IN_PROGRESS",
+      "summary": "Dashboard guidance now uses the existing participant CLI for a selected identity/workspace, preserving the public origin and producing no secret-bearing command or extra browser approval gate. The 138 frontend cases and typecheck/build passed. The installed 690-file Nexus wheel served both real loopback browser fixtures; 22 observed checkpoints passed, with 34 unchanged DB comparisons per fixture and canonical shutdown. The initial native-dialog selector error was corrected and retained. No real client/vault/provider/native-service or productive M1/M2/full R3 qualification is claimed.",
+      "evidence": [
+        "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+        "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/artifact-manifest.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/browser/browser-report.json",
+        "plans/agent_ops/evidence/pr04-participant-guide/installed/candidate-v1/package-proof.json"
+      ]
     }
   ]
 }

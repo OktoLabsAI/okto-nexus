@@ -1,0 +1,12 @@
+{
+  "name": "10-public-command-dom",
+  "args": [
+    "eval",
+    "() => ({commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),inputs:[...document.querySelectorAll('[data-testid=participant-guide] input')].map(e=>({value:e.value,readOnly:e.readOnly})),viewport:innerWidth,body:document.documentElement.scrollWidth,focusInsideDialog:!!document.activeElement?.closest('dialog'),dialog:document.querySelector('dialog').getBoundingClientRect().toJSON()})"
+  ],
+  "started": "2026-11-07T08:23:43.546174+00:00",
+  "ended": "2026-11-07T08:23:48.617357+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"commands\": [\n    \"okto-nexus init --mode participant --profile='participant' --server='http://127.0.0.1:52889' --agent='dx04-agent-alpha' --workspace-id='dx04-workspace-alpha' --client=claude --project . --plan\",\n    \"okto-nexus init --mode participant --profile='participant' --approve=REVIEW_REVISION\",\n    \"okto-nexus participant launch --profile='participant' --plan\",\n    \"okto-nexus participant launch --profile='participant' --approve=LAUNCH_REVIEW_REVISION\",\n    \"okto-nexus doctor --mode participant --profile='participant'\",\n    \"okto-nexus doctor --mode participant --profile='participant' --check-server --check-mcp\"\n  ],\n  \"inputs\": [\n    {\n      \"value\": \"dx04-agent-alpha\",\n      \"readOnly\": true\n    },\n    {\n      \"value\": \"dx04-workspace-alpha\",\n      \"readOnly\": false\n    },\n    {\n      \"value\": \"participant\",\n      \"readOnly\": false\n    },\n    {\n      \"value\": \"http://127.0.0.1:52889\",\n      \"readOnly\": false\n    }\n  ],\n  \"viewport\": 929,\n  \"body\": 929,\n  \"focusInsideDialog\": true,\n  \"dialog\": {\n    \"x\": 27.875,\n    \"y\": 36.6875,\n    \"width\": 873.25,\n    \"height\": 843.625,\n    \"top\": 36.6875,\n    \"right\": 901.125,\n    \"bottom\": 880.3125,\n    \"left\": 27.875\n  }\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({commands:[...document.querySelectorAll(\\'[data-testid=participant-guide] pre\\')].map(e=>e.textContent),inputs:[...document.querySelectorAll(\\'[data-testid=participant-guide] input\\')].map(e=>({value:e.value,readOnly:e.readOnly})),viewport:innerWidth,body:document.documentElement.scrollWidth,focusInsideDialog:!!document.activeElement?.closest(\\'dialog\\'),dialog:document.querySelector(\\'dialog\\').getBoundingClientRect().toJSON()})');\n```\n",
+  "stderr": ""
+}

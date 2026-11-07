@@ -1,0 +1,12 @@
+{
+  "name": "18-copy-refused",
+  "args": [
+    "click",
+    "e488"
+  ],
+  "started": "2026-11-07T08:24:44.856193+00:00",
+  "ended": "2026-11-07T08:24:50.587779+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Copy command: 1. Review on' }).click();\n```\n### Page\n- Page URL: http://127.0.0.1:52889/\n- Page Title: Okto Nexus\n### Snapshot\n- [Snapshot](.playwright-cli\\page-2026-11-07T08-24-50-486Z.yml)\n",
+  "stderr": ""
+}

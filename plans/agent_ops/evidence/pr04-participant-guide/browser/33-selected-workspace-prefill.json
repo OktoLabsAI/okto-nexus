@@ -1,0 +1,12 @@
+{
+  "name": "33-selected-workspace-prefill",
+  "args": [
+    "eval",
+    "() => ({inputs:[...document.querySelectorAll('[data-testid=participant-guide] input')].map(e=>({value:e.value,readOnly:e.readOnly})),commands:document.querySelectorAll('[data-testid=participant-guide] pre').length})"
+  ],
+  "started": "2026-11-07T08:26:35.125544+00:00",
+  "ended": "2026-11-07T08:26:40.541656+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"inputs\": [\n    {\n      \"value\": \"dx04-agent-alpha\",\n      \"readOnly\": true\n    },\n    {\n      \"value\": \"dx04-workspace-alpha\",\n      \"readOnly\": false\n    },\n    {\n      \"value\": \"participant\",\n      \"readOnly\": false\n    },\n    {\n      \"value\": \"http://127.0.0.1:52889\",\n      \"readOnly\": false\n    }\n  ],\n  \"commands\": 6\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({inputs:[...document.querySelectorAll(\\'[data-testid=participant-guide] input\\')].map(e=>({value:e.value,readOnly:e.readOnly})),commands:document.querySelectorAll(\\'[data-testid=participant-guide] pre\\').length})');\n```\n",
+  "stderr": ""
+}

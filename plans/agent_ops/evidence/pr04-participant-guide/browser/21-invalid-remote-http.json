@@ -1,0 +1,13 @@
+{
+  "name": "21-invalid-remote-http",
+  "args": [
+    "fill",
+    "e474",
+    "http://nexus.example.test:9443"
+  ],
+  "started": "2026-11-07T08:25:00.332952+00:00",
+  "ended": "2026-11-07T08:25:04.597387+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByRole('textbox', { name: 'Server origin reachable from' }).fill('http://nexus.example.test:9443');\n```\n",
+  "stderr": ""
+}

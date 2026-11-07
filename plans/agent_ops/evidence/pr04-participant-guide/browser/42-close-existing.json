@@ -1,0 +1,12 @@
+{
+  "name": "42-close-existing",
+  "args": [
+    "press",
+    "Escape"
+  ],
+  "started": "2026-11-07T08:27:35.060378+00:00",
+  "ended": "2026-11-07T08:27:39.535123+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\n// Press Escape\nawait page.keyboard.press('Escape');\n```\n",
+  "stderr": ""
+}

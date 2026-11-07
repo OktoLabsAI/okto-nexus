@@ -1,0 +1,12 @@
+{
+  "name": "16-requests-so-far",
+  "args": [
+    "run-code",
+    "async page => { return globalThis.dx04Requests; }"
+  ],
+  "started": "2026-11-07T08:24:11.858397+00:00",
+  "ended": "2026-11-07T08:24:16.189834+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait (async page => { return globalThis.dx04Requests; })(page);\n```\n",
+  "stderr": ""
+}

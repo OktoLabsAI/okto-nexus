@@ -1,0 +1,12 @@
+{
+  "name": "43-onboarding-open",
+  "args": [
+    "tab-new",
+    "http://127.0.0.1:65032"
+  ],
+  "started": "2026-11-07T08:27:39.542900+00:00",
+  "ended": "2026-11-07T08:27:43.996073+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n- 0: [Okto Nexus](http://127.0.0.1:52889/)\n- 1: (current) [Okto Nexus](http://127.0.0.1:65032/)\n### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:65032');\n```\n### Open tabs\n- 0: [Okto Nexus](http://127.0.0.1:52889/)\n- 1: (current) [Okto Nexus](http://127.0.0.1:65032/)\n### Page\n- Page URL: http://127.0.0.1:65032/\n- Page Title: Okto Nexus\n### Snapshot\n- [Snapshot](.playwright-cli\\page-2026-11-07T08-27-43-853Z.yml)\n",
+  "stderr": ""
+}

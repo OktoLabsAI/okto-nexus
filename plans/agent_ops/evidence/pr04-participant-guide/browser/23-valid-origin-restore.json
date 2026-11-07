@@ -1,0 +1,13 @@
+{
+  "name": "23-valid-origin-restore",
+  "args": [
+    "fill",
+    "e474",
+    "https://nexus.example.test:9443"
+  ],
+  "started": "2026-11-07T08:25:09.480862+00:00",
+  "ended": "2026-11-07T08:25:13.715721+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByRole('textbox', { name: 'Server origin reachable from' }).fill('https://nexus.example.test:9443');\n```\n",
+  "stderr": ""
+}

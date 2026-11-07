@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: current HTTPS origin retains host and non-default port, without inventing 8202
+ok 1 - current HTTPS origin retains host and non-default port, without inventing 8202
+  ---
+  duration_ms: 4.4476
+  type: 'test'
+  ...
+# Subtest: unsafe origins produce no command, including userinfo, query and remote plaintext
+ok 2 - unsafe origins produce no command, including userinfo, query and remote plaintext
+  ---
+  duration_ms: 1.5335
+  type: 'test'
+  ...
+# Subtest: origin review and loopback locality are explicit independent choices
+ok 3 - origin review and loopback locality are explicit independent choices
+  ---
+  duration_ms: 1.5594
+  type: 'test'
+  ...
+# Subtest: guidance carries no credential even when a legacy caller supplies an extra key property
+ok 4 - guidance carries no credential even when a legacy caller supplies an extra key property
+  ---
+  duration_ms: 2.2018
+  type: 'test'
+  ...
+# Subtest: commands use existing CLI entry points and retain the same profile for recovery
+ok 5 - commands use existing CLI entry points and retain the same profile for recovery
+  ---
+  duration_ms: 0.7999
+  type: 'test'
+  ...
+# Subtest: generic guidance makes no client launch or readiness claim
+ok 6 - generic guidance makes no client launch or readiness claim
+  ---
+  duration_ms: 11.4354
+  type: 'test'
+  ...
+# Subtest: shell quoting keeps punctuation in public IDs inside one argument
+ok 7 - shell quoting keeps punctuation in public IDs inside one argument
+  ---
+  duration_ms: 0.9374
+  type: 'test'
+  ...
+# Subtest: an existing identity opens guidance without key input, network or implicit setup
+ok 8 - an existing identity opens guidance without key input, network or implicit setup
+  ---
+  duration_ms: 17.0906
+  type: 'test'
+  ...
+# Subtest: onboarding requires explicit identity and workspace and labels unknown clients honestly
+ok 9 - onboarding requires explicit identity and workspace and labels unknown clients honestly
+  ---
+  duration_ms: 2.0507
+  type: 'test'
+  ...
+# Subtest: the guide separates one-shot delivery and proof levels from public commands
+ok 10 - the guide separates one-shot delivery and proof levels from public commands
+  ---
+  duration_ms: 1.629
+  type: 'test'
+  ...
+# Subtest: loopback requires same-computer confirmation and warns about plaintext
+ok 11 - loopback requires same-computer confirmation and warns about plaintext
+  ---
+  duration_ms: 2.3839
+  type: 'test'
+  ...
+# Subtest: untrusted identity text stays escaped
+ok 12 - untrusted identity text stays escaped
+  ---
+  duration_ms: 1.5621
+  type: 'test'
+  ...
+# Subtest: editing or clearing a display name preserves unrelated typed metadata
+ok 13 - editing or clearing a display name preserves unrelated typed metadata
+  ---
+  duration_ms: 6.2118
+  type: 'test'
+  ...
+# Subtest: legacy non-string display metadata survives an untouched edit
+ok 14 - legacy non-string display metadata survives an untouched edit
+  ---
+  duration_ms: 1.0654
+  type: 'test'
+  ...
+# Subtest: only a confirmed empty installation offers introduction, ignoring the reserved operator
+ok 15 - only a confirmed empty installation offers introduction, ignoring the reserved operator
+  ---
+  duration_ms: 0.5223
+  type: 'test'
+  ...
+# Subtest: existing identities and dismissed guidance never force setup again
+ok 16 - existing identities and dismissed guidance never force setup again
+  ---
+  duration_ms: 0.4072
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1650.3498

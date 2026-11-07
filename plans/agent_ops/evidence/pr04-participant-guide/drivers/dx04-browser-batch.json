@@ -1,0 +1,5 @@
+[
+ {"name":"01-start-request-monitor","args":["run-code","async page => { globalThis.dx04Requests = []; page.on('request', req => { const u = new URL(req.url()); globalThis.dx04Requests.push({method:req.method(),origin:u.origin,path:u.pathname}); }); console.log(JSON.stringify({monitor:'method/origin/path only; no headers, bodies, cookies or query'})); }"]},
+ {"name":"02-existing-all-workspaces","args":["click","e375"]},
+ {"name":"03-existing-all-snapshot","args":["snapshot"]}
+]

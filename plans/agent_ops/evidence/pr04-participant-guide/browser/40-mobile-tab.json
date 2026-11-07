@@ -1,0 +1,12 @@
+{
+  "name": "40-mobile-tab",
+  "args": [
+    "press",
+    "Tab"
+  ],
+  "started": "2026-11-07T08:27:25.737618+00:00",
+  "ended": "2026-11-07T08:27:29.870558+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\n// Press Tab\nawait page.keyboard.press('Tab');\n```\n",
+  "stderr": ""
+}

@@ -1,0 +1,335 @@
+{
+  "revision": 1,
+  "qualification": "Installed DX04 guide browser fixture package; browser results retained separately",
+  "package": {
+    "version": "0.3.3",
+    "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+    "core_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+    "exact_source_stage_wheel_installed": true,
+    "file_count": 690,
+    "dashboard_bundle": "adapters/inbound/http/static/assets/index-Baw-pvQn.js",
+    "dashboard_sha256": "15d170828f24b24417570aa0bf13852d7efe0c9efe45a9bd80d966ebcf4ece2b"
+  },
+  "exclusions": [
+    "No home tree, SQLite database/WAL, vault, wheel, venv, user credential, cookie or one-shot material copied."
+  ],
+  "redaction_rule": "\\b(?:nxs_|nxobs_|nxsept_|nxt4_|nxc4_)[A-Za-z0-9_-]{20,}\\b",
+  "redaction_count": 0,
+  "artifact_count": 30,
+  "artifacts": [
+    {
+      "path": "drivers/build_candidate.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\build_candidate.py",
+      "source_sha256": "3680ef68f975658e6b5204bd0f1cf3f51008dff9080f9c2fbd8e043483256258",
+      "artifact_sha256": "3680ef68f975658e6b5204bd0f1cf3f51008dff9080f9c2fbd8e043483256258",
+      "source_bytes": 3399,
+      "artifact_bytes": 3399,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "drivers/server_entry.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\server_entry.py",
+      "source_sha256": "76fb729d037168f962141e664f7ba2e2eebfd6e539d84eeb21672ca9d2da0663",
+      "artifact_sha256": "76fb729d037168f962141e664f7ba2e2eebfd6e539d84eeb21672ca9d2da0663",
+      "source_bytes": 3806,
+      "artifact_bytes": 3806,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "drivers/servers.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\servers.py",
+      "source_sha256": "44a9ee51e6a53bc0b8714609944d8df004b2d646dc997e96716545dafa9fd4a1",
+      "artifact_sha256": "44a9ee51e6a53bc0b8714609944d8df004b2d646dc997e96716545dafa9fd4a1",
+      "source_bytes": 9908,
+      "artifact_bytes": 9908,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "drivers/collect_installed.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\collect_installed.py",
+      "source_sha256": "e6ef1569e430a99fdcb0df9c6eeb30556a3887d60d9d7e792b72f0656a86d805",
+      "artifact_sha256": "e6ef1569e430a99fdcb0df9c6eeb30556a3887d60d9d7e792b72f0656a86d805",
+      "source_bytes": 8287,
+      "artifact_bytes": 8287,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "candidate-v1/build.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\build.log",
+      "source_sha256": "c261d0d96275fea167d4b59c248041ec8e18de0bd327f7f67a0a366604501cfb",
+      "artifact_sha256": "c261d0d96275fea167d4b59c248041ec8e18de0bd327f7f67a0a366604501cfb",
+      "source_bytes": 206609,
+      "artifact_bytes": 206609,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "candidate-v1/venv.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\venv.log",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_bytes": 0,
+      "artifact_bytes": 0,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "candidate-v1/install.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\install.log",
+      "source_sha256": "94afdad905f94e42f409e014fc67a62ad7607e17f3ebf1c1d868e2d93a3f71e5",
+      "artifact_sha256": "94afdad905f94e42f409e014fc67a62ad7607e17f3ebf1c1d868e2d93a3f71e5",
+      "source_bytes": 396,
+      "artifact_bytes": 396,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "candidate-v1/package-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\package-proof.json",
+      "source_sha256": "fca5c30255552a507e7a4c4e4e78f3db3c3e0b89f72f0b46ed9830d623ecbbfe",
+      "artifact_sha256": "fca5c30255552a507e7a4c4e4e78f3db3c3e0b89f72f0b46ed9830d623ecbbfe",
+      "source_bytes": 80209,
+      "artifact_bytes": 80209,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/table-comparison.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\collection\\onboarding-table-comparison.json",
+      "source_sha256": "447c675919397c65028e81e2ee14d25c46e9a4dc18f0421b6a7d4dda493747b5",
+      "artifact_sha256": "447c675919397c65028e81e2ee14d25c46e9a4dc18f0421b6a7d4dda493747b5",
+      "source_bytes": 24568,
+      "artifact_bytes": 24568,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/launch.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\launch.json",
+      "source_sha256": "4e3bced628d6906c478b15eba06de837f6a3eb003f700d0c8bca4ba15a874e01",
+      "artifact_sha256": "4e3bced628d6906c478b15eba06de837f6a3eb003f700d0c8bca4ba15a874e01",
+      "source_bytes": 864,
+      "artifact_bytes": 864,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/server.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\server.json",
+      "source_sha256": "cf9ce5436766b02f919ba0a94393ddde0da2534c9e6456f00d04a33a07f3a1a5",
+      "artifact_sha256": "cf9ce5436766b02f919ba0a94393ddde0da2534c9e6456f00d04a33a07f3a1a5",
+      "source_bytes": 1024,
+      "artifact_bytes": 1024,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/owner.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\owner.json",
+      "source_sha256": "3396de17b9c6d16dafb68141ed29984fa42f077d6ceb30cfd1c039d87da5f5c0",
+      "artifact_sha256": "3396de17b9c6d16dafb68141ed29984fa42f077d6ceb30cfd1c039d87da5f5c0",
+      "source_bytes": 454,
+      "artifact_bytes": 454,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/import-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\import-proof.json",
+      "source_sha256": "fd6f8090120dbe2de30337179e97d17028070700ed4e3c5ca4cb168af20be27f",
+      "artifact_sha256": "fd6f8090120dbe2de30337179e97d17028070700ed4e3c5ca4cb168af20be27f",
+      "source_bytes": 60278,
+      "artifact_bytes": 60278,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/static-http-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\static-http-proof.json",
+      "source_sha256": "cdbf11b3cb2de65df3c472b82266e2237db1e8cd3af86b2094cbdad1f033cde6",
+      "artifact_sha256": "cdbf11b3cb2de65df3c472b82266e2237db1e8cd3af86b2094cbdad1f033cde6",
+      "source_bytes": 259,
+      "artifact_bytes": 259,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/baseline.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\baseline.json",
+      "source_sha256": "6ab877b3aeed3bc7b9eda85093d4f8b743a26a93b15e0e8c0a11f8e192d5f4c9",
+      "artifact_sha256": "6ab877b3aeed3bc7b9eda85093d4f8b743a26a93b15e0e8c0a11f8e192d5f4c9",
+      "source_bytes": 5221,
+      "artifact_bytes": 5221,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/after-browser-snapshot.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\after-browser-snapshot.json",
+      "source_sha256": "6ab877b3aeed3bc7b9eda85093d4f8b743a26a93b15e0e8c0a11f8e192d5f4c9",
+      "artifact_sha256": "6ab877b3aeed3bc7b9eda85093d4f8b743a26a93b15e0e8c0a11f8e192d5f4c9",
+      "source_bytes": 5221,
+      "artifact_bytes": 5221,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/after-browser-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\after-browser-proof.json",
+      "source_sha256": "b9fe1884818b5c59e7f5f8bb2386083cd1bc15d102bc15247f57e35ed2eda372",
+      "artifact_sha256": "b9fe1884818b5c59e7f5f8bb2386083cd1bc15d102bc15247f57e35ed2eda372",
+      "source_bytes": 285,
+      "artifact_bytes": 285,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/shutdown.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\shutdown.json",
+      "source_sha256": "c55423102487da5a71db1632bda30b46499b9cebac8b5ff14c19e73e09b54369",
+      "artifact_sha256": "c55423102487da5a71db1632bda30b46499b9cebac8b5ff14c19e73e09b54369",
+      "source_bytes": 372,
+      "artifact_bytes": 372,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/onboarding/server.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\onboarding\\server.log",
+      "source_sha256": "587b1b484c09c0283289151b63d01e8a89e957a1a41f120bf89f5dd35f47d420",
+      "artifact_sha256": "587b1b484c09c0283289151b63d01e8a89e957a1a41f120bf89f5dd35f47d420",
+      "source_bytes": 288,
+      "artifact_bytes": 288,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/table-comparison.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\collection\\agents-table-comparison.json",
+      "source_sha256": "5d32034400ada1a67a6a1729275dc414a31f8d8387a2ef4e3a775a53647e5817",
+      "artifact_sha256": "5d32034400ada1a67a6a1729275dc414a31f8d8387a2ef4e3a775a53647e5817",
+      "source_bytes": 24564,
+      "artifact_bytes": 24564,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/launch.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\launch.json",
+      "source_sha256": "74312c338a61dfcd331e8ff0e04653ecba38893465abb8678778ff814201a0de",
+      "artifact_sha256": "74312c338a61dfcd331e8ff0e04653ecba38893465abb8678778ff814201a0de",
+      "source_bytes": 843,
+      "artifact_bytes": 843,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/server.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\server.json",
+      "source_sha256": "e99bbc117774baf93dfa122af73c2cf5980726aedc6efd1433650125262b85d2",
+      "artifact_sha256": "e99bbc117774baf93dfa122af73c2cf5980726aedc6efd1433650125262b85d2",
+      "source_bytes": 1003,
+      "artifact_bytes": 1003,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/owner.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\owner.json",
+      "source_sha256": "ae3d9fd82fab4cbc5f573307c283f80266c1c49168f483804072f23bf01a4616",
+      "artifact_sha256": "ae3d9fd82fab4cbc5f573307c283f80266c1c49168f483804072f23bf01a4616",
+      "source_bytes": 454,
+      "artifact_bytes": 454,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/import-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\import-proof.json",
+      "source_sha256": "6ad4ee83bf7389938a246e637ae4c97b0d978d350164b480955667434e3be57d",
+      "artifact_sha256": "6ad4ee83bf7389938a246e637ae4c97b0d978d350164b480955667434e3be57d",
+      "source_bytes": 60301,
+      "artifact_bytes": 60301,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/static-http-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\static-http-proof.json",
+      "source_sha256": "cdbf11b3cb2de65df3c472b82266e2237db1e8cd3af86b2094cbdad1f033cde6",
+      "artifact_sha256": "cdbf11b3cb2de65df3c472b82266e2237db1e8cd3af86b2094cbdad1f033cde6",
+      "source_bytes": 259,
+      "artifact_bytes": 259,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/baseline.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\baseline.json",
+      "source_sha256": "5bbecefca4fb3ed21cf8d16ac0ccfaaa94755a66de1dc42f104be0e9ed312612",
+      "artifact_sha256": "5bbecefca4fb3ed21cf8d16ac0ccfaaa94755a66de1dc42f104be0e9ed312612",
+      "source_bytes": 5217,
+      "artifact_bytes": 5217,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/after-browser-snapshot.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\after-browser-snapshot.json",
+      "source_sha256": "5bbecefca4fb3ed21cf8d16ac0ccfaaa94755a66de1dc42f104be0e9ed312612",
+      "artifact_sha256": "5bbecefca4fb3ed21cf8d16ac0ccfaaa94755a66de1dc42f104be0e9ed312612",
+      "source_bytes": 5217,
+      "artifact_bytes": 5217,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/after-browser-proof.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\after-browser-proof.json",
+      "source_sha256": "91cc94b4f51153800b04c3f9ee9efa3c9c35db9789a6d8c482ce70381e0ce353",
+      "artifact_sha256": "91cc94b4f51153800b04c3f9ee9efa3c9c35db9789a6d8c482ce70381e0ce353",
+      "source_bytes": 281,
+      "artifact_bytes": 281,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/shutdown.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\shutdown.json",
+      "source_sha256": "d1f648c8dd14c8f73f5805b23b30904ff1801ccc099f88114371416d6189bb8b",
+      "artifact_sha256": "d1f648c8dd14c8f73f5805b23b30904ff1801ccc099f88114371416d6189bb8b",
+      "source_bytes": 372,
+      "artifact_bytes": 372,
+      "redactions": 0,
+      "byte_exact": true
+    },
+    {
+      "path": "servers/agents/server.log",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\server.log",
+      "source_sha256": "9e99b02a1b165968833e281c7f2c9dc75073df993d1fc6d7f48fb02a1d5e48b4",
+      "artifact_sha256": "9e99b02a1b165968833e281c7f2c9dc75073df993d1fc6d7f48fb02a1d5e48b4",
+      "source_bytes": 288,
+      "artifact_bytes": 288,
+      "redactions": 0,
+      "byte_exact": true
+    }
+  ],
+  "aggregate_sha256": "b1ea691b401fadedb854fd1768d32257c2fac1a6f9fb4ab389bb3e676719a706",
+  "comparisons": {
+    "onboarding": {
+      "canonical_unchanged": true,
+      "checked_comparisons": 34,
+      "raw_agent_unchanged": true
+    },
+    "agents": {
+      "canonical_unchanged": true,
+      "checked_comparisons": 34,
+      "raw_agent_unchanged": true
+    }
+  },
+  "canonical_shutdown": "DRAINED plus own interpreter exit for both scenarios"
+}

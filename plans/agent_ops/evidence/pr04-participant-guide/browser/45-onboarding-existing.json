@@ -1,0 +1,12 @@
+{
+  "name": "45-onboarding-existing",
+  "args": [
+    "click",
+    "e183"
+  ],
+  "started": "2026-11-07T08:28:00.603946+00:00",
+  "ended": "2026-11-07T08:28:05.357044+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Use my existing client' }).click();\n```\n### Open tabs\n- 0: [Okto Nexus](http://127.0.0.1:52889/)\n- 1: (current) [Okto Nexus](http://127.0.0.1:65032/)\n### Page\n- Page URL: http://127.0.0.1:65032/\n- Page Title: Okto Nexus\n### Snapshot\n- [Snapshot](.playwright-cli\\page-2026-11-07T08-28-05-260Z.yml)\n",
+  "stderr": ""
+}

@@ -1,0 +1,12 @@
+{
+  "name": "08-public-command-assert",
+  "args": [
+    "eval",
+    "() => ({commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),readonlyAgent:document.querySelector('[data-testid=participant-guide] input')?.readOnly,viewport:innerWidth,body:document.documentElement.scrollWidth,dialog:document.querySelector('[role=dialog]').getBoundingClientRect().toJSON()})"
+  ],
+  "started": "2026-11-07T08:23:23.078143+00:00",
+  "ended": "2026-11-07T08:23:27.864763+00:00",
+  "exit_code": 1,
+  "stdout": "### Error\nTypeError: Cannot read properties of null (reading 'getBoundingClientRect')\n    at eval (eval at <anonymous> (eval at evaluate (:370:30)), <anonymous>:1:307)\n    at eval (eval at evaluate (:370:30), <anonymous>:4:50)\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n",
+  "stderr": ""
+}

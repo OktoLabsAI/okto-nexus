@@ -1,0 +1,13 @@
+{
+  "name": "37-mobile-screenshot",
+  "args": [
+    "screenshot",
+    "--filename",
+    "output/playwright/dx04-participant-guide/mobile-existing.png"
+  ],
+  "started": "2026-11-07T08:26:54.972402+00:00",
+  "ended": "2026-11-07T08:26:59.352263+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n- [Screenshot of viewport](output\\playwright\\dx04-participant-guide\\mobile-existing.png)\n### Ran Playwright code\n```js\n// Screenshot viewport and save it as output\\playwright\\dx04-participant-guide\\mobile-existing.png\nawait page.screenshot({\n  path: 'output\\\\playwright\\\\dx04-participant-guide\\\\mobile-existing.png',\n  scale: 'css',\n  type: 'png'\n});\n```\n",
+  "stderr": ""
+}

@@ -1,0 +1,13 @@
+{
+  "name": "24-generic",
+  "args": [
+    "select",
+    "e472",
+    "generic"
+  ],
+  "started": "2026-11-07T08:25:13.716838+00:00",
+  "ended": "2026-11-07T08:25:18.028526+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByLabel('ClientClaude CodeCodexOther').selectOption('generic');\n```\n### Page\n- Page URL: http://127.0.0.1:52889/\n- Page Title: Okto Nexus\n### Snapshot\n- [Snapshot](.playwright-cli\\page-2026-11-07T08-25-17-899Z.yml)\n",
+  "stderr": ""
+}

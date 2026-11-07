@@ -1,0 +1,13 @@
+{
+  "name": "34-mobile-resize",
+  "args": [
+    "resize",
+    "390",
+    "844"
+  ],
+  "started": "2026-11-07T08:26:40.542862+00:00",
+  "ended": "2026-11-07T08:26:44.451757+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.setViewportSize({ width: 390, height: 844 });\n```\n",
+  "stderr": ""
+}

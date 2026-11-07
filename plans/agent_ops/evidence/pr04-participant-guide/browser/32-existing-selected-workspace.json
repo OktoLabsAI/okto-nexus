@@ -1,0 +1,12 @@
+{
+  "name": "32-existing-selected-workspace",
+  "args": [
+    "click",
+    "e375"
+  ],
+  "started": "2026-11-07T08:26:29.464074+00:00",
+  "ended": "2026-11-07T08:26:35.117260+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByTestId('participant-guide-dx04-agent-alpha').click();\n```\n### Page\n- Page URL: http://127.0.0.1:52889/\n- Page Title: Okto Nexus\n### Snapshot\n- [Snapshot](.playwright-cli\\page-2026-11-07T08-26-34-978Z.yml)\n",
+  "stderr": ""
+}

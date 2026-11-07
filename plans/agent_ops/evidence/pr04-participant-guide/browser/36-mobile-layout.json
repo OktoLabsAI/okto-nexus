@@ -1,0 +1,12 @@
+{
+  "name": "36-mobile-layout",
+  "args": [
+    "eval",
+    "() => ({viewport:innerWidth,body:document.documentElement.scrollWidth,dialog:document.querySelector('dialog').getBoundingClientRect().toJSON(),overflows:[...document.querySelectorAll('[data-testid=participant-guide] pre, [data-testid=participant-guide] input, [data-testid=participant-guide] select')].map(e=>({tag:e.tagName,width:e.clientWidth,scroll:e.scrollWidth}))})"
+  ],
+  "started": "2026-11-07T08:26:49.083426+00:00",
+  "ended": "2026-11-07T08:26:54.964352+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"viewport\": 390,\n  \"body\": 390,\n  \"dialog\": {\n    \"x\": 0,\n    \"y\": 0,\n    \"width\": 390,\n    \"height\": 844,\n    \"top\": 0,\n    \"right\": 390,\n    \"bottom\": 844,\n    \"left\": 0\n  },\n  \"overflows\": [\n    {\n      \"tag\": \"INPUT\",\n      \"width\": 349,\n      \"scroll\": 349\n    },\n    {\n      \"tag\": \"INPUT\",\n      \"width\": 349,\n      \"scroll\": 349\n    },\n    {\n      \"tag\": \"INPUT\",\n      \"width\": 349,\n      \"scroll\": 349\n    },\n    {\n      \"tag\": \"SELECT\",\n      \"width\": 349,\n      \"scroll\": 349\n    },\n    {\n      \"tag\": \"INPUT\",\n      \"width\": 349,\n      \"scroll\": 349\n    },\n    {\n      \"tag\": \"SELECT\",\n      \"width\": 349,\n      \"scroll\": 349\n    },\n    {\n      \"tag\": \"PRE\",\n      \"width\": 351,\n      \"scroll\": 351\n    },\n    {\n      \"tag\": \"PRE\",\n      \"width\": 351,\n      \"scroll\": 351\n    },\n    {\n      \"tag\": \"PRE\",\n      \"width\": 351,\n      \"scroll\": 351\n    },\n    {\n      \"tag\": \"PRE\",\n      \"width\": 351,\n      \"scroll\": 351\n    },\n    {\n      \"tag\": \"PRE\",\n      \"width\": 351,\n      \"scroll\": 351\n    },\n    {\n      \"tag\": \"PRE\",\n      \"width\": 351,\n      \"scroll\": 351\n    }\n  ]\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({viewport:innerWidth,body:document.documentElement.scrollWidth,dialog:document.querySelector(\\'dialog\\').getBoundingClientRect().toJSON(),overflows:[...document.querySelectorAll(\\'[data-testid=participant-guide] pre, [data-testid=participant-guide] input, [data-testid=participant-guide] select\\')].map(e=>({tag:e.tagName,width:e.clientWidth,scroll:e.scrollWidth}))})');\n```\n",
+  "stderr": ""
+}

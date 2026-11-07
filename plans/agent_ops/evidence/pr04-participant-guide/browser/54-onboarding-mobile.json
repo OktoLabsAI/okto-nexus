@@ -1,0 +1,13 @@
+{
+  "name": "54-onboarding-mobile",
+  "args": [
+    "resize",
+    "390",
+    "844"
+  ],
+  "started": "2026-11-07T08:29:08.307748+00:00",
+  "ended": "2026-11-07T08:29:12.234963+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.setViewportSize({ width: 390, height: 844 });\n```\n",
+  "stderr": ""
+}

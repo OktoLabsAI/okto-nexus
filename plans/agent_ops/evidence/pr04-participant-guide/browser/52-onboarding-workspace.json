@@ -1,0 +1,13 @@
+{
+  "name": "52-onboarding-workspace",
+  "args": [
+    "fill",
+    "e241",
+    "external-workspace"
+  ],
+  "started": "2026-11-07T08:28:59.936147+00:00",
+  "ended": "2026-11-07T08:29:04.094061+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByRole('textbox', { name: 'Existing workspace ID' }).fill('external-workspace');\n```\n",
+  "stderr": ""
+}

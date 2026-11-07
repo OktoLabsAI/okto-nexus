@@ -1,0 +1,8 @@
+[
+ {"name":"04-all-empty-assert","args":["eval","() => ({workspace:document.querySelector('[data-testid=participant-guide] input:nth-of-type(1)')?.value,commands:document.querySelectorAll('[data-testid=participant-guide] pre').length,focus:document.activeElement?.getAttribute('aria-label'),dialog:document.activeElement?.closest('[role=dialog]')!==null,checkboxes:document.querySelectorAll('[data-testid=participant-guide] input[type=checkbox]').length})"]},
+ {"name":"05-fill-workspace","args":["fill","e468","dx04-workspace-alpha"]},
+ {"name":"06-claude-snapshot","args":["snapshot"]},
+ {"name":"07-desktop-screenshot","args":["screenshot","--filename","output/playwright/dx04-participant-guide/desktop-claude.png"]},
+ {"name":"08-public-command-assert","args":["eval","() => ({commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),readonlyAgent:document.querySelector('[data-testid=participant-guide] input')?.readOnly,viewport:innerWidth,body:document.documentElement.scrollWidth,dialog:document.querySelector('[role=dialog]').getBoundingClientRect().toJSON()})"]},
+ {"name":"09-request-monitor-read","args":["run-code","async page => { return globalThis.dx04Requests; }"]}
+]

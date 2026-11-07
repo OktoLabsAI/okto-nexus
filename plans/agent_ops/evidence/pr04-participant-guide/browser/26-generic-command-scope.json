@@ -1,0 +1,12 @@
+{
+  "name": "26-generic-command-scope",
+  "args": [
+    "eval",
+    "() => ({commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),checkboxes:document.querySelectorAll('[data-testid=participant-guide] input[type=checkbox]').length})"
+  ],
+  "started": "2026-11-07T08:25:35.424963+00:00",
+  "ended": "2026-11-07T08:25:45.061902+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"commands\": [\n    \"okto-nexus init --mode participant --profile='participant' --server='https://nexus.example.test:9443' --agent='dx04-agent-alpha' --workspace-id='dx04-workspace-alpha' --client=generic --project . --plan\",\n    \"okto-nexus init --mode participant --profile='participant' --approve=REVIEW_REVISION\",\n    \"okto-nexus doctor --mode participant --profile='participant'\",\n    \"okto-nexus doctor --mode participant --profile='participant' --check-server --check-mcp\"\n  ],\n  \"checkboxes\": 0\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({commands:[...document.querySelectorAll(\\'[data-testid=participant-guide] pre\\')].map(e=>e.textContent),checkboxes:document.querySelectorAll(\\'[data-testid=participant-guide] input[type=checkbox]\\').length})');\n```\n",
+  "stderr": ""
+}

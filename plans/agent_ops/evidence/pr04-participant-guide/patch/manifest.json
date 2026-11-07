@@ -1,0 +1,305 @@
+{
+  "base_head": "e607d01291642191082691a0a89a54226a9c947a",
+  "repository": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "applied": false,
+  "applied_to_checkout": false,
+  "tests_executed": true,
+  "build_executed": true,
+  "browser_executed": false,
+  "validation": {
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h",
+    "tests": {
+      "focused_initial": 16,
+      "full_initial": 138,
+      "full_final": 138,
+      "full_ux_final": 138,
+      "failures": 0,
+      "skipped": 0
+    },
+    "typecheck": "passed via npm run build",
+    "build": "passed",
+    "browser": "NOT_RUN",
+    "native_client": "NOT_RUN",
+    "executions": [
+      {
+        "label": "focused-initial",
+        "command": [
+          "rtk",
+          "proxy",
+          "node",
+          "--test",
+          "--test-reporter=tap",
+          "tests/mcpSnippet.test.mjs",
+          "tests/participantGuide.test.mjs",
+          "tests/projectIdentity.test.mjs"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+        "started_at": "2026-11-07T07:57:59.050688+00:00",
+        "ended_at": "2026-11-07T07:58:01.003013+00:00",
+        "elapsed_seconds": 1.952325800084509,
+        "exit_code": 0,
+        "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\focused-initial.log",
+        "log_sha256": "add586ebd78f9fb0dbfd4a73b7e47040684cb9072f1c3c9867e6a8fafec00c3f"
+      },
+      {
+        "label": "suite-initial",
+        "command": [
+          "rtk",
+          "proxy",
+          "npm",
+          "test"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+        "started_at": "2026-11-07T07:58:53.186934+00:00",
+        "ended_at": "2026-11-07T07:59:00.973137+00:00",
+        "elapsed_seconds": 7.786200699978508,
+        "exit_code": 0,
+        "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\suite-initial.log",
+        "log_sha256": "d926d9d8d2e24c34030482f53634830d2ce964619817cb971a8186d13f1472d0"
+      },
+      {
+        "label": "build-initial",
+        "command": [
+          "rtk",
+          "proxy",
+          "npm",
+          "run",
+          "build"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+        "started_at": "2026-11-07T07:58:28.397195+00:00",
+        "ended_at": "2026-11-07T07:59:20.955880+00:00",
+        "elapsed_seconds": 52.55868220003322,
+        "exit_code": 0,
+        "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\build-initial.log",
+        "log_sha256": "1fd189d445b4fb9a2f7c04eff996d85fe86e9ceca358384ccfd2d4603d9cf147"
+      },
+      {
+        "label": "suite-final",
+        "command": [
+          "rtk",
+          "proxy",
+          "npm",
+          "test"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+        "started_at": "2026-11-07T07:59:59.757825+00:00",
+        "ended_at": "2026-11-07T08:00:09.883482+00:00",
+        "elapsed_seconds": 10.125655899988487,
+        "exit_code": 0,
+        "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\suite-final.log",
+        "log_sha256": "c2bd720a6e9c35e503e6cca11c839eb07bbb7c938519c65306d7009c9f453694"
+      },
+      {
+        "label": "build-final",
+        "command": [
+          "rtk",
+          "proxy",
+          "npm",
+          "run",
+          "build"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+        "started_at": "2026-11-07T07:59:59.724042+00:00",
+        "ended_at": "2026-11-07T08:00:49.470479+00:00",
+        "elapsed_seconds": 49.74643299996387,
+        "exit_code": 0,
+        "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\build-final.log",
+        "log_sha256": "d28bb21f07cb4ed770adc4f547a2b52c1c3391faf3f6314d8c508e1b0d0f3db7"
+      },
+      {
+        "label": "suite-ux-final",
+        "command": [
+          "rtk",
+          "proxy",
+          "npm",
+          "test"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+        "started_at": "2026-11-07T08:04:41.103147+00:00",
+        "ended_at": "2026-11-07T08:04:49.324517+00:00",
+        "elapsed_seconds": 8.22136640001554,
+        "exit_code": 0,
+        "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\suite-ux-final.log",
+        "log_sha256": "881d5137281424cf9f8e9dc899642cd7077c1e21b5fb0a7f665cd7566afecfc1"
+      },
+      {
+        "label": "build-ux-final",
+        "command": [
+          "rtk",
+          "proxy",
+          "npm",
+          "run",
+          "build"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+        "started_at": "2026-11-07T08:04:41.131648+00:00",
+        "ended_at": "2026-11-07T08:05:22.731110+00:00",
+        "elapsed_seconds": 41.59945510001853,
+        "exit_code": 0,
+        "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\build-ux-final.log",
+        "log_sha256": "6362858c96287158228004330bf22e4108f825730f041eb0649c457dd9389096"
+      }
+    ],
+    "candidate_matches_validated_files": [
+      {
+        "path": "docs/terminal-participant.md",
+        "matches": true,
+        "sha256": "d67266ac78c0e76b279889ad8b1ae94d0feb3267923d0bcbe850472858a74377"
+      },
+      {
+        "path": "frontend/src/api.ts",
+        "matches": true,
+        "sha256": "4f1d3c3e3bde69e8b185b264a9570129ef1a3f60fdf6be42a2b94222417e2942"
+      },
+      {
+        "path": "frontend/src/participantGuide.ts",
+        "matches": true,
+        "sha256": "1dccd57fac3d5db0139569e63e3acc019dd4d2f0506c63f50205f9311c27c394"
+      },
+      {
+        "path": "frontend/tests/mcpSnippet.test.mjs",
+        "matches": true,
+        "sha256": "0d6820e37c83e54797032c87cee5749598ffa92e5044791cf2615c1dad3c7b0a"
+      },
+      {
+        "path": "frontend/tests/participantGuide.test.mjs",
+        "matches": true,
+        "sha256": "607cf467a358474e20bf40d736bb7556f955df184bbfeec82eb37e01ec987c27"
+      },
+      {
+        "path": "frontend/src/components/ParticipantGuide.tsx",
+        "matches": true,
+        "sha256": "f112e2b663dc4204fb1d612a8526dd5bdc5dfce61f51fc6b78b046ef5971f4a1"
+      },
+      {
+        "path": "frontend/src/views/AgentsView.tsx",
+        "matches": true,
+        "sha256": "acc3903c15f60453cd4ff707ef9e3cfc8bc16ec4cd73b244bda6e121a0f46b4a"
+      },
+      {
+        "path": "frontend/src/components/onboarding/OnboardingModal.tsx",
+        "matches": true,
+        "sha256": "1ebbd6ef6d04d346c73782cb447338f3afbdec19325b66a0be874c98b5277ce3"
+      }
+    ],
+    "static_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\src\\okto_nexus\\adapters\\inbound\\http\\static",
+    "static_assets": [
+      {
+        "path": "assets/index-CbeM8Lpf.css",
+        "bytes": 108957,
+        "sha256": "9f5b8fbcf626c24f37c71786209e5931a2ca717f7337b819898fd572b7b8f208"
+      },
+      {
+        "path": "assets/index-XXUaFoE9.js",
+        "bytes": 1340363,
+        "sha256": "9da561ac942f121f50d5232540bdaa8d82cc2e8890e32b5b06ae46e731684633"
+      },
+      {
+        "path": "index.html",
+        "bytes": 472,
+        "sha256": "7d051a5df1bb92eb8d8d2ba1eb31c80a1903ca51d77f9fb54d64d759b7dc7796"
+      },
+      {
+        "path": "logos/nexus-icon.svg",
+        "bytes": 1279,
+        "sha256": "a9072ef70eabcb370a5f6f148ba26b2f0371509ddcbce9a99c4f1d755103f24c"
+      },
+      {
+        "path": "logos/nexus-wordmark-dark.svg",
+        "bytes": 1675,
+        "sha256": "9f885f9d90045692809824a2387abaf1d01350543644dfbf7ce2caf773454b3d"
+      },
+      {
+        "path": "logos/nexus-wordmark-light.svg",
+        "bytes": 1714,
+        "sha256": "3c69be500b89bf7a843af0c5d29950e9d2ca6c2890d4f9c9e76e304a6b758736"
+      },
+      {
+        "path": "logos/oktolabs-icon.svg",
+        "bytes": 41677,
+        "sha256": "43604e942f117fc6c6f02ca3063af5bccf8d59b90095eab1cbf7149ba60fe820"
+      }
+    ],
+    "static_asset_count": 7
+  },
+  "patch": "participant-guide.patch",
+  "patch_sha256": "c532f376331e2201bbccd09a384ccd45c3174b52198008a900a427a1c7fa82b2",
+  "patch_bytes": 35863,
+  "files": [
+    {
+      "path": "docs/terminal-participant.md",
+      "new_file": false,
+      "base_sha256": "6f5196a5dfe1786a1fc450cb9f8bfaee8612cf6eb08f8287ce0d365363c8424f",
+      "candidate_sha256": "d67266ac78c0e76b279889ad8b1ae94d0feb3267923d0bcbe850472858a74377",
+      "checkout_matches_read_base": true,
+      "added_lines": 29,
+      "removed_lines": 0
+    },
+    {
+      "path": "frontend/src/api.ts",
+      "new_file": false,
+      "base_sha256": "2fd72b0bb28e02d0294ecd5fa51c4bb5a74a8c0cd4e19606783835a4213d88df",
+      "candidate_sha256": "4f1d3c3e3bde69e8b185b264a9570129ef1a3f60fdf6be42a2b94222417e2942",
+      "checkout_matches_read_base": true,
+      "added_lines": 0,
+      "removed_lines": 35
+    },
+    {
+      "path": "frontend/src/components/ParticipantGuide.tsx",
+      "new_file": true,
+      "base_sha256": null,
+      "candidate_sha256": "f112e2b663dc4204fb1d612a8526dd5bdc5dfce61f51fc6b78b046ef5971f4a1",
+      "checkout_matches_read_base": true,
+      "added_lines": 67,
+      "removed_lines": 0
+    },
+    {
+      "path": "frontend/src/components/onboarding/OnboardingModal.tsx",
+      "new_file": false,
+      "base_sha256": "5d040beb582d0e0ad844b0bf0d2920611bf9a02a83fd449cdb798304efd138ef",
+      "candidate_sha256": "1ebbd6ef6d04d346c73782cb447338f3afbdec19325b66a0be874c98b5277ce3",
+      "checkout_matches_read_base": true,
+      "added_lines": 2,
+      "removed_lines": 8
+    },
+    {
+      "path": "frontend/src/participantGuide.ts",
+      "new_file": true,
+      "base_sha256": null,
+      "candidate_sha256": "1dccd57fac3d5db0139569e63e3acc019dd4d2f0506c63f50205f9311c27c394",
+      "checkout_matches_read_base": true,
+      "added_lines": 74,
+      "removed_lines": 0
+    },
+    {
+      "path": "frontend/src/views/AgentsView.tsx",
+      "new_file": false,
+      "base_sha256": "0650099da5dcf015418b20cbcfc97e145cc58a51e030664f9388a4fec1f18a03",
+      "candidate_sha256": "acc3903c15f60453cd4ff707ef9e3cfc8bc16ec4cd73b244bda6e121a0f46b4a",
+      "checkout_matches_read_base": true,
+      "added_lines": 18,
+      "removed_lines": 54
+    },
+    {
+      "path": "frontend/tests/mcpSnippet.test.mjs",
+      "new_file": false,
+      "base_sha256": "db63abaaed1a85f88e5b5d505ef5137c79dfa9c0d8ef2c30a86d7ac115ccc456",
+      "candidate_sha256": "0d6820e37c83e54797032c87cee5749598ffa92e5044791cf2615c1dad3c7b0a",
+      "checkout_matches_read_base": true,
+      "added_lines": 70,
+      "removed_lines": 19
+    },
+    {
+      "path": "frontend/tests/participantGuide.test.mjs",
+      "new_file": true,
+      "base_sha256": null,
+      "candidate_sha256": "607cf467a358474e20bf40d736bb7556f955df184bbfeec82eb37e01ec987c27",
+      "checkout_matches_read_base": true,
+      "added_lines": 77,
+      "removed_lines": 0
+    }
+  ],
+  "proposed_test_definitions": 12,
+  "all_checkout_targets_match_read_base": true
+}

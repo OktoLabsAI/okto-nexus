@@ -1,0 +1,12 @@
+{
+  "name": "41-mobile-focus",
+  "args": [
+    "eval",
+    "() => ({focusInside:!!document.activeElement?.closest('dialog'),label:document.activeElement?.getAttribute('aria-label')})"
+  ],
+  "started": "2026-11-07T08:27:29.871742+00:00",
+  "ended": "2026-11-07T08:27:35.059261+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"focusInside\": true,\n  \"label\": \"Close modal\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({focusInside:!!document.activeElement?.closest(\\'dialog\\'),label:document.activeElement?.getAttribute(\\'aria-label\\')})');\n```\n",
+  "stderr": ""
+}

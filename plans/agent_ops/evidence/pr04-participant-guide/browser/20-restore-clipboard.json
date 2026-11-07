@@ -1,0 +1,12 @@
+{
+  "name": "20-restore-clipboard",
+  "args": [
+    "eval",
+    "() => { navigator.clipboard.writeText = window.dx04ClipboardOriginal; delete window.dx04ClipboardOriginal; return {restored:true}; }"
+  ],
+  "started": "2026-11-07T08:24:55.528485+00:00",
+  "ended": "2026-11-07T08:25:00.331272+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"restored\": true\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => { navigator.clipboard.writeText = window.dx04ClipboardOriginal; delete window.dx04ClipboardOriginal; return {restored:true}; }');\n```\n",
+  "stderr": ""
+}

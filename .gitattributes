@@ -23,3 +23,5 @@ tests/fixtures/diagnostics_v1/** -text -whitespace
 # Remote bootstrap reports retain exact original qualification bytes.
 plans/agent_ops/evidence/pr03-remote-bootstrap/** -text -whitespace
 plans/agent_ops/evidence/pr03-remote-renewal/** -text -whitespace
+# Public participant-guide evidence retains original artifact bytes.
+plans/agent_ops/evidence/pr04-participant-guide/** -text -whitespace

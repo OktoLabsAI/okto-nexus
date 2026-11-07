@@ -529,3 +529,11 @@ Pacote Nexus final: remoção apenas de duas quebras vazias no EOF, com AST equi
 Quatro cenários conjuntos qualificaram renovação por esgotamento/expiração, resposta perdida, rotação explícita, reconexão concluída e revogação com HTTP/WebSocket, IPC TCP e DaemonApp reais. O harness/provedor é sintético. Bootstrap e Finish históricos permanecem imutáveis; setup pendente mantém o epoch original. Emissão pendente conserva incerteza durante falha de acesso, enquanto falha de leitura de recibo confirmado não reabre a emissão.
 
 Pacotes instalados: **Nexus 66/66 e Connector 233/233**, sem somar retestes. Core inalterado. Connector commit/push `fb3fff473ff246adcffa9e91573ac85f7a394170`. Plano e inventário fixos preservados; M1/M2 produtivos, serviços/cofres nativos, TLS/dois hosts e R3 integral permanecem abertos. [Evidências e limites](plans/agent_ops/evidence/pr03-remote-renewal.md).
+
+## 2026-11-07 — Guia público de participante no dashboard
+
+Onboarding e agente existente agora compartilham comandos públicos de review/apply/launch/doctor, com origem e workspace explícitos. Snippets que embutiam a chave foram removidos; a entrega one-shot permanece separada. Copiar o guia não cria identidade, gira credencial ou altera runtime.
+
+Passaram 138 testes de frontend e typecheck/build; 22 checkpoints no navegador usaram o wheel instalado com 690 arquivos conferidos. Nos dois Servers, as 34 comparações de estado permaneceram iguais, inclusive hashes brutos de agentes. As requisições capturadas foram GET; console sem erros/avisos. Layout de 390 px, tema escuro, clipboard, foco e onboarding vazio foram conferidos. Browser encerrado e ambos Servers DRAINED com PIDs finalizados.
+
+Somente subescopos de DX-03/04/05/12 e DX-T01/03/09/11/35 foram verificados. Os status globais e DX-02 cofre real→cliente permanecem iguais; M1/M2/R3 seguem abertos. Connector/Core sem alterações. [Evidências e limites](plans/agent_ops/evidence/pr04-participant-guide/milestone.md).

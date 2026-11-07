@@ -1,0 +1,10 @@
+[
+ {"name":"32-existing-selected-workspace","args":["click","e375"]},
+ {"name":"33-selected-workspace-prefill","args":["eval","() => ({inputs:[...document.querySelectorAll('[data-testid=participant-guide] input')].map(e=>({value:e.value,readOnly:e.readOnly})),commands:document.querySelectorAll('[data-testid=participant-guide] pre').length})"]},
+ {"name":"34-mobile-resize","args":["resize","390","844"]},
+ {"name":"35-mobile-snapshot","args":["snapshot"]},
+ {"name":"36-mobile-layout","args":["eval","() => ({viewport:innerWidth,body:document.documentElement.scrollWidth,dialog:document.querySelector('dialog').getBoundingClientRect().toJSON(),overflows:[...document.querySelectorAll('[data-testid=participant-guide] pre, [data-testid=participant-guide] input, [data-testid=participant-guide] select')].map(e=>({tag:e.tagName,width:e.clientWidth,scroll:e.scrollWidth}))})"]},
+ {"name":"37-mobile-screenshot","args":["screenshot","--filename","output/playwright/dx04-participant-guide/mobile-existing.png"]},
+ {"name":"38-existing-requests","args":["requests","--all"]},
+ {"name":"39-existing-console","args":["console","warning"]}
+]

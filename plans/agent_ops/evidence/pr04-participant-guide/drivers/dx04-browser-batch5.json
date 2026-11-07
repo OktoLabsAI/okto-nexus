@@ -1,0 +1,8 @@
+[
+ {"name":"26-generic-command-scope","args":["eval","() => ({commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),checkboxes:document.querySelectorAll('[data-testid=participant-guide] input[type=checkbox]').length})"]},
+ {"name":"27-close-escape","args":["press","Escape"]},
+ {"name":"28-focus-restored","args":["eval","() => ({dialogs:document.querySelectorAll('dialog[open]').length,focusLabel:document.activeElement?.getAttribute('aria-label'),focusTestId:document.activeElement?.getAttribute('data-testid')})"]},
+ {"name":"29-after-close-snapshot","args":["snapshot"]},
+ {"name":"30-select-workspace","args":["select","e12","dx04-workspace-alpha"]},
+ {"name":"31-workspace-snapshot","args":["snapshot"]}
+]

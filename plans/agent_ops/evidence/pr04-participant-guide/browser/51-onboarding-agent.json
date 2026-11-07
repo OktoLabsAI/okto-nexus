@@ -1,0 +1,13 @@
+{
+  "name": "51-onboarding-agent",
+  "args": [
+    "fill",
+    "e239",
+    "external-agent"
+  ],
+  "started": "2026-11-07T08:28:55.826364+00:00",
+  "ended": "2026-11-07T08:28:59.935053+00:00",
+  "exit_code": 0,
+  "stdout": "### Ran Playwright code\n```js\nawait page.getByRole('textbox', { name: 'Existing agent ID' }).fill('external-agent');\n```\n",
+  "stderr": ""
+}

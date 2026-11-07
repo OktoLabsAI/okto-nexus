@@ -1,0 +1,12 @@
+{
+  "name": "28-focus-restored",
+  "args": [
+    "eval",
+    "() => ({dialogs:document.querySelectorAll('dialog[open]').length,focusLabel:document.activeElement?.getAttribute('aria-label'),focusTestId:document.activeElement?.getAttribute('data-testid')})"
+  ],
+  "started": "2026-11-07T08:25:51.614059+00:00",
+  "ended": "2026-11-07T08:25:57.332850+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"dialogs\": 0,\n  \"focusLabel\": \"Existing client for dx04-agent-alpha\",\n  \"focusTestId\": \"participant-guide-dx04-agent-alpha\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({dialogs:document.querySelectorAll(\\'dialog[open]\\').length,focusLabel:document.activeElement?.getAttribute(\\'aria-label\\'),focusTestId:document.activeElement?.getAttribute(\\'data-testid\\')})');\n```\n",
+  "stderr": ""
+}

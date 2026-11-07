@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "status": "VERIFIED_DECLARED_WINDOWS_DASHBOARD_SCOPE",
+  "milestone": "PR-04",
+  "subject": "Dashboard participant public guidance",
+  "platform": "Windows; installed Nexus wheel, real loopback HTTP and Chromium through Playwright CLI",
+  "plan": {
+    "revision": "R3",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+  },
+  "patch_sha256": "c532f376331e2201bbccd09a384ccd45c3174b52198008a900a427a1c7fa82b2",
+  "frontend": {
+    "status": "VERIFIED_CODE_AND_RENDER_CONTRACT",
+    "isolated_tests": 138,
+    "root_checkout_tests": 138,
+    "unique_suite_size": 138,
+    "failures": 0,
+    "skipped": 0,
+    "new_or_replaced_guide_cases": 12,
+    "new_net_cases_vs_base": 8,
+    "typecheck": "PASS",
+    "build": "PASS",
+    "evidence": [
+      "frontend/suite-ux-final.log",
+      "frontend/suite-ux-final.json",
+      "frontend/build-ux-final.log",
+      "frontend/build-ux-final.json",
+      "patch/manifest.json",
+      "patch/validation.json",
+      "root-validation.json"
+    ]
+  },
+  "installed_package": {
+    "status": "VERIFIED",
+    "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+    "core_wheel_sha256": "5721e462add21d65380f070a68db07a653a498a78d4be9ea0cf949909d3cfecb",
+    "file_count": 690,
+    "source_stage_wheel_install_match": true,
+    "canonical_bundle": "assets/index-Baw-pvQn.js",
+    "canonical_bundle_sha256": "15d170828f24b24417570aa0bf13852d7efe0c9efe45a9bd80d966ebcf4ece2b",
+    "evidence": [
+      "installed/candidate-v1/package-proof.json",
+      "installed/servers/agents/static-http-proof.json",
+      "installed/servers/onboarding/static-http-proof.json"
+    ]
+  },
+  "installed_browser": {
+    "status": "VERIFIED_DECLARED_SCOPE",
+    "reports": "browser/browser-report.json",
+    "checkpoints": 22,
+    "command_records": 59,
+    "command_exit_failures": {
+      "08-public-command-assert": 1
+    },
+    "failure_classification": "QA selector assumed explicit role=dialog; corrected to native dialog; retained attempts and misleading fields explained in browser-report.",
+    "identity_runtime_preservation": "34 comparisons per Server fixture, all unchanged including raw agents; 33 tables plus separate credential projection",
+    "empty_server": {
+      "agents": 1,
+      "workspaces": 0
+    },
+    "seeded_server": {
+      "agents": 3,
+      "workspaces": 2
+    },
+    "network": {
+      "agents": {
+        "captured_requests": 346,
+        "methods": {
+          "GET": 346
+        },
+        "scope": "current page request list at checkpoint; successful static resources omitted"
+      },
+      "onboarding": {
+        "captured_requests": 49,
+        "methods": {
+          "GET": 49
+        },
+        "scope": "current page request list at checkpoint; successful static resources omitted"
+      }
+    },
+    "only_public_guidance_captured": true,
+    "service_browser_cleanup": "Named QA browser closed; both Server instances canonically DRAINED and PIDs exited",
+    "evidence": [
+      "browser/browser-report.json",
+      "browser/60-close-browser.json",
+      "installed/servers/agents/table-comparison.json",
+      "installed/servers/onboarding/table-comparison.json",
+      "installed/servers/agents/shutdown.json",
+      "installed/servers/onboarding/shutdown.json"
+    ]
+  },
+  "dx02": {
+    "actual_client_credential_resolution": "NOT_RUN",
+    "ledger_change": "none",
+    "narrow_prior_proof": "Claude Code 2.1.317 and Codex 0.166.0 on Windows resolve a fixture environment reference and authenticate MCP initialize; present/missing cases, no model turn.",
+    "excluded_chain": "real OS vault -> shipped CLI launch -> actual client -> canonical cooperation",
+    "driver_evidence": "participant-environment.py:82-90 builds configuration and injects KEY via child_environment; :106 starts the selected native binary directly.",
+    "os_vault_note": "The separate Windows storage/removal fixture does not join that vault to the native-client campaign.",
+    "evidence": [
+      "plans/agent_ops/evidence/pr04-participant-launch-native.json",
+      "plans/agent_ops/campaigns/participant-environment.py",
+      "plans/agent_ops/evidence/pr04-participant-launch.md",
+      "plans/agent_ops/evidence/pr04-participant-launch-source.xml",
+      "plans/agent_ops/evidence/pr04-participant-launch-installed.xml",
+      "plans/agent_ops/evidence/pr04-participant-removal-vault-source.xml"
+    ]
+  },
+  "limitations": [
+    "Frontend unit/SSR/typecheck/build checks and root checkout checks overlap; 138 is the suite size, not 276 or a new installed backend-test count.",
+    "Installed candidate-v1 is verified with the canonical checkout bundle. The historical isolated bundle is not byte-identical; both frontend suite runs overlap.",
+    "root-validation.json attributes the bundle difference to three existing class-template CR escapes (six bytes). Use the canonical checkout build for package/browser qualification, with its own exact package proof.",
+    "The guide generates only public CLI commands. It does not execute init, access a vault, edit client configuration, start a service/client/model, create/rotate identity, change runtime bindings or issue grants.",
+    "Dedicated one-shot key delivery remains unchanged and must not be included in browser screenshots or copied trace evidence. The no-secret claim is scoped to generated guidance, not removal of the existing authorized one-shot UI.",
+    "Origin preservation/validation is a frontend contract. This milestone does not retest real transport redirects or prove credential delivery to a native client.",
+    "DX-02 actual_client_credential_resolution stays NOT_RUN for the broad real-vault-to-client chain. Earlier native-client initialize cases used synthetic environment injection and a synthetic MCP responder.",
+    "Actual GUI/TUI inheritance, real OS-vault-to-native-client end-to-end use, canonical external-client cooperation, native service lifecycle and productive M1/M2/full R3 remain outside this milestone."
+  ],
+  "publication_scope": "Nexus feature/v0.3.3 only. Connector/Core unchanged. No registry publication or merge."
+}

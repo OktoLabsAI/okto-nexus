@@ -3,6 +3,7 @@ import { Moon, Sun, X } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 import { runtimeApi, type ProjectPresetOverview } from '../../runtimeApi';
 import { markCompleted } from './onboardingStorage';
+import { ParticipantGuide } from '../ParticipantGuide';
 
 const TITLE = 'onboarding-title';
 const button = 'rounded-lg border border-surface-300 dark:border-surface-600 px-4 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500';
@@ -86,14 +87,7 @@ export function OnboardingModal({onClose, onOpenAgents}: {onClose: () => void; o
           <div><h2 className="font-semibold mb-2">Start work when you are ready</h2><code className={command}>okto-nexus work</code>
             <p className="text-sm mt-2 text-surface-600 dark:text-surface-300">After local setup, use the same project terminal to request work, follow progress and answer authorized questions. Reopen it to find the same project. Closing this guide does not stop the service or submit work.</p></div>
         </section> : <section aria-label="Existing client connection" className="space-y-3">
-          <h2 className="font-semibold">Add coordination to your existing client</h2>
-          <p className="text-sm">Use the existing agent identity and its approved MCP HTTP configuration. Another client does not require a new managed runtime or disabling an existing connection.</p>
-          <ol className="list-decimal pl-5 space-y-2 text-sm">
-            <li>Open Agents and choose the intended identity. An absent identity requires explicit operator creation.</li>
-            <li>Use the client's supported HTTP configuration and protected credential input. Keep the key out of URLs and retain unrelated client settings.</li>
-            <li>Reconnect the client and verify authentication and available tools. These checks do not prove that a task or handoff completed.</li>
-          </ol>
-          <p className="text-sm text-surface-600 dark:text-surface-300">Configuration on another computer must be applied there. Opening this guide does not edit client files, issue a key or change runtime access.</p>
+          <ParticipantGuide />
         </section>}
         <aside className="border-t border-surface-200 dark:border-surface-700 pt-4 text-sm text-surface-600 dark:text-surface-300">
           <h2 className="font-semibold text-surface-900 dark:text-white mb-1">Already connected from the terminal?</h2>

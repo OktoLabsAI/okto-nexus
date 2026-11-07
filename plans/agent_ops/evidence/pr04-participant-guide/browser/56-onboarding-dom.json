@@ -1,0 +1,12 @@
+{
+  "name": "56-onboarding-dom",
+  "args": [
+    "eval",
+    "() => ({dark:document.documentElement.classList.contains('dark'),viewport:innerWidth,body:document.documentElement.scrollWidth,commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),horizontalOverflows:[...document.querySelectorAll('[data-testid=participant-guide] input, [data-testid=participant-guide] pre, [data-testid=participant-guide] select')].filter(e=>e.scrollWidth>e.clientWidth).length,checkboxes:document.querySelectorAll('[data-testid=participant-guide] input[type=checkbox]').length})"
+  ],
+  "started": "2026-11-07T08:29:16.388880+00:00",
+  "ended": "2026-11-07T08:29:20.690460+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"dark\": true,\n  \"viewport\": 390,\n  \"body\": 390,\n  \"commands\": [\n    \"okto-nexus init --mode participant --profile='participant' --server='http://127.0.0.1:65032' --agent='external-agent' --workspace-id='external-workspace' --client=claude --project . --plan\",\n    \"okto-nexus init --mode participant --profile='participant' --approve=REVIEW_REVISION\",\n    \"okto-nexus participant launch --profile='participant' --plan\",\n    \"okto-nexus participant launch --profile='participant' --approve=LAUNCH_REVIEW_REVISION\",\n    \"okto-nexus doctor --mode participant --profile='participant'\",\n    \"okto-nexus doctor --mode participant --profile='participant' --check-server --check-mcp\"\n  ],\n  \"horizontalOverflows\": 0,\n  \"checkboxes\": 0\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({dark:document.documentElement.classList.contains(\\'dark\\'),viewport:innerWidth,body:document.documentElement.scrollWidth,commands:[...document.querySelectorAll(\\'[data-testid=participant-guide] pre\\')].map(e=>e.textContent),horizontalOverflows:[...document.querySelectorAll(\\'[data-testid=participant-guide] input, [data-testid=participant-guide] pre, [data-testid=participant-guide] select\\')].filter(e=>e.scrollWidth>e.clientWidth).length,checkboxes:document.querySelectorAll(\\'[data-testid=participant-guide] input[type=checkbox]\\').length})');\n```\n",
+  "stderr": ""
+}

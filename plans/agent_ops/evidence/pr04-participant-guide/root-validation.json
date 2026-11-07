@@ -1,0 +1,38 @@
+{
+  "isolated_bundle_sha256": "9da561ac942f121f50d5232540bdaa8d82cc2e8890e32b5b06ae46e731684633",
+  "checkout_bundle_sha256": "15d170828f24b24417570aa0bf13852d7efe0c9efe45a9bd80d966ebcf4ece2b",
+  "escaped_crlf_count": 25,
+  "equal_after_normalizing_escaped_crlf": false,
+  "root_tests": {
+    "command": "npm test",
+    "passed": 138,
+    "failed": 0,
+    "skipped": 0,
+    "duration_ms": 4561.0091,
+    "source": "observed exec tool output"
+  },
+  "root_build": {
+    "command": "npm run build",
+    "exit_code": 0,
+    "vite_version": "6.4.3",
+    "source": "observed exec tool output"
+  },
+  "only_three_class_whitespace_cr_escapes_differ": true,
+  "differences": [
+    {
+      "isolated_offset": 614436,
+      "checkout_offset": 614436,
+      "context": "face-200 dark:border-surface-700/60\\r\n        bg-white/90 dark:bg-surf"
+    },
+    {
+      "isolated_offset": 614514,
+      "checkout_offset": 614512,
+      "context": "90 backdrop-blur-md overflow-hidden\\r\n        flex flex-col h-full ani"
+    },
+    {
+      "isolated_offset": 614777,
+      "checkout_offset": 614773,
+      "context": "h-full w-1.5 cursor-col-resize z-10\\r\n          hover:bg-accent-500/40"
+    }
+  ]
+}

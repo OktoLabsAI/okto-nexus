@@ -1,0 +1,11 @@
+{
+  "url": "http://127.0.0.1:52889",
+  "launcher_pid": 3080,
+  "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\home",
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\server.log",
+  "entry_proof": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\servers\\agents\\import-proof.json",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\candidate-v1\\venv\\Scripts\\python.exe",
+  "scenario": "agents",
+  "wheel_sha256": "9b18dc0c69673bb730198ca461f2464c8ee4ae3fdc1226f22ffcb8140783412f",
+  "shutdown": "python C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-mcp-guide-installed-sk13m28a\\servers.py stop candidate-v1 agents"
+}

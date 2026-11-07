@@ -1,0 +1,13 @@
+{
+  "name": "07-desktop-screenshot",
+  "args": [
+    "screenshot",
+    "--filename",
+    "output/playwright/dx04-participant-guide/desktop-claude.png"
+  ],
+  "started": "2026-11-07T08:23:18.727520+00:00",
+  "ended": "2026-11-07T08:23:23.076982+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n- [Screenshot of viewport](output\\playwright\\dx04-participant-guide\\desktop-claude.png)\n### Ran Playwright code\n```js\n// Screenshot viewport and save it as output\\playwright\\dx04-participant-guide\\desktop-claude.png\nawait page.screenshot({\n  path: 'output\\\\playwright\\\\dx04-participant-guide\\\\desktop-claude.png',\n  scale: 'css',\n  type: 'png'\n});\n```\n",
+  "stderr": ""
+}

@@ -1,0 +1,11 @@
+[
+ {"name":"17-clipboard-failure-injection","args":["eval","() => { window.dx04ClipboardOriginal = navigator.clipboard.writeText; navigator.clipboard.writeText = async () => { throw new DOMException('QA denied', 'NotAllowedError'); }; return {injection:'clipboard write rejected only'}; }"]},
+ {"name":"18-copy-refused","args":["click","e488"]},
+ {"name":"19-copy-failure-status","args":["eval","() => ({status:[...document.querySelectorAll('[role=status]')].map(e=>e.textContent)})"]},
+ {"name":"20-restore-clipboard","args":["eval","() => { navigator.clipboard.writeText = window.dx04ClipboardOriginal; delete window.dx04ClipboardOriginal; return {restored:true}; }"]},
+ {"name":"21-invalid-remote-http","args":["fill","e474","http://nexus.example.test:9443"]},
+ {"name":"22-invalid-origin-refusal","args":["eval","() => ({commands:document.querySelectorAll('[data-testid=participant-guide] pre').length,status:[...document.querySelectorAll('[role=status]')].map(e=>e.textContent)})"]},
+ {"name":"23-valid-origin-restore","args":["fill","e474","https://nexus.example.test:9443"]},
+ {"name":"24-generic","args":["select","e472","generic"]},
+ {"name":"25-generic-snapshot","args":["snapshot"]}
+]

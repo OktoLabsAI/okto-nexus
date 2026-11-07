@@ -1,0 +1,13 @@
+[
+ {"name":"49-onboarding-keyboard-wrap","args":["press","Shift+Tab"]},
+ {"name":"50-onboarding-focus","args":["eval","() => ({label:document.activeElement?.textContent,inside:!!document.activeElement?.closest('[role=dialog]')})"]},
+ {"name":"51-onboarding-agent","args":["fill","e239","external-agent"]},
+ {"name":"52-onboarding-workspace","args":["fill","e241","external-workspace"]},
+ {"name":"53-onboarding-posix","args":["select","e249","posix"]},
+ {"name":"54-onboarding-mobile","args":["resize","390","844"]},
+ {"name":"55-onboarding-final-snapshot","args":["snapshot"],"quiet":true},
+ {"name":"56-onboarding-dom","args":["eval","() => ({dark:document.documentElement.classList.contains('dark'),viewport:innerWidth,body:document.documentElement.scrollWidth,commands:[...document.querySelectorAll('[data-testid=participant-guide] pre')].map(e=>e.textContent),horizontalOverflows:[...document.querySelectorAll('[data-testid=participant-guide] input, [data-testid=participant-guide] pre, [data-testid=participant-guide] select')].filter(e=>e.scrollWidth>e.clientWidth).length,checkboxes:document.querySelectorAll('[data-testid=participant-guide] input[type=checkbox]').length})"]},
+ {"name":"57-onboarding-mobile-dark-screenshot","args":["screenshot","--filename","output/playwright/dx04-participant-guide/mobile-onboarding-dark.png"]},
+ {"name":"58-onboarding-requests","args":["requests","--all"],"quiet":true},
+ {"name":"59-onboarding-console","args":["console","warning"]}
+]

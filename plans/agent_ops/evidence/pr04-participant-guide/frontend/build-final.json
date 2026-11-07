@@ -1,0 +1,16 @@
+{
+  "label": "build-final",
+  "command": [
+    "rtk",
+    "proxy",
+    "npm",
+    "run",
+    "build"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\frontend",
+  "started_at": "2026-11-07T07:59:59.724042+00:00",
+  "ended_at": "2026-11-07T08:00:49.470479+00:00",
+  "elapsed_seconds": 49.74643299996387,
+  "exit_code": 0,
+  "log": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx04-participant-guide-validation-2uf9880h\\build-final.log"
+}

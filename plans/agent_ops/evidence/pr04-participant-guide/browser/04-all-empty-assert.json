@@ -1,0 +1,12 @@
+{
+  "name": "04-all-empty-assert",
+  "args": [
+    "eval",
+    "() => ({workspace:document.querySelector('[data-testid=participant-guide] input:nth-of-type(1)')?.value,commands:document.querySelectorAll('[data-testid=participant-guide] pre').length,focus:document.activeElement?.getAttribute('aria-label'),dialog:document.activeElement?.closest('[role=dialog]')!==null,checkboxes:document.querySelectorAll('[data-testid=participant-guide] input[type=checkbox]').length})"
+  ],
+  "started": "2026-11-07T08:23:03.610979+00:00",
+  "ended": "2026-11-07T08:23:08.139572+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"workspace\": \"dx04-agent-alpha\",\n  \"commands\": 0,\n  \"focus\": \"Expand modal\",\n  \"dialog\": false,\n  \"checkboxes\": 0\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({workspace:document.querySelector(\\'[data-testid=participant-guide] input:nth-of-type(1)\\')?.value,commands:document.querySelectorAll(\\'[data-testid=participant-guide] pre\\').length,focus:document.activeElement?.getAttribute(\\'aria-label\\'),dialog:document.activeElement?.closest(\\'[role=dialog]\\')!==null,checkboxes:document.querySelectorAll(\\'[data-testid=participant-guide] input[type=checkbox]\\').length})');\n```\n",
+  "stderr": ""
+}

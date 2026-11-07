@@ -3,32 +3,83 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import ts from 'typescript';
 
-globalThis.location = {hostname: '127.0.0.1', port: '8202'};
-const source = await readFile(new URL('../src/api.ts', import.meta.url), 'utf8');
+const source = await readFile(new URL('../src/participantGuide.ts', import.meta.url), 'utf8');
 const compiled = ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022}}).outputText;
-const {mcpSnippet} = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
-const KEY = 'nxs_example';
+const {buildParticipantGuide, participantOrigin, quoteParticipantArgument} = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+const options = (overrides = {}) => ({origin: 'https://nexus.example',
+  agentId: 'reviewer', workspaceId: 'workspace-1', profile: 'reviewer',
+  client: 'claude', shell: 'powershell', ...overrides});
+const commands = value => {assert.equal(value.ok, true); return value.steps.map(step => step.command).join('\n');};
 
-test('no format puts the key in the URL', () => {
-  for (const format of ['claude-cli', 'codex', 'vscode', 'claude', 'cursor', 'windsurf', 'other']) {
-    assert.ok(!mcpSnippet(format, KEY).includes('api_key='), format);
+test('current HTTPS origin retains host and non-default port, without inventing 8202', () => {
+  for (const origin of ['https://nexus.example', 'https://nexus.example:9443', 'https://[2001:db8::10]:9443']) {
+    assert.equal(participantOrigin(origin).origin, origin);
+    const text = commands(buildParticipantGuide(options({origin})));
+    assert.ok(text.includes('--server=\'' + origin + '\''));
+    assert.ok(!text.includes('http://') && !text.includes(':8202'));
   }
 });
 
-test('the claude command sends the key in a Bearer header', () => {
-  assert.equal(mcpSnippet('claude-cli', KEY),
-    'claude mcp add -t http okto-nexus "http://127.0.0.1:8202/mcp" --header "Authorization: Bearer nxs_example"');
+test('unsafe origins produce no command, including userinfo, query and remote plaintext', () => {
+  for (const origin of ['http://nexus.example', 'https://user:token@nexus.example', 'https://nexus.example/mcp',
+    'https://nexus.example?next=https://other.example', 'https://nexus.example#key', 'file:///config',
+    'javascript:alert(1)', 'https://nexus.example\n', 'https://nexus.example\\other', '//nexus.example',
+    'http://127.0.0.2:8202', 'https://nexus.example:0', 'https://nexus.example\u0000']) {
+    const result = buildParticipantGuide(options({origin}));
+    assert.equal(result.ok, false, origin);
+    assert.equal(result.steps, undefined);
+  }
 });
 
-test('the codex command reads the key from OKTO_NEXUS_API_KEY', () => {
-  const [exportLine, addLine] = mcpSnippet('codex', KEY).split('\n');
-  assert.equal(exportLine, 'export OKTO_NEXUS_API_KEY="nxs_example"');
-  assert.equal(addLine, 'codex mcp add okto-nexus --url "http://127.0.0.1:8202/mcp" --bearer-token-env-var OKTO_NEXUS_API_KEY');
+test('valid origins generate public commands without a second approval gate', () => {
+  assert.equal(buildParticipantGuide(options()).ok, true);
+  for (const origin of ['http://127.0.0.1:8202', 'http://localhost:8202', 'http://[::1]:8202', 'https://localhost']) {
+    const accepted = buildParticipantGuide(options({origin}));
+    assert.equal(accepted.ok, true);
+    assert.equal(accepted.plaintext, origin.startsWith('http:'));
+  }
 });
 
-test('JSON formats carry the Bearer header next to the URL', () => {
-  const vscode = JSON.parse(mcpSnippet('vscode', KEY));
-  assert.deepEqual(vscode.servers['okto-nexus'].headers, {Authorization: 'Bearer nxs_example'});
-  const claude = JSON.parse(mcpSnippet('claude', KEY));
-  assert.deepEqual(claude.mcpServers['okto-nexus'], {url: 'http://127.0.0.1:8202/mcp', headers: {Authorization: 'Bearer nxs_example'}});
+test('guidance carries no credential even when a legacy caller supplies an extra key property', () => {
+  const marker = 'nxs_' + 'f'.repeat(48);
+  for (const client of ['claude', 'codex', 'generic']) {
+    const value = buildParticipantGuide(options({client, apiKey: marker}));
+    assert.ok(!JSON.stringify(value).includes(marker));
+    assert.ok(!commands(value).match(/export |Authorization:|--header|api_key=|--key=/));
+  }
+  for (const field of ['agentId', 'workspaceId', 'profile']) assert.equal(buildParticipantGuide(options({[field]: marker})).ok, false);
+});
+
+test('commands use existing CLI entry points and retain the same profile for recovery', () => {
+  const result = buildParticipantGuide(options({client: 'codex'}));
+  assert.equal(result.ok, true);
+  assert.equal(result.steps[0].command, "okto-nexus init --mode participant --profile='reviewer' --server='https://nexus.example' --agent='reviewer' --workspace-id='workspace-1' --client=codex --project . --plan");
+  assert.equal(result.steps[1].command, "okto-nexus init --mode participant --profile='reviewer' --approve=REVIEW_REVISION");
+  assert.equal(result.steps[2].command, "okto-nexus participant launch --profile='reviewer' --plan");
+  assert.equal(result.steps[3].command, "okto-nexus participant launch --profile='reviewer' --approve=LAUNCH_REVIEW_REVISION");
+  assert.equal(result.steps[4].command, "okto-nexus doctor --mode participant --profile='reviewer'");
+  assert.equal(result.steps[5].command, "okto-nexus doctor --mode participant --profile='reviewer' --check-server --check-mcp");
+  assert.ok(!commands(result).match(/rotate|regenerate|new-agent|work |smoke /));
+});
+
+test('generic guidance makes no client launch or readiness claim', () => {
+  const result = buildParticipantGuide(options({client: 'generic'}));
+  assert.ok(commands(result).includes('--client=generic'));
+  assert.ok(!commands(result).includes('participant launch'));
+  assert.deepEqual(result.steps.map(step => step.id), ['review', 'apply', 'doctor', 'mcp']);
+  assert.ok(result.steps.at(-1).explanation.includes('doctor process'));
+});
+
+test('shell quoting keeps punctuation in public IDs inside one argument', () => {
+  const agentId = "worker'project";
+  assert.equal(quoteParticipantArgument(agentId, 'powershell'), "'worker''project'");
+  assert.equal(quoteParticipantArgument(agentId, 'posix'), "'worker'\"'\"'project'");
+  assert.equal(quoteParticipantArgument('worker’project', 'powershell'), "'worker’’project'");
+  for (const shell of ['powershell', 'posix']) {
+    const value = buildParticipantGuide(options({agentId, shell}));
+    assert.ok(commands(value).includes('--agent=' + quoteParticipantArgument(agentId, shell)));
+  }
+  for (const overrides of [{agentId: 'line\nbreak'}, {workspaceId: '\u001b[31m'}, {profile: '../other'}, {client: 'cursor'}, {shell: 'cmd'}]) {
+    assert.equal(buildParticipantGuide(options(overrides)).ok, false);
+  }
 });

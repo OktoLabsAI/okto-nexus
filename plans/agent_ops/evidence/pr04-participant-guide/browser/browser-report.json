@@ -1,0 +1,233 @@
+{
+  "status": "VERIFIED_DECLARED_BROWSER_SCOPE",
+  "checks": [
+    {
+      "name": "existing_identity_readonly",
+      "status": "PASS",
+      "evidence": [
+        "10-public-command-dom.json"
+      ],
+      "detail": "Agent action binds the selected identity without key access."
+    },
+    {
+      "name": "all_workspaces_requires_input",
+      "status": "PASS",
+      "evidence": [
+        "03-existing-all-snapshot.json",
+        "04-all-empty-assert.json"
+      ],
+      "detail": "No workspace inferred from All workspaces; the later input receives six public commands."
+    },
+    {
+      "name": "public_claude_steps",
+      "status": "PASS",
+      "evidence": [
+        "10-public-command-dom.json"
+      ],
+      "detail": "Init review/apply, foreground launch review/apply and passive/explicit MCP doctor are distinct."
+    },
+    {
+      "name": "no_browser_approval_gate",
+      "status": "PASS",
+      "evidence": [
+        "04-all-empty-assert.json",
+        "26-generic-command-scope.json"
+      ],
+      "detail": "Valid fields generate commands immediately; CLI review remains explicit."
+    },
+    {
+      "name": "desktop_dialog_focus_and_width",
+      "status": "PASS",
+      "evidence": [
+        "10-public-command-dom.json",
+        "desktop-claude.png"
+      ],
+      "detail": "Native dialog is in viewport and contains active focus."
+    },
+    {
+      "name": "clipboard_success",
+      "status": "PASS",
+      "evidence": [
+        "11-copy-public-command.json",
+        "12-copy-success.json"
+      ],
+      "detail": "Actual browser clipboard write succeeded; no clipboard contents read."
+    },
+    {
+      "name": "clipboard_refusal",
+      "status": "PASS",
+      "evidence": [
+        "17-clipboard-failure-injection.json",
+        "18-copy-refused.json",
+        "19-copy-failure-status.json",
+        "20-restore-clipboard.json"
+      ],
+      "detail": "writeText rejection was explicitly injected and restored; UI offers manual copy."
+    },
+    {
+      "name": "codex_https_port_preserved",
+      "status": "PASS",
+      "evidence": [
+        "15-codex-https-snapshot.json"
+      ],
+      "detail": "Public origin input only; no HTTPS network request or TLS qualification."
+    },
+    {
+      "name": "remote_http_refused",
+      "status": "PASS",
+      "evidence": [
+        "21-invalid-remote-http.json",
+        "22-invalid-origin-refusal.json"
+      ],
+      "detail": "Invalid remote plaintext origin yields no commands."
+    },
+    {
+      "name": "generic_has_no_launch",
+      "status": "PASS",
+      "evidence": [
+        "25-generic-snapshot.json",
+        "26-generic-command-scope.json"
+      ],
+      "detail": "Generic manual guidance is explicitly unqualified and has no launch command."
+    },
+    {
+      "name": "escape_restores_trigger",
+      "status": "PASS",
+      "evidence": [
+        "27-close-escape.json",
+        "28-focus-restored.json"
+      ],
+      "detail": "Escape closes edited public guide without a discard confirmation and restores the agent trigger."
+    },
+    {
+      "name": "selected_workspace_prefilled",
+      "status": "PASS",
+      "evidence": [
+        "30-select-workspace.json",
+        "33-selected-workspace-prefill.json"
+      ],
+      "detail": "Selected workspace and origin populate a new guide."
+    },
+    {
+      "name": "existing_mobile_layout",
+      "status": "PASS",
+      "evidence": [
+        "35-mobile-snapshot.json",
+        "36-mobile-layout.json",
+        "mobile-existing.png"
+      ],
+      "detail": "390x844 viewport, inputs/selects/commands without horizontal overflow; screenshot visually inspected."
+    },
+    {
+      "name": "mobile_keyboard_focus",
+      "status": "PASS",
+      "evidence": [
+        "40-mobile-tab.json",
+        "41-mobile-focus.json"
+      ],
+      "detail": "Tab enters the visible native-dialog close control after viewport resizing."
+    },
+    {
+      "name": "empty_server_onboarding",
+      "status": "PASS",
+      "evidence": [
+        "44-onboarding-snapshot.json",
+        "46-onboarding-existing-snapshot.json"
+      ],
+      "detail": "Only reserved operator exists; guidance does not provision missing identities. Later external-agent/external-workspace are illustrative input, not authenticated identities."
+    },
+    {
+      "name": "onboarding_keyboard_wrap",
+      "status": "PASS",
+      "evidence": [
+        "49-onboarding-keyboard-wrap.json",
+        "50-onboarding-focus.json"
+      ],
+      "detail": "Shift+Tab from first header control wraps to last footer control."
+    },
+    {
+      "name": "onboarding_dark_mobile",
+      "status": "PASS",
+      "evidence": [
+        "53-onboarding-posix.json",
+        "56-onboarding-dom.json",
+        "mobile-onboarding-dark.png"
+      ],
+      "detail": "Bash/zsh selected, dark390x844 layout without horizontal overflow; screenshot visually inspected."
+    },
+    {
+      "name": "agents_network_read_only",
+      "status": "PASS",
+      "evidence": [
+        "38-existing-requests.json"
+      ],
+      "detail": "Captured browser request list contains no POST/PUT/PATCH/DELETE; critical DB hashes supply independent state proof."
+    },
+    {
+      "name": "onboarding_network_read_only",
+      "status": "PASS",
+      "evidence": [
+        "58-onboarding-requests.json"
+      ],
+      "detail": "Captured browser request list contains no POST/PUT/PATCH/DELETE; critical DB hashes supply independent state proof."
+    },
+    {
+      "name": "39-existing-console",
+      "status": "PASS",
+      "evidence": [
+        "39-existing-console.json"
+      ],
+      "detail": "No console warnings/errors during this page campaign."
+    },
+    {
+      "name": "59-onboarding-console",
+      "status": "PASS",
+      "evidence": [
+        "59-onboarding-console.json"
+      ],
+      "detail": "No console warnings/errors during this page campaign."
+    },
+    {
+      "name": "browser_closed",
+      "status": "PASS",
+      "evidence": [
+        "60-close-browser.json"
+      ],
+      "detail": "Only the named isolated QA browser session was closed."
+    }
+  ],
+  "check_count": 22,
+  "network": {
+    "agents": {
+      "captured_requests": 346,
+      "methods": {
+        "GET": 346
+      },
+      "scope": "current page request list at checkpoint; successful static resources omitted"
+    },
+    "onboarding": {
+      "captured_requests": 49,
+      "methods": {
+        "GET": 49
+      },
+      "scope": "current page request list at checkpoint; successful static resources omitted"
+    }
+  },
+  "command_records": 59,
+  "command_exit_failures": {
+    "08-public-command-assert": 1
+  },
+  "screenshots_visually_reviewed": [
+    "desktop-claude.png",
+    "mobile-existing.png",
+    "mobile-onboarding-dark.png"
+  ],
+  "failures_and_limits": [
+    "Initial Agents click before readiness was intercepted by pre-existing metrics opt-in. Refreshed snapshot and closed metrics via its explicit Close action; no metrics write.",
+    "04 initially queried the agent input under the misleading field name workspace and searched explicit role=dialog instead of native dialog; those two fields are not used as evidence. 08 failed on the same native-dialog selector. Corrected observations are in10 and33.",
+    "01 and16 custom Node request-monitor attempts yielded no serialized result; they are retained but supply no proof. CLI requests38/58 and DB baselines are authoritative.",
+    "Browser shell selections and public strings do not execute init/apply/launch/doctor or test provider login, actual client, TLS, OS vault, native service, M1/M2 or joint R3.",
+    "No create/regenerate/Finish control or one-shot key panel was opened; no credential was entered, read from clipboard, or captured.",
+    "No product change was needed during browser qualification; wheel remains candidate-v1."
+  ]
+}

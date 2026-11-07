@@ -1,0 +1,12 @@
+{
+  "name": "50-onboarding-focus",
+  "args": [
+    "eval",
+    "() => ({label:document.activeElement?.textContent,inside:!!document.activeElement?.closest('[role=dialog]')})"
+  ],
+  "started": "2026-11-07T08:28:50.600613+00:00",
+  "ended": "2026-11-07T08:28:55.818723+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"label\": \"Open Agents\",\n  \"inside\": true\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({label:document.activeElement?.textContent,inside:!!document.activeElement?.closest(\\'[role=dialog]\\')})');\n```\n",
+  "stderr": ""
+}

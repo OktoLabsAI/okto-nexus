@@ -1,0 +1,12 @@
+{
+  "name": "12-copy-success",
+  "args": [
+    "eval",
+    "() => ({status:[...document.querySelectorAll('[role=status]')].map(e=>e.textContent)})"
+  ],
+  "started": "2026-11-07T08:23:54.206948+00:00",
+  "ended": "2026-11-07T08:23:59.779964+00:00",
+  "exit_code": 0,
+  "stdout": "### Result\n{\n  \"status\": [\n    \"Public command copied. Enter the key only at the hidden terminal prompt.\"\n  ]\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({status:[...document.querySelectorAll(\\'[role=status]\\')].map(e=>e.textContent)})');\n```\n",
+  "stderr": ""
+}
