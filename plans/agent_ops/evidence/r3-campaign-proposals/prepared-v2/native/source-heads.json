@@ -1,0 +1,50 @@
+{
+  "nexus": {
+    "repository": "D:/Projetos/Techridy/okto_labs_okto_nexus",
+    "commit": "21c5b7573316a2571a5378e479dbc7511e32fa70",
+    "pending_paths": [
+      " M LEDGER_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      " M docs/service-lifecycle.md",
+      " M plans/agent_ops/implementation-report.md",
+      " M plans/agent_ops/ledger.json",
+      " M src/okto_nexus/adapters/inbound/cli/runtime_server.py",
+      " M src/okto_nexus/adapters/inbound/cli/service.py",
+      " M src/okto_nexus/adapters/inbound/http/app.py",
+      " M src/okto_nexus/adapters/inbound/http/service_lifecycle.py",
+      " M src/okto_nexus/adapters/outbound/service_manager/local.py",
+      " M src/okto_nexus/application/execution_capabilities.py",
+      " M src/okto_nexus/application/execution_dispatch.py",
+      " M src/okto_nexus/application/execution_leases.py",
+      " M src/okto_nexus/application/execution_native_decisions.py",
+      " M src/okto_nexus/application/harness_supervisor.py",
+      " M src/okto_nexus/application/runtime_access.py",
+      " M src/okto_nexus/application/service_lifecycle.py",
+      " M src/okto_nexus/bootstrap/database_reset.py",
+      " M src/okto_nexus/bootstrap/embedded_dispatch.py",
+      " M src/okto_nexus/bootstrap/runtime_host.py",
+      " M src/okto_nexus/bootstrap/server_runtime.py",
+      " M src/okto_nexus/bootstrap/server_shutdown.py",
+      " M tests/execution_r4/test_server_signal_shutdown.py",
+      " M vendor/ci/manifest.json",
+      " M vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl",
+      " M vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "?? src/okto_nexus/adapters/outbound/service_manager/stop_latch.py",
+      "?? tests/execution_r4/test_service_cooperative_drain.py",
+      "?? tests/execution_r4/test_service_drain_authority.py",
+      "?? tests/test_service_drain_decision.py"
+    ],
+    "note": "Snapshot context during candidate qualification; candidate wheels pinned independently."
+  },
+  "connector": {
+    "repository": "D:/Projetos/Techridy/okto-nexus-connector",
+    "commit": "ef8e267b8aa58eb5dd8c28387c8cc418551c0f2c",
+    "pending_paths": [],
+    "note": "Snapshot context during candidate qualification; candidate wheels pinned independently."
+  },
+  "core": {
+    "repository": "D:/Projetos/Techridy/okto-nexus-connector-core",
+    "commit": "3cdba87857e25b4ad5bdbaed91647bfa55873f91",
+    "pending_paths": [],
+    "note": "Snapshot context during candidate qualification; candidate wheels pinned independently."
+  }
+}

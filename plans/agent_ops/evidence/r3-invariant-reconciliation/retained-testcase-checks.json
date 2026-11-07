@@ -1,0 +1,1500 @@
+{
+  "action": "parse retained XML; no pytest execution",
+  "selections": [
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+        "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+        "bytes": 938
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_r3_mixed_coordination::test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_observation_service::test_canonical_self_management_requires_current_key_and_explicit_approval"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_observation_service::test_source_registration_idempotency_does_not_grant_permission"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_identity::test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+        "bytes": 14082
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[claude]",
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[codex]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
+        "sha256": "11b1dc62d570f92194dd39234c5f2c87517b9ce632b523653b1e6ccc7c401616",
+        "bytes": 6959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_coordination_cli::test_commands_resume_latest_and_explicit_new_request_preserve_private_content[handoff-False]",
+        "tests.execution_r4.test_coordination_cli::test_commands_resume_latest_and_explicit_new_request_preserve_private_content[message-False]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+        "sha256": "011bce74f9a80361357e68d050ab701950b13c0c3893ed59d7566c9c91ba368b",
+        "bytes": 46792
+      },
+      "matched_cases": [
+        "tests.test_herdr_transport::test_argv_is_fixed_explicit_and_never_uses_shell"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-shared-fixture-final/tests.xml",
+        "sha256": "7f5bf911cbc48c6f7f38080d6a323d309dd8ec8aa7a07c4a48fa2614c7cb5289",
+        "bytes": 418
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_observation_service::test_publish_changes_no_coordination_presence_or_capacity"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+        "sha256": "a52edc9a727bf2b810b1b432c9fedb48e5d8d37753d0954f486eb2dba60d2a01",
+        "bytes": 76476
+      },
+      "matched_cases": [
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-self]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-self]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-self]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_doctor::test_passive_doctor_preserves_files_without_vault_http_process_or_recovery"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_doctor::test_actual_tcp_mcp_is_not_agent_participation_or_model_work"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_observation_service::test_publish_changes_no_coordination_presence_or_capacity"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/idle/rg03-qualified.xml",
+        "sha256": "fda33e6f20248b6bc0fea4bbc8a0909891cf62603a68d6df6cc97d744b9ea15c",
+        "bytes": 1266
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_external_idle_scheduler_isolation::test_external_idle_preserves_exact_unconsumed_claim_reservation"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+        "sha256": "17f61e80065da17ff85d35c68a0b1f620d45fb75b407ca2e3193b87fb24b01e5",
+        "bytes": 22721
+      },
+      "matched_cases": [
+        "tests.test_terminal_coordination::test_wait_captures_cursor_before_snapshot_and_detects_existing_completion"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+        "sha256": "17f61e80065da17ff85d35c68a0b1f620d45fb75b407ca2e3193b87fb24b01e5",
+        "bytes": 22721
+      },
+      "matched_cases": [
+        "tests.test_terminal_coordination::test_wait_timeout_keeps_nonterminal_work_and_never_cancels_or_creates[CLAIMED]",
+        "tests.test_terminal_coordination::test_wait_timeout_keeps_nonterminal_work_and_never_cancels_or_creates[OPEN]",
+        "tests.test_terminal_coordination::test_wait_timeout_keeps_nonterminal_work_and_never_cancels_or_creates[VERIFYING]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_attention_api::test_empty_list_and_summary_are_explicit_passive_snapshots"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+        "sha256": "8fdca0e3c475036b7bab2978d7159b74f9b72c61d2cd81e1312470693e8c48f1",
+        "bytes": 46943
+      },
+      "matched_cases": [
+        "tests.test_attention_operations::test_only_current_unknown_receipt_or_reconciliation_requires_attention"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_observation_service::test_publish_changes_no_coordination_presence_or_capacity"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+        "sha256": "a52edc9a727bf2b810b1b432c9fedb48e5d8d37753d0954f486eb2dba60d2a01",
+        "bytes": 76476
+      },
+      "matched_cases": [
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-self]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-self]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-self]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+        "sha256": "a52edc9a727bf2b810b1b432c9fedb48e5d8d37753d0954f486eb2dba60d2a01",
+        "bytes": 76476
+      },
+      "matched_cases": [
+        "tests.test_observation_correlation_http::test_client_cannot_supply_native_or_os_proof[native_record]",
+        "tests.test_observation_correlation_http::test_client_cannot_supply_native_or_os_proof[os_identity]",
+        "tests.test_observation_correlation_http::test_client_cannot_supply_native_or_os_proof[proof]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+        "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+        "bytes": 938
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[mcp_first]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+        "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+        "bytes": 938
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[runtime_first]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+        "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+        "bytes": 938
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[concurrent]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-current/tests.xml",
+        "sha256": "df6d4a737ec3dcabb05cd5be49aa8c301e1d6ec85262755c6fcc1995fed0ef90",
+        "bytes": 2347
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[admitted]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-current/tests.xml",
+        "sha256": "df6d4a737ec3dcabb05cd5be49aa8c301e1d6ec85262755c6fcc1995fed0ef90",
+        "bytes": 2347
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[accepted]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-current/tests.xml",
+        "sha256": "df6d4a737ec3dcabb05cd5be49aa8c301e1d6ec85262755c6fcc1995fed0ef90",
+        "bytes": 2347
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[terminal]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-current/tests.xml",
+        "sha256": "df6d4a737ec3dcabb05cd5be49aa8c301e1d6ec85262755c6fcc1995fed0ef90",
+        "bytes": 2347
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_canonical_consumption::test_canonical_push_reservation_excludes_mcp_pull[closed]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-creation-release-installed.xml",
+        "sha256": "3840a8fc8cd97ae97784bbf81379a187ba975ed279260651cf3dee8b544b8410",
+        "bytes": 8405
+      },
+      "matched_cases": [
+        "tests.test_coordination_creation::test_same_request_concurrent_retry_recovers_one_canonical_object[handoff_create-False]",
+        "tests.test_coordination_creation::test_same_request_concurrent_retry_recovers_one_canonical_object[message_create-False]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-creation-installed.xml",
+        "sha256": "bf31f03f4e9c4bbeb86bb771c05160706c4d20b9c4ee60ecb6ee525493bba64e",
+        "bytes": 32959
+      },
+      "matched_cases": [
+        "tests.test_coordination_creation::test_commit_cuts_leave_no_partial_creation[approval_result-handoff_create-False]",
+        "tests.test_coordination_creation::test_commit_cuts_leave_no_partial_creation[approval_result-message_create-False]",
+        "tests.test_coordination_creation::test_commit_cuts_leave_no_partial_creation[event-handoff_create-False]",
+        "tests.test_coordination_creation::test_commit_cuts_leave_no_partial_creation[event-message_create-False]",
+        "tests.test_coordination_creation::test_commit_cuts_leave_no_partial_creation[receipt-handoff_create-False]",
+        "tests.test_coordination_creation::test_commit_cuts_leave_no_partial_creation[receipt-message_create-False]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+        "bytes": 6749
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[intents:resolve]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+        "bytes": 6749
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[/runtime/operations]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+        "bytes": 6749
+      },
+      "matched_cases": [
+        "tests.test_terminal_coordination::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[submit]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+        "bytes": 6749
+      },
+      "matched_cases": [
+        "tests.test_terminal_coordination::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[inspect]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_init::test_cli_never_falls_back_to_echoing_key"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_identity::test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-domain-initial.xml",
+        "sha256": "38161520517b212cbb0ee8c605fd96a14fcc665a7a02125d5a463a9072d75c45",
+        "bytes": 20753
+      },
+      "matched_cases": [
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[agent_id]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[api_key]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[extra]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[frame]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[log]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[prompt]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[session_id]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[session_secret]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[token]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[workspace_id]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+        "bytes": 14082
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[claude]",
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[codex]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+        "bytes": 14082
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_participant_contract_cannot_substitute_for_managed_capability_or_qualification"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+        "bytes": 14082
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_generic_export_is_manual_and_pi_has_no_invented_http_adapter"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+        "sha256": "a895c722752fecf00cfcad6f5b7c2a74781b0e5a59fecd30e2e56a0dd3a84f52",
+        "bytes": 16709
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_unobserved_build_is_explicitly_unknown_without_inventing_qualification[claude]",
+        "tests.test_participant_config::test_unobserved_build_is_explicitly_unknown_without_inventing_qualification[codex]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+        "bytes": 14082
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[claude]",
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[codex]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+        "bytes": 14082
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_generic_export_is_manual_and_pi_has_no_invented_http_adapter"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_attention_engine_bounds::test_full_engine_query_count_is_constant_across_distinct_agents_and_source_families"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_attention_api::test_preferences_are_shared_between_devices_cas_and_independent_from_resolution"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+        "sha256": "a52edc9a727bf2b810b1b432c9fedb48e5d8d37753d0954f486eb2dba60d2a01",
+        "bytes": 76476
+      },
+      "matched_cases": [
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[DELETE-self]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[GET-self]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-anonymous]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-publish]",
+        "tests.test_observation_correlation_http::test_only_operator_can_read_select_or_clear[POST-self]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-domain-initial.xml",
+        "sha256": "38161520517b212cbb0ee8c605fd96a14fcc665a7a02125d5a463a9072d75c45",
+        "bytes": 20753
+      },
+      "matched_cases": [
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[agent_id]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[api_key]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[extra]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[frame]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[log]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[prompt]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[session_id]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[session_secret]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[token]",
+        "tests.test_observations_domain::test_identity_and_arbitrary_fields_are_refused_without_echo[workspace_id]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[batch101]",
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[bool-sequence]",
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[canonical-oversize]",
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[duplicate]",
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[identity]",
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[nan]",
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[oversize]",
+        "tests.test_observation_http::test_bounded_strict_http_errors_never_echo_input[unknown]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.test_observation_service::test_publish_changes_no_coordination_presence_or_capacity"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+        "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+        "bytes": 35751
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[False]",
+        "tests.execution_r4.test_external_observation_isolation::test_external_done_and_seen_do_not_release_a_turn_or_wake_queued_work[True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+        "sha256": "17f61e80065da17ff85d35c68a0b1f620d45fb75b407ca2e3193b87fb24b01e5",
+        "bytes": 22721
+      },
+      "matched_cases": [
+        "tests.test_terminal_coordination::test_wait_captures_cursor_before_snapshot_and_detects_existing_completion"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
+        "sha256": "11b1dc62d570f92194dd39234c5f2c87517b9ce632b523653b1e6ccc7c401616",
+        "bytes": 6959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_coordination_cli::test_commands_resume_latest_and_explicit_new_request_preserve_private_content[handoff-False]",
+        "tests.execution_r4.test_coordination_cli::test_commands_resume_latest_and_explicit_new_request_preserve_private_content[message-False]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-cli-surface-installed.xml",
+        "sha256": "fd15f4b5a6ef82b79e16be41309c2d084160940e0de35e2656ad30f555d9c509",
+        "bytes": 1539
+      },
+      "matched_cases": [
+        "tests.test_frente1_measurement::test_s4_cuttable_surface_meets_40pct_reduction_gate"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr05-coordination-cli-source-participant-coordination-mcp-agent.xml",
+        "sha256": "4916db0bc885b529303d912f9383845f162d23e98089a4f094d69e9d9f9939b5",
+        "bytes": 4295
+      },
+      "matched_cases": [
+        "tests.test_participant_coordination_mcp::test_invalid_call_is_refused_before_transport[message_create-arguments1]",
+        "tests.test_participant_coordination_mcp::test_invalid_call_is_refused_before_transport[message_create-arguments2]",
+        "tests.test_participant_coordination_mcp::test_invalid_call_is_refused_before_transport[message_create-arguments3]",
+        "tests.test_participant_coordination_mcp::test_invalid_call_is_refused_before_transport[session_open-arguments0]",
+        "tests.test_participant_coordination_mcp::test_real_tcp_discovery_creation_and_recovery_use_canonical_identity[handoff_create]",
+        "tests.test_participant_coordination_mcp::test_real_tcp_discovery_creation_and_recovery_use_canonical_identity[message_create]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "sha256": "5ef5be7d67ad8cbe394ac68269c2bbda8683de759107893402e27a371c6583bc",
+        "bytes": 389
+      },
+      "matched_cases": [
+        "tests.test_service_process::test_concurrent_detached_start_survives_cli_exit_reuses_and_drains"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+        "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0",
+        "bytes": 9752
+      },
+      "matched_cases": [
+        "tests.integration.test_detached_service_lifecycle::test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-locks.xml",
+        "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd",
+        "bytes": 3469
+      },
+      "matched_cases": [
+        "tests.test_serve_lock::test_canonical_home_alias_and_shared_database_are_exclusive",
+        "tests.test_serve_lock::test_serve_loser_does_not_bootstrap_or_migrate",
+        "tests.test_serve_lock::test_two_real_processes_one_owner_and_crash_releases_os_lock"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-locks.xml",
+        "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd",
+        "bytes": 3469
+      },
+      "matched_cases": [
+        "tests.test_serve_lock::test_legacy_stale_or_reused_pid_is_not_dead_proof[False]",
+        "tests.test_serve_lock::test_legacy_stale_or_reused_pid_is_not_dead_proof[None]",
+        "tests.test_serve_lock::test_old_owner_release_cannot_remove_changed_generation",
+        "tests.test_serve_lock::test_stale_heartbeat_never_steals_live_os_lock"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-readiness.xml",
+        "sha256": "b72f35f83ae7b84873c99dcd5d192e5a914170527f49433765e0d768e56691f8",
+        "bytes": 4939
+      },
+      "matched_cases": [
+        "tests.test_service_inspection::test_status_of_absent_instance_does_not_create_home_or_start_process"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+        "bytes": 12747
+      },
+      "matched_cases": [
+        "tests.test_project_doctor_cli::test_absent_instance_is_not_started_or_initialized",
+        "tests.test_project_doctor_cli::test_remote_default_reads_metadata_without_vault_network_or_local_service",
+        "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_LOGIN_REQUIRED-FAIL]",
+        "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_VAULT_UNAVAILABLE-UNKNOWN]",
+        "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[SERVER_UNREACHABLE-UNKNOWN]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+        "bytes": 1727
+      },
+      "matched_cases": [
+        "test_service_logs::test_absent_logs_are_passive_and_do_not_require_saved_python",
+        "test_service_logs::test_corrupt_or_secret_bearing_lines_are_withheld",
+        "test_service_logs::test_ctrl_c_ends_follow_without_lifecycle_mutation",
+        "test_service_logs::test_read_and_retention_are_bounded",
+        "test_service_logs::test_tail_and_json_expose_only_coded_records"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+        "sha256": "5deea2f609889b212f31ed9fdd9e245900892d412c788a08c96852c291665708",
+        "bytes": 25401
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_connect_login_start::test_partial_install_resumes_without_new_setup_or_model_test[checkpoint_loss]",
+        "tests.execution_r4.test_connect_login_start::test_partial_install_resumes_without_new_setup_or_model_test[drain_timeout]",
+        "tests.execution_r4.test_connect_login_start::test_remote_operator_option_never_resolves_local_startup"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-start-stop.xml",
+        "sha256": "ef194a3594fe3d124b2912c4990cd006c2a04127f9025c4b4371181524651c7b",
+        "bytes": 9112
+      },
+      "matched_cases": [
+        "tests.test_service_start::test_pending_launch_is_not_repeated_and_uses_detached_non_shell_entrypoint"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
+        "sha256": "2629642cb5c39608779025be284ebaaf49a8696fff293930958d888d336a1754",
+        "bytes": 19401
+      },
+      "matched_cases": [
+        "tests.okto_nexus.test_service_launch_recovery::test_actual_cli_recovery_and_late_child_are_fenced",
+        "tests.okto_nexus_connector.test_launch_recovery::test_actual_cli_recovery_and_late_child_are_fenced"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+        "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+        "bytes": 8036
+      },
+      "matched_cases": [
+        "tests.test_user_service_installation::test_edited_task_is_retained_for_every_mutation[install_user_service]",
+        "tests.test_user_service_installation::test_edited_task_is_retained_for_every_mutation[start]",
+        "tests.test_user_service_installation::test_edited_task_is_retained_for_every_mutation[uninstall_user_service]",
+        "tests.test_user_service_installation::test_foreign_task_conflicts_before_context_or_os_mutation",
+        "tests.test_user_service_installation::test_installed_start_uses_scheduler_and_reuses_pending_task"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-start-stop.xml",
+        "sha256": "ef194a3594fe3d124b2912c4990cd006c2a04127f9025c4b4371181524651c7b",
+        "bytes": 9112
+      },
+      "matched_cases": [
+        "tests.test_service_start::test_pending_launch_is_not_repeated_and_uses_detached_non_shell_entrypoint"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
+        "sha256": "2629642cb5c39608779025be284ebaaf49a8696fff293930958d888d336a1754",
+        "bytes": 19401
+      },
+      "matched_cases": [
+        "tests.okto_nexus.test_service_launch_recovery::test_actual_cli_recovery_and_late_child_are_fenced",
+        "tests.okto_nexus_connector.test_launch_recovery::test_actual_cli_recovery_and_late_child_are_fenced"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "sha256": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430",
+        "bytes": 11485
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_remote_renewal::test_rotated_credential_reconnects_completed_setup_and_fences_stale_review_and_tickets"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+        "bytes": 6749
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[starting-0]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+        "bytes": 6749
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[started-1]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+        "bytes": 6749
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[exited-1]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "sha256": "5ef5be7d67ad8cbe394ac68269c2bbda8683de759107893402e27a371c6583bc",
+        "bytes": 389
+      },
+      "matched_cases": [
+        "tests.test_service_process::test_concurrent_detached_start_survives_cli_exit_reuses_and_drains"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+        "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0",
+        "bytes": 9752
+      },
+      "matched_cases": [
+        "tests.integration.test_detached_service_lifecycle::test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+        "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+        "bytes": 8036
+      },
+      "matched_cases": [
+        "tests.test_user_service_installation::test_stale_stop_cannot_latch_new_generation",
+        "tests.test_user_service_installation::test_stop_persists_recovery_latch_before_request_and_never_stops_os_task"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-start-stop.xml",
+        "sha256": "ef194a3594fe3d124b2912c4990cd006c2a04127f9025c4b4371181524651c7b",
+        "bytes": 9112
+      },
+      "matched_cases": [
+        "tests.test_service_start::test_lost_shutdown_response_is_recovered_by_correlated_durable_receipt",
+        "tests.test_service_start::test_restart_does_not_start_when_drain_is_pending"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_interactive_cli_request_question_answer_result_and_return"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False]",
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True]",
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work[EOFError]",
+        "tests.execution_r4.test_terminal_work::test_leaving_interactive_cli_does_not_interrupt_or_close_service_owned_work[KeyboardInterrupt]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-readiness.xml",
+        "sha256": "b72f35f83ae7b84873c99dcd5d192e5a914170527f49433765e0d768e56691f8",
+        "bytes": 4939
+      },
+      "matched_cases": [
+        "tests.test_service_inspection::test_active_version_drift_requires_explicit_review",
+        "tests.test_service_inspection::test_another_instance_on_the_port_is_not_ready"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+        "sha256": "b51fe62f729834894267631af475539b4356daa7ccfcd76815898586d31ae7d6",
+        "bytes": 7382
+      },
+      "matched_cases": [
+        "tests.test_service_inspection::test_owner_change_during_response_requires_another_observation"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_doctor::test_passive_doctor_preserves_files_without_vault_http_process_or_recovery"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_doctor::test_actual_tcp_mcp_is_not_agent_participation_or_model_work"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+        "bytes": 12747
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_project_diagnostics::test_ready_connection_does_not_prove_provider_login_participation_or_work"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-readiness.xml",
+        "sha256": "b72f35f83ae7b84873c99dcd5d192e5a914170527f49433765e0d768e56691f8",
+        "bytes": 4939
+      },
+      "matched_cases": [
+        "tests.test_service_inspection::test_status_of_absent_instance_does_not_create_home_or_start_process"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+        "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+        "bytes": 12747
+      },
+      "matched_cases": [
+        "tests.test_project_doctor_cli::test_absent_instance_is_not_started_or_initialized",
+        "tests.test_project_doctor_cli::test_remote_default_reads_metadata_without_vault_network_or_local_service",
+        "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_LOGIN_REQUIRED-FAIL]",
+        "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[OPERATOR_VAULT_UNAVAILABLE-UNKNOWN]",
+        "tests.test_project_doctor_cli::test_remote_failure_never_uses_local_fallback_or_prints_remote_error_payload[SERVER_UNREACHABLE-UNKNOWN]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+        "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+        "bytes": 1727
+      },
+      "matched_cases": [
+        "test_service_logs::test_absent_logs_are_passive_and_do_not_require_saved_python",
+        "test_service_logs::test_corrupt_or_secret_bearing_lines_are_withheld",
+        "test_service_logs::test_ctrl_c_ends_follow_without_lifecycle_mutation",
+        "test_service_logs::test_read_and_retention_are_bounded",
+        "test_service_logs::test_tail_and_json_expose_only_coded_records"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+        "sha256": "e4f2ef4cb33218011bb2d5248f985ce6ee7ad9933c1a94a80f1c7de2d398ccac",
+        "bytes": 16105
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_connect::test_cli_plan_apply_and_reconnect_use_saved_profile",
+        "tests.execution_r4.test_terminal_connect::test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed.xml",
+        "sha256": "0fdea66f45c8f8dc012b8d803014fcb9939dfe94e18f1b3bc377836a8bcddfa9",
+        "bytes": 24608
+      },
+      "matched_cases": [
+        "tests.unit.test_connect_reuse::test_bare_connect_reuses_project_and_current_authority_without_rewrite"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "../okto-nexus-connector/docs/evidence/diagnostics-v1/installed.xml",
+        "sha256": "35d89a7b38b7c5aabeba6a688c2063a865619072fb973ef7cea9139dbc16b007",
+        "bytes": 13896
+      },
+      "matched_cases": [
+        "tests.unit.test_diagnostic_report_contract::test_default_legacy_shape_and_call_graph_are_preserved"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "../okto-nexus-connector/docs/evidence/diagnostics-v1/installed.xml",
+        "sha256": "35d89a7b38b7c5aabeba6a688c2063a865619072fb973ef7cea9139dbc16b007",
+        "bytes": 13896
+      },
+      "matched_cases": [
+        "tests.unit.test_diagnostic_report_contract::test_no_probe_does_not_resolve_credentials_or_contact_server"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr01-detached-process.xml",
+        "sha256": "5ef5be7d67ad8cbe394ac68269c2bbda8683de759107893402e27a371c6583bc",
+        "bytes": 389
+      },
+      "matched_cases": [
+        "tests.test_service_process::test_concurrent_detached_start_survives_cli_exit_reuses_and_drains"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+        "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0",
+        "bytes": 9752
+      },
+      "matched_cases": [
+        "tests.integration.test_detached_service_lifecycle::test_concurrent_cli_start_reuse_restart_and_drain_keep_one_owner"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+        "sha256": "7c4b58373b18fca73bede77df6ebd9075ce1f5670708841ddc98bba7aea34c26",
+        "bytes": 12346
+      },
+      "matched_cases": [
+        "test_user_service_installation::test_disabling_active_task_preserves_existing_generation_and_control",
+        "test_user_service_installation::test_enable_disable_are_scoped_idempotent_and_do_not_start_or_drain",
+        "test_user_service_installation::test_enablement_response_loss_is_reconciled_only_for_the_same_intent"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_init::test_init_and_connect_participant_share_review_and_cli_checkpoints[claude]",
+        "tests.execution_r4.test_participant_init::test_init_and_connect_participant_share_review_and_cli_checkpoints[codex]",
+        "tests.execution_r4.test_participant_init::test_init_and_connect_participant_share_review_and_cli_checkpoints[generic]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_init::test_participant_context_uses_bearer_identity_without_self_elevation[None-401]",
+        "tests.execution_r4.test_participant_init::test_participant_context_uses_bearer_identity_without_self_elevation[operator-403]",
+        "tests.execution_r4.test_participant_init::test_participant_context_uses_bearer_identity_without_self_elevation[subject-200]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_identity::test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/nexus/installed.xml",
+        "sha256": "99193233c05e14eae36adde80189a00b954516411e572cf12604dca21e4f43cd",
+        "bytes": 5174
+      },
+      "matched_cases": [
+        "tests.test_remote_setup_server::test_participant_and_revoked_principal_cannot_read_or_bootstrap"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_interactive_cli_request_question_answer_result_and_return"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False]",
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True]",
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False]",
+        "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_identity::test_colliding_identity_is_never_adopted_or_modified[False]",
+        "tests.execution_r4.test_terminal_identity::test_colliding_identity_is_never_adopted_or_modified[True]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+        "bytes": 38959
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_identity::test_default_cli_review_is_stable_and_reconnect_preserves_identity_customizations"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/nexus/installed.xml",
+        "sha256": "99193233c05e14eae36adde80189a00b954516411e572cf12604dca21e4f43cd",
+        "bytes": 5174
+      },
+      "matched_cases": [
+        "tests.test_remote_setup_server::test_participant_and_revoked_principal_cannot_read_or_bootstrap"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "sha256": "3b0dfe759ea90d97fcd5d41cf9055ea4fa0b847cd1ecb97f4006b88d9bbd3704",
+        "bytes": 760
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_project_preset_update::test_review_advances_only_unchanged_defaults_and_finish_recovers_once"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+        "sha256": "c858dd7c21295fd5af0598127ad5ea7154c1bf28920ea88e53124ed21d5f7fbc",
+        "bytes": 26321
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_project_preset_update::test_concurrent_change_refuses_finish_without_repair_or_authority[configuration]",
+        "tests.execution_r4.test_project_preset_update::test_concurrent_change_refuses_finish_without_repair_or_authority[grant]",
+        "tests.execution_r4.test_project_preset_update::test_concurrent_change_refuses_finish_without_repair_or_authority[identity]",
+        "tests.execution_r4.test_project_preset_update::test_concurrent_change_refuses_finish_without_repair_or_authority[preset]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+        "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+        "bytes": 14082
+      },
+      "matched_cases": [
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[claude]",
+        "tests.test_participant_config::test_reference_only_round_trip_and_selected_entry_ownership[codex]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+        "sha256": "d3d325891c083b1b72f012fcf9e1f89f90111c38437969cfb27ea1eadbfef418",
+        "bytes": 5639
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_init::test_review_apply_reconnect_preserves_runtime_and_other_configuration"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+        "sha256": "3b0dfe759ea90d97fcd5d41cf9055ea4fa0b847cd1ecb97f4006b88d9bbd3704",
+        "bytes": 760
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_project_preset_update::test_review_advances_only_unchanged_defaults_and_finish_recovers_once"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+        "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+        "bytes": 16634
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_participant_doctor::test_passive_doctor_preserves_files_without_vault_http_process_or_recovery"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[installations:check]",
+        "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[setup:finish]",
+        "tests.execution_r4.test_terminal_connect::test_response_loss_resumes_without_repeating_native_effects[setup:test]"
+      ],
+      "action": "read retained XML only"
+    },
+    {
+      "report": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+        "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+        "bytes": 19851
+      },
+      "matched_cases": [
+        "tests.execution_r4.test_terminal_work::test_interactive_cli_request_question_answer_result_and_return"
+      ],
+      "action": "read retained XML only"
+    }
+  ],
+  "distinct_passed_identities": 162
+}

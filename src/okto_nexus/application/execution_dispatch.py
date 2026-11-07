@@ -8,7 +8,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import json
 import secrets
-import time
 from typing import Mapping
 
 from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame
@@ -629,7 +628,8 @@ def begin_execution_send(
             grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
                              represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
                              substrate=mode, consume=not bootstrap and not native_decision,
-                             check_budget=not native_decision, uow=uow)
+                             check_budget=not native_decision, uow=uow,
+                             _continuation_action=row['action'] if native_decision else None)
             if grant is None:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                       "A canonical execution grant is required for dispatch.", {})

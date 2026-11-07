@@ -1,0 +1,174 @@
+{
+  "scope": "Exact public evidence bytes; no private runtime state or credential material included",
+  "files": {
+    "build/build.log": {
+      "sha256": "faf8e3d10597d2a1bd317c5d6fecce16b7514ed8c56ac92934d5ff1571a3c13b",
+      "bytes": 288394
+    },
+    "build/manifest.json": {
+      "sha256": "eae03fa792bea288f070dcd8a4744b7c888e031bd896e4f324d0ab8cf3a8d82d",
+      "bytes": 90762
+    },
+    "build/source-comparison.json": {
+      "sha256": "6888c0907966836c056301539fdc8e1e3049e84d6b4f2bca29093acdba6403c8",
+      "bytes": 130
+    },
+    "git-source-equivalence.json": {
+      "sha256": "edba9a5cea3777383e2cb1a4fc6654d2d39799299a0213a5669632e027213727",
+      "bytes": 6556
+    },
+    "installed/nexus-installed-fixture-retry/canonical/campaign.json": {
+      "sha256": "5394f22b52667cd2b99b1c1832c3b5b40e1ccd7ad34ae3285799384fbbb062dc",
+      "bytes": 251080
+    },
+    "installed/nexus-installed-fixture-retry/canonical/installed.json": {
+      "sha256": "54b25aef4f8387eccf76e14adc1a265e4547af87a2478df341b8f17f02b79e04",
+      "bytes": 756
+    },
+    "installed/nexus-installed-fixture-retry/canonical/tests.xml": {
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "bytes": 10540
+    },
+    "installed/nexus-installed-fixture-retry/environment.json": {
+      "sha256": "2878e98197cf4938bc7da131d15ac8d084cd485c355bdeb9a09715d8d3ba2d3d",
+      "bytes": 400
+    },
+    "installed/nexus-installed-fixture-retry/fixture-provenance.json": {
+      "sha256": "54f32a13d90a61260df533c821046c35b090c95e62d02117fa4ccd5fad851dc2",
+      "bytes": 132854
+    },
+    "installed/nexus-installed-fixture-retry/result.json": {
+      "sha256": "f8d55db9bc30acf431e75cd2dd3eb8db4ff800967907d1fff087e8908963a577",
+      "bytes": 4227
+    },
+    "installed/nexus-installed-fixture-retry/tests.txt": {
+      "sha256": "629d8895e7b73b18ab723ba806b874170c762f8355047a332ea33039dcae5333",
+      "bytes": 15136
+    },
+    "installed/nexus-installed-v1/canonical/campaign.json": {
+      "sha256": "b9aa027222147e1a4855afdb2dd6333e8d6982a301d3d88029ffafc58fdea662",
+      "bytes": 182257
+    },
+    "installed/nexus-installed-v1/canonical/installed.json": {
+      "sha256": "54b25aef4f8387eccf76e14adc1a265e4547af87a2478df341b8f17f02b79e04",
+      "bytes": 756
+    },
+    "installed/nexus-installed-v1/canonical/tests.xml": {
+      "sha256": "fab2cd1596e7ec6f7244578e8021f801d54270bcfa47f19b73a7a6e4e06129bb",
+      "bytes": 60132
+    },
+    "installed/nexus-installed-v1/environment.json": {
+      "sha256": "9ed801dee7954186e54c57412093f3aeae7ffcdaae105c323de344d70c86451a",
+      "bytes": 419
+    },
+    "installed/nexus-installed-v1/package-proof.json": {
+      "sha256": "d73d87d5c45f171a90b38d75e586ceb7103a9daa7f693791b1b81df238aa0b4e",
+      "bytes": 874
+    },
+    "installed/nexus-installed-v1/pip-check.txt": {
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31
+    },
+    "installed/nexus-installed-v1/result.json": {
+      "sha256": "585bf303d200d5371cdac594a1e1c0684f64791406cf09dba7ba979a4747f3fe",
+      "bytes": 4581
+    },
+    "installed/nexus-installed-v1/tests.txt": {
+      "sha256": "e4b8aaa690ddf1323a6c135c060640a0e43838b8238553d8014dcf36ec965d03",
+      "bytes": 69997
+    },
+    "milestone.md": {
+      "sha256": "c8d89ecf793e9081d3ff960a70871fa2b78da6f088893faa3a612b9dcb572282",
+      "bytes": 1792
+    },
+    "preparation/curate_nexus.py": {
+      "sha256": "6b039a3c00912ad7cf5a9320bde850d441e5110f7d56eb400000e48fe9a360e7",
+      "bytes": 5171
+    },
+    "preparation/finalize_nexus.py": {
+      "sha256": "72693bd0c4486dde3facdae71014de09cbeaefb1491d1c71e1197b26d3898e4f",
+      "bytes": 10442
+    },
+    "preparation/nexus-snapshot-v1.json": {
+      "sha256": "151df288fcccd37d9de09b6b0c744b44ad2169475ca3e9fc06161724995fdcaa",
+      "bytes": 175810
+    },
+    "preparation/qualify_nexus.py": {
+      "sha256": "c4d53b3d278ee6e82e691be36c42032649e8ea17665018ef333d3522bf9d409c",
+      "bytes": 3654
+    },
+    "preparation/retry_nexus.py": {
+      "sha256": "92755aa278de22c3f20ceb5d1b82209c63ac1d60c063081fa45f55e5d82e0c43",
+      "bytes": 4516
+    },
+    "preparation/third-party.txt": {
+      "sha256": "73fbc65e7255da7fe9ea293feabefc90b49d43619889d5e13e288879934f770d",
+      "bytes": 879
+    },
+    "public-review.json": {
+      "sha256": "8af4a1762054ab87391ea1d701f0a44301c516a651d83647e6e150791bf6d1e1",
+      "bytes": 175
+    },
+    "qualification.json": {
+      "sha256": "926b62892b561e43ff0cf8cd2baef4c962705c31faa6dfc6226fa1dfedf05ee8",
+      "bytes": 39148
+    },
+    "readonly-review.json": {
+      "sha256": "27ec9906770cec4fb86d72c12b26055cff8c335fbafff1d36032bce277b45d28",
+      "bytes": 3767
+    },
+    "source/continuation-final.xml": {
+      "sha256": "99447898af1c921a3c18116169b09f61b54c0a7ef7ed4196114465825091fa10",
+      "bytes": 21861
+    },
+    "source/continuation-v2-initial.xml": {
+      "sha256": "74e260faa6caf43df6fa5a4ed906e034f942abf5a1b05b75c32972620dcbb1d0",
+      "bytes": 10498
+    },
+    "source/core-integrated-initial.xml": {
+      "sha256": "feb281295ae245fcb053b6262a89a59a3d094b1993c60340f5b2bba85ca4075e",
+      "bytes": 6702
+    },
+    "source/focal-correct-environment.xml": {
+      "sha256": "f56658cd45ea66f5acc4b4cdce725544c5a06402258b790afae7e9a1c8d9b219",
+      "bytes": 8658
+    },
+    "source/focal-initial.xml": {
+      "sha256": "da6a520888fe7dcb97ca8a70189b7f0bcd5e928ea921c48cb3ded454f527f977",
+      "bytes": 1318
+    },
+    "source/focused-final.xml": {
+      "sha256": "9fa08cfc2adc44f935eca4f2e6f2ac2fc0968eade6a54207d5236c15738ec346",
+      "bytes": 5199
+    },
+    "source/initial.xml": {
+      "sha256": "5de68e92b0b0bffe3b11aa69f425919ce16d60fbdc003f301cee71c3c2abe07b",
+      "bytes": 3971
+    },
+    "source/late-renewal-final.xml": {
+      "sha256": "eda7ba65e6e9c45ec8e32ddb31797bb853514d69443d9367ceab3f0d936a933e",
+      "bytes": 913
+    },
+    "source/late-renewal-initial.xml": {
+      "sha256": "554d9e3137a9bc3186ed4a3e5a90359147865f5de538e6bd24a532add01d530f",
+      "bytes": 5067
+    },
+    "source/nexus-source-qualification.json": {
+      "sha256": "f544f08fceaf7fc165eda91a75ac369369f644fca1c2b0630a7551342617b3a9",
+      "bytes": 145091
+    },
+    "source/qualification.py": {
+      "sha256": "e0a4415a410cdf3d067c20c12b2c9bd2f13ca44f41d6d6fa446acb3d59e3fc9e",
+      "bytes": 7676
+    },
+    "source/regression-final.xml": {
+      "sha256": "70816590dea51ed3471dd15a08b0a2c9ae40ad8705755648900d457a52d2b633",
+      "bytes": 51423
+    },
+    "source/renewal-fixture-final.xml": {
+      "sha256": "c3c0392a26ba8906ed31271827c9190a4bc93b6cd750cc48bceabc54d3ca21f4",
+      "bytes": 931
+    }
+  },
+  "aggregate_sha256": "02dfbe76a64399270cf7ea08a7e55ab443e3cd66fa21f92435cd9fdf90094bf8"
+}

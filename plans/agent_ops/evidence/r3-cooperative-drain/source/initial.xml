@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="5" time="2.029" timestamp="2026-11-07T07:00:46.403536-03:00" hostname="Alienware_m15"><testcase classname="tests.test_service_drain_decision" name="test_timeout_does_not_start_shutdown_or_reopen_admission" time="0.010"><failure message="AssertionError: assert 'DRAINED' == 'DRAINING_PENDING'&#10;  &#10;  - DRAINING_PENDING&#10;  + DRAINED">@pytest.mark.asyncio
+    async def test_timeout_does_not_start_shutdown_or_reopen_admission():
+        owner, host, deps = coordinator()
+        report = await owner.request(timeout_seconds=.01)
+&gt;       assert report["state"] == "DRAINING_PENDING"
+E       AssertionError: assert 'DRAINED' == 'DRAINING_PENDING'
+E         
+E         - DRAINING_PENDING
+E         + DRAINED
+
+tests\test_service_drain_decision.py:41: AssertionError</failure></testcase><testcase classname="tests.test_service_drain_decision" name="test_force_requires_an_existing_expired_drain" time="0.006"><failure message="TypeError: ServerShutdownCoordinator.request() got an unexpected keyword argument 'force'">@pytest.mark.asyncio
+    async def test_force_requires_an_existing_expired_drain():
+        owner, host, deps = coordinator()
+        with pytest.raises(OktoNexusError):
+&gt;           await owner.request(timeout_seconds=0, force=True)
+E           TypeError: ServerShutdownCoordinator.request() got an unexpected keyword argument 'force'
+
+tests\test_service_drain_decision.py:57: TypeError</failure></testcase><testcase classname="tests.test_service_drain_decision" name="test_force_is_one_retained_decision_not_a_new_shutdown" time="0.006"><failure message="TypeError: ServerShutdownCoordinator.request() got an unexpected keyword argument 'force'">@pytest.mark.asyncio
+    async def test_force_is_one_retained_decision_not_a_new_shutdown():
+        owner, host, _ = coordinator()
+        await owner.request(timeout_seconds=0)
+        task = owner._task
+&gt;       await owner.request(timeout_seconds=0, force=True)
+E       TypeError: ServerShutdownCoordinator.request() got an unexpected keyword argument 'force'
+
+tests\test_service_drain_decision.py:73: TypeError</failure></testcase><testcase classname="tests.test_service_drain_decision" name="test_cancelled_observer_keeps_drain_owned_and_control_available" time="0.006"><failure message="assert 1 == 0&#10; +  where 1 = &lt;test_service_drain_decision.DrainHost object at 0x00000181AEBC5220&gt;.shutdown_calls">@pytest.mark.asyncio
+    async def test_cancelled_observer_keeps_drain_owned_and_control_available():
+        owner, host, _ = coordinator()
+        observer = asyncio.create_task(owner.request(timeout_seconds=1))
+        await asyncio.sleep(0)
+        observer.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await observer
+        assert owner._task is not None and not owner._task.cancelled()
+&gt;       assert host.shutdown_calls == 0
+E       assert 1 == 0
+E        +  where 1 = &lt;test_service_drain_decision.DrainHost object at 0x00000181AEBC5220&gt;.shutdown_calls
+
+tests\test_service_drain_decision.py:89: AssertionError</failure></testcase><testcase classname="tests.test_service_drain_decision" name="test_safety_shutdown_escalates_same_owner_without_operator_force" time="0.006"><failure message="AttributeError: 'ServerShutdownCoordinator' object has no attribute 'request_safety_shutdown'">@pytest.mark.asyncio
+    async def test_safety_shutdown_escalates_same_owner_without_operator_force():
+        owner, host, _ = coordinator()
+        await owner.request(timeout_seconds=0)
+        task = owner._task
+&gt;       await owner.request_safety_shutdown(timeout_seconds=0)
+E       AttributeError: 'ServerShutdownCoordinator' object has no attribute 'request_safety_shutdown'
+
+tests\test_service_drain_decision.py:99: AttributeError</failure></testcase></testsuite></testsuites>

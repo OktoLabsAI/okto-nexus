@@ -51,7 +51,9 @@ class ExecutionCapabilityService:
             raise _error(ErrorCode.CONFLICT, 'The session scope is ambiguous.')
         return rows[0]
 
-    def _authority(self, uow, scope, *, grant_id=None, grant_revision=None):
+    def _authority(self, uow, scope, *, grant_id=None, grant_revision=None, continuation_action=None):
+        if continuation_action not in {None, 'approval.decide', 'input.provide', 'session.authority'}:
+            raise ValueError('Invalid capability authority continuation.')
         containment = getattr(self.access, 'session_containment', None)
         if containment is not None:
             containment.require_not_pending(uow, scope)
@@ -80,7 +82,8 @@ class ExecutionCapabilityService:
             endpoint_id=row['endpoint_id'])
         grant = self.access.authorize(context, action='open', endpoint_id=row['endpoint_id'],
             represented_agent_id=scope['agent_id'], workspace_id=scope['workspace_id'],
-            substrate=semantic['payload']['mode'], uow=uow, audit=False, check_budget=False)
+            substrate=semantic['payload']['mode'], uow=uow, audit=False, check_budget=False,
+            _continuation_action=continuation_action)
         if (grant is None or (grant_revision is not None and grant['revision'] != grant_revision) or
                 (not grant['no_expiry'] and _stamp(grant['expires_at']) <= _stamp(self.access.clock.now_iso()))):
             raise _error(ErrorCode.PERMISSION_DENIED, 'A current session execution grant is required.')
@@ -254,7 +257,8 @@ class ExecutionCapabilityService:
             raise _error(ErrorCode.PERMISSION_DENIED, 'The session capability is unavailable in this scope.')
         expected_scope = json.loads(credential['scope_json'])
         authority, _ = self._authority(uow, expected_scope,
-            grant_id=credential['source_grant_id'], grant_revision=credential['source_grant_revision'])
+            grant_id=credential['source_grant_id'], grant_revision=credential['source_grant_revision'],
+            continuation_action='session.authority')
         lease = self.repo.effective(uow, expected_scope)
         states = ('OPEN_PENDING', 'READY') if transport_only and audience == 'nexus-mcp-session' and not actions else ('READY',)
         if (authority['lifecycle_state'] not in states or authority['lease_state'] != 'ACTIVE' or

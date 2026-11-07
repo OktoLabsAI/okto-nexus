@@ -1,0 +1,72 @@
+{
+  "format": "okto.svc07.finite-readonly-review",
+  "revision": 1,
+  "recorded_at": "2026-11-07T11:04:57.114599+00:00",
+  "status": "NO_BLOCKING_FINDINGS_IN_REVIEWED_SCOPE",
+  "review_mode": "Read-only diff, canonical contracts and existing test assertions; completed before this record was written.",
+  "files": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\runtime_access.py",
+      "sha256": "a362d7df03d648517dafa0d22309985837953ef991790bd03ce9d86a7504f957"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_capabilities.py",
+      "sha256": "24b2731f9b1afc0f5b4d028a4b07dd1ffd23da7c6af8a8e0acfbd8fb691a87d6"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_leases.py",
+      "sha256": "d0765bb4a3aab932eca9a39cd7ccd96c0a9243e7909f2cd458638abafa1235d0"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\server_shutdown.py",
+      "sha256": "c521b76f6573a9503c4dde0064f190d4bc213dbc6dbb9ac901e8b5920b8a7013"
+    }
+  ],
+  "findings": [],
+  "conclusions": [
+    {
+      "area": "authority continuation",
+      "reference": "runtime_access.py:49-59; execution_capabilities.py:259-269",
+      "result": "Internal continuation labels change only the admission-fence classification. Current principal, policy, source grant, revisions and applied live lease remain required. New capability issuance remains fenced."
+    },
+    {
+      "area": "committed renewal recovery",
+      "reference": "execution_leases.py:184-204,229-244,299-310",
+      "result": "Recovery after the prior lease expires requires the exact already-ISSUED live renewal, adjacent serial, same scope/channel/grant/action authority, and current canonical checks. A new request or an initial lease ACK does not inherit this exception."
+    },
+    {
+      "area": "quiescence and race",
+      "reference": "server_shutdown.py:129-165,175-201",
+      "result": "SQL retains productive or uncertain work. The remote control exception requires current READY/owner/binding and absence of pending productive work/native requests; Claude replacement steer is not exempt. Core activity revision and owned producers are rechecked after SQLite observation."
+    },
+    {
+      "area": "stop lifetime",
+      "reference": "server_shutdown.py:203-244,251-338",
+      "result": "Supervisor stop latch precedes normal or operator-forced containment. Retained observation permits containment while preserving store/owner lifetime until its reader joins; on_drained is delayed."
+    }
+  ],
+  "existing_tests_read": [
+    "tests/execution_r4/test_service_drain_authority.py",
+    "tests/execution_r4/test_service_cooperative_drain.py",
+    "tests/execution_r4/test_shutdown_admission.py",
+    "tests/test_service_drain_decision.py"
+  ],
+  "supporting_contracts_read": [
+    "src/okto_nexus/application/runtime_admission_fence.py",
+    "src/okto_nexus/application/execution_native_decisions.py",
+    "src/okto_nexus/bootstrap/runtime_host.py",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_session_release.py"
+  ],
+  "executions": {
+    "test_suites": 0,
+    "providers": 0,
+    "native_services": 0
+  },
+  "repository_edits": 0,
+  "limits": [
+    "Finite source review only; no claim of exhaustive interleaving proof.",
+    "Existing test assertions were inspected, not executed by this review.",
+    "Does not replace the installed qualification campaign in progress.",
+    "Hashes identify the frozen files at recording; no additional code review or tests were performed to create this record."
+  ]
+}

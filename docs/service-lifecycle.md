@@ -180,6 +180,31 @@ with a fingerprint check immediately before mutation. Task Scheduler provides
 no atomic fingerprint-conditional write against an external editor. Actual native
 mutation/login qualification is tracked separately from the isolated tests.
 
+## Drain and an explicit force decision
+
+`service stop` closes new productive admission and waits for admitted work.
+Authorized native decisions, results and reconciliation remain available during
+that wait. The first request fixes the drain deadline; repeating the request
+does not reset it. A timeout reports `DRAINING_PENDING`, never permission to
+interrupt work or proof of release.
+
+After inspecting the same instance and its current generation, an operator may
+explicitly request containment after the drain deadline:
+
+```powershell
+okto-nexus service stop --home C:\absolute\nexus-home --timeout 30 --json
+okto-nexus service status --home C:\absolute\nexus-home --json
+okto-nexus service stop --home C:\absolute\nexus-home --force --expected-generation REVIEWED_GENERATION --timeout 30 --json
+```
+
+Force requires an existing expired drain and the reviewed generation. It enters
+the existing owned-resource containment path; it does not mark uncertain work
+complete or authorize a new generation. Unknown ownership retains recovery and
+the instance lock until release is proved. Restart still requires confirmed
+drain. Stop intent is persisted before supervisor shutdown so the selected task
+does not interpret an explicit stop as a crash. Signals and external process
+termination use their separate safety-containment path.
+
 ## Passive service logs
 
 ```powershell

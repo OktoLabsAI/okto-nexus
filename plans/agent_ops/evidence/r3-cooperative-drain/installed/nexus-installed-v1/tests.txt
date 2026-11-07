@@ -1,0 +1,526 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\nexus-source-v1
+configfile: ..\..\nexus-ci-installed-1stceou9\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 247 items
+
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_timeout_does_not_start_shutdown_or_reopen_admission PASSED [  0%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_force_requires_an_existing_expired_drain PASSED [  0%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_force_is_one_retained_decision_not_a_new_shutdown PASSED [  1%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_cancelled_observer_keeps_drain_owned_and_control_available PASSED [  1%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_safety_shutdown_escalates_same_owner_without_operator_force PASSED [  2%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_supervisor_latch_failure_prevents_even_explicit_force PASSED [  2%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_service_force_checks_authority_generation_and_prior_drain PASSED [  2%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_force_cli_requires_explicit_stop_and_generation[arguments0] PASSED [  3%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_force_cli_requires_explicit_stop_and_generation[arguments1] PASSED [  3%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_force_cli_requires_explicit_stop_and_generation[arguments2] PASSED [  4%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_cli_orchestration_refuses_changed_generation_before_sending_force PASSED [  4%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_missing_core_drain_contract_remains_unknown PASSED [  4%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_authorized_reset_waits_for_unknown_resource_without_service_stop_latch PASSED [  5%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_local_force_preserves_explicit_refusal_without_echoing_peer_text[True] PASSED [  5%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_local_force_preserves_explicit_refusal_without_echoing_peer_text[False] PASSED [  6%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_force_contains_while_sql_observer_is_blocked_but_retains_owner_until_join PASSED [  6%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_normal_stop_keeps_old_wire_shape_while_force_is_explicit[False] PASSED [  6%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_normal_stop_keeps_old_wire_shape_while_force_is_explicit[True] PASSED [  7%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_drain_decision.py::test_core_revision_change_during_sql_read_invalidates_quiescent_proof PASSED [  7%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_cooperative_drain.py::test_idle_open_drains_without_force_or_rewriting_open_receipt PASSED [  8%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_cooperative_drain.py::test_drain_keeps_approval_and_terminal_publication_until_work_completes[None] PASSED [  8%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_cooperative_drain.py::test_drain_keeps_approval_and_terminal_publication_until_work_completes[agent] PASSED [  8%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_cooperative_drain.py::test_drain_keeps_approval_and_terminal_publication_until_work_completes[grant] PASSED [  9%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_cooperative_drain.py::test_drain_keeps_approval_and_terminal_publication_until_work_completes[revision] PASSED [  9%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_cooperative_drain.py::test_force_retains_uncertain_core_resources_until_release PASSED [ 10%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_cooperative_drain.py::test_canonical_open_needs_positive_ready_proof_and_inventory_failure_retains_owner PASSED [ 10%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_existing_capability_and_lease_continue_only_under_current_authority[None] PASSED [ 10%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_existing_capability_and_lease_continue_only_under_current_authority[revoked_grant] PASSED [ 11%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_existing_capability_and_lease_continue_only_under_current_authority[expired_grant] PASSED [ 11%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_existing_capability_and_lease_continue_only_under_current_authority[expired_lease] PASSED [ 12%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_existing_capability_and_lease_continue_only_under_current_authority[inactive_actor] PASSED [ 12%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_drain_cannot_issue_an_initial_lease_for_a_prepared_opening PASSED [ 12%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_drain_reconciles_only_the_exact_live_renewal_already_issued[None] PASSED [ 13%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_drain_reconciles_only_the_exact_live_renewal_already_issued[expired_renewal] PASSED [ 13%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_drain_reconciles_only_the_exact_live_renewal_already_issued[revoked_grant] PASSED [ 14%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_drain_authority.py::test_drain_does_not_install_a_previously_issued_initial_lease PASSED [ 14%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_instance_identity_is_not_agent_project_or_service_generation PASSED [ 14%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_readiness_never_promises_harness_or_work_authority[False-True-False-RUNNING-starting-False] PASSED [ 15%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_readiness_never_promises_harness_or_work_authority[True-True-False-RUNNING-ready-True] PASSED [ 15%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_readiness_never_promises_harness_or_work_authority[True-True-True-RUNNING-stopping-True] PASSED [ 16%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_readiness_never_promises_harness_or_work_authority[True-True-False-DRAINING_PENDING-stopping-True] PASSED [ 16%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_readiness_never_promises_harness_or_work_authority[True-False-False-RUNNING-failed-False] PASSED [ 17%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_local_readiness_is_generation_correlated_read_only_and_captures_active_version PASSED [ 17%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_participant_remote_operator_and_cross_origin_browser_cannot_inspect_service PASSED [ 17%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_stopping_instance_stays_observable_without_reopening_admission PASSED [ 18%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_embedded_app_without_service_owner_does_not_fabricate_readiness PASSED [ 18%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_readiness.py::test_stop_requires_local_operator_and_current_generation PASSED [ 19%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_background_context_retains_resolved_settings_without_terminal_secrets PASSED [ 19%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_pending_launch_is_not_repeated_and_uses_detached_non_shell_entrypoint PASSED [ 19%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_saved_context_distinguishes_frozen_defaults_from_explicit_policy PASSED [ 20%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_existing_service_is_reused_without_spawn_or_rewrite PASSED [ 20%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_concurrent_start_waits_on_exclusion_without_spawn PASSED [ 21%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_status_waits_while_another_cli_prepares_before_launch_receipt PASSED [ 21%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_receipt_write_survives_a_real_concurrent_windows_reader PASSED [ 21%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_persistent_receipt_write_failure_is_bounded_and_preserves_previous_state PASSED [ 22%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_installed_supervisor_never_falls_back_to_detached PASSED [ 22%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_facade_never_retries_failed_or_stopping_service[stopping-RUNTIME_DRAINING] PASSED [ 23%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_facade_never_retries_failed_or_stopping_service[failed-INSTANCE_MISMATCH] PASSED [ 23%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_facade_never_retries_failed_or_stopping_service[degraded-VERSION_INCOMPATIBLE] PASSED [ 23%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection[initial0] PASSED [ 24%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection[initial1] PASSED [ 24%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_transient_metadata_failure_waits_for_current_owner_without_another_start PASSED [ 25%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_saved_context_selects_same_endpoint_without_repeating_flags PASSED [ 25%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_restart_does_not_start_when_drain_is_pending PASSED [ 25%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_lost_shutdown_response_is_recovered_by_correlated_durable_receipt PASSED [ 26%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_service_start.py::test_unconfirmed_exit_does_not_authorize_restart PASSED [ 26%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_install_is_scoped_idempotent_and_preserves_context PASSED [ 27%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_foreign_task_conflicts_before_context_or_os_mutation PASSED [ 27%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_edited_task_is_retained_for_every_mutation[start] PASSED [ 27%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_edited_task_is_retained_for_every_mutation[uninstall_user_service] PASSED [ 28%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_edited_task_is_retained_for_every_mutation[install_user_service] PASSED [ 28%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_changed_context_does_not_rewrite_or_launch PASSED [ 29%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_installed_start_uses_scheduler_and_reuses_pending_task PASSED [ 29%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_creation_response_loss_does_not_overwrite_or_adopt_existing_task PASSED [ 29%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_creation_failed_before_effect_retries_same_durable_intent PASSED [ 30%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_persisted_native_response_is_recoverable_without_creating_again PASSED [ 30%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_uninstall_waits_for_task_exit_then_preserves_all_user_data PASSED [ 31%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_lost_removal_response_recovers_only_from_positive_absence PASSED [ 31%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_uninstall_without_home_is_passive PASSED [ 31%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_supervised_entry_suppresses_recovery_after_explicit_stop PASSED [ 32%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_supervised_entry_is_foreground_fenced_and_uses_saved_context PASSED [ 32%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_failed_supervised_start_remains_nonzero_for_bounded_os_recovery PASSED [ 33%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_facade_preflights_then_drains_before_registration_or_removal PASSED [ 33%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_cli_requires_explicit_user_and_logon_scope[argv0] PASSED [ 34%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_cli_requires_explicit_user_and_logon_scope[argv1] PASSED [ 34%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_cli_requires_explicit_user_and_logon_scope[argv2] PASSED [ 34%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_cli_requires_explicit_user_and_logon_scope[argv3] PASSED [ 35%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_native_adapter_never_overwrites_and_checks_fingerprint_before_mutation PASSED [ 35%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_stop_persists_recovery_latch_before_request_and_never_stops_os_task PASSED [ 36%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_stale_stop_cannot_latch_new_generation PASSED [ 36%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_different_home_cannot_install_another_supervisor_for_same_database PASSED [ 36%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_lost_start_response_retains_pending_request_without_resubmission PASSED [ 37%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_stop_before_scheduled_entry_starts_suppresses_it_without_force PASSED [ 37%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_foreground_refuses_installed_integration_before_bootstrap PASSED [ 38%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_later_user_login_is_distinct_from_crash_retry_after_stop PASSED [ 38%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_native_host_preflight_validates_without_registering_or_creating_home PASSED [ 38%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_enable_disable_are_scoped_idempotent_and_do_not_start_or_drain PASSED [ 39%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_disabling_active_task_preserves_existing_generation_and_control PASSED [ 39%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_enablement_response_loss_is_reconciled_only_for_the_same_intent PASSED [ 40%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_external_edit_during_enablement_stays_pending_without_overwrite PASSED [ 40%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_external_enabled_edit_requires_review_without_a_matching_intent PASSED [ 40%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_disabled_queued_entry_exits_before_bootstrap PASSED [ 41%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_disable_can_be_used_with_missing_recorded_interpreter PASSED [ 41%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_enable_absent_instance_does_not_create_state PASSED [ 42%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\test_user_service_installation.py::test_native_preflight_from_worker_releases_com_on_that_thread PASSED [ 42%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch FAILED [ 42%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_connector_requests_canonical_capability_over_public_http PASSED [ 43%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_issuer_must_own_session_or_be_canonical_operator[operator-200] PASSED [ 43%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_issuer_must_own_session_or_be_canonical_operator[registrar-404] PASSED [ 44%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_issuer_must_own_session_or_be_canonical_operator[other-404] PASSED [ 44%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change0] FAILED [ 44%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change1] FAILED [ 45%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change2] FAILED [ 45%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change3] FAILED [ 46%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change4] FAILED [ 46%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change5] FAILED [ 46%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change6] FAILED [ 47%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_revalidates_authority_and_never_returns_old_material[UPDATE runtime_profiles SET enabled=0] PASSED [ 47%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_revalidates_authority_and_never_returns_old_material[UPDATE agents SET is_active=0 WHERE agent_id='subject'] PASSED [ 48%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_revalidates_authority_and_never_returns_old_material[UPDATE runtime_execution_grants SET revoked_at='2026-01-01T00:00:00Z'] PASSED [ 48%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_revalidates_authority_and_never_returns_old_material[UPDATE execution_sessions SET owner_generation=owner_generation+1] PASSED [ 48%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_revalidates_authority_and_never_returns_old_material[UPDATE execution_sessions SET lifecycle_state='STOPPED'] PASSED [ 49%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_revalidates_authority_and_never_returns_old_material[UPDATE execution_realizations SET revision=revision+1] PASSED [ 49%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_audiences_do_not_interchange_or_authenticate_as_agent_keys PASSED [ 50%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_stable_secret_follows_applied_lease_and_keeps_scope_ceiling PASSED [ 50%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE runtime_execution_grants SET revoked_at='2026-01-01T00:00:00Z'] PASSED [ 51%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE runtime_execution_grants SET revision=revision+1] PASSED [ 51%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE runtime_profiles SET enabled=0] PASSED [ 51%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE agents SET api_key_hash='rotated' WHERE agent_id='subject'] PASSED [ 52%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE execution_agent_revisions SET credential_epoch=credential_epoch+1 WHERE agent_id='subject'] PASSED [ 52%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-sql5] PASSED [ 53%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-sql6] PASSED [ 53%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE execution_sessions SET owner_generation=owner_generation+1] PASSED [ 53%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE execution_leases SET valid_until_server='2000-01-01T00:00:00Z'] PASSED [ 54%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[False-UPDATE execution_sessions SET lifecycle_state='STOPPED'] PASSED [ 54%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE runtime_execution_grants SET revoked_at='2026-01-01T00:00:00Z'] PASSED [ 55%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE runtime_execution_grants SET revision=revision+1] PASSED [ 55%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE runtime_profiles SET enabled=0] PASSED [ 55%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE agents SET api_key_hash='rotated' WHERE agent_id='subject'] PASSED [ 56%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE execution_agent_revisions SET credential_epoch=credential_epoch+1 WHERE agent_id='subject'] PASSED [ 56%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-sql5] PASSED [ 57%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-sql6] PASSED [ 57%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE execution_sessions SET owner_generation=owner_generation+1] PASSED [ 57%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE execution_leases SET valid_until_server='2000-01-01T00:00:00Z'] PASSED [ 58%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[True-UPDATE execution_sessions SET lifecycle_state='STOPPED'] PASSED [ 58%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_restored_capability_requires_current_server_and_core_authority[strict-none] PASSED [ 59%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_restored_capability_requires_current_server_and_core_authority[strict-renewed] PASSED [ 59%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_restored_capability_requires_current_server_and_core_authority[strict-server_revoked] PASSED [ 59%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_restored_capability_requires_current_server_and_core_authority[strict-local_revoked] PASSED [ 60%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_restored_capability_requires_current_server_and_core_authority[strict-serial] PASSED [ 60%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_restored_capability_requires_current_server_and_core_authority[strict-vault_missing] PASSED [ 61%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[none] FAILED [ 61%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[reserved] PASSED [ 61%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[other_agent] PASSED [ 62%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[extra] PASSED [ 62%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[duplicate] PASSED [ 63%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[expired] PASSED [ 63%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[renewing] FAILED [ 63%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[renewing_expired] PASSED [ 64%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[input] PASSED [ 64%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input] PASSED [ 65%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input] PASSED [ 65%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED] FAILED [ 65%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED] FAILED [ 66%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[subject] PASSED [ 66%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[other] PASSED [ 67%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[hash] PASSED [ 67%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[revision] PASSED [ 68%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[cas] PASSED [ 68%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[scope] PASSED [ 68%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[generation] PASSED [ 69%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[expired] PASSED [ 69%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[terminal] PASSED [ 70%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[grant] PASSED [ 70%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_invalid_or_stale_decision_cannot_create_an_operation[profile] PASSED [ 70%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_two_interfaces_race_for_one_canonical_decision PASSED [ 71%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_outbox_failure_rolls_back_canonical_approval_and_decision PASSED [ 71%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_sensitive_input_is_retained_in_memory_and_explicitly_resupplied_after_loss[input] PASSED [ 72%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_dispatch_revalidates_operator_decision_and_uses_control_lane[None] PASSED [ 72%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_dispatch_revalidates_operator_decision_and_uses_control_lane[operator] PASSED [ 72%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_dispatch_revalidates_operator_decision_and_uses_control_lane[decision] PASSED [ 73%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_dispatch_revalidates_operator_decision_and_uses_control_lane[payload] PASSED [ 73%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_dispatch_revalidates_operator_decision_and_uses_control_lane[grant] PASSED [ 74%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_input_dispatch_reconstructs_exact_wire_without_persisting_response[input] PASSED [ 74%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_lost_input_is_reported_without_inventing_a_native_receipt[input] PASSED [ 74%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_inactive_agent_retained_approval_is_non_actionable PASSED [ 75%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[True-approval-approve] PASSED [ 75%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[True-approval-deny] PASSED [ 76%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[True-input-approve] PASSED [ 76%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[True-input-deny] PASSED [ 76%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[False-approval-approve] PASSED [ 77%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[False-approval-deny] PASSED [ 77%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[False-input-approve] PASSED [ 78%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_embedded_native_decisions.py::test_embedded_native_decision_roundtrip[False-input-deny] PASSED [ 78%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_admission.py::test_prepared_new_work_is_refused_but_replay_and_close_remain_available PASSED [ 78%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_admission.py::test_cached_authorizers_share_memory_fence_before_storage[build_execution_access] PASSED [ 79%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_admission.py::test_cached_authorizers_share_memory_fence_before_storage[build_access_service] PASSED [ 79%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_shutdown.py::test_shutdown_contains_native_open_finishing_after_deadline PASSED [ 80%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_shutdown.py::test_operator_shutdown_returns_pending_and_keeps_recovery_available PASSED [ 80%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_shutdown.py::test_shutdown_cli_over_tcp_retains_server_until_recovery PASSED [ 80%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_shutdown.py::test_shutdown_retry_recovers_inventory_release_and_cancelled_observer PASSED [ 81%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_shutdown.py::test_two_runtime_shutdown_reports_stopped_release_and_unknown_separately PASSED [ 81%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGINT] PASSED [ 82%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGTERM] PASSED [ 82%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGINT] PASSED [ 82%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGTERM] PASSED [ 83%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[False] PASSED [ 83%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[True] PASSED [ 84%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores[quiesce-False] PASSED [ 84%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores[quiesce-True] PASSED [ 85%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores[pump-False] PASSED [ 85%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores[pump-True] PASSED [ 85%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores[history-False] PASSED [ 86%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores[history-True] PASSED [ 86%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_bounded_shutdown_recovers_same_uncertain_runtime[unknown] PASSED [ 87%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_bounded_shutdown_recovers_same_uncertain_runtime[error] PASSED [ 87%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_cancelled_shutdown_request_keeps_cleanup_owned PASSED [ 87%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_shutdown_retries_final_publication_without_reopening_native PASSED [ 88%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_shutdown_storage_order.py::test_lifespan_retains_embedded_owner_until_pending_recovery PASSED [ 88%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_reset_remote_close_uses_authenticated_dashboard_operator PASSED [ 89%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_reset_preserves_configured_local_connection_and_can_deliver_again[False] PASSED [ 89%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_reset_preserves_configured_local_connection_and_can_deliver_again[True] PASSED [ 89%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_reset_retains_history_until_native_stops PASSED [ 90%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_reset_preserves_installation_observation_without_reprobing PASSED [ 90%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_failed_drain_keeps_history_and_resumes_admission PASSED [ 91%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_reset_generation_survives_backup_and_cold_start FAILED [ 91%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_failed_history_reset_rolls_back_data_and_immutability_fence[False] PASSED [ 91%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_failed_history_reset_rolls_back_data_and_immutability_fence[True] PASSED [ 92%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_independent_inventory.py::test_reset_waits_only_for_preserved_selected_harness[codex_app_server] PASSED [ 92%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_independent_inventory.py::test_reset_waits_only_for_preserved_selected_harness[pi_rpc] PASSED [ 93%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[False-grant] FAILED [ 93%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[False-ack] FAILED [ 93%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[True-grant] PASSED [ 94%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[True-ack] PASSED [ 94%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_real_writer_timeout_preserves_runtime_and_next_renewal[grant-codex_app_server] PASSED [ 95%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_real_writer_timeout_preserves_runtime_and_next_renewal[grant-claude_stream] PASSED [ 95%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_real_writer_timeout_preserves_runtime_and_next_renewal[grant-pi_rpc] PASSED [ 95%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_real_writer_timeout_preserves_runtime_and_next_renewal[ack-codex_app_server] PASSED [ 96%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_real_writer_timeout_preserves_runtime_and_next_renewal[ack-claude_stream] PASSED [ 96%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_real_writer_timeout_preserves_runtime_and_next_renewal[ack-pi_rpc] PASSED [ 97%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_recovery_status_timeout_retains_subject_fence_without_host_containment[state] PASSED [ 97%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_recovery_status_timeout_retains_subject_fence_without_host_containment[diagnostic] PASSED [ 97%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_nonretryable_recovery_state_failure_remains_fatal PASSED [ 98%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_initial_lease_refusal.py::test_initial_denial_commits_exact_no_effect_receipt_and_closes_only_its_session[False-before_grant] PASSED [ 98%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_initial_lease_refusal.py::test_initial_denial_commits_exact_no_effect_receipt_and_closes_only_its_session[False-before_applied] PASSED [ 99%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_initial_lease_refusal.py::test_initial_denial_commits_exact_no_effect_receipt_and_closes_only_its_session[True-before_grant] PASSED [ 99%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_initial_lease_refusal.py::test_initial_denial_commits_exact_no_effect_receipt_and_closes_only_its_session[True-before_applied] PASSED [100%]
+
+================================== FAILURES ===================================
+_ test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch _
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:70: in test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+___ test_capability_request_rejects_invalid_fields_before_issuance[change0] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+___ test_capability_request_rejects_invalid_fields_before_issuance[change1] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+___ test_capability_request_rejects_invalid_fields_before_issuance[change2] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+___ test_capability_request_rejects_invalid_fields_before_issuance[change3] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+___ test_capability_request_rejects_invalid_fields_before_issuance[change4] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+___ test_capability_request_rejects_invalid_fields_before_issuance[change5] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+___ test_capability_request_rejects_invalid_fields_before_issuance[change6] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+____ test_metadata_is_authorized_read_only_and_never_returns_secret[none] _____
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py:151: in test_metadata_is_authorized_read_only_and_never_returns_secret
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+__ test_metadata_is_authorized_read_only_and_never_returns_secret[renewing] ___
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py:151: in test_metadata_is_authorized_read_only_and_never_returns_secret
+    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+_ test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED] _
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py:142: in test_public_cas_records_exactly_one_application_and_replay
+    schema = json.loads((Path(__file__).parents[2]/"plans/contratos/http-target.schema.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+_ test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED] _
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py:142: in test_public_cas_records_exactly_one_application_and_replay
+    schema = json.loads((Path(__file__).parents[2]/"plans/contratos/http-target.schema.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\plans\\contratos\\http-target.schema.json'
+____________ test_reset_generation_survives_backup_and_cold_start _____________
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py:230: in test_reset_generation_survives_backup_and_cold_start
+    from test_canonical_backup_artifacts import procedure
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+..\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\assertion\rewrite.py:185: in exec_module
+    exec(co, module.__dict__)
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_canonical_backup_artifacts.py:22: in <module>
+    spec.loader.exec_module(procedure)
+<frozen importlib._bootstrap_external>:1022: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:1159: in get_code
+    ???
+<frozen importlib._bootstrap_external>:1217: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tools\\offline_runtime_backup.py'
+_ test_transient_renewal_failure_retries_or_contains_only_session[False-grant] _
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py:67: in test_transient_renewal_failure_retries_or_contains_only_session
+    asyncio.run(scenario())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py:54: in scenario
+    assert not failed_agents and not failed_hosts
+E   assert (not [('Pi', AttributeError("'types.SimpleNamespace' object has no attribute '_lease_wake'"))])
+_ test_transient_renewal_failure_retries_or_contains_only_session[False-ack] __
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py:67: in test_transient_renewal_failure_retries_or_contains_only_session
+    asyncio.run(scenario())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py:54: in scenario
+    assert not failed_agents and not failed_hosts
+E   assert (not [('Pi', AttributeError("'types.SimpleNamespace' object has no attribute '_lease_wake'"))])
+============================== warnings summary ===============================
+..\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\nexus-installed-v1\canonical\tests.xml -
+=========================== short test summary info ===========================
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change0]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change1]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change2]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change3]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change4]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change5]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change6]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[none]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[renewing]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_reset_connections.py::test_reset_generation_survives_backup_and_cold_start
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[False-grant]
+FAILED ..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[False-ack]
+============ 15 failed, 232 passed, 1 warning in 783.95s (0:13:03) ============

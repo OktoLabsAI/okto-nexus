@@ -1,0 +1,1289 @@
+{
+  "files": [
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/configure_local.py",
+      "sha256": "eff8932363be322af0107bbaea1ead053c18a3b8203583315829e966ff53f166",
+      "bytes": 23003
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect.py",
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4",
+      "bytes": 15851
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/connect_reuse.py",
+      "sha256": "e5f0b13ab29aa9c1f59a9aa684c5ad92605f863850368b0e000a17cf63061925",
+      "bytes": 15168
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/commands/doctor.py",
+      "sha256": "f3308b16d9979a9db8425e19bb02d59f1cb830b001102837618f7963326c0d57",
+      "bytes": 19111
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/cli/diagnostic_report.py",
+      "sha256": "a16f0f5b86a73a08c4e014b6a397be38728dffbc3730596d9317eeb801a7c7b6",
+      "bytes": 16644
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/daemon/lifecycle.py",
+      "sha256": "3b7541b832ed1ff7eaba213ddefbc841a56d869754a7eb863f3930ada420c4d8",
+      "bytes": 17738
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/service_context.py",
+      "sha256": "7871f6e2d90cb6ed82ab50a1897610edf8316e6e1c71b8133682526b28b7954d",
+      "bytes": 6455
+    },
+    {
+      "repository": "connector",
+      "path": "src/okto_nexus_connector/platform/user_service.py",
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804",
+      "bytes": 14169
+    },
+    {
+      "repository": "connector",
+      "path": "tests/unit/test_connect_reuse.py",
+      "sha256": "f7bb7eecd2069ba6014e73b4da6fd1fb0d85c1aeb92db5baa1a0b1a3310f77ec",
+      "bytes": 14247
+    },
+    {
+      "repository": "connector",
+      "path": "tests/unit/test_diagnostic_report_contract.py",
+      "sha256": "b81c6c6da3b3ef93b58b8e09c478425143570e09a2d98f2613938fd0df4f2bff",
+      "bytes": 16102
+    },
+    {
+      "repository": "core",
+      "path": "docs/evidence/cooperative-drain/summary.json",
+      "sha256": "0b723e944adb98b0036be92625228526cffee5c43ed1eafd4905b9e16fbbc93f",
+      "bytes": 3361
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/__init__.py",
+      "sha256": "2c4ca5d38bac7033748d5eea54aa5acb5d868566136c5a6d6782a5e65c507caf",
+      "bytes": 11272
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/config_document.py",
+      "sha256": "ada269c555e38a4d8670ecbcbf712cb8a929339898ead4e76b0544464bc967df",
+      "bytes": 13049
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/connection_configuration.py",
+      "sha256": "1017c9e482682aee10080d617faf465ce6efd3c75c276b7e95eb2601b817adcc",
+      "bytes": 6721
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/drain.py",
+      "sha256": "65359996135f94e421f4a014fc0f5d95bb8eee2bff4ef87ee9d0b3b217eb766f",
+      "bytes": 13101
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/journal.py",
+      "sha256": "718e46f30b7a5c10d3d20eec7753af60a40c5688f702d2994563211953b026b2",
+      "bytes": 100731
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/kernel.py",
+      "sha256": "d0ea79751775ccd4c5d1198022c23783be9aab883757c5cb2edf29ce07fa0713",
+      "bytes": 9188
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/native/runtime_bridge.py",
+      "sha256": "9b25fdd47b80da79f3e933bc4daeabac7158dfcf0f39239a2a8b78786fed75af",
+      "bytes": 64006
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/operation_refusal_r4.py",
+      "sha256": "80e86b145db99cafafda30a471070e64c874b4e8eb1a4e4a67c65d03902d033f",
+      "bytes": 10204
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/participant_config.py",
+      "sha256": "340820cd81082dc0715b597bb7888f3ec22c92f3810374743d51012d7b170d43",
+      "bytes": 7049
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/ports.py",
+      "sha256": "851ab534cd89b240d25703e42b495441e89403f14fe86610e09fad99665ff94e",
+      "bytes": 14386
+    },
+    {
+      "repository": "core",
+      "path": "src/nexus_connector_core/runtime.py",
+      "sha256": "c4cf6e4c69c04c55c0dbdd848f371746dff2827d2768c9afe8c75e4af3c97c18",
+      "bytes": 168825
+    },
+    {
+      "repository": "core",
+      "path": "tests/test_participant_config.py",
+      "sha256": "b768e9cba98dc5228ccb6ff6aad6d4dc8a730ad38bf42a43cac355373726bba3",
+      "bytes": 8216
+    },
+    {
+      "repository": "nexus",
+      "path": "../okto-nexus-connector-core/docs/evidence/cooperative-drain/milestone.md",
+      "sha256": "d8e7fbe254c90fb3ba3667aba4c20d6c2cfd24d7dea36287333f56f7095b9c37",
+      "bytes": 2003
+    },
+    {
+      "repository": "nexus",
+      "path": "../okto-nexus-connector-core/docs/evidence/cooperative-drain/summary.json",
+      "sha256": "0b723e944adb98b0036be92625228526cffee5c43ed1eafd4905b9e16fbbc93f",
+      "bytes": 3361
+    },
+    {
+      "repository": "nexus",
+      "path": "../okto-nexus-connector/docs/evidence/cooperative-drain/installed/reports.json",
+      "sha256": "b5c288382e9d3c8a5b1fece6a41d113031647b254aa1cead7806e67e27c2b827",
+      "bytes": 2423
+    },
+    {
+      "repository": "nexus",
+      "path": "../okto-nexus-connector/docs/evidence/diagnostics-v1/installed.xml",
+      "sha256": "35d89a7b38b7c5aabeba6a688c2063a865619072fb973ef7cea9139dbc16b007",
+      "bytes": 13896
+    },
+    {
+      "repository": "nexus",
+      "path": "../okto-nexus-connector/src/okto_nexus_connector/daemon/r4_execution.py",
+      "sha256": "3a9f62ce21f692e5caa473b7fe29e79b1563328d714aae2707dd9f69b55a1039",
+      "bytes": 18056
+    },
+    {
+      "repository": "nexus",
+      "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+      "bytes": 133337
+    },
+    {
+      "repository": "nexus",
+      "path": "docs/herdr-observer.md",
+      "sha256": "9d02c9be3a1373184fe7901885a239ba985e9d05076f7a4dcfd8e41e2a9d041f",
+      "bytes": 12237
+    },
+    {
+      "repository": "nexus",
+      "path": "docs/terminal-connect.md",
+      "sha256": "6fe36d65469eb913157c286d11e7937c8c8b0582cc41aa977cf5ece717639ee9",
+      "bytes": 10706
+    },
+    {
+      "repository": "nexus",
+      "path": "docs/terminal-work.md",
+      "sha256": "4d7c54c5ea55e4d46b417d70b26834f73154cf7048524c014ce469aef6cc2a9e",
+      "bytes": 8314
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/App.tsx",
+      "sha256": "2d56774e52c70eb7646fd5225cb11e1609c33919a2ae209346dc53a148544e87",
+      "bytes": 42958
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/attentionController.ts",
+      "sha256": "6cf1c8e313e74f9b08f44102687f7b89dc2cff9bf25871a9c7e32e28638d3804",
+      "bytes": 18516
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/attentionNavigation.ts",
+      "sha256": "f4a12551e8b67e5b58eb31f6532982961fc9291d25894db808d7c645d73fbcdc",
+      "bytes": 10332
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/components/AttentionInspection.tsx",
+      "sha256": "1ff69ba63cfeac70d570edbd67b217e21d3f970c2ff5c29234ccd0d3ae808407",
+      "bytes": 6145
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/components/CanonicalObservation.tsx",
+      "sha256": "c69aa1b349d93f80146f1218b3137e98dce16d44cebb68e5fab9dfd2e9d7905f",
+      "bytes": 3809
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/components/ExternalObservations.tsx",
+      "sha256": "024d17937840ee5e66f342d44fd2d6e9fd39a8ffe11127b67b180502968af947",
+      "bytes": 9928
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/participantGuide.ts",
+      "sha256": "1dccd57fac3d5db0139569e63e3acc019dd4d2f0506c63f50205f9311c27c394",
+      "bytes": 4944
+    },
+    {
+      "repository": "nexus",
+      "path": "frontend/src/views/AttentionView.tsx",
+      "sha256": "82b866cbffad184ee08e99f4fb5138e63e3cbdce0fa3b3a89a924f0e2ea3189a",
+      "bytes": 18812
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/adr.md",
+      "sha256": "cff9c9d49af28f6d4e0f69d3674e9ec658cf6a4addfc831720a63da3392e884c",
+      "bytes": 5233
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/campaigns/participant-environment.py",
+      "sha256": "d850d4e5c7d4a0f24ee7d31b924b8e01d2e73a132f29dbecee3cea40dd0fa49a",
+      "bytes": 9234
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/campaigns/windows-user-service.md",
+      "sha256": "2a605d21972b72bfa60fac27da7a087af4a91e3167862a5bea315213dadf0db4",
+      "bytes": 3584
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-detached-process.xml",
+      "sha256": "5ef5be7d67ad8cbe394ac68269c2bbda8683de759107893402e27a371c6583bc",
+      "bytes": 389
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-locks.xml",
+      "sha256": "8b197a81204808e21cc869f8b1d5bb33f2e5f8863fadabfe30f35db75a7418dd",
+      "bytes": 3469
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-readiness.xml",
+      "sha256": "b72f35f83ae7b84873c99dcd5d192e5a914170527f49433765e0d768e56691f8",
+      "bytes": 4939
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr01-start-stop.xml",
+      "sha256": "ef194a3594fe3d124b2912c4990cd006c2a04127f9025c4b4371181524651c7b",
+      "bytes": 9112
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-connector-user-service.xml",
+      "sha256": "4fbc401c9039c70d207d38475e47d13ddd2694b4fbbb76f82a28d9e389f92bf0",
+      "bytes": 9752
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+      "sha256": "7c4b58373b18fca73bede77df6ebd9075ce1f5670708841ddc98bba7aea34c26",
+      "bytes": 12346
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-launch-recovery-installed.xml",
+      "sha256": "2629642cb5c39608779025be284ebaaf49a8696fff293930958d888d336a1754",
+      "bytes": 19401
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
+      "sha256": "7e4f6d23df82a771a35f97de4d1ea9a5e0f580b156ea1ab682362e315579aefa",
+      "bytes": 1727
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-service-logs.xml",
+      "sha256": "b51fe62f729834894267631af475539b4356daa7ccfcd76815898586d31ae7d6",
+      "bytes": 7382
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+      "sha256": "b473d2d9fcf7a2685c8fabba94a64268cd9da769020ed76aebe336af4ffe2d08",
+      "bytes": 8036
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-connector-reconnect-connector-installed.xml",
+      "sha256": "0fdea66f45c8f8dc012b8d803014fcb9939dfe94e18f1b3bc377836a8bcddfa9",
+      "bytes": 24608
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-login-start-installed.xml",
+      "sha256": "5deea2f609889b212f31ed9fdd9e245900892d412c788a08c96852c291665708",
+      "bytes": 25401
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-preset-evolution-installed.xml",
+      "sha256": "c858dd7c21295fd5af0598127ad5ea7154c1bf28920ea88e53124ed21d5f7fbc",
+      "bytes": 26321
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-preset-evolution-reconnect-installed.xml",
+      "sha256": "3b0dfe759ea90d97fcd5d41cf9055ea4fa0b847cd1ecb97f4006b88d9bbd3704",
+      "bytes": 760
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-dashboard-browser.json",
+      "sha256": "f0982bd9a3b65c9d5466f57fe8e51d9ee2f406713c1027d2ed2730cf0d041268",
+      "bytes": 2354
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
+      "sha256": "b0fed697873554447cf5862ea39dbcc66d8d6d2cf66c53d060f13f76223a5100",
+      "bytes": 12747
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/nexus/installed.xml",
+      "sha256": "99193233c05e14eae36adde80189a00b954516411e572cf12604dca21e4f43cd",
+      "bytes": 5174
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+      "sha256": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430",
+      "bytes": 11485
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+      "sha256": "7112703111e576e88960ad7a5cbbd896ed8c322511edc3b4b5cc00de58aa110c",
+      "bytes": 31315
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-terminal-connect-installed.xml",
+      "sha256": "e4f2ef4cb33218011bb2d5248f985ce6ee7ad9933c1a94a80f1c7de2d398ccac",
+      "bytes": 16105
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+      "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b",
+      "bytes": 38959
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-terminal-work-installed.xml",
+      "sha256": "5692441093ce878851c2f7f303b19b47718cc7be9f11019fbb14bb623a534987",
+      "bytes": 19851
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr03-terminal-work.md",
+      "sha256": "152a0c666ba2516dc36fc380868daf64ccfb82b511c94bfa76d25c3a8f6921ce",
+      "bytes": 9062
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-cooperation-surface.json",
+      "sha256": "e00b10b4406aff58c14186310c96f181a5fd04f48e87cba2bbdaf8bfcd76a7ac",
+      "bytes": 979
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-contract-client-formats.json",
+      "sha256": "38206ff1a0a929df4baed4e02550b331aea3cceffa2ce7e030bac5d2dff60bfa",
+      "bytes": 3322
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-contract-core-installed.xml",
+      "sha256": "e637a99d9e27b2f05eb8208efe1028e61f8ffb4fc68aefe5f1d26bdef02ac374",
+      "bytes": 14082
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/milestone.md",
+      "sha256": "82b0c76c035f8c1e9bc92cb90b9fc38b0cb9f7dd2738d321e5e9751508c0727d",
+      "bytes": 3901
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-guide/reports.json",
+      "sha256": "7791bbca39631539b3d77d5371437269f03ba0fa5c7315e6dbd38f252e90c6d9",
+      "bytes": 6278
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-init-core-installed.xml",
+      "sha256": "a895c722752fecf00cfcad6f5b7c2a74781b0e5a59fecd30e2e56a0dd3a84f52",
+      "bytes": 16709
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-init-nexus-installed.xml",
+      "sha256": "d3d325891c083b1b72f012fcf9e1f89f90111c38437969cfb27ea1eadbfef418",
+      "bytes": 5639
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-launch-native.json",
+      "sha256": "c8cedc4394f1b62a0afc625ecda33233b82080ae24d3c1bebec50d238dcd63f9",
+      "bytes": 7354
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr04-participant-removal-installed.xml",
+      "sha256": "9f0d1b4ba2018e3ac8f4aea07698f49d7b2ae961b8e708a5e0547b66681b32d4",
+      "bytes": 16634
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+      "sha256": "17f61e80065da17ff85d35c68a0b1f620d45fb75b407ca2e3193b87fb24b01e5",
+      "bytes": 22721
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli-release-installed.xml",
+      "sha256": "11b1dc62d570f92194dd39234c5f2c87517b9ce632b523653b1e6ccc7c401616",
+      "bytes": 6959
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli-source-participant-coordination-mcp-agent.xml",
+      "sha256": "4916db0bc885b529303d912f9383845f162d23e98089a4f094d69e9d9f9939b5",
+      "bytes": 4295
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli-surface-installed.xml",
+      "sha256": "fd15f4b5a6ef82b79e16be41309c2d084160940e0de35e2656ad30f555d9c509",
+      "bytes": 1539
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli-surface.json",
+      "sha256": "b9add915c7f4f9387df0ad60af585f2c39d25e497a56eff7b7a59b2d4b93f202",
+      "bytes": 582
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli.md",
+      "sha256": "aad02b9b8a7fa63254df429e993913e01fc7a73449acef25a73f45bf52f0e6da",
+      "bytes": 8964
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-creation-installed.xml",
+      "sha256": "bf31f03f4e9c4bbeb86bb771c05160706c4d20b9c4ee60ecb6ee525493bba64e",
+      "bytes": 32959
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-creation-release-installed.xml",
+      "sha256": "3840a8fc8cd97ae97784bbf81379a187ba975ed279260651cf3dee8b544b8410",
+      "bytes": 8405
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr05-coordination-creation-surface-final.json",
+      "sha256": "af65588da64519740b394b94e89325e48896bdc02fc04e8d39f337f71d7ef22e",
+      "bytes": 4580
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr07-attention-ui.md",
+      "sha256": "94d1edfc8004cb62d4e174f46ababe016602388565c636e504b4bce710daabfd",
+      "bytes": 7709
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr07-attention-ui/final-results.json",
+      "sha256": "eb2120f656219cfefda0f812377f9030a7462d20917f568c08c98597476e2a38",
+      "bytes": 5064
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+      "sha256": "8999a1db3633fed14719004b2981e2bc2c6b6683aca198f83abaaa69634c21c2",
+      "bytes": 4693
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr08-observations/pr08-observations-domain-initial.xml",
+      "sha256": "38161520517b212cbb0ee8c605fd96a14fcc665a7a02125d5a463a9072d75c45",
+      "bytes": 20753
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr09-herdr/installed/qualified-v2/pr09-observation-installed-v2-initial.xml",
+      "sha256": "011bce74f9a80361357e68d050ab701950b13c0c3893ed59d7566c9c91ba368b",
+      "bytes": 46792
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr09-herdr/live/observer-command-audit.jsonl",
+      "sha256": "bbf42d4d180b6977cf999862ac895e47ee7bdf7e6f049f49bfdbca4e40993b6e",
+      "bytes": 6078
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-correlation.md",
+      "sha256": "31a7eb5d7101c68272a17f55a0605461143d3ee8c6df8c295f220db746bbea10",
+      "bytes": 6788
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-correlation/browser/campaign-summary.json",
+      "sha256": "eccab1aad67b68a5bffa1b97d604ef810a593d0e5ad75505d3a20cd140fff0b2",
+      "bytes": 1132
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-correlation/candidate-v2/installed.xml",
+      "sha256": "e76b7eb68f0f327e013285bc2dfe8da7ea11a598e53adffd31931ae7ffe51ade",
+      "bytes": 35751
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-correlation/diagnostics/shared-contract-comparison.json",
+      "sha256": "60efb5488d6705a682044526dde3199c5145f3457a181fa11f94ce9ef436014f",
+      "bytes": 519
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-correlation/installed/correlation/installed.xml",
+      "sha256": "a52edc9a727bf2b810b1b432c9fedb48e5d8d37753d0954f486eb2dba60d2a01",
+      "bytes": 76476
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-external.md",
+      "sha256": "e4082ad492c105994e57825091f5c8d1f910cf9c3b9e235ca502547449b7b8e2",
+      "bytes": 11187
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/pr10-external/final/initial/installed.xml",
+      "sha256": "8fdca0e3c475036b7bab2978d7159b74f9b72c61d2cd81e1312470693e8c48f1",
+      "bytes": 46943
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-compatibility-boundaries/core/application-boundaries.json",
+      "sha256": "9508e5d03f98ff63a1bd9637b5e3a8081bf5306f0e0ea8e4e30e6e26522d7606",
+      "bytes": 1449
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-compatibility-boundaries/core/report.json",
+      "sha256": "a56c893c9f4c5fbafdd7c49abe4baf19fc5ab8f1ac1839cf542ffada9432d4f6",
+      "bytes": 5167
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json",
+      "sha256": "28fb2e4ce0e5abca933ac5dfa1c89db7c5eb5c325db44049f57fbfa35e930c31",
+      "bytes": 969
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+      "sha256": "b06ee61dfd45b83d6c5731136d27eacbe5c1abf3478f8a61127aea5801a01189",
+      "bytes": 2157
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/idle/rg03-qualified.xml",
+      "sha256": "fda33e6f20248b6bc0fea4bbc8a0909891cf62603a68d6df6cc97d744b9ea15c",
+      "bytes": 1266
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+      "sha256": "a14f5fc02d9384da86f056d6349141e818defa7ea4c05f9d4ba893c41ec4e607",
+      "bytes": 12903
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+      "sha256": "12d45b50b2c1e4b5f7f0ec97ba928d9ac7f0be97b85827bf11de7120bf7e10d4",
+      "bytes": 3237
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/mapping.json",
+      "sha256": "06b51cba7c7cca528290bb40e5c271dde96afd609206904a510db12117dcca99",
+      "bytes": 26406
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+      "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+      "bytes": 938
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-current/tests.xml",
+      "sha256": "df6d4a737ec3dcabb05cd5be49aa8c301e1d6ec85262755c6fcc1995fed0ef90",
+      "bytes": 2347
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-shared-fixture-final/tests.xml",
+      "sha256": "7f5bf911cbc48c6f7f38080d6a323d309dd8ec8aa7a07c4a48fa2614c7cb5289",
+      "bytes": 418
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+      "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+      "bytes": 6749
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-public-artifact-review/classifications.json",
+      "sha256": "ab0d3e22b294baec6c8e6e566934dffa82357b2604c70c74db11d6fb01aa66c3",
+      "bytes": 20123
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-public-artifact-review/verification.json",
+      "sha256": "70c26ac0e3d25299f971367a912d54f9984aa0222a4ffa23e5b8365aa0c5a392",
+      "bytes": 625
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+      "sha256": "fbf8644cf836886bc7bac596211a783d6090e79077c643b1d2a627c87a3a37e3",
+      "bytes": 48795
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+      "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd",
+      "bytes": 342617
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+      "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+      "bytes": 286943
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+      "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+      "bytes": 136618
+    },
+    {
+      "repository": "nexus",
+      "path": "plans/agent_ops/ledger.json",
+      "sha256": "c66554369d874ab818d9d2ae8c4c21f90e22ea47285872dd1705cfe742e500b1",
+      "bytes": 903574
+    },
+    {
+      "repository": "nexus",
+      "path": "scripts/qualify_participant_formats.py",
+      "sha256": "333208abc6016d07ea0c8ac4368d25c5623b69cb78e7754e5e0bcb928dd849cd",
+      "bytes": 5717
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/connect.py",
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3",
+      "bytes": 21054
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/coordination.py",
+      "sha256": "7e9ebc799961d053b15ecd4c37ee2d99964f80013380798715491947b1ae66fb",
+      "bytes": 14200
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/doctor.py",
+      "sha256": "cfa4139879ca6757ef1248226935cb331b67c8abb0e620f881566e062fcdea90",
+      "bytes": 10591
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/native_input.py",
+      "sha256": "3b2c3e3891972d6071a2d20f51901a4d5ad3a99204668523f33b4ab9f1f49283",
+      "bytes": 6706
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/participant.py",
+      "sha256": "7400f03f002989547e012ebeb4ca8e59d4ae0452bb2028f593990270ad398017",
+      "bytes": 9151
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/participant_doctor.py",
+      "sha256": "e6ecdd575ae7860ee3a44f1766c120ba48c4546ac62fcce451fcb3eed6c7608c",
+      "bytes": 3383
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/remote_setup_io.py",
+      "sha256": "3244aac9c49b9a94bf86f00cc4e99cc084a10481d5d5afe2c3ecf3326dbaf3df",
+      "bytes": 6833
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/serve.py",
+      "sha256": "e035f239181391c24e35038fda3b2b13ce44a34d87437d3d2d6130358eb5d512",
+      "bytes": 30457
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/service.py",
+      "sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63",
+      "bytes": 12289
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/service_process.py",
+      "sha256": "39f11bbfbd0e599909cd035e2e1deba53a9bb3027591b536d84391d39c2e2642",
+      "bytes": 2023
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+      "sha256": "4cb4f62d878dad0b3dcad8c486e46d5c2c9b6acc864fadcc1cf737bbecfd3fc8",
+      "bytes": 4456
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/terminal_target.py",
+      "sha256": "8143e47af4bd50614d7ba280b6d6e0c8fe9d7df85e99eb4db2b56b7137c2b1a6",
+      "bytes": 2298
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/cli/work.py",
+      "sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+      "bytes": 19900
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/http/lock.py",
+      "sha256": "0d4f71f6c30ab9eecc827fdb6cf5c6006c48a739391fd10df8118618f294bbc5",
+      "bytes": 5474
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/http/observations.py",
+      "sha256": "43c6e5483a90573f165671cdae36a5b9543feae73d0f66c988f333f765a31e43",
+      "bytes": 9577
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/inbound/mcp/registration.py",
+      "sha256": "b29bb3c2564f205816caac9765a4f82df52c5e138be208d14382afb8b1281b86",
+      "bytes": 39356
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/observation/herdr.py",
+      "sha256": "77e795ffbc97ea30648f38ec02e8ea0c004c54aaa3448b159222fb4c76da4699",
+      "bytes": 12852
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/participant_client.py",
+      "sha256": "9f4a7d429e4a7a0959a490043c74304a288ebf3f51e265a75533bb15e4d0b08c",
+      "bytes": 5356
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/participant_coordination_mcp.py",
+      "sha256": "5280739c6b3cc2fe01f943fc7c8e62ad729702193c55fca012c23a637886d43b",
+      "bytes": 10001
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/participant_process.py",
+      "sha256": "f5153c14eb808f958666da3db63497735e79c9b969c4ce02b044edfc9d64295a",
+      "bytes": 4038
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/context.py",
+      "sha256": "8f54e12b9c6d657a44ae3ed178e2efbc60782b4479e1b0f5f516d4bbee397e06",
+      "bytes": 6489
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+      "sha256": "365bb1671c2e2eb2802345ebefb41afbb9879bd0aa203ae1f1e236c0d69fd123",
+      "bytes": 6558
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/installation.py",
+      "sha256": "4a3df9d200b1e4875c48aa4d9e874f93477c7f458f36f2c6b81a8950a451dcaa",
+      "bytes": 17776
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/local.py",
+      "sha256": "8d388f54ca56da886a7b2675316b5aef4b854a87e0219f696aea4b69a44b2989",
+      "bytes": 24682
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/locking.py",
+      "sha256": "4fd47c0c89cc220ca9301e6e927ef0098ed537592d5e5323fb5f2f07d662a425",
+      "bytes": 1994
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/service_manager/logs.py",
+      "sha256": "07148a93632ef92c4797985dc91c60a05b28ffd5879920f3e01ca41f9ba1cf7d",
+      "bytes": 6732
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/sqlite/attention.py",
+      "sha256": "b2d9b879294c88519468447416ff2ac8daf37eb61514cb9fd0d62293e21001ce",
+      "bytes": 13657
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/sqlite/coordination_requests.py",
+      "sha256": "300e5b1a247c349287c6daa3d0282ab36bfedd1e1baa1f06bb5355acea4fc472",
+      "bytes": 9282
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/sqlite/observation_correlation_projection.py",
+      "sha256": "5e3ac323c267dcdaefbb5360e0614d7bf6ec95e428f4d6958083fd4c5e44cbcd",
+      "bytes": 13332
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/adapters/outbound/sqlite/observations_repo.py",
+      "sha256": "c1bf5ed887d066b1a9712515598b3a77c988d4a77b8dd88d07b32a609fdfd1a8",
+      "bytes": 34438
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/attention.py",
+      "sha256": "cf0b96fe7d568fcc04f50d99ce30c3eae3f42e826b40b905eb384c2cf3500553",
+      "bytes": 5968
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/attention_approvals.py",
+      "sha256": "0dd2026f04e0c4ae96a9903853e4598007274f5091354a1d580a1fb4ba7d239d",
+      "bytes": 5540
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/attention_authority.py",
+      "sha256": "e9a58c0f86782aebd66e22d8a2126b374633f1e07e055ebb2921b5646ff88c7d",
+      "bytes": 50852
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/attention_external.py",
+      "sha256": "71b53dc7e82e584d824b84bccabaf747b170abdae66a0694dea7cc682f1a18a7",
+      "bytes": 4681
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/attention_native.py",
+      "sha256": "1771b403aaff8789d545deac311a1d3a4efc84e3f42743c55f0152dea153d7b3",
+      "bytes": 15027
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/attention_operations.py",
+      "sha256": "76858ad6e59026f984881c6f4962c6721d6a317e0b20aa9a3ecd785653ff193c",
+      "bytes": 7919
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/attention_results.py",
+      "sha256": "e9bc0911c5c59ca59614db27b8c7bfb8e823bc8d8b54eeee9d591b82b103b511",
+      "bytes": 2152
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/connection_setup.py",
+      "sha256": "ed43ab293fe8c8834897c98cc627399526c467f771982f74d91edff12f7ac287",
+      "bytes": 22715
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/coordination_requests.py",
+      "sha256": "b0546f311f9100615b4137df24b0d4d256a1365241fe9000e7a65957f01f7975",
+      "bytes": 8004
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/handoff.py",
+      "sha256": "ddd4512c4b381fa257941c79e1fdabedc7a069d00a785d910973f952b78b453e",
+      "bytes": 167235
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/herdr_observer.py",
+      "sha256": "219bfaf0dd1dfae8f8316cf53b84c576fb4a58473df0f17dad0e1ccdd3775ae0",
+      "bytes": 13984
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/observation_correlation_service.py",
+      "sha256": "c40973f1e59631009c9fef1ba3f0431b3074ba52ff8a261710f14e0c775b7a8b",
+      "bytes": 12136
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/observation_correlation_view.py",
+      "sha256": "a1bf6727686c04a5f570a15d43a6e9a1217622b02a3a03637a87ebcf1bdf949f",
+      "bytes": 4586
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/observation_validation.py",
+      "sha256": "0010497ecf9c331d3e48d19522b045939d5a67bfa731e2df4999ad9a230120f6",
+      "bytes": 2733
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/observations.py",
+      "sha256": "b6c700014d023976f5adb0a384d5f6e10d3bb2e73029d9061a46b6a126bab893",
+      "bytes": 27844
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/participant_diagnostics.py",
+      "sha256": "ceb9dcf1c3385dad62b41d8ee147387c5597ec9ec3ca0936535e0c40eb8374d9",
+      "bytes": 12601
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/participant_launch.py",
+      "sha256": "287f2d0af70c1e95b3f7313492bc263c31ac764a5bd81a3e837510f9aff6758c",
+      "bytes": 6673
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/participant_setup.py",
+      "sha256": "1e4a6206d172f7c351ffe9852beeba59b95e5a1861a1859be234053d84f5dc04",
+      "bytes": 2860
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/project_diagnostics.py",
+      "sha256": "b110ce62d50385cb058e39680d85e21b204d404b853fce57205822e266f270fe",
+      "bytes": 14178
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/project_preset.py",
+      "sha256": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f",
+      "bytes": 3678
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/project_preset_update.py",
+      "sha256": "2ac1c0f5bad6239bfd471ebc88a6aaccdf71d4c14c761ab1e0ce8413aa6bd252",
+      "bytes": 12656
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/remote_setup.py",
+      "sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd",
+      "bytes": 21304
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/remote_terminal_setup.py",
+      "sha256": "c5919c1e317dd0357dba3870b43ecb83e8a91f095ca5c2d77a770e7de3c577d1",
+      "bytes": 21684
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/service_lifecycle.py",
+      "sha256": "a4170283a120733f8e8f1cf43c3f04698ae6e9063068594e65d53da2bb769dfb",
+      "bytes": 8148
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_connection.py",
+      "sha256": "1d59b4345ac09a62b6ffd50d6ecd4bd4b1443edf87104154a42a5478641b9b63",
+      "bytes": 20873
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_coordination.py",
+      "sha256": "65920e954d88f23589b2f1806caadca7cf5077cad0e4644c260cd3fce4f39e27",
+      "bytes": 17321
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_participant.py",
+      "sha256": "b96e8d2ca962efb8b129232a3da6d9c5f8fcedb5a1ba4013e2cae402c320e6b4",
+      "bytes": 9384
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_preset.py",
+      "sha256": "33ac9374ea347791b3f0b8b826010d04c22684618d20946e14b0cdd3d2665790",
+      "bytes": 6811
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/application/terminal_work.py",
+      "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "bytes": 21125
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/bootstrap/server_shutdown.py",
+      "sha256": "c521b76f6573a9503c4dde0064f190d4bc213dbc6dbb9ac901e8b5920b8a7013",
+      "bytes": 19730
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/config.py",
+      "sha256": "e498a660a830f208ad87f5e9c2e0915ec4a1b994cf257b6c6726fd7504231cf4",
+      "bytes": 34748
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/attention.py",
+      "sha256": "301330c30662e16a5367a256122ab07b557b8244f78ceeb86b889dcb88f9df85",
+      "bytes": 8647
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/coordination_requests.py",
+      "sha256": "131647c679b12f2b835452a4e2ac6a2bd8457fec1211b5dea99b3910a9bfd3a3",
+      "bytes": 5961
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/diagnostic_report.py",
+      "sha256": "48e9b5d2a5ade865e5fcb76cebde27a1b90690ae5e62ceba0e72af1df0047934",
+      "bytes": 21001
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/observations.py",
+      "sha256": "86314c9def2301034daf22b103d26a13abd3acf1da81ba70fccdcb8298fc8a81",
+      "bytes": 10117
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/domain/service_lifecycle.py",
+      "sha256": "8f7c37a75548395c98840b96020fc2b00930755558e8685cf5555dbb8d57c7df",
+      "bytes": 1145
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/migrations/161_attention_preferences.sql",
+      "sha256": "e1a6d7ae63fafb32402d1c4e829f9cab3aab55f59aebaf2b942bc78e1fd2e45d",
+      "bytes": 12175
+    },
+    {
+      "repository": "nexus",
+      "path": "src/okto_nexus/migrations/162_attention_authority_epochs.sql",
+      "sha256": "57f5618b749769b479080aba19e2e90e54fb930a96ac4fbed53ade72b4322fc2",
+      "bytes": 54255
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_binding_operator.py",
+      "sha256": "d44090ef7f0b6dfaedf8f14a3a3b1cd0f11319e578ee70aa7e4e7fdb3ab933a0",
+      "bytes": 28642
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_canonical_consumption.py",
+      "sha256": "c0b6edcf19983a480b018300d000d5dc9b06880f57af1d0e212905c57a2f8662",
+      "bytes": 15030
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_coordination_cli.py",
+      "sha256": "4c9b5ca2a44e3da5b776d5b7443dbbee4611f8226616d4843b154d145873bc20",
+      "bytes": 26933
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_embedded_inventory.py",
+      "sha256": "bcf26f49915be258a705ff969b0c49ca332446fafbd61dda400a2aabfd356ef4",
+      "bytes": 20599
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_external_idle_scheduler_isolation.py",
+      "sha256": "ae9597ae5470cd8ba41492861e332e633508637475ad44cf320d36b5190cb02d",
+      "bytes": 10432
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_external_observation_isolation.py",
+      "sha256": "9c8885f37bb55bd792c29cb905c213cf9a99b9f98aba95d08598716755488b54",
+      "bytes": 7754
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_local_realization.py",
+      "sha256": "7e3aa0601eae2721afab4a9fbc3676c83a061aa431bfcba7d9cfdd7c1ae4a1f6",
+      "bytes": 15853
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_participant_doctor.py",
+      "sha256": "f1ab0bdb3b0e86975071f972f7d41adb9f917cb413967d80ab6c3c8c7a75c593",
+      "bytes": 12307
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_participant_init.py",
+      "sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+      "bytes": 15032
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_participant_launch.py",
+      "sha256": "fc91d1c87230276495ec20449319edd800bd03f50bd479129971b3a7af0f04a3",
+      "bytes": 10986
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_project_diagnostics.py",
+      "sha256": "529986bf97152ba8d13b425ef98e7dd6205c71f8478481c508ec389e57c0b30b",
+      "bytes": 8028
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_project_preset_update.py",
+      "sha256": "fb6111259062305d6f965afe8f83ab93bb928864a824fc15bd3fbd4c42f01b4c",
+      "bytes": 12396
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_r3_mixed_coordination.py",
+      "sha256": "22f7b5b4af430f2226f135c1744b3792969acd4c9d60f6ed0d9880bf495e8b22",
+      "bytes": 8977
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_remote_connection.py",
+      "sha256": "d74ca53fc282cce450f010260bc38c534445fa8b2a98fa561fa93259d524255d",
+      "bytes": 66654
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_terminal_connect.py",
+      "sha256": "54885c13755eb878456908f2e49d71decf8cd0952c888325ae1946960a39e58a",
+      "bytes": 11803
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_terminal_identity.py",
+      "sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+      "bytes": 13692
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/execution_r4/test_terminal_work.py",
+      "sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "bytes": 20694
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_attention_api.py",
+      "sha256": "3b21f99d943bc2d6519ef6e2cf2b29270b79221fdc9ec6bf56a68bbf09493cae",
+      "bytes": 23604
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_attention_engine_bounds.py",
+      "sha256": "069efe55ee710458fe9471db855dff3f5c0bc0e85086e0441394ad2909c16600",
+      "bytes": 5883
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_attention_operations.py",
+      "sha256": "4aee8fc7ee973e64f5b2ccb5e24df2031738a37606340430f478e8761a464f71",
+      "bytes": 39771
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_coordination_creation.py",
+      "sha256": "ff8add10a6825344350b26ef8335961ac9251b56948566f12d754aad764e63c5",
+      "bytes": 21865
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_herdr_transport.py",
+      "sha256": "dbdb1c85dd6078258b2d60619ee939eb025ff215fe1a084ca600a4437befe8a1",
+      "bytes": 14004
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_observation_correlation_http.py",
+      "sha256": "cae448fd884d8266040eebd557fb41e505fa47bf5981240cde9050f59ae15376",
+      "bytes": 26476
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_observation_http.py",
+      "sha256": "35ff887b9faadc4cd3751ed476fb9a83294ae3f49a72c4a54b45fb6c76f10f06",
+      "bytes": 8740
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_observation_service.py",
+      "sha256": "7858a9c31e4604678028c6adca00bffbd5e8ac78f51e8cc6f4e6592b206210a0",
+      "bytes": 17363
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_observations_domain.py",
+      "sha256": "d3480717466ac801a585f44627ff850baf152aff08551ec0f798c27cd3c52cb6",
+      "bytes": 13600
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_participant_coordination_mcp.py",
+      "sha256": "6bed5844cf9b323649bc6f06b65a6678ac82c5446930749e0b2a0bca45e736dc",
+      "bytes": 12912
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_remote_setup_server.py",
+      "sha256": "bc695a67d8fdb9a1775eee0e584bd8738449d2821a578b0eb366237b76efbec0",
+      "bytes": 15880
+    },
+    {
+      "repository": "nexus",
+      "path": "tests/test_terminal_coordination.py",
+      "sha256": "cdb6cbd03f4f25c18f682db1a679c3cbd950abde20cb3fcb70afaece85a3c623",
+      "bytes": 28343
+    }
+  ],
+  "note": "Only explicitly cited public files; no private state, credentials, databases or broad workspace indexing."
+}

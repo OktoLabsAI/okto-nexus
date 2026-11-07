@@ -49,11 +49,96 @@ class EmbeddedRuntimeHost:
             tuple[RuntimeCore, SQLiteJournal]]] = {}
         self._selections: dict[tuple[str, str], tuple[dict, dict, object, bool, str]] = {}
         self._closing = False
+        self._draining = False
         self._history_closing = False
         self._native_action_owners = {}
         self.local_launch_factory = None
         self._history_tasks = set()
         self._released_compositions = set()
+        self._drain_observations = {}
+
+    def begin_drain(self):
+        """Fence new composition while controls keep their existing runtime."""
+        self._draining = True
+        for task in tuple(self._runtime_tasks.values()):
+            if task.done() and not task.cancelled() and task.exception() is None:
+                begin = getattr(task.result()[0], 'begin_drain', None)
+                if callable(begin):
+                    begin()
+
+    @property
+    def draining(self):
+        return self._draining
+
+    def drain_revision(self):
+        """Memory-only fence against stale proofs across host/SQLite awaits."""
+        values = []
+        for key, task in self._runtime_tasks.items():
+            value = None
+            if task.done() and not task.cancelled() and task.exception() is None:
+                revision = getattr(task.result()[0], 'drain_revision', None)
+                if callable(revision):
+                    value = revision()
+            values.append((key, id(task), value))
+        return self._draining, self._closing, tuple(sorted(values))
+
+    async def drain_status(self):
+        resources = []
+        quiescent_scopes = []
+        observed = {}
+        for key, task in tuple(self._runtime_tasks.items()):
+            reason = None
+            if not task.done() or task.cancelled():
+                reason = 'COMPOSITION_PENDING'
+            elif task.exception() is not None:
+                if key not in self._released_compositions:
+                    reason = 'COMPOSITION_UNKNOWN'
+            else:
+                runtime = task.result()[0]
+                status = getattr(runtime, 'drain_status', None)
+                if (not callable(status) or not callable(getattr(runtime, 'begin_drain', None))
+                        or not callable(getattr(runtime, 'drain_revision', None))):
+                    reason = 'DRAIN_PROTOCOL_UNAVAILABLE'
+                else:
+                    runtime.begin_drain()
+                    observation = self._drain_observations.get(key)
+                    if observation is None:
+                        observation = asyncio.create_task(status(), name='embedded-drain-observation')
+                        self._drain_observations[key] = observation
+                        self._history_tasks.add(observation)
+                        observation.add_done_callback(self._history_tasks.discard)
+                    # Keep one owned observation across caller cancellation and
+                    # timeouts. A slow native read cannot create another reader.
+                    await asyncio.wait((observation,), timeout=.01)
+                    if not observation.done():
+                        reason = 'DRAIN_OBSERVATION_PENDING'
+                    else:
+                        self._drain_observations.pop(key, None)
+                        try:
+                            report = observation.result()
+                            observed[key] = report.get('activity_revision')
+                            if (report.get('state') != 'QUIESCENT' or report.get('quiescent') is not True
+                                    or report.get('resources')):
+                                reason = 'CORE_' + str(report.get('state', 'UNKNOWN'))
+                                resources.extend(dict(row, owner='embedded-core', executor_id=key[0],
+                                    session_id=key[1], store_retained=True) for row in report.get('resources', ()))
+                            elif (report.get('activity_revision') is not None and
+                                  report['activity_revision'] == runtime.drain_revision() and key in self._selections):
+                                quiescent_scopes.append([self._selections[key][4], key[0], key[1]])
+                            else:
+                                reason = 'DRAIN_OBSERVATION_CHANGED'
+                        except Exception:
+                            reason = 'DRAIN_OBSERVATION_UNKNOWN'
+            if reason:
+                resources.append({'owner': 'embedded-core', 'executor_id': key[0],
+                    'session_id': key[1], 'reason': reason, 'outcome': 'pending', 'store_retained': True})
+        revision = self.drain_revision()
+        if any(value != observed.get(key) for key, _task, value in revision[2]):
+            resources.append({'owner': 'embedded-core', 'reason': 'DRAIN_OBSERVATION_CHANGED',
+                              'outcome': 'unknown', 'store_retained': True})
+        return {'state': 'QUIESCENT' if self._draining and not resources else 'UNKNOWN',
+                'quiescent': self._draining and not resources, 'resources': resources,
+                'quiescent_scopes': quiescent_scopes, 'activity_revision': revision}
 
     def _journal_path(self, executor_id, session_id):
         digest = hashlib.sha256((executor_id + "\0" + session_id).encode("ascii")).hexdigest()
@@ -218,6 +303,8 @@ class EmbeddedRuntimeHost:
                 raise RuntimeError("The selected installation or root changed.")
             task = self._runtime_tasks.get(key)
             if task is None:
+                if self._draining:
+                    raise CoreError('RUNTIME_DRAINING', 'embedded_composition', retry_safe=True)
                 self._selections[key] = selection
                 task = asyncio.create_task(self._compose(
                     key, selection, environment, native_factory))
@@ -254,6 +341,10 @@ class EmbeddedRuntimeHost:
                 if not isinstance(native_owner, PiNativeActionOwner):
                     raise ValueError("The native action factory must return an owned Pi ingress.")
                 self._native_action_owners[key] = native_owner
+            if self._draining:
+                begin = getattr(runtime, 'begin_drain', None)
+                if callable(begin):
+                    begin()
             return runtime, journal
         except BaseException:
             if journal is not None:

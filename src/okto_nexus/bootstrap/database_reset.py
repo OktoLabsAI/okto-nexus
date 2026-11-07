@@ -96,7 +96,7 @@ async def _run(app, *, keep_agents, reset, context):
         if coordinator is not None:
             # This is a runtime restart within the same HTTP server.
             coordinator.on_drained = None
-            await coordinator.request(timeout_seconds=2)
+            await coordinator.request_safety_shutdown(timeout_seconds=2, latch_service=False)
             await coordinator.wait()
             drained = True
         app.state.database_reset_phase = 'clearing_history'

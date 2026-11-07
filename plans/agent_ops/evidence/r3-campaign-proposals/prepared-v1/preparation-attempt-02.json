@@ -1,0 +1,6 @@
+{
+  "exit_code": 1,
+  "phase": "archive_bounds",
+  "cause": "Official ZIP contains 53 members; initial 30-entry preparation cap refused before extraction. Official size/hash already matched. No native code ran.",
+  "preserved_script": "prepare_official_artifact_attempt02.py"
+}

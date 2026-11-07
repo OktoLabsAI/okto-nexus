@@ -1,0 +1,117 @@
+{
+  "src/okto_nexus/bootstrap/server_shutdown.py": {
+    "qualified_raw_sha256": "c521b76f6573a9503c4dde0064f190d4bc213dbc6dbb9ac901e8b5920b8a7013",
+    "staged_sha256": "a643e2e639b02c61983c12852e8f41cee6b546e0bfdae6e35eafd3d3b71b8a76",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/bootstrap/runtime_host.py": {
+    "qualified_raw_sha256": "8226a920259b7402adbb4222f1ef57741060f1ac338c822b398d8bc55985baa5",
+    "staged_sha256": "ce12d988f51c6b22c2f27f3f7a40c8481b4e05c29221b0ac92abb8c81aa0e891",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/bootstrap/server_runtime.py": {
+    "qualified_raw_sha256": "55c8531f099287e8d8ffe0dc49934673c4d431d9dd0d77de08436f88dfdb2a73",
+    "staged_sha256": "98f3ecbb23852010b0aade4b23306a2c146241962723805c5832f73192d72307",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/bootstrap/database_reset.py": {
+    "qualified_raw_sha256": "9ab1235091c3647ee76a6c6950d5f91a2a7aa708a4fcc2a09b12fb1596e0d33e",
+    "staged_sha256": "3128e03ed9dbb9b59889680b6cc2117cb58f949be607cdd0d4111329230413bb",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/bootstrap/embedded_dispatch.py": {
+    "qualified_raw_sha256": "4c19ee1ee1c7f75f0afdb4df19ec4ad3a3da289cb751fd647e3389327ab52fdd",
+    "staged_sha256": "bbe9d31c89e67f495677433f117d71fd659f56302a6ef93d9d155d1ecbeb4e02",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/application/harness_supervisor.py": {
+    "qualified_raw_sha256": "d903a712435168a476161baeba05a88f9cb3c10a95bae0fc93b0778e3466f001",
+    "staged_sha256": "fad2d64fda6e7754783a5623b67d8b5e7748e8d4a169eff3836d907550ec891c",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/application/service_lifecycle.py": {
+    "qualified_raw_sha256": "a4170283a120733f8e8f1cf43c3f04698ae6e9063068594e65d53da2bb769dfb",
+    "staged_sha256": "a4170283a120733f8e8f1cf43c3f04698ae6e9063068594e65d53da2bb769dfb",
+    "equivalence": "exact"
+  },
+  "src/okto_nexus/application/runtime_access.py": {
+    "qualified_raw_sha256": "a362d7df03d648517dafa0d22309985837953ef991790bd03ce9d86a7504f957",
+    "staged_sha256": "a53315b996241ad9cabbfd5da73cba354b765db3abd7d417dc917094e95a2fdd",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/application/execution_native_decisions.py": {
+    "qualified_raw_sha256": "615a1d98316803447c5739b1c63ffbd2f33dbb35245c959f3db95c764ca82793",
+    "staged_sha256": "8bbb0b26bfbe63b88e98e5e412bbb4c297ee160b9857440cc07e4cbc05dcd230",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/application/execution_dispatch.py": {
+    "qualified_raw_sha256": "10a4a12a2cbac4c781d8d53fca9ff5d0f9e546688de9ab029d5d37031efb7add",
+    "staged_sha256": "4269e3e15fc8b62b25644073b0ff4b0b68eb7bfa1da8a487cf20e0df46757b0b",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/application/execution_capabilities.py": {
+    "qualified_raw_sha256": "24b2731f9b1afc0f5b4d028a4b07dd1ffd23da7c6af8a8e0acfbd8fb691a87d6",
+    "staged_sha256": "b43678fee7d468ca5be7d7aade1dde458f9f61a94d9e79b31fa41cb5c8cb7430",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/application/execution_leases.py": {
+    "qualified_raw_sha256": "d0765bb4a3aab932eca9a39cd7ccd96c0a9243e7909f2cd458638abafa1235d0",
+    "staged_sha256": "a47be84f3cb7ef2e13d3482191cff3671eb38c4cf10cb53cd4a3f867a05b4e4a",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/adapters/inbound/cli/service.py": {
+    "qualified_raw_sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63",
+    "staged_sha256": "a89e234ef77df029c86c67e917583c78ef4ee70d5db691b6be7e2e66881a0496",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/adapters/inbound/cli/runtime_server.py": {
+    "qualified_raw_sha256": "3e16a907f6f659fbc075cac65c49512235239d578fcd21e20730b8a0ee1ae515",
+    "staged_sha256": "27efe09e61e427b6c8d36380854c52eee1989e0ec85dc263defe0be6e90f9e46",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/adapters/inbound/http/service_lifecycle.py": {
+    "qualified_raw_sha256": "63c1be3056176a59a3d195b51796824185f631595d7338f483d6dde97af304e7",
+    "staged_sha256": "63c1be3056176a59a3d195b51796824185f631595d7338f483d6dde97af304e7",
+    "equivalence": "exact"
+  },
+  "src/okto_nexus/adapters/inbound/http/app.py": {
+    "qualified_raw_sha256": "1eeaf932b22a676d3dca4f746c3c9c9fb32a430ae9ba4a582ddb511ded2e32a1",
+    "staged_sha256": "874f6ff579eb3b17e165b65b7b89abeaee3a675481b9107715bb06f31a31a3fe",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "src/okto_nexus/adapters/outbound/service_manager/local.py": {
+    "qualified_raw_sha256": "8d388f54ca56da886a7b2675316b5aef4b854a87e0219f696aea4b69a44b2989",
+    "staged_sha256": "8d388f54ca56da886a7b2675316b5aef4b854a87e0219f696aea4b69a44b2989",
+    "equivalence": "exact"
+  },
+  "src/okto_nexus/adapters/outbound/service_manager/stop_latch.py": {
+    "qualified_raw_sha256": "5a9e8c8144254269260f2c272863dc1f84e9376be7fa513aff97b784c3e2cf62",
+    "staged_sha256": "5a9e8c8144254269260f2c272863dc1f84e9376be7fa513aff97b784c3e2cf62",
+    "equivalence": "exact"
+  },
+  "tests/execution_r4/test_server_signal_shutdown.py": {
+    "qualified_raw_sha256": "c3a691ca3cd316ee3bc4426e167686ed4ef887335a96d17723e784ef6ce23889",
+    "staged_sha256": "20461962f4a38b702c151baf643e5b3b97ccfbd3f9eea8effd3143225392ca7b",
+    "equivalence": "CRLF-to-LF only"
+  },
+  "tests/execution_r4/test_renewal_storage_contention.py": {
+    "qualified_raw_sha256": "bc15a4e7c8415e7a3eac8bce0e02abbf689a108e8aedd1b92fde4b2126d80333",
+    "staged_sha256": "bc15a4e7c8415e7a3eac8bce0e02abbf689a108e8aedd1b92fde4b2126d80333",
+    "equivalence": "exact"
+  },
+  "tests/test_service_drain_decision.py": {
+    "qualified_raw_sha256": "145147f3e7d1cc2649413687cb9047166273f87cb40d2238b029c021a797f8a6",
+    "staged_sha256": "145147f3e7d1cc2649413687cb9047166273f87cb40d2238b029c021a797f8a6",
+    "equivalence": "exact"
+  },
+  "tests/execution_r4/test_service_cooperative_drain.py": {
+    "qualified_raw_sha256": "1d1e43d96f00daf648e36b8812d78aad1123eaa506918707c2eb9359e09da4c3",
+    "staged_sha256": "1d1e43d96f00daf648e36b8812d78aad1123eaa506918707c2eb9359e09da4c3",
+    "equivalence": "exact"
+  },
+  "tests/execution_r4/test_service_drain_authority.py": {
+    "qualified_raw_sha256": "998ca64c661746703c783c418c3b32f86f452d1ae86fa90c832f2f9fcb411687",
+    "staged_sha256": "998ca64c661746703c783c418c3b32f86f452d1ae86fa90c832f2f9fcb411687",
+    "equivalence": "exact"
+  }
+}

@@ -1,0 +1,13 @@
+usage: okto-nexus-connector daemon stop [-h] [--timeout TIMEOUT] [--force]
+                                        [--expected-generation EXPECTED_GENERATION]
+                                        [--json] [--verbose]
+
+options:
+  -h, --help            show this help message and exit
+  --timeout TIMEOUT
+  --force               contain the same generation after its drain deadline
+  --expected-generation EXPECTED_GENERATION
+                        generation reviewed with daemon status; required with
+                        --force
+  --json                machine-readable JSON output
+  --verbose             include technical details

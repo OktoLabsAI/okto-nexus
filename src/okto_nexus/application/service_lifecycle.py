@@ -52,9 +52,16 @@ class ServiceLifecycle:
             result = self.adapter.inspect(timeout=min(1.0, max(.01, deadline - self.monotonic())))
         return result
 
-    def stop(self, *, timeout=30.0):
+    def stop(self, *, timeout=30.0, force=False, expected_generation=None):
+        if type(force) is not bool or (force and (not isinstance(expected_generation, str) or not expected_generation)):
+            raise ValueError('Force requires an explicit expected generation.')
+        if not force and expected_generation is not None:
+            raise ValueError('Expected generation applies only to an explicit force decision.')
         deadline = self.monotonic() + timeout
         before = self.adapter.inspect(timeout=min(2, timeout))
+        if force and before.get('generation') != expected_generation:
+            return {**before, 'state': 'failed', 'reason': 'INSTANCE_CHANGED',
+                    'next_action': 'Inspect the current generation; no force was requested.'}
         if before['state'] == 'stopped':
             return before
         pending = before.get('reason') == 'SUPERVISOR_PENDING' and not before.get('generation')
@@ -63,7 +70,8 @@ class ServiceLifecycle:
         generation = before.get('generation')
         if not generation and not pending:
             return before
-        result = self.adapter.request_stop(before, timeout=max(.01, deadline - self.monotonic()))
+        options = {'force': True} if force else {}
+        result = self.adapter.request_stop(before, timeout=max(.01, deadline - self.monotonic()), **options)
         if result['state'] not in {'ready', 'stopping'} or result.get('reason') == 'CONCURRENT_LIFECYCLE':
             return result
         report = result.get('shutdown', {'state': 'UNCONFIRMED'})
@@ -80,7 +88,8 @@ class ServiceLifecycle:
                     'next_action': 'The observed generation changed; no further shutdown was requested.'}
             if remaining <= 0:
                 return {**observed, 'shutdown': report, 'wait_timed_out': True,
-                    'next_action': 'Drain remains in progress or unconfirmed. Inspect status; no force was requested.'}
+                    'next_action': ('Force was requested for this generation; its outcome remains pending. Inspect status.'
+                        if force else 'Drain remains pending. Inspect status; an explicit stop --force --expected-generation is required to escalate.')}
             self.sleep(min(.1, remaining))
 
     def restart(self, *, timeout=30.0):

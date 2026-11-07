@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="17.552" timestamp="2026-11-07T07:43:44.720204-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_service_drain_authority" name="test_drain_reconciles_only_the_exact_live_renewal_already_issued[None]" time="5.423"><failure message="okto_nexus.errors.OktoNexusError: CONFLICT: Runtime shutdown is in progress; new work is not accepted.">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10704/test_dra...3a031b', connection_id='conn_9d90dcc046ee9ff903db01be7f2d3f6b', connection_generation=2, control_capabilities=()), ...)
+drift = None
+
+    @pytest.mark.parametrize('drift', [None, 'expired_renewal', 'revoked_grant'])
+    def test_drain_reconciles_only_the_exact_live_renewal_already_issued(opening, drift):
+        deps, _app, _access, _context, _grant, channel, _resolution, _ = opening
+        begin(opening)
+        leases, _request, first, ack = apply_lease(opening)
+        leases.applied(ack, channel=channel)
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='READY'")
+        leases, request, renewed, ack = apply_lease(opening, serial=first['lease_serial'],
+            purpose='renew', request_id='already-issued')
+        deps.runtime_admission_fence.close()
+        # The peer may have installed the renewal before its ACK reached Server.
+        # Expiring the previous lease must not erase this committed issuance.
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE execution_leases SET valid_until_server='2000-01-01T00:00:00Z' WHERE lease_serial=1")
+            if drift == 'expired_renewal':
+                uow.connection.execute("UPDATE execution_leases SET valid_until_server='2000-01-01T00:00:00Z' WHERE lease_serial=2")
+            elif drift == 'revoked_grant':
+                uow.connection.execute('UPDATE runtime_execution_grants SET revoked_at=?,revision=revision+1',
+                                       (deps.clock.now_iso(),))
+            before = [tuple(row) for row in uow.connection.execute('SELECT * FROM execution_leases ORDER BY lease_serial')]
+            source = tuple(uow.connection.execute('SELECT * FROM runtime_execution_grants').fetchone())
+        if drift:
+            with pytest.raises(OktoNexusError):
+                leases.issue(request, channel=channel)
+            with pytest.raises(OktoNexusError):
+                leases.applied(ack, channel=channel)
+        else:
+&gt;           assert leases.issue(request, channel=channel) == renewed
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_service_drain_authority.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\execution_leases.py:220: in issue
+    authority, source, actions, expires = self._authority(uow, scope, request['grant_id'], channel, now)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\execution_leases.py:192: in _authority
+    self.access.require_admission('runtime.open')
+src\okto_nexus\application\runtime_access.py:25: in require_admission
+    self.admission_fence.require(action, returning_external_work=returning_external_work)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.runtime_admission_fence.RuntimeAdmissionFence object at 0x00000233D1254440&gt;
+action = 'runtime.open', returning_external_work = False
+
+    def require(self, action, *, returning_external_work=False):
+        productive = action in {
+            "open", "send", "steer", "execute_work",
+            "runtime.open", "turn.submit", "turn.steer",
+        }
+        if productive and not (returning_external_work and action == "execute_work") and self.closed:
+&gt;           raise OktoNexusError(ErrorCode.CONFLICT,
+                "Runtime shutdown is in progress; new work is not accepted.",
+                {"reason": "RUNTIME_DRAINING"})
+E           okto_nexus.errors.OktoNexusError: CONFLICT: Runtime shutdown is in progress; new work is not accepted.
+
+src\okto_nexus\application\runtime_admission_fence.py:30: OktoNexusError</failure></testcase><testcase classname="tests.execution_r4.test_service_drain_authority" name="test_drain_reconciles_only_the_exact_live_renewal_already_issued[expired_renewal]" time="3.512" /><testcase classname="tests.execution_r4.test_service_drain_authority" name="test_drain_reconciles_only_the_exact_live_renewal_already_issued[revoked_grant]" time="2.943" /><testcase classname="tests.execution_r4.test_service_drain_authority" name="test_drain_does_not_install_a_previously_issued_initial_lease" time="3.018" /></testsuite></testsuites>

@@ -1,0 +1,88 @@
+{
+  "format": "okto.m1.proposal-public-manifest",
+  "revision": 1,
+  "status": "PREPARATION_ONLY",
+  "files": [
+    {
+      "path": "prepare_official_artifact_initial.py",
+      "bytes": 5101,
+      "sha256": "9b04286ddc189ce6d960c7e256aaf32315f37289f535d64e9d57169387655eac"
+    },
+    {
+      "path": "prepare_official_artifact_attempt02.py",
+      "bytes": 5333,
+      "sha256": "2df490efdbc810bc8a30bdecd8ac12fb9994eb683b989a10458deec6f9e920e6"
+    },
+    {
+      "path": "prepare_official_artifact.py",
+      "bytes": 5617,
+      "sha256": "c998753bb5bd497e7490920ec147b256dc976b5ee59d68814a95cacfa6a6cefa"
+    },
+    {
+      "path": "verify_official_artifact.py",
+      "bytes": 3042,
+      "sha256": "04a64356c947bb7b3c3cfdb5ac12b97acc84db57be09b677047362a1453686ac"
+    },
+    {
+      "path": "build_proposal.py",
+      "bytes": 32331,
+      "sha256": "5838cc15a53cc33fb0ec58e08cffb8d0ea9fb761e2b0ef92a6c8d25a374bef8d"
+    },
+    {
+      "path": "finalize_public.py",
+      "bytes": 3943,
+      "sha256": "dd110873ecc42167fe88887ee8aa97c35e7ecdabb59aed113314f22ba7252aa5"
+    },
+    {
+      "path": "preparation-attempt-01.json",
+      "bytes": 248,
+      "sha256": "2c5d8056cd09b1c8f20453d10f97fffc748b30365edec9c713f62d7c42f936dd"
+    },
+    {
+      "path": "preparation-attempt-02.json",
+      "bytes": 284,
+      "sha256": "62afdfc37c498ac2e0177fc497c3c432de9fb3d9eacf6bbe5c43c45d2a308148"
+    },
+    {
+      "path": "preparation-attempt-03.json",
+      "bytes": 549,
+      "sha256": "ee67b215fa4f6ec2dd9c9999ecf1bb97edb73f038dc39615e870b8d7ad48d7f0"
+    },
+    {
+      "path": "codex-0.157.0-artifact-proof.json",
+      "bytes": 10139,
+      "sha256": "1c9fe1a29850f30c21dd2a717c5e015f1b24f4c525f93eaf65625c71de686516"
+    },
+    {
+      "path": "codex-0.157.0-pure-qualification.json",
+      "bytes": 2109,
+      "sha256": "4739bd2b524f5956b2d6387d901e12eb6078f2e754527d8b6b2627ad0a6589c8"
+    },
+    {
+      "path": "m1-codex-campaign-proposal.json",
+      "bytes": 27753,
+      "sha256": "0813c2f2e6112954b93de6ea72ffdc91259258c153e34dfff1b006ce3a00bb89"
+    },
+    {
+      "path": "m1-codex-campaign-proposal.md",
+      "bytes": 8170,
+      "sha256": "3ef9864392afa2b87ebc4a7fe75842f28ec2d379c9884edd8878914d12a59b91"
+    }
+  ],
+  "aggregate_sha256": "ea900672cab8eccd3a5a241936fb187ccb3c6901d939712aba68e953f0fceb83",
+  "raw_artifacts_excluded": [
+    "../artifacts/codex-x86_64-pc-windows-msvc.exe.zip",
+    "../artifacts/codex-0.157.0-windows-x64/",
+    "../artifacts/github-release-metadata.json"
+  ],
+  "native_executions": 0,
+  "inference_calls": 0,
+  "secrets_read_or_copied": false,
+  "test_suites_executed": 0,
+  "redactions": 0,
+  "limits": [
+    "Hashes cover preparation documents/scripts and file bytes, not final SVC07 wheels.",
+    "No campaign acceptance or native liveness/authentication claim.",
+    "Strict token-cap and final execution authorization remain open."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "format": "okto.m1.codex-pure-qualification",
+  "revision": 1,
+  "native_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-codex-campaign-proposal-ynzvp8yx\\artifacts\\codex-0.157.0-windows-x64\\codex-x86_64-pc-windows-msvc.exe",
+  "native_executions": 0,
+  "native_version_basis": "Exact official 0.157.0 release bytes equal the previously qualified executable fingerprint; no version probe was executed.",
+  "fingerprint": "sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+  "build_identity": "sha256:0bf80fe3ec18c1061c053a3e0f43dd07430ef53827ccd822a649246897526535",
+  "architecture": "x86_64",
+  "conversation_qualified": true,
+  "controls_qualified": true,
+  "native_request_contracts": [
+    "item/commandExecution/requestApproval"
+  ],
+  "qualified_route": "exact executable fingerprint, not the legacy portable identity entry",
+  "portable_identity_note": "Current core.build_identity.v3 identity differs from the retained historical portable grant. Executable fingerprint() is its raw content SHA, as verified in current discovery.py; the generic path-bound docstring does not describe this executable branch.",
+  "local_binding_approval": "still required for the isolated absolute executable and exact project scope",
+  "source_files": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\build_identity.py",
+      "sha256": "d88ed79ddb2b07204330610d6908f91f538013a794f0c5fe95b6a4685630b6ab"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\discovery.py",
+      "sha256": "add88263115f95877127fc32a5e5de2ebf035fe847f4d578d153c24f9a0cbaa7"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\adapters\\compatibility.py",
+      "sha256": "1b2adaf98a0dd2ebb7b04d348a9bdc79ee6b35680cdb97b1dcb0ad89694ec7ab"
+    }
+  ],
+  "provider_authentication_or_config_read": false,
+  "effects": {
+    "file_hashing": true,
+    "binary_execution": false,
+    "inference": false,
+    "runtime_started": false
+  }
+}

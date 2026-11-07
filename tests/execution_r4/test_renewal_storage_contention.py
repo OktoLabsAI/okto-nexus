@@ -45,6 +45,7 @@ def test_transient_renewal_failure_retries_or_contains_only_session(phase, expir
             context=context, renew_r4=renew), 'renew_at': 0}
         owner = SimpleNamespace(
             sessions={'one': session}, _stopping=asyncio.Event(), _renewal_gate=gate,
+            _lease_wake=asyncio.Event(),
             channel=SimpleNamespace(connection_id='link', connection_generation=1),
             _request_grant=None, leases=SimpleNamespace(applied=applied), failure=None,
             verify=lambda: None, failed=fail_host,

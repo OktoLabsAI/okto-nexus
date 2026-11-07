@@ -1,0 +1,226 @@
+{
+  "scope": "Exact public evidence bytes; no private runtime state or credential material included",
+  "files": {
+    "curate_readiness.py": {
+      "sha256": "c2efdda118d6a8a83ec94a743c7225475e0fde83452162bee66271c720bbb50c",
+      "bytes": 5692
+    },
+    "m1-codex-campaign-proposal.json": {
+      "sha256": "075e082cddfe40eb6337cb068e0b40e89b009adb42bf5b2269582854d829dc75",
+      "bytes": 33621
+    },
+    "milestone.md": {
+      "sha256": "565a2fe04d1512c9d39397f1bb5cb1584df94ebd193f65f4139dd50bcdb1f7e4",
+      "bytes": 1564
+    },
+    "native-service-campaign-proposal.json": {
+      "sha256": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a",
+      "bytes": 51454
+    },
+    "prepared-v1/artifact-manifest.json": {
+      "sha256": "36cf3f603c80e6ef154a195637043f957a8e256844b58adfaa7f98a561a340ee",
+      "bytes": 2995
+    },
+    "prepared-v1/build_proposal.py": {
+      "sha256": "5838cc15a53cc33fb0ec58e08cffb8d0ea9fb761e2b0ef92a6c8d25a374bef8d",
+      "bytes": 32331
+    },
+    "prepared-v1/codex-0.157.0-artifact-proof.json": {
+      "sha256": "1c9fe1a29850f30c21dd2a717c5e015f1b24f4c525f93eaf65625c71de686516",
+      "bytes": 10139
+    },
+    "prepared-v1/codex-0.157.0-pure-qualification.json": {
+      "sha256": "4739bd2b524f5956b2d6387d901e12eb6078f2e754527d8b6b2627ad0a6589c8",
+      "bytes": 2109
+    },
+    "prepared-v1/finalize_public.py": {
+      "sha256": "dd110873ecc42167fe88887ee8aa97c35e7ecdabb59aed113314f22ba7252aa5",
+      "bytes": 3943
+    },
+    "prepared-v1/m1-codex-campaign-proposal.json": {
+      "sha256": "0813c2f2e6112954b93de6ea72ffdc91259258c153e34dfff1b006ce3a00bb89",
+      "bytes": 27753
+    },
+    "prepared-v1/m1-codex-campaign-proposal.md": {
+      "sha256": "3ef9864392afa2b87ebc4a7fe75842f28ec2d379c9884edd8878914d12a59b91",
+      "bytes": 8170
+    },
+    "prepared-v1/preparation-attempt-01.json": {
+      "sha256": "2c5d8056cd09b1c8f20453d10f97fffc748b30365edec9c713f62d7c42f936dd",
+      "bytes": 248
+    },
+    "prepared-v1/preparation-attempt-02.json": {
+      "sha256": "62afdfc37c498ac2e0177fc497c3c432de9fb3d9eacf6bbe5c43c45d2a308148",
+      "bytes": 284
+    },
+    "prepared-v1/preparation-attempt-03.json": {
+      "sha256": "ee67b215fa4f6ec2dd9c9999ecf1bb97edb73f038dc39615e870b8d7ad48d7f0",
+      "bytes": 549
+    },
+    "prepared-v1/prepare_official_artifact.py": {
+      "sha256": "c998753bb5bd497e7490920ec147b256dc976b5ee59d68814a95cacfa6a6cefa",
+      "bytes": 5617
+    },
+    "prepared-v1/prepare_official_artifact_attempt02.py": {
+      "sha256": "2df490efdbc810bc8a30bdecd8ac12fb9994eb683b989a10458deec6f9e920e6",
+      "bytes": 5333
+    },
+    "prepared-v1/prepare_official_artifact_initial.py": {
+      "sha256": "9b04286ddc189ce6d960c7e256aaf32315f37289f535d64e9d57169387655eac",
+      "bytes": 5101
+    },
+    "prepared-v1/verify_official_artifact.py": {
+      "sha256": "04a64356c947bb7b3c3cfdb5ac12b97acc84db57be09b677047362a1453686ac",
+      "bytes": 3042
+    },
+    "prepared-v2/artifact-manifest.json": {
+      "sha256": "56561f383a13342d7604b190ef1443993c83167dd8c65f474520edc28ebdcc18",
+      "bytes": 7350
+    },
+    "prepared-v2/curate_refresh.py": {
+      "sha256": "4208d9ebefc22aeab1d6194bddc153588fd7c548650c1ed52b86b80e2b3e428d",
+      "bytes": 6428
+    },
+    "prepared-v2/m1-codex-campaign-proposal-v2.json": {
+      "sha256": "e55473760c9ae7a9fb625c3aef628b938798847e6933bd579905ab15a8f611c9",
+      "bytes": 32435
+    },
+    "prepared-v2/m1-codex-campaign-proposal-v2.md": {
+      "sha256": "bac9ff13687869ef8eefc0531f1099f030ab1512a56f066f1073d1a794d3a39d",
+      "bytes": 2648
+    },
+    "prepared-v2/native/connector-daemon-help.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/connector-daemon-help.stdout.txt": {
+      "sha256": "44c636ceb3e62eaf5b6c0665999041dc1f63bdfa4175d56395301ef5dc74f6b0",
+      "bytes": 704
+    },
+    "prepared-v2/native/connector-daemon-start-help.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/connector-daemon-start-help.stdout.txt": {
+      "sha256": "567da96634bc47f71b606f8a420b621f2cb858ccd52e1938ce254cfac226c9b1",
+      "bytes": 316
+    },
+    "prepared-v2/native/connector-daemon-stop-help.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/connector-daemon-stop-help.stdout.txt": {
+      "sha256": "47001da8b362c8e5ec18909934cf5998847db3636e77d594c617e9bfdf6a4a50",
+      "bytes": 653
+    },
+    "prepared-v2/native/connector-service-help.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/connector-service-help.stdout.txt": {
+      "sha256": "7e4f760040c6455de61ceba7f7d275b140df25a4aaa485da52dd81534dd35aa2",
+      "bytes": 861
+    },
+    "prepared-v2/native/connector-service-install-help.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/connector-service-install-help.stdout.txt": {
+      "sha256": "5edf6c8200317528b33f917a35b7c662549d2598e09705a58a1080d356fd7c45",
+      "bytes": 285
+    },
+    "prepared-v2/native/environment-preparation.json": {
+      "sha256": "c6fbbd2854ccae53e7c9ddf2065219f7fbe6c113c1c2a41137272ce5f6cbfc48",
+      "bytes": 13955
+    },
+    "prepared-v2/native/environment.json": {
+      "sha256": "f4f2a92a308459a581835e7b036c8d198582d9bf6a4848be5d8575922d47a921",
+      "bytes": 1055
+    },
+    "prepared-v2/native/finalize_proposal.py": {
+      "sha256": "1fd6625af1fb05e5a7c07d56b93e367ac47eb1d35aa03cc8bb6c70bf23f8ca7e",
+      "bytes": 1548
+    },
+    "prepared-v2/native/inspect_installed.py": {
+      "sha256": "407142281b42407240e45115b8f28b26d226e98c9f4f1b2b66d0a3802e1d6903",
+      "bytes": 3927
+    },
+    "prepared-v2/native/installed-inspection.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/installed-inspection.stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/installed-proof.json": {
+      "sha256": "72198a336dbf9034f768f6b2d004e866b08a970e27c356828eb85b3ff61ef683",
+      "bytes": 116791
+    },
+    "prepared-v2/native/native-service-campaign-proposal.json": {
+      "sha256": "cbc676dac4b3eaa4898608d71e9dca53a3afe7d70d09c8e09ff727563e8dfd43",
+      "bytes": 51163
+    },
+    "prepared-v2/native/nexus-service-help.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/nexus-service-help.stdout.txt": {
+      "sha256": "bbf9417dedc0b14c0323384ceb6f0888ef04e717f1941281062e900aa8e2c2d5",
+      "bytes": 1810
+    },
+    "prepared-v2/native/offline-install.log": {
+      "sha256": "146e5b47bb6f5b50fb7b4da1a60d90e4d39fe7c8192c0f30d91da8533195d205",
+      "bytes": 5677
+    },
+    "prepared-v2/native/pip-check.log": {
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31
+    },
+    "prepared-v2/native/prepare_proposal.py": {
+      "sha256": "be2a02e982512cde75a692ac25a9b50bd857527128f5dd7a47362cfe8ce71800",
+      "bytes": 10616
+    },
+    "prepared-v2/native/proposal-readonly-checks.log": {
+      "sha256": "b0fc01ed443f2466d3da3a96750610e0e464bb6eedc96855483182c5e970f9ae",
+      "bytes": 1850
+    },
+    "prepared-v2/native/pythonw-import-proof.json": {
+      "sha256": "e87cdd1c92f2116bf3b4e201d29f9a283193da956c97370357771bcefeb797da",
+      "bytes": 116122
+    },
+    "prepared-v2/native/pythonw-imports.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/pythonw-imports.stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/native/read-only-checks.json": {
+      "sha256": "4e8de34695e115797bb17784f9c08f8af104852fe35fb0eb1ba62021ebf21eaa",
+      "bytes": 3925
+    },
+    "prepared-v2/native/source-heads.json": {
+      "sha256": "9e330f78b795bd8426a2abe6879cc1b8e3caed0759ea656f1871dc944fe3d8f3",
+      "bytes": 2581
+    },
+    "prepared-v2/native/venv-create.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "prepared-v2/prepare_refresh.py": {
+      "sha256": "6845e7a5ca0f0f95ed2b623997b2316f8fc51581c191b2314591f71192c5889a",
+      "bytes": 7332
+    },
+    "prepared-v2/README.md": {
+      "sha256": "2be72b7b6c77ee797967804e746e735b5a3267826022bcd7fbba7a055c4c9209",
+      "bytes": 2131
+    },
+    "prepared-v2/refine_m1.py": {
+      "sha256": "bdbc8ea7951c94d877699d1f166aa6039c2e92a346aa7188a738b2ec65f87fbf",
+      "bytes": 10142
+    }
+  },
+  "aggregate_sha256": "ea2d004a9af649290eeaaff63cb2d330e2958f6fb64abdb8448467eaa51770a3"
+}

@@ -19,6 +19,7 @@ class StopServiceRequest(BaseModel):
     instance_id: str = Field(min_length=1, max_length=100)
     generation: str = Field(min_length=1, max_length=100)
     timeout_seconds: float = Field(default=30.0, ge=0, le=300, allow_inf_nan=False)
+    force: bool = False
 
 
 def build_router(lock) -> APIRouter:
@@ -73,7 +74,10 @@ def build_router(lock) -> APIRouter:
                 'message': 'The shutdown coordinator is not available.'}}, status_code=503)
         # Same canonical coordinator used by /v1/runtime/shutdown. This local
         # operator adapter neither grants participant authority nor signals PIDs.
-        report = await owner.request(timeout_seconds=body.timeout_seconds)
+        try:
+            report = await owner.request(timeout_seconds=body.timeout_seconds, force=body.force)
+        except OktoNexusError as error:
+            return _map_error(error)
         return JSONResponse({'ok': True, 'data': {'instance_id': identity,
             'generation': lock.generation, 'shutdown': report}},
             status_code=200 if report['state'] == 'DRAINED' else 202,

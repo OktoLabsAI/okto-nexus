@@ -92,7 +92,7 @@ class ExecutionLeaseService:
             raise _conflict('The lease authority changed.')
         return frame
 
-    def _authority(self, uow, scope, grant_id, channel, now):
+    def _authority(self, uow, scope, grant_id, channel, now, *, issued_renewal=None):
         containment = getattr(self.access, 'session_containment', None)
         if containment is not None:
             containment.require_not_pending(uow, scope)
@@ -181,6 +181,26 @@ class ExecutionLeaseService:
             raise _conflict('The session has no canonical opening operation.')
         from .runtime_requirements import profile_action_allowed
         profile = self.access.endpoints.profile(uow, row['profile_id']) if row['profile_id'] else None
+        existing = self.repo.effective(uow, scope)
+        applied = bool(existing is not None and existing['status'] == 'ACTIVE'
+            and existing['applied_at'] is not None and existing['grant_id'] == grant_id
+            and existing['scope_json'] and json.loads(existing['scope_json']) == scope
+            and existing['connection_id'] == channel.connection_id
+            and existing['connection_generation'] == channel.connection_generation)
+        # An exact renewal already committed may have reached the peer before
+        # the previous lease expired. Replaying that grant or accepting its ACK
+        # reconciles existing authority; it cannot create a new lease request.
+        reconciling = bool(applied and issued_renewal is not None
+            and issued_renewal['status'] == 'ISSUED'
+            and issued_renewal['lease_serial'] == existing['lease_serial'] + 1
+            and json.loads(issued_renewal['request_json']).get('purpose') == 'renew'
+            and all(issued_renewal[key] == existing[key] for key in (
+                'scope_json', 'connection_id', 'connection_generation', 'grant_id',
+                'source_grant_revision', 'allowed_actions_json'))
+            and _stamp(issued_renewal['valid_until_server']) > now)
+        continuing = applied and (_stamp(existing['valid_until_server']) > now or reconciling)
+        if not continuing:
+            self.access.require_admission('runtime.open')
         actions = []
         for action in json.loads(source['actions']):
             if action not in _ACTIONS:
@@ -191,7 +211,8 @@ class ExecutionLeaseService:
                 context, action=action, endpoint_id=row['endpoint_id'],
                 represented_agent_id=scope['agent_id'], workspace_id=scope['workspace_id'],
                 substrate='attach' if semantic['payload']['mode'] == 'attach' else 'managed',
-                uow=uow, audit=False, check_budget=False)
+                uow=uow, audit=False, check_budget=False,
+                _continuation_action='lease.renew' if continuing else None)
             actions.append(_ACTIONS[action])
         native_inputs_allowed = profile is not None and 'approvals' not in profile['config'].get('disabled_capabilities', ())
         if (self.access.config.feature_hitl and native_inputs_allowed and 'turn.submit' in actions and
@@ -207,9 +228,12 @@ class ExecutionLeaseService:
         digest = hashlib.sha256(canonical_json(request)).hexdigest()
         with self.factory.unit_of_work() as uow:
             now = _stamp(self.access.clock.now_iso())
-            authority, source, actions, expires = self._authority(uow, scope, request['grant_id'], channel, now)
             latest = self.repo.latest(uow, scope)
             prior = self.repo.request(uow, scope, request['request_id'])
+            recovery = (prior if prior is not None and prior['request_digest'] == digest
+                        and latest['lease_serial'] == prior['lease_serial'] else None)
+            authority, source, actions, expires = self._authority(
+                uow, scope, request['grant_id'], channel, now, issued_renewal=recovery)
             if prior is not None:
                 if (prior['request_digest'] != digest or prior['status'] not in ('ISSUED','ACTIVE') or
                         latest['lease_serial'] != prior['lease_serial'] or
@@ -275,7 +299,8 @@ class ExecutionLeaseService:
                 # A revocation ACK can only tighten state, never restore it.
                 self.repo.applied(uow, scope, serial=row['lease_serial'], now=now.isoformat(), revoked=True)
                 return
-            _, source, actions, _ = self._authority(uow, scope, frame['grant_id'], channel, now)
+            _, source, actions, _ = self._authority(
+                uow, scope, frame['grant_id'], channel, now, issued_renewal=row)
             expected_stage = 'INSTALLED' if row['lease_serial'] == 1 else 'RENEWED'
             if (frame['application_stage'] != expected_stage or row['status'] not in ('ISSUED','ACTIVE') or
                     row['source_grant_revision'] != source['revision'] or

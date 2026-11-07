@@ -1,0 +1,113 @@
+{
+  "exit": 1,
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-wheel-v1\\okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-installed-v1\\canonical",
+    "--tests",
+    "tests/test_service_drain_decision.py",
+    "tests/execution_r4/test_service_cooperative_drain.py",
+    "tests/execution_r4/test_service_drain_authority.py",
+    "tests/test_service_readiness.py",
+    "tests/test_service_start.py",
+    "tests/test_user_service_installation.py",
+    "tests/execution_r4/test_session_capabilities.py",
+    "tests/execution_r4/test_capability_recovery.py",
+    "tests/execution_r4/test_native_decisions.py",
+    "tests/execution_r4/test_embedded_native_decisions.py",
+    "tests/execution_r4/test_shutdown_admission.py",
+    "tests/execution_r4/test_server_shutdown.py",
+    "tests/execution_r4/test_server_signal_shutdown.py",
+    "tests/execution_r4/test_shutdown_storage_order.py",
+    "tests/execution_r4/test_reset_connections.py",
+    "tests/execution_r4/test_reset_independent_inventory.py",
+    "tests/execution_r4/test_renewal_storage_contention.py",
+    "tests/execution_r4/test_initial_lease_refusal.py"
+  ],
+  "cases": 247,
+  "failures": [
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch",
+      "time": "4.089"
+    },
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_request_rejects_invalid_fields_before_issuance[change0]",
+      "time": "3.538"
+    },
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_request_rejects_invalid_fields_before_issuance[change1]",
+      "time": "3.438"
+    },
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_request_rejects_invalid_fields_before_issuance[change2]",
+      "time": "3.318"
+    },
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_request_rejects_invalid_fields_before_issuance[change3]",
+      "time": "3.500"
+    },
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_request_rejects_invalid_fields_before_issuance[change4]",
+      "time": "3.158"
+    },
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_request_rejects_invalid_fields_before_issuance[change5]",
+      "time": "2.932"
+    },
+    {
+      "classname": "tests.execution_r4.test_session_capabilities",
+      "name": "test_capability_request_rejects_invalid_fields_before_issuance[change6]",
+      "time": "3.024"
+    },
+    {
+      "classname": "tests.execution_r4.test_capability_recovery",
+      "name": "test_metadata_is_authorized_read_only_and_never_returns_secret[none]",
+      "time": "3.966"
+    },
+    {
+      "classname": "tests.execution_r4.test_capability_recovery",
+      "name": "test_metadata_is_authorized_read_only_and_never_returns_secret[renewing]",
+      "time": "4.116"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED]",
+      "time": "4.045"
+    },
+    {
+      "classname": "tests.execution_r4.test_native_decisions",
+      "name": "test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED]",
+      "time": "4.470"
+    },
+    {
+      "classname": "tests.execution_r4.test_reset_connections",
+      "name": "test_reset_generation_survives_backup_and_cold_start",
+      "time": "0.152"
+    },
+    {
+      "classname": "tests.execution_r4.test_renewal_storage_contention",
+      "name": "test_transient_renewal_failure_retries_or_contains_only_session[False-grant]",
+      "time": "0.011"
+    },
+    {
+      "classname": "tests.execution_r4.test_renewal_storage_contention",
+      "name": "test_transient_renewal_failure_retries_or_contains_only_session[False-ack]",
+      "time": "0.008"
+    }
+  ],
+  "skips": []
+}

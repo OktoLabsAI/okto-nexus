@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="5.580" timestamp="2026-11-07T07:09:37.931734-03:00" hostname="Alienware_m15"><testcase classname="" name="tests.test_service_start" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_service_start.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests\test_service_start.py:13: in &lt;module&gt;
+    from okto_nexus.adapters.inbound.cli.service import run_service
+src\okto_nexus\adapters\inbound\cli\service.py:15: in &lt;module&gt;
+    from ...outbound.service_manager.local import LocalServerLifecycle
+src\okto_nexus\adapters\outbound\service_manager\local.py:17: in &lt;module&gt;
+    from .installation import (INSTALLATION_NAME, SUPERVISOR,
+src\okto_nexus\adapters\outbound\service_manager\installation.py:15: in &lt;module&gt;
+    from nexus_connector_core.user_service_definition import (
+E   ModuleNotFoundError: No module named 'nexus_connector_core.user_service_definition'</error></testcase></testsuite></testsuites>

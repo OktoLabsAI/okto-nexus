@@ -142,7 +142,7 @@ def test_signal_during_startup_waits_for_owner_without_hanging_failed_startup(mo
         server = RuntimeServer(uvicorn.Config(app))
         calls = []
         class Owner:
-            async def request(self):
+            async def request_safety_shutdown(self):
                 calls.append("request")
                 return {"state": "DRAINING_PENDING"}
             async def wait(self):

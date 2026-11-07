@@ -46,8 +46,17 @@ class RuntimeAccessService:
 
     def authorize(self, context, *, action="admin", endpoint_id=None, session_id=None,
                   represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True,
-                  audit=True, _returning_external_work=False):
-        self.require_admission(action, returning_external_work=_returning_external_work)
+                  audit=True, _returning_external_work=False, _continuation_action=None):
+        if (_continuation_action not in {None, 'approval.decide', 'input.provide', 'lease.renew', 'session.authority'} or
+                (_continuation_action in {'approval.decide', 'input.provide'} and action not in {'open', 'send'}) or
+                (_continuation_action == 'session.authority' and action != 'open') or
+                (_continuation_action == 'lease.renew' and action not in ACTIONS)):
+            raise ValueError('Invalid existing-session authority continuation.')
+        # Only validated native-request, existing capability and lease callers
+        # select these internal continuations. Grant, identity, policy and lease
+        # checks remain unchanged; new work and new credentials remain fenced.
+        self.require_admission(_continuation_action or action,
+                               returning_external_work=_returning_external_work)
         now, allowed, selected = self.clock.now_iso(), False, None
         with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
             actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None

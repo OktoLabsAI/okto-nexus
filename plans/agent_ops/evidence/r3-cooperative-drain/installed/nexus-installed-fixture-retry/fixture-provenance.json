@@ -1,0 +1,2394 @@
+{
+  "changes": [
+    {
+      "path": "tools/offline_runtime_backup.py",
+      "sha256": "13526cf64683b571ec2cd16d64b16e81b450e0e53444cce845a3271d84f7a188",
+      "reason": "missing repository backup test helper in frozen snapshot"
+    },
+    {
+      "path": "plans/contratos/fixtures-planejamento.json",
+      "sha256": "465863e95bd5f415609b7407d355278f423cde18459be6333d2b5412c6996a4f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/contratos/http-routes.json",
+      "sha256": "9cb295443cab89a894bae7288493a27e3206a7ef7ff002e7e97d36431594fa31",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/contratos/http-target.schema.json",
+      "sha256": "8315a736a23037ce95888cc0f931316a272d381977057f917a6f192ed2b14143",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/contratos/nxl-r4-delta.json",
+      "sha256": "81c9e877d90601c0aca14cf596dcc7259c422eaa893052272cfe2cd0df13dd2f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/contratos/README.md",
+      "sha256": "0df34f03ea3ba99fda782e79b2f6e94cc74017c3c08c3263824e8a962120a45a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/acceptance_inventory.json",
+      "sha256": "3b8221aeb040fbf8c7b504a48c41fda9f844d5fe78184cb91c21a3e76698f927",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/ACTIVE_PLAN.json",
+      "sha256": "286f0f07927606fc994212eb9ca40f9a619c4472c1239de0371722508d536e0f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/audit_delivery.py",
+      "sha256": "201029fff039a59341784d7382544879e757d2e3022f6ddb2f8e1d8fc90cf81a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/audit_ns15_05_docs.py",
+      "sha256": "7c8a6ff0484d4c1888513e0d88031e706142e7fdcf06895574e87f41389f6153",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/baseline.json",
+      "sha256": "70f1c565b40856d638e469cd9afa9751afcc695a36c60eab96a41d7a4e25c328",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/CHECKPOINT_RECONCILIATION_20261002.md",
+      "sha256": "7f2b24d16d91ddee2525c1ebf4a7543284699289896fb4780bbd548ba35b6ca2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/collect_tests.py",
+      "sha256": "242a0b0ef0f3df01eb835cf7188b65e7bfb9f776dacadd54f899dd9b2e270a38",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/completion_review_20260930.json",
+      "sha256": "ade50565040c9e472c3e2556595a77fc70b867096c54b6e43d6065dc3b9dc0cf",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/delivery_coverage.json",
+      "sha256": "2e263338c4317d229ad152529411f7ec9fb17811d27f1054c4b715b01af7f2b2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/delivery_plan.json",
+      "sha256": "cf7cdf4ea5d393ecd975471ab1d9cb03928f08906adfeaafa195917c6d069adb",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/DELIVERY_PLAN.md",
+      "sha256": "2b8a4a216f1230b79363f5ae159f47eb7d91db57d7c9dfb66d00751686376103",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/delivery_scope_review_20260930.json",
+      "sha256": "7bff5834ce94ba3f4b12f154244a4ace36f29f5170e612ab0600ae4fd0492b0f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/evidence_manifest.json",
+      "sha256": "73c45a7b5816346d4b43ab204fd852eb50b64eb0725d923578ba066fcd4b456d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/full_delivery_checkpoint_20260930.json",
+      "sha256": "829a1f845118664b8977749e0af571ae5f220f7b1af12e51c3afcae41874cd28",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/IMPLEMENTATION_STATUS.md",
+      "sha256": "799660947e907c672a10908c3e61558772e869099f416bd24e41606481ce3480",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/LOCAL_HARNESS_CAMPAIGN.md",
+      "sha256": "d45497aa1058acc6884be926a745f7111b9997ca04c738248413d42137533c7e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M00_AUDIT.md",
+      "sha256": "9ea2f21093b9a84b842216880eef67a1149a0ed148ca7da6fa78947e35c2b341",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M01_CLOSE_POLICY.md",
+      "sha256": "498fd73685fdbceddb1e514666f4d893b6dc12ede605ad177abbc204bf61e2f9",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M01_CODEX_0159_QUALIFICATION.md",
+      "sha256": "b145df19f6db061e02760f2a209ee9463aeba2606bd9b8d1e060cb599fbdb296",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M01_DECISION_CONFORMANCE.md",
+      "sha256": "5b91dcbd0ab6893aed6b1e37bf349d86a3d8b3c3cf7f680712a699bb0d32f330",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M01_EXPIRED_CONTAINMENT.md",
+      "sha256": "1434e206c0d827c6ce62d22f1f518215bbdc6773de4b7d119fda4b0d4a3f1e6d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M01_LEASE_APPLICATION.md",
+      "sha256": "d64dfc513d234874fb0d254296ea77655d8653f363cdef6bf0e92a6c832014cc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M01_PENDING_CONTAINMENT.md",
+      "sha256": "0ddca69bf3bfbebb0ba7b348d7e658f9771291d0427af7c993c6d1c91c66b7f3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M01_TARGETING_INVENTORY.md",
+      "sha256": "db545ee40938658ff5ba27116bf34c8d8885144d8e4aeeba68c775455009faa3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M02_CAPABILITY_RECOVERY.md",
+      "sha256": "44633bcc4ac284e1d912011bf701a8242607539abab079356dd2d298cf14af89",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M02_DURABLE_CAPABILITY_INTENT.md",
+      "sha256": "c0513e82dd907ebd6c57e34d331c701575849f23290b9f28a7eb930dc2e58b92",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M02_EXECUTOR_REGISTRATION.md",
+      "sha256": "d02f79a59b2c4b6dd25236c21c1c396c2fb4449fcf04456405c3340c69b8cb07",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M02_SESSION_CAPABILITIES.md",
+      "sha256": "f5b38c0bcdb1d91cefec35df1e603a94cbe6b0d34613edc74891d2ae5d8d655a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_BINDING_ALIAS_SCOPE.md",
+      "sha256": "cee2d6428934d833827a9e1af747ac9769ff5dd474129413cd34359a24b42af9",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_BINDING_LANE_CONTINUITY.md",
+      "sha256": "1eab117edc6edf5621d018f69ab2b2323a57e9aa07a01e91464dcbba0d298b89",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_BINDING_REPLACEMENT.md",
+      "sha256": "dae543f1bc81124183861afd580e99deaf3db104e9872cfb7b7f1331c22e57a0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_DELEGATED_BINDING.md",
+      "sha256": "5df2bc2b3a13b411641ea4cbff41511aae50f678abc532c37ba3c5670a107e90",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_DISCOVERY_PRESENCE.md",
+      "sha256": "094731a4f59c3d47c22ccab3c69f993606f6550bd7a64ff4403b2989e241561e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_EXECUTOR_DIAGNOSTICS.md",
+      "sha256": "e105c133f29656a2223bfb970c0d562f418e3dfc011cfc6ac1d13110f73f2e8f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_INSTALLATION_OBSERVATION.md",
+      "sha256": "20254c812303dfc66be0f0a5fb2f1b3d47b6446903c05b5827dda185f2d5745d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_NATIVE_AUTH_FAILURES.md",
+      "sha256": "e9d999cdfac522592bfba995c10a53193cda644f02eb3b63c6c3380a93ed1b0e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_OPERATOR_BINDING.md",
+      "sha256": "79a90765faefb4783d1000f7131593c0d717375b775d17c635c87f09c8677070",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_PROVIDER_HOME_ISOLATION.md",
+      "sha256": "34738eb2aedee097a879a585c45942ca06e0f1655bbea24fb4a9061b6ccbcd60",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M03_QUALIFIED_NATIVE_AUTH.md",
+      "sha256": "d0e7edf253f0043257330a9b51e6efb8a04d23fbbabe4a7319ac92029753c84b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M04_CANONICAL_CONTROLS.md",
+      "sha256": "423ed61a690c2531b08f5b6e8f3044cc9f6dbe41c8c0483687c3b500b4236868",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M04_INITIAL_TURNS.md",
+      "sha256": "dcf7bf4362d61b5546281c4c92eff9502a68a7899a9f8b40578fdd8e470524cf",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M04_OPEN_BOOTSTRAP.md",
+      "sha256": "2886002dd31a9a8c142206d0c3e28c73e9735bc521595202f91fab3b675a076d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M04_OPERATOR_RUNTIME.md",
+      "sha256": "504641f8803a14c769dce685aa9087c56b492a78e80016785cd8c67a29421c1a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M04_REMOTE_DISPATCH_PUMP.md",
+      "sha256": "97c1a6d2379c3a22f7396150b3d77896c85984d626ae6680448ca8fdafb13d97",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M04_SESSION_REUSE.md",
+      "sha256": "5c68c82a8e956aca8343ddd10a557cbeca6973a30d49ab90058c794851f26c6b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_EMBEDDED_DISPATCH.md",
+      "sha256": "383764d8483c0dd917dc1c118330e1f3b9511eaf6d4faefd4d6cc62bad3c8c87",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_EMBEDDED_EVENTS.md",
+      "sha256": "690aae34569def550314ce340c76a39c0442f9ba65c6f40b1d5a510655b4cf48",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_EMBEDDED_INVENTORY.md",
+      "sha256": "52743f500054953c0c817bd892826164ba4b871034d62fd870a8061d740a5669",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_EMBEDDED_RECOVERY.md",
+      "sha256": "4b43a39c1b5ef9b88c59390fcf5d0e8f23e6bd3feee488243151e22c23df07fa",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_EMBEDDED_RESOURCE_RECONCILIATION.md",
+      "sha256": "34f09d17d8ae25706443e5ab957f76c1444459e804add07ef399c1b1c98497a8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_EMBEDDED_TOOLS.md",
+      "sha256": "54cb3b55a2c1659ec00ad4e1680f426e292408690a3b7dbffebaf531f4f12314",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_LOCAL_LAUNCH.md",
+      "sha256": "cd1358bc8456be5a1d833c464620e1e77be7bac5ac323cd1fdee62e01281f573",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_LOCAL_REALIZATION.md",
+      "sha256": "b75f6075cb1e5e1e564617f58a884ebe605c59880cb81cee6eb1d3612a520628",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_MCP_OPENING_HANDSHAKE.md",
+      "sha256": "5bfa73f4706dce11bc808f4598c67e73c7b3cdf4aac674c88b6048a4985e9fbe",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_PROCESS_HTTP_LOGIN.md",
+      "sha256": "eb23f8d14ef783611279ac57a7a0f76e970744ad241fafb3b476a0dc0a562afc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_PROVIDER_VAULT.md",
+      "sha256": "5804680e56ee63b86bec2c7376c113e5ec8829ec0350b08fb2a7dfc0a33ebf06",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M05_REAL_EMBEDDED_PI.md",
+      "sha256": "b86f578a0869affb264ab6fb4b443506c1b0e1959233f7f3c71bcf26f146631d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_AUTOMATIC_LANES.md",
+      "sha256": "5d69e22b48f1843a6ec5ba36123fe2cdf26a617be8b48c0bfa7ca3d6febec191",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_CANONICAL_LEASES.md",
+      "sha256": "159c5fd257f58a22c7515ea2a96dffa7128ca454dc77fc093fe7bb564e927cb2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_CONNECTOR_CONNECTION_OWNER.md",
+      "sha256": "fbb15aa9249f168f906e541496e5c3a4c35c2b511c44d986fed56d56ab19bc7f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_DAEMON_EXECUTION_OWNER.md",
+      "sha256": "254b68a7b828f490feb9c8e3f679720acf76f4fb6c35de9b045c3a6555d11e4f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_DAEMON_STARTUP.md",
+      "sha256": "329120053df55c6360410dc8b4b172808a6e12640f39a5f2f56843e56f20bbca",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_DISCONNECTED_LEASES.md",
+      "sha256": "298fcfda2332d488a73854dbab07273ca3451e547f50cbfad6c9cceba7a556a7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_M07_RECONCILIATION.md",
+      "sha256": "4defe00ac3d44dc7639dd36dde40b62578c96c9f7299ef8649e0a6402e2f1fe5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_PHYSICAL_SELECTION.md",
+      "sha256": "a075266cf40e78d1d02ddc7818773fe0f80c694b8538edc62ed86b36d177728d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_RESOURCE_RELEASE.md",
+      "sha256": "dc997b460c8258f4b51515219e6a164ead304926d48dbbeb9e4c589aa83e9f24",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_RUNTIME_LEASE_RENEWAL.md",
+      "sha256": "c6ba72156c4d8dad1567fe35207666fbba81f854e057586c96aa21b4517da8ba",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M06_TICKET_RECOVERY.md",
+      "sha256": "3b713f5a1e1f44960eeb70ed292a2fdd8c0e7d07e64349b8561a0d9c456c1943",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M07_DURABLE_PUBLICATION.md",
+      "sha256": "b6ccaf19564df0139dcedf2208baea0389596d915726beffbf80c0b402bd3335",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M07_EVENT_INGRESS.md",
+      "sha256": "2328974f87fbe1211f0925b3db4248f0d8ad2f5a8f9e362767cef966a7a697ef",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M07_EVENT_PUBLISHER.md",
+      "sha256": "26c78131ab8dfa5b4e422e900cb81635c49771ae4a41963b2a940e514869d39c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M07_EVENT_RECOVERY.md",
+      "sha256": "78f3fd4cfda14b2f894d2659e9764d6944aa16da9a4fe3797472b9ff044a78cd",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M07_LATE_CLOSE_PUBLICATION.md",
+      "sha256": "746135c873857141b70770663e032762a22b2b030150d90e9e9d9219b8c0b64f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M07_RECEIPT_BINDING.md",
+      "sha256": "7e81260f629c882b78d704d71017a212f0dd3811e3302cdbce81a784b73fff14",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M07_TERMINAL_CLOSE.md",
+      "sha256": "bc560c324c59594993bd37e7cae0afe7d96c70ee2b39199cc46aa160c71f66e2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/m08_native_approval_working_checkpoint.json",
+      "sha256": "2e9397efbadb54571b332cd5ae27b6f7aed7cb7ab5938bf7e691392f558b4827",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M08_OPERATIONAL_NATIVE_PROPOSALS.md",
+      "sha256": "517f560c9accb2d9a10b5f11efc78fcf1080ba37884d06c717d1e8342bcafb01",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M09_CORE_NATIVE_BRIDGE.md",
+      "sha256": "c210a4382fa05f21ef0b18d51e15c010a13f52a3f555e26fe0215bc0b2471cc5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M09_MCP_SESSION_AUTHORITY.md",
+      "sha256": "5163c2971a35ac7e2fb7360644395c6a80634c09d9ee4fb12d42c322af8744c8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M09_NATIVE_ACTIONS.md",
+      "sha256": "59d05f3f5b7c05df1159db03e3b61f10ec5c22d41c97dec70b9db88cbd3bc3d9",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M09_NATIVE_CAPABILITY_REFRESH.md",
+      "sha256": "4cec23983cbba03a47ee5018ddce08c739f4fd267a39a9b986d8835fc072ec75",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M09_PI_HOST_OWNERSHIP.md",
+      "sha256": "8e062fc67f579cc05931f216f9b2c72b2aeb0f3c4b72a8dbac535c30bb3c4bac",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M09_RUNNING_TOOL_AUTHORITY.md",
+      "sha256": "a2d75ca67331cdc90b340761e5f4ca4207adbaf34cd0e47ee26a05cdf8a4b2d6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_AGENT_CONNECTIONS.md",
+      "sha256": "c7a8811a40e10250111ecd89594ae75f86a139c4efbdc9bd3396b35b4b8406ec",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_BINDING_CONSENT.md",
+      "sha256": "2f159b2ebca37f1d63d95f7bfcdf0e9e59b957bb160211801b18cdccfaa1b314",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_BINDING_INVENTORY_READS.md",
+      "sha256": "ac64fe17a5a80e5810cacbdabb68385d1bc224fb5982d041c7729acd438efbd3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_EMBEDDED_PREPARATION_UI.md",
+      "sha256": "6f50e5915b0218bc7effa5ce9e9945a14635b33612339fc403ad29ace7f13c21",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_INVENTORY_REFRESH.md",
+      "sha256": "e3b082ceaa76d1bac9e88753f1eea60f048d3a91f72367234f7df541f336a973",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_LOCAL_INSTALLATION_CHECK.md",
+      "sha256": "39e6f162b9ae58b419f24fb06296bdabdabc2b8da08ed283284914bec85049fa",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_NATIVE_DECISIONS_UI.md",
+      "sha256": "91a5577d73130fb79afaafe55bdfab412d9a851d93c88ae2ad3242aac83714e3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_OFFLINE_RECOVERY.md",
+      "sha256": "7f9eace793cb27d92ffc537e1f8c4d41972a3ef9ff2a786b0a8e06a98780634f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_RUNTIME_OPERATIONS.md",
+      "sha256": "f23a632e9f5fe625386cefcf4da72b7171b64641183b7c12b72cbff595012255",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_RUNTIME_OPTIONS.md",
+      "sha256": "16e04cc9ac9941896c251bb99a2cd4c43126470667281f906dcac77fe32154c1",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_RUNTIME_SELECTION.md",
+      "sha256": "975ebee2b6bb48e7995a17f0175b05fc0d1df27759927b9b150a2f5350ac550c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_SESSION_BROWSER.md",
+      "sha256": "76e2d66b9ec7becbaf00e96bca084c5cfbe2bba8974f6eecc58af766c6a53c60",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_SESSION_HISTORY_UI.md",
+      "sha256": "0616bdb4e941390d8ee254d8897cf2f4f4ec515d72a398e11b3be596e858f7ad",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M10_SESSION_VIEW.md",
+      "sha256": "a9d4809cc2c3860ab9bb8fbee3a2f22467894c7e66db9bd50f589cb4082b4cc3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_ADMISSION_CAPACITY.md",
+      "sha256": "5f11d644e81bd99e84664acdb81526f3c3950284adc393fe0c331ae231e4afc6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_AUTH_CACHE_LIMITS.md",
+      "sha256": "cb160eea5efa8418ba36b8af9fc1524ccccbf428fdb7e62ab7703917ed473776",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_CAPACITY_METRICS.md",
+      "sha256": "8893ff532e178643a15923801c200b3a242a58b5f6f39d093c64d550cddef75c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_DISCOVERY_SHUTDOWN.md",
+      "sha256": "0fb3ea41bf804ac496c3a39ec4aa8955d936f0203374ecc8d253f2a9a8779e84",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_DISPATCH_CAPACITY.md",
+      "sha256": "b8a4e687fa1a9784b43bf948f0d298dd4fb7cac66b94dc1aeccc7a94d5de12e7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_EMBEDDED_SHUTDOWN_DEADLINE.md",
+      "sha256": "74d8762e6ba7f8369aed08328db738dd79fe53c6a6d7a6ecdd86a465a7ee2bc9",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_NATIVE_CLOSE_OUTCOMES.md",
+      "sha256": "7b70a6ee4e8d01b15d61e1512700d4cd6e7f46611ffe6c9777389ad3be9773d7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_NS14_01_RESTART.md",
+      "sha256": "8677e6670f037955d27809c19596748650154e66125f4378cd03609b17576236",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_NS14_02_AUTHORITY.md",
+      "sha256": "2d7b790f05fcb909574b5342c531aceb7457095104b30039df74f63d1847482b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_NS14_03_COMBINED.md",
+      "sha256": "2c894d84d4e159cbc41c938ff63d19fe344735e338bc7c74b753b97da3729a64",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_NS14_04_LOAD.md",
+      "sha256": "38eb04bf95e92b0bb96f5870a070094c44c717b4b97af16e7ab38357145ba3dc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_NS14_05_PROCESS_CRASH.md",
+      "sha256": "6667ea87e909dd711c377607b31adc64ae667c9d2767daf75df435e185126c39",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_PARALLEL_IDENTITY.md",
+      "sha256": "b89146f6d602b2b58b5105fe3cae7163892ce749585745659bdc3eaad683ba4c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_SERVER_SHUTDOWN.md",
+      "sha256": "be0ce39edae21f775138d746c74ad8420034720802e71fcd50b4d5fe836b42d1",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_SERVER_SIGNALS.md",
+      "sha256": "d97b4e4c48d7ecbc670d9e16bde0c927fac69cad7e4088c672a595282fa0d5a5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_SHUTDOWN_ADMISSION.md",
+      "sha256": "43af0590c77490dab4ffd813ca10687c76689880ea07635e910c77c0d0ffdd92",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_SHUTDOWN_FACTS.md",
+      "sha256": "6d845972f6d98b4cf7403eaeaefe0857ca7fc39fd5c5994514543b879675241c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M11_SHUTDOWN_STORAGE_ORDER.md",
+      "sha256": "33467be678bf48e6bef99c9ddc2d791e0027c21c567f6146bd3fbeb7d4f78dc0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_MIGRATION_ADOPTION.md",
+      "sha256": "8f41568891192c7d2e11e11ff2d80acd8c79817b44012a4b1635072b0d411982",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_MIGRATION_BACKUP.md",
+      "sha256": "580dc2daa0a27b06fec538608dbb4c21525fd027f6dccabb6c91462eff8f2a78",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_MIGRATION_CATALOG.md",
+      "sha256": "9f56147da8782dc0397aed643b15bc5de67fd69a028f7c2041a97494c53f8b98",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_MIGRATION_CUTOVER_FENCE.md",
+      "sha256": "2eb6a0b7fe3bf4e3ca4bf522a2dc0ce0904b3b8b5ce261c1d7f9caa07768bb91",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_MIGRATION_POLICY.md",
+      "sha256": "45450254fb06653525c33b1cf8016349e0c690a933f4ed8db5485643915c4b40",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_MIGRATION_RESUME.md",
+      "sha256": "8075d00c3e21ebf724064a5c9e784cf403841fa9d08a85dbc795c4e6e091a189",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS06_05_COMBINED.md",
+      "sha256": "65b52f2faafdff9950602159a22d487df5abbe22ff47994ad4ffcc3aaeb0b22e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS06_05_CONSUMPTION.md",
+      "sha256": "fd27a7373fe290181c7572fbab94aecc4e74fa6c99efb7e10c014bf065a853fa",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_01_ACCEPTANCE.md",
+      "sha256": "73070c85d145dd1447b3107e528d099ae2ef75819e424fda8911a4c0a6c30fce",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_02_DRAIN.md",
+      "sha256": "f0ec5710a83c00011c2e47ded317e04dd5079de7727d6c33de555ba697448389",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_BOOT.md",
+      "sha256": "9bab8111bd191c8f8a7b7a1bf209d0588c508a77dcac21c06cb7723ecfb3b0cd",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_CALLERS.md",
+      "sha256": "ccc1f0775ad247bde6cf75b656587f5b99f6d12625e64f6626781b4514bc78e7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_DELIVERY.md",
+      "sha256": "4cdcd0c2f160d23fc52f742d43910fc05e30e5e95378472f1e7a8c72d10851e7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_DELIVERY_SELECTION.md",
+      "sha256": "8eeae96ae15a69d8a0753d0b50f70abc7ef07fecea33851de248fb3b3703c0cc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_DISCOVERY.md",
+      "sha256": "55103781b0fbc05fc80b84461a01ac99d97ed237c05b164afdb30ce89b6971aa",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_EVENT_VIEWS.md",
+      "sha256": "bdbfa7d729412b7a0a62b48c5281866eb4abe7dd368015bee7ac699ae7548c47",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_FALLBACK.md",
+      "sha256": "fa62296b10e082cf9ae08b713867ac44b22b824bc3f921684dda1af5cbf8fbeb",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_HANDOFF.md",
+      "sha256": "6307338113779861085bf39f829522cb50084b2bd76c107a29feec4d451ae4f5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_HANDOFF_WORKSPACE.md",
+      "sha256": "68173cffc483266c79d398c67d45b70a26df46bbe69864957c662841b63b2882",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_HELPER_REMOVAL.md",
+      "sha256": "8252fa8ddd3b8e8f5b68a9f8974e2f40a954d63128b33eb08026b073e9e1ab94",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_KEYS.md",
+      "sha256": "c62677a7ddfc88ee3d29fbf28e31d2746fff0185bee8251d419b4d38820db0bc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_LOADER_CUTOVER.md",
+      "sha256": "6a479a82c814148ca965defe83ce259ce55b99abb8cef814a54e15e533d6999a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_NATIVE_REMOVAL.md",
+      "sha256": "af74c52c39b45e243fa7f181dae7d5f2e69f5c49c928ed224bda04f02e8b2382",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_OPEN.md",
+      "sha256": "9b5d82cc8c307a0f98295b34177183ba94bd7da5062b11cebdc61580ccf07b43",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_PUBLICATION.md",
+      "sha256": "421867adacc3afea8a0533f94b58e78e6860982491e49463d8a2db0abed6b410",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_RECOVERY.md",
+      "sha256": "264dce0deea1104f6d2e0ad35c5985c7bddf2e2c037b9523b497226ee3b31b52",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_RESULTS.md",
+      "sha256": "8883f1eed92129b1352ed4422ce252b2ad3f43d800709047cd3eb0311482460b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_RETENTION.md",
+      "sha256": "8ab5fb5473aa190bb5e59ce15d8d0d3d457007ffaff6d9a79d219369c5edfbd4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_SELECTION.md",
+      "sha256": "53af3a0798e92c1b54ef799e19640e8afae62c33827ce25e57d9fb2f08bce42b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_03_WORKSPACE.md",
+      "sha256": "985ea0cf96f8ebb49ab7bbd29ac676eacb52fb3705550324e5cb6114ec036957",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_04_CONFIG_RESTORE.md",
+      "sha256": "d02ac68baa75eee02a3fe23a1805bcfbac3bd7b48b4b5fc96bdf0aa6228c851b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_05_ACCEPTANCE.md",
+      "sha256": "3fdfae80b428c68b304b1335ea8dca3dd9c45158e9d7d291e81065d94ff965b5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_05_DOCUMENTATION.md",
+      "sha256": "641af9b2bc64b440aa1f26c443626a401f16283b22bbfc63e2aecec9ac679b97",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_05_MCP_RECONCILIATION.md",
+      "sha256": "ec208613aca734196d55d34dd49bf0fabae66331e3e65c7742e3c0fd954086a0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_NS15_05_OPERATIONAL_RECONCILIATION.md",
+      "sha256": "fbe1d4188279dd0f4bfe6914f6f97ce6ae3f47e5e5f9f55f4b04be96c3bb0261",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M12_TN40_ROLLBACK.md",
+      "sha256": "beafebdd1696ff6691d7c1835bdaa5e9fdb9d724ae0a892599c016dca6b8ba14",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CAMPAIGN_INPUTS.md",
+      "sha256": "d8a0770af5d237474b1f0ead06ac79797815495d0f086855b0f49b8530659805",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_BOOT_BUDGET.md",
+      "sha256": "bb057d0517c4ce113b062379e215d421810382e8cc70e950fa6a7a7169ca9378",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_CAPTURE_PROGRESS.md",
+      "sha256": "3ed64f1386ab4e02c1b9832786740c350c08bbdf68fabe2c45c4e52dd7725c44",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_FACTORY_CUTOVER.md",
+      "sha256": "0833444b2525db09de2d0b2496cfdf83dfc5eb2d25c0cd78f4177a378f8a1cbf",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_FAILURE_CAUSE.md",
+      "sha256": "eabdead607eb9ebaef197be5b031569e83c83588ec76851d9a3d4c3e858994c4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_HTTP_CLIENTS.md",
+      "sha256": "10f153338296778b109ddf39dcc364cb4a79d83966244178e1ce8ce0fff8001a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_LINUX_LOAD_DIAGNOSIS.md",
+      "sha256": "16220b8caba639b0e14fb8a6b45c9538c8bb8a769f989ee59ccdedbc57ec8857",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_LOAD_REFRESH.md",
+      "sha256": "ba2dd938cca209a8f4a1858abac8e7b24e9fda4963e8709e464c3c763c574c66",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_RECONCILIATION.md",
+      "sha256": "77c8805714da4d811f7b6e92db5f0d413f0e5446e38f5ba0d7561dfac4bd2515",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_SURFACE_REPAIR.md",
+      "sha256": "662e2f6e0e4146324980771f0c3dd04471f6da3b4bd2c81907679db8a19aac48",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_CI_TRUST_RECOVERY.md",
+      "sha256": "b7d2ebb80f45f2f66e59893d7932aa97c6f267afbe91a846d27b3555f434c9b1",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_DISCOVERY_DIAGNOSTICS.md",
+      "sha256": "0e967acadfcaca034a889c9c99243c338e25154f0fc79ec9ddbaffde5faf986a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_LINK_STORAGE_FAILURE.md",
+      "sha256": "5f04e36b85fa0347db0ffacbd2c83cafed63b4230ff2cd0487215c6728097c78",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_PI_STREAM_DIAGNOSTIC.md",
+      "sha256": "04d5606d8ee2c8acfd2ab6c90c1657c00cfcbb4951a563909cdfdbebbe4ae98f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_POSIX_DISCOVERY_056.md",
+      "sha256": "57f2186f7ab4ba351c0b5f96e54ec4032116b5c637601f165c84f9df8c0e2fc5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_SAME_MACHINE_054.md",
+      "sha256": "f23d710a2732f9292f443f76a4058d7a116038baaced36ed658ddbc08f629b29",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_SAME_MACHINE_055.md",
+      "sha256": "a5646aa786309b57ad1ea790dfe959731f83726dc850525ad326fbd3c521182b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_WRITER_DEADLINE.md",
+      "sha256": "9405589908ef08f9e4b1315e27a8e089a1e6b91285c249caa77bab8a2c9a6405",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/M13_WRITER_FAIRNESS.md",
+      "sha256": "aa9b981b23b9ee9a33ae3865efa3dc51613f0cd9014bace85846c33ff5b98152",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/planning_consolidation_validation_20260930.json",
+      "sha256": "29ed710fae61a6cb2520319644b53debb9fb74fceb961351cfb045687c3dc414",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/planning_package_validation_20260930.json",
+      "sha256": "550730a987628606fa61f177120cc6ce52fc21df16e4c308144c985531812cb6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/planning_registration_package_validation_20260930.json",
+      "sha256": "eb7b7cff9ef6375a0f83c90517b8d018f1be1d7cb67d23b6ff5d698b9c25e996",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/planning_registration_review_20260930.json",
+      "sha256": "2ba28e4bac14f55f36a6add67caa66e173d166e30e2092d8aaa12df39f649fb0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/planning_review_20260930.json",
+      "sha256": "e39b773a1c963fc5d2e7bb508cef7a815a9f8c2622da07f2e08c65d3bbfea382",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/planning_review_validation_20260930.json",
+      "sha256": "6d549651756a3249e94245af4e7a06f68bc38848224c79611ba4ed12d47edeb2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/planning_total_delivery_validation_20260930.json",
+      "sha256": "c79498d2e0619aeae754ae23a24416e9b7d1128062bb5f8d23f999b68a890b13",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/probe_provider_vault_cli.py",
+      "sha256": "11a74611f6883c4d4bdf697d6b872a1028f60bbd07aa6d26b81fb8b354aaf92e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/profile_parallel_identity.py",
+      "sha256": "e005b176c71619b1f1ac76d56cf7bf1c7dcd031d7014339c1f66ce5502912b02",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/profile_passive_discovery.py",
+      "sha256": "56d429fcedabbcbf559ce83466ac88663fbcf0eabceca4ca4018fdb5ed409a18",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/RELEASE_022_TEST_MIGRATION.md",
+      "sha256": "b27435cfbaeeac733244d73ddc0dbe82214c5787d0994bcf41dbd642e6be4a62",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_admission_capacity_installed.py",
+      "sha256": "365f082002ad50b28b883dd50fd64826e31430945f0324e50f27c97014d17538",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_approved_launch_installed.py",
+      "sha256": "e6ebfcb0f99a74185b1d259b0935da54485ab5470de8e9e34aa1f92e7aa2e03b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_approved_mcp_installed.py",
+      "sha256": "e602fccdb19ba202a30d3b85cecb4345bf6c9c9243b2e16e230b4209b6cf4cd7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_approved_native_installed.py",
+      "sha256": "3c6e7bb757fbc1a0638fab7caeb56c3774c16e622deaf41c63869bd8086fcd47",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_auth_cache_installed.py",
+      "sha256": "57ca8cd486bf29214d1cbb037bc4e6a2347fbd9e45cc3e7b7f49f7ff53cac52f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_automatic_lanes_installed.py",
+      "sha256": "012392336ba254372916d7fb3c30e4b17ba30fa5c48ea09b0980d162314cd4d4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_binding_alias_installed.py",
+      "sha256": "9f2b675cf5af88e74d2fbef3f2754bbe5c3b44affa03d5715b43197432247f65",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_binding_lanes_installed.py",
+      "sha256": "844e2d4697ea93c38a12dedf1c5d9dbc6e11031b210542093a380e02b0b0c31c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_binding_onboarding_installed.py",
+      "sha256": "27e7f35f6b643b17b9032b2f64462d1c68455c7de700d9c5839c8ac7ac024f76",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_binding_replacement_final_installed.py",
+      "sha256": "6306f79882ef9f4b7b404aeb0aa1cbe9b84fb789c5ce60ff0c47aca0ef3ea5e6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_binding_replacement_installed.py",
+      "sha256": "025536de6885582e42eb3ba63fdd59c42327d5bdb955f5bea0b87d682895505d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_capability_recovery_installed.py",
+      "sha256": "428dc72ec5a35a7e31466a7b429059e0b93cd96ac1d388cd92170c5731270597",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_capacity_metrics_installed.py",
+      "sha256": "27dd8348994043e4ddf3c7a87d33b59a75203190c7292551a892832ee76abdae",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_codex_0159_installed.py",
+      "sha256": "98bcc26f4276ab814159725443407d7959c6175484a04a9872fc492bb8dad8ba",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_core44_embedded_providers.py",
+      "sha256": "c0182e17ad36b4cad87c0d602a7a75c31737d2168341bc6794e2fc9f5b0f604b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_discovery_configuration_installed.py",
+      "sha256": "6f7a006db50afb66c5fcfe1f8ad02ca54b7b2e47b4c30a3e8cba57f981138fd3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_discovery_stop_installed.py",
+      "sha256": "f4fe3790ed3679328dfbc87307295ae373f288889cde2935d3b395e8b4c59179",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_discovery_stop_positive.py",
+      "sha256": "c2312fec118d4d21c7412cd3c5e86c0b883822eb0dfcbf5619e837eb8c3f14bc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_dispatch_capacity_installed.py",
+      "sha256": "75c0f34f6dc2ba2bcaf5930cd0faefad60970e0dbe1efe8baadab219333e592f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_embedded_dispatch_installed.py",
+      "sha256": "1f339239ceafe33a6e54761fb6df9ba40a11461a74c0dd48d9f542620d3a1ff0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_embedded_events_installed.py",
+      "sha256": "700307aa30976323d896604bb96c4832c0485a74eb694772d5ff131768261223",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_embedded_inventory_installed.py",
+      "sha256": "8af53fb509e2a2008c22a17f127483de3ee0439f6d5dc71cb70d50c81bba56c8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_embedded_recovery_installed.py",
+      "sha256": "f1392f192e5711d1a012c5be1b3cf1d04d6709c811531110cc36701c2155ae1a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_embedded_resources_installed.py",
+      "sha256": "4e3e771a4d6a6417362b560c31f708a02451df2bdb1184a078088e4266e5dcd2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_embedded_tools_installed.py",
+      "sha256": "a3d3d445fa1323615ee846d658730ce0806795ca5cd3ed22b819a65aaade167c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_event_ingress_installed.py",
+      "sha256": "83a771634474f576a9077427a3e5eeaaab0942101f7cdd609fc6fa85ca90496d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_event_publisher_installed.py",
+      "sha256": "77e7da69ede13dc805f2a5ba3624eb439d1e8548c6584f7a8418339a078bd38b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_event_recovery_installed.py",
+      "sha256": "6cb8a44017225faa1352e7d09b97c0b057b0baedc88fe7a8d662c14d0bffc62d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_executor_diagnostics_installed.py",
+      "sha256": "ebdcd7e247c39404f41235eae9ee685728e7bdc9d9190a8dfb8a53b2d1ba3225",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_executor_onboarding_installed.py",
+      "sha256": "562b85a1f3b52e76e8c8f1592cc7b120234643f37034d584428bb380574facef",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_initial_turn_installed.py",
+      "sha256": "1b0728e7e38d54b92334a5cb551112522d5117151a8defbaa16c8ab78229db09",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_late_close_installed.py",
+      "sha256": "7ab40b5a4740b16cfc988d2dfbe0b84e86601d38d22972b7fbcbfeca806a13ba",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_launch_observation_installed.py",
+      "sha256": "f7270a0f7b2a3307bdfd5dff2aac8cb44de37c12bc598ce1b761e78ad3c3bbbe",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_lease_disconnect_installed.py",
+      "sha256": "c11c8c4fd41611a2287d54d16c010f3658e2a60aa9473d31b3e4e2e072de54a5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_lease_renewal_installed.py",
+      "sha256": "c8f45e3d81e120e6e7b05245063f460a4abb50aca79cadd9f09c18227f58f5e0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_lease_renewal_providers.py",
+      "sha256": "4b0adabe7b3bd9cec8da82b04092538b9cb1d7486fe64144db2aced41279b6e1",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_local_discovery_installed.py",
+      "sha256": "99fa4404ad0cad4326661b07f3a7507b36de852a422e2569b742d306f1a73596",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_local_launch_installed.py",
+      "sha256": "b99c787e316b2d37ec76a5e56060c60b2758925f42a89ca74e1d744c97365cd0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_local_realization_installed.py",
+      "sha256": "4d0414bc30413b2bf1fecf1d251fe1b27c4b37afe6b46869a7e4b2887d3fc59e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_mcp_opening_installed.py",
+      "sha256": "2904aaba8792aa54baeafbfd28c6f9345b65b1a83bae92f4a986bc7a134afed6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_migration_adoption_installed.py",
+      "sha256": "a3a2ba622dc8caf1c7e225d8c12312b945724edd25a08ecfd7918d1189bf5697",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_migration_backup_installed.py",
+      "sha256": "a5038bb74089419cf3e5222d83d0f2be7458e3fa07a1ef62875b90fc5ce0305a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_migration_catalog_installed.py",
+      "sha256": "46b5d8f1febaee4a8a66126a30172841fdff0d0397a4d34a0e14dbeb218ff544",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_migration_cutover_installed.py",
+      "sha256": "cdb1a75355dfe4279029acf3aaaeccb9951ae3c794d178495a0d1d887c215204",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_migration_policy_installed.py",
+      "sha256": "c68f6aca6583ae68ecc0a59a26a6ccdc318b4d754754631b6b81806727424b8f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_migration_resume_installed.py",
+      "sha256": "dbee5d46556b291532edaae99e649585f644d5860d811299b5198927375fe048",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_missing_login_installed.py",
+      "sha256": "a991e9ab437ce39178d83e39b489bb4715695131d5e41e61c94872b988873849",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_approval_core_installed.py",
+      "sha256": "7216e3588d82a54f2dbb3ca1923e4bf562eda684673ad67b8a74d14e34fb0bc8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_auth_installed.py",
+      "sha256": "5b8f46a45afaee43136bbf8ad49122d0919a229787346f9a9fc6b22f1dc41ded",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_close_installed.py",
+      "sha256": "d8744533c01b1955003c54f2cbfde53b073f7d2cd8ae3db8b9353e509e1c7529",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_decision_installed.py",
+      "sha256": "94f6cd5fd3fb8ea3c1b7aa774a3baa2ee825147ad7bdd58c8f901a7d31072c4a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_domain_installed.py",
+      "sha256": "b74dc5c859b39debfc57c76a5bcd1c83209c2206a4c47fecd08227bf9fcb40dc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_elicitation_core_installed.py",
+      "sha256": "b1a9518539f0352c112f4fc7c230c549c83b773b80b7e5970fd6bdb547ab64e0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_elicitation_installed.py",
+      "sha256": "cb72d76cfb8ad427544b00758bd4b59235bb0e94cde7f8e51b5122939ee85b46",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_failure_installed.py",
+      "sha256": "9c246c7f0249a15f07875f5a7bd721c373f07271a06718866832a3d0b58ba140",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_lease_core_installed.py",
+      "sha256": "af4489523e607ee505692d30e5be617f680f39155670736ae5f24f5cbf4468a5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_lease_installed.py",
+      "sha256": "9ac417a7062dc05edfafdb99be1b30566f027084103720d58d3f6f05479f5fa0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_refresh_installed.py",
+      "sha256": "d105a0a8662ae3c7a094bc68eb51dc5adf4d61074df5cb5913963faaf14a8a16",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_native_request_installed.py",
+      "sha256": "44c3adac581e0a649a36073f19e0d7978073711b728e02e18cfa4c17cfba8957",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns06_05_combined.py",
+      "sha256": "88f5a24c9cd3e611642694a9dfc8f0d33218c08a921db1dca37d61bdd21e970a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns06_05_consumption.py",
+      "sha256": "360e498c887de9d028ddb4751292e32f21e25dad6e0612f0e15a5888a30e74ad",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns14_01_installed.py",
+      "sha256": "56060060a99191513fdfa862a4e5f817cd13e1f0e4724914ecb7ba05ed64e4f4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns14_02_installed.py",
+      "sha256": "ed45f8b43b0a1ab4ca4ff628aa26537d6c10e25318d48a5bb347ba9a57e8f4f0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns14_03_installed.py",
+      "sha256": "b3364082db9c34e2c84295fdb40e4393edd528e796d2b878a3c35ae7cb15a0e8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns14_04_installed.py",
+      "sha256": "2a41ec7fa60d8c5ddf3bb5fdc384c07d3ed037bbc9fb6c051f6e26bc55bb73ed",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns14_05_installed.py",
+      "sha256": "ae3bc6a98cca8d2fdd49428e4136dbbf297d79063c9ca0f247bc1d2715ed7b70",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_01_cutover_installed.py",
+      "sha256": "68e9c2533c7a93aecd0f0fdd5c0fa23f8e4d5537ef68e84562ba8ce861c64653",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_01_installed.py",
+      "sha256": "31d696cfb147fd1ffa37daacba923e3e07bfd109e278ef6ff5f7b9e4d934cfb6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_02_final_installed.py",
+      "sha256": "327442343575371cd4ea3f86d3ad74887ef2c3c870df534d2deff9b71c58f30b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_02_installed.py",
+      "sha256": "0277715ab8676c7ebbbc4cf412ff71c5a4b7507e1ddf8c60298f895fd44dd3e3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_boot.py",
+      "sha256": "bc44ea214e4ac28cb2df36b965bb413f2ce0b33d6900199feba6af948b9a71ba",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_callers.py",
+      "sha256": "96096bd1fbbbe9524fe7a1a4823102403ad0756ecea2a9b5c283d2bed580ab4a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_delivery.py",
+      "sha256": "f9bb4305172b0aa24952b613c34cdb173814c15a7dcc63916e2b31cb0f9b9944",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_delivery_selection.py",
+      "sha256": "f019e311dc90805a8e3e2d49f1b5ee466c0579894f4eaddf4dcf38f4eb1bf145",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_discovery.py",
+      "sha256": "1e64d218d470f203e08291a7e5f4cad2a4542441ff29b1232fc69afe6288ab48",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_event_views.py",
+      "sha256": "1d41cb61d62c1350b1e9a984c401d67798185ea76bb9294c66af67cd3ed025b2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_event_views_resume.py",
+      "sha256": "0b28338d6e7d635aae20fb928dcbc4cd42cb16da51e721c36bc75b381b910c92",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_fallback.py",
+      "sha256": "d7caf2545d04bbdf8f7c61ebd5dcbdfa6e3f2e9f505cd5b7f1391cc1afa27fd4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_handoff.py",
+      "sha256": "28b3bb8c15fb37a28686c299a64ce9e99d78c3d38cfb140485dc390ce814fb90",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_handoff_workspace.py",
+      "sha256": "45bbc6b169ed0828751fbf00e6ba1dafd7ad56e57799e62348aa722be9529119",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_handoff_workspace_http.py",
+      "sha256": "6356da5d6cbfdf6159216d1480e5e030cc945e367a187dfa89d27cbc5eedd41a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_handoff_workspace_recheck.py",
+      "sha256": "067c637d0679915c777bcd3ead074925aadf58274037aab23d769fbc49f87c71",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_helper_removal.py",
+      "sha256": "b3118b772dd78bd9da3532021aa415477e7e410425f23f582a89305c08cba4a6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_key.py",
+      "sha256": "1077f0be419988cd0adcdd89e1b9c07fd47c6a50b4a6a1d07adc188c0e247f07",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_loader_cutover.py",
+      "sha256": "7ef2b343e44c6b7a4cabca0b67ec55f54020c76bf3ce48777acb3329fb4e2617",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_native_removal.py",
+      "sha256": "030b59ec599f1bffcd7953e12581e25f169b336e16354ea7bfaaa2eb9a7f372c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_open.py",
+      "sha256": "961c31a077ac34421db619b958b3c8e088c0e24d3c1499883ff2a7a902ffcfbd",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_publication.py",
+      "sha256": "c137737a881f2430acb99333f5b9dc41bf5e332d75ce368a434055089369b747",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_publication_artifact.py",
+      "sha256": "2bfd794ce66433d4aec4d7b7305004630c057f167b754c23e0007c1d682f69ed",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_recovery.py",
+      "sha256": "d401f9fbfdd3d2bfa2b486050aec7797649b4df8aa40421a5f5ba11e3cd038bb",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_results.py",
+      "sha256": "f3068e4ce62355834299023292668b1ec9b0e2f41beef229e7f57fd617dbb589",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_results_http.py",
+      "sha256": "68ed1c3621f7fd411bac087e74ea9b907987e052f25dbee07397924d473889b7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_retention.py",
+      "sha256": "0ea5ef73f404807a89f8a27ba9680144af0ab5f9d143d5bb6e9d0fb56bee0271",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_selection.py",
+      "sha256": "9b84e8800c30b17c8c2955372f39ea733931814e10bee1e7905d9d5592d79431",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_03_workspace.py",
+      "sha256": "f3bd298b5ddff8637b56a08ab4720b12950d2cc4ddec758fc142285be8a50e41",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_04.py",
+      "sha256": "d8bbf861295419e9230183dc8ef7ac22cd0c2086b1f55a45ad9cc378be647e58",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ns15_05.py",
+      "sha256": "ed6de4b389b443d5c3166dca639f0a1ce9df15b3b6f5490748cd1ccd1646c15a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_parallel_identity_installed.py",
+      "sha256": "bf3507b464d387650cc28da4bb3f657a61a9f73584349c725f3abe9e077391f6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_parallel_identity_positive.py",
+      "sha256": "2e0086f3d524836f6450eab5a52c6874f4133578ec7a1c6e707de6be086b722e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_parallel_identity_stop.py",
+      "sha256": "91ba464f9d9176dfbb8470d3a9a444a676aca6053da8f5dce275d6851473a21f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_pi_opening_core_installed.py",
+      "sha256": "7a910251e5e282d8b5df8a39353cd1c0fb926302948a9054f5b9faacd2cda766",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_pi_opening_providers.py",
+      "sha256": "70597f368c082be0728e65a41c9dab5e536e8fa03974d8def8bd5e4e89c632be",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_pi_opening_regressions.py",
+      "sha256": "710c347fa097c6b3b368169b798ea5564cc30af6a0fe61c64cd315fade4067ca",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_pi_owner_installed.py",
+      "sha256": "6216b30439d75b263d8579ff912f0ed22e13d52b4f0d6f802255d89810fb0089",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_pi_stream_diagnostic.py",
+      "sha256": "61f0a9f56c5b051a971fa01982bfb511c84b725e787af07aafab34fd11c19b00",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_process_http_installed.py",
+      "sha256": "87cf7b10b31b0271ce441f8ffc92a4620767a64ead8fe7bc84b95f53eb91ba7e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_provider_home_installed.py",
+      "sha256": "b3d15a69870ff27b548da0f6a02f9489b9918d91ddf3f4e90e064c823fd31b9a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_provider_home_positive.py",
+      "sha256": "189192106840d63d97e6a4aeb1acb6fe21d4d8c4dd4b678e8d1dc533620b5337",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_provider_vault_installed.py",
+      "sha256": "5d4b5fc11dfb01951303424568aa7ff1a1b9ccb75d18352f9bbf2ae4dc435138",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_publication_installed.py",
+      "sha256": "7c363423e0ca91a5ac3fcba07aa95aed3a0e05d8505cd46ef7b79f4df1dca259",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_connector_providers.py",
+      "sha256": "480fc9fee1c39cf9fe1e0cd2ddb30cc55aad06d5f3c20501d0e55952c6ce2173",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_connector_regressions.py",
+      "sha256": "0ae9ae292301367e980f4d75c60f5ae30a533fd5e5d2eddd8441862c5111e578",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_consumer_auth.py",
+      "sha256": "21c5e1ad4f8e3fd7a787f92a18d92eb189b45107996da492d9e76ecce65915fe",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_discovery_stop.py",
+      "sha256": "f7525c96550128fc274e57eeb7321b121c8e802cbc73d56dfadbf7de716de794",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_embedded_mcp.py",
+      "sha256": "0046252d49a8802f89ead9010895ec7590c7b81fff765bcb1d6bd599ee2c670b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_native_decision.py",
+      "sha256": "7c9db111eb4129ce808658f5fb33f5626379f6ff9191f6a1b2de01ca9978f928",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_native_elicitation.py",
+      "sha256": "0d0316fdbf98aa86c36c3bc086fa897eb447dfa9e86230841adad4a1e3478bbd",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_real_rebinding_providers.py",
+      "sha256": "0b66d1b73a40bd54f398c39f4f2a647f7272cf7c7bfe7fa6c6beb0e83325f619",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_receipt_binding_installed.py",
+      "sha256": "00d2322e594fe43e5b66908c2ed97bbcb15f77e9ff72aba0ced84721c0716795",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_reconciliation_installed.py",
+      "sha256": "d1d159fb1e5ad5f66a9cbcc90c1cc1941689f7823ae8ac3bdca3d62a43a64363",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_resource_release_installed.py",
+      "sha256": "eac84f0aa24e0c3f50f79caa169b45a8087a18bd763c092d88ebfb047d0de42a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_running_launch_providers.py",
+      "sha256": "dfecf1add449e6803e28350ca89b89ddfb7b572465e687f4ed1b487901b65916",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_running_launch_regressions.py",
+      "sha256": "9afe696608ae43fd746ac1c37f8fd920562af08c22b864b934f3631ac298979c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_runtime_admission_installed.py",
+      "sha256": "acc3d343afa6d6da9e9ac3785565c6bc74614661b5bbf1391396fe664fb552fb",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_runtime_cli_installed.py",
+      "sha256": "8f2f7dfb6df2ea33d9f000c991b80bf76c7286aa5e8bd96c245fcf5e6d77486e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_server_shutdown_installed.py",
+      "sha256": "15d473161c1e69f966774bef07fd2c7d2081fadfec6bf206d252424aba530460",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_server_signal_installed.py",
+      "sha256": "2eb4148efdb6ba975a108dfe61f3b773b97563971a2045de1cfbf7a49ec4fee4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_session_cli_installed.py",
+      "sha256": "5cd6bedb615d58716b952f31db86c09133b4a91e53e67807514a845dd3b55fe4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_session_reservation_installed.py",
+      "sha256": "119e1e84d2de23f9f500cc87037764eaea431894aeb8e17b84e414510102e082",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_session_reuse_installed.py",
+      "sha256": "581c5ac20b2315e2d1847fb8615abe9f5269df8b6f14796294e874705d0092f8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_session_views_installed.py",
+      "sha256": "15efb34432e91ac4404c16d78f04b70159077698fbb68a73d71cb873786697dc",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_shutdown_admission_installed.py",
+      "sha256": "7ef1a4be6b47f7940d2be3ccdf29fc6162ed04d3db5e8a70eb6dde7f62ac5461",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_shutdown_deadline_installed.py",
+      "sha256": "5d602acd85dd105c861b2536c967b2fb46fb7058021574aaebc1d1a056b3dfd4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_shutdown_facts_installed.py",
+      "sha256": "b546a37d4200458cad1605997e95579a8eed740c6553a3765fc5971b5a02e425",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_shutdown_order_installed.py",
+      "sha256": "9d213c5a63eacd042e43b30a6cabeb1190da090faf6c5736a921271ed6aee715",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_terminal_close_installed.py",
+      "sha256": "b65ae57ed4826de1f068773034c11fe6936a8a51e81d76e4ca6a179151e11119",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/run_ticket_recovery_installed.py",
+      "sha256": "a9e996b5b4df7de1e60cc660bc8905dfa7b07f9f45be0fb6f2a52135b60fbe5e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260929.json",
+      "sha256": "d075358ed63257efcab079710e43df0e210669aebc609358dbad03b2433cdf42",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260929_targeting.json",
+      "sha256": "f6ef66c518c71413055366e353135980ffdf42d9b04108241722078b8d4fd571",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_approved_launch.json",
+      "sha256": "f268dfdcfa0ad2bd63519b16b1a98e564afb05b5cb3fa8981a3d0f70fd338982",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_approved_mcp.json",
+      "sha256": "e93046a8977736efea3d48ae2d7291c991697d718264445dbe3b54b24915c1d8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_approved_native.json",
+      "sha256": "a4b9c7c1c22f930fa692a915a63c4d9634d49532e6e65043e8245ac9eb6e1e3c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_automatic_lanes.json",
+      "sha256": "1e957bb5b8761a2d9bf8fd9dff26a77083797e68790df7ef32b40643a1960e19",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_canonical_leases.json",
+      "sha256": "4f7aa6007c9535109f704d70e8cdb65b3e99d3a6bbf3edcade68bf0cc5870ed1",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_capabilities.json",
+      "sha256": "6aa62bea5412e1ecb494e1af821846d4682708c3b3c8ce3d2139944727b035fe",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_capability_recovery.json",
+      "sha256": "cea216a4062d1a04e8bd519808e1873c76dba2354502df0574fe50863797e1d1",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_capability_reservation.json",
+      "sha256": "0fdd8af56cdace30b8337a3aef31203a76b53ca63532ea34c4a2680898df91ea",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_close_policy.json",
+      "sha256": "5f618de080a71710af7962b50c6a122c553a05ed609cdd1f5213f1cdc0c4d385",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_codex_0159.json",
+      "sha256": "0aff5432409e5cdac11fa0e31394d9eda275cd59fcf39edd08870eff80bcba5b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_connection_owner.json",
+      "sha256": "244eb112859f4051041569440c6f36ed6230b7c7e140a02916b9e6001d803845",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_containment.json",
+      "sha256": "0878beecfe13ac7ec40e183e1c1bb65c0b8c8c133acce8da967b732c195399c3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_controls.json",
+      "sha256": "937b4b65f40cd95cbea80c18e5c0b29ca9d7d0a838e5aaf092ab36c41a031234",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_delegated_binding.json",
+      "sha256": "b7e637b55ce3ad7e9ae9aabbafafaf7fbcdda3ff702874f230d2427a7c7d5743",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_discovery_configuration.json",
+      "sha256": "1652ec732fabecb811b4cdf343eec0e36eeba117a5020713855e6f8b17803c8b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
+      "sha256": "cb0c00aef6a9422208065b9e663af54ca8ac003c555a6b346894df4962a41b2f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_embedded_dispatch.json",
+      "sha256": "051189c300f7bf35d45f857da358ab5fd018cd3e454a1d1f1377fd66cf973b16",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_embedded_events.json",
+      "sha256": "e44a98d372f5628792e987045ef59544138d31e5a53c98eaddf66379449f76b4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_embedded_inventory.json",
+      "sha256": "bcbb7de1bd92be2a7e8cab70095440276abea4f3f136b3bc40e72c1b23489804",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_embedded_recovery.json",
+      "sha256": "04d9ee03ac98f61dab4c1e920506c2302f2ef3e6a3a53740f4ab6cab90caa872",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_embedded_resources.json",
+      "sha256": "d9484ac445bcc3ae514f8ee699c825dc7a44e33490583b6c8ff4dc35ec31afd4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_embedded_tools.json",
+      "sha256": "73dea1611d26062c816e0f9f2713f9f2f0a920d09b2d8edb61ec769097daba0d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_event_ingress.json",
+      "sha256": "5230307cb43d50d7123d32efc237518ec93e96058b7eb20afdef3c66ca134a0c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_event_publisher.json",
+      "sha256": "b044c4f296736c804df3c6818f45c7caa38f88272896bf7fa434063f4bf7a878",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_event_recovery.json",
+      "sha256": "4968b7d51ade0c7df942526084d564b52b6ee9921761807d26955bfb1919ceeb",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_execution_owner.json",
+      "sha256": "f1c19de5b6614023dc99c33f187524dae5e31ca159b8317af7ed5ef23b9dd075",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_late_close.json",
+      "sha256": "c2752e6d872c5835c0111ba6212ed17426e24d0ec939e9c439fe1db59deaee5e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_leases.json",
+      "sha256": "fd3dc0ed69a6a8551cb12d471cbcbe158e7b50b7b45bec2d1f5c92bc85a3b0fb",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_lease_disconnect.json",
+      "sha256": "cc266b1fec61687d08fe5855bdc9e86a980992af1e9850a53d733c04c88a9f98",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_lease_renewal.json",
+      "sha256": "78dc90ca3c7fe07bd56fa730b153147342a0b64c538f9dad3eaeecd166344aa1",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_local_discovery.json",
+      "sha256": "cdef24422dfc57e9856c129feefcd9f72d30ebe9cdbb8dc4c236048af4b09c6c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_local_launch.json",
+      "sha256": "847f3ecff50bdfa7873c5bf50618008c5b5c6c891877d3feff95313d604ed943",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_local_realization.json",
+      "sha256": "7321efa923561f7f82f2c0d3421ad17960832a0c4909fa28cfd6a51500874c2b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_mcp_capabilities.json",
+      "sha256": "ad59c74eb3dbcdbe4bf474f6318801ebc4247c3fa56193898412c6a00f8e6be8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_mcp_opening.json",
+      "sha256": "661abd7ab117ea9f52afd1a2bb8a2d31f0dd31fa94d2387169414405badc3ae4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_actions.json",
+      "sha256": "dde775bb29dc1b2a4edd00a3a022e348fc33692e60ab1561e1afb1278ef97795",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_close.json",
+      "sha256": "b4966639cf90b622dd620742393fde4500db6982d31fa334f7949ee3b3e06da7",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_decisions.json",
+      "sha256": "b1afee8bc4605d023777eb629b962c3369e9fc7679b6a3f23b083e8142f2cf95",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_domain.json",
+      "sha256": "bb4c2d987b3a49ce910be93ca1cecf8cef76131a861012db21e57ed8b8fc1556",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_elicitation.json",
+      "sha256": "7082580fe7bdaf6209276260bd3e2a15b9cd884c9097db91c4d61d8f55319642",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_lease.json",
+      "sha256": "1a1dc940d5f02d50943afa822c1280552a6704773855a88b121f10484796d979",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_refresh.json",
+      "sha256": "b095d55a92ac97e8395f4f5baba65c0a2b8a238799067c02e09fcc325a24a065",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_native_requests.json",
+      "sha256": "1b52bb59b4e8ea9abb7b30e7c85c077f44337231432c26923e418821f9b69c27",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
+      "sha256": "b4af560281f35fa8477bbe70bdff8af3163cd22d01d475e23259fd4974471870",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_operator_binding.json",
+      "sha256": "4233e7470519eabd63ef633b187afe55618a4ec28f9f8080e35e9b561b2f5271",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_pending_containment.json",
+      "sha256": "b7a3300c391263ec5f65727856866d09a560a15a94c1ede3d6415d118a528cb6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_physical_selection.json",
+      "sha256": "698fb6ed2dcee8fca7556eb049b82dcc9dd9f0ea0fb8d3270c064c259f8d3322",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "sha256": "56128de19663dffaa7e861002b2fbff8a5fb1f30160ae7fd54fd5bf6197d3012",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_process_http.json",
+      "sha256": "968409c9a3d57074beb426323ca1d0bca6743937e111216828dc5850073097d4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_provider_vault.json",
+      "sha256": "35dc4493c02cf2007444c57842ea20715d1e5626ef771d1a0e74d9bb7aa036ab",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_publication.json",
+      "sha256": "951ac4c034ebfe6f29627693519f7d3460c7a85a903066dc530347c1b2b72208",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_receipt_binding.json",
+      "sha256": "1c79793f93da20eda6d77fbb20d04e09f567e3ef56769008c6a26657ff3e51e4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_reconciliation.json",
+      "sha256": "823e64a70cfea7c4bba4bf8932f7eb996284ebb10cfb24a2cf0895f57232a11e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_registration.json",
+      "sha256": "c9ccbceedcaa12df62732062b9c5ea62dd52cdd821c1d8347b8b14c304739d84",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_resource_release.json",
+      "sha256": "097ba3ea94a3481fcebeddd9b94ae779be78e7019037d561657df5ba27e0ccce",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_startup.json",
+      "sha256": "d7b9cf6f02b511f1b86c0ee5a01bd99c3ee96c72ef933be0b07971c6c97b2433",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_terminal_close.json",
+      "sha256": "9494a4dce8fb5a76f79d99cd8874543aee40f9382ebd46ff260ae17ccc7f300e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20260930_ticket_recovery.json",
+      "sha256": "8842d430aea71a9eac5db70d0119b5a1f2c4b83f05fb1f915d3d73e6a41b5943",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_admission_capacity.json",
+      "sha256": "393a2956327c9eb42489928f02045795658e067a1345bb4be4682ec7da07b474",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_auth_cache.json",
+      "sha256": "34e3a256cb36dcf276c04cf254709cc72371a15086293f385283923d088517db",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_binding_aliases.json",
+      "sha256": "637620c467738d1d84107a32a2a39aeaa3ac976442e5a0267e7be689a5dc7cfb",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_binding_lanes.json",
+      "sha256": "c9f28153a868db9b9657e8b1f9c6d249caa4c2fbada71c88ad4dd4b814b4b2b8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_binding_onboarding.json",
+      "sha256": "bb18325f7eaa37c7b1f9b9151a060c8fa05517df2dac402fca94cb2275287d7b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_binding_replacement.json",
+      "sha256": "e9145f3aabbc2b2a27afc4ebcfec08d989a09edd17f4ba07755ca5928b20a48c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_capacity_metrics.json",
+      "sha256": "6ad4be37ca2b854c525515f77621ef445ac3b4724f913734a93eb84e83041cb4",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_core44_embedded.json",
+      "sha256": "295723344f9eac4569352125f7f888b1e4b099ceab4d80823bf53badd251e4a9",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_discovery_stop.json",
+      "sha256": "35de7eb9a1d8acea0203234efe55ccd9edf1a4acb8156439480a427289ffe8b9",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_dispatch_capacity.json",
+      "sha256": "1ac9d0485f07242444f462caaeb4450851811afb7e204508fb2786f806f5c883",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_executor_diagnostics.json",
+      "sha256": "712e171f36156ca7755728ca2c4b9d1d01a6d5d5e28cb68ddac1871d48a2ae30",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_executor_onboarding.json",
+      "sha256": "d7ace98619b176b7f2b1c6d9f8c47f5f7af325a7125958e9558cce270e521f46",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_initial_turns.json",
+      "sha256": "8d9df3e716a2be2a2d78f1b89b83336b4c2e740c4a206964995576069d86735a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_migration_adoption.json",
+      "sha256": "60a86ac415fe5c4bef00495abbb7c8d88287b531e5dba29c75313b574e44120d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_migration_backup.json",
+      "sha256": "8a6274ab764d0adeca027ecb0bdae2d710d7dbdbf1d4c3f540ffaf6959a8d017",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_migration_catalog.json",
+      "sha256": "994b54446bd25c0857414b4176fdbe034ce80654f6f1a0e0d8b553f55a89643a",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_migration_cutover.json",
+      "sha256": "21123f363776dd281c427e9ed28a336890a8469fd6a44ebaa076db9f8e00d3f8",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_migration_policy.json",
+      "sha256": "8503b04e83467db0055d7c2754d76329d3e2ad7012eea4d672d31bea482b8e39",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_migration_resume.json",
+      "sha256": "a864b9d13436b595f8d445c2f759b13ead7cf84c32626890a2d3d413f202977c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_native_auth.json",
+      "sha256": "6c0be5e20db9267ed76a985a105a19d1c12050277ecf40510539824d4622ef48",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_native_failures.json",
+      "sha256": "1a3dc1172195283e42be7354f77571f20bad49b405d6f5b45438e3f11059514d",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns06_05_combined.json",
+      "sha256": "41990a4b03e33565b5c6678207aefa260ef1251599afba371f27a8b94ee67925",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns06_05_consumption.json",
+      "sha256": "7393a443349c10a71f418076324eb1670ce10efe12620ad5302398dbe588b712",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns14_01.json",
+      "sha256": "c6384567b61033cd35063a158a03eb8bb4826cf058cacd54ffeea5089ef10b97",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns14_02.json",
+      "sha256": "5bb465b7770b121d65e023b0c54b1404062640d029e95d4f6aed102b3b97ae5f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns14_03.json",
+      "sha256": "38d5510ab411fdc505cb81852d584d0bffbf1672d0b827ee3b23385601d8e846",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns14_04.json",
+      "sha256": "6c714edaca1c7c4322c7d92f67cce331f0484634b6e68b6d9b9039a34d51ace6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns14_05.json",
+      "sha256": "6cefff449c44f285b6bb8c2f4c504990a175afc6f158c419128642bc4d23e287",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_01.json",
+      "sha256": "738393498a6e482b5306a8a9c100aad408672902cc17e3de91eedd5398640009",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_02.json",
+      "sha256": "fc0d8782c4d8d23cb01c14073174bab8b35db6a3166a254789172a70cb698eb0",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_boot.json",
+      "sha256": "d33f91303e267327c9507a3f2c6c54c00435fbed0373e7bac4063ebbb43fdb32",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_callers.json",
+      "sha256": "01537b58abee80b529c9f0c4d950641dd70dc802e0b9bc80cef29c5b63f9a819",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_delivery.json",
+      "sha256": "8c8e79e149000c2d2c1a4ec099bcba91b0c36e4901e3234f9e65acf74427ce4b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_delivery_selection.json",
+      "sha256": "4dfe1531a6d2b58f71301ec4edcfbf48489d242e46e49fa75b2797c70ec36cfd",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_discovery.json",
+      "sha256": "cc6d25835de59f3528d2e0b22bca1e8f48054400d19009ae83673a854e26c11c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_event_views.json",
+      "sha256": "fbd20010f24d920a0ac5141ddd694fe643c63fa6beeb5bbc1a53bd13d11d03b2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_fallback.json",
+      "sha256": "07dce4a4cf7ee9757d3af2fd1064d5d944dccb4141ccc96fd9660538b175cac3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_handoff.json",
+      "sha256": "978bd7a75883e7d2e719d9b9e1c1000b967d101ef6763cf9dc8ac7db7d8197e5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_handoff_workspace.json",
+      "sha256": "e181c00ee94006653881678061f924a880a7b89e74a64462523cae21635d98fd",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_helper_removal.json",
+      "sha256": "dbc7b31fcfe5745ed692938bcfb0903f0e09853a3130ff0aab46496d6bfbdc11",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_key.json",
+      "sha256": "91d4ce7795a5f4c0da865653d9bd0016a10cd178bdcf388c2fe5967a61627157",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_loader_cutover.json",
+      "sha256": "0a540496fede23a733a542711012bf07778438f1c4e9b40d06cfcd2891e9956f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_native_removal.json",
+      "sha256": "36388fee54d23a626cf381733a8b85e6fa1094249b55da3fd4c4ee0258cd6f49",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_open.json",
+      "sha256": "a2fdc9098d62d4386f5011800b9bdbc922e9afaaba6d010a5304dfa3ec6f1664",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_publication.json",
+      "sha256": "092a10e579c1fe8d27735b3ce68d8e0cb739e961980db91f4fdfc1dccd67da2f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_recovery.json",
+      "sha256": "505b1d6e8fe0c8b7ab095407adea11a76b11fd03aac64c2eb5dc2b13447b87e5",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_results.json",
+      "sha256": "830a81b1aea92f4830b9af0ac911b2ca95c0961e8ef50e030c1ac4715a865013",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_retention.json",
+      "sha256": "6e5faf97ab2601c7338bb330e34b6f9eba041fca3d60c7ead8cf64d3e569e061",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_selection.json",
+      "sha256": "3d1e6f2f886c41d94eb7b5f206cf7883a8248028c71e6f55b503924b6305658b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_03_workspace.json",
+      "sha256": "5cd040e00f295b54506c72eec6630c3752580bb03a641b86478cf31314c84cb6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_04.json",
+      "sha256": "9fa77cb64a875e20459d153e184a6ae2bcc1219f2c38d5a1b21a6c5a8dbd689f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_ns15_05.json",
+      "sha256": "e1ceca2873e8925985b08b3b8e62f912453cdf281b42657d36d6027898b1bb9e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_parallel_identity.json",
+      "sha256": "609873963fe7665fae021d1ebdf1cd8e4ce1158ac570d764ee2a08ad12ffb7f3",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_pi_opening.json",
+      "sha256": "6f47445bd5c05ec9c45672b7168c6541ddc828241f074975b2cdfb9f31b7654b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_provider_home.json",
+      "sha256": "160628756e1cf98d0574ee567515af616d40885549cf04282d6d5c6a9a9e0faa",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_real_connector.json",
+      "sha256": "28d5eb1ea435a6d8070bfa163371492c4692e091e6e07ddf771a0f69348f0010",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_running_launch.json",
+      "sha256": "27fb2d86ec110a74e9e0215383936de7cc4bfb76189b27f194b83d49b0ceb8a6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_runtime_admission.json",
+      "sha256": "a6c343053a7c1ffeeb4aa8f9efdab84f8f21f11f775d71d39103bce767471526",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_runtime_cli.json",
+      "sha256": "c5d35a1f801beaff71be146f722be5de1dd73a3d8798e6a7b07c2b2db52b988e",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_server_shutdown.json",
+      "sha256": "1c57b9802ea1d9308c8f1c0d7cde435b78e433d6b2acc3a91217a62ec8b45e5c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_server_signal.json",
+      "sha256": "6327b01ae985315f4646f7fcb1af51c5a277523324cf6b2452f8539a1818817b",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_session_cli.json",
+      "sha256": "f1a12242fe9b2937cb00b41a9bee074df3bc0a6ced42660fbdff2321756470ca",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_session_reuse.json",
+      "sha256": "299ba838b39b5bd23b30973eb610d0dde607991a9ac3cf3b78e4617c045c972f",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_session_views.json",
+      "sha256": "781f835818205a8c02c84b912643d89dd38c068aa0f0d43001ccf44f48f8c238",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_shutdown_admission.json",
+      "sha256": "cca936c0b1fe7a6e00dfde5182674cda50fadc1ad55ef409818b020c030f77bf",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_shutdown_deadline.json",
+      "sha256": "5c457996ea6973e2f32003298a80044bc81f7d47c67c7d98d4136cf0a97443d6",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_shutdown_facts.json",
+      "sha256": "b9fffdc18d2cd8f525d448c1b9d9609d2af63e2bf19d8479e42402a52d1d9969",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_shutdown_order.json",
+      "sha256": "596f7720f4320dae56c88f5b18b70fa44e2093ba1bca077def5d8c942c1b7f3c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/test_runs_20261001_tn40.json",
+      "sha256": "7304a20fdadf09565add4f2efc1616b0c4104264f88bfa72ca261bafcc190dd2",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/total_delivery_review_20260930.json",
+      "sha256": "065f8f9884fb6ac51c0daabb5248e37de7cae85440d18aa833ad94e095957c34",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "plans/r4_execution/validate_delivery_plan.py",
+      "sha256": "1cca818ca5ff58cef82536907554e4a6363d7beda6dd1de1df2b3e3411fa350c",
+      "reason": "missing normative test fixture in frozen snapshot"
+    },
+    {
+      "path": "tests/execution_r4/test_renewal_storage_contention.py",
+      "before_sha256": "b0de193dfd79d24211722f77a25277240b00cf3d17c69b4bc19d4d17f97e45a2",
+      "sha256": "bc15a4e7c8415e7a3eac8bce0e02abbf689a108e8aedd1b92fde4b2126d80333",
+      "reason": "existing fake owner needs _lease_wake event used by production constructor"
+    }
+  ],
+  "diagnoses": [
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:70: in test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change0]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change1]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change2]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change3]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change4]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change5]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change6]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_session_capabilities.py:136: in test_capability_request_rejects_invalid_fields_before_issuance\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[none]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_capability_recovery.py:151: in test_metadata_is_authorized_read_only_and_never_returns_secret\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[renewing]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_capability_recovery.py:151: in test_metadata_is_authorized_read_only_and_never_returns_secret\n    schema = json.loads((Path(__file__).parents[2] / 'plans/contratos/http-target.schema.json').read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_native_decisions.py:142: in test_public_cas_records_exactly_one_application_and_replay\n    schema = json.loads((Path(__file__).parents[2]/\"plans/contratos/http-target.schema.json\").read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED]",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_native_decisions.py:142: in test_public_cas_records_exactly_one_application_and_replay\n    schema = json.loads((Path(__file__).parents[2]/\"plans/contratos/http-target.schema.json\").read_text())\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:546: in read_text\n    return PathBase.read_text(self, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_abc.py:632: in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\pathlib\\_local.py:537: in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\plans\\\\contratos\\\\http-target.schema.json'"
+    },
+    {
+      "node": "tests/execution_r4/test_reset_connections.py::test_reset_generation_survives_backup_and_cold_start",
+      "classification": "missing normative fixture",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_reset_connections.py:230: in test_reset_generation_survives_backup_and_cold_start\n    from test_canonical_backup_artifacts import procedure\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n..\\r3-cooperative-drain-09ucmgsr\\venv\\Lib\\site-packages\\_pytest\\assertion\\rewrite.py:185: in exec_module\n    exec(co, module.__dict__)\n..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_canonical_backup_artifacts.py:22: in <module>\n    spec.loader.exec_module(procedure)\n<frozen importlib._bootstrap_external>:1022: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1159: in get_code\n    ???\n<frozen importlib._bootstrap_external>:1217: in get_data\n    ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\r3-cooperative-drain-09ucmgsr\\\\nexus-source-v1\\\\tools\\\\offline_runtime_backup.py'"
+    },
+    {
+      "node": "tests/execution_r4/test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[False-grant]",
+      "classification": "incomplete fake owner",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_renewal_storage_contention.py:67: in test_transient_renewal_failure_retries_or_contains_only_session\n    asyncio.run(scenario())\nC:\\Python313\\Lib\\asyncio\\runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\asyncio\\runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\asyncio\\base_events.py:720: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_renewal_storage_contention.py:54: in scenario\n    assert not failed_agents and not failed_hosts\nE   assert (not [('Pi', AttributeError(\"'types.SimpleNamespace' object has no attribute '_lease_wake'\"))])"
+    },
+    {
+      "node": "tests/execution_r4/test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session[False-ack]",
+      "classification": "incomplete fake owner",
+      "trace": "..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_renewal_storage_contention.py:67: in test_transient_renewal_failure_retries_or_contains_only_session\n    asyncio.run(scenario())\nC:\\Python313\\Lib\\asyncio\\runners.py:194: in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\asyncio\\runners.py:118: in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python313\\Lib\\asyncio\\base_events.py:720: in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n..\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\tests\\execution_r4\\test_renewal_storage_contention.py:54: in scenario\n    assert not failed_agents and not failed_hosts\nE   assert (not [('Pi', AttributeError(\"'types.SimpleNamespace' object has no attribute '_lease_wake'\"))])"
+    }
+  ],
+  "selected": [
+    "tests/execution_r4/test_session_capabilities.py::test_capability_public_issue_returns_secret_once_and_replaces_only_before_dispatch",
+    "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change0]",
+    "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change1]",
+    "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change2]",
+    "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change3]",
+    "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change4]",
+    "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change5]",
+    "tests/execution_r4/test_session_capabilities.py::test_capability_request_rejects_invalid_fields_before_issuance[change6]",
+    "tests/execution_r4/test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[none]",
+    "tests/execution_r4/test_capability_recovery.py::test_metadata_is_authorized_read_only_and_never_returns_secret[renewing]",
+    "tests/execution_r4/test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED]",
+    "tests/execution_r4/test_native_decisions.py::test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED]",
+    "tests/execution_r4/test_reset_connections.py::test_reset_generation_survives_backup_and_cold_start",
+    "tests/execution_r4/test_renewal_storage_contention.py::test_transient_renewal_failure_retries_or_contains_only_session",
+    "tests/execution_r4/test_external_idle_scheduler_isolation.py",
+    "tests/execution_r4/test_terminal_work.py::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch",
+    "tests/execution_r4/test_terminal_work.py::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile",
+    "tests/execution_r4/test_participant_launch.py::test_checkpoint_loss_preserves_uncertainty_without_respawn",
+    "tests/execution_r4/test_participant_init.py::test_lost_checkpoint_resumes_same_intent_by_observing_effect",
+    "tests/execution_r4/test_participant_init.py::test_uncertain_file_with_later_edit_is_preserved_without_new_intent",
+    "tests/test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation",
+    "tests/test_terminal_coordination.py::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated",
+    "tests/test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids",
+    "tests/test_terminal_cooperation.py::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent",
+    "tests/test_terminal_cooperation.py::test_missing_request_file_does_not_reset_a_confirmed_request_window",
+    "tests/execution_r4/test_remote_terminal_setup.py::test_lost_bootstrap_response_recovers_references_without_reissue",
+    "tests/execution_r4/test_remote_terminal_setup.py::test_lost_decision_resumes_same_approval_then_only_host_finish_completes",
+    "tests/execution_r4/test_remote_terminal_setup.py::test_checkpoint_failure_after_bootstrap_reports_uncertainty_without_reissue",
+    "tests/execution_r4/test_terminal_identity.py::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key"
+  ],
+  "product_bytes_changed": false
+}

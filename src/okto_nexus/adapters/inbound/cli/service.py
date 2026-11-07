@@ -24,6 +24,8 @@ def run_service(argv: list[str]) -> int:
     parser.add_argument('--plan-file', type=Path, help='reviewed upgrade plan JSON for upgrade-apply')
     parser.add_argument('--output', type=Path, help='save upgrade-plan as a new UTF-8 JSON file')
     parser.add_argument('--expected-revision', help='pending launch receipt revision reviewed with status --json')
+    parser.add_argument('--force', action='store_true', help='explicit containment after the selected drain deadline')
+    parser.add_argument('--expected-generation', help='current service generation reviewed before deciding to force')
     parser.add_argument('--follow', action='store_true', help='follow local service logs until Ctrl+C')
     parser.add_argument('--tail', type=int, default=None, help='recent log records, 1..10000 (default 50)')
     parser.add_argument('--user', action='store_true', help='select the effective user service scope')
@@ -32,6 +34,10 @@ def run_service(argv: list[str]) -> int:
     parser.add_argument('--timeout', type=float, default=None,
                         help='observation timeout in seconds; timeout never kills the service')
     args, remaining = parser.parse_known_args(argv)
+    if args.force and (args.action != 'stop' or not args.expected_generation):
+        parser.error('stop --force requires --expected-generation')
+    if args.expected_generation and not args.force:
+        parser.error('--expected-generation applies only to stop --force')
     if (args.action in {'recover-start', 'upgrade-apply'}) != bool(args.expected_revision):
         parser.error('recover-start and upgrade-apply require --expected-revision; other actions do not use it')
     if (args.action == 'upgrade-plan') != bool(args.python):
@@ -77,6 +83,8 @@ def run_service(argv: list[str]) -> int:
             result = service.upgrade_apply(document=read_json(args.plan_file), expected_revision=args.expected_revision)
         elif args.action == 'recover-start':
             result = service.recover_start(expected_revision=args.expected_revision)
+        elif args.action == 'stop' and args.force:
+            result = service.stop(timeout=timeout, force=True, expected_generation=args.expected_generation)
         else:
             action = getattr(service, method)
             result = action(timeout=timeout)

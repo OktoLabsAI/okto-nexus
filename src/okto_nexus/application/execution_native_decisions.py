@@ -179,7 +179,9 @@ class ExecutionNativeDecisions:
     def _live(self, uow, row, frame):
         conn = uow.connection
         scope = {name: frame[name] for name in _SCOPE}
-        authority, grant = ExecutionCapabilityService(factory=self.factory, access=self.access)._authority(uow, scope)
+        continuation = 'input.provide' if row['kind'] == 'native_input' else 'approval.decide'
+        authority, grant = ExecutionCapabilityService(factory=self.factory, access=self.access)._authority(
+            uow, scope, continuation_action=continuation)
         session = conn.execute("SELECT * FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?",
                                tuple(scope[name] for name in ("server_id", "executor_id", "session_id"))).fetchone()
         lease = SqliteExecutionLeaseRepository().effective(uow, scope)
@@ -200,7 +202,8 @@ class ExecutionNativeDecisions:
         self.access.authorize(RuntimeRequestContext(scope["agent_id"], "agent_key",
             credential_binding=authority["api_key_hash"], execution_grant_id=grant["grant_id"]),
             action="send", endpoint_id=authority["endpoint_id"], represented_agent_id=scope["agent_id"],
-            workspace_id=scope["workspace_id"], uow=uow, audit=False, check_budget=False)
+            workspace_id=scope["workspace_id"], uow=uow, audit=False, check_budget=False,
+            _continuation_action=continuation)
         return scope
 
     def decide(self, uow, approval, *, approved, response, context, decided_by, replay):

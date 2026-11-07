@@ -580,3 +580,29 @@ ocupada, falhas reais de configuração/migração/storage e Ctrl+C injetado na 
 do connect com o mesmo processo vivo, depois READY/DRAINED. Nenhum serviço nativo,
 provedor ou cofre pessoal utilizado. SVC07 e campanhas reais seguem pendentes.
 Evidência: `plans/agent_ops/evidence/r3-service-boundaries/milestone.md`.
+
+## 2026-11-07 — SVC-07: contrato cooperativo do Core
+
+Core publicado em 3cdba87: fence de novas operações, observação passiva e composição de owners do mesmo journal. Foram verificados 217 casos únicos no pacote instalado; tentativas e falhas de preparação permanecem retidas. A mesma wheel 1407014e… foi atualizada nos dois consumidores. Nexus e Connector seguem em validação integrada, sem declarar SVC-07 ou M1 completos. A proposta M1 usará Codex CLI, conta já autenticada e limite total de 200 mil tokens informado pelo usuário; execução real e acesso a credenciais ainda não ocorreram. Evidência: ../okto-nexus-connector-core/docs/evidence/cooperative-drain/milestone.md.
+
+## 2026-11-07 — SVC-07: drenagem cooperativa nos três componentes
+
+Core publicado em `3cdba87` e Connector em `ef8e267`. Nexus qualificado com247
+casos únicos de drenagem/autoridade/serviço e45 de isolamento/recuperação:
+**292 casos instalados aprovados**. Rodadas fonte e instalada não são somadas.
+As15 falhas iniciais instaladas foram de preparação/fixture; seus relatórios
+permanecem retidos, seguidos de62 retestes aprovados, sem mudança da wheel.
+Drain mantém decisões, leases, resultados e ACKs admitidos; novas admissões
+ficam bloqueadas. Timeout permanece pendente e força exige geração atual/prazo
+vencido. SVC-07 implementado, com campanhas reais ainda abertas.
+
+Os28 invariantes foram reconciliados como contratos/arquitetura, sem promover
+M1/M2. SVC-02 fecha a lacuna de porta ocupada e RG-09 fecha o ambiente herdado
+dos45 casos. Propostas atuais usam wheels qualificadas; conta já autenticada
+e200 mil tokens definem a proposta M1, mas o teto rígido segue sem garantia
+técnica e a opção de monitoramento ainda aguarda resposta. Nenhum serviço
+nativo/provedor/credencial real foi executado neste milestone.
+
+Evidências: `plans/agent_ops/evidence/r3-cooperative-drain/milestone.md`,
+`plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json` e
+`plans/agent_ops/evidence/r3-campaign-proposals/milestone.md`.

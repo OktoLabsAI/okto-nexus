@@ -1222,6 +1222,18 @@ class HarnessSupervisor:
     # ------------------------------------------------------------------ #
     # close (explicit, operator/agent-requested end)
     # ------------------------------------------------------------------ #
+    def drain_status(self):
+        """Conservative legacy inventory; no native close or idle inference."""
+        with self._lock:
+            resources = [{'owner': 'legacy', 'session_id': key, 'outcome': 'unknown',
+                          'store_retained': True} for key in self._live]
+            for name, value in (('opening', self._opening_agents), ('closing', self._closing),
+                                ('helpers', self._active_helpers), ('calls', self._active_calls)):
+                if value:
+                    resources.append({'owner': 'legacy', 'resource_id': name,
+                                      'outcome': 'pending', 'store_retained': True})
+        return {'quiescent': not resources, 'resources': resources}
+
     def begin_shutdown(self, *, wake=None):
         """Close admission once, using at most four persistent teardown workers.
 

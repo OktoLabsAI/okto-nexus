@@ -1,0 +1,39 @@
+{
+  "scope": "Windows/local e contratos can\u00f4nicos com pares nativos sint\u00e9ticos. N\u00e3o qualifica provedor pessoal, servi\u00e7o nativo registrado nem outras plataformas.",
+  "accepted_verified": [
+    "INV-01",
+    "INV-02",
+    "INV-03",
+    "INV-04",
+    "INV-05",
+    "INV-06",
+    "INV-07",
+    "INV-08",
+    "INV-09",
+    "INV-10",
+    "INV-11",
+    "INV-12",
+    "INV-13",
+    "INV-14",
+    "INV-15",
+    "INV-16",
+    "INV-17",
+    "INV-18",
+    "INV-19",
+    "INV-20",
+    "INV-21",
+    "INV-22",
+    "INV-23",
+    "INV-24",
+    "INV-25",
+    "INV-26",
+    "INV-27",
+    "INV-28"
+  ],
+  "conditional_resolved_by": "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+  "conditions": [
+    "INV-06/20/21 accepted only after 247 source and installed SVC07 cases and45 isolation cases passed",
+    "Architectural/contractual invariants do not mark real campaign acceptance complete"
+  ],
+  "global_acceptance": false
+}

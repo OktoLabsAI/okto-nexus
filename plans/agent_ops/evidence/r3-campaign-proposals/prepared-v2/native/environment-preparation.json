@@ -1,0 +1,300 @@
+{
+  "status": "CANDIDATE_PREPARATION_ONLY",
+  "system_site_packages": false,
+  "dependency_source": "Existing immutable public-dependency wheel pool, hashes verified; no network or shared-venv mutation.",
+  "previous_dependency_manifest": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-services-current-8uwywu7k\\environment-preparation.json",
+  "previous_dependency_manifest_sha256": "3461eabb8dee458e3f166d3b8e2906aebc953b897fec3391c779a0f7f13c419e",
+  "dependencies": {
+    "jsonschema": "4.26.0",
+    "rpds-py": "2026.9.1",
+    "referencing": "0.37.0",
+    "attrs": "26.1.0",
+    "jsonschema-specifications": "2025.9.1",
+    "rfc8785": "0.1.4",
+    "pywin32": "312",
+    "websockets": "17.0.1",
+    "httpx": "0.28.1",
+    "idna": "3.20",
+    "httpcore": "1.0.9",
+    "h11": "0.16.0",
+    "certifi": "2026.7.22",
+    "anyio": "4.15.1",
+    "typing-extensions": "4.16.0",
+    "wsproto": "1.3.2",
+    "uvicorn": "0.54.0",
+    "click": "8.5.0",
+    "fastapi": "0.142.2",
+    "opentelemetry-api": "1.45.1",
+    "annotated-doc": "0.0.5",
+    "typing-inspection": "0.4.4",
+    "pydantic": "2.13.5",
+    "pydantic-core": "2.46.5",
+    "annotated-types": "0.8.0",
+    "starlette": "1.7.0",
+    "mcp": "1.30.0",
+    "sse-starlette": "3.5.0",
+    "python-multipart": "0.0.32",
+    "pyjwt": "2.15.1",
+    "pydantic-settings": "2.15.0",
+    "python-dotenv": "1.2.4",
+    "httpx-sse": "0.4.3"
+  },
+  "dependency_wheels": [
+    {
+      "name": "annotated_doc-0.0.5-py3-none-any.whl",
+      "sha256": "117bac03a25ede5df5440e855b32d556049ca169ead221505badf432fed4b101",
+      "bytes": 5302
+    },
+    {
+      "name": "annotated_types-0.8.0-py3-none-any.whl",
+      "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+      "bytes": 13427
+    },
+    {
+      "name": "anyio-4.15.1-py3-none-any.whl",
+      "sha256": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+      "bytes": 132079
+    },
+    {
+      "name": "attrs-26.1.0-py3-none-any.whl",
+      "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+      "bytes": 67548
+    },
+    {
+      "name": "certifi-2026.7.22-py3-none-any.whl",
+      "sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+      "bytes": 136983
+    },
+    {
+      "name": "click-8.5.0-py3-none-any.whl",
+      "sha256": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+      "bytes": 125251
+    },
+    {
+      "name": "fastapi-0.142.2-py3-none-any.whl",
+      "sha256": "bd5f4d81f1e93a88bcd77caf4dfe3c2dbffc3805407a0007e9a114c18b3a670b",
+      "bytes": 144409
+    },
+    {
+      "name": "h11-0.16.0-py3-none-any.whl",
+      "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+      "bytes": 37515
+    },
+    {
+      "name": "httpcore-1.0.9-py3-none-any.whl",
+      "sha256": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+      "bytes": 78784
+    },
+    {
+      "name": "httpx-0.28.1-py3-none-any.whl",
+      "sha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+      "bytes": 73517
+    },
+    {
+      "name": "httpx_sse-0.4.3-py3-none-any.whl",
+      "sha256": "0ac1c9fe3c0afad2e0ebb25a934a59f4c7823b60792691f779fad2c5568830fc",
+      "bytes": 8960
+    },
+    {
+      "name": "idna-3.20-py3-none-any.whl",
+      "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+      "bytes": 69583
+    },
+    {
+      "name": "jsonschema-4.26.0-py3-none-any.whl",
+      "sha256": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+      "bytes": 90630
+    },
+    {
+      "name": "jsonschema_specifications-2025.9.1-py3-none-any.whl",
+      "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+      "bytes": 18437
+    },
+    {
+      "name": "mcp-1.30.0-py3-none-any.whl",
+      "sha256": "666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0",
+      "bytes": 234581
+    },
+    {
+      "name": "opentelemetry_api-1.45.1-py3-none-any.whl",
+      "sha256": "b31553efa588ae44bc306f863c785c5333a9ecc091248c6ee68b4b6c87fdedfb",
+      "bytes": 60256
+    },
+    {
+      "name": "pydantic-2.13.5-py3-none-any.whl",
+      "sha256": "346a034f080da3755d8e9cb5e00e8b07de1d39e4f6e2c87d8ab7cafa0b269a73",
+      "bytes": 472589
+    },
+    {
+      "name": "pydantic_core-2.46.5-cp313-cp313-win_amd64.whl",
+      "sha256": "15f4a94963c95accac15b7b657bb177d3ad82bb90b0d0526d9a9b85079925db5",
+      "bytes": 2041980
+    },
+    {
+      "name": "pydantic_settings-2.15.0-py3-none-any.whl",
+      "sha256": "0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42",
+      "bytes": 69413
+    },
+    {
+      "name": "pyjwt-2.15.1-py3-none-any.whl",
+      "sha256": "42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193",
+      "bytes": 33860
+    },
+    {
+      "name": "python_dotenv-1.2.4-py3-none-any.whl",
+      "sha256": "42269a8a5b3fd54ffa6f3d84b18abed50064717576b4ecf03dc4a55d8aa04fdc",
+      "bytes": 23266
+    },
+    {
+      "name": "python_multipart-0.0.32-py3-none-any.whl",
+      "sha256": "ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23",
+      "bytes": 30042
+    },
+    {
+      "name": "pywin32-312-cp313-cp313-win_amd64.whl",
+      "sha256": "c53e878d15a1c44788082bfe712a905433473aa38f86375b7cf8b45e3acbaaf9",
+      "bytes": 6914298
+    },
+    {
+      "name": "referencing-0.37.0-py3-none-any.whl",
+      "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+      "bytes": 26766
+    },
+    {
+      "name": "rfc8785-0.1.4-py3-none-any.whl",
+      "sha256": "520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48",
+      "bytes": 9240
+    },
+    {
+      "name": "rpds_py-2026.9.1-cp313-cp313-win_amd64.whl",
+      "sha256": "3e93b2cd69a9830be33e03945cd7cda940a0a8bfcfbff41d6144f0cb0d3d8bd9",
+      "bytes": 222409
+    },
+    {
+      "name": "sse_starlette-3.5.0-py3-none-any.whl",
+      "sha256": "3e6e1070df3f0f5d9cea81496de92dbb72f6721871d99748ece67441dd8b7997",
+      "bytes": 17407
+    },
+    {
+      "name": "starlette-1.7.0-py3-none-any.whl",
+      "sha256": "67f8e99895493dd2911a03f11314af6ceebeae4e704bb9f43dfc6a9db151c93e",
+      "bytes": 78980
+    },
+    {
+      "name": "typing_extensions-4.16.0-py3-none-any.whl",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "bytes": 45571
+    },
+    {
+      "name": "typing_inspection-0.4.4-py3-none-any.whl",
+      "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+      "bytes": 14750
+    },
+    {
+      "name": "uvicorn-0.54.0-py3-none-any.whl",
+      "sha256": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf",
+      "bytes": 87427
+    },
+    {
+      "name": "websockets-17.0.1-cp313-cp313-win_amd64.whl",
+      "sha256": "409d93efcaa14f7a99592c5baaef5ec6ca94fba0f5aec1a86f693977c69c9c1c",
+      "bytes": 213348
+    },
+    {
+      "name": "wsproto-1.3.2-py3-none-any.whl",
+      "sha256": "61eea322cdf56e8cc904bd3ad7573359a242ba65688716b0710a5eb12beab584",
+      "bytes": 24405
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "C:\\Python313\\python.exe",
+        "-I",
+        "-m",
+        "venv",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "pip",
+        "--isolated",
+        "install",
+        "--no-index",
+        "--no-deps",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\annotated_doc-0.0.5-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\annotated_types-0.8.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\anyio-4.15.1-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\attrs-26.1.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\certifi-2026.7.22-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\click-8.5.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\fastapi-0.142.2-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\h11-0.16.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\httpcore-1.0.9-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\httpx-0.28.1-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\httpx_sse-0.4.3-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\idna-3.20-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\jsonschema-4.26.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\jsonschema_specifications-2025.9.1-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\mcp-1.30.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\opentelemetry_api-1.45.1-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\pydantic-2.13.5-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\pydantic_core-2.46.5-cp313-cp313-win_amd64.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\pydantic_settings-2.15.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\pyjwt-2.15.1-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\python_dotenv-1.2.4-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\python_multipart-0.0.32-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\pywin32-312-cp313-cp313-win_amd64.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\referencing-0.37.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\rfc8785-0.1.4-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\rpds_py-2026.9.1-cp313-cp313-win_amd64.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\sse_starlette-3.5.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\starlette-1.7.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\typing_extensions-4.16.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\typing_inspection-0.4.4-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\uvicorn-0.54.0-py3-none-any.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\websockets-17.0.1-cp313-cp313-win_amd64.whl",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\wsproto-1.3.2-py3-none-any.whl"
+      ],
+      "exit_code": 0,
+      "log_sha256": "146e5b47bb6f5b50fb7b4da1a60d90e4d39fe7c8192c0f30d91da8533195d205"
+    },
+    {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\venv\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "pip",
+        "--isolated",
+        "check"
+      ],
+      "exit_code": 0,
+      "log_sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+    }
+  ],
+  "products": {
+    "okto_nexus": {
+      "original": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-wheel-v1\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad"
+    },
+    "okto_nexus_connector": {
+      "original": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\vendor\\ci\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5"
+    },
+    "nexus_connector_core": {
+      "original": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\core-v2-wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a"
+    }
+  },
+  "qualification": "Final candidate payloads supplied by root. Installed campaign qualification is still pending; this is not final acceptance.",
+  "service_operations_executed": []
+}

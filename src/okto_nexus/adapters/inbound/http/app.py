@@ -737,7 +737,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             if getattr(app.state, 'connection_tests', None) is not None:
                 await app.state.connection_tests.shutdown()
             if shutdown_coordinator is not None:
-                await shutdown_coordinator.request()
+                await shutdown_coordinator.request_safety_shutdown()
                 await shutdown_coordinator.wait()
             embedded_shutdown_error: Exception | None = None
             if embedded_dispatch is not None:
@@ -857,6 +857,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         )
 
     app.state.deps = deps
+    app.state.service_lock = lock
     app.state.inventory_fresh_publications = deps.execution_fresh_publications
     app.state.auth = auth
     from .operator_auth import OperatorAuth, router as operator_auth_router

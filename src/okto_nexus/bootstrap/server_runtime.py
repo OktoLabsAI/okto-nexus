@@ -74,11 +74,15 @@ async def start_runtime_services(app, *, native_factory=None):
         if server is not None:
             server.should_exit = True
     app.state.connection_tests = ConnectionTests(deps)
+    async def persist_stop():
+        from ..adapters.outbound.service_manager.stop_latch import persist_service_stop
+        await anyio.to_thread.run_sync(persist_service_stop, getattr(app.state, 'service_lock', None))
     coordinator = ServerShutdownCoordinator(deps, embedded=dispatch, inventory=inventory,
         host=host, on_drained=drained, connection_tests=app.state.connection_tests,
         runtime_boot=boot,
         handoff_notices=notices,
         handoff_runtime=handoffs,
+        persist_stop=persist_stop,
         on_embedded_report=lambda report: setattr(app.state, 'embedded_shutdown_report', report))
     app.state.runtime_shutdown = coordinator
     app.state.embedded_runtime_supervisor = None

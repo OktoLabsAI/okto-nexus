@@ -44,7 +44,7 @@ class RuntimeServer(uvicorn.Server):
             if owner is None:
                 await asyncio.sleep(.01)
                 continue
-            report = await owner.request()
+            report = await owner.request_safety_shutdown()
             logger.info("Server shutdown state: %s", report["state"])
             await owner.wait()
             return

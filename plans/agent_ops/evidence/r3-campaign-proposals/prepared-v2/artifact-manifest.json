@@ -1,0 +1,214 @@
+{
+  "format": "okto.campaign-proposal-refresh-manifest",
+  "revision": 1,
+  "status": "CANDIDATES_PREPARED_NOT_AUTHORIZED_NOT_RUN",
+  "files": [
+    {
+      "path": "curate_refresh.py",
+      "bytes": 6428,
+      "sha256": "4208d9ebefc22aeab1d6194bddc153588fd7c548650c1ed52b86b80e2b3e428d"
+    },
+    {
+      "path": "m1-codex-campaign-proposal-v2.json",
+      "bytes": 32435,
+      "sha256": "e55473760c9ae7a9fb625c3aef628b938798847e6933bd579905ab15a8f611c9"
+    },
+    {
+      "path": "m1-codex-campaign-proposal-v2.md",
+      "bytes": 2648,
+      "sha256": "bac9ff13687869ef8eefc0531f1099f030ab1512a56f066f1073d1a794d3a39d"
+    },
+    {
+      "path": "native/connector-daemon-help.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/connector-daemon-help.stdout.txt",
+      "bytes": 704,
+      "sha256": "44c636ceb3e62eaf5b6c0665999041dc1f63bdfa4175d56395301ef5dc74f6b0"
+    },
+    {
+      "path": "native/connector-daemon-start-help.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/connector-daemon-start-help.stdout.txt",
+      "bytes": 316,
+      "sha256": "567da96634bc47f71b606f8a420b621f2cb858ccd52e1938ce254cfac226c9b1"
+    },
+    {
+      "path": "native/connector-daemon-stop-help.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/connector-daemon-stop-help.stdout.txt",
+      "bytes": 653,
+      "sha256": "47001da8b362c8e5ec18909934cf5998847db3636e77d594c617e9bfdf6a4a50"
+    },
+    {
+      "path": "native/connector-service-help.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/connector-service-help.stdout.txt",
+      "bytes": 861,
+      "sha256": "7e4f760040c6455de61ceba7f7d275b140df25a4aaa485da52dd81534dd35aa2"
+    },
+    {
+      "path": "native/connector-service-install-help.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/connector-service-install-help.stdout.txt",
+      "bytes": 285,
+      "sha256": "5edf6c8200317528b33f917a35b7c662549d2598e09705a58a1080d356fd7c45"
+    },
+    {
+      "path": "native/environment-preparation.json",
+      "bytes": 13955,
+      "sha256": "c6fbbd2854ccae53e7c9ddf2065219f7fbe6c113c1c2a41137272ce5f6cbfc48"
+    },
+    {
+      "path": "native/environment.json",
+      "bytes": 1055,
+      "sha256": "f4f2a92a308459a581835e7b036c8d198582d9bf6a4848be5d8575922d47a921"
+    },
+    {
+      "path": "native/finalize_proposal.py",
+      "bytes": 1548,
+      "sha256": "1fd6625af1fb05e5a7c07d56b93e367ac47eb1d35aa03cc8bb6c70bf23f8ca7e"
+    },
+    {
+      "path": "native/inspect_installed.py",
+      "bytes": 3927,
+      "sha256": "407142281b42407240e45115b8f28b26d226e98c9f4f1b2b66d0a3802e1d6903"
+    },
+    {
+      "path": "native/installed-inspection.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/installed-inspection.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/installed-proof.json",
+      "bytes": 116791,
+      "sha256": "72198a336dbf9034f768f6b2d004e866b08a970e27c356828eb85b3ff61ef683"
+    },
+    {
+      "path": "native/native-service-campaign-proposal.json",
+      "bytes": 51163,
+      "sha256": "cbc676dac4b3eaa4898608d71e9dca53a3afe7d70d09c8e09ff727563e8dfd43"
+    },
+    {
+      "path": "native/nexus-service-help.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/nexus-service-help.stdout.txt",
+      "bytes": 1810,
+      "sha256": "bbf9417dedc0b14c0323384ceb6f0888ef04e717f1941281062e900aa8e2c2d5"
+    },
+    {
+      "path": "native/offline-install.log",
+      "bytes": 5677,
+      "sha256": "146e5b47bb6f5b50fb7b4da1a60d90e4d39fe7c8192c0f30d91da8533195d205"
+    },
+    {
+      "path": "native/pip-check.log",
+      "bytes": 31,
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+    },
+    {
+      "path": "native/prepare_proposal.py",
+      "bytes": 10616,
+      "sha256": "be2a02e982512cde75a692ac25a9b50bd857527128f5dd7a47362cfe8ce71800"
+    },
+    {
+      "path": "native/proposal-readonly-checks.log",
+      "bytes": 1850,
+      "sha256": "b0fc01ed443f2466d3da3a96750610e0e464bb6eedc96855483182c5e970f9ae"
+    },
+    {
+      "path": "native/pythonw-import-proof.json",
+      "bytes": 116122,
+      "sha256": "e87cdd1c92f2116bf3b4e201d29f9a283193da956c97370357771bcefeb797da"
+    },
+    {
+      "path": "native/pythonw-imports.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/pythonw-imports.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native/read-only-checks.json",
+      "bytes": 3925,
+      "sha256": "4e8de34695e115797bb17784f9c08f8af104852fe35fb0eb1ba62021ebf21eaa"
+    },
+    {
+      "path": "native/source-heads.json",
+      "bytes": 2581,
+      "sha256": "9e330f78b795bd8426a2abe6879cc1b8e3caed0759ea656f1871dc944fe3d8f3"
+    },
+    {
+      "path": "native/venv-create.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prepare_refresh.py",
+      "bytes": 7332,
+      "sha256": "6845e7a5ca0f0f95ed2b623997b2316f8fc51581c191b2314591f71192c5889a"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2131,
+      "sha256": "2be72b7b6c77ee797967804e746e735b5a3267826022bcd7fbba7a055c4c9209"
+    },
+    {
+      "path": "refine_m1.py",
+      "bytes": 10142,
+      "sha256": "bdbc8ea7951c94d877699d1f166aa6039c2e92a346aa7188a738b2ec65f87fbf"
+    }
+  ],
+  "aggregate_sha256": "077f89ccba0206667a45176219522622b65092cd6fdbcd6510da6b29de59a913",
+  "native_task_mutations": 0,
+  "provider_calls": 0,
+  "native_task_queries": 2,
+  "checks_passed": 8,
+  "source_wheel_installed_equal": {
+    "okto-nexus": 691,
+    "okto-nexus-connector": 124,
+    "okto-nexus-connector-core": 166
+  },
+  "prior_m1_manifest_sha256": "36cf3f603c80e6ef154a195637043f957a8e256844b58adfaa7f98a561a340ee",
+  "native_proposal_sha256": "cbc676dac4b3eaa4898608d71e9dca53a3afe7d70d09c8e09ff727563e8dfd43",
+  "m1_v2_proposal_sha256": "e55473760c9ae7a9fb625c3aef628b938798847e6933bd579905ab15a8f611c9",
+  "excluded": [
+    "venv",
+    "wheels",
+    "profiles",
+    "homes",
+    "databases",
+    "personal credentials"
+  ],
+  "redactions": 0,
+  "limits": [
+    "Candidate hashes are not final installed campaign acceptance.",
+    "No native service lifecycle or provider activity was executed.",
+    "Strict200k token guarantee and execution authorization remain unresolved."
+  ]
+}

@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T10:13:10.286567+00:00",
+  "updated_at": "2026-11-07T11:08:25.486032+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -783,7 +783,7 @@
     },
     "SVC-02": {
       "title": "propriedade e exclusão mútua",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "milestones": [
         "PR-01"
       ],
@@ -843,13 +843,13 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/after/installed/tests.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "result": "Canonical home/DB/effective-user identity and held OS exclusion precede bootstrap; metadata/PID/port never independently prove ownership. Remaining: Full occupied-socket startup diagnostic/fixed-endpoint case not located. It is a safe test gap, not Windows installation permission.",
+      "result": "Canonical identity and OS exclusion contracts plus actual occupied-socket startup are verified in disposable Windows processes: fixed endpoint/database, explicit PORT_IN_USE, foreign listener preserved, no alternative owner. This closes the finite missing case identified in the literal audit.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
-      "limitations": [
-        "Full occupied-socket startup diagnostic/fixed-endpoint case not located. It is a safe test gap, not Windows installation permission."
-      ],
+      "limitations": [],
       "subscopes": {
         "server_os_exclusion": "VERIFIED",
         "startup_before_migration": "VERIFIED",
@@ -862,9 +862,9 @@
       },
       "reconciliation": {
         "current_implementation": "Canonical home/DB/effective-user identity and held OS exclusion precede bootstrap; metadata/PID/port never independently prove ownership.",
-        "remaining": "Full occupied-socket startup diagnostic/fixed-endpoint case not located. It is a safe test gap, not Windows installation permission.",
-        "remaining_kind": "focused_safe_qualification",
-        "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "remaining": "None within the disposable Windows ownership/startup contract.",
+        "remaining_kind": "none",
+        "evidence": "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
       }
     },
@@ -1076,12 +1076,13 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
+        "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "result": "Explicit state/readiness correlates owner/version; local query readiness is not provider/authority readiness; failure and stopping stay observable. Remaining: No direct retained Ctrl+C-connect or startup migration-failure diagnostic assertion located; real provider readiness still open.",
+      "result": "Readiness and failure-state contracts, including actual startup config/migration/storage failures and interrupted connect observation, are verified. Real provider readiness remains separately pending.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "No direct retained Ctrl+C-connect or startup migration-failure diagnostic assertion located; real provider readiness still open."
+        "Real provider readiness remains unqualified; service readiness never promises provider work."
       ],
       "subscopes": {
         "server_readiness_projection": "VERIFIED",
@@ -1092,8 +1093,8 @@
       },
       "reconciliation": {
         "current_implementation": "Explicit state/readiness correlates owner/version; local query readiness is not provider/authority readiness; failure and stopping stay observable.",
-        "remaining": "No direct retained Ctrl+C-connect or startup migration-failure diagnostic assertion located; real provider readiness still open.",
-        "remaining_kind": "mixed_safe_and_real_qualification",
+        "remaining": "Real provider readiness remains unqualified; service readiness never promises provider work.",
+        "remaining_kind": "real_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
       }
@@ -1377,7 +1378,7 @@
     },
     "SVC-07": {
       "title": "parada controlada",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "milestones": [
         "PR-02"
       ],
@@ -1398,6 +1399,7 @@
         "docs/service-lifecycle.md",
         "plans/agent_ops/evidence/pr02-connector-user-service.md",
         "plans/agent_ops/evidence/pr02-nexus-user-service.md",
+        "src/okto_nexus/adapters/inbound/cli/runtime_server.py",
         "src/okto_nexus/adapters/inbound/cli/serve.py",
         "src/okto_nexus/adapters/inbound/cli/service.py",
         "src/okto_nexus/adapters/inbound/cli/service_process.py",
@@ -1409,14 +1411,33 @@
         "src/okto_nexus/adapters/outbound/service_manager/inspection.py",
         "src/okto_nexus/adapters/outbound/service_manager/installation.py",
         "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "src/okto_nexus/adapters/outbound/service_manager/stop_latch.py",
         "src/okto_nexus/adapters/outbound/service_manager/windows_tasks.py",
+        "src/okto_nexus/application/execution_capabilities.py",
+        "src/okto_nexus/application/execution_dispatch.py",
+        "src/okto_nexus/application/execution_leases.py",
+        "src/okto_nexus/application/execution_native_decisions.py",
+        "src/okto_nexus/application/harness_supervisor.py",
+        "src/okto_nexus/application/runtime_access.py",
         "src/okto_nexus/application/service_lifecycle.py",
+        "src/okto_nexus/bootstrap/database_reset.py",
+        "src/okto_nexus/bootstrap/embedded_dispatch.py",
+        "src/okto_nexus/bootstrap/runtime_host.py",
+        "src/okto_nexus/bootstrap/server_runtime.py",
+        "src/okto_nexus/bootstrap/server_shutdown.py",
+        "tests/execution_r4/test_renewal_storage_contention.py",
+        "tests/execution_r4/test_server_signal_shutdown.py",
+        "tests/execution_r4/test_service_cooperative_drain.py",
+        "tests/execution_r4/test_service_drain_authority.py",
+        "tests/test_service_drain_decision.py",
         "tests/test_service_inspection.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
         "tests/test_user_service_installation.py"
       ],
       "tests": [
+        "../okto-nexus-connector-core/docs/evidence/cooperative-drain/milestone.md",
+        "../okto-nexus-connector/docs/evidence/cooperative-drain/milestone.md",
         "plans/agent_ops/evidence/pr01-detached-process.xml",
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service-packaging.xml",
@@ -1426,25 +1447,33 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "result": "Canonical drain fences admissions, keeps recovery available, retains unknown ownership, correlates generation and never forces on observation timeout. Remaining: Literal line325 explicit force decision is not exposed by inspected CLI/request/coordinator; do not equate this with absence of Core containment escalation. External logout/shutdown/context campaign still pending.",
+      "result": "Cooperative drain delivered in Core and both hosts. 217 Core,194 Connector and247 Nexus installed unique contract cases pass; Nexus also passes45 isolation/recovery cases. New productive work is fenced, admitted authority/results/ACKs continue, timeout stays pending, explicit force checks current generation and expired drain, and unknown resources retain ownership. Real external shutdown/service/provider campaigns remain open.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Literal line325 explicit force decision is not exposed by inspected CLI/request/coordinator; do not equate this with absence of Core containment escalation. External logout/shutdown/context campaign still pending."
+        "Actual registered user-service and external logout/shutdown context remain unqualified; synthetic peers do not qualify real provider work."
       ],
       "subscopes": {
         "local_canonical_shutdown_adapter": "VERIFIED",
         "supervisor_stop_suppression_isolated": "VERIFIED",
         "durable_generation_after_cleanup": "VERIFIED",
         "connector_stop_suppression_isolated": "VERIFIED",
-        "connector_detached_restart_drain": "VERIFIED"
+        "connector_detached_restart_drain": "VERIFIED",
+        "cooperative_core_installed": "VERIFIED",
+        "cooperative_connector_installed": "VERIFIED",
+        "cooperative_nexus_installed": "VERIFIED",
+        "explicit_generation_force": "VERIFIED",
+        "admitted_authority_continuation": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Canonical drain fences admissions, keeps recovery available, retains unknown ownership, correlates generation and never forces on observation timeout.",
-        "remaining": "Literal line325 explicit force decision is not exposed by inspected CLI/request/coordinator; do not equate this with absence of Core containment escalation. External logout/shutdown/context campaign still pending.",
-        "remaining_kind": "product_gap_plus_real_campaign",
-        "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "current_implementation": "Cooperative drain delivered in Core and both hosts. 217 Core,194 Connector and247 Nexus installed unique contract cases pass; Nexus also passes45 isolation/recovery cases. New productive work is fenced, admitted authority/results/ACKs continue, timeout stays pending, explicit force checks current generation and expired drain, and unknown resources retain ownership. Real external shutdown/service/provider campaigns remain open.",
+        "remaining": "Actual registered user-service and external logout/shutdown context remain unqualified; synthetic peers do not qualify real provider work.",
+        "remaining_kind": "real_campaign",
+        "evidence": "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
       }
     },
@@ -1706,12 +1735,15 @@
         "plans/agent_ops/evidence/pr02-upgrade-nexus-final.xml",
         "plans/agent_ops/evidence/pr02-upgrade-nexus.xml",
         "plans/agent_ops/evidence/pr02-upgrade-wheels.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "result": "Terminal-only start/stop/restart/install/uninstall/log/status/doctor and retained foreground commands exist; passive commands do not infer work absence. Remaining: Keep verified passive/CLI subcontracts; real terminal-independent productive operation plus SVC07 explicit-force gap remain unclosed.",
+      "result": "Terminal lifecycle controls and explicit generation-bound force decision are implemented and contract-qualified. Real terminal-independent productive operation remains pending.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Keep verified passive/CLI subcontracts; real terminal-independent productive operation plus SVC07 explicit-force gap remain unclosed."
+        "Real terminal-independent productive operation remains unqualified."
       ],
       "subscopes": {
         "server_start_stop_restart": "VERIFIED",
@@ -1729,8 +1761,8 @@
       },
       "reconciliation": {
         "current_implementation": "Terminal-only start/stop/restart/install/uninstall/log/status/doctor and retained foreground commands exist; passive commands do not infer work absence.",
-        "remaining": "Keep verified passive/CLI subcontracts; real terminal-independent productive operation plus SVC07 explicit-force gap remain unclosed.",
-        "remaining_kind": "mixed_product_and_qualification",
+        "remaining": "Real terminal-independent productive operation remains unqualified.",
+        "remaining_kind": "real_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
       }
@@ -7091,11 +7123,14 @@
         "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "remaining": "External logout/shutdown bounded persistence unqualified; explicit-force UI path is separate SVC07 product gap.",
-      "remaining_kind": "real_external_shutdown_and_product_gap",
-      "result": "CLI drain before scheduler effects, timeout pending, same generation receipts and authorized recovery paths verified. Scope/remaining: External logout/shutdown bounded persistence unqualified; explicit-force UI path is separate SVC07 product gap."
+      "remaining": "Actual external logout/shutdown bounded persistence remains unqualified.",
+      "remaining_kind": "real_external_shutdown",
+      "result": "Installed CLI/HTTP/Core drain preserves admitted work and does not force on timeout. Explicit force is generation-bound and requires an existing expired drain. Supervisor stop intent precedes containment; actual external logout/shutdown remains pending."
     },
     "SVC-T22": {
       "requirement": "Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente.",
@@ -10234,6 +10269,9 @@
       "evidence": [
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
@@ -10242,7 +10280,8 @@
       "subscopes": {
         "pr09_optional_windows_observer_contract": "VERIFIED",
         "selected_39_current_recovery_cases": "VERIFIED"
-      }
+      },
+      "result": "39 selected current recovery cases pass again under the strict isolated environment, preserving exact IDs and no replay. Selected contract coverage is verified; full real network/service/provider recovery acceptance remains open."
     },
     "RG-06": {
       "requirement": "Core importado sem sockets/processos/credenciais; dependências entre aplicações continuam proibidas.",
@@ -10339,19 +10378,24 @@
     },
     "RG-09": {
       "requirement": "Campanha usa homes/workspaces temporários e não modifica contas/configurações pessoais.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/milestone.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/environment.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json"
       ],
       "subscopes": {
         "pr09_optional_windows_observer_contract": "VERIFIED",
-        "current_mixed_session_protocol_and_import_campaign_isolation": "VERIFIED"
+        "current_mixed_session_protocol_and_import_campaign_isolation": "VERIFIED",
+        "idle_and_selected_recovery_environment_isolation": "VERIFIED"
       },
-      "result": "Recorded temporary scopes and explicit environment allowlists qualify the named mixed/session/protocol/import campaigns. RG03/RG05 inherited environment; do not generalize stronger isolation proof to them. Future authorized native/provider campaigns require their own isolation/cleanup proof."
+      "result": "Named contract campaigns use temporary homes/workspaces and explicit environment allowlists. The previous RG03/RG05 inherited-environment gap is closed by45 current installed cases. This qualifies these finite campaigns only; future authorized native/provider campaigns need their own isolation and cleanup evidence."
     },
     "RG-10": {
       "requirement": "Validação de browser usa o backend real; snapshot/string test não substitui interação.",
@@ -10379,7 +10423,7 @@
   "invariants": {
     "INV-01": {
       "requirement": "A identidade canônica continua sendo `agent_id`. Harness, transporte, pane, host, sessão e observador não criam automaticamente outro agente.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
@@ -10392,17 +10436,22 @@
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
         "external_observation_admission_and_passive_read_contract": "VERIFIED",
         "pr09_optional_windows_observer_contract": "VERIFIED"
-      }
+      },
+      "result": "Identidade selecionada e autenticada permanece agent_id; sessões/instâncias e fontes têm seus próprios IDs auxiliares.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-02": {
       "requirement": "MCP do Nexus permanece HTTP direto no Server. Não adicionar servidor/proxy/fachada MCP no Connector ou no observador. Não reintroduzir MCP stdio do Nexus.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
@@ -10413,66 +10462,99 @@
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
         "pr09_optional_windows_observer_contract": "VERIFIED"
-      }
+      },
+      "result": "Participante conecta diretamente ao MCP HTTP do Server; exportação/guia e observador não criam servidor MCP intermediário. O Connector mantém o canal R4 de execução.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-03": {
       "requirement": "Core continua independente das aplicações; não recebe banco de identidades, inbox, HTTP de produto, UI ou autorização canônica.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Boundaries retidos excluem dependências entre aplicações. Core recebe contratos/ports de execução, e o drain novo apenas metadata de runtime/journal.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-04": {
       "requirement": "Connector continua host/cliente remoto de execução. Não passa a decidir handoffs nem a possuir inbox própria.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Claim, entrega e decisões permanecem serviços canônicos Server; Connector realiza a execução do binding autorizado via R4, sem inbox/handoff próprios.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-05": {
       "requirement": "Presença, atividade, capacidade, autorização, término do turno e conclusão do handoff são fatos diferentes.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
-      }
+      },
+      "result": "Projeção distingue estados e proveniência; publicação externa não toca coordenação/presença/capacidade e recibo recebido não vira liveness/idle.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-06": {
       "requirement": "`idle`, `done`, timeout, silêncio ou desconexão não autorizam execução, conclusão, liberação de capacidade ou replay.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
-      }
+      },
+      "result": "Idle/done externos não liberam turno/reserva nem alteram prioridade/fairness; timeout de observação não cancela. Novo drain requer prova de quiescência ou força explícita e retém UNKNOWN.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-07": {
       "requirement": "Observar/ler/abrir a central não aprova, responde, interrompe, reivindica ou reexecuta trabalho.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
-      }
+      },
+      "result": "GET/inspeção e preferências são passivos sobre tabelas canônicas; decisões exigem controles existentes, autoridade e CAS.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-08": {
       "requirement": "Um observador externo não produz recibos nativos, prova de ownership do Core, heartbeat de sessão MCP ou reserva de capacidade.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
@@ -10485,24 +10567,34 @@
         "plans/agent_ops/evidence/pr08-observations.md",
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
         "external_observation_admission_and_passive_read_contract": "VERIFIED",
         "pr09_optional_windows_observer_contract": "VERIFIED"
-      }
+      },
+      "result": "OBS publica somente estado auxiliar. Correlação é operador-only, prova nativa/OS não vem do cliente e não transfere autoridade ao sinal externo.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-09": {
       "requirement": "Handoffs preservam claim canônico único. MCP-only continua elegível conforme o contrato existente, sem obrigação de reportar capacidade externa.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Corridas MCP/runtime resultam em um único claim e efeito; inelegibilidade não muda com idle externo e MCP-only participa sem relatório externo.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-10": {
       "requirement": "Uma requisição repetida para recuperação mantém a identidade original. Nova tentativa produtiva exige intenção explícita e as regras canônicas.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
@@ -10511,46 +10603,66 @@
         "plans/agent_ops/evidence/pr05-coordination-cli-revocation-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-wheel.json",
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED"
-      }
+      },
+      "result": "Recovery preserva request/operation/decisão originais; ausência/uncertainty não cria substituto e novo trabalho exige intenção explícita.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-11": {
       "requirement": "Não colocar chaves em URLs, argumentos de processo, logs, screenshots, exemplos executáveis, exportações ou estado do browser.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
-      }
+      },
+      "result": "Credenciais entram por mecanismos protegidos e referências; checkpoints/exportações omitem valores. Correção dos artefatos públicos foi revisada e itens sintéticos classificados.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-12": {
       "requirement": "Não fabricar qualificação de harness. Suporte ao formato de configuração MCP é distinto de suporte à execução nativa.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Contrato ParticipantClientConfig é distinto de capacidade/qualificação managed; cliente/build não observado fica UNKNOWN e generic/Pi não recebem adapter HTTP inventado.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-13": {
       "requirement": "A fonte de verdade de mensagens, handoffs, aprovações e execução permanece nos subsistemas atuais. Novas tabelas são auxiliares, não novas filas de trabalho.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
-      }
+      },
+      "result": "A central compõe fatos canônicos e guarda só preferências/anchors; observações/correlações são auxiliares e reads preservam tabelas canônicas.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-14": {
       "requirement": "Não interpretar texto livre de prompt/log como comando Nexus, aprovação, identidade ou conclusão.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
         "plans/agent_ops/evidence/pr05-coordination-cli-installed-summary.json",
@@ -10561,65 +10673,111 @@
         "plans/agent_ops/evidence/pr05-coordination-cli.md",
         "plans/agent_ops/evidence/pr08-observations-tests.json",
         "plans/agent_ops/evidence/pr08-observations.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "generic_coordination_cli_installed_contract": "VERIFIED",
         "external_observation_admission_and_passive_read_contract": "VERIFIED"
-      }
+      },
+      "result": "Schema fechado recusa campos de identidade/comando; texto de terminal é dado escapado e somente evento canônico pode concluir trabalho.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-15": {
       "requirement": "Não aumentar a superfície MCP indiscriminadamente. Priorizar ferramentas existentes e APIs específicas; qualquer parâmetro novo deve ter schema, testes e revisão de superfície.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "CLI reutiliza ferramentas canônicas; schemas e descoberta validam parâmetros antes do efeito. Mudanças MCP têm medições de superfície retidas e teste de orçamento.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-16": {
       "requirement": "O daemon é um modo de operação do Server/Connector existente; não cria outro domínio de execução, fila, scheduler ou identidade de agente.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Lifecycle compõe o mesmo Server/DaemonApp e os mesmos contratos Core, sem segundo scheduler, fila produtiva ou identidade de agente.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-17": {
       "requirement": "Identidade da instância do serviço é distinta de agent_id, workspace e sessão. Perfis que usam a mesma instância não iniciam processos concorrentes sobre seus dados.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Instância é derivada de home/DB/usuário e protegida por exclusão OS/generation antes de bootstrap. Alias/perfis não permitem dois owners dos mesmos dados.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-18": {
       "requirement": "Resolver destino local/remoto antes de iniciar processos. Falha do Server remoto nunca cria um Server local substituto.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Topology é resolvida antes de lifecycle local; RemoteTarget apenas verifica Server remoto e não oferece fallback de início local.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-19": {
       "requirement": "Só existe um supervisor ativo por instância. Serviço instalado é acionado pelo gerenciador correspondente, sem daemon avulso concorrente.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Start instalado usa o gerenciador nativo e não lança daemon avulso. Intent/lock existentes impedem concorrência e submissão repetida enquanto pendente.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-20": {
       "requirement": "Iniciar/reiniciar serviço não concede autoridade nova, não renova grants e não repete operações de resultado incerto. Trabalho previamente autorizado segue admissão/reconciliação canônicas.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Reuso/recovery não emite novos grants nem repete resultado incerto; leases antigas não migram na renovação explícita. Novo stop/restart mantém latch antes dos efeitos.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-21": {
       "requirement": "Fechar CLI/dashboard não significa parar serviço ou cancelar trabalho. Parada explícita não é tratada como crash para ressuscitar a instância.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Saída do launcher/CLI mantém owner e trabalho; parada explícita fixa desired=draining antes da contenção. Direct IPC também precisa latch de supervisor.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-22": {
       "requirement": "Estado do processo, prontidão do serviço, conexão do harness e sucesso de uma tarefa são provas diferentes.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
@@ -10629,15 +10787,20 @@
         "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
         "plans/agent_ops/evidence/pr03-project-doctor.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
-      }
+      },
+      "result": "Readiness correlaciona owner/versão mas não afirma login/provedor/participação/trabalho. Doctor mantém checks/proof levels independentes.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-23": {
       "requirement": "Consultas de status, logs e doctor padrão não iniciam o serviço nem inferência. A inicialização automática pertence a comandos de ação documentados.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-project-doctor-boundaries-source.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-cli.json",
@@ -10647,30 +10810,45 @@
         "plans/agent_ops/evidence/pr03-project-doctor-wheels-initial.json",
         "plans/agent_ops/evidence/pr03-project-doctor-wheels.json",
         "plans/agent_ops/evidence/pr03-project-doctor.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "nexus_project_doctor_proof_levels_and_passivity": "VERIFIED"
-      }
+      },
+      "result": "Status/log/doctor padrão são observações sem start/cofre/rede/inferência; connect de ação usa ensure_running somente após revisão/ação documentada.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-24": {
       "requirement": "Sobreviver ao terminal, reiniciar após falha, iniciar no login e operar sem login exigem evidências separadas; não prometer sobrevivência do processo a reboot.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Relatórios distinguem saída de launcher, reinício sintético, login, logout/reboot e operação sem login; a campanha nativa preparada permanece não executada.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-25": {
       "requirement": "O caminho padrão de conexão e uso cotidiano é completo pelo terminal, incluindo decisões com autoridade válida. Política organizacional explicitamente preexistente continua obrigatória; a configuração padrão nova não introduz dependência do dashboard.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-work.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Connect/init/work/decisões usam CLI e autoridade canônica vigente; fluxo padrão não exige dashboard e políticas preexistentes seguem obrigatórias.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-26": {
       "requirement": "O preset preenche a configuração comum do produto. Generalista é um perfil reutilizável, não uma identidade global compartilhada; reconnect não recria agente nem reaplica defaults sobre escolhas do usuário.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-preset-evolution-boundaries-source.xml",
         "plans/agent_ops/evidence/pr03-preset-evolution-cleanup-installed.xml",
@@ -10682,7 +10860,9 @@
         "plans/agent_ops/evidence/pr03-preset-evolution-terminal-source.xml",
         "plans/agent_ops/evidence/pr03-preset-evolution-wheels.json",
         "plans/agent_ops/evidence/pr03-preset-evolution.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
       ],
       "subscopes": {
         "optional_preset_three_way_diff_and_authorized_finish": "VERIFIED",
@@ -10690,22 +10870,35 @@
         "preset_update_preserves_customization_and_disabled_runtime": "VERIFIED",
         "preset_update_local_remote_receipt_recovery": "VERIFIED",
         "reconnect_and_old_finish_replay_after_preset_revision_change": "VERIFIED"
-      }
+      },
+      "result": "Preset é configuração versionada reutilizável, não identidade global. Finish/reconnect recuperam mesmo agente; merge só avança defaults não personalizados.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-27": {
       "requirement": "O preset preserva instruções, modelo, ferramentas e limites efetivos do harness quando suportados e verificáveis. Integração com Nexus não remove sandbox, não desabilita perguntas nativas nem concede administração global.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Preset usa harness_settings vazio, tool_access=ask e grants limitados; modelo/instruções/sandbox não são sobrescritos. Merge preserva customizações e política nativa existente.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     },
     "INV-28": {
       "requirement": "Serviço ativo ou sessão pronta não encerram M1: solicitar trabalho, decidir pedidos autorizados e recuperar resultados pelo terminal precisam estar demonstrados no caminho escolhido.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-work.md",
-        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
-      ]
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/accepted.json",
+        "plans/agent_ops/evidence/r3-invariant-reconciliation/matrix.json"
+      ],
+      "result": "Relatórios mantêm M1 incompleto quando há só serviço/sessão pronta; doctor não confunde initialize/readiness com tarefa, e trabalho terminal sintético é rotulado como tal.",
+      "scope": "Windows/local e contratos canônicos com pares nativos sintéticos. Não qualifica provedor pessoal, serviço nativo registrado nem outras plataformas.",
+      "limitations": "Contract/architecture invariant only; no promotion of M1/M2 or real native-service acceptance."
     }
   },
   "completion_criteria": {
@@ -11076,10 +11269,12 @@
     "windows_temporary_user_tasks": {
       "status": "AWAITING_AUTHORIZATION",
       "plan": "plans/agent_ops/campaigns/windows-user-service.md",
-      "snapshot": "plans/agent_ops/evidence/pr02-native-campaign-plan.json",
-      "snapshot_sha256": "0ced0ecb8a4b9aebdb1893f3eb676b6019802bfd26ccc4e26fb6ed4bcab834a2",
+      "snapshot": "plans/agent_ops/evidence/r3-campaign-proposals/native-service-campaign-proposal.json",
+      "snapshot_sha256": "862f986247ec9c0c4071f4b57ff422e2384128fe1f8c8b1b3b4ea2f9c3d19e0a",
       "native_preflight": "Selected task names absent; no registration or app state created",
-      "limits": "Temporary isolated tasks only; no personal app state, provider, credential, logout or reboot"
+      "limits": "Temporary isolated tasks only; no personal app state, provider, credential, logout or reboot",
+      "payload_refresh_required": false,
+      "payload_refresh_reason": "Current qualified wheel hashes pinned in revision4; exact two tasks remain absent and no registration performed."
     },
     "pr09_windows_herdr": {
       "status": "VERIFIED",
@@ -11236,6 +11431,33 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/decisions.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/pending-qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/artifact-manifest.json"
+      ]
+    },
+    "m1_codex_real": {
+      "status": "PROPOSAL_READY_AWAITING_BUDGET_CLARIFICATION_AND_AUTHORIZATION",
+      "harness": "Codex CLI",
+      "account_selection": "already authenticated CLI account",
+      "total_token_limit": 200000,
+      "execution_authorized": false,
+      "credential_access_performed": false,
+      "provider_inference_performed": false,
+      "observed_cli_version": "0.167.0",
+      "observed_version_command": "codex --version",
+      "build_qualification": "Isolated official Codex0.157.0 exact executable fingerprint matches Core qualification; personal0.167.0 unchanged. No provider execution.",
+      "budget_limit": "A hard cumulative token cap is not exposed by the current native turn contract; proposal must state this impasse explicitly.",
+      "proposal": "plans/agent_ops/evidence/r3-campaign-proposals/m1-codex-campaign-proposal.json"
+    },
+    "r3_cooperative_drain": {
+      "status": "VERIFIED",
+      "scope": "Windows installed contracts with synthetic native peers; real service/provider scopes remain open",
+      "nexus_unique_installed": 292,
+      "nexus_svc07_unique_installed": 247,
+      "connector_unique_installed": 194,
+      "core_unique_installed": 217,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json"
       ]
     }
   },
@@ -12076,6 +12298,25 @@
         "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "plans/agent_ops/evidence/r3-service-boundaries/after/installed/tests.xml",
         "plans/agent_ops/evidence/r3-service-boundaries/artifact-manifest.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "PR-10",
+      "status": "IN_PROGRESS",
+      "summary": "Core cooperative drain published as3cdba87;217uniqueinstalledcases passed with retained fixture preparation failures and exact package proof. SameCore1407014 wheel refreshed in both consumers. Hosts remain in qualification. User selected authenticated Codex account and200k total tokens for proposal only; no inference or credential use authorized by these preference replies.",
+      "evidence": [
+        "../okto-nexus-connector-core/docs/evidence/cooperative-drain/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "SVC07 cooperative drain and invariant reconciliation",
+      "result": "292 unique Nexus installed cases; Core/Connector milestones already pushed.28 invariants reconciled; SVC02 finite gap and RG09 environment gap closed. Real campaigns remain unexecuted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json"
       ]
     }
   ]

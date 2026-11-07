@@ -1,0 +1,6 @@
+{
+  "exit_code": 1,
+  "phase": "metadata_asset_selection",
+  "cause": "Initial expected ZIP name omitted the .exe segment; no asset was downloaded and no native executable ran.",
+  "preserved_script": "prepare_official_artifact_initial.py"
+}

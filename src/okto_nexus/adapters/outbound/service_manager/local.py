@@ -9,6 +9,7 @@ import secrets
 import subprocess
 import time
 from urllib.request import ProxyHandler, Request, build_opener
+from urllib.error import HTTPError
 
 from ..process_liveness import process_exited
 from .context import CONTEXT_NAME, atomic_json, document_revision, read_json, validate_context
@@ -239,8 +240,16 @@ class LocalServerLifecycle:
             return {**self.inspect(timeout=.2), 'state': 'starting', 'reason': 'CONCURRENT_START',
                 'next_action': 'Wait for the initialization already being selected.'}
 
-    def request_stop(self, current, *, timeout):
+    def request_stop(self, current, *, timeout, force=False):
+        if type(force) is not bool:
+            raise ValueError('Force must be a boolean.')
         pending = current.get('reason') == 'SUPERVISOR_PENDING' and not current.get('generation')
+        if force:
+            actual = self._inspect_process(timeout=min(.5, timeout))
+            if (not current.get('generation') or actual.get('generation') != current['generation']
+                    or actual.get('instance_id') != current.get('instance_id')):
+                return {**actual, 'state': 'failed', 'reason': 'INSTANCE_CHANGED',
+                    'next_action': 'Inspect the current generation; no force was requested.'}
         if current['state'] not in {'ready', 'stopping'} and not pending:
             return current
         if (self.home / INSTALLATION_NAME).exists():
@@ -261,9 +270,12 @@ class LocalServerLifecycle:
             except (OSError, ValueError, ImportError) as error:
                 return installation_failure(current, error)
         address = '[::1]' if self.host in {'::', '::1'} else '127.0.0.1'
+        body = {'instance_id': current['instance_id'],
+                'generation': current['generation'], 'timeout_seconds': float(timeout)}
+        if force:
+            body['force'] = True
         request = Request(f'http://{address}:{self.port}/api/v1/service/stop',
-            data=json.dumps({'instance_id': current['instance_id'],
-                'generation': current['generation'], 'timeout_seconds': float(timeout)}).encode(),
+            data=json.dumps(body).encode(),
             headers={'Content-Type': 'application/json'}, method='POST')
         try:
             with build_opener(ProxyHandler({}), NoRedirect()).open(request, timeout=max(.01, timeout)) as response:
@@ -276,10 +288,35 @@ class LocalServerLifecycle:
                         or data['generation'] != current['generation']):
                     raise ValueError('Shutdown identity mismatch')
                 report = data['shutdown']
+        except HTTPError as error:
+            # An explicit canonical refusal is not a lost response. Never
+            # print peer text, malformed bodies or URLs from an exception.
+            reason = None
+            try:
+                raw = error.read(32769)
+                if len(raw) <= 32768:
+                    envelope = json.loads(raw)
+                    refusal = envelope.get('error', {})
+                    code = refusal.get('code')
+                    details = refusal.get('details') or {}
+                    if error.code in {400, 401, 403, 409, 422} and code in {
+                            'CONFLICT', 'INSTANCE_MISMATCH', 'AUTH_FAILED', 'PERMISSION_DENIED',
+                            'VALIDATION_ERROR', 'INVALID_TRANSITION'}:
+                        reason = ('DRAIN_DECISION_NOT_AVAILABLE'
+                            if details.get('reason') == 'DRAIN_DECISION_NOT_AVAILABLE'
+                            else 'SHUTDOWN_REQUEST_REFUSED')
+            except (OSError, ValueError, TypeError, AttributeError):
+                pass
+            if reason:
+                return {**current, 'state': 'failed', 'reason': reason,
+                        'next_action': 'Inspect the current drain before another explicit decision.'}
+            report = {'state': 'UNCONFIRMED', 'resources': []}
         except (OSError, ValueError, KeyError, TypeError):
             report = {'state': 'UNCONFIRMED', 'resources': []}
         return {**current, 'state': 'stopping', 'shutdown': report,
-            'reason': 'RUNTIME_DRAINING', 'next_action': 'Observe the same generation; no force or restart was requested.'}
+            'reason': 'RUNTIME_DRAINING', 'next_action': (
+                'Observe the same generation; a force decision was submitted and its outcome must be confirmed.' if force else
+                'Observe the same generation; no force or restart was requested.')}
 
     def shutdown_receipt(self, generation):
         try:

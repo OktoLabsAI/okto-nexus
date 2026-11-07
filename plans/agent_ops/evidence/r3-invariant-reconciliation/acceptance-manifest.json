@@ -1,0 +1,34 @@
+{
+  "scope": "Exact public evidence bytes; no private runtime state or credential material included",
+  "files": {
+    "accepted.json": {
+      "sha256": "807c6e88825a2de3f8b35d94e5cb97e01c54f4c1b96a8fd33c4837aef6d30d18",
+      "bytes": 990
+    },
+    "artifact-manifest.json": {
+      "sha256": "3b4c70783c37ec884ff51526baaeb179226cb6c1bcb67aae196877a03d1b7324",
+      "bytes": 1176
+    },
+    "input-manifest.json": {
+      "sha256": "ae4e5e619faceca4a8756149057ea49ed4ea1209ea11c4cbe4716f7f7f602eb6",
+      "bytes": 47875
+    },
+    "matrix.json": {
+      "sha256": "d737552b69150521dd40ef488ea65494d9923446b816d6c5ef01d538129fe7ce",
+      "bytes": 369104
+    },
+    "reconcile.py": {
+      "sha256": "d0f241926db59a065988679ecc2ec08e6b5c87ff64c669973ada1b191a08515d",
+      "bytes": 23559
+    },
+    "retained-testcase-checks.json": {
+      "sha256": "dc91d1ddbb3d5eaea74091432cdb76d20a8797ec26539ac4fcfe80499b7c73b8",
+      "bytes": 68341
+    },
+    "summary.md": {
+      "sha256": "17030272d6b0dd43e4b4a26151eea90b1c359febe56b096129a027cbe570ceca",
+      "bytes": 6386
+    }
+  },
+  "aggregate_sha256": "d0ae131dd1c7645534b939e7856fcadfedc36d68222c1c9ca910d8c3400c1dde"
+}

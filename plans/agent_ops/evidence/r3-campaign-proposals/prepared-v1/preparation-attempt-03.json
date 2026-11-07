@@ -1,0 +1,8 @@
+{
+  "exit_code": 2,
+  "phase": "legacy_portable_identity_comparison",
+  "cause": "The downloaded executable SHA equals the exact qualified fingerprint, but current v3 portable identity differs from the historical portable grant. Initial proof is retained unmodified. A separate pure current-Core check confirms the exact fingerprint route qualifies conversation/controls; no allowlist was changed.",
+  "initial_proof": "codex-0.157.0-artifact-proof.json",
+  "final_proof": "codex-0.157.0-pure-qualification.json",
+  "native_executions": 0
+}

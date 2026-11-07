@@ -1,0 +1,44 @@
+{
+  "public_allowlist": [
+    "matrix.json",
+    "summary.md",
+    "input-manifest.json",
+    "retained-testcase-checks.json",
+    "reconcile.py"
+  ],
+  "files": [
+    {
+      "path": "matrix.json",
+      "sha256": "d737552b69150521dd40ef488ea65494d9923446b816d6c5ef01d538129fe7ce",
+      "bytes": 369104
+    },
+    {
+      "path": "summary.md",
+      "sha256": "17030272d6b0dd43e4b4a26151eea90b1c359febe56b096129a027cbe570ceca",
+      "bytes": 6386
+    },
+    {
+      "path": "input-manifest.json",
+      "sha256": "ae4e5e619faceca4a8756149057ea49ed4ea1209ea11c4cbe4716f7f7f602eb6",
+      "bytes": 47875
+    },
+    {
+      "path": "retained-testcase-checks.json",
+      "sha256": "dc91d1ddbb3d5eaea74091432cdb76d20a8797ec26539ac4fcfe80499b7c73b8",
+      "bytes": 68341
+    },
+    {
+      "path": "reconcile.py",
+      "sha256": "d0f241926db59a065988679ecc2ec08e6b5c87ff64c669973ada1b191a08515d",
+      "bytes": 23559
+    }
+  ],
+  "excludes": [
+    "private state",
+    "credentials",
+    "DB",
+    "venv",
+    "raw runtime responses"
+  ],
+  "executions": "none; script only reads public artifacts and writes this Temp directory"
+}

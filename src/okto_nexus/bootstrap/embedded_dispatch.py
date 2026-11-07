@@ -152,7 +152,7 @@ class EmbeddedDispatchOwner:
             self.host.local_launch_factory=lambda scope:self.tools.decorate(original_launch(scope))
 
     async def check_capacity_scope(self, request, *, action):
-        if self._stopping.is_set() or self.failure is not None:
+        if self._stopping.is_set() or self.host.draining or self.failure is not None:
             return 'RECOVERING'
         return await self.capacity_authority.check_capacity_scope(request, action=action)
 
