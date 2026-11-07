@@ -1,0 +1,102 @@
+{
+  "scope": "SVC-T22 safe Windows restart-pending contract with one physical Core-owned Python child",
+  "unique_final_cases": 1,
+  "unique_final_passed": 1,
+  "attempts": [
+    {
+      "report": "reports/initial.xml",
+      "sha256": "57da9ffab825cbe4308b889f77264445012bbcb8e904870952ec018cf09e454e",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "classification": "Fixture: launcher PID was incorrectly compared with real Server owner PID; failed before native launch.",
+      "product_defect_proven": false,
+      "passed": 0,
+      "source_unchanged_during_run": true,
+      "exit_code": 1,
+      "test_snapshot": "sources/history/initial-test.py"
+    },
+    {
+      "report": "reports/retry-owner.xml",
+      "sha256": "f2470dfa0e300c2391d4a6f06279ef2f734f9be2d584626407eae4285f5b6d0d",
+      "cases": 1,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0,
+      "classification": "Collection: shared helper added psutil absent from isolated environment; no process started.",
+      "product_defect_proven": false,
+      "passed": 0,
+      "source_unchanged_during_run": true,
+      "exit_code": 2,
+      "test_snapshot": "sources/history/retry-owner-test.py"
+    },
+    {
+      "report": "reports/retry-stdlib.xml",
+      "sha256": "0eea031ca6036b665e762146e11820956ec37c09a324ef39ca49527f3abc077f",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "classification": "Oracle: short CLI timeout honestly returned UNCONFIRMED; test prematurely required DRAINING_PENDING from that response.",
+      "product_defect_proven": false,
+      "passed": 0,
+      "source_unchanged_during_run": true,
+      "exit_code": 1,
+      "test_snapshot": "sources/history/retry-stdlib-test.py"
+    },
+    {
+      "report": "reports/retry-canonical.xml",
+      "sha256": "0543f0df56f6f3d1b53e5371f52043e4c7da53a0991f75ef13d8e4f730792fa3",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "classification": "Fixture: human operator client rejected the /v1 route before network I/O.",
+      "product_defect_proven": false,
+      "passed": 0,
+      "source_unchanged_during_run": true,
+      "exit_code": 1,
+      "test_snapshot": "sources/history/retry-canonical-test.py"
+    },
+    {
+      "report": "reports/retry-operator-route.xml",
+      "sha256": "d76ecb1ba1f61b2a1361664ea0c77cc18bb2e5f44f9be2da12e65d61f254c51c",
+      "cases": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "classification": "Fixture: runtime-shutdown read did not accept human operator context; replaced by existing canonical local service inspection.",
+      "product_defect_proven": false,
+      "passed": 0,
+      "source_unchanged_during_run": true,
+      "exit_code": 1,
+      "test_snapshot": "sources/history/retry-operator-route-test.py"
+    },
+    {
+      "report": "reports/retry-service-inspection.xml",
+      "sha256": "e5497569ad41aa0b6fe41f33619687cc6ca0f0e6e81c6708deae4e4eb85db007",
+      "cases": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "classification": "PASS: same real Server and live Core-owned Connector child while restart pending; normal terminal/close then child exit0, slot release and Server drained without replacement.",
+      "product_defect_proven": false,
+      "passed": 1,
+      "source_unchanged_during_run": true,
+      "exit_code": 0
+    }
+  ],
+  "duplicate_count_policy": "All executions are the same test identity; failures/collection errors are retained, not added to final coverage.",
+  "final_source_sha256": "2d9df736dd16db77a427b5f5761c5e7902dd6c498519963f78f8fd2d73f782f7",
+  "helper_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+  "public_xml_bytes_unchanged": true,
+  "no_product_changes": true,
+  "installed_qualification": "Owned by root, pending at source closure",
+  "limits": [
+    "Child belongs to Core in Connector, not to Server.",
+    "Restart remained pending; no completed replacement while child was alive is claimed.",
+    "No survival after parent death is claimed; Job containment was not weakened.",
+    "No provider/native-service/task/personal credential campaign."
+  ]
+}

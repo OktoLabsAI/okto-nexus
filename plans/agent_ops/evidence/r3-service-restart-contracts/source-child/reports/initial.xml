@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="46.711" timestamp="2026-11-07T08:56:29.016032-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_service_surviving_child" name="test_restart_pending_keeps_real_connector_child_claim_and_slot" time="41.766"><failure message="assert 18476 == 18080">tests\execution_r4\test_service_surviving_child.py:236: in test_restart_pending_keeps_real_connector_child_claim_and_slot
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_service_surviving_child.py:223: in run
+    await scenario()
+tests\execution_r4\test_service_surviving_child.py:144: in scenario
+    assert initial['pid'] == old_pid
+E   assert 18476 == 18080</failure></testcase></testsuite></testsuites>

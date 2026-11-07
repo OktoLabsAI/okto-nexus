@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="76.646" timestamp="2026-11-07T09:04:29.798969-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_service_surviving_child" name="test_restart_pending_keeps_real_connector_child_claim_and_slot" time="70.392"><failure message="AssertionError: assert (True and 'UNCONFIRMED' == 'DRAINING_PENDING'&#10;  &#10;  - DRAINING_PENDING&#10;  + UNCONFIRMED)">tests\execution_r4\test_service_surviving_child.py:254: in test_restart_pending_keeps_real_connector_child_claim_and_slot
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_service_surviving_child.py:241: in run
+    await scenario()
+tests\execution_r4\test_service_surviving_child.py:179: in scenario
+    assert pending['wait_timed_out'] and pending['shutdown']['state'] == 'DRAINING_PENDING'
+E   AssertionError: assert (True and 'UNCONFIRMED' == 'DRAINING_PENDING'
+E     
+E     - DRAINING_PENDING
+E     + UNCONFIRMED)</failure></testcase></testsuite></testsuites>

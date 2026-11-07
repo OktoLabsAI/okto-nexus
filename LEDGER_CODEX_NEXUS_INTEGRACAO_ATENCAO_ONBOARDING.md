@@ -629,3 +629,15 @@ relatório/node da matriz são referências sobrepostas, não novos testes.
 T50 verifica honestidade de aceite; não declara M1 concluído. Não houve produto,
 credencial pessoal, provedor ou Task Scheduler alterado neste milestone.
 Evidência: `plans/agent_ops/evidence/r3-dx-final-contracts/milestone.md`.
+
+## 2026-11-07 — reinício e ownership de processos
+
+Quatro novos casos passaram no código-fonte e nos pacotes instalados atuais.
+SVC-T22/T23/T24 e RG-05 foram verificados no escopo literal: reinício pendente
+preserva o filho real, claim e slot; queda/retorno do Server preserva vínculos,
+limites e grants e não repete trabalho. A prova usa PID canônico, nascimento,
+geração e saída do processo real. O filho fecha com exit0 antes da liberação.
+As tentativas de preparação e o PASS invalidado por PID do redirector estão
+preservados; não contam como cobertura nova. Não houve mudança de produto,
+inferência real ou Task Scheduler. M1 e campanhas de plataforma seguem abertos.
+Evidência: `plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json`.

@@ -1,0 +1,470 @@
+{
+  "schema": "r3-two-id-recovery-audit.v1",
+  "scope": [
+    "SVC-T22",
+    "RG-05"
+  ],
+  "nexus_head": "6ce61b7bbc7b835c054a9de9723f2843b06b9d96",
+  "plan": {
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "unchanged": true
+  },
+  "activity": {
+    "tests_executed": 0,
+    "providers_started": 0,
+    "services_started": 0,
+    "checkout_or_ledger_edits": 0,
+    "status_promotions": 0
+  },
+  "rows": [
+    {
+      "id": "SVC-T22",
+      "literal": "Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente.",
+      "plan_line": 848,
+      "ledger_status_read": "IN_PROGRESS",
+      "proven": [
+        "NS14-01 really kills the producing Server with os._exit and starts another PID on the same home after respecting the durable owner lease.",
+        "The restarted Server returns the same SUBMITTED operation and UNKNOWN ownership/process state; control_available is false; the exact session claim/reservation remain; slot_released is false; no native runtime is constructed.",
+        "Replay of the original request returns its original operation_id. A new intent is not admissible. Refusal reason is not independently a grant-expiry proof because the synthetic binary is removed.",
+        "Current installed drain/restart contracts preserve uncertain owners, stores and pending release; they do not start another service generation when stop is pending. Native handles in those cases are doubles."
+      ],
+      "evidence": [
+        "plans/r4_execution/evidence/ns14-01-nexus-installed.xml",
+        "plans/r4_execution/evidence/ns14-01-nexus-installed.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json"
+      ],
+      "evidence_limit": "NS14 is retained historical installed evidence, not a current-wheel rerun. Its current test_ns14_01 AST equals historical commit 5a01c6ec and its process helper bytes equal the retained hash. The native backend is synthetic; no real child survival is established.",
+      "remaining": "One concrete safe physical-child branch: an actual restart attempt while the current owner and its Core-owned Python child are alive must stay pending and retain claim/slot until proven release. The literal does not require the child to survive parent death.",
+      "minimum_next_case": "New test_service_surviving_child.py, technical plan retained beside this matrix; no provider, personal service, scheduled task or weakened Job containment.",
+      "recommendation": "PARTIAL: uncertain-operation restart branch evidenced; living-owned-child restart-pending branch awaits the targeted safe case.",
+      "product_defect_established": false
+    },
+    {
+      "id": "RG-05",
+      "literal": "Reinício/queda de rede com operação incerta não dispara replay por nenhum dos novos caminhos.",
+      "plan_line": 972,
+      "ledger_status_read": "IN_PROGRESS",
+      "proven": [
+        "All 39 named recovery identities pass in both the joint-contract run and the later cooperative-drain installed run; the latter uses Nexus cd1653/Core 1407014/Connector 73f1a3. These are 39 identities, not 78.",
+        "The six selected flow groups plus the AC05 renewal complement assert original IDs, single effects or honest uncertainty without recreation. AC05 includes real process-death boundaries for coordination/cooperation.",
+        "NS14 adds real Server restart with uncertain canonical work and retained ownership, at historical package scope.",
+        "Current lifecycle guards refuse a new start while drain/exit remains unconfirmed; optional observation paths have no authority to replay productive work."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+        "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-contract-closure/matrix.json",
+        "plans/r4_execution/evidence/ns14-01-nexus-installed.xml",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json"
+      ],
+      "path_map": [
+        {
+          "path_group": "Coordination creation/approval",
+          "source": "tests/test_terminal_coordination.py",
+          "assertion": "One productive call/effect after lost reply/checkpoint; missing confirmed receipt stays uncertain. AC05 adds real subprocess death at DB/CLI commit boundaries."
+        },
+        {
+          "path_group": "Participant exchange/handoff",
+          "source": "tests/test_terminal_cooperation.py",
+          "assertion": "Fixed request IDs, exactly one effect; pre-send retry retains the same ID; missing prior receipt never recreates. AC05 adds real CLI death after exchange commit."
+        },
+        {
+          "path_group": "Work and native decision",
+          "source": "tests/execution_r4/test_terminal_work.py",
+          "assertion": "Lost resolve or submit reply recovers same operation, one open/send; lost approval/input reply produces one canonical decision and one native answer, or explicit refusal."
+        },
+        {
+          "path_group": "Participant initialization and launch",
+          "source": "tests/execution_r4/test_participant_init.py; tests/execution_r4/test_participant_launch.py",
+          "assertion": "Same setup intent, one backup/vault effect; file drift preserved; starting/started/exited checkpoint loss does not respawn. Launch process here is a double, not a living child."
+        },
+        {
+          "path_group": "Local identity Finish",
+          "source": "tests/execution_r4/test_terminal_identity.py",
+          "assertion": "One reviewed identity/key/grant/binding, one probe/turn; recovery returns original result with identical canonical snapshot."
+        },
+        {
+          "path_group": "Remote bootstrap/approval/Finish",
+          "source": "tests/execution_r4/test_remote_terminal_setup.py",
+          "assertion": "One bootstrap and one decision; missing secret material is not reissued; host Finish alone completes. Peer is explicit synthetic protocol double."
+        },
+        {
+          "path_group": "Reviewed authorization renewal",
+          "source": "tests/execution_r4/test_terminal_authorization.py",
+          "assertion": "AC05 complement: existing usable grant refuses duplicate issuance; lost issuance resolves same receipt even after later revocation. Not part of the selected 39."
+        }
+      ],
+      "remaining": "No additional new-flow product defect or provider-only gap found. Finish the already-running current real Server-return qualification (T23/T24) and the one shared SVC-T22 living-child restart-pending case before a full current lifecycle-contract recommendation.",
+      "pending_scope": "Coordinator reports T23/T24 use real old/new Server PIDs and a live Connector, but work and close finish before the crash. They compare unchanged operations/receipts and opens/sends=1. No PASS is inferred while execution is pending, and those cases do not substitute for uncertain work or a living child.",
+      "minimum_next_case": "Reuse the SVC-T22 targeted safe case plus retain the final T23/T24 results when available; no separate provider/native-task campaign follows from this literal.",
+      "recommendation": "CONTRACT_FLOW_MAP_SUPPORTED; final current lifecycle recommendation conditional on the two named safe qualifications. No status promotion performed.",
+      "product_defect_established": false
+    }
+  ],
+  "selected_recovery_checks": [
+    {
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml",
+      "sha256": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+      "matched_unique_cases": 39,
+      "missing": [],
+      "note": "Same identities; never add the two runs as 78 cases."
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "matched_unique_cases": 39,
+      "missing": [],
+      "note": "Same identities; never add the two runs as 78 cases."
+    }
+  ],
+  "source_assertion_map": [
+    {
+      "test": "tests/execution_r4/test_terminal_work.py::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch",
+      "line": 82,
+      "end_line": 95,
+      "source_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "cases": [
+        "test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[intents:resolve]",
+        "test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[/runtime/operations]"
+      ],
+      "assert_count": 4,
+      "retained_function_sha256": "11a0f042501f540691b11f11bddb669d94939d0a55c77cae36c60a133b107210"
+    },
+    {
+      "test": "tests/execution_r4/test_terminal_work.py::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile",
+      "line": 116,
+      "end_line": 183,
+      "source_sha256": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+      "cases": [
+        "test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True]",
+        "test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True]",
+        "test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False]"
+      ],
+      "assert_count": 16,
+      "retained_function_sha256": "e33a38d2931b197e7ccba80731333dee24a63e983bcd0eb78cbf875bb2aa8ded"
+    },
+    {
+      "test": "tests/execution_r4/test_participant_launch.py::test_checkpoint_loss_preserves_uncertainty_without_respawn",
+      "line": 92,
+      "end_line": 110,
+      "source_sha256": "fc91d1c87230276495ec20449319edd800bd03f50bd479129971b3a7af0f04a3",
+      "cases": [
+        "test_checkpoint_loss_preserves_uncertainty_without_respawn[starting-0]",
+        "test_checkpoint_loss_preserves_uncertainty_without_respawn[started-1]",
+        "test_checkpoint_loss_preserves_uncertainty_without_respawn[exited-1]"
+      ],
+      "assert_count": 4,
+      "retained_function_sha256": "bab1eeb836aaf731afdbdb5d76d4fe13368c980be6a2eb0a974e687fda7acdef"
+    },
+    {
+      "test": "tests/execution_r4/test_participant_init.py::test_lost_checkpoint_resumes_same_intent_by_observing_effect",
+      "line": 146,
+      "end_line": 168,
+      "source_sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+      "cases": [
+        "test_lost_checkpoint_resumes_same_intent_by_observing_effect[credential_stored]",
+        "test_lost_checkpoint_resumes_same_intent_by_observing_effect[done]"
+      ],
+      "assert_count": 6,
+      "retained_function_sha256": "e17bbed58b90fa0de7cae0158735bbe7a36874c30f089e1acac9bebc2f7c97ce"
+    },
+    {
+      "test": "tests/execution_r4/test_participant_init.py::test_uncertain_file_with_later_edit_is_preserved_without_new_intent",
+      "line": 184,
+      "end_line": 203,
+      "source_sha256": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+      "cases": [
+        "test_uncertain_file_with_later_edit_is_preserved_without_new_intent"
+      ],
+      "assert_count": 2,
+      "retained_function_sha256": "93706992fa7ae3c0fbe086a6ee96c232dcd166286e2af80c27a74d6da35f0fff"
+    },
+    {
+      "test": "tests/test_terminal_coordination.py::test_restart_after_commit_recovers_original_without_another_creation",
+      "line": 184,
+      "end_line": 202,
+      "source_sha256": "cdb6cbd03f4f25c18f682db1a679c3cbd950abde20cb3fcb70afaece85a3c623",
+      "cases": [
+        "test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-message_create]",
+        "test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-handoff_create]",
+        "test_restart_after_commit_recovers_original_without_another_creation[created-save_result-message_create]",
+        "test_restart_after_commit_recovers_original_without_another_creation[created-save_result-handoff_create]",
+        "test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-message_create]",
+        "test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-handoff_create]",
+        "test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-message_create]",
+        "test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-handoff_create]"
+      ],
+      "assert_count": 7,
+      "retained_function_sha256": "b16b2c02675cb17142ebb3156372c0ce9173a50d4d1312b94d584e1ddc51dced"
+    },
+    {
+      "test": "tests/test_terminal_coordination.py::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated",
+      "line": 318,
+      "end_line": 328,
+      "source_sha256": "cdb6cbd03f4f25c18f682db1a679c3cbd950abde20cb3fcb70afaece85a3c623",
+      "cases": [
+        "test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[submit]",
+        "test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[inspect]"
+      ],
+      "assert_count": 2,
+      "retained_function_sha256": "26645408a726754c29350805636371bdc560e7b0c5e1e60968dd539ea560d209"
+    },
+    {
+      "test": "tests/test_terminal_cooperation.py::test_crash_recovery_preserves_one_effect_and_same_ids",
+      "line": 240,
+      "end_line": 259,
+      "source_sha256": "61aa262a571250c9166780e98cd94144f18d71394e4db42913e7b630018858b0",
+      "cases": [
+        "test_crash_recovery_preserves_one_effect_and_same_ids[before-exchange]",
+        "test_crash_recovery_preserves_one_effect_and_same_ids[before-handoff]",
+        "test_crash_recovery_preserves_one_effect_and_same_ids[after-exchange]",
+        "test_crash_recovery_preserves_one_effect_and_same_ids[after-handoff]",
+        "test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-exchange]",
+        "test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-handoff]",
+        "test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-exchange]",
+        "test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-handoff]"
+      ],
+      "assert_count": 5,
+      "retained_function_sha256": "f048c9ad00454038c0e86c93dfd5eb5f53d0f95d588cc6af2347ca0ea3bc1a79"
+    },
+    {
+      "test": "tests/test_terminal_cooperation.py::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent",
+      "line": 530,
+      "end_line": 557,
+      "source_sha256": "61aa262a571250c9166780e98cd94144f18d71394e4db42913e7b630018858b0",
+      "cases": [
+        "test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-exchange]",
+        "test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-handoff]",
+        "test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-exchange]",
+        "test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-handoff]"
+      ],
+      "assert_count": 10,
+      "retained_function_sha256": "9eb4fcd91476f99b9c8df9b1e013b50e096e87a4a96f0ea04c9d20747f92de02"
+    },
+    {
+      "test": "tests/test_terminal_cooperation.py::test_missing_request_file_does_not_reset_a_confirmed_request_window",
+      "line": 516,
+      "end_line": 525,
+      "source_sha256": "61aa262a571250c9166780e98cd94144f18d71394e4db42913e7b630018858b0",
+      "cases": [
+        "test_missing_request_file_does_not_reset_a_confirmed_request_window"
+      ],
+      "assert_count": 2,
+      "retained_function_sha256": "5fc29f657ea3ad8c85e868e56436df15714cd8d0e46282173bd9cc94b4eed2fc"
+    },
+    {
+      "test": "tests/execution_r4/test_remote_terminal_setup.py::test_lost_bootstrap_response_recovers_references_without_reissue",
+      "line": 221,
+      "end_line": 231,
+      "source_sha256": "7dd4b3c799dbc6574e76dca2eda038d696c59ee0a975767063f608717560f69f",
+      "cases": [
+        "test_lost_bootstrap_response_recovers_references_without_reissue"
+      ],
+      "assert_count": 3,
+      "retained_function_sha256": "cff27dd2b5f60bc12fb0951ff6b18269905484257899007eb23c979888df9591"
+    },
+    {
+      "test": "tests/execution_r4/test_remote_terminal_setup.py::test_lost_decision_resumes_same_approval_then_only_host_finish_completes",
+      "line": 234,
+      "end_line": 250,
+      "source_sha256": "7dd4b3c799dbc6574e76dca2eda038d696c59ee0a975767063f608717560f69f",
+      "cases": [
+        "test_lost_decision_resumes_same_approval_then_only_host_finish_completes"
+      ],
+      "assert_count": 6,
+      "retained_function_sha256": "38cef89e67ee77e8617a8251a1c6bc685689a1fe6e075f3640201cf813b4999e"
+    },
+    {
+      "test": "tests/execution_r4/test_remote_terminal_setup.py::test_checkpoint_failure_after_bootstrap_reports_uncertainty_without_reissue",
+      "line": 274,
+      "end_line": 286,
+      "source_sha256": "7dd4b3c799dbc6574e76dca2eda038d696c59ee0a975767063f608717560f69f",
+      "cases": [
+        "test_checkpoint_failure_after_bootstrap_reports_uncertainty_without_reissue"
+      ],
+      "assert_count": 2,
+      "retained_function_sha256": "c08e8aa5bf76c4b45b360c947141fb20aeedf30144591890c792b6e2ff285805"
+    },
+    {
+      "test": "tests/execution_r4/test_terminal_identity.py::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key",
+      "line": 35,
+      "end_line": 93,
+      "source_sha256": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+      "cases": [
+        "test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False]",
+        "test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True]"
+      ],
+      "assert_count": 25,
+      "retained_function_sha256": "70b27a182e3fa36c67a68cbdc6cdb183f979a1bc8c648391b04c10f365b1b9f1"
+    }
+  ],
+  "ac05_selected_pass_checks": [
+    {
+      "entry_path": "message/handoff creation and canonical approval",
+      "path": "plans/agent_ops/evidence/pr05-coordination-creation-installed.xml",
+      "sha256": "bf31f03f4e9c4bbeb86bb771c05160706c4d20b9c4ee60ecb6ee525493bba64e",
+      "selected_passed_cases": [
+        "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[after_creation-handoff_create-False]",
+        "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[after_creation-message_create-False]",
+        "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[before_execution-handoff_create-False]",
+        "tests.test_coordination_creation::test_real_process_exit_during_approval_resumes_original_request[before_execution-message_create-False]",
+        "tests.test_coordination_requests::test_process_termination_at_commit_boundary[False]",
+        "tests.test_coordination_requests::test_process_termination_at_commit_boundary[True]"
+      ]
+    },
+    {
+      "entry_path": "message/handoff creation and canonical approval",
+      "path": "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml",
+      "sha256": "17f61e80065da17ff85d35c68a0b1f620d45fb75b407ca2e3193b87fb24b01e5",
+      "selected_passed_cases": [
+        "tests.execution_r4.test_coordination_cli::test_real_process_death_after_commit_recovers_through_installed_entrypoint[False]"
+      ]
+    },
+    {
+      "entry_path": "message/handoff creation and canonical approval",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "selected_passed_cases": [
+        "tests.test_terminal_coordination::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[inspect]",
+        "tests.test_terminal_coordination::test_missing_previously_confirmed_receipt_is_uncertain_and_never_recreated[submit]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-handoff_create]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-lost_response-message_create]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-save_result-handoff_create]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[created-save_result-message_create]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-handoff_create]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-lost_response-message_create]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-handoff_create]",
+        "tests.test_terminal_coordination::test_restart_after_commit_recovers_original_without_another_creation[pending_approval-save_result-message_create]"
+      ]
+    },
+    {
+      "entry_path": "participant cooperation exchange and handoff",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "selected_passed_cases": [
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[after-exchange]",
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[after-handoff]",
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[before-exchange]",
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[before-handoff]",
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-exchange]",
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[journal_result-handoff]",
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-exchange]",
+        "tests.test_terminal_cooperation::test_crash_recovery_preserves_one_effect_and_same_ids[requests_result-handoff]",
+        "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-exchange]",
+        "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[False-handoff]",
+        "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-exchange]",
+        "tests.test_terminal_cooperation::test_lost_response_and_missing_checkpoint_only_inspect_prior_consent[True-handoff]",
+        "tests.test_terminal_cooperation::test_missing_request_file_does_not_reset_a_confirmed_request_window"
+      ]
+    },
+    {
+      "entry_path": "participant cooperation exchange and handoff",
+      "path": "plans/agent_ops/evidence/pr04-cooperation-facade-cli-installed.xml",
+      "sha256": "45476f332157f41dec5700d41e23ec3cfee9166f5f3b21d1f9a65480147c8569",
+      "selected_passed_cases": [
+        "tests.execution_r4.test_cooperation_cli::test_real_process_death_after_exchange_commit_recovers_installed_entrypoint[False]"
+      ]
+    },
+    {
+      "entry_path": "productive work submission and native decision",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "selected_passed_cases": [
+        "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[/runtime/operations]",
+        "tests.execution_r4.test_terminal_work::test_lost_submission_response_recovers_same_work_without_duplicate_dispatch[intents:resolve]",
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-False]",
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[approval-True]",
+        "tests.execution_r4.test_terminal_work::test_native_decision_response_loss_recovers_canonical_result_and_keeps_answers_out_of_profile[input-True]"
+      ]
+    },
+    {
+      "entry_path": "local participant initialization, launch and identity Finish",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "selected_passed_cases": [
+        "tests.execution_r4.test_participant_init::test_lost_checkpoint_resumes_same_intent_by_observing_effect[credential_stored]",
+        "tests.execution_r4.test_participant_init::test_lost_checkpoint_resumes_same_intent_by_observing_effect[done]",
+        "tests.execution_r4.test_participant_init::test_uncertain_file_with_later_edit_is_preserved_without_new_intent",
+        "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[exited-1]",
+        "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[started-1]",
+        "tests.execution_r4.test_participant_launch::test_checkpoint_loss_preserves_uncertainty_without_respawn[starting-0]",
+        "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False]",
+        "tests.execution_r4.test_terminal_identity::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True]"
+      ]
+    },
+    {
+      "entry_path": "remote bootstrap review, human approval and host Finish",
+      "path": "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml",
+      "sha256": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+      "selected_passed_cases": [
+        "tests.execution_r4.test_remote_terminal_setup::test_checkpoint_failure_after_bootstrap_reports_uncertainty_without_reissue",
+        "tests.execution_r4.test_remote_terminal_setup::test_lost_bootstrap_response_recovers_references_without_reissue",
+        "tests.execution_r4.test_remote_terminal_setup::test_lost_decision_resumes_same_approval_then_only_host_finish_completes"
+      ]
+    },
+    {
+      "entry_path": "reviewed grant renewal and issuance receipt recovery",
+      "path": "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+      "sha256": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430",
+      "selected_passed_cases": [
+        "tests.execution_r4.test_terminal_authorization::test_available_grant_is_observed_without_duplicate_authority",
+        "tests.execution_r4.test_terminal_authorization::test_uncertain_issue_recovers_same_receipt_even_after_later_revocation[after]",
+        "tests.execution_r4.test_terminal_authorization::test_uncertain_issue_recovers_same_receipt_even_after_later_revocation[before]"
+      ]
+    }
+  ],
+  "ns14_provenance": {
+    "historical_wheel_sha256": {
+      "nexus": "00822f6548efd3162c7b594e91baab388273b95d72e8d383c1924a67db88d0ce",
+      "connector": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7",
+      "core": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "current_function_ast_equals_commit": "5a01c6ec",
+    "helper_sha256": "baa606e3511ba8ad8117a9ae7c8d8ee4f9af42b4da0af0789336a30ab12be322"
+  },
+  "current_installed_wheels": {
+    "okto_nexus": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+    "nexus_connector_core": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+    "okto_nexus_connector": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5"
+  },
+  "inputs": {
+    "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml": "b878432c4f566f8de389be30c907f643edb07016784b1b97c31d903c582fd430",
+    "plans/agent_ops/evidence/pr04-cooperation-facade-cli-installed.xml": "45476f332157f41dec5700d41e23ec3cfee9166f5f3b21d1f9a65480147c8569",
+    "plans/agent_ops/evidence/pr05-coordination-cli-behavior-installed.xml": "17f61e80065da17ff85d35c68a0b1f620d45fb75b407ca2e3193b87fb24b01e5",
+    "plans/agent_ops/evidence/pr05-coordination-creation-installed.xml": "bf31f03f4e9c4bbeb86bb771c05160706c4d20b9c4ee60ecb6ee525493bba64e",
+    "plans/agent_ops/evidence/r3-contract-closure/matrix.json": "de55c23ab296e60b622a14b2c3856f8d344bdbcda2c008ed0b978816401e9b93",
+    "plans/agent_ops/evidence/r3-cooperative-drain/installed/nexus-installed-fixture-retry/canonical/tests.xml": "a876db616a3f1638f220ac18f0ffe5be2fb1453cf58a44223bdb55e8121e50b3",
+    "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json": "926b62892b561e43ff0cf8cd2baef4c962705c31faa6dfc6226fa1dfedf05ee8",
+    "plans/agent_ops/evidence/r3-joint-contracts/recovery/ci/tests.xml": "5d204a2405b0ed15cf05ce140ebe3b2af6d373166426c2f5590a415f5333f868",
+    "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json": "8309bb50103e3022b9393f9692e1294861f44ba3054d31b0b3045460bee67229",
+    "plans/agent_ops/ledger.json": "5e682214eb54e3f46295e01ea88bdaa71c164f86fdce40084ec4afe68fcdd929",
+    "plans/r4_execution/evidence/ns14-01-nexus-installed.json": "a09944b1088e4f0bed7956be52ab4e7d20b7910cf03222a3670e79babe2acc6e",
+    "plans/r4_execution/evidence/ns14-01-nexus-installed.xml": "e618ab59ee06f483c32c6719684ebc5b99c56ec19ade334c7bd8b3972a7a1d6a",
+    "src/okto_nexus/application/service_lifecycle.py": "a4170283a120733f8e8f1cf43c3f04698ae6e9063068594e65d53da2bb769dfb",
+    "tests/execution_r4/ns14_restart_process.py": "baa606e3511ba8ad8117a9ae7c8d8ee4f9af42b4da0af0789336a30ab12be322",
+    "tests/execution_r4/test_ns14.py": "2060d1a1380bce2afc671db132df3b826191ce4b7e32fcea9df191451aff43e5",
+    "tests/execution_r4/test_participant_init.py": "3303131ba531cbf50d044250716df97ac023b3b6a477b3f394493e9a8058782c",
+    "tests/execution_r4/test_participant_launch.py": "fc91d1c87230276495ec20449319edd800bd03f50bd479129971b3a7af0f04a3",
+    "tests/execution_r4/test_remote_terminal_setup.py": "7dd4b3c799dbc6574e76dca2eda038d696c59ee0a975767063f608717560f69f",
+    "tests/execution_r4/test_service_cooperative_drain.py": "1d1e43d96f00daf648e36b8812d78aad1123eaa506918707c2eb9359e09da4c3",
+    "tests/execution_r4/test_terminal_identity.py": "447cefeaceca353b792857c7d874f5dd3a3c229401c80e29085e7288f1926e11",
+    "tests/execution_r4/test_terminal_work.py": "e1bd263d378e6a697956ba183ced4454fbfe55c9c305b0e818e4133576ccd8e4",
+    "tests/test_service_drain_decision.py": "145147f3e7d1cc2649413687cb9047166273f87cb40d2238b029c021a797f8a6",
+    "tests/test_service_start.py": "beb820afc91aa8d42866d0cffd1a7f166663ff9b6aee1d14ef54fc01569d838a",
+    "tests/test_terminal_cooperation.py": "61aa262a571250c9166780e98cd94144f18d71394e4db42913e7b630018858b0",
+    "tests/test_terminal_coordination.py": "cdb6cbd03f4f25c18f682db1a679c3cbd950abde20cb3fcb70afaece85a3c623"
+  },
+  "reconciliation_input": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-reconciliation-ctw9ix9p\\reconciliation.json",
+    "sha256": "d2c78d41f43f10b57ec589b3d1ce4a41f4a33c848f27f77ce296a8a273211dbf"
+  },
+  "limits": [
+    "No full provider recovery campaign claimed.",
+    "No foreign PID relabeled as an owned child.",
+    "No real scheduled task/native service required by these two contract literals.",
+    "No closed report was modified and no historical PASS was relabeled as current execution."
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "status": "VERIFIED",
+  "source_cases": 4,
+  "installed_cases": 4,
+  "unique_new_cases": 4,
+  "cases": [
+    {
+      "classname": "tests.execution_r4.test_service_restart_contracts",
+      "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+      "time": "120.454"
+    },
+    {
+      "classname": "tests.execution_r4.test_service_restart_contracts",
+      "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+      "time": "109.971"
+    },
+    {
+      "classname": "tests.execution_r4.test_service_restart_contracts",
+      "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid]",
+      "time": "130.521"
+    },
+    {
+      "classname": "tests.execution_r4.test_service_surviving_child",
+      "name": "test_restart_pending_keeps_real_connector_child_claim_and_slot",
+      "time": "50.452"
+    }
+  ],
+  "product_changes": 0,
+  "scenarios": {
+    "SVC-T22": "Current installed restart attempt with a real Core-owned Python child stays pending; canonical Server owner/generation, birth, claim and slot remain. One physical effect; explicit close yields child exit0, release, DRAINED and no implicit replacement. Retained NS14-01 separately proves uncertain-operation restart at its historical wheel scope.",
+    "SVC-T23": "Three current installed real Server crash/return cases preserve installation identity, bindings, permissions and limits. Expired/revoked grants remain invalid; valid control admits only new explicit work. Canonical HANDLE birth/death and distinct replacement generation are proved.",
+    "SVC-T24": "Same live Connector reconnects to the actual replacement Server without another executor, identity, Finish, probe or old productive effect. Previous work and native session were closed before the crash; active-session survival is not claimed.",
+    "RG-05": "Explicit new-flow inventory and39 current retained recovery identities, AC05 complementary receipt/process-death proofs and4 new installed lifecycle cases support no implicit replay. Historical uncertain-operation Server restart remains labeled historical; no new provider or OS suspension acceptance is inferred."
+  },
+  "limits": [
+    "Windows process qualification; native provider behavior is synthetic.",
+    "No paid inference, personal credentials, Task Scheduler registration, logout, reboot or suspension was performed.",
+    "T22 child belongs to Core in the live Connector. No child survival after its owner dies is claimed.",
+    "Four unique new cases ran once in each final source and installed qualification, not eight independent scenarios.",
+    "Earlier fixture failures and the redirector-based superseded PASS remain in the immutable source history."
+  ],
+  "packages": {
+    "okto_nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-wheel-v1\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "cd1653dbdb48031e6c04771889ecc3efa5de965973dfe29026436fe263b478ad",
+      "files": 691
+    },
+    "nexus_connector_core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\vendor\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "1407014ea12f7e6f04ac70b9da8dbf8ebd9a57d8021bb5e74437bc22bd274f7a",
+      "files": 166
+    },
+    "okto_nexus_connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-cooperative-drain-09ucmgsr\\nexus-source-v1\\vendor\\ci\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "files": 124
+    }
+  }
+}

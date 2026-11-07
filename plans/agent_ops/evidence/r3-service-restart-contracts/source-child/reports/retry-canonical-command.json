@@ -1,0 +1,28 @@
+{
+  "mode": "source",
+  "command": [
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t22-live-child-source-oy_hoh3y\\pytest.ini",
+    "-p",
+    "pytest_asyncio.plugin",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_service_surviving_child.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t22-live-child-source-oy_hoh3y\\retry-canonical.xml",
+    "--basetemp=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t22-live-child-source-oy_hoh3y\\retry-canonical-private"
+  ],
+  "imports": {
+    "okto_nexus": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\__init__.py",
+    "okto_nexus_connector": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\__init__.py",
+    "nexus_connector_core": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\__init__.py"
+  },
+  "inputs": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_service_surviving_child.py": "620a30baff7a41c00028bdb9728d73d95426df7e059dff2a157a05a04c977868",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_service_restart_contracts.py": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a"
+  },
+  "providers": false,
+  "personal_services": false,
+  "os_task_registration": false
+}

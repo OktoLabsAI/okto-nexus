@@ -1,0 +1,314 @@
+{
+  "format": "svc-t23-t24-source-qualification.v2",
+  "scope": [
+    "SVC-T23",
+    "SVC-T24"
+  ],
+  "supersedes": "superseded/source-qualification.json",
+  "source": {
+    "path": "tests/execution_r4/test_service_restart_contracts.py",
+    "sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+    "unchanged_during_final_run": true
+  },
+  "command": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "tests\\execution_r4\\test_service_restart_contracts.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner-stdlib.xml"
+  ],
+  "environment": {
+    "command": [
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-m",
+      "pytest",
+      "tests/execution_r4/test_service_restart_contracts.py",
+      "-q",
+      "--tb=short",
+      "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\initial.xml"
+    ],
+    "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "python": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "versions": {
+      "okto-nexus": "0.3.3",
+      "okto-nexus-connector": "0.0.12",
+      "okto-nexus-connector-core": "0.0.14",
+      "mcp": "1.30.0"
+    }
+  },
+  "child_import_contract": "Base Python -I; dependency and product roots explicitly derived from qualification runner imports. The installed runner must therefore supply site-packages product roots.",
+  "final_unique_cases": 3,
+  "final_counts": {
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "final_seconds": 387.227,
+  "historical_xml_records": 13,
+  "historical_failed_records": 6,
+  "historical_collection_errors": 1,
+  "superseded_passing_records": 3,
+  "counts_note": "Only the three final identities qualify. Repeated attempts and superseded passing records are not additional coverage; interrupted preparation has no XML and contributes zero cases.",
+  "attempts": [
+    {
+      "report": "reports/initial.xml",
+      "raw_sha256": "8e93f9e2ecc0ad38b3ea3cb24200b310d5cf5e851e84af16252b51c912f21ec7",
+      "classification": "fixture_expectation_failure",
+      "explanation": "Expected synchronous refusal, but canonical intent admission precedes dispatch validation.",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "failure",
+          "seconds": 115.031
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "failure",
+          "seconds": 114.807
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failure": 2,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "report": "reports/dispatch-final.xml",
+      "raw_sha256": "f1a73590161688b78cd1b94db6c514bd9fd3b5de41542e58d1f2fa5f014675aa",
+      "classification": "fixture_expectation_failure",
+      "explanation": "Expired case expected a grant word in a deliberately generic denial; revoked observation deadline was shorter than real reconnect backoff plus jitter.",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "failure",
+          "seconds": 130.33
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "failure",
+          "seconds": 129.046
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failure": 2,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "report": "reports/scope-final.xml",
+      "raw_sha256": "0e7f98ea5bc5dd65ecd79e99c5fc6699cba90b8a7b84a3cec2794da5e08b63e7",
+      "classification": "fixture_cleanup_failure",
+      "explanation": "Contract assertions passed, but cleanup incorrectly used OperatorProfile outside its existing /api/v1 allowlist.",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "failure",
+          "seconds": 131.647
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "failure",
+          "seconds": 133.992
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failure": 2,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "report": "reports/three-controls-explicit-origin.xml",
+      "raw_sha256": "538c6922d089ab3bd324147d0c1e62c7391b6b883ce73bd650825536320907a4",
+      "classification": "superseded_not_qualification",
+      "explanation": "Three passing records are invalid as restart qualification: Windows venv Popen PID could be a redirector, and death of the canonical owner was not proved.",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "passed",
+          "seconds": 116.562
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "passed",
+          "seconds": 107.459
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid]",
+          "status": "passed",
+          "seconds": 124.315
+        }
+      ],
+      "counts": {
+        "passed": 3,
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "report": "reports/canonical-owner.xml",
+      "raw_sha256": "b03f216ce0c094c1cd61746fe9ee537cc2b5ee777b342068f4203eb2759dabd8",
+      "classification": "collection_error_no_child_started",
+      "explanation": "Temporary test dependency psutil was unavailable. Removed dependency; no environment mutation or product change.",
+      "cases": [
+        {
+          "classname": "",
+          "name": "tests.execution_r4.test_service_restart_contracts",
+          "status": "error",
+          "seconds": 0.0
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failure": 0,
+        "error": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "report": "reports/canonical-owner-stdlib.xml",
+      "raw_sha256": "a1e42802f5646be68feb943cd477dac51a5d628a790c9a70c329fdbe8c9909c0",
+      "classification": "final_qualification",
+      "explanation": "Canonical PID equals base-Python Popen PID; owned Windows HANDLE birth/parent and actual owner death are checked, followed by new generation and canonical drain/exit0.",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "passed",
+          "seconds": 130.731
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "passed",
+          "seconds": 124.577
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid]",
+          "status": "passed",
+          "seconds": 130.229
+        }
+      ],
+      "counts": {
+        "passed": 3,
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "owner_proofs": [
+    {
+      "case": "expired",
+      "artifact": "owners/expired.json",
+      "owners": [
+        {
+          "pid": 13940,
+          "birth": 134385266874588956,
+          "parent_pid": 8616,
+          "generation": "0ec0c619d485be25f2b9acaf9e83737e",
+          "instance_id": "svc_c4e997d2c80910472d29a793abf370245d20d117187845223fd4d5dbc47cd50a",
+          "state": "crashed_owner_exited"
+        },
+        {
+          "pid": 49876,
+          "birth": 134385267721674312,
+          "parent_pid": 8616,
+          "generation": "9ab4538dc9118abe5fe589eee130289d",
+          "instance_id": "svc_c4e997d2c80910472d29a793abf370245d20d117187845223fd4d5dbc47cd50a",
+          "state": "canonically_drained_owner_exited"
+        }
+      ]
+    },
+    {
+      "case": "revoked",
+      "artifact": "owners/revoked.json",
+      "owners": [
+        {
+          "pid": 46552,
+          "birth": 134385268107169133,
+          "parent_pid": 8616,
+          "generation": "b4b72150ddbf1934a28e06ef28340554",
+          "instance_id": "svc_46c3c51e792d7db87caa1c5ffc1d998225e4bd4ef6c664d18ee8dbb460141e26",
+          "state": "crashed_owner_exited"
+        },
+        {
+          "pid": 42140,
+          "birth": 134385268951484704,
+          "parent_pid": 8616,
+          "generation": "69f2255b37d3b699203cde492ddcc675",
+          "instance_id": "svc_46c3c51e792d7db87caa1c5ffc1d998225e4bd4ef6c664d18ee8dbb460141e26",
+          "state": "canonically_drained_owner_exited"
+        }
+      ]
+    },
+    {
+      "case": "valid",
+      "artifact": "owners/valid.json",
+      "owners": [
+        {
+          "pid": 15364,
+          "birth": 134385269352048683,
+          "parent_pid": 8616,
+          "generation": "bb37fbe3a5f38721e6d25d9ced5ceb79",
+          "instance_id": "svc_9b41bfdab60b7924e4b3579edd8ea2fdd2fe11a9bbc0132f6a63b3048a697569",
+          "state": "crashed_owner_exited"
+        },
+        {
+          "pid": 49028,
+          "birth": 134385270122217501,
+          "parent_pid": 8616,
+          "generation": "a2986620688013a796469dca4b939452",
+          "instance_id": "svc_9b41bfdab60b7924e4b3579edd8ea2fdd2fe11a9bbc0132f6a63b3048a697569",
+          "state": "canonically_drained_owner_exited"
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    "Each Windows Server launch is tied to its own retained process HANDLE: canonical PID, FILETIME birth, direct parent, ServeLock generation and instance identity.",
+    "The original canonical owner is proved dead before replacement; its durable dispatcher lease expires naturally. Replacement has new PID/birth/generation and the same installation instance_id.",
+    "Same live Connector DaemonApp and real HTTP/WebSocket/local IPC/Core journals reconnect after Server loss. Native/provider behavior is synthetic.",
+    "Installation, subject credential identity/permissions/limits, workspaces, bindings, profiles, Finish, executor IDs and completed operation/receipt history are retained.",
+    "No additional probe, executor, opening or send is caused by reconnection; old work remains completed and its native session was explicitly closed before the crash.",
+    "Expired and revoked grants remain typed as such and cannot dispatch native work: PERMISSION_DENIED, possible_effect false, native opens/sends 1/1 and used_executions 1.",
+    "A valid-grant control admits only new explicit work on the same binding/executor with new operation/session IDs: native opens/sends 2/2 and used_executions 1 to 2.",
+    "Each replacement is stopped via canonical CLI using the same home/loopback origin/product import paths; DRAINED, exit0 and HANDLE death are required."
+  ],
+  "history_limits": [
+    "No immutable source snapshot was retained for initial and dispatch-final attempts; no fixture-source hash is claimed for those runs.",
+    "The old three-passing-record report is retained verbatim but invalidated by redirector-limitation.json. It is not accepted as restart evidence.",
+    "The interrupted preparation has no completed XML; whether cleanup stop ran is unknown, not inferred."
+  ],
+  "limits": [
+    "Source qualification only; final installed qualification is parent-owned and pending at collection.",
+    "Windows process HANDLE proof only; no claim for another operating system.",
+    "No real provider, personal credentials/vault, physical second host or native service/task registration.",
+    "Previous native session was closed before Server failure; active native-session survival is not claimed.",
+    "Only a new test/helper file was changed; no product/ledger/docs/closed historical artifacts/commit/push changed by this task.",
+    "Cleanup assertions prove the six owned Server processes exited. Private homes/databases and complete logs are excluded from this public collection."
+  ]
+}

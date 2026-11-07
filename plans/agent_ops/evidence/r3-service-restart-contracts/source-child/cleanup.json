@@ -1,0 +1,19 @@
+{
+  "observed_at_utc": "2026-11-07T12:17:26.040965+00:00",
+  "processes": {
+    "server": {
+      "pid": 27052,
+      "original_birth_running": false,
+      "observation": "pid_reused_by_different_birth"
+    },
+    "native_child": {
+      "pid": 22280,
+      "original_birth_running": false,
+      "observation": "pid_reused_by_different_birth"
+    }
+  },
+  "child_exit_code": 0,
+  "server_exit_code": 0,
+  "source_runner_exit_code": 0,
+  "cleanup": "Exact owned handles/births only; no original owned process remains running. Runner exited0; PID presence alone is never an ownership oracle."
+}

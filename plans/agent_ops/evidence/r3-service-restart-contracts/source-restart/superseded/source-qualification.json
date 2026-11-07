@@ -1,0 +1,208 @@
+{
+  "format": "svc-t23-t24-source-qualification.v1",
+  "scope": [
+    "SVC-T23",
+    "SVC-T24"
+  ],
+  "source": {
+    "path": "tests\\execution_r4\\test_service_restart_contracts.py",
+    "sha256": "4fbcc2093da2bd6322d9fc7e2211a7a2cd33c3ce83cdb0098ebbc89aaddbc85f",
+    "unchanged_during_final_run": true
+  },
+  "environment": {
+    "command": [
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-m",
+      "pytest",
+      "tests/execution_r4/test_service_restart_contracts.py",
+      "-q",
+      "--tb=short",
+      "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\initial.xml"
+    ],
+    "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "python": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "versions": {
+      "okto-nexus": "0.3.3",
+      "okto-nexus-connector": "0.0.12",
+      "okto-nexus-connector-core": "0.0.14",
+      "mcp": "1.30.0"
+    }
+  },
+  "final_command": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "tests\\execution_r4\\test_service_restart_contracts.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\three-controls-explicit-origin.xml"
+  ],
+  "final_unique_cases": 3,
+  "final_counts": {
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "historical_xml_records": 9,
+  "historical_failed_records": 6,
+  "counts_note": "Repeated identities are not summed as unique coverage. Interrupted preparation had no completed XML and contributes zero qualified cases.",
+  "attempts": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\initial.xml",
+      "sha256": "8e93f9e2ecc0ad38b3ea3cb24200b310d5cf5e851e84af16252b51c912f21ec7",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "failure",
+          "seconds": 115.031
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "failure",
+          "seconds": 114.807
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failure": 2,
+        "error": 0,
+        "skipped": 0
+      },
+      "classification": "Fixture expected synchronous grant refusal although intent admission precedes dispatch.",
+      "credential_marker_counts": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\dispatch-final.xml",
+      "sha256": "f1a73590161688b78cd1b94db6c514bd9fd3b5de41542e58d1f2fa5f014675aa",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "failure",
+          "seconds": 130.33
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "failure",
+          "seconds": 129.046
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failure": 2,
+        "error": 0,
+        "skipped": 0
+      },
+      "classification": "Expired: fixture expected grant word in intentionally generic denial; revoked: 30s observation window was shorter than production 30s +20% jitter reconnect delay.",
+      "credential_marker_counts": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\scope-final.xml",
+      "sha256": "0e7f98ea5bc5dd65ecd79e99c5fc6699cba90b8a7b84a3cec2794da5e08b63e7",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "failure",
+          "seconds": 131.647
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "failure",
+          "seconds": 133.992
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failure": 2,
+        "error": 0,
+        "skipped": 0
+      },
+      "classification": "Both contract assertions passed; fixture cleanup incorrectly used OperatorProfile for a /v1 route outside its existing /api/v1 allowlist.",
+      "credential_marker_counts": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\three-controls-explicit-origin.xml",
+      "sha256": "538c6922d089ab3bd324147d0c1e62c7391b6b883ce73bd650825536320907a4",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "status": "passed",
+          "seconds": 116.562
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "status": "passed",
+          "seconds": 107.459
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid]",
+          "status": "passed",
+          "seconds": 124.315
+        }
+      ],
+      "counts": {
+        "passed": 3,
+        "failure": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "classification": "Final immutable source: all three contract variants and exact-home/host/port canonical cleanup passed.",
+      "credential_marker_counts": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    }
+  ],
+  "interrupted_preparation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\interrupted-preparation.json",
+    "sha256": "13f9395144432b9903780369dcd8a16ba9445b6f50b2065313dae97ba27016cb",
+    "cleanup_execution": "unknown; no retained start marker or completed traceback proves whether stop ran"
+  },
+  "assertions": [
+    "Actual two Server PIDs with identical home/port; previous durable dispatcher lease respected.",
+    "Same live Connector DaemonApp; real HTTP/WebSocket/local IPC and Core journals; native/provider peer synthetic.",
+    "Server installation, subject credential identity/permissions, workspaces, bindings, runtime profiles, Finish and configured limits unchanged across restart.",
+    "Same remote executor/Connector and binding; no added executor, probe, old operation, receipt or native effect on reconnection.",
+    "Completed prior task and closed native session stay historical. No claim of active session survival.",
+    "Expired/revoked grants: typed canonical authorization state plus PERMISSION_DENIED at dispatch, possible_effect=false, native open/send counts remain1/1, used_executions stays1.",
+    "Valid grant positive control: only explicit second work opens/sends again; same executor/binding, new operation/session IDs, native counts2/2, used_executions1->2.",
+    "Canonical service stop uses same interpreter/product paths, home, loopback host and selected port; DRAINED and child exit0 required."
+  ],
+  "limitations": [
+    "Source qualification only; installed final three-case run remains parent-owned.",
+    "No real provider, personal credential store, Windows task registration or physical second host.",
+    "No production file, shared fixture, ledger, historical artifact, commit or push changed by this task.",
+    "Failed XMLs are retained privately and classified as fixture expectations/cleanup; they are not promoted as passing tests."
+  ],
+  "processes": "Final test process exited0; each test requires restarted Server canonical stop and exit0; killed original Server was explicitly owned. No test-owned process remains expected."
+}

@@ -1,0 +1,17 @@
+{
+  "files": [
+    {
+      "path": "tests/execution_r4/test_service_restart_contracts.py",
+      "qualified_worktree_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "git_index_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "equal_after_lf_normalization": true
+    },
+    {
+      "path": "tests/execution_r4/test_service_surviving_child.py",
+      "qualified_worktree_sha256": "2d9df736dd16db77a427b5f5761c5e7902dd6c498519963f78f8fd2d73f782f7",
+      "git_index_sha256": "2d9df736dd16db77a427b5f5761c5e7902dd6c498519963f78f8fd2d73f782f7",
+      "equal_after_lf_normalization": true
+    }
+  ],
+  "meaning": "Only Git newline normalization is permitted between qualified source and committed source."
+}

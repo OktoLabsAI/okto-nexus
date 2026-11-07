@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="232.798" timestamp="2026-11-07T08:25:48.775764-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_service_restart_contracts" name="test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]" time="115.031"><failure message="Failed: Expected current grant refusal with a ready link, got None">tests\execution_r4\test_service_restart_contracts.py:233: in test_server_restart_preserves_remote_binding_limits_and_invalid_grant
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_service_restart_contracts.py:227: in run
+    await scenario()
+tests\execution_r4\test_service_restart_contracts.py:214: in scenario
+    pytest.fail(f'Expected current grant refusal with a ready link, got {denied.get("state")}')
+E   Failed: Expected current grant refusal with a ready link, got None</failure></testcase><testcase classname="tests.execution_r4.test_service_restart_contracts" name="test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]" time="114.807"><failure message="Failed: Expected current grant refusal with a ready link, got None">tests\execution_r4\test_service_restart_contracts.py:233: in test_server_restart_preserves_remote_binding_limits_and_invalid_grant
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_service_restart_contracts.py:227: in run
+    await scenario()
+tests\execution_r4\test_service_restart_contracts.py:214: in scenario
+    pytest.fail(f'Expected current grant refusal with a ready link, got {denied.get("state")}')
+E   Failed: Expected current grant refusal with a ready link, got None</failure></testcase></testsuite></testsuites>

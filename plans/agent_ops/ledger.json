@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T11:38:42.920970+00:00",
+  "updated_at": "2026-11-07T12:22:56.184176+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -7134,38 +7134,68 @@
     },
     "SVC-T22": {
       "requirement": "Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
+        "plans/agent_ops/evidence/r3-service-restart-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "remaining": "Real service restart with surviving native child/uncertain operation remains unexecuted; no new general product defect established.",
-      "remaining_kind": "real_native_recovery_campaign",
-      "result": "Synthetic late native open/unknown close and occupied slots retain ownership; shutdown observer does not replay/release. Scope/remaining: Real service restart with surviving native child/uncertain operation remains unexecuted; no new general product defect established."
+      "remaining": "None within this literal contract and recorded qualification scope.",
+      "remaining_kind": "none",
+      "result": "Current installed restart attempt with a real Core-owned Python child stays pending; canonical Server owner/generation, birth, claim and slot remain. One physical effect; explicit close yields child exit0, release, DRAINED and no implicit replacement. Retained NS14-01 separately proves uncertain-operation restart at its historical wheel scope.",
+      "qualification_limit": [
+        "Windows process qualification; native provider behavior is synthetic.",
+        "No paid inference, personal credentials, Task Scheduler registration, logout, reboot or suspension was performed.",
+        "T22 child belongs to Core in the live Connector. No child survival after its owner dies is claimed.",
+        "Four unique new cases ran once in each final source and installed qualification, not eight independent scenarios.",
+        "Earlier fixture failures and the redirector-based superseded PASS remain in the immutable source history."
+      ]
     },
     "SVC-T23": {
       "requirement": "Restart preserva identidade, bindings e limites; grant expirado/revogado continua inválido.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-detached-process.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
         "plans/agent_ops/evidence/pr02-upgrade-installed.xml",
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "remaining": "Available proofs compose restart persistence with canonical grant authority. If wiring needs an additional assertion, it is a safe disposable restart test; neither registered OS service nor provider is required by T23.",
-      "remaining_kind": "safe_disposable_qualification_if_wiring_uncovered",
-      "result": "Saved config/DB/ledger survive detached restart/upgrade; remote grants remain current/expired/revoked under separate canonical campaign. Scope/remaining: Available proofs compose restart persistence with canonical grant authority. If wiring needs an additional assertion, it is a safe disposable restart test; neither registered OS service nor provider is required by T23."
+      "remaining": "None within this literal contract and recorded qualification scope.",
+      "remaining_kind": "none",
+      "result": "Three current installed real Server crash/return cases preserve installation identity, bindings, permissions and limits. Expired/revoked grants remain invalid; valid control admits only new explicit work. Canonical HANDLE birth/death and distinct replacement generation are proved.",
+      "qualification_limit": [
+        "Windows process qualification; native provider behavior is synthetic.",
+        "No paid inference, personal credentials, Task Scheduler registration, logout, reboot or suspension was performed.",
+        "T22 child belongs to Core in the live Connector. No child survival after its owner dies is claimed.",
+        "Four unique new cases ran once in each final source and installed qualification, not eight independent scenarios.",
+        "Earlier fixture failures and the redirector-based superseded PASS remain in the immutable source history."
+      ]
     },
     "SVC-T24": {
       "requirement": "Queda/retorno do Server mantém vínculo do Connector sem novo executor ou execução duplicada.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
       ],
-      "remaining": "Dedicated continuity/remote suite assertions still need read-only mapping; renewal alone is not substituted. This is safe evidence reconciliation, not a requirement for physical hosts.",
-      "remaining_kind": "evidence_mapping_or_safe_qualification",
-      "result": "Remote loopback DaemonApp and current auth/binding reuse are proven; no Finish/probe replay after rotation. Scope/remaining: Dedicated continuity/remote suite assertions still need read-only mapping; renewal alone is not substituted. This is safe evidence reconciliation, not a requirement for physical hosts."
+      "remaining": "None within this literal contract and recorded qualification scope.",
+      "remaining_kind": "none",
+      "result": "Same live Connector reconnects to the actual replacement Server without another executor, identity, Finish, probe or old productive effect. Previous work and native session were closed before the crash; active-session survival is not claimed.",
+      "qualification_limit": [
+        "Windows process qualification; native provider behavior is synthetic.",
+        "No paid inference, personal credentials, Task Scheduler registration, logout, reboot or suspension was performed.",
+        "T22 child belongs to Core in the live Connector. No child survival after its owner dies is claimed.",
+        "Four unique new cases ran once in each final source and installed qualification, not eight independent scenarios.",
+        "Earlier fixture failures and the redirector-based superseded PASS remain in the immutable source history."
+      ]
     },
     "SVC-T25": {
       "requirement": "CLI novo/daemon antigo informa compatibilidade e não atualiza/interrompe trabalho implicitamente.",
@@ -10561,7 +10591,7 @@
     },
     "RG-05": {
       "requirement": "Reinício/queda de rede com operação incerta não dispara replay por nenhum dos novos caminhos.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr09-herdr.md",
         "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
@@ -10571,13 +10601,25 @@
         "plans/agent_ops/evidence/r3-joint-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
         "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
-        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json"
       ],
       "subscopes": {
         "pr09_optional_windows_observer_contract": "VERIFIED",
         "selected_39_current_recovery_cases": "VERIFIED"
       },
-      "result": "39 selected current recovery cases pass again under the strict isolated environment, preserving exact IDs and no replay. Selected contract coverage is verified; full real network/service/provider recovery acceptance remains open."
+      "result": "Explicit new-flow inventory and39 current retained recovery identities, AC05 complementary receipt/process-death proofs and4 new installed lifecycle cases support no implicit replay. Historical uncertain-operation Server restart remains labeled historical; no new provider or OS suspension acceptance is inferred.",
+      "remaining": "None within this literal contract and recorded qualification scope.",
+      "remaining_kind": "none",
+      "qualification_limit": [
+        "Windows process qualification; native provider behavior is synthetic.",
+        "No paid inference, personal credentials, Task Scheduler registration, logout, reboot or suspension was performed.",
+        "T22 child belongs to Core in the live Connector. No child survival after its owner dies is claimed.",
+        "Four unique new cases ran once in each final source and installed qualification, not eight independent scenarios.",
+        "Earlier fixture failures and the redirector-based superseded PASS remain in the immutable source history."
+      ]
     },
     "RG-06": {
       "requirement": "Core importado sem sockets/processos/credenciais; dependências entre aplicações continuam proibidas.",
@@ -11789,6 +11831,17 @@
         "plans/agent_ops/evidence/r3-dx-final-contracts/milestone.md",
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json"
       ]
+    },
+    "r3_service_restart_contracts": {
+      "status": "VERIFIED",
+      "unique_new_cases": 4,
+      "source_cases": 4,
+      "installed_cases": 4,
+      "product_changes": 0,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/artifact-manifest.json"
+      ]
     }
   },
   "history": [
@@ -12665,6 +12718,15 @@
       "summary": "16 additional DX contract predicates verified, T44 inbox isolation3/3 installed. Real provider/login/default-installation/effective-process scopes remain pending in T34/T38/T39/T40/T43. No provider or native task executed.",
       "evidence": [
         "plans/agent_ops/evidence/r3-dx-final-contracts/milestone.md"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "Service restart and owned child contracts",
+      "status": "VERIFIED",
+      "summary": "SVC-T22/T23/T24 and RG-05 contract predicates qualified; four new source and four installed PASS. M1/native service/platform campaigns remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json"
       ]
     }
   ]

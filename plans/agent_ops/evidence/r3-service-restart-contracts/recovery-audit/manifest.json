@@ -1,0 +1,31 @@
+{
+  "scope": [
+    "SVC-T22",
+    "RG-05"
+  ],
+  "files": {
+    "audit.md": {
+      "sha256": "22e28b721c47cc08fcae401050f47c273a6ed5c53a3747a3a5291107f67702d1",
+      "bytes": 2828
+    },
+    "collect_audit.py": {
+      "sha256": "d8840572e9aa96c5a21282cab1137709d5fb7c7932f00d08580ac8bbd92cdecb",
+      "bytes": 12022
+    },
+    "matrix.json": {
+      "sha256": "94e620245389712083f2a238fdb8ef57e5d0361f096e1b60277f64950129d8ca",
+      "bytes": 32840
+    },
+    "technical-plan.md": {
+      "sha256": "a9fa27c8c38954315dbdaab6ac45cd1c3b666d14e0c0062cab259e3b95175c24",
+      "bytes": 1955
+    }
+  },
+  "excluded": [
+    "private homes",
+    "databases",
+    "credentials",
+    "raw logs"
+  ],
+  "tests_executed": 0
+}

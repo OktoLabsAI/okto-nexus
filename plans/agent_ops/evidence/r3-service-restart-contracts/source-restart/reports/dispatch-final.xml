@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="262.926" timestamp="2026-11-07T08:33:06.031659-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_service_restart_contracts" name="test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]" time="130.330"><failure message="AssertionError: {'operation_id': 'op_e4d559c10f803b91f6a2dcb499cf0d89', 'client_intent_id': 'denied-after-server-restart', 'scope': {'...: 2, 'binding_id': 'bind_abb603f33cc253343c7bb97f12bdd413', 'binding_revision': 1, ...}, 'action': 'runtime.open', ...}&#10;assert 'grant' in 'runtime action is not authorized.'&#10; +  where 'runtime action is not authorized.' = &lt;built-in method lower of str object at 0x00000170264EACE0&gt;()&#10; +    where &lt;built-in method lower of str object at 0x00000170264EACE0&gt; = 'Runtime action is not authorized.'.lower">tests\execution_r4\test_service_restart_contracts.py:249: in test_server_restart_preserves_remote_binding_limits_and_invalid_grant
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_service_restart_contracts.py:243: in run
+    await scenario()
+tests\execution_r4\test_service_restart_contracts.py:226: in scenario
+    assert 'grant' in refusal['error']['message'].lower(), refusal
+E   AssertionError: {'operation_id': 'op_e4d559c10f803b91f6a2dcb499cf0d89', 'client_intent_id': 'denied-after-server-restart', 'scope': {'...: 2, 'binding_id': 'bind_abb603f33cc253343c7bb97f12bdd413', 'binding_revision': 1, ...}, 'action': 'runtime.open', ...}
+E   assert 'grant' in 'runtime action is not authorized.'
+E    +  where 'runtime action is not authorized.' = &lt;built-in method lower of str object at 0x00000170264EACE0&gt;()
+E    +    where &lt;built-in method lower of str object at 0x00000170264EACE0&gt; = 'Runtime action is not authorized.'.lower</failure></testcase><testcase classname="tests.execution_r4.test_service_restart_contracts" name="test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]" time="129.046"><failure message="AssertionError: {'state': 'REGISTERING', 'executor_id': 'exe_e37e6aa6d85b15cca36736f916f26acc', 'automatic_messages': True, 'automatic_recovery': True, 'control_ready': False, 'execution_ready': False, 'error_code': 'EXECUTOR_OFFLINE', 'execution_errors': {}, 'recovery_required': False, 'cleanup_pending': False, 'publication_sequence': 4, 'inventory_revision': 'sha256:66d1723ef02e631a78761d5acc17b878780725b44b1105a53d572355946a2c7d', 'connection_generation': None, 'attempts': 6, 'last_connected_at': 1794051364.8509529, 'last_error_at': 1794051411.0163126, 'last_disconnect_cause': 'ConnectorError EXECUTOR_OFFLINE stage=http', 'consecutive_failures': 5, 'attention_required': False, 'last_received_at': None, 'attached_bindings': []}">tests\execution_r4\test_service_restart_contracts.py:249: in test_server_restart_preserves_remote_binding_limits_and_invalid_grant
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_service_restart_contracts.py:243: in run
+    await scenario()
+tests\execution_r4\test_service_restart_contracts.py:183: in scenario
+    await project.eventually(lambda: project.control.status()['execution_ready'] and
+tests\execution_r4\remote_renewal_helpers.py:161: in eventually
+    assert time.monotonic() &lt; deadline, self.control.status() if self.control else 'Control not composed'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: {'state': 'REGISTERING', 'executor_id': 'exe_e37e6aa6d85b15cca36736f916f26acc', 'automatic_messages': True, 'automatic_recovery': True, 'control_ready': False, 'execution_ready': False, 'error_code': 'EXECUTOR_OFFLINE', 'execution_errors': {}, 'recovery_required': False, 'cleanup_pending': False, 'publication_sequence': 4, 'inventory_revision': 'sha256:66d1723ef02e631a78761d5acc17b878780725b44b1105a53d572355946a2c7d', 'connection_generation': None, 'attempts': 6, 'last_connected_at': 1794051364.8509529, 'last_error_at': 1794051411.0163126, 'last_disconnect_cause': 'ConnectorError EXECUTOR_OFFLINE stage=http', 'consecutive_failures': 5, 'attention_required': False, 'last_received_at': None, 'attached_bindings': []}</failure></testcase></testsuite></testsuites>

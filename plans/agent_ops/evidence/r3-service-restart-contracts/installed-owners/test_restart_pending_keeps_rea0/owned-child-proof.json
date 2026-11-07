@@ -1,0 +1,65 @@
+{
+  "server_pid": 43752,
+  "server_generation": "32264513505adbc1414c5bd9f73acbff",
+  "child_owner": "Core in the Connector process",
+  "connector_pid": 15652,
+  "birth": {
+    "key": {
+      "server_id": "srv_3c382445804c0623f4c14f01296db367",
+      "executor_id": "exe_fdd9a46cfae7e6397f801b618fe5a3ac",
+      "session_id": "ses_bc7f0e57ce4644003e12af4de25fe7ee"
+    },
+    "opening_operation_id": "op_8dfe2da215aab6975167de18b51fafd4",
+    "evidence": {
+      "platform": "win32",
+      "pid": 49664,
+      "birth_token": "filetime:01dd6eb28b909947",
+      "containment": "windows_job",
+      "container_id": "Global\\nexus-core-cc60ddb4086d4a8ab1090508b83cf306"
+    }
+  },
+  "claim": {
+    "key": {
+      "server_id": "srv_3c382445804c0623f4c14f01296db367",
+      "executor_id": "exe_fdd9a46cfae7e6397f801b618fe5a3ac",
+      "session_id": "ses_bc7f0e57ce4644003e12af4de25fe7ee"
+    },
+    "opening_operation_id": "op_8dfe2da215aab6975167de18b51fafd4",
+    "opening_connection_generation": 3,
+    "opening_owner_generation": 1
+  },
+  "slot_before_release": {
+    "key": {
+      "server_id": "srv_3c382445804c0623f4c14f01296db367",
+      "executor_id": "exe_fdd9a46cfae7e6397f801b618fe5a3ac",
+      "session_id": "ses_bc7f0e57ce4644003e12af4de25fe7ee"
+    },
+    "opening_operation_id": "op_8dfe2da215aab6975167de18b51fafd4",
+    "released": false
+  },
+  "restart_result": "DRAINING_PENDING",
+  "same_server_owner": true,
+  "child_alive_at_pending": true,
+  "cli_shutdown_state": "UNCONFIRMED",
+  "original_operation_ids": [
+    "op_2cbcb775e0e23ec978079d87b9848c50",
+    "op_8dfe2da215aab6975167de18b51fafd4"
+  ],
+  "physical_work_records": 1,
+  "physical_release_confirmed": true,
+  "no_parent_death_survival_claim": true,
+  "child_exit_code": 0,
+  "slot_after_release": {
+    "key": {
+      "server_id": "srv_3c382445804c0623f4c14f01296db367",
+      "executor_id": "exe_fdd9a46cfae7e6397f801b618fe5a3ac",
+      "session_id": "ses_bc7f0e57ce4644003e12af4de25fe7ee"
+    },
+    "opening_operation_id": "op_8dfe2da215aab6975167de18b51fafd4",
+    "released": true
+  },
+  "server_owner_exited": true,
+  "final_service_state": "stopped",
+  "automatic_replacement_started": false,
+  "completed": true
+}

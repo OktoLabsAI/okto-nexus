@@ -1,0 +1,24 @@
+{
+  "format": "svc-t22-finite-readonly-review.v1",
+  "file": "tests/execution_r4/test_service_surviving_child.py",
+  "sha256": "2d9df736dd16db77a427b5f5761c5e7902dd6c498519963f78f8fd2d73f782f7",
+  "shared_helper": {
+    "file": "tests/execution_r4/test_service_restart_contracts.py",
+    "sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a"
+  },
+  "literal": "Restart com operação incerta ou filho ainda vivo não repete trabalho nem libera claim/slot indevidamente.",
+  "literal_reference": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md:848",
+  "findings": [],
+  "verified_by_reading": [
+    {"lines": "178-196", "conclusion": "A restart timeout is not accepted as shutdown success. Even when CLI returns UNCONFIRMED, current canonical inspection must show DRAINING_PENDING with the same owner PID/generation. The exact spawned child is alive, claim/slot/birth remain equal, stop proof remains absent, operation IDs remain unchanged and the physical work marker contains one record."},
+    {"lines": "210-218", "conclusion": "Explicit close is admitted while the native turn is active; close is held until the terminal result is observed, and the child remains alive with its slot retained before release."},
+    {"lines": "219-240", "conclusion": "After explicit release, child exit0 and observed physical stop are required, then slot release and SUCCEEDED close receipt. Server owner must exit0; status must be stopped and durable shutdown state DRAINED for the same generation. No replacement or repeated native effect is accepted."},
+    {"lines": "58-75", "conclusion": "The physical child exchanges one WORK/ACK and exits through STOP. Watchdog exit88 cannot satisfy the required exit0."}
+  ],
+  "limits": [
+    "Read-only review; no test was executed by this reviewer for this file.",
+    "This exercises the literal live-child branch. The child belongs to Core in the Connector process, which remains alive; it does not claim that the child survives death of its owning process.",
+    "Native/provider protocol behavior is synthetic. No real provider, personal credentials or operating-system service registration is qualified.",
+    "The review is bounded to the frozen test and its oracles; installed execution remains parent-owned."
+  ]
+}

@@ -1,0 +1,456 @@
+{
+  "format": "svc-t23-t24-public-allowlist.v2",
+  "artifacts": [
+    {
+      "path": "reports/initial.xml",
+      "role": "fixture_expectation_failure",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\initial.xml",
+      "source_sha256": "8e93f9e2ecc0ad38b3ea3cb24200b310d5cf5e851e84af16252b51c912f21ec7",
+      "artifact_sha256": "8e93f9e2ecc0ad38b3ea3cb24200b310d5cf5e851e84af16252b51c912f21ec7",
+      "source_bytes": 2527,
+      "artifact_bytes": 2527,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "reports/dispatch-final.xml",
+      "role": "fixture_expectation_failure",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\dispatch-final.xml",
+      "source_sha256": "f1a73590161688b78cd1b94db6c514bd9fd3b5de41542e58d1f2fa5f014675aa",
+      "artifact_sha256": "f1a73590161688b78cd1b94db6c514bd9fd3b5de41542e58d1f2fa5f014675aa",
+      "source_bytes": 5039,
+      "artifact_bytes": 5039,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "reports/scope-final.xml",
+      "role": "fixture_cleanup_failure",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\scope-final.xml",
+      "source_sha256": "0e7f98ea5bc5dd65ecd79e99c5fc6699cba90b8a7b84a3cec2794da5e08b63e7",
+      "artifact_sha256": "0e7f98ea5bc5dd65ecd79e99c5fc6699cba90b8a7b84a3cec2794da5e08b63e7",
+      "source_bytes": 4043,
+      "artifact_bytes": 4043,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "reports/three-controls-explicit-origin.xml",
+      "role": "superseded_not_qualification",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\three-controls-explicit-origin.xml",
+      "source_sha256": "538c6922d089ab3bd324147d0c1e62c7391b6b883ce73bd650825536320907a4",
+      "artifact_sha256": "538c6922d089ab3bd324147d0c1e62c7391b6b883ce73bd650825536320907a4",
+      "source_bytes": 774,
+      "artifact_bytes": 774,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "reports/canonical-owner.xml",
+      "role": "collection_error_no_child_started",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner.xml",
+      "source_sha256": "b03f216ce0c094c1cd61746fe9ee537cc2b5ee777b342068f4203eb2759dabd8",
+      "artifact_sha256": "b03f216ce0c094c1cd61746fe9ee537cc2b5ee777b342068f4203eb2759dabd8",
+      "source_bytes": 952,
+      "artifact_bytes": 952,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "reports/canonical-owner-stdlib.xml",
+      "role": "final_qualification",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner-stdlib.xml",
+      "source_sha256": "a1e42802f5646be68feb943cd477dac51a5d628a790c9a70c329fdbe8c9909c0",
+      "artifact_sha256": "a1e42802f5646be68feb943cd477dac51a5d628a790c9a70c329fdbe8c9909c0",
+      "source_bytes": 774,
+      "artifact_bytes": 774,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "source-snapshots/scope-final.source.py",
+      "role": "historical_test_source_snapshot",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\scope-final.source.py",
+      "source_sha256": "8c3cae058a2cb5521326f5cbdd114df06ac70c2bb4bc1ea75062af559b19a89c",
+      "artifact_sha256": "8c3cae058a2cb5521326f5cbdd114df06ac70c2bb4bc1ea75062af559b19a89c",
+      "source_bytes": 12984,
+      "artifact_bytes": 12984,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "source-snapshots/three-controls.source.py",
+      "role": "historical_test_source_snapshot",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\three-controls.source.py",
+      "source_sha256": "fc78b5ad14c727db8bf3fbed882593445e664f8ea288878674af88235c9109e2",
+      "artifact_sha256": "fc78b5ad14c727db8bf3fbed882593445e664f8ea288878674af88235c9109e2",
+      "source_bytes": 14909,
+      "artifact_bytes": 14909,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "source-snapshots/three-controls-explicit-origin.source.py",
+      "role": "historical_test_source_snapshot",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\three-controls-explicit-origin.source.py",
+      "source_sha256": "4fbcc2093da2bd6322d9fc7e2211a7a2cd33c3ce83cdb0098ebbc89aaddbc85f",
+      "artifact_sha256": "4fbcc2093da2bd6322d9fc7e2211a7a2cd33c3ce83cdb0098ebbc89aaddbc85f",
+      "source_bytes": 14970,
+      "artifact_bytes": 14970,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "source-snapshots/canonical-owner.source.py",
+      "role": "historical_test_source_snapshot",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner.source.py",
+      "source_sha256": "df57d70966be4ae6bb787d2ea6728d102a92f35a44a3e1aede12b325fae42651",
+      "artifact_sha256": "df57d70966be4ae6bb787d2ea6728d102a92f35a44a3e1aede12b325fae42651",
+      "source_bytes": 17234,
+      "artifact_bytes": 17234,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "source-snapshots/canonical-owner-stdlib.source.py",
+      "role": "historical_test_source_snapshot",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner-stdlib.source.py",
+      "source_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "artifact_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "source_bytes": 19369,
+      "artifact_bytes": 19369,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "final-source/test_service_restart_contracts.py",
+      "role": "final_test_source",
+      "source_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_service_restart_contracts.py",
+      "source_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "artifact_sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "source_bytes": 19369,
+      "artifact_bytes": 19369,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/command.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\command.json",
+      "source_sha256": "6c5a40810cd7d2a31ae51eacaaead8f4e895a29f7037281d66e05673e9c7c82f",
+      "artifact_sha256": "6c5a40810cd7d2a31ae51eacaaead8f4e895a29f7037281d66e05673e9c7c82f",
+      "source_bytes": 650,
+      "artifact_bytes": 650,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/dispatch-final-command.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\dispatch-final-command.json",
+      "source_sha256": "0fc70de989c637fed0b2847bc81068993aede75d9ca19d65cb06ce8bc9bbb4d4",
+      "artifact_sha256": "0fc70de989c637fed0b2847bc81068993aede75d9ca19d65cb06ce8bc9bbb4d4",
+      "source_bytes": 443,
+      "artifact_bytes": 443,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/scope-final-command.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\scope-final-command.json",
+      "source_sha256": "4c4bcede70fde36503e8552b040dc3f5e0b17337bc395e1936051ea469796455",
+      "artifact_sha256": "4c4bcede70fde36503e8552b040dc3f5e0b17337bc395e1936051ea469796455",
+      "source_bytes": 440,
+      "artifact_bytes": 440,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/three-controls-command.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\three-controls-command.json",
+      "source_sha256": "c460c3eb63245d3e0133002e28763803706b704b837e5916278e158b0409029a",
+      "artifact_sha256": "c460c3eb63245d3e0133002e28763803706b704b837e5916278e158b0409029a",
+      "source_bytes": 443,
+      "artifact_bytes": 443,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/three-controls-explicit-origin-command.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\three-controls-explicit-origin-command.json",
+      "source_sha256": "84871f88ac7ff262efa4086cdc950fa89819cc0e145b738958ba0d8e41c9320e",
+      "artifact_sha256": "84871f88ac7ff262efa4086cdc950fa89819cc0e145b738958ba0d8e41c9320e",
+      "source_bytes": 459,
+      "artifact_bytes": 459,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/canonical-owner-command.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner-command.json",
+      "source_sha256": "b4c04c8ee77d864ead9ee96b9d3189854b771af369a79835bd5cb20684c85e79",
+      "artifact_sha256": "b4c04c8ee77d864ead9ee96b9d3189854b771af369a79835bd5cb20684c85e79",
+      "source_bytes": 444,
+      "artifact_bytes": 444,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/canonical-owner-stdlib-command.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner-stdlib-command.json",
+      "source_sha256": "24eb8d8d1c8153071bf53a5d42eb6159067374b57e871fe4d67d799191fdf302",
+      "artifact_sha256": "24eb8d8d1c8153071bf53a5d42eb6159067374b57e871fe4d67d799191fdf302",
+      "source_bytes": 451,
+      "artifact_bytes": 451,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/interrupted-preparation.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\interrupted-preparation.json",
+      "source_sha256": "13f9395144432b9903780369dcd8a16ba9445b6f50b2065313dae97ba27016cb",
+      "artifact_sha256": "13f9395144432b9903780369dcd8a16ba9445b6f50b2065313dae97ba27016cb",
+      "source_bytes": 1298,
+      "artifact_bytes": 1298,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/redirector-limitation.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\redirector-limitation.json",
+      "source_sha256": "e3f0b414be9db19659a40f5bf3caa605cfa7be1685d817d80cc2c2a23d501d50",
+      "artifact_sha256": "e3f0b414be9db19659a40f5bf3caa605cfa7be1685d817d80cc2c2a23d501d50",
+      "source_bytes": 655,
+      "artifact_bytes": 655,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "preparation/handle-probe.json",
+      "role": "preparation_metadata",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\handle-probe.json",
+      "source_sha256": "f6b970166a45c502df07928ea6daa86ae9850f1a3bc8553bf5f6de0cc855f038",
+      "artifact_sha256": "f6b970166a45c502df07928ea6daa86ae9850f1a3bc8553bf5f6de0cc855f038",
+      "source_bytes": 444,
+      "artifact_bytes": 444,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "superseded/source-qualification.json",
+      "role": "superseded_report_not_current_qualification",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\source-qualification.json",
+      "source_sha256": "9471bf3473922c12a83a7c8f022d7f1c1d51e6eb2573567b2d1770a531e4325e",
+      "artifact_sha256": "9471bf3473922c12a83a7c8f022d7f1c1d51e6eb2573567b2d1770a531e4325e",
+      "source_bytes": 8809,
+      "artifact_bytes": 8809,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "superseded/manifest.json",
+      "role": "superseded_report_not_current_qualification",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\manifest.json",
+      "source_sha256": "1c955b9d8f89db5b9172fe1f9c11408971c5c48d2ea0c90318776250282517dd",
+      "artifact_sha256": "1c955b9d8f89db5b9172fe1f9c11408971c5c48d2ea0c90318776250282517dd",
+      "source_bytes": 2903,
+      "artifact_bytes": 2903,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "owners/expired.json",
+      "role": "final_owned_process_proof",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10715\\test_server_restart_preserves_0\\owner-proofs.json",
+      "source_sha256": "28fcbb206f7bd08cf7448e31862e6277ce9dafd51d2d6577b6adc68685536b44",
+      "artifact_sha256": "28fcbb206f7bd08cf7448e31862e6277ce9dafd51d2d6577b6adc68685536b44",
+      "source_bytes": 561,
+      "artifact_bytes": 561,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "owners/revoked.json",
+      "role": "final_owned_process_proof",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10715\\test_server_restart_preserves_1\\owner-proofs.json",
+      "source_sha256": "63f2e743be12e11f4cf1aaffbe269d0e9fd25448afaf04c9df2eb4ad7c72f071",
+      "artifact_sha256": "63f2e743be12e11f4cf1aaffbe269d0e9fd25448afaf04c9df2eb4ad7c72f071",
+      "source_bytes": 561,
+      "artifact_bytes": 561,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "owners/valid.json",
+      "role": "final_owned_process_proof",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10715\\test_server_restart_preserves_2\\owner-proofs.json",
+      "source_sha256": "064abd3589c7f73d9bbf61477a66e0f4005e949a71f8cd95463476740874f387",
+      "artifact_sha256": "064abd3589c7f73d9bbf61477a66e0f4005e949a71f8cd95463476740874f387",
+      "source_bytes": 561,
+      "artifact_bytes": 561,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "source-qualification-v2.json",
+      "role": "current_source_qualification",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\source-qualification-v2.json",
+      "source_sha256": "b10ec736ebc556f0a3419ce5cb4c347afef00dd17f3adfef41ab5b28b0ba1a65",
+      "artifact_sha256": "b10ec736ebc556f0a3419ce5cb4c347afef00dd17f3adfef41ab5b28b0ba1a65",
+      "source_bytes": 13418,
+      "artifact_bytes": 13418,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    },
+    {
+      "path": "curate_source_v2.py",
+      "role": "explicit_allowlist_collector",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\curate_source_v2.py",
+      "source_sha256": "4756f3033dc8b986983b2d88eb188e4ee102c23d9e033fd81c1f3ab4d710c023",
+      "artifact_sha256": "4756f3033dc8b986983b2d88eb188e4ee102c23d9e033fd81c1f3ab4d710c023",
+      "source_bytes": 11752,
+      "artifact_bytes": 11752,
+      "redactions": {
+        "nxs_": 0,
+        "nxobs_": 0,
+        "ept_": 0,
+        "nxl_": 0
+      }
+    }
+  ],
+  "excluded": [
+    "private full logs",
+    "homes",
+    "databases",
+    "keys",
+    "unlisted paths"
+  ],
+  "transformations": "UTF-8 decode/encode only; no newline normalization. Token-pattern replacements only if present. Every source and artifact SHA retained independently.",
+  "redaction_patterns": {
+    "nxs_": "(?<![A-Za-z0-9_])nxs_[A-Za-z0-9_-]{20,}",
+    "nxobs_": "(?<![A-Za-z0-9_])nxobs_[A-Za-z0-9_-]{20,}",
+    "ept_": "(?<![A-Za-z0-9_])ept_[A-Za-z0-9_-]{20,}",
+    "nxl_": "(?<![A-Za-z0-9_])nxl_[A-Za-z0-9_-]{20,}"
+  },
+  "total_redactions": 0,
+  "artifact_count": 29
+}

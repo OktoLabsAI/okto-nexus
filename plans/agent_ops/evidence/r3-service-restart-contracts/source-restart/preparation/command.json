@@ -1,0 +1,21 @@
+{
+  "command": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "tests/execution_r4/test_service_restart_contracts.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\initial.xml"
+  ],
+  "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+  "python": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+  "versions": {
+    "okto-nexus": "0.3.3",
+    "okto-nexus-connector": "0.0.12",
+    "okto-nexus-connector-core": "0.0.14",
+    "mcp": "1.30.0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "status": "interrupted_prequalification",
+  "exit_code": 15,
+  "interrupted_owned_pids": [
+    48156,
+    16328
+  ],
+  "xml_exists": false,
+  "log_bytes": 1,
+  "cleanup_stop_observed": "unknown",
+  "reason": "No retained command-start marker or completed traceback proves whether the cleanup stop executed before interruption; no inference from absent output.",
+  "termination_scope": "Exact pytest node file + unique XML path selected the owned venv launcher and its direct Python worker; process ancestry and descendant argv were checked. No termination by port or executable name.",
+  "final_invocation_review": {
+    "start": "python -I SAME_LAUNCHER --home SAME_HOME --host 127.0.0.1 --port SAME_PORT --project-root ROOT --harness-root ROOT --feature-harness-integrations true --feature-hitl true --embedding-mode off",
+    "stop": "python -I SAME_LAUNCHER service stop --home SAME_HOME --host 127.0.0.1 --port SAME_PORT --json --timeout 40",
+    "shared": "Same sys.executable, child environment allowlist, cwd and dependency/product paths for start and stop. Launcher derives product roots from current runner imports; installed runner therefore passes site-packages paths.",
+    "test_sha256": "4fbcc2093da2bd6322d9fc7e2211a7a2cd33c3ce83cdb0098ebbc89aaddbc85f"
+  }
+}

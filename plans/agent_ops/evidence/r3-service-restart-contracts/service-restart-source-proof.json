@@ -1,0 +1,46 @@
+{
+  "cases": [
+    {
+      "test": "tests/execution_r4/test_service_restart_contracts.py",
+      "sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a",
+      "source_report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner-stdlib.xml",
+      "source_report_sha256": "a1e42802f5646be68feb943cd477dac51a5d628a790c9a70c329fdbe8c9909c0",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired]",
+          "time": "130.731"
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked]",
+          "time": "124.577"
+        },
+        {
+          "classname": "tests.execution_r4.test_service_restart_contracts",
+          "name": "test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid]",
+          "time": "130.229"
+        }
+      ]
+    },
+    {
+      "test": "tests/execution_r4/test_service_surviving_child.py",
+      "sha256": "2d9df736dd16db77a427b5f5761c5e7902dd6c498519963f78f8fd2d73f782f7",
+      "source_report": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t22-live-child-source-oy_hoh3y\\retry-service-inspection.xml",
+      "source_report_sha256": "e5497569ad41aa0b6fe41f33619687cc6ca0f0e6e81c6708deae4e4eb85db007",
+      "cases": [
+        {
+          "classname": "tests.execution_r4.test_service_surviving_child",
+          "name": "test_restart_pending_keeps_real_connector_child_claim_and_slot",
+          "time": "47.402"
+        }
+      ]
+    }
+  ],
+  "helpers": {
+    "tests/execution_r4/remote_renewal_helpers.py": "f9365aa8ae61c16a3ce0bdaa1108cbdba159472bc2e6a25544fd7edc7ca86ad2",
+    "tests/execution_r4/test_vertical_inventory.py": "ff7cdeb3fa3159df99749bc6244760d4e2f847cbb047e2e19daa7c95d7e56168"
+  },
+  "product_changes": false,
+  "scope": "Current final source qualifications only; redirector-based proof excluded"
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "pid": 29336,
+    "birth": 134385273023851522,
+    "parent_pid": 15652,
+    "generation": "7fce2de11eb1f917e923896008ebc09d",
+    "instance_id": "svc_d712b583091db30267191ed72920d81fe8a7915bf098884efed3ed0871c55aac",
+    "state": "crashed_owner_exited"
+  },
+  {
+    "pid": 52560,
+    "birth": 134385273778015877,
+    "parent_pid": 15652,
+    "generation": "45f7c79435cf87c2e4d9566042fc9409",
+    "instance_id": "svc_d712b583091db30267191ed72920d81fe8a7915bf098884efed3ed0871c55aac",
+    "state": "canonically_drained_owner_exited"
+  }
+]

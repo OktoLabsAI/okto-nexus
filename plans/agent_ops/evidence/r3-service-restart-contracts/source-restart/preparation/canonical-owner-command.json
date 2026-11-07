@@ -1,0 +1,14 @@
+{
+  "command": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "tests\\execution_r4\\test_service_restart_contracts.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-t23-t24-source-ceueozkh\\canonical-owner.xml"
+  ],
+  "test_sha256": "df57d70966be4ae6bb787d2ea6728d102a92f35a44a3e1aede12b325fae42651"
+}

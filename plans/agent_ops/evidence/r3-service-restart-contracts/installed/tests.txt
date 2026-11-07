@@ -1,0 +1,240 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\nexus-source-v1
+configfile: ..\..\nexus-ci-installed-o33fth2h\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 4 items
+
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_restart_contracts.py::test_server_restart_preserves_remote_binding_limits_and_invalid_grant[expired] Timeout (0:02:00)!
+Thread 0x00007e24 (most recent call first):
+  File "C:\Python313\Lib\subprocess.py", line 1609 in _readerthread
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000a7ac (most recent call first):
+  File "C:\Python313\Lib\subprocess.py", line 1609 in _readerthread
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x000048ac (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 1092 in join
+  File "C:\Python313\Lib\subprocess.py", line 1638 in _communicate
+  File "C:\Python313\Lib\subprocess.py", line 1219 in communicate
+  File "C:\Python313\Lib\subprocess.py", line 556 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_restart_contracts.py", line 194 in stop
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 59 in run
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 93 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c1ec (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x00008514 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c244 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000a05c (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000858c (most recent call first):
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 775 in _poll
+  File "C:\Python313\Lib\asyncio\windows_events.py", line 446 in select
+  File "C:\Python313\Lib\asyncio\base_events.py", line 1995 in _run_once
+  File "C:\Python313\Lib\asyncio\base_events.py", line 678 in run_forever
+  File "C:\Python313\Lib\asyncio\base_events.py", line 707 in run_until_complete
+  File "C:\Python313\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Python313\Lib\asyncio\runners.py", line 194 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_restart_contracts.py", line 359 in test_server_restart_preserves_remote_binding_limits_and_invalid_grant
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\python.py", line 187 in pytest_pyfunc_call
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\python.py", line 1798 in runtest
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 184 in pytest_runtest_call
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 250 in <lambda>
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 361 in from_call
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 249 in call_and_report
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 139 in runtestprotocol
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 118 in pytest_runtest_protocol
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 411 in pytest_runtestloop
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 387 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 333 in wrap_session
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 380 in pytest_cmdline_main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\config\__init__.py", line 262 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\config\__init__.py", line 286 in _console_main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pytest\__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+PASSED [ 25%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_restart_contracts.py::test_server_restart_preserves_remote_binding_limits_and_invalid_grant[revoked] PASSED [ 50%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_restart_contracts.py::test_server_restart_preserves_remote_binding_limits_and_invalid_grant[valid] Timeout (0:02:00)!
+Thread 0x000028b4 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000239c (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000beac (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x000069bc (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 161 in _next_item
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 123 in _run
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000baec (most recent call first):
+  File "C:\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 161 in _next_item
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\nexus_connector_core\offloop.py", line 123 in _run
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000c164 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000b6f4 (most recent call first):
+  File "C:\Python313\Lib\concurrent\futures\thread.py", line 90 in _worker
+  File "C:\Python313\Lib\threading.py", line 992 in run
+  File "C:\Python313\Lib\threading.py", line 1041 in _bootstrap_inner
+  File "C:\Python313\Lib\threading.py", line 1012 in _bootstrap
+
+Thread 0x0000858c (most recent call first):
+  File "C:\Python313\Lib\ssl.py", line 717 in create_default_context
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\httpx\_config.py", line 40 in create_ssl_context
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\httpx\_transports\default.py", line 297 in __init__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\httpx\_client.py", line 1445 in _init_transport
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\httpx\_client.py", line 1402 in __init__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\okto_nexus_connector\transport\https_client.py", line 299 in __aenter__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\okto_nexus_connector\daemon\r4_control.py", line 384 in _attempt
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\okto_nexus_connector\daemon\r4_control.py", line 619 in cycle
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\nexus_connector_core\automation.py", line 131 in supervise_connection
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\okto_nexus_connector\daemon\r4_control.py", line 673 in _run
+  File "C:\Python313\Lib\asyncio\events.py", line 89 in _run
+  File "C:\Python313\Lib\asyncio\base_events.py", line 2033 in _run_once
+  File "C:\Python313\Lib\asyncio\base_events.py", line 678 in run_forever
+  File "C:\Python313\Lib\asyncio\base_events.py", line 707 in run_until_complete
+  File "C:\Python313\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Python313\Lib\asyncio\runners.py", line 194 in run
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_restart_contracts.py", line 359 in test_server_restart_preserves_remote_binding_limits_and_invalid_grant
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\python.py", line 187 in pytest_pyfunc_call
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\python.py", line 1798 in runtest
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 184 in pytest_runtest_call
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 250 in <lambda>
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 361 in from_call
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 249 in call_and_report
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 139 in runtestprotocol
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\runner.py", line 118 in pytest_runtest_protocol
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 411 in pytest_runtestloop
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 387 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 333 in wrap_session
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\main.py", line 380 in pytest_cmdline_main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\config\__init__.py", line 262 in _main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\_pytest\config\__init__.py", line 286 in _console_main
+  File "C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\pytest\__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+PASSED [ 75%]
+..\r3-cooperative-drain-09ucmgsr\nexus-source-v1\tests\execution_r4\test_service_surviving_child.py::test_restart_pending_keeps_real_connector_child_claim_and_slot PASSED [100%]
+
+============================== warnings summary ===============================
+..\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/execution_r4/test_service_restart_contracts.py: 9 warnings
+tests/execution_r4/test_service_surviving_child.py: 3 warnings
+  C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\venv\Lib\site-packages\websockets\exceptions.py:139: DeprecationWarning: ConnectionClosed.code is deprecated; use Protocol.close_code or ConnectionClosed.rcvd.code
+    warnings.warn(  # deprecated in 13.1 - 2024-09-21
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\r3-cooperative-drain-09ucmgsr\nexus-service-restart-contracts\canonical\tests.xml -
+================= 4 passed, 13 warnings in 418.85s (0:06:58) ==================

@@ -1,0 +1,7 @@
+{
+  "superseded": "three-controls-explicit-origin.xml",
+  "status": "3 test PASS but not accepted as real owner restart qualification",
+  "reason": "Windows venv launcher PID can differ from actual Server PID. Prior helper killed/waited launcher and checked healthz, without canonical owner PID/birth/generation proof. No assertion that the old real owner died follows from those checks alone.",
+  "correction": "Direct base interpreter retaining selected product import paths; readiness endpoint plus ServeLock identity, owner PID/birth/ancestry before kill, dead owner after wait, new canonical generation and PID.",
+  "product_changed": false
+}

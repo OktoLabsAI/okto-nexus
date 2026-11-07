@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="53.750" timestamp="2026-11-07T09:10:15.346697-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_service_surviving_child" name="test_restart_pending_keeps_real_connector_child_claim_and_slot" time="48.591"><failure message="okto_nexus.application.terminal_connection.ConnectionError: The Server refused this request.">tests\execution_r4\test_service_surviving_child.py:264: in test_restart_pending_keeps_real_connector_child_claim_and_slot
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_service_surviving_child.py:251: in run
+    await scenario()
+tests\execution_r4\test_service_surviving_child.py:186: in scenario
+    observed = await asyncio.to_thread(project.call, 'GET', PREFIX+'/runtime/shutdown')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\remote_renewal_helpers.py:140: in call
+    response = self.http(method, path, body)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\outbound\operator_client.py:138: in __call__
+    return super().__call__(method, path, body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\outbound\terminal_http.py:66: in __call__
+    raise ConnectionError(error.get('code', 'REQUEST_REFUSED'), error.get('message', 'The Server refused this request.'),
+E   okto_nexus.application.terminal_connection.ConnectionError: The Server refused this request.</failure></testcase></testsuite></testsuites>
