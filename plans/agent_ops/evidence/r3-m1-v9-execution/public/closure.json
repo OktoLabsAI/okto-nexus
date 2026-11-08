@@ -1,0 +1,40 @@
+{
+  "format": "okto.m1.closed_campaign",
+  "revision": 1,
+  "campaign_revision": 9,
+  "closed_at": "2026-11-08T01:13:11.568559+00:00",
+  "status": "CLOSED_AFTER_PREPARATION_FAILURE_NO_M1_ACCEPTANCE",
+  "proposal_sha256": "099215c658e4b16cfb69456ea1ad9a21875b45a090c439a6504b05912491d204",
+  "original_proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "controller_checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+  "faults_preserved": [
+    "OBSERVATION_UNKNOWN",
+    "STOP_UNCONFIRMED",
+    "CAMPAIGN_RUNNER_EXCEPTION"
+  ],
+  "controller_mutated": false,
+  "cumulative_reserved_admissions": 5,
+  "new_reserved_admissions": 2,
+  "historical_confirmed_productive_admissions": 2,
+  "new_confirmed_productive_admissions": 1,
+  "productive_confirmation_scope": "Local connection test only; useful work was never dispatched to a native turn.",
+  "new_observed_tokens": 21815,
+  "carry_in_minimum_observed_tokens": 67658,
+  "prior_carry_in_tokens": 45843,
+  "billing_final": false,
+  "closed_without_force": true,
+  "replay_allowed": false,
+  "all_temporary_tasks_absent": true,
+  "data_retained": true,
+  "first_useful_result": false,
+  "acceptance_promoted": false,
+  "evidence_sha256": {
+    "local-setup-result.json": "c9a8af8cf534f6fa790ecc754e9de8ada8185dd319d6b69b62b98ade9a345909",
+    "m1v9-local-work-01-runner-error.json": "2899da8dd8415401adf915af57b8d6221bf9d16ed7dbdc722bfae61d62e8af14",
+    "cleanup-nexus.json": "14dd54713fee196cee3fcd3df604254577e9ff3403dc1ae7f4600949d40962f1",
+    "final-presence.json": "7fc65d76a001c01e288d5929aee750ce1c232122f50587faefedd3b3cfa82bdd",
+    "lifecycle-nexus-uninstall-result.json": "9b4e79e669274efb318986e29cff0ea1d53c864cf664f8ba1502af9b982eef05"
+  },
+  "diagnosis_sha256": "4e4404915bcc2599c139c6b4e54a0dbcbbfa20954ec1255c4aa9b6428e3a1518",
+  "limits": "Local setup succeeded. Durable startup refusal proves no native admission for the useful session; the original SQLite subtype is not retained. The work reservation, permanent faults and unbound collector stay unchanged. Observed usage is not final billing. No successor execution is authorized by this closure."
+}

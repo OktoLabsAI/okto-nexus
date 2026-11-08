@@ -1,0 +1,79 @@
+{
+  "started": 1794099646.3425004,
+  "finished": 1794099735.7597132,
+  "cli_exit": 0,
+  "reported_state": "configured",
+  "reported_code": null,
+  "summary": {
+    "known_observed_tokens": 67658,
+    "new_observed_tokens": 21815,
+    "carry_in_tokens": 45843,
+    "reserved_requests": 4,
+    "new_reserved_requests": 1,
+    "policy": {
+      "revision": 9,
+      "carry_in_admissions": 3,
+      "carry_in_tokens": 45843,
+      "max_cumulative_admissions": 9,
+      "max_new_admissions": 6,
+      "preventive_cumulative_tokens": 200000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+      "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+      "predecessor_faults": [
+        "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+        "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+        "predecessor_faults": [
+          "CAMPAIGN_RUNNER_EXCEPTION"
+        ]
+      }
+    },
+    "current": [],
+    "can_admit": true,
+    "reasons": [],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "monitor": {
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\connection-tests",
+    "home_identity": [
+      14764524303808498864,
+      11821949025048577
+    ],
+    "prior_journals": [],
+    "journal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\connection-tests\\719446fcb7804401b07915d12f63b8eb\\journal.db",
+    "journal_identity": [
+      14764524303808498864,
+      11258999071646252
+    ],
+    "cursor": 31,
+    "high_water": 21815,
+    "thread": "01a1b8ac-d746-7dc2-abc1-b7df91362ba5",
+    "turn": "01a1b8ac-fc15-7d73-bc64-73e0644a2094",
+    "started": true,
+    "terminal": true,
+    "usage_seen": true,
+    "caught_up": true,
+    "result_stage": "SUCCEEDED",
+    "close_stage": "SUBMITTED",
+    "owned_slot_released": true
+  },
+  "stop_selected": null,
+  "stop_wrapper_exits": [],
+  "maximum_poll_start_interval_seconds": 0.3415678000310436,
+  "poll_count": 360,
+  "publication_diagnostics": {
+    "attempts": 361,
+    "published_snapshots": 360,
+    "windows_publication_errors": 1,
+    "last_winerror": 5
+  },
+  "output_sha256": "d4f375340b99bdc849cebb28027c17fbcb00cb7291ad121711342de3ff67db8b"
+}

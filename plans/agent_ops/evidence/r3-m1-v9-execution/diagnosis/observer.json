@@ -1,0 +1,83 @@
+{
+  "status": "READ_ONLY_DIAGNOSIS_NO_RUNTIME_OR_PRODUCT_CHANGES",
+  "observed_at_utc": "2026-11-08T01:11:25.744412+00:00",
+  "confirmed": [
+    {
+      "finding": "Global 0.5s HTTP timeout",
+      "source": "m1_v9_work.py",
+      "line": 89,
+      "detail": "The same mutable transport serves admission, binding, observation, control and final receipt GET. The limit is not isolated to monitoring reads."
+    },
+    {
+      "finding": "First observation error specificity is lost",
+      "source": "controller/controller.py",
+      "line": 327,
+      "detail": "poll catches all observation Exceptions and persists only OBSERVATION_UNKNOWN, retaining neither route/method nor safe code/stage/elapsed time."
+    },
+    {
+      "finding": "Control attempt can end observation before reconciliation",
+      "source": "m1_v9_work.py",
+      "line": 190,
+      "detail": "interrupt/close do not append stop_owner subprocesses. all([]) is True, so this branch exits after a selected control even without a terminal intent/operation receipt. It does not claim termination, but it stops the observation loop prematurely."
+    },
+    {
+      "finding": "Final read failed, original failure cause not retained",
+      "provenance": "Root-provided sanitized traceback",
+      "detail": "ConnectionError SERVER_UNREACHABLE at flow.operation(operation_id,flow.binding()); binding GET /connections/me -> terminal_http.py:41. This code also covers URLError/OSError, so it alone does not prove a socket timeout."
+    }
+  ],
+  "native_startup_hypothesis": {
+    "conclusion": "Not established; examined spawn/handshake operations are offloaded rather than executed directly by the HTTP event loop.",
+    "source_evidence": [
+      "connections_v1.me awaits anyio.to_thread.run_sync(current_agent_revisions).",
+      "runtime_bridge._open awaits asyncio.to_thread(_guarded_start) or process_launch.produce; produce also uses asyncio.to_thread.",
+      "current_agent_revisions uses a writer UoW by default, so SQLite/worker contention is possible, but no duration/lock trace from this run proves that cause."
+    ],
+    "limits": "This is not a universal audit of every launch/auth callback. Later READY on the same PID does not identify which earlier socket/worker/storage wait failed."
+  },
+  "separate_canonical_failure": {
+    "provenance": "Readonly peer coordination_review message; public report to be linked by root.",
+    "opening": "op_82adce0483a49d7020b53eeab5ce5423",
+    "state": "FAILED/PREPARATION_FAILED",
+    "possible_effect": false,
+    "retry_safe": true,
+    "retirement": "startup_refusal/no_native_admission",
+    "native_stream_epoch": null,
+    "recovery_event": {
+      "id": 2,
+      "at": "2026-11-08T01:03:10.218089Z",
+      "exception_class": "OktoNexusError",
+      "code": "DB_ERROR",
+      "projected_stage": "agent runtime history",
+      "reason": null
+    },
+    "useful_dispatch": "attempt_no0 / INITIAL_OPEN_FAILED",
+    "interrupt": "resolved intent can_submit=false/session_not_ready; no admitted operation/receipt",
+    "limit": "No original SQLite message/code was retained here. Do not attribute DB_ERROR to the 0.5s timeout or claim native startup blocked this request. No missing usage is rewritten as authoritative zero."
+  },
+  "minimal_robust_direction": [
+    "Keep controller/checkpoint ownership and all mutations on one owner. Split the watchdog/accounting tick from blocking multi-GET facade calls; retain one coalesced read worker per lane, never a new worker every tick.",
+    "Keep the <=1s watchdog sampling and original 120s clock active while reads are pending. Pending/stale coverage blocks admissions and is not fresh accounting. A single slow read must not block deadline/control selection.",
+    "Use a separate bounded canonical control path, persist its immutable intent/action before dispatch, and observe that same intent/receipt with GET only. Never replay a productive/control POST to repair uncertainty, never abandon an owned worker on timeout, and join readers before releasing stores/ownership.",
+    "Remove the blanket .5 transport override only as part of this separation; merely increasing it in the synchronous loop does not preserve the monitor/deadline contract.",
+    "Publish the first safe failure classification: method, route template, canonical code/stage, configured timeout, monotonic elapsed, and phase. Never publish response bodies, messages, headers, SQL, auth or provider output.",
+    "On terminal opening refusal without a stream, retain the canonical failure and reservation, distinguish unavailable usage from observed usage, and stop the lane without fabricating an epoch or dispatching again.",
+    "Do not exit interrupt/close observation via all([]); distinguish owner-process stop from canonical control selection and preserve explicit unresolved outcomes."
+  ],
+  "focused_test_recommendations_not_executed": [
+    "A coalesced read held on a synthetic Event beyond0.5s: <=1s watchdog ticks continue, at most one reader exists, no second admission, original120s deadline selects control once without waiting for that reader.",
+    "A terminal PREPARATION_FAILED opening with no stream: preserve exact canonical reason, no invented usage/epoch, no replay or second productive request.",
+    "Interrupt resolve response uncertainty with stops=[]: do not falsely exit as reconciled; GET the same intent, never repeat POST, preserve can_submit=false/session_not_ready honestly.",
+    "Final receipt GET failure after an earlier observation fault: preserve first error metadata, select no second control, retain/join owned readers and produce a bounded public result."
+  ],
+  "effects_performed": {
+    "tests": 0,
+    "HTTP": 0,
+    "product_CLI": 0,
+    "service": 0,
+    "provider": 0,
+    "credential": 0,
+    "DB_reads": 0
+  },
+  "historical_state_unchanged": true
+}

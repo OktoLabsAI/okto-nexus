@@ -1,0 +1,23 @@
+{
+  "status": "NORMAL_CLEANUP_CONFIRMED",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-6e7df6cdba864d312a10019224651c771e6b603618ad4524cc7821e2fffef32a",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-f6f08d745dd900aa1cb17838507146770ed036cb39ab7bae1479081406f09bd6",
+      "absent": true
+    }
+  },
+  "exclusive_port_probe_passed_not_reserved": 54913,
+  "time": 1794099964.1001015,
+  "data_preserved": true,
+  "force_used": false,
+  "replayed": false,
+  "connector_started": false,
+  "service_actions": 4,
+  "proof_sha256": "14dd54713fee196cee3fcd3df604254577e9ff3403dc1ae7f4600949d40962f1",
+  "controller_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+  "report_exists": false
+}

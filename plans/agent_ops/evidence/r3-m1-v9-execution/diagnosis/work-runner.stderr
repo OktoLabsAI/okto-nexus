@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "C:\Users\jpamb\AppData\Local\Temp\m1-v9-preparation-t4xaqhca\draft\m1_v9_work.py", line 208, in <module>
+    receipt=flow.operation(operation_id,flow.binding())
+                                        ~~~~~~~~~~~~^^
+  File "C:\Users\jpamb\AppData\Local\Temp\m1-v9-preparation-t4xaqhca\draft\installation\venv\Lib\site-packages\okto_nexus\application\terminal_work.py", line 31, in binding
+    me = self.api('GET', '/connections/me')
+  File "C:\Users\jpamb\AppData\Local\Temp\m1-v9-preparation-t4xaqhca\draft\installation\venv\Lib\site-packages\okto_nexus\application\terminal_work.py", line 25, in api
+    return self.call(method, PREFIX + path, body)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\m1-v9-preparation-t4xaqhca\draft\response_loss.py", line 91, in __call__
+    return self.call(method, path, body)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jpamb\AppData\Local\Temp\m1-v9-preparation-t4xaqhca\draft\m1_v9_work.py", line 98, in counted
+    return transport(method,path,body)
+  File "C:\Users\jpamb\AppData\Local\Temp\m1-v9-preparation-t4xaqhca\draft\installation\venv\Lib\site-packages\okto_nexus\adapters\outbound\terminal_http.py", line 41, in __call__
+    raise ConnectionError('OUTCOME_UNKNOWN' if method != 'GET' else 'SERVER_UNREACHABLE',
+        'The Server response is unavailable. Inspect or resume the same saved request.',
+        possible_effect=method != 'GET') from None
+okto_nexus.application.terminal_connection.ConnectionError: The Server response is unavailable. Inspect or resume the same saved request.

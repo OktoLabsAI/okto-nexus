@@ -1,0 +1,35 @@
+{
+  "status": "PARTIAL_EXECUTION_CLOSED_NO_M1_ACCEPTANCE",
+  "installation": "INSTALLED_VERIFIED",
+  "package_payloads": 982,
+  "new_reserved_admissions": 2,
+  "cumulative_reserved_admissions": 5,
+  "new_confirmed_productive_admissions": 1,
+  "new_observed_tokens": 21815,
+  "cumulative_minimum_observed_tokens": 67658,
+  "usage_final_or_billed": false,
+  "local_setup": "SUCCEEDED_CONFIGURED",
+  "local_useful": "PREPARATION_FAILED_BEFORE_NATIVE_ADMISSION",
+  "canonical_cause": "DB_ERROR; SQLite subtype not retained",
+  "observer_faults": [
+    "OBSERVATION_UNKNOWN",
+    "STOP_UNCONFIRMED",
+    "CAMPAIGN_RUNNER_EXCEPTION"
+  ],
+  "explicit_service_actions": 4,
+  "normal_stop": "DRAINED",
+  "physical_exit": "RETAINED_HANDLE_PID_BIRTH_GENERATION_CONFIRMED",
+  "force_used": false,
+  "replay_used": false,
+  "connector_started": false,
+  "final_cleanup": "PASS",
+  "data_retained": true,
+  "first_useful_result": false,
+  "new_acceptances": [],
+  "limits": [
+    "Setup success is not M1 completion or BASE-06 useful result.",
+    "Controller and reservation were copied without repair/reset.",
+    "No provider transcript, personal auth/config, vault credential, raw campaign database or private setup output is collected.",
+    "The diagnostic improvement prepared later cannot recover the original SQLite subtype retrospectively."
+  ]
+}

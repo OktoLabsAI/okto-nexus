@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-08T01:02:03.376666+00:00",
+  "updated_at": "2026-11-08T01:13:12.703927+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12377,7 +12377,7 @@
       ]
     },
     "r3_m1_v9_execution": {
-      "status": "INSTALLATION_VERIFIED_CHECKPOINT",
+      "status": "PARTIAL_EXECUTION_CLOSED_NO_M1_ACCEPTANCE",
       "proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
       "approval_sha256": "44dba586ced5eb3319bd4243a68ea3b2943b29cff1326f63fd8e942bf8ab8676",
       "policy": {
@@ -12390,16 +12390,17 @@
         "operational_tolerance": 700000,
         "deadline_seconds": 120
       },
-      "new_reserved_admissions": 0,
-      "service_actions": 0,
+      "new_reserved_admissions": 2,
+      "service_actions": 4,
       "force_authorized": false,
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v9-authorization/authorization.json",
-        "plans/agent_ops/evidence/r3-m1-v9-installation/qualification.json"
+        "plans/agent_ops/evidence/r3-m1-v9-installation/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-v9-execution/qualification.json"
       ],
-      "checkpoint_at_utc": "2026-11-08T00:54:35.473194+00:00",
-      "checkpoint_scope": "Historical installation completion only. The zero counters in this entry are scoped to this installation checkpoint, not the later live campaign; root records later lifecycle/provider progress separately.",
-      "live_campaign_state": "NOT_ASSERTED_BY_THIS_CHECKPOINT",
+      "checkpoint_at_utc": "2026-11-08T01:13:11.568559+00:00",
+      "checkpoint_scope": "Final v9 closure. Installation remains a nested historical checkpoint; counters reflect the completed finite campaign.",
+      "live_campaign_state": "CLOSED_NORMAL_CLEANUP_CONFIRMED",
       "derived_proposal_sha256": "099215c658e4b16cfb69456ea1ad9a21875b45a090c439a6504b05912491d204",
       "derived_authorization_sha256": "301a6a20779730e1cb684882266e9c4dbdf990e26042aa5aca9d8616a344e5e4",
       "direct_user_approval_for_corrected_hash": false,
@@ -12425,8 +12426,23 @@
         "first_refusal_effects": false,
         "requirements_change": "Exactly three CR bytes removed; wheel URIs/order/hashes unchanged.",
         "result": "plans/agent_ops/evidence/r3-m1-v9-installation/installation/installation-result.json",
-        "acceptance_promoted": false
-      }
+        "acceptance_promoted": false,
+        "checkpoint_at_utc": "2026-11-08T00:54:35.473194+00:00"
+      },
+      "cumulative_reserved_admissions": 5,
+      "new_observed_tokens": 21815,
+      "cumulative_minimum_observed_tokens": 67658,
+      "local_setup": "SUCCEEDED_CONFIGURED",
+      "local_useful": "PREPARATION_FAILED_BEFORE_NATIVE_ADMISSION",
+      "faults": [
+        "OBSERVATION_UNKNOWN",
+        "STOP_UNCONFIRMED",
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ],
+      "force_used": false,
+      "cleanup": "NORMAL_EXIT_TASKS_ABSENT_DATA_RETAINED",
+      "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+      "controller_checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588"
     }
   },
   "history": [
@@ -13557,6 +13573,15 @@
       "summary": "The original approved requirements contained 3 CRLF pairs; strict installer refused REQUIREMENTS_CHANGED before reservation/effects. Transparent same-scope derivation removes only 3 CR bytes; no direct user approval of the corrected hash is claimed. One offline installation completed with 982 payloads/imports verified and pip check 0. This historical checkpoint neither asserts later live state nor promotes M1/BASE-06 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v9-installation/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "milestone": "M1 v9 partial execution and normal closure",
+      "status": "PARTIAL_EXECUTION_CLOSED_NO_M1_ACCEPTANCE",
+      "summary": "Local setup succeeded (21815 new observed tokens); useful open failed DB_ERROR/PREPARATION_FAILED before native admission. Observer faults/reservation retained; same-generation normal drain and retained-handle physical exit, then task uninstall. No M1/BASE-06 promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v9-execution/qualification.json"
       ]
     }
   ]

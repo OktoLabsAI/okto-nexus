@@ -1,0 +1,15 @@
+{
+  "state": "degraded",
+  "reason": "SERVICE_UNREACHABLE",
+  "instance_id": "svc_6e7df6cdba864d312a10019224651c771e6b603618ad4524cc7821e2fffef32a",
+  "generation": null,
+  "pid": null,
+  "ready_for_queries": false,
+  "supervisor": null,
+  "task": {
+    "name": "OktoNexus-server-6e7df6cdba864d312a10019224651c771e6b603618ad4524cc7821e2fffef32a",
+    "state": 4,
+    "digest": "56f7022a93b7bcb0e24c5b326c1ed62fcb5842cc408a7d11b5b414cea47d73d0"
+  },
+  "observed_at": 1794099585.5168624
+}

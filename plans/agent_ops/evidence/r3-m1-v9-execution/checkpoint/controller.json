@@ -1,0 +1,129 @@
+{
+  "ancestry": {
+    "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+    "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+    "predecessor_faults": [
+      "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+    ],
+    "prior_ancestry": {
+      "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+      "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+      "predecessor_faults": [
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ]
+    }
+  },
+  "authorization_sha256": "301a6a20779730e1cb684882266e9c4dbdf990e26042aa5aca9d8616a344e5e4",
+  "collector": {
+    "format": "m1-token-collector-v8",
+    "sha256": "065940251efa75a7d5af448d2cb5c3a7f1924755bfa98728410caf35ef0dbd92",
+    "state": {
+      "current_request": "m1v9-local-work-01",
+      "faults": [],
+      "max_requests": 6,
+      "requests": {
+        "m1v9-local-work-01": {
+          "operation_id": null,
+          "pre_scope": {
+            "agent_id": "m1v9-local",
+            "binding_id": "bind_9ce9caeeb220d9870438a6760fc9857f",
+            "executor_id": "exe_a3c5c67b963211699be0b3ce933efe16",
+            "server_id": "srv_60d3a838389bb9e67fe0b18bc0f67c6a",
+            "workspace_binding_id": "wxb_c64eed238ad95a85f97aa7c3d22c7eb0",
+            "workspace_id": "wsr_7d9d5620de1a6c71f85ca24a6f65e132"
+          },
+          "stage": "useful_work",
+          "state": "reserved",
+          "stream": null
+        }
+      },
+      "revision": 1,
+      "stop_at": 200000,
+      "streams": {},
+      "threads": {},
+      "tolerance": 700000,
+      "turns": {},
+      "version": 1
+    }
+  },
+  "faults": [
+    "OBSERVATION_UNKNOWN",
+    "STOP_UNCONFIRMED",
+    "CAMPAIGN_RUNNER_EXCEPTION"
+  ],
+  "format": 9,
+  "last_clock": 1794099775.1589882,
+  "owners": {
+    "local": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home"
+  },
+  "policy": {
+    "carry_in_admissions": 3,
+    "carry_in_tokens": 45843,
+    "deadline_seconds": 120,
+    "max_cumulative_admissions": 9,
+    "max_new_admissions": 6,
+    "operational_tolerance": 700000,
+    "preventive_cumulative_tokens": 200000,
+    "revision": 9
+  },
+  "proposal_sha256": "099215c658e4b16cfb69456ea1ad9a21875b45a090c439a6504b05912491d204",
+  "requests": {
+    "m1v9-local-setup": {
+      "kind": "setup",
+      "lane": "local",
+      "monitor": {
+        "caught_up": true,
+        "close_stage": "SUBMITTED",
+        "cursor": 31,
+        "high_water": 21815,
+        "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home",
+        "home_identity": [
+          14764524303808498864,
+          11821949025048577
+        ],
+        "journal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\connection-tests\\719446fcb7804401b07915d12f63b8eb\\journal.db",
+        "journal_identity": [
+          14764524303808498864,
+          11258999071646252
+        ],
+        "owned_slot_released": true,
+        "prior_journals": [],
+        "result_stage": "SUCCEEDED",
+        "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\connection-tests",
+        "started": true,
+        "terminal": true,
+        "thread": "01a1b8ac-d746-7dc2-abc1-b7df91362ba5",
+        "turn": "01a1b8ac-fc15-7d73-bc64-73e0644a2094",
+        "usage_seen": true
+      },
+      "settled": true,
+      "started": 1794099646.389339,
+      "stop_selected": null
+    },
+    "m1v9-local-work-01": {
+      "kind": "work",
+      "lane": "local",
+      "operation": "op_361a4709f8cd239395cccba1a7c9939e",
+      "recover": false,
+      "scope": {
+        "agent_id": "m1v9-local",
+        "binding_id": "bind_9ce9caeeb220d9870438a6760fc9857f",
+        "executor_id": "exe_a3c5c67b963211699be0b3ce933efe16",
+        "server_id": "srv_60d3a838389bb9e67fe0b18bc0f67c6a",
+        "workspace_binding_id": "wxb_c64eed238ad95a85f97aa7c3d22c7eb0",
+        "workspace_id": "wsr_7d9d5620de1a6c71f85ca24a6f65e132"
+      },
+      "session": "ses_110771b0028f1cd11831e6c803d1d366",
+      "settled": false,
+      "stage": "useful_work",
+      "started": 1794099761.6978507,
+      "stop_selected": {
+        "action": "interrupt",
+        "reason": "OBSERVATION_UNKNOWN"
+      },
+      "stream": null
+    }
+  },
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign",
+  "state_sha256": "7304eafd52e0ac5c297cda01d78f736f606758d850ce25fdbba6f07af419707d"
+}

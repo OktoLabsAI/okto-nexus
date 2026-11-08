@@ -1198,3 +1198,11 @@ uma afirmação sobre o estado posterior dos serviços ou da campanha em execuç
 Nenhum aceite M1/BASE-06 ou status de tarefa/cenário/marco foi promovido.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v9-installation/qualification.json`.
+
+## M1 v9 — execução parcial e encerramento normal
+
+A conexão local terminou configurada: 21.815 tokens novos observados e 67.658 cumulativos mínimos, sem afirmação de faturamento final. Duas novas reservas (cinco cumulativas) foram preservadas. A tarefa útil falhou na preparação com `DB_ERROR`/`PREPARATION_FAILED`, antes de admissão nativa; a causa específica do SQLite não foi retida. O observador também registrou `OBSERVATION_UNKNOWN`, `STOP_UNCONFIRMED` e `CAMPAIGN_RUNNER_EXCEPTION`; o checkpoint não foi alterado para apagar esses fatos.
+
+Quatro ações de serviço foram executadas. A mesma geração drenou normalmente; a saída física foi confirmada por handle retido com PID/birth e a tarefa foi desinstalada. Ambas as tarefas propostas estão ausentes, a porta está livre e os dados foram preservados. Não houve Connector, force, replay, relatório útil nem promoção de M1/BASE-06.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v9-execution/qualification.json`.

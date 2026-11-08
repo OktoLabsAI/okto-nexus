@@ -1,0 +1,79 @@
+{
+  "error_type": "ConnectionError",
+  "publication_diagnostics": {
+    "attempts": 26,
+    "published_snapshots": 26
+  },
+  "pending_publication_diagnostics": {},
+  "containment_error_type": null,
+  "summary": {
+    "known_observed_tokens": 67658,
+    "new_observed_tokens": 21815,
+    "carry_in_tokens": 45843,
+    "reserved_requests": 5,
+    "new_reserved_requests": 2,
+    "policy": {
+      "revision": 9,
+      "carry_in_admissions": 3,
+      "carry_in_tokens": 45843,
+      "max_cumulative_admissions": 9,
+      "max_new_admissions": 6,
+      "preventive_cumulative_tokens": 200000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+      "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+      "predecessor_faults": [
+        "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+        "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+        "predecessor_faults": [
+          "CAMPAIGN_RUNNER_EXCEPTION"
+        ]
+      }
+    },
+    "current": [
+      "m1v9-local-work-01"
+    ],
+    "can_admit": false,
+    "reasons": [
+      "CAMPAIGN_RUNNER_EXCEPTION",
+      "NO_ENROLLED_EVENT_STREAM",
+      "OBSERVATION_UNKNOWN",
+      "RESERVED_STREAM_NOT_BOUND",
+      "SERIAL_REQUEST_UNSETTLED",
+      "STOP_UNCONFIRMED"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "request": {
+    "kind": "work",
+    "lane": "local",
+    "stage": "useful_work",
+    "operation": "op_361a4709f8cd239395cccba1a7c9939e",
+    "session": "ses_110771b0028f1cd11831e6c803d1d366",
+    "stream": null,
+    "recover": false,
+    "scope": {
+      "server_id": "srv_60d3a838389bb9e67fe0b18bc0f67c6a",
+      "executor_id": "exe_a3c5c67b963211699be0b3ce933efe16",
+      "binding_id": "bind_9ce9caeeb220d9870438a6760fc9857f",
+      "agent_id": "m1v9-local",
+      "workspace_id": "wsr_7d9d5620de1a6c71f85ca24a6f65e132",
+      "workspace_binding_id": "wxb_c64eed238ad95a85f97aa7c3d22c7eb0"
+    },
+    "started": 1794099761.6978507,
+    "settled": false,
+    "stop_selected": {
+      "reason": "OBSERVATION_UNKNOWN",
+      "action": "interrupt"
+    }
+  },
+  "stop_wrapper_exits": [],
+  "scope": "No automatic retry; a selected canonical control is not a termination receipt."
+}

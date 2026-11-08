@@ -1,0 +1,333 @@
+{
+  "status": "POSTSTOP_METADATA_RECONCILED_READ_ONLY",
+  "observed_at_utc": "2026-11-08T01:12:19.689296+00:00",
+  "target": {
+    "session_id": "ses_110771b0028f1cd11831e6c803d1d366",
+    "work_operation_id": "op_361a4709f8cd239395cccba1a7c9939e",
+    "opening_operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+    "interrupt_client_intent_id": "m1-stop-m1v9-local-work-01",
+    "interrupt_operation_id": "op_63aaa9261ecec217e1ee4cb37ec7d54d"
+  },
+  "server": {
+    "operations": [
+      {
+        "server_id": "srv_60d3a838389bb9e67fe0b18bc0f67c6a",
+        "executor_id": "exe_a3c5c67b963211699be0b3ce933efe16",
+        "operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+        "session_id": "ses_110771b0028f1cd11831e6c803d1d366",
+        "action": "runtime.open",
+        "admission_state": "RESOLVED_TERMINAL",
+        "created_at": "2026-11-08T01:02:42.038031+00:00",
+        "parent_operation_id": null
+      },
+      {
+        "server_id": "srv_60d3a838389bb9e67fe0b18bc0f67c6a",
+        "executor_id": "exe_a3c5c67b963211699be0b3ce933efe16",
+        "operation_id": "op_361a4709f8cd239395cccba1a7c9939e",
+        "session_id": "ses_110771b0028f1cd11831e6c803d1d366",
+        "action": "turn.submit",
+        "admission_state": "RESOLVED_TERMINAL",
+        "created_at": "2026-11-08T01:02:42.055Z",
+        "parent_operation_id": "op_82adce0483a49d7020b53eeab5ce5423"
+      }
+    ],
+    "interrupt_intent": [
+      {
+        "server_id": "srv_60d3a838389bb9e67fe0b18bc0f67c6a",
+        "actor_agent_id": "operator",
+        "client_intent_id": "m1-stop-m1v9-local-work-01",
+        "intent_id": "r4intent_c1b3bc10dc9171adf4b9fcfdbbb4b537",
+        "operation_id": "op_63aaa9261ecec217e1ee4cb37ec7d54d",
+        "resolution_revision": 1,
+        "created_at": "2026-11-08T01:02:54.152Z",
+        "can_submit": 0,
+        "blocker": "session_not_ready",
+        "action": "turn.interrupt"
+      }
+    ],
+    "interrupt_admitted_operations": [],
+    "session": [
+      {
+        "server_id": "srv_60d3a838389bb9e67fe0b18bc0f67c6a",
+        "executor_id": "exe_a3c5c67b963211699be0b3ce933efe16",
+        "session_id": "ses_110771b0028f1cd11831e6c803d1d366",
+        "binding_id": "bind_9ce9caeeb220d9870438a6760fc9857f",
+        "workspace_id": "wsr_7d9d5620de1a6c71f85ca24a6f65e132",
+        "open_operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+        "owner_generation": 1,
+        "lifecycle_state": "CLOSED",
+        "stream_epoch": null,
+        "lease_state": "CLOSED",
+        "local_retirement_revision": 8,
+        "local_journal_name": "session-4a1be83b7ab87ddf7fd9aae130df6ddaa08b90e69d14c0475f598ecad068828e.db"
+      }
+    ],
+    "receipts": [
+      {
+        "operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+        "receipt_revision": 1,
+        "stage": "FAILED",
+        "possible_effect": 0,
+        "retry_safe": 1,
+        "error_code": "PREPARATION_FAILED",
+        "received_at": "2026-11-08T01:03:15.342Z"
+      }
+    ],
+    "dispatch": [
+      {
+        "operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+        "dispatch_state": "RESOLVED_TERMINAL",
+        "attempt_no": 1,
+        "connection_generation": 2,
+        "lease_serial": null,
+        "last_receipt_revision": 1,
+        "dispatch_phase": "OPEN_AUTHORIZED_PENDING_LEASE",
+        "error_code": null,
+        "possible_effect": null
+      },
+      {
+        "operation_id": "op_361a4709f8cd239395cccba1a7c9939e",
+        "dispatch_state": "RESOLVED_TERMINAL",
+        "attempt_no": 0,
+        "connection_generation": null,
+        "lease_serial": null,
+        "last_receipt_revision": null,
+        "dispatch_phase": null,
+        "error_code": "INITIAL_OPEN_FAILED",
+        "possible_effect": 0
+      }
+    ],
+    "retirement": [
+      {
+        "evidence_kind": "startup_refusal",
+        "release_kind": "no_native_admission",
+        "opening_operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+        "owner_generation": 1,
+        "retirement_revision": 8
+      }
+    ],
+    "startup_refusal": [
+      {
+        "operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+        "session_id": "ses_110771b0028f1cd11831e6c803d1d366",
+        "accepted_at": "2026-11-08T01:03:15.369831Z",
+        "kind": "startup_failure",
+        "native_absent": 1,
+        "capacity_type": "null"
+      }
+    ],
+    "leases": [],
+    "watermarks": [],
+    "event_counts": [],
+    "result_metadata": [],
+    "tool_credential_status_only": [
+      {
+        "status": "REMOVED",
+        "count": 1
+      }
+    ],
+    "capability_status_only": [
+      {
+        "audience": "nexus-mcp-session",
+        "revocation_status": "not_revoked",
+        "count": 1
+      }
+    ],
+    "store_binding_not_session_scoped": [
+      {
+        "count": 1,
+        "import_complete_count": 1
+      }
+    ],
+    "recovery_diagnostics": [
+      {
+        "id": 2,
+        "executor_id": "exe_a3c5c67b963211699be0b3ce933efe16",
+        "created_at": "2026-11-08T01:03:10.218089Z",
+        "code": "RECOVERY_SESSION_BLOCKED",
+        "agent_id": "m1v9-local",
+        "exception_class": "OktoNexusError",
+        "error_code": "DB_ERROR",
+        "stage": "agent runtime history",
+        "reason": null
+      }
+    ]
+  },
+  "core": {
+    "owned-slots.db": {
+      "owned_slot_reservations": [],
+      "execution_turn_slots": [],
+      "execution_capacity_reservations": []
+    },
+    "session-4a1be83b7ab87ddf7fd9aae130df6ddaa08b90e69d14c0475f598ecad068828e.db": {
+      "operations_v2": [
+        {
+          "operation_id": "op_82adce0483a49d7020b53eeab5ce5423",
+          "session_id": "ses_110771b0028f1cd11831e6c803d1d366",
+          "stage": "FAILED",
+          "possible_effect": 0,
+          "retry_safe": 1,
+          "error_code": "PREPARATION_FAILED"
+        }
+      ],
+      "session_claims": [],
+      "session_lease_state": [],
+      "session_open_generations": [],
+      "event_streams": [],
+      "process_births": [],
+      "process_launches": [],
+      "owned_slot_reservations": [],
+      "event_count": 0
+    }
+  },
+  "timeline": {
+    "seconds_open_created_to_recovery_diagnostic": 28.180058
+  },
+  "usage": {
+    "matching_server_event_count": 0,
+    "matching_core_event_count": 0,
+    "matching_stream": false,
+    "observed_work_tokens": null,
+    "classification": "NO_USAGE_EVIDENCE_NOT_ZERO",
+    "controller_known_tokens_as_reported_by_root": 67658,
+    "setup_tokens_as_reported_by_root": 21815,
+    "controller_values_independently_recomputed": false,
+    "billing_final": false
+  },
+  "findings": [
+    "Opening has matching Server/Core FAILED PREPARATION_FAILED receipt with possible_effect=false; local retirement is startup_refusal/no_native_admission.",
+    "Work was admitted as an initial-turn intention but dispatch attempt_no is0; canonical terminal dispatch reason is INITIAL_OPEN_FAILED. No own work receipt/result exists.",
+    "Interrupt is only a resolved client intent blocked by session_not_ready; no execution operation or receipt was admitted. Do not claim a confirmed native interrupt.",
+    "No matching Core claim, lease, process birth/launch, event stream or owned slot exists. This is not a released=1 claim: the persisted refusal/retirement proves the unopened path.",
+    "Sanitized persisted diagnostic is OktoNexusError DB_ERROR at agent runtime history, without a more specific reason or original SQLite exception.",
+    "REMOVED tool credential metadata plus issued session capability proves tools preparation advanced past initial ApprovedLocalLaunch and capability issue/store. Failure was before authorize_r4 returned an executor; the exact failing call remains unknown.",
+    "Session capability revoked_at NULL alone does not prove usable authority: the current session is CLOSED and current guards still apply.",
+    "execution_embedded_store_bindings has no session_id column; its installation-wide row cannot be attributed as a session-specific stage proof."
+  ],
+  "checks_already_run": {
+    "mode": "SQLite mode=ro + query_only",
+    "per_db_deadline_seconds": 5,
+    "integrity_check_max_errors": 1,
+    "foreign_key_max_rows": 11,
+    "results": {
+      "nexus.db": {
+        "integrity_check": "ok",
+        "foreign_key_violations": 0
+      },
+      "owned-slots.db": {
+        "integrity_check": "ok",
+        "foreign_key_violations": 0
+      },
+      "session-4a1be83b7ab87ddf7fd9aae130df6ddaa08b90e69d14c0475f598ecad068828e.db": {
+        "integrity_check": "ok",
+        "foreign_key_violations": 0
+      }
+    },
+    "check_scope": "Executed once during schema inspection before this collection; does not exclude a past transient SQLITE_BUSY."
+  },
+  "sources": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\nexus.db": {
+      "bytes": 2502656,
+      "sha256": "1757eca7318bee9486719660d96198d6a54110f53663de9b06977b7ea4729305"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\nexus.db-wal": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\owned-slots.db": {
+      "bytes": 131072,
+      "sha256": "e930f752f8a6d8b6086e91e4b39a62c803f9022c132071cf5764dd6b641dd91e"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\owned-slots.db-wal": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\session-4a1be83b7ab87ddf7fd9aae130df6ddaa08b90e69d14c0475f598ecad068828e.db": {
+      "bytes": 163840,
+      "sha256": "d8e623d6d8e78acffc5f871a78c982e01afdc5f99242069a3a66c6aac20f27ef"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\session-4a1be83b7ab87ddf7fd9aae130df6ddaa08b90e69d14c0475f598ecad068828e.db-wal": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "source_hashes_after": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\nexus.db": {
+      "bytes": 2502656,
+      "sha256": "1757eca7318bee9486719660d96198d6a54110f53663de9b06977b7ea4729305"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\nexus.db-wal": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\owned-slots.db": {
+      "bytes": 131072,
+      "sha256": "e930f752f8a6d8b6086e91e4b39a62c803f9022c132071cf5764dd6b641dd91e"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\owned-slots.db-wal": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\session-4a1be83b7ab87ddf7fd9aae130df6ddaa08b90e69d14c0475f598ecad068828e.db": {
+      "bytes": 163840,
+      "sha256": "d8e623d6d8e78acffc5f871a78c982e01afdc5f99242069a3a66c6aac20f27ef"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign\\nexus-home\\core-runtime\\session-4a1be83b7ab87ddf7fd9aae130df6ddaa08b90e69d14c0475f598ecad068828e.db-wal": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "unchanged": true,
+  "limits": [
+    "No controller, repository, database or authorization was modified.",
+    "No product CLI, network, provider, service, process ownership probe or personal credential access was performed.",
+    "No provider payload, transcript, output_text, credential metadata, secret hash or token was selected/published.",
+    "No live replay or new admission follows from this report; the retained campaign fault/reservations remain unchanged.",
+    "Physical stop/uninstall and known controller totals are supplied by root; this report only reconciles the stopped databases.",
+    "No SQL exception cause, native handshake failure, zero billing or zero consumed tokens is inferred from absence of rows."
+  ],
+  "interpretation_source_hashes": [
+    {
+      "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_agent_recovery.py",
+      "sha256": "0b177e5e018e38356731d8af905dc4aad4c8424219fa162a63843796c6621588",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_agent_recovery.py",
+      "installed_sha256": "0b177e5e018e38356731d8af905dc4aad4c8424219fa162a63843796c6621588",
+      "bytes_equal": true
+    },
+    {
+      "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_dispatch.py",
+      "sha256": "4c19ee1ee1c7f75f0afdb4df19ec4ad3a3da289cb751fd647e3389327ab52fdd",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_dispatch.py",
+      "installed_sha256": "4c19ee1ee1c7f75f0afdb4df19ec4ad3a3da289cb751fd647e3389327ab52fdd",
+      "bytes_equal": true
+    },
+    {
+      "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_tools.py",
+      "sha256": "b2a2c49569b2343e4744a287bd1c40915d2b5d439c5f007b4ec5508155a5261c",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_tools.py",
+      "installed_sha256": "b2a2c49569b2343e4744a287bd1c40915d2b5d439c5f007b4ec5508155a5261c",
+      "bytes_equal": true
+    },
+    {
+      "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_startup_refusal.py",
+      "sha256": "c4e5449f6c9c569626870d236efb63e6e1849d45860d79dc8a16aaf3427ee350",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_startup_refusal.py",
+      "installed_sha256": "c4e5449f6c9c569626870d236efb63e6e1849d45860d79dc8a16aaf3427ee350",
+      "bytes_equal": true
+    },
+    {
+      "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_unopened_retirement.py",
+      "sha256": "845add85f0e51dedb1b66ce4123fe82abfc1191fd90f6d79971571a11859ea95",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_unopened_retirement.py",
+      "installed_sha256": "845add85f0e51dedb1b66ce4123fe82abfc1191fd90f6d79971571a11859ea95",
+      "bytes_equal": true
+    },
+    {
+      "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_local_launch.py",
+      "sha256": "05ff346d467ada98f70b3175c6e12ec4fe31dae4fd0781fba53817a6a478c8d3",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_local_launch.py",
+      "installed_sha256": "05ff346d467ada98f70b3175c6e12ec4fe31dae4fd0781fba53817a6a478c8d3",
+      "bytes_equal": true
+    }
+  ]
+}
