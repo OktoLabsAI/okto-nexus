@@ -38,8 +38,17 @@ class TerminalConnection:
     def api(self, method, path, body=None):
         return self.call(method, PREFIX + path, body)
 
-    def options(self, request):
-        subject = self.api('GET', '/connections/me')['agent_id'] if request.get('agent_creation') else request['agent_id']
+    def options(self, request, *, deadline=None, server_id=None):
+        if deadline is not None:
+            self._check_observation_deadline(deadline)
+        subject = request['agent_id']
+        if request.get('agent_creation'):
+            me = self.api('GET', '/connections/me')
+            if server_id is not None and me['server_id'] != server_id:
+                raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.', possible_effect=True)
+            subject = me['agent_id']
+        if deadline is not None:
+            self._check_observation_deadline(deadline)
         return self.api('GET', '/agents/' + quote(subject, safe='') + '/runtime-options?' +
             urlencode({'executor_id': request['executor_id'], **({'workspace_id': request['workspace_id']}
                        if request.get('workspace_id') else {})}))
@@ -204,12 +213,68 @@ class TerminalConnection:
             self.save(document)
         return document['request']
 
+    def _check_observation_deadline(self, deadline):
+        if self.monotonic() >= deadline:
+            raise ConnectionError('INSTALLATION_UNCONFIRMED',
+                'The reviewed installation was not confirmed within the observation deadline. '
+                'Resume the same saved request; its version command was not repeated.', possible_effect=True)
+
+    def _confirm_version_check(self, document, request, deadline):
+        """Observe the saved selection; a lost check reply never repeats its probe."""
+        adapter = request['configuration']['adapter_id']
+        while self.monotonic() < deadline:
+            try:
+                if self.api('GET', '/connections/me')['server_id'] != document['server_id']:
+                    raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.')
+                available = self.options(request, deadline=deadline, server_id=document['server_id'])
+            except ConnectionError as error:
+                if error.code != 'SERVER_UNREACHABLE' or error.possible_effect:
+                    # A read refusal does not undo the previously submitted check.
+                    raise ConnectionError(error.code, error.message,
+                        possible_effect=True, stage=error.stage) from None
+            else:
+                if available['executor_id'] != request['executor_id']:
+                    raise ConnectionError('EXECUTOR_ID_MISMATCH', 'The observed executor changed.', possible_effect=True)
+                selected = [row for row in available['options']
+                            if row['candidate_ref'] == request['candidate_ref'] and row['adapter_id'] == adapter]
+                if len(selected) != 1:
+                    raise ConnectionError('INSTALLATION_UNCONFIRMED',
+                        'The reviewed installation selection changed. Its version command was not repeated.', possible_effect=True)
+                selected = selected[0]
+                fresh = available.get('adapter_freshness', {}).get(adapter) == 'FRESH'
+                if fresh and selected.get('can_configure') is not True:
+                    raise ConnectionError('CONFIGURATION_NOT_AUTHORIZED',
+                        'The canonical policy no longer permits configuring this installation.', possible_effect=True)
+                if fresh and selected['technical_state'] == 'READY_FOR_RUNTIME':
+                    # A bounded HTTP call can finish after the overall observation deadline.
+                    if self.monotonic() >= deadline:
+                        break
+                    request['inventory_revision'] = available['inventory_revision']
+                    document.update(state='approved', version_check_confirmed=True)
+                    self.save(document)
+                    return
+            remaining = deadline - self.monotonic()
+            if remaining > 0:
+                self.sleep(min(1, remaining))
+        raise ConnectionError('INSTALLATION_UNCONFIRMED',
+            'The reviewed installation was not confirmed before the observation deadline. '
+            'Resume the same saved request; its version command was not repeated.', possible_effect=True)
+
     def apply(self, document, *, approval=None, timeout=300):
-        if self.api('GET', '/connections/me')['server_id'] != document['server_id']:
-            raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.')
+        check_deadline = self.monotonic() + timeout
+        check_submitted = document['state'] == 'check_submitted'
+        try:
+            me = self.api('GET', '/connections/me')
+        except ConnectionError as error:
+            if not check_submitted:
+                raise
+            raise ConnectionError(error.code, error.message, possible_effect=True, stage=error.stage) from None
+        if me['server_id'] != document['server_id']:
+            raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.', possible_effect=check_submitted)
         if document['state'] == 'done':
             return self.observe(document)
         request = self.approve_review(document, approval)
+        checked_version = False
         if document['state'] in ('test_submitted', 'finish'):
             try:
                 receipt = self.api('POST', '/connections/setup:recover', request)
@@ -228,24 +293,34 @@ class TerminalConnection:
             if document['state'] == 'approved':
                 document['state'] = 'check_submitted'
                 self.save(document)
-                self.api('POST', '/runtime/executors/' + quote(request['executor_id'], safe='') + '/installations:check',
-                    dict(agent_id=self.api('GET', '/connections/me')['agent_id'] if request.get('agent_creation') else request['agent_id'],
-                         adapter_id=request['configuration']['adapter_id'],
-                         candidate_ref=request['candidate_ref'], inventory_revision=request['inventory_revision'], approved=True))
-            available = self.options(request)
-            selected = next((row for row in available['options'] if row['candidate_ref'] == request['candidate_ref']
-                             and row['adapter_id'] == request['configuration']['adapter_id']), None)
-            if not selected or selected['technical_state'] != 'READY_FOR_RUNTIME':
-                state = selected['technical_state'] if selected else 'SELECTION_CHANGED'
-                reasons = ', '.join(selected.get('technical_reasons', [])) if selected else ''
-                raise ConnectionError('INSTALLATION_UNCONFIRMED',
-                    f'The reviewed installation is {state} ({reasons}). Its version command was not repeated.', possible_effect=True)
-            request['inventory_revision'] = available['inventory_revision']
-            document.update(state='approved', version_check_confirmed=True)
-            self.save(document)
+                self._check_observation_deadline(check_deadline)
+                subject = request['agent_id']
+                if request.get('agent_creation'):
+                    me = self.api('GET', '/connections/me')
+                    if me['server_id'] != document['server_id']:
+                        raise ConnectionError('SERVER_ID_MISMATCH', 'The selected Server installation changed.', possible_effect=True)
+                    subject = me['agent_id']
+                self._check_observation_deadline(check_deadline)
+                try:
+                    self.api('POST', '/runtime/executors/' + quote(request['executor_id'], safe='') + '/installations:check',
+                        dict(agent_id=subject,
+                             adapter_id=request['configuration']['adapter_id'],
+                             candidate_ref=request['candidate_ref'], inventory_revision=request['inventory_revision'], approved=True))
+                except ConnectionError as error:
+                    if error.code != 'OUTCOME_UNKNOWN' or error.possible_effect is not True:
+                        raise
+            self._confirm_version_check(document, request, check_deadline)
+            # Persisting the confirmation can also exhaust the check's budget.
+            # The confirmed checkpoint remains resumable, but no new test starts now.
+            self._check_observation_deadline(check_deadline)
+            checked_version = True
         if document['state'] == 'approved':
             document['state'] = 'test_submitted'
             self.save(document)
+            if checked_version:
+                # Preserve the submitted checkpoint even when its durable write
+                # used the remaining time. Recovery must not replay a missing test.
+                self._check_observation_deadline(check_deadline)
             test = self.api('POST', '/connections/setup:test', request)
         elif document['state'] == 'test_submitted':
             try:

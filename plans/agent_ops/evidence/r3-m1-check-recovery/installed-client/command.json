@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\venv\\Scripts\\python.exe",
+    "-I",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\source\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\installed-client\\canonical",
+    "--tests",
+    "tests/execution_r4/test_terminal_connect.py"
+  ],
+  "isolated_home": true,
+  "provider": false,
+  "native_service_registration": false
+}

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="15" time="129.347" timestamp="2026-11-07T21:00:46.865226-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_terminal_connect" name="test_response_loss_resumes_without_repeating_native_effects[installations:check]" time="13.319"><failure message="okto_nexus.application.terminal_connection.ConnectionError: Injected lost response">terminal = namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB54EE7230&gt;, selection...stapi.applications.FastAPI object at 0x000001FB5381BB60&gt;, call=&lt;function terminal.&lt;locals&gt;.call at 0x000001FB54F3F920&gt;)
+lost = 'installations:check'
+
+    @pytest.mark.parametrize('lost', ['installations:check', 'setup:test', 'setup:finish'])
+    def test_response_loss_resumes_without_repeating_native_effects(terminal, lost):
+        t = terminal
+        document = t.flow.review(t.selection)
+        t.fault.after = lost
+        if lost == 'installations:check':
+            # A lost check reply is recovered by observation in the same apply.
+&gt;           recovered = t.flow.apply(document, approval=document['review_revision'])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_terminal_connect.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\terminal_connection.py:231: in apply
+    self.api('POST', '/runtime/executors/' + quote(request['executor_id'], safe='') + '/installations:check',
+src\okto_nexus\application\terminal_connection.py:39: in api
+    return self.call(method, PREFIX + path, body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'POST'
+path = '/api/v1/runtime-management/runtime/executors/exe_ccde471c210677249fe49947edfc0d52/installations:check'
+body = {'agent_id': 'subject', 'adapter_id': 'codex_app_server', 'candidate_ref': 'nexus-install-v1:126b6c6b92707a1c1344286b2...b9db99b4a2658f7', 'inventory_revision': 'sha256:7a1d79b4b9c53057efd88a12b4e2645dbd2713434f9f19777bb64bef9dc888ea', ...}
+
+    def call(method, path, body=None):
+        calls.append((method, path))
+        response = client.request(method, path, json=body, headers={'X-Nexus-UI': '1'})
+        value = response.json()
+        if response.status_code &gt;= 400:
+            error = value['error']
+            raise ConnectionError(error['code'], error['message'], stage=error.get('stage', 'http'),
+                                  possible_effect=error.get('possible_effect', False))
+        if fault.after and path.endswith(fault.after):
+            fault.after = None
+&gt;           raise ConnectionError('OUTCOME_UNKNOWN', 'Injected lost response', possible_effect=True)
+E           okto_nexus.application.terminal_connection.ConnectionError: Injected lost response
+
+tests\execution_r4\test_terminal_connect.py:53: ConnectionError</failure></testcase><testcase classname="tests.execution_r4.test_terminal_connect" name="test_response_loss_resumes_without_repeating_native_effects[setup:test]" time="8.377" /><testcase classname="tests.execution_r4.test_terminal_connect" name="test_response_loss_resumes_without_repeating_native_effects[setup:finish]" time="9.040" /><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_reply_loss_observes_same_publication_before_single_test[0]" time="8.183"><failure message="okto_nexus.application.terminal_connection.ConnectionError: Lost version-check reply">check_recovery = (namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB5742D220&gt;, selectio...observes_same_publication_before_single_test.&lt;locals&gt;.delayed at 0x000001FB57457560&gt;, get_error=None, post_error=None))
+delay = 0
+
+    @pytest.mark.parametrize('delay', [0, 2])
+    def test_check_reply_loss_observes_same_publication_before_single_test(check_recovery, delay):
+        t, document, state = check_recovery
+    
+        def delayed(path, value):
+            if '/runtime-options?' in path and state.options_reads &lt;= delay:
+                # The source selection is unchanged but its publication is not usable yet.
+                value['adapter_freshness'][document['request']['configuration']['adapter_id']] = 'STALE'
+                for row in value['options']:
+                    row['can_configure'] = False
+            return value
+    
+        state.mutate = delayed
+&gt;       result = t.flow.apply(document, approval=document['review_revision'], timeout=5)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_terminal_connect.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\terminal_connection.py:231: in apply
+    self.api('POST', '/runtime/executors/' + quote(request['executor_id'], safe='') + '/installations:check',
+src\okto_nexus\application\terminal_connection.py:39: in api
+    return self.call(method, PREFIX + path, body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'POST'
+path = '/api/v1/runtime-management/runtime/executors/exe_bfc6be949f8d3fb5953e903232033cfd/installations:check'
+body = {'agent_id': 'subject', 'adapter_id': 'codex_app_server', 'candidate_ref': 'nexus-install-v1:69ad05e946edba48b6b5c20d8...8fe343a080e817a', 'inventory_revision': 'sha256:dd44540d99d9b4b656b41df007b61c7332f0cbad92eb8f112322f5de9fb30645', ...}
+
+    def call(method, path, body=None):
+        if method == 'POST' and path.endswith('installations:check'):
+            if state.post_error is not None:
+                raise state.post_error
+            original(method, path, body)
+            state.checked = True
+            state.now += state.post_elapsed
+&gt;           raise ConnectionError('OUTCOME_UNKNOWN', 'Lost version-check reply', possible_effect=True)
+E           okto_nexus.application.terminal_connection.ConnectionError: Lost version-check reply
+
+tests\execution_r4\test_terminal_connect.py:123: ConnectionError</failure></testcase><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_reply_loss_observes_same_publication_before_single_test[2]" time="8.120"><failure message="okto_nexus.application.terminal_connection.ConnectionError: Lost version-check reply">check_recovery = (namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB5511B5C0&gt;, selectio...observes_same_publication_before_single_test.&lt;locals&gt;.delayed at 0x000001FB53BAC180&gt;, get_error=None, post_error=None))
+delay = 2
+
+    @pytest.mark.parametrize('delay', [0, 2])
+    def test_check_reply_loss_observes_same_publication_before_single_test(check_recovery, delay):
+        t, document, state = check_recovery
+    
+        def delayed(path, value):
+            if '/runtime-options?' in path and state.options_reads &lt;= delay:
+                # The source selection is unchanged but its publication is not usable yet.
+                value['adapter_freshness'][document['request']['configuration']['adapter_id']] = 'STALE'
+                for row in value['options']:
+                    row['can_configure'] = False
+            return value
+    
+        state.mutate = delayed
+&gt;       result = t.flow.apply(document, approval=document['review_revision'], timeout=5)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_terminal_connect.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\okto_nexus\application\terminal_connection.py:231: in apply
+    self.api('POST', '/runtime/executors/' + quote(request['executor_id'], safe='') + '/installations:check',
+src\okto_nexus\application\terminal_connection.py:39: in api
+    return self.call(method, PREFIX + path, body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'POST'
+path = '/api/v1/runtime-management/runtime/executors/exe_adcf76927e91d49d883123310933b2ac/installations:check'
+body = {'agent_id': 'subject', 'adapter_id': 'codex_app_server', 'candidate_ref': 'nexus-install-v1:a0ed582b04db1c9429e1b6241...c0dcdb94c87bb9a', 'inventory_revision': 'sha256:ca55bb4103cd5ffd7447dfeb8d1c33fc389b350ea5048fce8694dfd0a9fd053b', ...}
+
+    def call(method, path, body=None):
+        if method == 'POST' and path.endswith('installations:check'):
+            if state.post_error is not None:
+                raise state.post_error
+            original(method, path, body)
+            state.checked = True
+            state.now += state.post_elapsed
+&gt;           raise ConnectionError('OUTCOME_UNKNOWN', 'Lost version-check reply', possible_effect=True)
+E           okto_nexus.application.terminal_connection.ConnectionError: Lost version-check reply
+
+tests\execution_r4\test_terminal_connect.py:123: ConnectionError</failure></testcase><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_deadline_retains_checkpoint_without_test[post_deadline]" time="7.351"><failure message="AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'&#10;  &#10;  - INSTALLATION_UNCONFIRMED&#10;  + OUTCOME_UNKNOWN">check_recovery = (namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB551A4CB0&gt;, selectio... ...}, namespace(now=2.0, post_elapsed=2, checked=True, options_reads=0, mutate=None, get_error=None, post_error=None))
+failure = 'post_deadline'
+
+    @pytest.mark.parametrize('failure', ['post_deadline', 'get_deadline', 'unreachable', 'stale'])
+    def test_check_recovery_deadline_retains_checkpoint_without_test(check_recovery, failure):
+        t, document, state = check_recovery
+        if failure == 'post_deadline':
+            state.post_elapsed = 2
+        elif failure == 'unreachable':
+            state.get_error = ConnectionError('SERVER_UNREACHABLE', 'Observation unavailable')
+        else:
+            def incomplete(path, value):
+                if '/runtime-options?' in path:
+                    if failure == 'get_deadline':
+                        state.now = 2
+                    else:
+                        value['adapter_freshness'][document['request']['configuration']['adapter_id']] = 'STALE'
+                return value
+            state.mutate = incomplete
+        with pytest.raises(ConnectionError) as caught:
+            t.flow.apply(document, approval=document['review_revision'], timeout=2)
+&gt;       assert caught.value.code == 'INSTALLATION_UNCONFIRMED'
+E       AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'
+E         
+E         - INSTALLATION_UNCONFIRMED
+E         + OUTCOME_UNKNOWN
+
+tests\execution_r4\test_terminal_connect.py:184: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_deadline_retains_checkpoint_without_test[get_deadline]" time="7.456"><failure message="AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'&#10;  &#10;  - INSTALLATION_UNCONFIRMED&#10;  + OUTCOME_UNKNOWN">check_recovery = (namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB563AA030&gt;, selectio..._deadline_retains_checkpoint_without_test.&lt;locals&gt;.incomplete at 0x000001FB5643E840&gt;, get_error=None, post_error=None))
+failure = 'get_deadline'
+
+    @pytest.mark.parametrize('failure', ['post_deadline', 'get_deadline', 'unreachable', 'stale'])
+    def test_check_recovery_deadline_retains_checkpoint_without_test(check_recovery, failure):
+        t, document, state = check_recovery
+        if failure == 'post_deadline':
+            state.post_elapsed = 2
+        elif failure == 'unreachable':
+            state.get_error = ConnectionError('SERVER_UNREACHABLE', 'Observation unavailable')
+        else:
+            def incomplete(path, value):
+                if '/runtime-options?' in path:
+                    if failure == 'get_deadline':
+                        state.now = 2
+                    else:
+                        value['adapter_freshness'][document['request']['configuration']['adapter_id']] = 'STALE'
+                return value
+            state.mutate = incomplete
+        with pytest.raises(ConnectionError) as caught:
+            t.flow.apply(document, approval=document['review_revision'], timeout=2)
+&gt;       assert caught.value.code == 'INSTALLATION_UNCONFIRMED'
+E       AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'
+E         
+E         - INSTALLATION_UNCONFIRMED
+E         + OUTCOME_UNKNOWN
+
+tests\execution_r4\test_terminal_connect.py:184: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_deadline_retains_checkpoint_without_test[unreachable]" time="7.496"><failure message="AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'&#10;  &#10;  - INSTALLATION_UNCONFIRMED&#10;  + OUTCOME_UNKNOWN">check_recovery = (namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB57A7A7A0&gt;, selectio....0, checked=True, options_reads=0, mutate=None, get_error=ConnectionError('Observation unavailable'), post_error=None))
+failure = 'unreachable'
+
+    @pytest.mark.parametrize('failure', ['post_deadline', 'get_deadline', 'unreachable', 'stale'])
+    def test_check_recovery_deadline_retains_checkpoint_without_test(check_recovery, failure):
+        t, document, state = check_recovery
+        if failure == 'post_deadline':
+            state.post_elapsed = 2
+        elif failure == 'unreachable':
+            state.get_error = ConnectionError('SERVER_UNREACHABLE', 'Observation unavailable')
+        else:
+            def incomplete(path, value):
+                if '/runtime-options?' in path:
+                    if failure == 'get_deadline':
+                        state.now = 2
+                    else:
+                        value['adapter_freshness'][document['request']['configuration']['adapter_id']] = 'STALE'
+                return value
+            state.mutate = incomplete
+        with pytest.raises(ConnectionError) as caught:
+            t.flow.apply(document, approval=document['review_revision'], timeout=2)
+&gt;       assert caught.value.code == 'INSTALLATION_UNCONFIRMED'
+E       AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'
+E         
+E         - INSTALLATION_UNCONFIRMED
+E         + OUTCOME_UNKNOWN
+
+tests\execution_r4\test_terminal_connect.py:184: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_deadline_retains_checkpoint_without_test[stale]" time="7.320"><failure message="AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'&#10;  &#10;  - INSTALLATION_UNCONFIRMED&#10;  + OUTCOME_UNKNOWN">check_recovery = (namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB571A5750&gt;, selectio..._deadline_retains_checkpoint_without_test.&lt;locals&gt;.incomplete at 0x000001FB5529D3A0&gt;, get_error=None, post_error=None))
+failure = 'stale'
+
+    @pytest.mark.parametrize('failure', ['post_deadline', 'get_deadline', 'unreachable', 'stale'])
+    def test_check_recovery_deadline_retains_checkpoint_without_test(check_recovery, failure):
+        t, document, state = check_recovery
+        if failure == 'post_deadline':
+            state.post_elapsed = 2
+        elif failure == 'unreachable':
+            state.get_error = ConnectionError('SERVER_UNREACHABLE', 'Observation unavailable')
+        else:
+            def incomplete(path, value):
+                if '/runtime-options?' in path:
+                    if failure == 'get_deadline':
+                        state.now = 2
+                    else:
+                        value['adapter_freshness'][document['request']['configuration']['adapter_id']] = 'STALE'
+                return value
+            state.mutate = incomplete
+        with pytest.raises(ConnectionError) as caught:
+            t.flow.apply(document, approval=document['review_revision'], timeout=2)
+&gt;       assert caught.value.code == 'INSTALLATION_UNCONFIRMED'
+E       AssertionError: assert 'OUTCOME_UNKNOWN' == 'INSTALLATION_UNCONFIRMED'
+E         
+E         - INSTALLATION_UNCONFIRMED
+E         + OUTCOME_UNKNOWN
+
+tests\execution_r4\test_terminal_connect.py:184: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_rejects_changed_identity_before_test[server]" time="7.479" /><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_rejects_changed_identity_before_test[executor]" time="7.361" /><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_rejects_changed_identity_before_test[adapter]" time="7.379" /><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_rejects_changed_identity_before_test[candidate]" time="7.537" /><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_does_not_mask_definite_refusal[post]" time="10.193" /><testcase classname="tests.execution_r4.test_terminal_connect" name="test_check_recovery_does_not_mask_definite_refusal[get]" time="7.375"><failure message="AssertionError: assert ConnectionError('Lost version-check reply') is ConnectionError('Authority revoked')&#10; +  where ConnectionError('Lost version-check reply') = &lt;ExceptionInfo ConnectionError('Lost version-check reply') tblen=4&gt;.value">check_recovery = (namespace(flow=&lt;okto_nexus.application.terminal_connection.TerminalConnection object at 0x000001FB551D57E0&gt;, selectio...psed=0.0, checked=True, options_reads=0, mutate=None, get_error=ConnectionError('Authority revoked'), post_error=None))
+stage = 'get'
+
+    @pytest.mark.parametrize('stage', ['post', 'get'])
+    def test_check_recovery_does_not_mask_definite_refusal(check_recovery, stage):
+        t, document, state = check_recovery
+        refusal = ConnectionError('PERMISSION_DENIED', 'Authority revoked', possible_effect=False)
+        if stage == 'post':
+            state.post_error = refusal
+        else:
+            state.get_error = refusal
+        with pytest.raises(ConnectionError) as caught:
+            t.flow.apply(document, approval=document['review_revision'], timeout=2)
+&gt;       assert caught.value is refusal
+E       AssertionError: assert ConnectionError('Lost version-check reply') is ConnectionError('Authority revoked')
+E        +  where ConnectionError('Lost version-check reply') = &lt;ExceptionInfo ConnectionError('Lost version-check reply') tblen=4&gt;.value
+
+tests\execution_r4\test_terminal_connect.py:234: AssertionError</failure></testcase></testsuite></testsuites>

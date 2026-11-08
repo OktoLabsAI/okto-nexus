@@ -1,0 +1,33 @@
+{
+  "status": "DEPENDENCIES_ONLY_READY",
+  "products_installed": false,
+  "source_modified": false,
+  "probe": {
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\venv\\Scripts\\python.exe",
+    "products_find_spec": {
+      "okto_nexus": null,
+      "okto_nexus_connector": null,
+      "nexus_connector_core": null
+    },
+    "product_dist_info_absent": true,
+    "pip_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\venv\\Lib\\site-packages\\pip\\__init__.py",
+    "pip_version": "24.3.1",
+    "mcp_version": "1.30.0",
+    "system_site_packages": false
+  },
+  "excluded_top_level": [
+    "__pycache__",
+    "nexus_connector_core",
+    "okto_nexus",
+    "okto_nexus-0.3.3.dist-info",
+    "okto_nexus_connector",
+    "okto_nexus_connector-0.0.12.dist-info",
+    "okto_nexus_connector_core-0.0.14.dist-info"
+  ],
+  "dependency_files": 3209,
+  "dependency_manifest_sha256": "7081db25131f6f386b164ed5360673350079ad8013a8cc58abd7299fb4001c6d",
+  "environment_sha256": "f4c28a899e27189628ea90d41c77dc0ee244833699811b90ee209779a7b28b31",
+  "campaign_services_or_provider_used": false,
+  "limits": "Dependency copy and environment preparation are outside the future product-install-to-useful-result interval."
+}

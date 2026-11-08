@@ -1,0 +1,29 @@
+{
+  "format": "allowlisted_readonly_diagnosis",
+  "revision": 1,
+  "files": [
+    {
+      "path": "diagnosis.md",
+      "bytes": 5372,
+      "sha256": "e3235de90e16f3a883d63f6ec3a74f181fe523d0f1ac613dae8d573ba0cc9581"
+    },
+    {
+      "path": "diagnosis.json",
+      "bytes": 10060,
+      "sha256": "5a42a75be8fd0fba7f6f6f8ef1da2562536f86fc08672c5b6bda4e92f2a5baf9"
+    },
+    {
+      "path": "collect_readonly.py",
+      "bytes": 5139,
+      "sha256": "f33f2cbbbf8c05bc1ac3dd63dce9f0834b35e6114f5a6c0f8a5d00bdb809b46b"
+    }
+  ],
+  "excluded": [
+    "database",
+    "profile document",
+    "private stdout",
+    "raw logs",
+    "credentials",
+    "provider data"
+  ]
+}

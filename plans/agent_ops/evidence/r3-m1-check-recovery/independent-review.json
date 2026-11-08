@@ -1,0 +1,67 @@
+{
+  "format": "finite_readonly_review",
+  "revision": 1,
+  "reviewed_at": "2026-11-08T00:16:24.100437+00:00",
+  "verdict": "NO_BLOCKING_FINDING_IN_REVIEWED_FINAL_DELTA",
+  "sources": {
+    "src/okto_nexus/application/terminal_connection.py": "614dd004363fc78295f3ff38241900fc352dad65beb4fb04a4278639a705222e",
+    "tests/execution_r4/test_terminal_connect.py": "33d38379fbc505efffadc79ce122c1775517aa314695d34c1b1a8647b24fadd3"
+  },
+  "baseline": "Initial review of the same uncommitted client recovery change; final hash pinned by root/ac03.",
+  "verified_by_reading": [
+    {
+      "item": "Deadline gates",
+      "references": [
+        "terminal_connection.py:264",
+        "terminal_connection.py:291-315",
+        "terminal_connection.py:41-53",
+        "terminal_connection.py:225-255",
+        "terminal_connection.py:317-324"
+      ],
+      "conclusion": "Deadline established before check; checks between GETs, before installation POST, after confirmation persistence and after test_submitted persistence before new setup:test. Late HTTP return cannot authorize new test within this apply."
+    },
+    {
+      "item": "No probe replay",
+      "references": [
+        "terminal_connection.py:293-312",
+        "test_terminal_connect.py:274-323"
+      ],
+      "conclusion": "Only approved state sends one installation POST; check_submitted observes same selection through GET. After saved test_submitted but expired budget, explicit later invocation uses recovery and does not resend missing test."
+    },
+    {
+      "item": "Current exact selection",
+      "references": [
+        "terminal_connection.py:227-254",
+        "terminal_connection.py:41-53"
+      ],
+      "conclusion": "Server and executor identity, one exact adapter/candidate, adapter FRESH and can_configure is True are required before READY_FOR_RUNTIME can confirm."
+    },
+    {
+      "item": "Possible effect and definite refusal",
+      "references": [
+        "terminal_connection.py:230-247",
+        "terminal_connection.py:265-273",
+        "terminal_connection.py:309-311",
+        "test_terminal_connect.py:235-271"
+      ],
+      "conclusion": "Read/identity failures after a submitted check preserve possible_effect; only OUTCOME_UNKNOWN with possible_effect True on installation POST enters read recovery. Definitive POST refusal remains definite."
+    },
+    {
+      "item": "Caller compatibility",
+      "references": [
+        "terminal_preset.py:41-51",
+        "terminal_preset.py:87-89"
+      ],
+      "conclusion": "options keywords are additive; TerminalPreset local-test delegation retains API and runtime-options semantics; no remote preset branch change."
+    }
+  ],
+  "previous_findings_resolution": "Between-read/pre-POST and post-persistence gates are present; final additional gate after test_submitted persistence is present with directed test.",
+  "tests_executed_by_reviewer": 0,
+  "product_changes_by_reviewer": false,
+  "limits": [
+    "Reading only; does not substitute final installed qualification or claim its outcome.",
+    "Existing bounded HTTP may outlast observation deadline; no claim of hard cancellation or hard wall-clock latency.",
+    "Persisted test_submitted with no dispatch is conservatively non-replayable; source test explicitly expects SETUP_TEST_UNCONFIRMED on later recovery.",
+    "No provider, credential, service, campaign replay, controller reset or new authorization. Historical M1 fault/reservations unchanged."
+  ]
+}

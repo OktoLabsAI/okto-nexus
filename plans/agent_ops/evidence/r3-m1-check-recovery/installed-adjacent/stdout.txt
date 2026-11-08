@@ -1,0 +1,69 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\m1-check-recovery-inopit5p\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\m1-check-recovery-inopit5p\source
+configfile: ..\installed-adjacent\tmp\nexus-ci-installed-3sjy_j3h\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 25 items
+
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_checked_bytes_survive_passive_refresh_without_another_probe PASSED [  4%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_version_check_remains_available_during_runtime_recovery PASSED [  8%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_observation_is_reused_after_server_restart PASSED [ 12%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_refusals_precede_version_execution[subject] PASSED [ 16%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_refusals_precede_version_execution[consent] PASSED [ 20%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_refusals_precede_version_execution[stale] PASSED [ 24%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_refusals_precede_version_execution[binary] PASSED [ 28%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_refusals_precede_version_execution[remote] PASSED [ 32%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity[binary] PASSED [ 36%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity[authority] PASSED [ 40%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity[owner] PASSED [ 44%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_probe_result_cannot_outlive_its_authority_or_identity[containment] PASSED [ 48%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_observation_survives_core_upgrade_only_for_same_bytes_and_platform[binary] PASSED [ 52%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_observation_survives_core_upgrade_only_for_same_bytes_and_platform[core] PASSED [ 56%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_observation_survives_core_upgrade_only_for_same_bytes_and_platform[platform] PASSED [ 60%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_cancelled_http_observer_keeps_probe_owned_and_fences_concurrent_check[False] PASSED [ 64%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_cancelled_http_observer_keeps_probe_owned_and_fences_concurrent_check[True] PASSED [ 68%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_committed_observation_recovers_after_publication_failure PASSED [ 72%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_core_probe_uses_private_cwd_and_no_provider_credentials PASSED [ 76%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_fresh_selection_survives_slow_identity_revalidation[False] PASSED [ 80%]
+..\..\..\source\tests\execution_r4\test_local_installation_check.py::test_fresh_selection_survives_slow_identity_revalidation[True] PASSED [ 84%]
+..\..\..\source\tests\execution_r4\test_terminal_identity.py::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[False] PASSED [ 88%]
+..\..\..\source\tests\execution_r4\test_terminal_identity.py::test_finish_creates_one_reviewed_identity_and_recovery_never_rotates_its_key[True] PASSED [ 92%]
+..\..\..\source\tests\execution_r4\test_terminal_preset.py::test_local_update_recovers_original_test_and_finish_without_repeating_effects[setup:test] PASSED [ 96%]
+..\..\..\source\tests\execution_r4\test_terminal_preset.py::test_local_update_recovers_original_test_and_finish_without_repeating_effects[setup:finish] PASSED [100%]
+
+============================== warnings summary ===============================
+..\..\..\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\m1-check-recovery-inopit5p\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\m1-check-recovery-inopit5p\installed-adjacent\canonical\tests.xml -
+================== 25 passed, 1 warning in 190.76s (0:03:10) ==================

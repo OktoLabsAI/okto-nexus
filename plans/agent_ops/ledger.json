@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-07T23:56:58.551009+00:00",
+  "updated_at": "2026-11-08T00:23:15.516311+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12325,7 +12325,7 @@
       "new_productive_admissions": 0,
       "service_actions": 4,
       "service_force_authorized": false,
-      "productive_admissions_status": "NOT_CONFIRMED_CHECK_SUBMITTED",
+      "productive_admissions_status": "READ_ONLY_RECONCILIATION_BEFORE_SETUP_TEST",
       "new_reserved_admissions": 1,
       "new_observed_tokens": 0,
       "final_or_billed_usage": false,
@@ -12335,7 +12335,21 @@
       "tasks_removed": true,
       "connector_started": false,
       "acceptance_promoted": false,
-      "remaining": "Read-only diagnosis of check_submitted failure; original M1 criteria remain unmet."
+      "remaining": "Campaign permanently closed. A separately reviewed successor is required for M1; reserved slot and fault retained.",
+      "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d"
+    },
+    "r3_m1_check_recovery": {
+      "status": "INSTALLED_CLIENT_RECOVERY_VERIFIED",
+      "nexus_wheel_sha256": "99e1d530b27aeba7dcbd8adae8772ac19eaf4354ad5c31fdb80c0ed6e63d7680",
+      "installed_unique_cases": 59,
+      "package_payloads": 982,
+      "native_provider_calls": 0,
+      "native_service_actions": 0,
+      "acceptance_promoted": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-check-recovery/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-check-recovery/artifact-manifest.json"
+      ]
     }
   },
   "history": [
@@ -13430,6 +13444,15 @@
       "summary": "Installed982 payloads; first setup stopped at check_submitted/OUTCOME_UNKNOWN. Controller selected normal stop, DRAINED and exact task removed. No force/replay, no M1 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v8-execution/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "milestone": "M1 version-check response recovery fix",
+      "status": "INSTALLED_CLIENT_RECOVERY_VERIFIED",
+      "summary": "Read-only diagnosis places v8 before inference. Corrected client uses bounded canonical GET recovery without check replay;59 installed cases PASS,982 payloads unchanged. No M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-check-recovery/qualification.json"
       ]
     }
   ]

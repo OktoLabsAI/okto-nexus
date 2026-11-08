@@ -1,0 +1,73 @@
+{
+  "status": "FINAL_SOURCE_DIAGNOSTIC_PASS_INSTALLED_QUALIFICATION_PENDING",
+  "sources": {
+    "src/okto_nexus/application/terminal_connection.py": "614dd004363fc78295f3ff38241900fc352dad65beb4fb04a4278639a705222e",
+    "tests/execution_r4/test_terminal_connect.py": "33d38379fbc505efffadc79ce122c1775517aa314695d34c1b1a8647b24fadd3"
+  },
+  "stages": [
+    {
+      "label": "PRE_FIX",
+      "report": "red.xml",
+      "sha256": "4028948339b23fcc0395e0f294b6e603371c667e2d380173b9d16d869adb9958",
+      "input_manifest": "red-inputs.json",
+      "input_manifest_sha256": "ea263a838811ac7fb2a91e8af60884769c9b81c253a8042bb17f0a4618cbf32e",
+      "counts": {
+        "tests": 15,
+        "failures": 8,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "INTERMEDIATE_26",
+      "report": "green.xml",
+      "sha256": "74721bc3fdb2618fdabc7253b64bab72036bbeb5f5a6e7f798cff1a4922e2e6e",
+      "input_manifest": "intermediate-inputs.json",
+      "input_manifest_sha256": "c3d2301a7787b1376fa32e772ed9ec56c116f58ef09af52d57bd39fd72a25b08",
+      "counts": {
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "INTERMEDIATE_33",
+      "report": "final-green.xml",
+      "sha256": "771a973f0e183670e5a3a343c5c6c20d1c482bd4ace9c68696b3ce022791f29e",
+      "input_manifest": "candidate33-inputs.json",
+      "input_manifest_sha256": "34b4d94aeb61aa44b308644acaaa05dba3f1c15c5674103682a68a896d3b10c3",
+      "counts": {
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "FINAL_NEW_CASE_ONLY",
+      "report": "final-one.xml",
+      "sha256": "f09b36a627e84a0607694b5a02f3b218c8797907a8eed616f1db6d426b70d204",
+      "input_manifest": "final-inputs.json",
+      "input_manifest_sha256": "548e1a68974af5c6665b4334e2e1bc31bfdbcbffc8c46794549b5b6b49fc5826",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "final_test_module_cases": 34,
+  "not_claimed": "The final 34-case module was not rerun as a whole on source. Root owns final installed qualification. Intermediate counts are not summed as independent final passes.",
+  "change": "Only OUTCOME_UNKNOWN with possible_effect from installations:check enters bounded GET recovery. Exact Server/executor/adapter/candidate, freshness and configuration authority remain required. Every check-stage call and durable-write boundary before setup:test has a monotonic deadline gate. Submitted uncertainty remains recoverable without replay.",
+  "lint": "ruff PASS; git diff --check PASS",
+  "effects": {
+    "real_provider": 0,
+    "native_cli": 0,
+    "os_service": 0,
+    "personal_credentials": 0
+  },
+  "historical_red_limit": "Initial identity-negative cases were strengthened after red to assert actual mutated reads and exact refusal codes; red is not a reproduction of final test bytes.",
+  "final_inputs_unchanged_after_test": true
+}

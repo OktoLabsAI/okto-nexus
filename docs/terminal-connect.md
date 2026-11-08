@@ -66,8 +66,12 @@ Reopen with `connect` from the same project, or `connect --profile project-revie
 An existing profile reads the current canonical binding without applying defaults
 again. After response loss it recovers the same setup receipt, observes an already
 submitted test, and never submits another test when its result is unavailable.
-Interrupted version checks are also observed before any later step. Changed
-explicit choices conflict with the profile rather than silently rewriting it.
+If the version-check response is lost, the same invocation reads the canonical
+inventory for the reviewed Server, executor and installation within the observation
+budget. It does not repeat the version command. The model test starts only after
+that selection is confirmed ready; an expired budget or changed identity preserves
+the saved checkpoint without starting a new model test. Changed explicit choices conflict with
+the profile rather than silently rewriting it.
 Expired or exhausted execution authorization is reviewed separately with
 `work authorize` (or `/authorize` in the project prompt). Reconnect and service
 restart never renew it automatically. See [terminal work](terminal-work.md)

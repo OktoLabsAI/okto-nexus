@@ -1,0 +1,61 @@
+{
+  "status": "INSTALLED_CLIENT_RECOVERY_VERIFIED",
+  "wheel_sha256": "99e1d530b27aeba7dcbd8adae8772ac19eaf4354ad5c31fdb80c0ed6e63d7680",
+  "source_files": {
+    "src/okto_nexus/application/terminal_connection.py": "614dd004363fc78295f3ff38241900fc352dad65beb4fb04a4278639a705222e",
+    "tests/execution_r4/test_terminal_connect.py": "33d38379fbc505efffadc79ce122c1775517aa314695d34c1b1a8647b24fadd3"
+  },
+  "installed_unique_cases": 59,
+  "installed_groups": {
+    "client": 34,
+    "adjacent": 25
+  },
+  "campaigns": {
+    "client": {
+      "input_count": 2067,
+      "inputs_unchanged": true
+    },
+    "adjacent": {
+      "input_count": 2067,
+      "inputs_unchanged": true
+    }
+  },
+  "package_payloads": {
+    "okto_nexus": {
+      "files": 691,
+      "wheel_sha256": "99e1d530b27aeba7dcbd8adae8772ac19eaf4354ad5c31fdb80c0ed6e63d7680",
+      "post_test_payloads_unchanged": true
+    },
+    "nexus_connector_core": {
+      "files": 167,
+      "wheel_sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+      "post_test_payloads_unchanged": true
+    },
+    "okto_nexus_connector": {
+      "files": 124,
+      "wheel_sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "post_test_payloads_unchanged": true
+    }
+  },
+  "source_diagnostics": {
+    "intermediate_runs": [
+      26,
+      33
+    ],
+    "final_new_case_only": 1,
+    "final_whole_module_source_run": false
+  },
+  "cause": "Local CLI abandoned installations:check after a lost response although the exact version observation was durable and published; timing supports the30s transport boundary.",
+  "correction": "Recover only OUTCOME_UNKNOWN/possible_effect from the same check through bounded GETs; preserve exact identity, fresh inventory, authority, deadlines and non-replayable checkpoints.",
+  "definite_post_refusal_preserved": true,
+  "per_http_timeout_unchanged": true,
+  "native_provider_calls": 0,
+  "native_service_actions": 0,
+  "historical_campaign_modified": false,
+  "acceptance_promoted": false,
+  "limits": [
+    "An in-flight bounded HTTP request can outlast the observation deadline; no hard cancellation is claimed.",
+    "A persisted test_submitted checkpoint with no POST is conservatively unconfirmed on later resume, never automatically replayed.",
+    "Synthetic installed qualification does not satisfy M1, BASE-06 or real provider requirements."
+  ]
+}

@@ -1136,3 +1136,19 @@ Quatro ações de serviço, sem force/replay. Esta campanha está encerrada e
 não pode ser reiniciada; o diagnóstico de leitura prossegue. Nenhum aceite promovido.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v8-execution/qualification.json`.
+
+## 2026-11-07 — recuperação da checagem de versão qualificada
+
+Diagnóstico somente leitura confirmou v8 em check_submitted, observação de
+versão persistida e zero operações/sessões/recibos/Finish. A resposta perdida
+é consistente com timeoutHTTP30 durante refresh posterior. O cliente recupera
+agora por GET limitado, sem repetir o check, exigindo seleção exata, freshness,
+autoridade e prazo. Falhas posteriores mantêm efeito possível; recusas não são
+transformadas em autorização. Guardas cobrem consultas e gravações antes do teste.
+
+59 casos dos bytes finais passaram instalados em ambiente separado (34+25),
+com982 payloads conferidos e entradas inalteradas. Rodadas fonte26/33 são
+intermediárias;1 novo caso final passou na fonte. Sem provedor/serviço real,
+sem replay/reset da v8 e sem promoção de aceite. A reserva conservadora permanece.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-check-recovery/qualification.json`.

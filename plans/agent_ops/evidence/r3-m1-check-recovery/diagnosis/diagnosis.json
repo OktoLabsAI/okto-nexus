@@ -1,0 +1,241 @@
+{
+  "format": "m1_readonly_installation_check_diagnosis",
+  "revision": 1,
+  "captured_at": "2026-11-07T23:57:34.831927+00:00",
+  "profile": {
+    "state": "check_submitted",
+    "server_id": "srv_fcdf1dbb6f48aa29d5f93c571f4c5319",
+    "version_check_required": true,
+    "version_check_confirmed": null,
+    "request": {
+      "client_intent_id": "connect_6e132838911b4805b20dcf0d992e5fce",
+      "agent_id": "m1v8-local",
+      "executor_id": "exe_49873f8c3d4f05bc6f4229e6fab9576a",
+      "workspace_id": null,
+      "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+      "inventory_revision": "sha256:47059aba6a9a94bf29cff0d6c26e8176c006e3a9bd4bfc00dc69c85686a2bfb2"
+    },
+    "result_present": false,
+    "test_present": false,
+    "file": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home\\terminal\\profiles\\m1v8-local.json",
+      "bytes": 6690,
+      "sha256": "e9c46729bd6e4352c9733556d527af6537e16cfcac9f3b14e46a118a8f2dc591",
+      "mtime_utc": "2026-11-07T23:50:36.701411+00:00"
+    }
+  },
+  "local_observations": [
+    {
+      "server_id": "srv_fcdf1dbb6f48aa29d5f93c571f4c5319",
+      "executor_id": "exe_49873f8c3d4f05bc6f4229e6fab9576a",
+      "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+      "core_version": "0.0.14",
+      "platform": "win32",
+      "version": "0.157.0",
+      "actor_agent_id": "operator",
+      "observed_at": "2026-11-07T23:50:56.166442Z"
+    }
+  ],
+  "counts": {
+    "execution_operations": 0,
+    "execution_receipts": 0,
+    "execution_sessions": 0,
+    "connection_setup_commits": 0
+  },
+  "inventory_snapshots": [
+    {
+      "publication_sequence": 14,
+      "inventory_revision": "sha256:cad71c1eba18cbba30fc38dea040d7345c6c85893b8454601f5f3b7ce57c0cb2",
+      "received_at": "2026-11-07T23:51:02.115Z",
+      "observation_age_ms": 0,
+      "selected_metadata": [
+        {
+          "adapter_id": "codex_app_server",
+          "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+          "version": "0.157.0",
+          "trust": "selected",
+          "state": "READY_FOR_RUNTIME"
+        },
+        {
+          "adapter_id": "codex_app_server",
+          "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+          "version": "0.157.0",
+          "trust": "selected",
+          "state": "READY_FOR_RUNTIME"
+        }
+      ]
+    },
+    {
+      "publication_sequence": 15,
+      "inventory_revision": "sha256:cad71c1eba18cbba30fc38dea040d7345c6c85893b8454601f5f3b7ce57c0cb2",
+      "received_at": "2026-11-07T23:51:10.319Z",
+      "observation_age_ms": 0,
+      "selected_metadata": [
+        {
+          "adapter_id": "codex_app_server",
+          "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+          "version": "0.157.0",
+          "trust": "selected",
+          "state": "READY_FOR_RUNTIME"
+        },
+        {
+          "adapter_id": "codex_app_server",
+          "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+          "version": "0.157.0",
+          "trust": "selected",
+          "state": "READY_FOR_RUNTIME"
+        }
+      ]
+    }
+  ],
+  "database": {
+    "before": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home\\nexus.db",
+      "bytes": 2494464,
+      "sha256": "fa53347833715ee9c43b263f2333832ab83cae138a12949667077d03fc0dd2eb",
+      "mtime_utc": "2026-11-07T23:51:14.407857+00:00"
+    },
+    "after": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\nexus-home\\nexus.db",
+      "bytes": 2494464,
+      "sha256": "fa53347833715ee9c43b263f2333832ab83cae138a12949667077d03fc0dd2eb",
+      "mtime_utc": "2026-11-07T23:51:14.407857+00:00"
+    },
+    "unchanged": true,
+    "mode": "ro"
+  },
+  "cli": {
+    "state": "unconfirmed",
+    "code": "OUTCOME_UNKNOWN",
+    "message": "The Server response is unavailable. Inspect or resume the same saved request.",
+    "possible_effect": true
+  },
+  "files": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\private\\local-setup.stdout",
+      "bytes": 170,
+      "sha256": "1b0a39daf60c528b590435221285348af8188dd74bc8d8a1a4e812c2a79d76cd",
+      "mtime_utc": "2026-11-07T23:51:06.776121+00:00"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\public\\local-setup-result.json",
+      "bytes": 2272,
+      "sha256": "39767e4a0b1628b9fd0b11e06fb05179dfaad204cbc9e5f9ddb57db397b46ba7",
+      "mtime_utc": "2026-11-07T23:51:16.359299+00:00"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-fresh-v8-pg0b6zbf\\campaign\\public\\lifecycle-nexus-stop-result.json",
+      "bytes": 427,
+      "sha256": "d69777ae643fd3eeb6854e83522d53b20bbb42f2ec632d1a2eea4da9744c5f7e",
+      "mtime_utc": "2026-11-07T23:51:16.296004+00:00"
+    }
+  ],
+  "timing_limit": "File mtimes are supporting evidence, not a retained per-HTTP timing trace.",
+  "sources": [
+    {
+      "relative": "application/terminal_connection.py",
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\terminal_connection.py",
+        "bytes": 21317,
+        "sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787",
+        "mtime_utc": "2026-11-07T16:18:06.467699+00:00"
+      },
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py",
+        "bytes": 21317,
+        "sha256": "4093de11b817e61886285533c05cb82e4190f790a4bf07fef13b707a457a1787",
+        "mtime_utc": "2026-11-07T23:43:53.244169+00:00"
+      },
+      "bytes_equal": true
+    },
+    {
+      "relative": "adapters/outbound/terminal_http.py",
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\terminal_http.py",
+        "bytes": 3661,
+        "sha256": "5b6bf34ceec9feb00feca2f0d2c3a7e81429d69c5be1b2c34c3e1a61142c2cca",
+        "mtime_utc": "2026-11-05T17:36:47.189729+00:00"
+      },
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\terminal_http.py",
+        "bytes": 3661,
+        "sha256": "5b6bf34ceec9feb00feca2f0d2c3a7e81429d69c5be1b2c34c3e1a61142c2cca",
+        "mtime_utc": "2026-11-07T23:43:52.531391+00:00"
+      },
+      "bytes_equal": true
+    },
+    {
+      "relative": "bootstrap/embedded_inventory.py",
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_inventory.py",
+        "bytes": 20718,
+        "sha256": "48076b23c09575858a8882a6d1821b78b1892a95eededa25b90d01eec179eee6",
+        "mtime_utc": "2026-11-05T03:28:01.451865+00:00"
+      },
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_inventory.py",
+        "bytes": 20718,
+        "sha256": "48076b23c09575858a8882a6d1821b78b1892a95eededa25b90d01eec179eee6",
+        "mtime_utc": "2026-11-07T23:43:53.288691+00:00"
+      },
+      "bytes_equal": true
+    },
+    {
+      "relative": "application/execution_local_observations.py",
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_local_observations.py",
+        "bytes": 12761,
+        "sha256": "72e22718866e72dabf1729017aa3b6c5d6bdd4cc17c867026da5643bdb8eef6c",
+        "mtime_utc": "2026-10-17T06:18:21.351962+00:00"
+      },
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_local_observations.py",
+        "bytes": 12761,
+        "sha256": "72e22718866e72dabf1729017aa3b6c5d6bdd4cc17c867026da5643bdb8eef6c",
+        "mtime_utc": "2026-11-07T23:43:53.003488+00:00"
+      },
+      "bytes_equal": true
+    },
+    {
+      "relative": "adapters/inbound/http/runtime_v1.py",
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\http\\runtime_v1.py",
+        "bytes": 59099,
+        "sha256": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2",
+        "mtime_utc": "2026-11-07T06:24:57.920589+00:00"
+      },
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\runtime_v1.py",
+        "bytes": 59099,
+        "sha256": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2",
+        "mtime_utc": "2026-11-07T23:43:52.423344+00:00"
+      },
+      "bytes_equal": true
+    },
+    {
+      "relative": "nexus_connector_core/inventory_observer.py",
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\inventory_observer.py",
+        "bytes": 13198,
+        "sha256": "7f593af1533b921477c6eb5c9db7e5f013cd2104f9aecfe4c0015d3e3211881e",
+        "mtime_utc": "2026-10-17T05:35:59.884666+00:00"
+      },
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-base06-install-g9ii2zhe\\venv\\Lib\\site-packages\\nexus_connector_core\\inventory_observer.py",
+        "bytes": 13198,
+        "sha256": "7f593af1533b921477c6eb5c9db7e5f013cd2104f9aecfe4c0015d3e3211881e",
+        "mtime_utc": "2026-11-07T23:43:51.514983+00:00"
+      },
+      "bytes_equal": true
+    }
+  ],
+  "effects": {
+    "product_imports": false,
+    "http_requests": false,
+    "sqlite_writes": false,
+    "replay": false,
+    "provider": false,
+    "service": false,
+    "private_raw_payloads_retained": false
+  }
+}
