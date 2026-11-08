@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-08T01:39:58.869057+00:00",
+  "updated_at": "2026-11-08T02:09:04.849261+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12458,6 +12458,22 @@
       "installed_tests_passed": 59,
       "installed_product_payloads": 983,
       "wheel_sha256": "07b7ed53c0fcd9b1c77099a8af52d6d5404d10aca988abaee15a7f51ca132ae4"
+    },
+    "r3_m1_v10_components": {
+      "status": "OFFLINE_COMPONENTS_QUALIFIED_COMPOSITION_PENDING",
+      "observer_support_cases": 22,
+      "observer_composition_cases": 25,
+      "observer_additional_cadence_case": 1,
+      "pty_unique_cases": 20,
+      "failed_attempts_retained": true,
+      "provider_calls": 0,
+      "service_actions": 0,
+      "acceptance_promoted": false,
+      "execution_authorized": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v10-observer-component/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-v10-pty-component/qualification.json"
+      ]
     }
   },
   "history": [
@@ -13615,6 +13631,16 @@
       "summary": "Offline wheel from commit405cac3f, 59 installed cases pass; 983 payloads and source/test inputs unchanged, pip check before/after passes. No native/provider/service effects or M1 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-installed-recovery-diagnostics/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "milestone": "M1 independent observation and protected transfer components",
+      "status": "OFFLINE_COMPONENTS_QUALIFIED_COMPOSITION_PENDING",
+      "summary": "Independent owner accounting and ordered PTY effect gates qualified offline. Failed runs retained; final v10 policy/bundle/remote shutdown ordering remains under qualification. No new provider or service action, acceptance, or authorization.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v10-observer-component/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-v10-pty-component/qualification.json"
       ]
     }
   ]

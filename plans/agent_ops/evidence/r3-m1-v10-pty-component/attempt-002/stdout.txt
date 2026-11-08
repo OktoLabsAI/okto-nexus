@@ -1,0 +1,17 @@
+.......F............                                                     [100%]
+================================== FAILURES ===================================
+____ test_missing_handoff_marker_expires_without_consumer_gate_or_delivery ____
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-002/cases/test_missing_handoff_marker_ex0')
+
+    def test_missing_handoff_marker_expires_without_consumer_gate_or_delivery(tmp_path):
+        seen = []
+        result = run_case(tmp_path, 'marker-absent', lambda phase: seen.append(phase) or True, timeout=4)
+        assert seen == ['producer'] and result['status'] != 'TRANSFERRED_ONCE'
+>       assert result['synthetic_files']['producer-started.json']
+E       assert False
+
+test_pty_gates.py:112: AssertionError
+=========================== short test summary info ===========================
+FAILED test_pty_gates.py::test_missing_handoff_marker_expires_without_consumer_gate_or_delivery
+1 failed, 19 passed in 25.01s

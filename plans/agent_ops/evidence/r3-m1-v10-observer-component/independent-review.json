@@ -1,0 +1,156 @@
+{
+  "kind": "READ_ONLY_SOURCE_REVIEW",
+  "verdict": "NO_NEW_BLOCKER_IN_REVIEWED_OBSERVER_RUNTIME",
+  "qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\qualification.json",
+    "sha256": "22809a3d5027c395f08a5111feb0118a8808cb9db5508480e44cd916593299f4"
+  },
+  "runtime_files": {
+    "controller.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\controller.py",
+      "sha256": "798ed957918eea5073db2f33514a4214abe663a43bf7f91de3047cffe39149c6"
+    },
+    "legacy_controller.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\legacy_controller.py",
+      "sha256": "2ae6bc2c1137d4beaaaf720e0e7b8627bfa47716a65f52e28fa3318dacc4e4cf"
+    },
+    "independent_controller.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\independent_controller.py",
+      "sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c"
+    },
+    "api_worker.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\api_worker.py",
+      "sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e"
+    },
+    "independent_journal.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\independent_journal.py",
+      "sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3"
+    },
+    "history_observers.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\history_observers.py",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57"
+    },
+    "serial_flow.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\serial_flow.py",
+      "sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697"
+    },
+    "setup_journal.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\setup_journal.py",
+      "sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a"
+    },
+    "token_collector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\token_collector.py",
+      "sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e"
+    },
+    "observation_guard.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10"
+    },
+    "m1_work_serial_candidate.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\m1_work_serial_candidate.py",
+      "sha256": "43e5345dc239e8b57bfdc92f481a1aa504bc71bfe7f6c14ce47dfb504f5557e4"
+    }
+  },
+  "referenced_test_reports_not_run_by_reviewer": [
+    {
+      "name": "support primitives",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\pure-tests.xml",
+      "sha256": "d04b6923a12c33dbf65d90a59be6b0a4c53d9b6ec08168a1b63d9af213cd28d2",
+      "counts": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "22",
+        "time": "5.340",
+        "timestamp": "2026-11-07T22:15:23.202172-03:00",
+        "hostname": "Alienware_m15"
+      }
+    },
+    {
+      "name": "initial final composition",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-composition1.xml",
+      "sha256": "ece76cc9efd854649dfb03b62ad3aed7d2b128cb9a64eacd499e84a9605f2ab9",
+      "counts": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "25",
+        "time": "19.490",
+        "timestamp": "2026-11-07T22:53:32.040572-03:00",
+        "hostname": "Alienware_m15"
+      }
+    },
+    {
+      "name": "combined scheduling failures retained",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-final.xml",
+      "sha256": "90e677cd0690c5d6affca373e376dd64897a7863b8e88ab2219d03fb93f1b405",
+      "counts": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "3",
+        "skipped": "0",
+        "tests": "47",
+        "time": "18.265",
+        "timestamp": "2026-11-07T22:54:37.240645-03:00",
+        "hostname": "Alienware_m15"
+      }
+    },
+    {
+      "name": "current composition with sanitized SQLite diagnostics",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-diagnostic.xml",
+      "sha256": "e1e6ad3411d250ba6876b5e7936db842ffe20b6b6d8a086fd46e2786d7c8d5ec",
+      "counts": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "25",
+        "time": "20.914",
+        "timestamp": "2026-11-07T22:55:40.130622-03:00",
+        "hostname": "Alienware_m15"
+      }
+    },
+    {
+      "name": "deterministic 1.038s cadence miss with final late-usage publication",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-cadence-miss.xml",
+      "sha256": "1ffc0619374659e8664a917b5253ab16a308ad6ab662203a79860eca734e42fc",
+      "counts": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "1",
+        "time": "6.532",
+        "timestamp": "2026-11-07T22:58:51.007993-03:00",
+        "hostname": "Alienware_m15"
+      }
+    }
+  ],
+  "closed_findings": [
+    {
+      "id": "CANONICAL_CORE_EPOCH",
+      "source": "independent_controller.py::_poll_work",
+      "finding": "A present canonical epoch must equal the selected Core epoch before bind/observe; mismatch raises and faults observation. Null pre-publication epoch is not claimed as Server confirmation."
+    },
+    {
+      "id": "RETAINED_API_ACCOUNTING",
+      "source": "independent_controller.py::drain_api; m1_work_serial_candidate.py normal/error/finally",
+      "finding": "Owner polls accounting while the sole retained API job is pending, and drains before result/error snapshots and close; stop wrapper return is not used as native exit proof."
+    }
+  ],
+  "observed_boundaries": [
+    "One inherited controller checkpoint and collector authority for setup/work lanes; retained read-only history observers are reattached before API jobs.",
+    "EffectFence.require is applied to every actual non-GET transport boundary, with monotonic deadline and known-token checks.",
+    "SQL readers select bounded typed metadata, validate namespace/cursors/epoch and fail closed; private Core projection is not final billing or Server publication.",
+    "Owner stop selection is durably reserved once per lane; no force or productive replay is added."
+  ],
+  "limits": [
+    "Source read only; this reviewer ran no observer tests, HTTP, services, provider or credential operations.",
+    "Referenced tests are synthetic; latest composition25 and cadence1 pass coexist with retained combined47/3fail history.",
+    "The one-second cadence is operational, not a hard OS scheduling guarantee.",
+    "Final v10 policy/ancestry rebasing, approval pins, setup and remote PTY owner-pump composition remain separately owned integration checks.",
+    "No overall campaign readiness or new authorization is asserted."
+  ]
+}

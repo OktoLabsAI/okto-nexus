@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="47" time="18.265" timestamp="2026-11-07T22:54:37.240645-03:00" hostname="Alienware_m15"><testcase classname="" name="test_primary_error_survives_final_get_error_and_values_never_leak" time="0.024" /><testcase classname="" name="test_unknown_diagnostic_fields_are_not_arbitrary_strings" time="0.001" /><testcase classname="" name="test_selected_control_with_no_owner_process_must_keep_observing[interrupt]" time="0.001" /><testcase classname="" name="test_selected_control_with_no_owner_process_must_keep_observing[close]" time="0.001" /><testcase classname="" name="test_owner_stop_requires_real_record_and_return_is_only_handoff" time="0.001" /><testcase classname="" name="test_unadmitted_control_is_get_only_and_not_completed[False-BLOCKED]" time="0.002" /><testcase classname="" name="test_unadmitted_control_is_get_only_and_not_completed[True-UNCONFIRMED]" time="0.002" /><testcase classname="" name="test_control_recovery_uses_exact_receipt_without_native_exit_inference[SUCCEEDED]" time="0.001" /><testcase classname="" name="test_control_recovery_uses_exact_receipt_without_native_exit_inference[FAILED]" time="0.002" /><testcase classname="" name="test_control_recovery_uses_exact_receipt_without_native_exit_inference[CANCELLED]" time="0.001" /><testcase classname="" name="test_control_recovery_uses_exact_receipt_without_native_exit_inference[SUBMITTED]" time="0.001" /><testcase classname="" name="test_control_scope_or_identity_drift_refuses[scope]" time="0.001" /><testcase classname="" name="test_control_scope_or_identity_drift_refuses[id]" time="0.001" /><testcase classname="" name="test_control_scope_or_identity_drift_refuses[action]" time="0.002" /><testcase classname="" name="test_terminal_preopen_failure_does_not_query_events_or_become_useful" time="0.001" /><testcase classname="" name="test_preopen_unknown_or_stream_present_is_not_zero_native_proof[possible_effect]" time="0.002" /><testcase classname="" name="test_preopen_unknown_or_stream_present_is_not_zero_native_proof[stage]" time="0.001" /><testcase classname="" name="test_preopen_unknown_or_stream_present_is_not_zero_native_proof[code]" time="0.001" /><testcase classname="" name="test_preopen_unknown_or_stream_present_is_not_zero_native_proof[epoch]" time="0.001" /><testcase classname="" name="test_deadline_fences_late_post_after_slow_get_without_repeat" time="0.002" /><testcase classname="" name="test_stop_failure_is_retained_and_never_retried" time="0.001" /><testcase classname="" name="test_watchdog_selects_stop_while_transport_is_blocked_in_another_thread" time="0.091" /><testcase classname="" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="0.467" /><testcase classname="" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="0.924" /><testcase classname="" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="2.523" /><testcase classname="" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.372" /><testcase classname="" name="test_journal_privacy_scope_and_real_layout[local]" time="0.094" /><testcase classname="" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.115" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.115" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.104" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.106" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.101" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.097" /><testcase classname="" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.086" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.088" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.102" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.100" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.107" /><testcase classname="" name="test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work" time="1.066"><failure message="assert False">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10780/test_one_global_ledger_across_0')
+
+    def test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work(tmp_path):
+        now=[1000.];home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path,lambda:now[0]);writers=[];setups=[];dispatches=[];stop=[]
+        local=scope('local');remote=scope('connector')
+        try:
+            control.setup('setup-local','local',home,lambda:dispatches.append('setup-local'),lambda:stop.append('local'))
+            setups.append(setup_journal(home,1,200));assert control.poll()['can_admit']
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            writers.append(JournalFixture(journal.path(local),local))
+            for name,total in [('local-one',10),('local-two',20)]:
+                control.start_work(name,'local','synthetic',binding=local,checkpoint=deepcopy(flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+                consume(control);writers[0].complete(name,total,thread='local-native-thread');fixture.terminal(name,local)
+&gt;               assert control.poll()['can_admit']
+E               assert False
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:325: AssertionError</failure></testcase><testcase classname="" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.451" /><testcase classname="" name="test_fresh_worker_validation_failure_never_posts" time="0.372" /><testcase classname="" name="test_usage_counter_regression_latches_fault_without_reset" time="0.790" /><testcase classname="" name="test_api_queue_and_cross_thread_controller_writes_are_refused" time="0.171" /><testcase classname="" name="test_present_canonical_and_core_epoch_mismatch_blocks_usage" time="0.593" /><testcase classname="" name="test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending" time="1.330" /><testcase classname="" name="test_historical_attachment_revalidates_owner_and_accounts_late_tokens" time="0.969"><failure message="AssertionError: assert (1 == 1 and ['normal-stop'] == []&#10;  &#10;  Left contains one more item: 'normal-stop'&#10;  Use -v to get more diff)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10780/test_historical_attachment_rev0')
+
+    def test_historical_attachment_revalidates_owner_and_accounts_late_tokens(tmp_path):
+        from history_observers import attach_existing_work
+        home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home);control=create_control(tmp_path)
+        flow,reader,stops=attach(control,fixture,tmp_path,home);writer=None
+        try:
+            control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={});consume(control)
+            writer=JournalFixture(reader.path(flow.selected),flow.selected);writer.complete('one',10)
+            fixture.terminal('one',flow.selected);control.poll();control.close()
+            control=create_control(tmp_path,create=False)
+            attached=attach_existing_work(control,campaign_root=tmp_path,server_home=home,
+                connector_state=tmp_path/'connector-state',stop_for_lane=lambda lane:stops.append(lane))
+            assert attached==['local']
+            writer.emit('thread/tokenUsage/updated','one',25)
+            assert control.poll()['known_observed_tokens']==45868
+            with pytest.raises(Exception):
+                attach_existing_work(control,campaign_root=tmp_path,server_home=tmp_path/'wrong-home',
+                    connector_state=tmp_path/'connector-state',stop_for_lane=lambda lane:None)
+&gt;           assert control.summary()['new_reserved_requests']==1 and stops==[]
+E           AssertionError: assert (1 == 1 and ['normal-stop'] == []
+E             
+E             Left contains one more item: 'normal-stop'
+E             Use -v to get more diff)
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:486: AssertionError</failure></testcase><testcase classname="" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="2.002"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10780/test_whole_work_wrapper_local_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002E049E5FA80&gt;
+
+    def test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation(tmp_path,monkeypatch):
+        context=Context(tmp_path)
+        module=types.ModuleType('campaign_context')
+        module.load=lambda:context
+        def require(value,reason):
+            if not value:raise AssertionError(reason)
+        module.require=require
+        monkeypatch.setitem(sys.modules,'campaign_context',module)
+        supervisor=types.ModuleType('supervisor_check');supervisor.require_work_owner=lambda selected:None
+        monkeypatch.setitem(sys.modules,'supervisor_check',supervisor)
+        import okto_nexus.adapters.inbound.cli.work as product_work
+        import okto_nexus.adapters.inbound.cli.terminal_target as target
+        def service(args,name,operator,resolver):
+            lane='local' if name=='m1v9-local' else 'connector'
+            home=Path(context.P['paths']['server_home' if lane=='local' else 'operator_home'])
+            return types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane=lane)
+        monkeypatch.setattr(target,'resolve_terminal_target',service)
+        monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,selected.adapter.home,selected.lane))
+        results=[]
+        try:
+            for lane,phase in [('local','useful'),('local','continuation'),('connector','useful'),('connector','continuation')]:
+                context.remaining=[lane,phase]
+                runpy.run_path(str(Path(__file__).parent/'m1_work_serial_candidate.py'),run_name='__main__')
+                profile=context.P['execution_bundle']['profiles'][lane]
+                suffix='01' if phase=='useful' else '02'
+                value=json.loads((tmp_path/'public'/(profile+'-work-'+suffix+'-result.json')).read_text())
+&gt;               assert value['record']['settled'] and value['canonical_receipt']['executor_stage']=='SUCCEEDED'
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               TypeError: 'NoneType' object is not subscriptable
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_work_wrapper.py:131: TypeError</failure></testcase></testsuite></testsuites>

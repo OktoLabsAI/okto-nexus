@@ -1,0 +1,156 @@
+--- frozen-v9/m1_v9_work.py
++++ candidate/m1_work_serial_candidate.py
+@@ -8,6 +8,9 @@
+ P,C,ROOT=X.P,X.C,X.ROOT
+ sys.path.insert(0,str(X.modules))
+ from controller import POLICY
++from independent_journal import CanonicalIntentReader, CoreJournalReader
++from serial_flow import SerialFlow
++from history_observers import attach_existing_work
+ sys.path.insert(0,str(Path(P['execution_bundle']['files']['response_loss']['path']).parent))
+ from response_loss import CampaignState,FiniteResponseLoss
+ from publication import poll_and_publish,publish_live
+@@ -31,7 +34,7 @@
+ controller=X.controller()
+ driverpath=ROOT/'private/response-loss.json'
+ faults=CampaignState(driverpath,**({'campaign_id':'m1-v9'} if not driverpath.exists() else {}))
+-flows={}; observed={}; guards=[]; stops=[]; handles=[]; selected_decisions=set()
++flows={}; raw_flows={}; bindings={}; observed={}; guards=[]; stops=[]; handles=[]; selected_decisions=set()
+ recovered_decisions={}
+ publication_diagnostics={}
+ pending_publication_diagnostics={}
+@@ -86,7 +89,7 @@
+     flow=open_work(service,name)
+     transport=flow.call
+     # Bound individual requests; any unknown observation closes admissions.
+-    transport.timeout=.5
++    transport.timeout=30  # accounting and deadline ticks do not wait for this worker
+     checkpoint=service.adapter.home/'terminal/work'/(name+'.json')
+     def load():return json.loads(checkpoint.read_text())
+     def counted(method,path,body=None):
+@@ -103,11 +106,14 @@
+         capture_configuration(value.get('events',{}))
+         return value
+     flow.observe=observe
+-    flows[lane]=flow
+-    controller.attach(lane,flow)
++    raw_flows[lane]=flow
++    controller.attach_api_flow(lane,flow)
+     owner=P['paths']['server_home'] if lane=='local' else P['paths']['connector_state']
+     controller.attach_owner(lane,owner,lambda:stop_owner(lane))
+-    return flow
++    facade=SerialFlow(controller,flow,lane,lambda:poll_and_publish(controller,
++        lambda value:public_write('live-accounting.json',value),publication_diagnostics,request))
++    flows[lane]=facade
++    return facade
+ 
+ def public_write(name,value):
+     target=ROOT/'public'/name
+@@ -165,6 +171,19 @@
+     # Retain the setup home callback even when observing remote work.
+     controller.attach_owner('local',P['paths']['server_home'],lambda:stop_owner('local'))
+     for lane in sorted(active_lanes):attach(lane)
++    # Restore all historical observers before the first API job can pump
++    # the global ledger. No binding, decision or final GET runs on owner.
++    attach_existing_work(controller,campaign_root=ROOT,server_home=P['paths']['server_home'],
++        connector_state=P['paths']['connector_state'],stop_for_lane=stop_owner)
++    for lane in sorted(active_lanes):
++        binding=flows[lane].binding();bindings[lane]=binding
++        if lane not in controller._readers:
++            me=flows[lane].api('GET','/connections/me')
++            require(me['server_id']==binding['server_id'],'ACTOR_SERVER_MISMATCH')
++            selected={k:binding[k] for k in ('server_id','executor_id','binding_id','agent_id','workspace_id','workspace_binding_id')}
++            controller.attach_observer(lane,CanonicalIntentReader(ROOT,P['paths']['server_home'],
++                server_id=binding['server_id'],actor_id=me['agent_id'],pre_scope=selected),
++                CoreJournalReader(ROOT,P['paths']['server_home' if lane=='local' else 'connector_state'],lane))
+     flow=flows[LANE]
+     if LANE=='connector' and PHASE=='useful':faults.arm('admission',LANE,request)
+     text=P['finite_work']['request'] if PHASE=='useful' else P['finite_work']['continuation']
+@@ -173,26 +192,44 @@
+     text=text.replace('<project>',project).replace('<lane_deliverables>',deliverables)
+     if PHASE=='useful':assert not (Path(deliverables)/'report.json').exists()
+     public_write(request+'-dispatch-selection.json',{'request_id':request,'lane':LANE,'phase':PHASE,'time':started,'prompt_sha256':hashlib.sha256(text.encode()).hexdigest(),'client_pin':pin})
+-    try:controller.work(request,LANE,text,stage='useful_work' if PHASE=='useful' else 'continuation')
+-    except ConnectionError as error:
+-        submission_error={'code':error.code,'stage':error.stage,'possible_effect':error.possible_effect}
+-        if request not in controller.data['requests']:raise
++    controller.start_work(request,LANE,text,binding=bindings[LANE],checkpoint=flow.document,
++        stage='useful_work' if PHASE=='useful' else 'continuation')
+     while True:
+         now=time.monotonic()
+         if previous is not None:intervals.append(now-previous)
+         previous=now
+         summary=poll_and_publish(controller,lambda value:public_write('live-accounting.json',value),publication_diagnostics,request)
+         current=controller.data['requests'][request]
+-        value=observed.get(LANE,{})
+-        for detail in value.get('requests',{}).get('items',[]):publish_approval(flow,detail)
+-        recover_decisions(flow)
+-        if current['settled']:break
+-        if current['stop_selected'] and all(p.poll() is not None for p in stops):
++        returned=controller.take_api_result()
++        if returned is not None:
++            require(returned['label']==request,'DISPATCH_RESULT_MISMATCH')
++            if not returned['ok']:
++                error=returned['error']
++                submission_error={'code':getattr(error,'code','UNKNOWN'),'stage':getattr(error,'stage','unknown'),
++                    'possible_effect':bool(getattr(error,'possible_effect',False))}
++        if current['settled'] and controller.api.thread is None:break
++        if current['stop_selected'] and current['stop_selected']['action']=='stop_owner' and stops and all(p.poll() is not None for p in stops):
++            break
++        if controller.api.thread is None and current.get('stream') and not current['stop_selected']:
++            value=flow.observe(session_id=current['session'])
++            for detail in value.get('requests',{}).get('items',[]):publish_approval(flow,detail)
++            recover_decisions(flow)
++        if current['stop_selected'] and current['stop_selected']['action']=='stop_owner' and stops and all(p.poll() is not None for p in stops):
+             # Attempted stop is reported as such; no termination/usage guarantee.
+             break
+         time.sleep(.2)
++    # Drain before any snapshot: a returned stop wrapper does not prove
++    # native exit, and a late worker result may add usage or diagnostics.
++    controller.drain_api()
++    late=controller.take_api_result()
++    if late is not None and not late['ok']:
++        error=late['error']
++        submission_error=submission_error or {'code':getattr(error,'code','UNKNOWN'),
++            'stage':getattr(error,'stage','unknown'),'possible_effect':bool(getattr(error,'possible_effect',False))}
++    controller.poll()
++    current=controller.data['requests'][request]
+     report=Path(deliverables)/'report.json'
+-    if current['settled'] and current.get('session'):
++    if current['settled'] and current.get('session') and not controller.data['faults']:
+         replay_configuration(flow,current['session'])
+     output={'exists':report.exists()}
+     if report.exists():
+@@ -204,7 +241,7 @@
+             except ValueError:output['matches_expected']=False
+     receipt_metadata=None
+     operation_id=controller.data['requests'][request].get('operation')
+-    if operation_id:
++    if operation_id and current['settled'] and not controller.data['faults']:
+         receipt=flow.operation(operation_id,flow.binding())
+         receipt_metadata={k:receipt.get(k) for k in ('operation_id','executor_stage','admission_state','action','possible_effect')}
+         output_text=(receipt.get('result') or {}).get('output_text')
+@@ -220,7 +257,10 @@
+             'useful_result_confirmed':useful_confirmed,
+             'useful_confirmed_monotonic_ns':time.monotonic_ns() if useful_confirmed else None,
+             'record':controller.data['requests'][request],'report':output,'submission_error':submission_error,
+-            'maximum_poll_start_interval_seconds':max(intervals,default=0),'calls':call_counts,
++            'maximum_poll_start_interval_seconds':controller.data.get('independent_observation',{}).get('maximum_poll_start_interval_seconds'),
++            'outer_loop_interval_seconds':max(intervals,default=0),'calls':call_counts,
++            'independent_observation':controller.data.get('independent_observation'),
++            'preopen_failure':current.get('preopen_failure'),
+             'publication_diagnostics':publication_diagnostics,'pending_publication_diagnostics':pending_publication_diagnostics,
+             'codex_thread_configuration':list(configuration_events.values()),
+             'configuration_observation_limit':'Canonical Core metadata only: missing/invalid stays unknown; instructionSources are references, not file contents or enforcement proof; no complete tool inventory is inferred.',
+@@ -238,9 +278,11 @@
+         try:controller.poll()
+         except BaseException:pass
+         time.sleep(.2)
++    controller.drain_api()
+     public_write(request+'-runner-error.json',{'error_type':type(error).__name__,
+         'publication_diagnostics':publication_diagnostics,'pending_publication_diagnostics':pending_publication_diagnostics,
+         'containment_error_type':containment_error,'summary':controller.summary(),
++        'independent_observation':controller.data.get('independent_observation'),
+         'request':controller.data['requests'].get(request),'stop_wrapper_exits':[p.returncode for p in stops],
+         'scope':'No automatic retry; a selected canonical control is not a termination receipt.'})
+     raise

@@ -1,0 +1,30 @@
+{
+  "status": "UNCONFIRMED",
+  "possible_effect": true,
+  "delivery_attempted": null,
+  "consumer_started": null,
+  "forced_owned_cleanup": true,
+  "effect_guard_decisions": [
+    {
+      "phase": "producer",
+      "allowed": false,
+      "deadline_expired": true
+    }
+  ],
+  "effect_guard_required": true,
+  "worker_pid": 56068,
+  "worker_birth_filetime": 134385766931752391,
+  "worker_assigned_before_gate": true,
+  "error_type": "TransferError",
+  "reason": "TRANSFER_DEADLINE",
+  "public_ipc_readers_joined": true,
+  "worker_stderr_observed": false,
+  "active_job_processes_after": 0,
+  "worker_exit": 125,
+  "synthetic_files": {
+    "producer-started.json": false,
+    "consumer-started.json": false,
+    "consumer-ack.json": false,
+    "producer-saw-ack.json": false
+  }
+}

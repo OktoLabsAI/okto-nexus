@@ -1218,3 +1218,11 @@ Evidência: `plans/agent_ops/evidence/r3-m1-recovery-diagnostics/qualification.j
 A wheel Nexus `07b7ed53…132ae4`, construída offline do commit `405cac3f`, passou em 59 casos instalados (diagnóstico, fila de escrita, contenção e conexão terminal). Os 983 payloads — Nexus 692, Core 167 e Connector 124 — permaneceram iguais antes/depois; `pip check` passou. Nenhuma chamada nativa ao provedor ou ação de serviço foi executada. Esta prova não identifica a causa SQLite histórica nem encerra M1.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-installed-recovery-diagnostics/qualification.json`.
+
+## Componentes offline para M1 v10
+
+O observador independente mantém a coleta de uso enquanto a API está bloqueada e verifica prazo antes de cada efeito. Passaram 22 casos de suporte, 25 de composição e uma regressão adicional de atraso de cadência; a rodada combinada com três falhas permanece registrada. O transporte PTY passou em 20 casos únicos, com autorização interna antes de cada processo, entrega única e encerramento dos auxiliares. As falhas de preparação dos testes também foram preservadas.
+
+A composição final v10 ainda exige a correção da ordem de parada remota: bloquear novos efeitos, comprovar o encerramento dos auxiliares e depois despachar a parada normal dos serviços. Estes testes não executam campanha real nem promovem M1/BASE-06.
+
+Evidências: `plans/agent_ops/evidence/r3-m1-v10-observer-component/qualification.json`, `plans/agent_ops/evidence/r3-m1-v10-pty-component/qualification.json`.

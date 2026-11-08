@@ -1,0 +1,41 @@
+{
+  "status": "UNCONFIRMED",
+  "possible_effect": false,
+  "delivery_attempted": false,
+  "consumer_started": false,
+  "forced_owned_cleanup": false,
+  "effect_guard_decisions": [],
+  "effect_guard_required": true,
+  "worker_pid": 52844,
+  "worker_birth_filetime": 134385766059215298,
+  "worker_assigned_before_gate": true,
+  "producer_started": false,
+  "consumer_start_count": 0,
+  "possible_consumer_effect": false,
+  "consumer_io_completed": false,
+  "effect_gates_requested": [],
+  "effect_gates_allowed": [],
+  "error_type": "AttributeError",
+  "error_frames": [
+    {
+      "file": "protected_pty.py",
+      "function": "<module>",
+      "line": 480
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "_worker",
+      "line": 188
+    }
+  ],
+  "public_ipc_readers_joined": true,
+  "worker_stderr_observed": false,
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "synthetic_files": {
+    "producer-started.json": false,
+    "consumer-started.json": false,
+    "consumer-ack.json": false,
+    "producer-saw-ack.json": false
+  }
+}

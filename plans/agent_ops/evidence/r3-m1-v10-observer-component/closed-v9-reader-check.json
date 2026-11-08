@@ -1,0 +1,24 @@
+{
+  "status": "PASS_READ_ONLY_EXISTING_CLOSED_V9",
+  "canonical_database_sha256": "1757eca7318bee9486719660d96198d6a54110f53663de9b06977b7ea4729305",
+  "core_journal_sha256": "d8e623d6d8e78acffc5f871a78c982e01afdc5f99242069a3a66c6aac20f27ef",
+  "controller_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+  "canonical_scope_matches_reserved_request": true,
+  "initial_turn_matches": true,
+  "preopen_failed": true,
+  "opening_receipt": {
+    "stage": "FAILED",
+    "error_code": "PREPARATION_FAILED",
+    "possible_effect": 0,
+    "retry_safe": 1,
+    "receipt_revision": 1
+  },
+  "selected_operation_has_receipt": false,
+  "core_event_stream_present": false,
+  "new_provider_calls": 0,
+  "new_service_actions": 0,
+  "canonical_database_unchanged": true,
+  "core_journal_unchanged": true,
+  "billed_tokens": null,
+  "historical_failure_cause": "DB_ERROR; specific SQLite cause not retained in v9"
+}

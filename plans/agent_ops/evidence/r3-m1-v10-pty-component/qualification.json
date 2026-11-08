@@ -1,0 +1,176 @@
+{
+  "status": "SYNTHETIC_GATED_PTY_QUALIFIED",
+  "helper_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-protected-pty-sce7juhl\\protected_pty.py",
+  "helper_sha256": "820d4a210d35d27dc869a4a8bb64065cdf908e3e323ec4b2361cdbb81e0fa882",
+  "owned_job_sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+  "v5_sha256_unchanged": "3e9819f37d7bd04a55dc094f3e05d62f13eb8fcbf0b404abf3f2f1e9279291b1",
+  "v5_owned_job_bytes_identical": true,
+  "qualified_final_helper_unique_cases": 20,
+  "qualified_case_nodes": [
+    "test_pty_gates::test_absent_guard_is_refused_before_job_or_process",
+    "test_pty_gates::test_allow_returning_after_deadline_cannot_start_producer",
+    "test_pty_gates::test_consumer_guard_denial_preserves_possible_producer_effect_without_delivery",
+    "test_pty_gates::test_cooperative_producer_waits_for_one_consumer_and_both_gates_precede_spawns",
+    "test_pty_gates::test_expired_shared_deadline_refuses_before_job_or_process",
+    "test_pty_gates::test_guard_exception_is_denial_without_serializing_its_message",
+    "test_pty_gates::test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames0]",
+    "test_pty_gates::test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames1]",
+    "test_pty_gates::test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames2]",
+    "test_pty_gates::test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames3]",
+    "test_pty_gates::test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames4]",
+    "test_pty_gates::test_missing_handoff_marker_expires_without_consumer_gate_or_delivery",
+    "test_pty_gates::test_non_true_producer_guard_means_no_producer_or_consumer[1]",
+    "test_pty_gates::test_non_true_producer_guard_means_no_producer_or_consumer[False]",
+    "test_pty_gates::test_non_true_producer_guard_means_no_producer_or_consumer[None]",
+    "test_pty_gates::test_protocol_refuses_duplicate_json_keys_and_oversized_line",
+    "test_pty_gates::test_shared_deadline_cannot_be_extended_by_new_helper_timeout",
+    "test_pty_gates::test_worker_rejects_reply_for_wrong_phase_sequence_or_boolean[reply0]",
+    "test_pty_gates::test_worker_rejects_reply_for_wrong_phase_sequence_or_boolean[reply1]",
+    "test_pty_gates::test_worker_rejects_reply_for_wrong_phase_sequence_or_boolean[reply2]"
+  ],
+  "attempts": {
+    "attempt-001": {
+      "passed": 13,
+      "failed": 7,
+      "inputs_unchanged": true,
+      "helper_sha256": "5f9ca1eb25ceed9012b3d612b2bf9dcfa123dbe8c7e7a729dba61ea1fc29ee45",
+      "results": [
+        {
+          "file": "test_allow_returning_after_dea0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_consumer_guard_denial_pre0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_cooperative_producer_wait0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_guard_exception_is_denial0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_missing_handoff_marker_ex0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_non_true_producer_guard_m0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_non_true_producer_guard_m1-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_non_true_producer_guard_m2-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_shared_deadline_cannot_be0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        }
+      ]
+    },
+    "attempt-002": {
+      "passed": 19,
+      "failed": 1,
+      "inputs_unchanged": true,
+      "helper_sha256": "820d4a210d35d27dc869a4a8bb64065cdf908e3e323ec4b2361cdbb81e0fa882",
+      "results": [
+        {
+          "file": "test_allow_returning_after_dea0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": true
+        },
+        {
+          "file": "test_consumer_guard_denial_pre0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_cooperative_producer_wait0-result.json",
+          "status": "TRANSFERRED_ONCE",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_guard_exception_is_denial0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_missing_handoff_marker_ex0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": true
+        },
+        {
+          "file": "test_non_true_producer_guard_m0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_non_true_producer_guard_m1-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_non_true_producer_guard_m2-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": false
+        },
+        {
+          "file": "test_shared_deadline_cannot_be0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": true
+        }
+      ]
+    },
+    "attempt-003": {
+      "passed": 1,
+      "failed": 0,
+      "inputs_unchanged": true,
+      "helper_sha256": "820d4a210d35d27dc869a4a8bb64065cdf908e3e323ec4b2361cdbb81e0fa882",
+      "results": [
+        {
+          "file": "test_missing_handoff_marker_ex0-result.json",
+          "status": "UNCONFIRMED",
+          "forced_auxiliary_cleanup": true
+        }
+      ]
+    }
+  },
+  "first_failure": "Synthetic import probe used PTY.__module__, which did not expose the extension __file__; corrected to the actually imported winpty.winpty module before gates.",
+  "second_failure": "Four-second synthetic fixture expired before producer initialization, so it did not reach missing-handoff condition. Preserved; only that fixture repeated at15s, with helper/operational deadline unchanged.",
+  "second_to_third_test_ast_delta_only": "test_missing_handoff_marker_expires_without_consumer_gate_or_delivery",
+  "pywinpty": {
+    "version": "3.0.3",
+    "site": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages",
+    "payloads_verified_before_after": 12
+  },
+  "native_product_cli_calls": 0,
+  "provider_calls": 0,
+  "real_credentials": 0,
+  "native_service_actions": 0,
+  "installed_functions": [
+    "remote_setup_io.material_sink",
+    "remote_setup_io.handoff_sink"
+  ],
+  "limits": [
+    "Synthetic Python children only; no real remote setup or M1 acceptance.",
+    "The callback must be bounded by the shared deadline; helper cannot preempt arbitrary caller code.",
+    "Gates do not cancel already-started effects and are not atomic with later OS scheduling.",
+    "UNKNOWN never implies no prior material delivery; no replay is permitted.",
+    "Forced cleanup owns auxiliary Job descendants only; it is not service force and cannot qualify TRANSFERRED_ONCE.",
+    "Owner-side remote queue/poll/fence composition is qualified separately by its owner."
+  ]
+}

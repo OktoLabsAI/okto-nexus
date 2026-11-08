@@ -1,0 +1,136 @@
+FFFFFF.F............                                                     [100%]
+================================== FAILURES ===================================
+_ test_cooperative_producer_waits_for_one_consumer_and_both_gates_precede_spawns _
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_cooperative_producer_wait0')
+
+    def test_cooperative_producer_waits_for_one_consumer_and_both_gates_precede_spawns(tmp_path):
+        seen = []
+        def guard(phase):
+            seen.append(phase)
+            assert not (tmp_path / (phase + '-started.json')).exists()
+            if phase == 'consumer':
+                assert (tmp_path / 'producer-started.json').exists()
+                assert (tmp_path / 'handoff.json').exists()
+            return True
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+>       assert seen == ['producer', 'consumer']
+E       AssertionError: assert [] == ['producer', 'consumer']
+E         
+E         Right contains 2 more items, first extra item: 'producer'
+E         Use -v to get more diff
+
+test_pty_gates.py:49: AssertionError
+______ test_non_true_producer_guard_means_no_producer_or_consumer[False] ______
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_non_true_producer_guard_m0')
+answer = False
+
+    @pytest.mark.parametrize('answer', [False, None, 1])
+    def test_non_true_producer_guard_means_no_producer_or_consumer(tmp_path, answer):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return answer
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+>       assert calls == ['producer'] and result['reason'] == 'EFFECT_GUARD_DENIED'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:67: AssertionError
+______ test_non_true_producer_guard_means_no_producer_or_consumer[None] _______
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_non_true_producer_guard_m1')
+answer = None
+
+    @pytest.mark.parametrize('answer', [False, None, 1])
+    def test_non_true_producer_guard_means_no_producer_or_consumer(tmp_path, answer):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return answer
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+>       assert calls == ['producer'] and result['reason'] == 'EFFECT_GUARD_DENIED'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:67: AssertionError
+________ test_non_true_producer_guard_means_no_producer_or_consumer[1] ________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_non_true_producer_guard_m2')
+answer = 1
+
+    @pytest.mark.parametrize('answer', [False, None, 1])
+    def test_non_true_producer_guard_means_no_producer_or_consumer(tmp_path, answer):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return answer
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+>       assert calls == ['producer'] and result['reason'] == 'EFFECT_GUARD_DENIED'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:67: AssertionError
+_ test_consumer_guard_denial_preserves_possible_producer_effect_without_delivery _
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_consumer_guard_denial_pre0')
+
+    def test_consumer_guard_denial_preserves_possible_producer_effect_without_delivery(tmp_path):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return phase == 'producer'
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+>       assert calls == ['producer', 'consumer']
+E       AssertionError: assert [] == ['producer', 'consumer']
+E         
+E         Right contains 2 more items, first extra item: 'producer'
+E         Use -v to get more diff
+
+test_pty_gates.py:79: AssertionError
+_______ test_guard_exception_is_denial_without_serializing_its_message ________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_guard_exception_is_denial0')
+
+    def test_guard_exception_is_denial_without_serializing_its_message(tmp_path):
+        def guard(phase):
+            raise ValueError('PRIVATE ACCOUNT VALUE NEVER PUBLIC')
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+        assert result['producer_started'] is False and result['delivery_attempted'] is False
+>       assert result['effect_guard_decisions'] == [{'phase': 'producer', 'allowed': False, 'error_type': 'ValueError'}]
+E       AssertionError: assert [] == [{'phase': 'p...'ValueError'}]
+E         
+E         Right contains one more item: {'phase': 'producer', 'allowed': False, 'error_type': 'ValueError'}
+E         Use -v to get more diff
+
+test_pty_gates.py:91: AssertionError
+____ test_missing_handoff_marker_expires_without_consumer_gate_or_delivery ____
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_missing_handoff_marker_ex0')
+
+    def test_missing_handoff_marker_expires_without_consumer_gate_or_delivery(tmp_path):
+        seen = []
+        result = run_case(tmp_path, 'marker-absent', lambda phase: seen.append(phase) or True, timeout=4)
+>       assert seen == ['producer'] and result['status'] != 'TRANSFERRED_ONCE'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:108: AssertionError
+=========================== short test summary info ===========================
+FAILED test_pty_gates.py::test_cooperative_producer_waits_for_one_consumer_and_both_gates_precede_spawns
+FAILED test_pty_gates.py::test_non_true_producer_guard_means_no_producer_or_consumer[False]
+FAILED test_pty_gates.py::test_non_true_producer_guard_means_no_producer_or_consumer[None]
+FAILED test_pty_gates.py::test_non_true_producer_guard_means_no_producer_or_consumer[1]
+FAILED test_pty_gates.py::test_consumer_guard_denial_preserves_possible_producer_effect_without_delivery
+FAILED test_pty_gates.py::test_guard_exception_is_denial_without_serializing_its_message
+FAILED test_pty_gates.py::test_missing_handoff_marker_expires_without_consumer_gate_or_delivery
+7 failed, 13 passed in 3.28s

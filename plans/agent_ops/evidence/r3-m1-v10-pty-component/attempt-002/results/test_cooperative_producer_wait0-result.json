@@ -1,0 +1,81 @@
+{
+  "status": "TRANSFERRED_ONCE",
+  "possible_effect": true,
+  "delivery_attempted": true,
+  "consumer_started": true,
+  "forced_owned_cleanup": false,
+  "effect_guard_decisions": [
+    {
+      "phase": "producer",
+      "allowed": true
+    },
+    {
+      "phase": "consumer",
+      "allowed": true
+    }
+  ],
+  "effect_guard_required": true,
+  "worker_pid": 52520,
+  "worker_birth_filetime": 134385766756601842,
+  "worker_assigned_before_gate": true,
+  "producer_started": true,
+  "consumer_start_count": 1,
+  "possible_consumer_effect": true,
+  "consumer_io_completed": true,
+  "effect_gates_requested": [
+    "producer",
+    "consumer"
+  ],
+  "effect_gates_allowed": [
+    "producer",
+    "consumer"
+  ],
+  "dependency_probe": {
+    "module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\__init__.py",
+    "module_sha256": "95a4e2f6c2e308bc9cc9a4183b7c0cbe164d20adaf87fa4ebc64c94f639de10b",
+    "extension": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.cp313-win_amd64.pyd",
+    "extension_sha256": "50b107ec1a9393a464071459023e8c6fc4b0f236e97731c31a741dcd56524df8"
+  },
+  "producer": {
+    "pid": 54240,
+    "birth_filetime": 134385766760672391,
+    "exact_job_member": true
+  },
+  "material_block_observed": true,
+  "material_seen_before_ready_marker": true,
+  "consumer_ready_marker_observed": true,
+  "producer_alive_at_consumer_start": true,
+  "consumer": {
+    "pid": 29460,
+    "birth_filetime": 134385766837694553,
+    "exact_job_member": true
+  },
+  "consumer_exit": 0,
+  "producer_exit": 0,
+  "material_in_public_result": false,
+  "material_in_argv_or_env": false,
+  "consumer_did_not_echo": true,
+  "tty_probe": {
+    "pid": 54240,
+    "streams": {
+      "stdin": true,
+      "stdout": true,
+      "stderr": true
+    },
+    "visible": false,
+    "material_sink_module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\remote_setup_io.py",
+    "material_sink_sha256": "3244aac9c49b9a94bf86f00cc4e99cc084a10481d5d5afe2c3ecf3326dbaf3df"
+  },
+  "consumer_material_matches": true,
+  "material_absent_from_synthetic_files": true,
+  "public_ipc_readers_joined": true,
+  "worker_stderr_observed": false,
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "synthetic_files": {
+    "producer-started.json": true,
+    "consumer-started.json": true,
+    "consumer-ack.json": true,
+    "producer-saw-ack.json": true
+  }
+}

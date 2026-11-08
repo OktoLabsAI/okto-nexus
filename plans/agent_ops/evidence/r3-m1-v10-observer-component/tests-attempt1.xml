@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="11" skipped="0" tests="16" time="21.403" timestamp="2026-11-07T22:36:19.562706-03:00" hostname="Alienware_m15"><testcase classname="" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="0.399"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_actual_core_journal_accou0')
+
+    def test_actual_core_journal_accounts_while_http_worker_is_blocked(tmp_path):
+        home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path);release=threading.Event();entered=threading.Event()
+        flow,reader,stops=attach(control,fixture,tmp_path,home,release=release,entered=entered)
+        writer=None
+        try:
+            control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={})
+            assert entered.wait(1)
+            writer=JournalFixture(reader.path(flow.selected),flow.selected)
+&gt;           writer.complete('one',150000)
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:91: in complete
+    for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):self.emit(method,name,total,thread=thread)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="0.331"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_threshold_and_late_post_f0')
+
+    def test_threshold_and_late_post_fence_share_one_normal_stop(tmp_path):
+        home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path);release=threading.Event();entered=threading.Event()
+        flow,reader,stops=attach(control,fixture,tmp_path,home,release=release,entered=entered)
+        writer=None
+        try:
+            control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={})
+            assert entered.wait(1)
+            writer=JournalFixture(reader.path(flow.selected),flow.selected)
+&gt;           writer.emit('turn/started','one');writer.emit('thread/tokenUsage/updated','one',154157)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="13.501"><failure message="AttributeError: 'NoneType' object has no attribute 'is_alive'">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_deadline_tick_does_not_wa0')
+
+    def test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay(tmp_path):
+        now=[1000.];home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path,lambda:now[0]);release=threading.Event();entered=threading.Event()
+        flow,reader,stops=attach(control,fixture,tmp_path,home,release=release,entered=entered)
+        try:
+            control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={});assert entered.wait(1)
+            for _ in range(601):now[0]+=.2;control.poll()
+&gt;           assert control.api.thread.is_alive() and stops==['normal-stop']
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'NoneType' object has no attribute 'is_alive'
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:209: AttributeError</failure></testcase><testcase classname="" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.393" /><testcase classname="" name="test_journal_privacy_scope_and_real_layout[local]" time="0.045"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_journal_privacy_scope_and0')
+lane = 'local'
+
+    @pytest.mark.parametrize('lane',['local','connector'])
+    def test_journal_privacy_scope_and_real_layout(tmp_path,lane):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope(lane)
+        reader=CoreJournalReader(tmp_path,owner,lane);writer=JournalFixture(reader.path(selected),selected)
+        try:
+            secret=RuntimeEvent(selected['server_id'],selected['executor_id'],selected['session_id'],'epoch',1,
+                'text_delta','output/secret',{'text':'PRIVATE TRANSCRIPT PASSWORD','token':'PRIVATE TOKEN'})
+&gt;           asyncio.run(writer.journal.append_event(secret));writer.sequence=1
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:238: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.042"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_journal_privacy_scope_and1')
+lane = 'connector'
+
+    @pytest.mark.parametrize('lane',['local','connector'])
+    def test_journal_privacy_scope_and_real_layout(tmp_path,lane):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope(lane)
+        reader=CoreJournalReader(tmp_path,owner,lane);writer=JournalFixture(reader.path(selected),selected)
+        try:
+            secret=RuntimeEvent(selected['server_id'],selected['executor_id'],selected['session_id'],'epoch',1,
+                'text_delta','output/secret',{'text':'PRIVATE TRANSCRIPT PASSWORD','token':'PRIVATE TOKEN'})
+&gt;           asyncio.run(writer.journal.append_event(secret));writer.sequence=1
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:238: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.034"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_corrupted_or_rolled_back_0')
+change = 'gap'
+
+    @pytest.mark.parametrize('change',['gap','epoch','watermark','body_scope','counter_type'])
+    def test_corrupted_or_rolled_back_journal_fails_closed(tmp_path,change):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        writer=JournalFixture(reader.path(selected),selected)
+        try:
+&gt;           writer.complete('one',10);reader.read(selected)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:91: in complete
+    for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):self.emit(method,name,total,thread=thread)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.040"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_corrupted_or_rolled_back_1')
+change = 'epoch'
+
+    @pytest.mark.parametrize('change',['gap','epoch','watermark','body_scope','counter_type'])
+    def test_corrupted_or_rolled_back_journal_fails_closed(tmp_path,change):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        writer=JournalFixture(reader.path(selected),selected)
+        try:
+&gt;           writer.complete('one',10);reader.read(selected)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:91: in complete
+    for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):self.emit(method,name,total,thread=thread)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.046"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_corrupted_or_rolled_back_2')
+change = 'watermark'
+
+    @pytest.mark.parametrize('change',['gap','epoch','watermark','body_scope','counter_type'])
+    def test_corrupted_or_rolled_back_journal_fails_closed(tmp_path,change):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        writer=JournalFixture(reader.path(selected),selected)
+        try:
+&gt;           writer.complete('one',10);reader.read(selected)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:91: in complete
+    for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):self.emit(method,name,total,thread=thread)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.048"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_corrupted_or_rolled_back_3')
+change = 'body_scope'
+
+    @pytest.mark.parametrize('change',['gap','epoch','watermark','body_scope','counter_type'])
+    def test_corrupted_or_rolled_back_journal_fails_closed(tmp_path,change):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        writer=JournalFixture(reader.path(selected),selected)
+        try:
+&gt;           writer.complete('one',10);reader.read(selected)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:91: in complete
+    for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):self.emit(method,name,total,thread=thread)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.041"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_corrupted_or_rolled_back_4')
+change = 'counter_type'
+
+    @pytest.mark.parametrize('change',['gap','epoch','watermark','body_scope','counter_type'])
+    def test_corrupted_or_rolled_back_journal_fails_closed(tmp_path,change):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        writer=JournalFixture(reader.path(selected),selected)
+        try:
+&gt;           writer.complete('one',10);reader.read(selected)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:91: in complete
+    for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):self.emit(method,name,total,thread=thread)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.034"><failure message="AssertionError: External effect forbidden">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10774/test_missing_journal_may_arriv0')
+
+    def test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start(tmp_path):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        assert reader.read(selected) is None
+&gt;       writer=JournalFixture(reader.path(selected),selected);writer.complete('one');reader.read(selected);writer.close()
+                                                              ^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:269: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:91: in complete
+    for method in ('turn/started','thread/tokenUsage/updated','turn/completed'):self.emit(method,name,total,thread=thread)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:88: in emit
+    asyncio.run(self.journal.append_event(RuntimeEvent(**value)))
+C:\Python313\Lib\asyncio\runners.py:193: in run
+    with Runner(debug=debug, loop_factory=loop_factory) as runner:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:58: in __enter__
+    self._lazy_init()
+C:\Python313\Lib\asyncio\runners.py:137: in _lazy_init
+    self._loop = events.new_event_loop()
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:837: in new_event_loop
+    return get_event_loop_policy().new_event_loop()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\events.py:734: in new_event_loop
+    return self._loop_factory()
+           ^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\windows_events.py:316: in __init__
+    super().__init__(proactor)
+C:\Python313\Lib\asyncio\proactor_events.py:637: in __init__
+    self._make_self_pipe()
+C:\Python313\Lib\asyncio\proactor_events.py:784: in _make_self_pipe
+    self._ssock, self._csock = socket.socketpair()
+                               ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\socket.py:615: in _fallback_socketpair
+    lsock.bind((host, 0))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (&lt;socket.socket [closed] fd=-1, family=2, type=1, proto=0&gt;, ('127.0.0.1', 0))
+kwargs = {}
+
+&gt;   def denied(*args,**kwargs):raise AssertionError('External effect forbidden')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: External effect forbidden
+
+C:\Users\jpamb\AppData\Local\Temp\m1-observation-review-zouioqck\integration-v2\test_independent.py:26: AssertionError</failure></testcase><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.063" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.057" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.061" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.064" /></testsuite></testsuites>

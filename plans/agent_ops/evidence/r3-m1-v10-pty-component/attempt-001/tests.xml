@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="20" time="2.881" timestamp="2026-11-07T22:56:44.783318-03:00" hostname="Alienware_m15"><testcase classname="test_pty_gates" name="test_cooperative_producer_waits_for_one_consumer_and_both_gates_precede_spawns" time="0.279"><failure message="AssertionError: assert [] == ['producer', 'consumer']&#10;  &#10;  Right contains 2 more items, first extra item: 'producer'&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_cooperative_producer_wait0')
+
+    def test_cooperative_producer_waits_for_one_consumer_and_both_gates_precede_spawns(tmp_path):
+        seen = []
+        def guard(phase):
+            seen.append(phase)
+            assert not (tmp_path / (phase + '-started.json')).exists()
+            if phase == 'consumer':
+                assert (tmp_path / 'producer-started.json').exists()
+                assert (tmp_path / 'handoff.json').exists()
+            return True
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+&gt;       assert seen == ['producer', 'consumer']
+E       AssertionError: assert [] == ['producer', 'consumer']
+E         
+E         Right contains 2 more items, first extra item: 'producer'
+E         Use -v to get more diff
+
+test_pty_gates.py:49: AssertionError</failure></testcase><testcase classname="test_pty_gates" name="test_non_true_producer_guard_means_no_producer_or_consumer[False]" time="0.299"><failure message="AssertionError: assert ([] == ['producer']&#10;  &#10;  Right contains one more item: 'producer'&#10;  Use -v to get more diff)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_non_true_producer_guard_m0')
+answer = False
+
+    @pytest.mark.parametrize('answer', [False, None, 1])
+    def test_non_true_producer_guard_means_no_producer_or_consumer(tmp_path, answer):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return answer
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+&gt;       assert calls == ['producer'] and result['reason'] == 'EFFECT_GUARD_DENIED'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:67: AssertionError</failure></testcase><testcase classname="test_pty_gates" name="test_non_true_producer_guard_means_no_producer_or_consumer[None]" time="0.327"><failure message="AssertionError: assert ([] == ['producer']&#10;  &#10;  Right contains one more item: 'producer'&#10;  Use -v to get more diff)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_non_true_producer_guard_m1')
+answer = None
+
+    @pytest.mark.parametrize('answer', [False, None, 1])
+    def test_non_true_producer_guard_means_no_producer_or_consumer(tmp_path, answer):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return answer
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+&gt;       assert calls == ['producer'] and result['reason'] == 'EFFECT_GUARD_DENIED'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:67: AssertionError</failure></testcase><testcase classname="test_pty_gates" name="test_non_true_producer_guard_means_no_producer_or_consumer[1]" time="0.255"><failure message="AssertionError: assert ([] == ['producer']&#10;  &#10;  Right contains one more item: 'producer'&#10;  Use -v to get more diff)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_non_true_producer_guard_m2')
+answer = 1
+
+    @pytest.mark.parametrize('answer', [False, None, 1])
+    def test_non_true_producer_guard_means_no_producer_or_consumer(tmp_path, answer):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return answer
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+&gt;       assert calls == ['producer'] and result['reason'] == 'EFFECT_GUARD_DENIED'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:67: AssertionError</failure></testcase><testcase classname="test_pty_gates" name="test_consumer_guard_denial_preserves_possible_producer_effect_without_delivery" time="0.318"><failure message="AssertionError: assert [] == ['producer', 'consumer']&#10;  &#10;  Right contains 2 more items, first extra item: 'producer'&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_consumer_guard_denial_pre0')
+
+    def test_consumer_guard_denial_preserves_possible_producer_effect_without_delivery(tmp_path):
+        calls = []
+        def guard(phase):
+            calls.append(phase)
+            return phase == 'producer'
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+&gt;       assert calls == ['producer', 'consumer']
+E       AssertionError: assert [] == ['producer', 'consumer']
+E         
+E         Right contains 2 more items, first extra item: 'producer'
+E         Use -v to get more diff
+
+test_pty_gates.py:79: AssertionError</failure></testcase><testcase classname="test_pty_gates" name="test_guard_exception_is_denial_without_serializing_its_message" time="0.298"><failure message="AssertionError: assert [] == [{'phase': 'p...'ValueError'}]&#10;  &#10;  Right contains one more item: {'phase': 'producer', 'allowed': False, 'error_type': 'ValueError'}&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_guard_exception_is_denial0')
+
+    def test_guard_exception_is_denial_without_serializing_its_message(tmp_path):
+        def guard(phase):
+            raise ValueError('PRIVATE ACCOUNT VALUE NEVER PUBLIC')
+        result = run_case(tmp_path, 'key-before-handoff', guard)
+        assert result['producer_started'] is False and result['delivery_attempted'] is False
+&gt;       assert result['effect_guard_decisions'] == [{'phase': 'producer', 'allowed': False, 'error_type': 'ValueError'}]
+E       AssertionError: assert [] == [{'phase': 'p...'ValueError'}]
+E         
+E         Right contains one more item: {'phase': 'producer', 'allowed': False, 'error_type': 'ValueError'}
+E         Use -v to get more diff
+
+test_pty_gates.py:91: AssertionError</failure></testcase><testcase classname="test_pty_gates" name="test_allow_returning_after_deadline_cannot_start_producer" time="0.250" /><testcase classname="test_pty_gates" name="test_missing_handoff_marker_expires_without_consumer_gate_or_delivery" time="0.291"><failure message="AssertionError: assert ([] == ['producer']&#10;  &#10;  Right contains one more item: 'producer'&#10;  Use -v to get more diff)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v10-protected-pty-sce7juhl/attempt-001/cases/test_missing_handoff_marker_ex0')
+
+    def test_missing_handoff_marker_expires_without_consumer_gate_or_delivery(tmp_path):
+        seen = []
+        result = run_case(tmp_path, 'marker-absent', lambda phase: seen.append(phase) or True, timeout=4)
+&gt;       assert seen == ['producer'] and result['status'] != 'TRANSFERRED_ONCE'
+E       AssertionError: assert ([] == ['producer']
+E         
+E         Right contains one more item: 'producer'
+E         Use -v to get more diff)
+
+test_pty_gates.py:108: AssertionError</failure></testcase><testcase classname="test_pty_gates" name="test_shared_deadline_cannot_be_extended_by_new_helper_timeout" time="0.244" /><testcase classname="test_pty_gates" name="test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames0]" time="0.001" /><testcase classname="test_pty_gates" name="test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames1]" time="0.001" /><testcase classname="test_pty_gates" name="test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames2]" time="0.001" /><testcase classname="test_pty_gates" name="test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames3]" time="0.001" /><testcase classname="test_pty_gates" name="test_malformed_out_of_order_or_post_denial_gate_never_authorizes[frames4]" time="0.001" /><testcase classname="test_pty_gates" name="test_worker_rejects_reply_for_wrong_phase_sequence_or_boolean[reply0]" time="0.001" /><testcase classname="test_pty_gates" name="test_worker_rejects_reply_for_wrong_phase_sequence_or_boolean[reply1]" time="0.001" /><testcase classname="test_pty_gates" name="test_worker_rejects_reply_for_wrong_phase_sequence_or_boolean[reply2]" time="0.001" /><testcase classname="test_pty_gates" name="test_protocol_refuses_duplicate_json_keys_and_oversized_line" time="0.001" /><testcase classname="test_pty_gates" name="test_absent_guard_is_refused_before_job_or_process" time="0.004" /><testcase classname="test_pty_gates" name="test_expired_shared_deadline_refuses_before_job_or_process" time="0.003" /></testsuite></testsuites>

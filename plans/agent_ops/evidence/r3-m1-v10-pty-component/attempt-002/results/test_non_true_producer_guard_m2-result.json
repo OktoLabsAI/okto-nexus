@@ -1,0 +1,60 @@
+{
+  "status": "UNCONFIRMED",
+  "possible_effect": false,
+  "delivery_attempted": false,
+  "consumer_started": false,
+  "forced_owned_cleanup": false,
+  "effect_guard_decisions": [
+    {
+      "phase": "producer",
+      "allowed": false
+    }
+  ],
+  "effect_guard_required": true,
+  "worker_pid": 2952,
+  "worker_birth_filetime": 134385766853987270,
+  "worker_assigned_before_gate": true,
+  "producer_started": false,
+  "consumer_start_count": 0,
+  "possible_consumer_effect": false,
+  "consumer_io_completed": false,
+  "effect_gates_requested": [
+    "producer"
+  ],
+  "effect_gates_allowed": [],
+  "dependency_probe": {
+    "module": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\__init__.py",
+    "module_sha256": "95a4e2f6c2e308bc9cc9a4183b7c0cbe164d20adaf87fa4ebc64c94f639de10b",
+    "extension": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.cp313-win_amd64.pyd",
+    "extension_sha256": "50b107ec1a9393a464071459023e8c6fc4b0f236e97731c31a741dcd56524df8"
+  },
+  "error_type": "TransferError",
+  "error_frames": [
+    {
+      "file": "protected_pty.py",
+      "function": "<module>",
+      "line": 480
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "_worker",
+      "line": 195
+    },
+    {
+      "file": "protected_pty.py",
+      "function": "_request_gate",
+      "line": 109
+    }
+  ],
+  "reason": "EFFECT_GUARD_DENIED",
+  "public_ipc_readers_joined": true,
+  "worker_stderr_observed": false,
+  "active_job_processes_after": 0,
+  "worker_exit": 0,
+  "synthetic_files": {
+    "producer-started.json": false,
+    "consumer-started.json": false,
+    "consumer-ack.json": false,
+    "producer-saw-ack.json": false
+  }
+}
