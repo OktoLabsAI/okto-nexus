@@ -1,0 +1,67 @@
+{
+  "status": "INSTALLED_RECOVERY_DIAGNOSTICS_VERIFIED",
+  "source_commit": "405cac3ffea92787b5c7d66c6ecb967f00624739",
+  "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+  "wheel_sha256": "07b7ed53c0fcd9b1c77099a8af52d6d5404d10aca988abaee15a7f51ca132ae4",
+  "installed_unique_cases": 59,
+  "counts_by_module": {
+    "tests.test_embedded_recovery_diagnostics": 10,
+    "tests.test_sqlite_writer_fairness": 10,
+    "tests.execution_r4.test_recovery_diagnostic_contention": 5,
+    "tests.execution_r4.test_terminal_connect": 34
+  },
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "canonical_ci_installed_harness": true,
+  "ci_input_count": 2069,
+  "ci_inputs_unchanged": true,
+  "snapshot_inputs_unchanged": true,
+  "snapshot_file_count": 4869,
+  "package_payloads": {
+    "okto_nexus": {
+      "files": 692,
+      "sha256": "07b7ed53c0fcd9b1c77099a8af52d6d5404d10aca988abaee15a7f51ca132ae4",
+      "before_after_match": true
+    },
+    "nexus_connector_core": {
+      "files": 167,
+      "sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+      "before_after_match": true
+    },
+    "okto_nexus_connector": {
+      "files": 124,
+      "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "before_after_match": true
+    }
+  },
+  "package_payload_total": 983,
+  "pip_check_before_after": "PASS",
+  "interpreter": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Scripts\\python.exe",
+    "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "payload_count_excludes_python": true
+  },
+  "source_files": {
+    "src/okto_nexus/adapters/outbound/sqlite/diagnostics.py": "fb4cb8debbc18305894bb404a1375e8cffabd332da9e2ac48ec21e9b0b47b51d",
+    "src/okto_nexus/adapters/outbound/sqlite/write_gate.py": "c9e1bb2a6873c1c756b181e0fe13dcd4cd708afb0c2efc62cc6bca6c68f145fd",
+    "src/okto_nexus/bootstrap/embedded_agent_recovery.py": "fcd61acbc27ecab5b62686d4e40694343486eef8ed51652ce93d6599849f386f",
+    "tests/test_embedded_recovery_diagnostics.py": "1eb83bfc93fd9eb28e4b8d10477820939d2448c61e15d8faa19ab6576900c6ef",
+    "tests/test_sqlite_writer_fairness.py": "3f0190210764fa9b6678e89a05bb682b496af40a1bcf0292e50fe219ca4717bb",
+    "tests/execution_r4/test_recovery_diagnostic_contention.py": "af7a894a30547928be5ee00548021b083ce6ed5e1a506a670c619168c956cbdf",
+    "tests/execution_r4/test_terminal_connect.py": "33d38379fbc505efffadc79ce122c1775517aa314695d34c1b1a8647b24fadd3",
+    "tools/ci_installed.py": "73261153e3021ced7a1bdf9b7ee756d26297cfbb6feda13bceadb56b98c0b662"
+  },
+  "offline_no_index_no_deps_require_hashes": true,
+  "requirements_encoding": "UTF-8 LF",
+  "previous_prefixes_modified": false,
+  "native_provider_calls": 0,
+  "native_service_actions": 0,
+  "limits": [
+    "Synthetic installed SQLite/recovery/terminal-connect qualification; no M1 or real provider acceptance.",
+    "New diagnostics do not identify the unretained historical M1 v9 SQLite cause.",
+    "No retry, timeout, locking, containment or effect semantics were changed.",
+    "Snapshot is the committed archive, including its canonical Git bytes; no checkout imports are used.",
+    "Import-boundary source-only tests were already passed separately and are not counted here."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "status": "DEPENDENCIES_ONLY_READY",
+  "products_installed": false,
+  "source_modified": false,
+  "probe": {
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Scripts\\python.exe",
+    "products_find_spec": {
+      "okto_nexus": null,
+      "okto_nexus_connector": null,
+      "nexus_connector_core": null
+    },
+    "product_dist_info_absent": true,
+    "pip_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\pip\\__init__.py",
+    "pip_version": "24.3.1",
+    "mcp_version": "1.30.0",
+    "system_site_packages": false
+  },
+  "excluded_top_level": [
+    "__pycache__",
+    "nexus_connector_core",
+    "okto_nexus",
+    "okto_nexus-0.3.3.dist-info",
+    "okto_nexus_connector",
+    "okto_nexus_connector-0.0.12.dist-info",
+    "okto_nexus_connector_core-0.0.14.dist-info"
+  ],
+  "dependency_files": 3209,
+  "dependency_manifest_sha256": "e8228f47a45e054751ace7a45043c6921d7d157d4471599abba8528cf4f24832",
+  "environment_sha256": "a3d406ea544c89e7907c2e5dea8c38101c7f117bab6ef76af3148696ecb8943e",
+  "campaign_services_or_provider_used": false,
+  "limits": "Dependency copy and environment preparation are outside the future product-install-to-useful-result interval."
+}

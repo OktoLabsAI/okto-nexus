@@ -1,0 +1,22 @@
+{
+  "pid": 45824,
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\source\\tools\\ci_installed.py",
+    "test",
+    "--wheel",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+    "--output",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\canonical",
+    "--tests",
+    "tests/test_embedded_recovery_diagnostics.py",
+    "tests/test_sqlite_writer_fairness.py",
+    "tests/execution_r4/test_recovery_diagnostic_contention.py",
+    "tests/execution_r4/test_terminal_connect.py"
+  ],
+  "no_timeout_kill": true
+}

@@ -1212,3 +1212,9 @@ Evidência: `plans/agent_ops/evidence/r3-m1-v9-execution/qualification.json`.
 O diagnóstico de recuperação preserva códigos SQLite tipados e distingue timeout da fila de escrita, sem mensagens arbitrárias, SQL, caminhos ou credenciais. A exceção da fila continua sendo subclasse de `TimeoutError`; políticas de retry, locks e contenção não mudaram. Foram aprovados 28 testes de fonte, incluindo 10 casos novos, com prova de importação do checkout e inputs imutáveis. A causa específica do `DB_ERROR` histórico da v9 continua desconhecida; não há promoção de M1 ou critérios.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-recovery-diagnostics/qualification.json`.
+
+## Qualificação instalada do diagnóstico
+
+A wheel Nexus `07b7ed53…132ae4`, construída offline do commit `405cac3f`, passou em 59 casos instalados (diagnóstico, fila de escrita, contenção e conexão terminal). Os 983 payloads — Nexus 692, Core 167 e Connector 124 — permaneceram iguais antes/depois; `pip check` passou. Nenhuma chamada nativa ao provedor ou ação de serviço foi executada. Esta prova não identifica a causa SQLite histórica nem encerra M1.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-installed-recovery-diagnostics/qualification.json`.

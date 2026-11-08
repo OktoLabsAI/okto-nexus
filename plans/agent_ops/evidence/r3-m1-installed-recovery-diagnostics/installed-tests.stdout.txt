@@ -1,0 +1,103 @@
+okto-nexus - local agent coordination bus
+
+Usage:
+  okto-nexus connect [options] Review and connect a local project
+  okto-nexus init --mode participant [options] Review an existing agent's external MCP configuration
+  okto-nexus participant launch [--profile NAME] [--plan | --approve REVISION] [options]  Launch a client with its protected credential
+  okto-nexus participant remove [--profile NAME] [--plan | --approve REVISION] [options]  Remove this setup's local entry and credential
+  okto-nexus participant smoke exchange|handoff|status|observe [options]  Review optional cooperation with a peer
+  okto-nexus doctor [--mode managed|participant] [--profile NAME] [--check-server] [--json]  Inspect independent proof levels
+  okto-nexus preset [--plan | --approve REVISION] [options]  Review optional preset updates
+  okto-nexus work [chat|send|status|watch|events|answer|authorize|sessions|resume|steer|interrupt|close] [options]
+  okto-nexus message send [options]  Send conversation using a participant profile
+  okto-nexus handoff create|wait [options]  Create work or observe its canonical completion
+  okto-nexus request inspect [REQUEST_ID] [options]  Recover a coordination reference
+  okto-nexus observe herdr bind|run|status [options]  Publish optional external activity observations
+  okto-nexus operator login|status|logout --profile NAME [options]
+  okto-nexus operator approval APPROVAL_ID --profile NAME [options]
+  okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
+  okto-nexus service status|logs|start|stop|restart|recover-start|install|uninstall|enable|disable|upgrade-plan|upgrade-apply [options]  Manage the local Server
+  okto-nexus tail [options]    Stream the event log as NDJSON
+  okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
+
+Use `okto-nexus serve --help` for server options. Agents connect to /mcp
+over HTTP with their existing API key.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.1, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\jpamb\AppData\Local\Temp\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\jpamb\AppData\Local\Temp\m1-recovery-diagnostics-installed-xtfm5o4x\source
+configfile: ..\isolated\tmp\nexus-ci-installed-bqbno8rn\pytest.ini
+plugins: anyio-4.16.0, asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 59 items
+
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_real_sqlite_writer_lock_preserves_driver_code_and_retryability PASSED [  1%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_real_writer_gate_timeout_is_distinct_from_sqlite_busy PASSED [  3%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_extended_constraint_code_survives_explicit_cause_without_sql_or_values PASSED [  5%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_implicit_context_and_cycle_are_bounded_without_copying_messages PASSED [  6%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_suppressed_unrelated_context_is_not_reported PASSED [  8%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_fake_attributes_and_timeout_message_cannot_fabricate_sqlite_or_gate_origin PASSED [ 10%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_driver_name_must_match_public_sqlite_constant[SQLITE_BUSY_BEARER_PRIVATE] PASSED [ 11%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_driver_name_must_match_public_sqlite_constant[private password/path] PASSED [ 13%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_driver_name_must_match_public_sqlite_constant[SQLITE_CONSTRAINT] PASSED [ 15%]
+..\..\..\source\tests\test_embedded_recovery_diagnostics.py::test_existing_technical_core_diagnostic_is_preserved PASSED [ 16%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_waiting_writers_precede_immediate_reacquisition PASSED [ 18%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_expired_waiter_is_removed_without_writing_or_blocking_successor PASSED [ 20%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_failed_transaction_releases_local_writer_admission[hook] PASSED [ 22%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_failed_transaction_releases_local_writer_admission[body] PASSED [ 23%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_failed_transaction_releases_local_writer_admission[begin] PASSED [ 25%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_failed_transaction_releases_local_writer_admission[commit] PASSED [ 27%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_queue_wait_reduces_sqlite_lock_wait_budget PASSED [ 28%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_late_wakeup_cannot_admit_expired_writer[0.02] PASSED [ 30%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_late_wakeup_cannot_admit_expired_writer[0.021] PASSED [ 32%]
+..\..\..\source\tests\test_sqlite_writer_fairness.py::test_zero_budget_allows_only_an_immediately_available_slot PASSED [ 33%]
+..\..\..\source\tests\execution_r4\test_recovery_diagnostic_contention.py::test_receipt_and_diagnostic_contention_preserve_native_and_retry[codex_app_server] PASSED [ 35%]
+..\..\..\source\tests\execution_r4\test_recovery_diagnostic_contention.py::test_receipt_and_diagnostic_contention_preserve_native_and_retry[claude_stream] PASSED [ 37%]
+..\..\..\source\tests\execution_r4\test_recovery_diagnostic_contention.py::test_receipt_and_diagnostic_contention_preserve_native_and_retry[pi_rpc] PASSED [ 38%]
+..\..\..\source\tests\execution_r4\test_recovery_diagnostic_contention.py::test_nonretryable_diagnostic_failure_is_not_hidden PASSED [ 40%]
+..\..\..\source\tests\execution_r4\test_recovery_diagnostic_contention.py::test_manual_recovery_does_not_report_stopped_host_ready PASSED [ 42%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_review_requires_exact_consent_then_finish_and_reconnect_preserve_configuration PASSED [ 44%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_response_loss_resumes_without_repeating_native_effects[installations:check] PASSED [ 45%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_response_loss_resumes_without_repeating_native_effects[setup:test] PASSED [ 47%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_response_loss_resumes_without_repeating_native_effects[setup:finish] PASSED [ 49%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_reply_loss_observes_same_publication_before_single_test[0] PASSED [ 50%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_reply_loss_observes_same_publication_before_single_test[2] PASSED [ 52%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_deadline_retains_checkpoint_without_test[post_deadline] PASSED [ 54%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_deadline_retains_checkpoint_without_test[get_deadline] PASSED [ 55%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_deadline_retains_checkpoint_without_test[unreachable] PASSED [ 57%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_deadline_retains_checkpoint_without_test[stale] PASSED [ 59%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_rejects_changed_identity_before_test[server] PASSED [ 61%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_rejects_changed_identity_before_test[subject_server] PASSED [ 62%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_rejects_changed_identity_before_test[executor] PASSED [ 64%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_rejects_changed_identity_before_test[adapter] PASSED [ 66%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_rejects_changed_identity_before_test[candidate] PASSED [ 67%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_does_not_mask_definite_refusal[post] PASSED [ 69%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_recovery_does_not_mask_definite_refusal[get] PASSED [ 71%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_resumed_check_read_failure_keeps_prior_possible_effect[server] PASSED [ 72%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_resumed_check_read_failure_keeps_prior_possible_effect[permission] PASSED [ 74%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_deadline_gates_each_read_and_following_effect[pre_post_subject] PASSED [ 76%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_deadline_gates_each_read_and_following_effect[recovery_server] PASSED [ 77%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_deadline_gates_each_read_and_following_effect[recovery_subject] PASSED [ 79%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_deadline_gates_each_read_and_following_effect[confirmation_save] PASSED [ 81%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_check_deadline_gates_each_read_and_following_effect[test_submission_save] PASSED [ 83%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_provider_home_separators_survive_finish_and_read_only_resume PASSED [ 84%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_submitted_test_with_lost_cache_is_not_replayed PASSED [ 86%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_mutated_review_never_starts_a_test PASSED [ 88%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_cli_plan_apply_and_reconnect_use_saved_profile PASSED [ 89%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_existing_agent_binding_is_reused_after_canonical_project_match PASSED [ 91%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_unknown_preset_origin_is_rejected_before_test[origin0] PASSED [ 93%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_unknown_preset_origin_is_rejected_before_test[origin1] PASSED [ 94%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_unknown_preset_origin_is_rejected_before_test[origin2] PASSED [ 96%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_reconnect_reads_later_customization_without_reissuing_grants PASSED [ 98%]
+..\..\..\source\tests\execution_r4\test_terminal_connect.py::test_interactive_connect_enters_work_only_after_configuration PASSED [100%]
+
+============================== warnings summary ===============================
+..\..\..\venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\jpamb\AppData\Local\Temp\m1-recovery-diagnostics-installed-xtfm5o4x\canonical\tests.xml -
+================== 59 passed, 1 warning in 344.53s (0:05:44) ==================
