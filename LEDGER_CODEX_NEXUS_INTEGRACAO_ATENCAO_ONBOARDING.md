@@ -1171,3 +1171,9 @@ aguarda recibo novo: v8 excluía ciclos adicionais de serviço. Sem force/logout
 reboot/replay/reset, instalação real ou chamada ao provedor. Nenhum aceite promovido.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v9-preparation/root-review.json`.
+
+## M1 v9 — autorização recebida
+
+O usuário respondeu “autorizo” à proposta final `9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279`. Recibo novo fixa seis novas/nove reservas cumulativas, preventiva200mil/tolerância700mil, duas tarefas/oito ações e até um início implícito do Connector. Preflight confirmou alvos ausentes, porta livre e hashes. Nenhum efeito novo neste checkpoint.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v9-authorization/authorization.json`.

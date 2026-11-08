@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "observed_at": "2026-11-08T00:47:32.600524+00:00",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-6e7df6cdba864d312a10019224651c771e6b603618ad4524cc7821e2fffef32a",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-f6f08d745dd900aa1cb17838507146770ed036cb39ab7bae1479081406f09bd6",
+      "absent": true
+    }
+  },
+  "fresh_campaign_root_absent": true,
+  "exclusive_port_probe_passed_not_reserved": 54913,
+  "execution_module_pins_verified": 27,
+  "wheel_pins_verified": 3,
+  "provider_calls": 0,
+  "service_mutations": 0
+}

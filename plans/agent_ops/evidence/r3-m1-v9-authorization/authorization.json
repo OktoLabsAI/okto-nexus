@@ -1,0 +1,33 @@
+{
+  "status": "USER_APPROVED",
+  "proposal_revision": 9,
+  "proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign",
+  "policy": {
+    "revision": 9,
+    "carry_in_admissions": 3,
+    "carry_in_tokens": 45843,
+    "max_cumulative_admissions": 9,
+    "max_new_admissions": 6,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "ancestry": {
+    "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+    "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+    "predecessor_faults": [
+      "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+      "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+      "predecessor_faults": [
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ]
+    }
+  },
+  "user_quote": "autorizo",
+  "approved_at_utc": "2026-11-08T00:47:32.598105+00:00",
+  "approval_context": "Direct reply to the final M1 v9 request: existing authenticated Codex CLI account; six new/nine cumulative reservations;200000 preventive cumulative tokens/700000 operational tolerance;two temporary Windows tasks/eight explicit lifecycle actions/at most one implicit selected Connector Scheduler start. One offline installation; no force/replay/logout/reboot."
+}
