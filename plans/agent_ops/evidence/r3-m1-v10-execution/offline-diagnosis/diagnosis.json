@@ -1,0 +1,124 @@
+{
+  "status": "READ_ONLY_CAUSAL_REPRODUCTION_COMPLETED_BEFORE_CANDIDATE_EDIT",
+  "db_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\nexus-home\\nexus.db",
+  "db_sha256_before": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "db_sha256_after": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "frozen_reader_sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+  "frozen_controller_sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+  "evidence_files": {
+    "probe.py": "a16d8016a267374f5eccd11b03e01335aefb2a92192d3bff04ebd2dc521adf7d",
+    "probe.json": "f7a89501721e3594a0088d8b02e5fbcc8e9c5ac300d6dbcaf4eaabe515d8c64e",
+    "native_probe.py": "2569067a45e3665c2de0beaf646564e140cdcc796978aaa86e19fe9b828a46b2",
+    "native-probe.json": "c09e46d1b63437039a2b27aa7c146a4f958d62429340a9fa6029854de707491c"
+  },
+  "original_failure": {
+    "exception_type": "OperationalError",
+    "sqlite_result": "interrupted",
+    "site": "CanonicalIntentReader.read initial intent query before work reservation/admission",
+    "original_trace_not_modified": true,
+    "statement": "No original phase-level timings were retained; reproduction establishes a sufficient matching failure mechanism, not retrospective observation of the exact original scheduling interval."
+  },
+  "demonstrated_mechanism": {
+    "schema_objects": {
+      "index": 364,
+      "table": 161,
+      "trigger": 227,
+      "view": 1
+    },
+    "selected_work_table_counts": {
+      "execution_client_intents": 0,
+      "execution_operations": 0,
+      "execution_sessions": 0,
+      "execution_receipts": 0
+    },
+    "query_plan": [
+      [
+        4,
+        0,
+        0,
+        "SEARCH execution_client_intents USING INDEX sqlite_autoindex_execution_client_intents_1 (server_id=? AND actor_agent_id=? AND client_intent_id=?)"
+      ]
+    ],
+    "python_first_new_connection": {
+      "index": 0,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 11.5124,
+        "query_only_ms": 0.1397,
+        "busy_timeout_ms": 0.0182,
+        "begin_ms": 0.0263,
+        "prepare_and_first_step_ms": 29.729,
+        "rollback_ms": 0.0199,
+        "close_ms": 0.4744
+      },
+      "read_elapsed_ms": 41.4852,
+      "progress_calls": 12,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 32.0798,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 40.6837,
+        "after_trace": false
+      },
+      "target_trace": [],
+      "result": {
+        "status": "SQLITE_ERROR",
+        "type": "OperationalError",
+        "sqlite_errorcode": 9,
+        "sqlite_errorname": "SQLITE_INTERRUPT"
+      }
+    },
+    "native_first_new_connection": {
+      "index": 0,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 12.9049,
+        "query_only_ms": 0.1879,
+        "busy_timeout_ms": 0.0077,
+        "begin_ms": 0.0337,
+        "prepare_ms": 27.8296
+      },
+      "read_elapsed_ms": 41.0839,
+      "progress_calls": 8,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 36.0737
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 40.6175
+      },
+      "status": {
+        "prepare_code": 9,
+        "step_code": null,
+        "returned_rows": 0
+      }
+    },
+    "conclusion": "The 40ms whole-open budget starts before connection creation. Each new connection reloads/compiles the full schema. sqlite3_prepare_v2 itself reaches progress deadline and returns SQLITE_INTERRUPT(9), before sqlite3_step is invoked. Empty indexed intent lookup is not the expensive phase.",
+    "warm_observation": "Reused connection schema cache reduces native prepare to minimum0.0184ms; prewarmed new connection target prepare0.0696\u20130.0921ms and step at most0.065ms in the measured sample.",
+    "cold_definition": "Connection/schema-cache cold only; OS file cache was not purged and file hashing reads database pages."
+  },
+  "instrumentation_note": "Initial C API probe omitted sqlite3_initialize and failed with an access violation before opening a DB; corrected explicit initialization produced the retained measurements. This is a probe defect, not a product finding.",
+  "minimal_candidate_plan": {
+    "read_budget_ms": 40,
+    "initial_schema_budget_ms": 100,
+    "initial_budget_basis": "Explicit one-time initialization budget, not a larger recurring query timeout. Observed first cold total41.1\u201341.5ms and schema preparation<=32.4ms;100ms bounds initialization while leaving room within the unchanged1s owner cadence. OS scheduling/filesystem stalls remain fail-closed and cannot be given a hard OS deadline.",
+    "api": "ReadOnly.prepare(path) caches one owner-thread, mode=ro/query_only connection per identity. ReadOnly.open(path) creates BEGIN snapshot for this read and always ROLLBACKs it; close() releases all cached handles. Canonical readers prepare before admission. A newly created Core journal initializes once on first existence during owner polling.",
+    "freshness": "Validate safe path and stat identity on each read; maintain fresh transaction per tick; verify schema version has not changed or fail closed rather than silently recompiling an unexpected schema.",
+    "failure": "No transparent re-open or retry after timeout, replacement, schema drift or unexpected close. Preserve primary error metadata and uncertainty. Keep global controller/token authority and120s/1s/200000 rules unchanged.",
+    "qualification": "Own closed real161-table DB cold/warm comparison; synthetic fresh-snapshot mutation, DB replacement, initialization/read timeout, explicit close/owner checks, actual Core late journal arrival, global ledger/worker composition regression."
+  },
+  "effects": {
+    "provider_calls": 0,
+    "services_started": 0,
+    "credential_reads": 0,
+    "campaign_replays": 0,
+    "repo_edits": 0,
+    "frozen_draft_edits": 0
+  },
+  "next_step": "Implement a separately named Temp candidate only after this evidence file is written."
+}

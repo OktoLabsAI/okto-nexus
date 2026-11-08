@@ -1,0 +1,28 @@
+{
+  "status": "NORMAL_CLEANUP_CONFIRMED",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-172e0a933c84bf33220c109d6692bec60faee05c45f4aa4b6725bc3e8891b84c",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-a4c82dcab003a5b130554f7d3f5494aded3db6a5310e1fd68e90879f88f14a63",
+      "absent": true
+    }
+  },
+  "exclusive_port_probe_passed_not_reserved": 56237,
+  "time": 1794136995.5306005,
+  "data_preserved": true,
+  "force_used": false,
+  "replayed": false,
+  "connector_started": false,
+  "service_actions": 4,
+  "proof_sha256": "a20bd9df2bc60166111147e40695b659438fafc82136b7d69da458ace4edde2e",
+  "controller_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+  "work_intent_rows": 0,
+  "work_reservation_exists": false,
+  "work_dispatched": false,
+  "report_exists": false,
+  "canonical_db_unchanged_by_readonly_check": true,
+  "canonical_db_sha256": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b"
+}

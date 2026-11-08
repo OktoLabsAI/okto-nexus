@@ -1,0 +1,28 @@
+{
+  "error_type": "sqlite3.OperationalError",
+  "observed_message": "interrupted",
+  "source": "own execution stderr, sanitized frame/function/message projection",
+  "frames": [
+    {
+      "file": "m1_v10_work.py",
+      "line": 195,
+      "function": "module"
+    },
+    {
+      "file": "independent_controller.py",
+      "line": 102,
+      "function": "start_work"
+    },
+    {
+      "file": "independent_journal.py",
+      "line": 78,
+      "function": "read"
+    }
+  ],
+  "failed_before_work_reservation": true,
+  "failed_before_work_api_dispatch": true,
+  "work_intent_rows": 0,
+  "work_model_turns": 0,
+  "original_numeric_sqlite_code_retained": false,
+  "scope": "Freshness SELECT failed in the campaign observer. This is not the v9 product DB_ERROR and not a provider failure."
+}

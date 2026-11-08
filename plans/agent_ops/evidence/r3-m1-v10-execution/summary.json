@@ -1,0 +1,89 @@
+{
+  "status": "V10_CLOSED_AFTER_OBSERVER_PREFLIGHT_FAILURE_NO_M1_ACCEPTANCE",
+  "proposal_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+  "approval_sha256": "8500ae2cd11ff8dca2bc1551a9a5349f76075a0578f2e931c436a09ee2515620",
+  "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+  "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+  "installation": {
+    "attempts": 1,
+    "status": "INSTALLED_VERIFIED",
+    "product_payloads": 983,
+    "pip_check_returncode": 0,
+    "receipt": "installation/installation-result.json",
+    "first_useful_result": false,
+    "base06_complete": false
+  },
+  "setup": {
+    "confirmed_productive_admissions": 1,
+    "cli_exit": 0,
+    "result_stage": "SUCCEEDED",
+    "new_minimum_observed_tokens": 21815,
+    "usage_seen": true,
+    "caught_up": true,
+    "owned_slot_released": true,
+    "close_stage_reported": "SUBMITTED"
+  },
+  "useful_work": {
+    "dispatch_selection_artifact_exists": true,
+    "controller_reservation_created": false,
+    "api_post_dispatched": false,
+    "canonical_intent_rows": 0,
+    "native_admitted": false,
+    "model_turns": 0,
+    "report_exists": false,
+    "failure": "Observer freshness SELECT raised sqlite3.OperationalError: interrupted before start_work reservation.",
+    "diagnosis": "campaign/observer-error-diagnosis.json",
+    "original_numeric_sqlite_code_retained": false
+  },
+  "accounting": {
+    "prior_reserved": 5,
+    "new_reserved": 1,
+    "cumulative_reserved": 6,
+    "prior_minimum_observed_tokens": 67658,
+    "new_minimum_observed_tokens": 21815,
+    "cumulative_minimum_observed_tokens": 89473,
+    "billing_final": false,
+    "historical_confirmed_productive_admissions": 3,
+    "new_confirmed_productive_admissions": 1
+  },
+  "closure": {
+    "normal_stop_returncode": 0,
+    "drain": "DRAINED",
+    "retained_handle_exit_confirmed": true,
+    "uninstall_returncode": 0,
+    "two_exact_tasks_absent": true,
+    "port_free_at_root_observation": 56237,
+    "forced_service_stop": false,
+    "connector_started": false,
+    "claude_executed": false,
+    "data_retained": true
+  },
+  "snapshot_order_note": "campaign/live-accounting.json is an earlier pre-failure snapshot with can_admit=true. It is preserved as historical evidence and does not supersede the final faulted checkpoint/runner-error/closure. Dispatch-selection.json is selection metadata, not proof of admission.",
+  "limits": [
+    "No useful work, native decision, continuation, Connector lane or M1 acceptance is promoted.",
+    "The observer failure is distinct from prior v9 product DB_ERROR. The separately retained offline reproduction establishes a matching initialization/deadline mechanism; original phase timings and numeric SQLite code were not retained. This collector performs no reproduction or database access.",
+    "Setup close_stage SUBMITTED is preserved exactly; separate owned-slot and service-exit evidence is not relabeled as a native close receipt.",
+    "Observed tokens are not final provider billing. This closed campaign confers no replay or future admission authority.",
+    "No test, service, provider, HTTP, Scheduler or database operation was executed by the collector. Original metadata/source hashes are checked before and after copying."
+  ],
+  "redactions": 0,
+  "private_material_excluded": [
+    "raw stdout/stderr",
+    "private logs",
+    "raw controller checkpoint",
+    "SQLite databases",
+    "vaults",
+    "provider authentication/configuration/transcripts",
+    "wheels and venvs"
+  ],
+  "separate_offline_diagnosis": {
+    "path": "offline-diagnosis/diagnosis.json",
+    "sha256": "6b76e393bef4b16f78760997cf3f74be126bbf5417f04cbffac60aa803f38d3a",
+    "db_unchanged_in_report": true,
+    "finding": "New-connection schema compilation reached the40ms whole-open observer deadline in the separate reproduction; the C API returned SQLITE_INTERRUPT during sqlite3_prepare_v2 before sqlite3_step.",
+    "interpretation": "A sufficient matching mechanism, not a retrospective measurement of the exact original scheduling interval. Cold means connection/schema-cache cold; OS file cache was not purged.",
+    "instrumentation_history": "An initial C probe omitted sqlite3_initialize and failed before opening the DB. This probe defect is retained in diagnosis.json; it is not a product failure.",
+    "executed_by_this_collector": false,
+    "candidate_code_included": false
+  }
+}

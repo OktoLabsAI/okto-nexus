@@ -1,0 +1,86 @@
+{
+  "started": 1794136663.8863814,
+  "finished": 1794136744.3130217,
+  "cli_exit": 0,
+  "reported_state": "configured",
+  "reported_code": null,
+  "summary": {
+    "known_observed_tokens": 89473,
+    "new_observed_tokens": 21815,
+    "carry_in_tokens": 67658,
+    "reserved_requests": 6,
+    "new_reserved_requests": 1,
+    "policy": {
+      "revision": 10,
+      "carry_in_admissions": 5,
+      "carry_in_tokens": 67658,
+      "max_cumulative_admissions": 11,
+      "max_new_admissions": 6,
+      "preventive_cumulative_tokens": 200000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+      "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+      "predecessor_faults": [
+        "OBSERVATION_UNKNOWN",
+        "STOP_UNCONFIRMED",
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+        "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+        "predecessor_faults": [
+          "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+          "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+          "predecessor_faults": [
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ]
+        }
+      }
+    },
+    "current": [],
+    "can_admit": true,
+    "reasons": [],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "monitor": {
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\nexus-home",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\nexus-home\\connection-tests",
+    "home_identity": [
+      14764524303808498864,
+      4785074607337734
+    ],
+    "prior_journals": [],
+    "journal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\nexus-home\\connection-tests\\c93ba44260f14c8caca364c0a0e5041b\\journal.db",
+    "journal_identity": [
+      14764524303808498864,
+      8444249304577894
+    ],
+    "cursor": 31,
+    "high_water": 21815,
+    "thread": "01a1bae1-a250-7772-b2bb-a53b04d4caed",
+    "turn": "01a1bae1-c253-7070-8cb2-96d0c6a9c297",
+    "started": true,
+    "terminal": true,
+    "usage_seen": true,
+    "caught_up": true,
+    "result_stage": "SUCCEEDED",
+    "close_stage": "SUBMITTED",
+    "owned_slot_released": true
+  },
+  "stop_selected": null,
+  "stop_wrapper_exits": [],
+  "maximum_poll_start_interval_seconds": 0.36095190001651645,
+  "poll_count": 346,
+  "publication_diagnostics": {
+    "attempts": 346,
+    "published_snapshots": 346
+  },
+  "output_sha256": "37d1b1b47ac668be003229f409c36b2347afb9ecf6eb27df592abb8170bd7584"
+}

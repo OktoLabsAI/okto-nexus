@@ -1,0 +1,92 @@
+{
+  "format": "okto.m1.controller-checkpoint-public-projection",
+  "revision": 1,
+  "source_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+  "source_copied_raw": false,
+  "controller_format": 10,
+  "proposal_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+  "authorization_sha256": "8500ae2cd11ff8dca2bc1551a9a5349f76075a0578f2e931c436a09ee2515620",
+  "state_sha256": "55b9de8013179790f073089609de2b6b36b52715286323629af11afa79ee9b1c",
+  "policy": {
+    "carry_in_admissions": 5,
+    "carry_in_tokens": 67658,
+    "deadline_seconds": 120,
+    "max_cumulative_admissions": 11,
+    "max_new_admissions": 6,
+    "operational_tolerance": 700000,
+    "preventive_cumulative_tokens": 200000,
+    "revision": 10
+  },
+  "ancestry": {
+    "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+    "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+    "predecessor_faults": [
+      "OBSERVATION_UNKNOWN",
+      "STOP_UNCONFIRMED",
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ],
+    "prior_ancestry": {
+      "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+      "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+      "predecessor_faults": [
+        "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+      ],
+      "prior_ancestry": {
+        "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+        "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+        "predecessor_faults": [
+          "CAMPAIGN_RUNNER_EXCEPTION"
+        ]
+      }
+    }
+  },
+  "faults": [
+    "CAMPAIGN_RUNNER_EXCEPTION"
+  ],
+  "requests": {
+    "m1v10-local-setup": {
+      "kind": "setup",
+      "lane": "local",
+      "settled": true,
+      "stop_selected": null,
+      "monitor": {
+        "cursor": 31,
+        "high_water": 21815,
+        "started": true,
+        "terminal": true,
+        "usage_seen": true,
+        "caught_up": true,
+        "result_stage": "SUCCEEDED",
+        "close_stage": "SUBMITTED",
+        "owned_slot_released": true
+      }
+    }
+  },
+  "work_request_reserved": false,
+  "collector": {
+    "format": "m1-token-collector-v8",
+    "sha256": "da1b0db62b233ec224c9cf6eba7ab0e5c770b4036b73f2d0dee6f88c31d3bb89",
+    "current_request": null,
+    "faults": [],
+    "counts": {
+      "requests": 0,
+      "streams": 0,
+      "threads": 0,
+      "turns": 0
+    }
+  },
+  "independent_owner_stops": {
+    "local": {
+      "state": "DISPATCH_RESERVED",
+      "reason": "CAMPAIGN_RUNNER_EXCEPTION",
+      "native_exit_confirmed": false,
+      "force_used": false
+    }
+  },
+  "independent_observation": {
+    "maximum_poll_start_interval_seconds": 0.3848263999680057,
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "worker_in_flight": false
+  },
+  "limits": "Allowlist projection only. No private checkpoint body, provider payload, prompt, paths to provider state, credential or transcript is copied. Owner-stop reservation is not itself proof of exit; use separate cleanup/retained HANDLE proof."
+}

@@ -1236,3 +1236,9 @@ Proposta revisável: `plans/agent_ops/evidence/r3-m1-v10-preparation/review.md`.
 ## M1 v10 autorizada e instalada
 
 A autorização real `8500ae2c…15620` vincula a proposta `90c2ed2c…14405a`. A instalação única passou com 983 payloads e dependências válidas. Nexus instalado/iniciado, owner confirmado e handle de saída retido; duas ações de serviço, nenhuma inferência neste checkpoint. Claude Sonnet foi autorizado opcionalmente com teto de 200 mil tokens e não foi selecionado. Evidência: `plans/agent_ops/evidence/r3-m1-v10-authorization/authorization.json`.
+
+## M1 v10 encerrada; falha no preparo do observador
+
+O setup real passou e registrou 21.815 tokens. O trabalho útil não chegou a ser reservado nem enviado: a consulta inicial do observador foi interrompida antes da admissão. A reprodução offline no banco preservado mostrou carga/compilação do esquema excedendo o orçamento de 40 ms; não é prova retrospectiva do tempo exato original. O snapshot público anterior à falha é histórico; checkpoint e fechamento finais prevalecem.
+
+A parada normal, a saída física do PID retido e a remoção da tarefa foram confirmadas. Quatro ações de serviço; sem Connector, Claude ou força. Permanecem seis reservas acumuladas e mínimo observado de 89.473 tokens, sem faturamento final. M1/BASE-06 seguem pendentes. Evidência: `plans/agent_ops/evidence/r3-m1-v10-execution/summary.json`.

@@ -1,0 +1,619 @@
+{
+  "status": "READ_ONLY_C_API_INSTRUMENTATION",
+  "sqlite_version": "3.45.3",
+  "db_sha256_before": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "db_sha256_after": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "library": "C:\\Python313\\DLLs\\sqlite3.dll",
+  "library_sha256": "afb50a080d3c79d9c89d134b006fb2b0779b5ffeeb703762d163141b15eb03bb",
+  "cold_definition": "New SQLite connection/schema cache; no OS cache purge performed.",
+  "samples": [
+    {
+      "index": 0,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 12.9049,
+        "query_only_ms": 0.1879,
+        "busy_timeout_ms": 0.0077,
+        "begin_ms": 0.0337,
+        "prepare_ms": 27.8296
+      },
+      "read_elapsed_ms": 41.0839,
+      "progress_calls": 8,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 36.0737
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 40.6175
+      },
+      "status": {
+        "prepare_code": 9,
+        "step_code": null,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 1,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.6482,
+        "query_only_ms": 0.0436,
+        "busy_timeout_ms": 0.0051,
+        "begin_ms": 0.0141,
+        "prepare_ms": 28.7506,
+        "bind_ms": 0.0446,
+        "step_ms": 0.0694
+      },
+      "read_elapsed_ms": 29.6205,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 3.5209
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 28.4626
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 2,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.6898,
+        "query_only_ms": 0.0471,
+        "busy_timeout_ms": 0.0045,
+        "begin_ms": 0.0159,
+        "prepare_ms": 29.2115,
+        "bind_ms": 0.0507,
+        "step_ms": 0.0788
+      },
+      "read_elapsed_ms": 30.1489,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 4.7077
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 29.1882
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 3,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.7145,
+        "query_only_ms": 0.0448,
+        "busy_timeout_ms": 0.0041,
+        "begin_ms": 0.0152,
+        "prepare_ms": 32.3288,
+        "bind_ms": 0.0508,
+        "step_ms": 0.0838
+      },
+      "read_elapsed_ms": 33.2897,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 3.4871
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 32.2061
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 4,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.6011,
+        "query_only_ms": 0.0461,
+        "busy_timeout_ms": 0.0041,
+        "begin_ms": 0.0142,
+        "prepare_ms": 27.1522,
+        "bind_ms": 0.0328,
+        "step_ms": 0.0868
+      },
+      "read_elapsed_ms": 27.9791,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 3.2381
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 26.9782
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 5,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.8842,
+        "query_only_ms": 0.072,
+        "busy_timeout_ms": 0.0041,
+        "begin_ms": 0.0385,
+        "prepare_ms": 28.6728,
+        "bind_ms": 0.038,
+        "step_ms": 0.074
+      },
+      "read_elapsed_ms": 29.8378,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 4.3009
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 28.909
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 6,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.6496,
+        "query_only_ms": 0.0469,
+        "busy_timeout_ms": 0.0043,
+        "begin_ms": 0.0149,
+        "prepare_ms": 24.8764,
+        "bind_ms": 0.0321,
+        "step_ms": 0.0609
+      },
+      "read_elapsed_ms": 25.7282,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 3.2578
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 24.8747
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 7,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.6784,
+        "query_only_ms": 0.043,
+        "busy_timeout_ms": 0.0041,
+        "begin_ms": 0.0147,
+        "prepare_ms": 26.8243,
+        "bind_ms": 0.0326,
+        "step_ms": 0.0636
+      },
+      "read_elapsed_ms": 27.6957,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 3.4745
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 26.842
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 8,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.6692,
+        "query_only_ms": 0.0464,
+        "busy_timeout_ms": 0.0038,
+        "begin_ms": 0.0138,
+        "prepare_ms": 21.6989,
+        "bind_ms": 0.0362,
+        "step_ms": 0.0641
+      },
+      "read_elapsed_ms": 22.5732,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 3.474
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 21.2522
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 9,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.501,
+        "query_only_ms": 0.0291,
+        "busy_timeout_ms": 0.0029,
+        "begin_ms": 0.009,
+        "prepare_ms": 22.8678,
+        "bind_ms": 0.0407,
+        "step_ms": 0.0746
+      },
+      "read_elapsed_ms": 23.5561,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 2.8456
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 22.5532
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 10,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.7304,
+        "query_only_ms": 0.0498,
+        "busy_timeout_ms": 0.0038,
+        "begin_ms": 0.0157,
+        "prepare_ms": 25.784,
+        "bind_ms": 0.0356,
+        "step_ms": 0.076
+      },
+      "read_elapsed_ms": 26.7367,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 3.5582
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 25.8184
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 11,
+      "mode": "new_connection",
+      "timings": {
+        "open_ms": 0.6792,
+        "query_only_ms": 0.0505,
+        "busy_timeout_ms": 0.0047,
+        "begin_ms": 0.0145,
+        "prepare_ms": 26.7811,
+        "bind_ms": 0.0351,
+        "step_ms": 0.0702
+      },
+      "read_elapsed_ms": 27.6989,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 4.0196
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 26.7636
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 0,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0018,
+        "query_only_ms": 0.0451,
+        "busy_timeout_ms": 0.0049,
+        "begin_ms": 0.0168,
+        "prepare_ms": 26.1673,
+        "bind_ms": 0.0407,
+        "step_ms": 0.0643
+      },
+      "read_elapsed_ms": 26.3799,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 2.7822
+      },
+      "last_progress": {
+        "phase": "prepare",
+        "elapsed_ms": 25.4194
+      },
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 1,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0006,
+        "query_only_ms": 0.0131,
+        "busy_timeout_ms": 0.0025,
+        "begin_ms": 0.0087,
+        "prepare_ms": 0.0345,
+        "bind_ms": 0.0103,
+        "step_ms": 0.0166
+      },
+      "read_elapsed_ms": 0.1052,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 2,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0004,
+        "query_only_ms": 0.0083,
+        "busy_timeout_ms": 0.002,
+        "begin_ms": 0.0067,
+        "prepare_ms": 0.0212,
+        "bind_ms": 0.0084,
+        "step_ms": 0.0129
+      },
+      "read_elapsed_ms": 0.0693,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 3,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0004,
+        "query_only_ms": 0.0078,
+        "busy_timeout_ms": 0.0019,
+        "begin_ms": 0.0066,
+        "prepare_ms": 0.0194,
+        "bind_ms": 0.0087,
+        "step_ms": 0.0125
+      },
+      "read_elapsed_ms": 0.0658,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 4,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0003,
+        "query_only_ms": 0.0074,
+        "busy_timeout_ms": 0.0018,
+        "begin_ms": 0.0063,
+        "prepare_ms": 0.0191,
+        "bind_ms": 0.0082,
+        "step_ms": 0.0127
+      },
+      "read_elapsed_ms": 0.0647,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 5,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0003,
+        "query_only_ms": 0.0077,
+        "busy_timeout_ms": 0.002,
+        "begin_ms": 0.0067,
+        "prepare_ms": 0.0184,
+        "bind_ms": 0.0083,
+        "step_ms": 0.0124
+      },
+      "read_elapsed_ms": 0.065,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 6,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0003,
+        "query_only_ms": 0.0078,
+        "busy_timeout_ms": 0.0023,
+        "begin_ms": 0.0065,
+        "prepare_ms": 0.0209,
+        "bind_ms": 0.0089,
+        "step_ms": 0.0118
+      },
+      "read_elapsed_ms": 0.0673,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 7,
+      "mode": "reused_connection",
+      "timings": {
+        "open_ms": 0.0003,
+        "query_only_ms": 0.0082,
+        "busy_timeout_ms": 0.0017,
+        "begin_ms": 0.0068,
+        "prepare_ms": 0.0211,
+        "bind_ms": 0.0084,
+        "step_ms": 0.0127
+      },
+      "read_elapsed_ms": 0.0685,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 0,
+      "mode": "new_connection_prewarmed",
+      "timings": {
+        "open_ms": 0.6601,
+        "query_only_ms": 0.0404,
+        "busy_timeout_ms": 0.0041,
+        "schema_prewarm_ms": 24.8872,
+        "begin_ms": 0.0301,
+        "prepare_ms": 0.0742,
+        "bind_ms": 0.0245,
+        "step_ms": 0.0515
+      },
+      "read_elapsed_ms": 0.2352,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 1,
+      "mode": "new_connection_prewarmed",
+      "timings": {
+        "open_ms": 0.7041,
+        "query_only_ms": 0.0516,
+        "busy_timeout_ms": 0.0049,
+        "schema_prewarm_ms": 25.7853,
+        "begin_ms": 0.0377,
+        "prepare_ms": 0.0921,
+        "bind_ms": 0.0262,
+        "step_ms": 0.0618
+      },
+      "read_elapsed_ms": 0.2786,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 2,
+      "mode": "new_connection_prewarmed",
+      "timings": {
+        "open_ms": 0.7377,
+        "query_only_ms": 0.0506,
+        "busy_timeout_ms": 0.0045,
+        "schema_prewarm_ms": 26.0753,
+        "begin_ms": 0.0264,
+        "prepare_ms": 0.0696,
+        "bind_ms": 0.0245,
+        "step_ms": 0.0622
+      },
+      "read_elapsed_ms": 0.2382,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    },
+    {
+      "index": 3,
+      "mode": "new_connection_prewarmed",
+      "timings": {
+        "open_ms": 0.7324,
+        "query_only_ms": 0.0921,
+        "busy_timeout_ms": 0.0048,
+        "schema_prewarm_ms": 27.4478,
+        "begin_ms": 0.024,
+        "prepare_ms": 0.0799,
+        "bind_ms": 0.0275,
+        "step_ms": 0.065
+      },
+      "read_elapsed_ms": 0.245,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "status": {
+        "prepare_code": 0,
+        "step_code": 101,
+        "returned_rows": 0
+      }
+    }
+  ]
+}

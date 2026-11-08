@@ -1,0 +1,1293 @@
+{
+  "status": "READ_ONLY_DIAGNOSTIC",
+  "db_sha256_before": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "db_sha256_after": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "db_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\nexus-home\\nexus.db",
+  "predicate_basis": "All selected work tables confirmed empty; diagnostic parameter values avoid auth/profile reads.",
+  "cold_definition": "New SQLite connection/schema cache. OS filesystem cache is uncontrolled and file hashing itself reads pages.",
+  "metadata": {
+    "sqlite_version": "3.45.3",
+    "python_version": "3.13.1",
+    "db_bytes": 2494464,
+    "schema_counts": {
+      "index": 364,
+      "table": 161,
+      "trigger": 227,
+      "view": 1
+    },
+    "selected_table_counts": {
+      "execution_client_intents": 0,
+      "execution_operations": 0,
+      "execution_sessions": 0,
+      "execution_receipts": 0
+    },
+    "intent_columns": [
+      {
+        "name": "server_id",
+        "type": "TEXT",
+        "primary_key": 1
+      },
+      {
+        "name": "actor_agent_id",
+        "type": "TEXT",
+        "primary_key": 2
+      },
+      {
+        "name": "client_intent_id",
+        "type": "TEXT",
+        "primary_key": 3
+      },
+      {
+        "name": "body_hash",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "intent_id",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "operation_id",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "resolution_revision",
+        "type": "INTEGER",
+        "primary_key": 0
+      },
+      {
+        "name": "resolved_json",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "created_at",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "source_guard_digest",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "session_selection",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "reuse_admitted_at",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "initial_turn_json",
+        "type": "TEXT",
+        "primary_key": 0
+      },
+      {
+        "name": "actor_guard_digest",
+        "type": "TEXT",
+        "primary_key": 0
+      }
+    ],
+    "intent_indexes": [
+      {
+        "name": "sqlite_autoindex_execution_client_intents_2",
+        "unique": 1,
+        "origin": "u"
+      },
+      {
+        "name": "sqlite_autoindex_execution_client_intents_1",
+        "unique": 1,
+        "origin": "pk"
+      }
+    ],
+    "query_plan": [
+      [
+        4,
+        0,
+        0,
+        "SEARCH execution_client_intents USING INDEX sqlite_autoindex_execution_client_intents_1 (server_id=? AND actor_agent_id=? AND client_intent_id=?)"
+      ]
+    ]
+  },
+  "samples": [
+    {
+      "index": 0,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 11.5124,
+        "query_only_ms": 0.1397,
+        "busy_timeout_ms": 0.0182,
+        "begin_ms": 0.0263,
+        "prepare_and_first_step_ms": 29.729,
+        "rollback_ms": 0.0199,
+        "close_ms": 0.4744
+      },
+      "read_elapsed_ms": 41.4852,
+      "progress_calls": 12,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 32.0798,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 40.6837,
+        "after_trace": false
+      },
+      "target_trace": [],
+      "result": {
+        "status": "SQLITE_ERROR",
+        "type": "OperationalError",
+        "sqlite_errorcode": 9,
+        "sqlite_errorname": "SQLITE_INTERRUPT"
+      }
+    },
+    {
+      "index": 1,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.5405,
+        "query_only_ms": 0.0274,
+        "busy_timeout_ms": 0.0112,
+        "begin_ms": 0.016,
+        "prepare_and_first_step_ms": 25.2695,
+        "fetch_ms": 0.0014,
+        "rollback_ms": 0.011,
+        "close_ms": 2.6958
+      },
+      "read_elapsed_ms": 25.9,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.1304000000000003,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 25.3443,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 25.837
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 2,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6008,
+        "query_only_ms": 0.0334,
+        "busy_timeout_ms": 0.0118,
+        "begin_ms": 0.0158,
+        "prepare_and_first_step_ms": 19.4424,
+        "fetch_ms": 0.0011,
+        "rollback_ms": 0.0111,
+        "close_ms": 2.7421
+      },
+      "read_elapsed_ms": 20.1396,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.1441,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 19.430300000000003,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 20.0766
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 3,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6274,
+        "query_only_ms": 0.0331,
+        "busy_timeout_ms": 0.0107,
+        "begin_ms": 0.0147,
+        "prepare_and_first_step_ms": 17.7498,
+        "fetch_ms": 0.0014,
+        "rollback_ms": 0.0129,
+        "close_ms": 2.2784
+      },
+      "read_elapsed_ms": 18.4709,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.0873,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 17.831599999999998,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 18.3832
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 4,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.4564,
+        "query_only_ms": 0.0226,
+        "busy_timeout_ms": 0.0077,
+        "begin_ms": 0.0097,
+        "prepare_and_first_step_ms": 18.4327,
+        "fetch_ms": 0.0017,
+        "rollback_ms": 0.02,
+        "close_ms": 2.6655
+      },
+      "read_elapsed_ms": 18.961,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 2.2753,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 18.24,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 18.8733
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 5,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6177,
+        "query_only_ms": 0.0349,
+        "busy_timeout_ms": 0.0129,
+        "begin_ms": 0.0159,
+        "prepare_and_first_step_ms": 17.206,
+        "fetch_ms": 0.0013,
+        "rollback_ms": 0.015,
+        "close_ms": 2.2346
+      },
+      "read_elapsed_ms": 17.9263,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.2152000000000003,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 17.181600000000003,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 17.8392
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 6,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.4632,
+        "query_only_ms": 0.0267,
+        "busy_timeout_ms": 0.0084,
+        "begin_ms": 0.0115,
+        "prepare_and_first_step_ms": 21.0819,
+        "fetch_ms": 0.0012,
+        "rollback_ms": 0.0147,
+        "close_ms": 3.3607
+      },
+      "read_elapsed_ms": 21.6198,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 2.3305000000000002,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 20.8781,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 21.5456
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 7,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6911,
+        "query_only_ms": 0.0379,
+        "busy_timeout_ms": 0.013,
+        "begin_ms": 0.0169,
+        "prepare_and_first_step_ms": 23.0064,
+        "fetch_ms": 0.0013,
+        "rollback_ms": 0.0147,
+        "close_ms": 2.9816
+      },
+      "read_elapsed_ms": 23.8036,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.2994,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 23.0641,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 23.6932
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 8,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6118,
+        "query_only_ms": 0.0284,
+        "busy_timeout_ms": 0.0105,
+        "begin_ms": 0.0155,
+        "prepare_and_first_step_ms": 23.6773,
+        "fetch_ms": 0.0015,
+        "rollback_ms": 0.014,
+        "close_ms": 3.215
+      },
+      "read_elapsed_ms": 24.3786,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.1229999999999998,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 23.6477,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 24.2933
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 9,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6728,
+        "query_only_ms": 0.0331,
+        "busy_timeout_ms": 0.0115,
+        "begin_ms": 0.0154,
+        "prepare_and_first_step_ms": 24.2648,
+        "fetch_ms": 0.0014,
+        "rollback_ms": 0.0141,
+        "close_ms": 3.1407
+      },
+      "read_elapsed_ms": 25.0345,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.6334,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 24.327399999999997,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 24.9536
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 10,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.719,
+        "query_only_ms": 0.0327,
+        "busy_timeout_ms": 0.0115,
+        "begin_ms": 0.0152,
+        "prepare_and_first_step_ms": 22.0656,
+        "fetch_ms": 0.0014,
+        "rollback_ms": 0.0146,
+        "close_ms": 3.3813
+      },
+      "read_elapsed_ms": 22.8794,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.1246,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 21.8859,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 22.7939
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 11,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.5937,
+        "query_only_ms": 0.0334,
+        "busy_timeout_ms": 0.0112,
+        "begin_ms": 0.0169,
+        "prepare_and_first_step_ms": 22.7111,
+        "fetch_ms": 0.0014,
+        "rollback_ms": 0.0132,
+        "close_ms": 3.5294
+      },
+      "read_elapsed_ms": 23.4015,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.1449,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 22.6402,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 23.313
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 12,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.8946,
+        "query_only_ms": 0.035,
+        "busy_timeout_ms": 0.0114,
+        "begin_ms": 0.1039,
+        "prepare_and_first_step_ms": 27.3658,
+        "fetch_ms": 0.0016,
+        "rollback_ms": 0.0172,
+        "close_ms": 3.6665
+      },
+      "read_elapsed_ms": 28.4561,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.0517,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 26.9709,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 28.3487
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 13,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6903,
+        "query_only_ms": 0.0342,
+        "busy_timeout_ms": 0.013,
+        "begin_ms": 0.0171,
+        "prepare_and_first_step_ms": 30.9876,
+        "fetch_ms": 0.0017,
+        "rollback_ms": 0.0147,
+        "close_ms": 3.2177
+      },
+      "read_elapsed_ms": 31.7816,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.3587000000000002,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 30.912399999999998,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 31.6885
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 14,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.7654,
+        "query_only_ms": 0.0359,
+        "busy_timeout_ms": 0.013,
+        "begin_ms": 0.0176,
+        "prepare_and_first_step_ms": 31.1922,
+        "fetch_ms": 0.0016,
+        "rollback_ms": 0.0182,
+        "close_ms": 3.7379
+      },
+      "read_elapsed_ms": 32.0691,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.6459,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 31.176,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 31.9736
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 15,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.7878,
+        "query_only_ms": 0.0372,
+        "busy_timeout_ms": 0.0135,
+        "begin_ms": 0.0183,
+        "prepare_and_first_step_ms": 29.4567,
+        "fetch_ms": 0.0015,
+        "rollback_ms": 0.0159,
+        "close_ms": 3.5558
+      },
+      "read_elapsed_ms": 30.3547,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.8261,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 29.5324,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 30.2686
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 16,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.7264,
+        "query_only_ms": 0.0367,
+        "busy_timeout_ms": 0.0125,
+        "begin_ms": 0.0162,
+        "prepare_and_first_step_ms": 28.355,
+        "fetch_ms": 0.0017,
+        "rollback_ms": 0.0148,
+        "close_ms": 3.4128
+      },
+      "read_elapsed_ms": 29.1836,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 4.0337000000000005,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 28.4176,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 29.0992
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 17,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.792,
+        "query_only_ms": 0.0418,
+        "busy_timeout_ms": 0.0131,
+        "begin_ms": 0.0163,
+        "prepare_and_first_step_ms": 24.9914,
+        "fetch_ms": 0.002,
+        "rollback_ms": 0.0169,
+        "close_ms": 3.2426
+      },
+      "read_elapsed_ms": 25.8946,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 2.8819000000000004,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 25.121199999999998,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 25.8061
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 18,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 1.1841,
+        "query_only_ms": 0.037,
+        "busy_timeout_ms": 0.0127,
+        "begin_ms": 0.0167,
+        "prepare_and_first_step_ms": 24.7431,
+        "fetch_ms": 0.0015,
+        "rollback_ms": 0.0158,
+        "close_ms": 3.3607
+      },
+      "read_elapsed_ms": 26.0345,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 4.2082999999999995,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 25.2619,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 25.9346
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 19,
+      "mode": "new_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.7864,
+        "query_only_ms": 0.0322,
+        "busy_timeout_ms": 0.0125,
+        "begin_ms": 0.0161,
+        "prepare_and_first_step_ms": 26.5161,
+        "fetch_ms": 0.0017,
+        "rollback_ms": 0.0151,
+        "close_ms": 3.6647
+      },
+      "read_elapsed_ms": 27.4005,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 3.3935,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 26.6488,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 27.3203
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 0,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0027,
+        "query_only_ms": 0.0095,
+        "busy_timeout_ms": 0.0075,
+        "begin_ms": 0.0226,
+        "prepare_and_first_step_ms": 30.6832,
+        "fetch_ms": 0.0017,
+        "rollback_ms": 0.0187
+      },
+      "read_elapsed_ms": 30.7659,
+      "progress_calls": 26,
+      "first_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 2.6995,
+        "after_trace": false
+      },
+      "last_progress": {
+        "phase": "prepare_and_first_step",
+        "elapsed_ms": 29.8652,
+        "after_trace": false
+      },
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 30.65
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 1,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0022,
+        "query_only_ms": 0.0208,
+        "busy_timeout_ms": 0.0115,
+        "begin_ms": 0.0141,
+        "prepare_and_first_step_ms": 0.1068,
+        "fetch_ms": 0.0008,
+        "rollback_ms": 0.0129
+      },
+      "read_elapsed_ms": 0.2012,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.1547
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 2,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0016,
+        "query_only_ms": 0.0095,
+        "busy_timeout_ms": 0.0073,
+        "begin_ms": 0.0107,
+        "prepare_and_first_step_ms": 0.0746,
+        "fetch_ms": 0.0007,
+        "rollback_ms": 0.0108
+      },
+      "read_elapsed_ms": 0.1218,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.0921
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 3,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0013,
+        "query_only_ms": 0.0081,
+        "busy_timeout_ms": 0.0075,
+        "begin_ms": 0.0103,
+        "prepare_and_first_step_ms": 0.0638,
+        "fetch_ms": 0.0007,
+        "rollback_ms": 0.0101
+      },
+      "read_elapsed_ms": 0.109,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.0805
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 4,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0012,
+        "query_only_ms": 0.0099,
+        "busy_timeout_ms": 0.0066,
+        "begin_ms": 0.0126,
+        "prepare_and_first_step_ms": 0.0619,
+        "fetch_ms": 0.0007,
+        "rollback_ms": 0.0105
+      },
+      "read_elapsed_ms": 0.1181,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.0814
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 5,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0014,
+        "query_only_ms": 0.009,
+        "busy_timeout_ms": 0.0071,
+        "begin_ms": 0.0102,
+        "prepare_and_first_step_ms": 0.0633,
+        "fetch_ms": 0.0006,
+        "rollback_ms": 0.0085
+      },
+      "read_elapsed_ms": 0.109,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.0828
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 6,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0011,
+        "query_only_ms": 0.0081,
+        "busy_timeout_ms": 0.0065,
+        "begin_ms": 0.0092,
+        "prepare_and_first_step_ms": 0.1353,
+        "fetch_ms": 0.0014,
+        "rollback_ms": 0.0176
+      },
+      "read_elapsed_ms": 0.1839,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.113
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 7,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.002,
+        "query_only_ms": 0.0181,
+        "busy_timeout_ms": 0.0088,
+        "begin_ms": 0.0137,
+        "prepare_and_first_step_ms": 0.0921,
+        "fetch_ms": 0.0007,
+        "rollback_ms": 0.0108
+      },
+      "read_elapsed_ms": 0.1577,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.1262
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 8,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0013,
+        "query_only_ms": 0.0088,
+        "busy_timeout_ms": 0.0075,
+        "begin_ms": 0.0094,
+        "prepare_and_first_step_ms": 0.0578,
+        "fetch_ms": 0.0009,
+        "rollback_ms": 0.0085
+      },
+      "read_elapsed_ms": 0.102,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.0775
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 9,
+      "mode": "reused_connection",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.0011,
+        "query_only_ms": 0.0067,
+        "busy_timeout_ms": 0.0062,
+        "begin_ms": 0.009,
+        "prepare_and_first_step_ms": 0.0494,
+        "fetch_ms": 0.0006,
+        "rollback_ms": 0.0072
+      },
+      "read_elapsed_ms": 0.0871,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.065
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 0,
+      "mode": "new_connection_prewarmed",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6003,
+        "query_only_ms": 0.0216,
+        "busy_timeout_ms": 0.0104,
+        "schema_prewarm_ms": 21.9103,
+        "begin_ms": 0.0303,
+        "prepare_and_first_step_ms": 0.1352,
+        "fetch_ms": 0.0011,
+        "rollback_ms": 0.0129,
+        "close_ms": 2.6057
+      },
+      "read_elapsed_ms": 0.1944,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.1273
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 1,
+      "mode": "new_connection_prewarmed",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.7098,
+        "query_only_ms": 0.0304,
+        "busy_timeout_ms": 0.0115,
+        "schema_prewarm_ms": 25.1053,
+        "begin_ms": 0.0286,
+        "prepare_and_first_step_ms": 0.1289,
+        "fetch_ms": 0.0011,
+        "rollback_ms": 0.0154,
+        "close_ms": 2.5342
+      },
+      "read_elapsed_ms": 0.1848,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.1168
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 2,
+      "mode": "new_connection_prewarmed",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.5752,
+        "query_only_ms": 0.0293,
+        "busy_timeout_ms": 0.0116,
+        "schema_prewarm_ms": 22.9632,
+        "begin_ms": 0.0255,
+        "prepare_and_first_step_ms": 0.1162,
+        "fetch_ms": 0.0012,
+        "rollback_ms": 0.0171,
+        "close_ms": 2.5709
+      },
+      "read_elapsed_ms": 0.167,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.11
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 3,
+      "mode": "new_connection_prewarmed",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.7015,
+        "query_only_ms": 0.0319,
+        "busy_timeout_ms": 0.0118,
+        "schema_prewarm_ms": 30.4772,
+        "begin_ms": 0.0317,
+        "prepare_and_first_step_ms": 0.1395,
+        "fetch_ms": 0.0014,
+        "rollback_ms": 0.0135,
+        "close_ms": 3.1405
+      },
+      "read_elapsed_ms": 0.2007,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.1259
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    },
+    {
+      "index": 4,
+      "mode": "new_connection_prewarmed",
+      "budget_ms": 40.0,
+      "timings": {
+        "connect_ms": 0.6236,
+        "query_only_ms": 0.033,
+        "busy_timeout_ms": 0.012,
+        "schema_prewarm_ms": 25.5315,
+        "begin_ms": 0.0458,
+        "prepare_and_first_step_ms": 0.1792,
+        "fetch_ms": 0.0013,
+        "rollback_ms": 0.0156,
+        "close_ms": 3.4355
+      },
+      "read_elapsed_ms": 0.2585,
+      "progress_calls": 0,
+      "first_progress": null,
+      "last_progress": null,
+      "target_trace": [
+        {
+          "phase": "prepare_and_first_step",
+          "elapsed_ms": 0.152
+        }
+      ],
+      "result": {
+        "status": "EMPTY_INTENT_CONFIRMED",
+        "count": 0
+      }
+    }
+  ]
+}
