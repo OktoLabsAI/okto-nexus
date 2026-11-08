@@ -4,6 +4,7 @@ Publication lag is not evidence of native failure. A slow worker is retained
 and observed; it is never duplicated or used to revoke a healthy native lease.
 """
 import asyncio
+import json
 import logging
 import random
 import re
@@ -13,6 +14,7 @@ import time
 from nexus_connector_core import (CoreError, ShutdownPolicy,
     require_audit_snapshot_not_rolled_back)
 from ..errors import ErrorCode, OktoNexusError
+from ..adapters.outbound.sqlite.diagnostics import safe_db_diagnostic
 
 from .embedded_reconciliation import EmbeddedReconciliation
 from .embedded_events import EmbeddedPublicationDeferred
@@ -24,8 +26,12 @@ def _diagnostic(error):
     # Keep technical reason identifiers, never arbitrary provider messages,
     # commands, URLs or environment values in the shared recovery log.
     suffix = f" ({reason})" if isinstance(reason, str) and re.fullmatch(r'[a-z][a-z0-9_.-]{0,79}', reason) else ''
-    return (f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} "
-            f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
+    diagnostic = (f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} "
+                  f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
+    database = safe_db_diagnostic(error)
+    if database:
+        diagnostic += ' ' + json.dumps(database, sort_keys=True, separators=(',', ':'))
+    return diagnostic
 
 
 _REASON = re.compile(r'[A-Za-z][A-Za-z0-9_.-]{0,79}')

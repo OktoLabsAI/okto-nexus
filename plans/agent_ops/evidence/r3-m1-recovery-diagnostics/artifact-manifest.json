@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "files": {
+    "changes.patch": {
+      "sha256": "bbccf1491c96f0898b80f175666ec5a36072b84842d4b3f622f6253dafc70aa2",
+      "bytes": 12627
+    },
+    "imports.json": {
+      "sha256": "f9ffaffd6e2e66799f20460ce34cf209216a51f05d4b08a98f1389575a2b5c9d",
+      "bytes": 1206
+    },
+    "input-hashes-after.json": {
+      "sha256": "b15f047c294a81f92bc2f44632446e7b99b7aa5f2a7098e8db16dc06e9575e21",
+      "bytes": 853
+    },
+    "input-hashes-before.json": {
+      "sha256": "b15f047c294a81f92bc2f44632446e7b99b7aa5f2a7098e8db16dc06e9575e21",
+      "bytes": 853
+    },
+    "qualification.json": {
+      "sha256": "5678ea00d770009a6b15287226466f028000bfd106c36cd4c4cefd17a5611ea5",
+      "bytes": 5577
+    },
+    "result.json": {
+      "sha256": "db42a18386e033ec15140bc06e3ebf98811a010b5d868fc131bfe2ab44d0ea9c",
+      "bytes": 460
+    },
+    "run_source_tests.py": {
+      "sha256": "0c16e70725dc8e08ce84656447a4e40ac9647f58738a3d8cd86950f88ef1f555",
+      "bytes": 4184
+    },
+    "source/src/okto_nexus/adapters/outbound/sqlite/diagnostics.py": {
+      "sha256": "fb4cb8debbc18305894bb404a1375e8cffabd332da9e2ac48ec21e9b0b47b51d",
+      "bytes": 2332
+    },
+    "source/src/okto_nexus/adapters/outbound/sqlite/write_gate.py": {
+      "sha256": "1287bc3f6023178167fe4ae5eac7cee879f05e1877afbbf9492d98b88a52776f",
+      "bytes": 1642
+    },
+    "source/src/okto_nexus/bootstrap/embedded_agent_recovery.py": {
+      "sha256": "32f5bbbb8147db9301b2b17ceab7b8b935c22af18033b89076d39e989913462c",
+      "bytes": 41517
+    },
+    "source/tests/test_embedded_recovery_diagnostics.py": {
+      "sha256": "1eb83bfc93fd9eb28e4b8d10477820939d2448c61e15d8faa19ab6576900c6ef",
+      "bytes": 6654
+    },
+    "source.stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "source.stdout.txt": {
+      "sha256": "75fdd6926944deff8b62699f843c0bd53c22b93a29ee3e22449deb60866dcb64",
+      "bytes": 652
+    },
+    "source.xml": {
+      "sha256": "eb448ad3e240da290319a55bf8d437050987b713b9c6cb98149c200b1d91198e",
+      "bytes": 4329
+    }
+  },
+  "excluded": [
+    "cases",
+    "profile",
+    "temporary databases",
+    "environment.json"
+  ]
+}

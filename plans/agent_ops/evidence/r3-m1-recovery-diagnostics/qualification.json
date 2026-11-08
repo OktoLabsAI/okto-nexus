@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "qualification": "modified source checkout, not installed candidate wheel",
+  "head_at_curation": "63bc76af693528b8a06c324dd369cbc4cf339673",
+  "changed_files": {
+    "src/okto_nexus/adapters/outbound/sqlite/diagnostics.py": "fb4cb8debbc18305894bb404a1375e8cffabd332da9e2ac48ec21e9b0b47b51d",
+    "src/okto_nexus/adapters/outbound/sqlite/write_gate.py": "1287bc3f6023178167fe4ae5eac7cee879f05e1877afbbf9492d98b88a52776f",
+    "src/okto_nexus/bootstrap/embedded_agent_recovery.py": "32f5bbbb8147db9301b2b17ceab7b8b935c22af18033b89076d39e989913462c",
+    "tests/test_embedded_recovery_diagnostics.py": "1eb83bfc93fd9eb28e4b8d10477820939d2448c61e15d8faa19ab6576900c6ef"
+  },
+  "tests": {
+    "passed": 28,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "new_diagnostic": 10,
+    "writer_fairness": 10,
+    "import_boundary": 3,
+    "existing_recovery_contention": 5,
+    "pytest_seconds": 63.28,
+    "warning": "Existing Starlette TestClient httpx deprecation"
+  },
+  "input_hashes_before_after_equal": true,
+  "hash_scope": "Three modified product files plus all four selected test files; rechecked again at curation.",
+  "ruff": {
+    "exit_code": 0,
+    "scope": [
+      "src/okto_nexus/adapters/outbound/sqlite/diagnostics.py",
+      "src/okto_nexus/adapters/outbound/sqlite/write_gate.py",
+      "src/okto_nexus/bootstrap/embedded_agent_recovery.py",
+      "tests/test_embedded_recovery_diagnostics.py"
+    ],
+    "observed_via": "rtk ruff check"
+  },
+  "behavior": [
+    "Append bounded JSON for actual SQLite exception codes and validated names from cause/context chain.",
+    "Keep extended result code and primary low-byte code/name; omit absent or malformed metadata.",
+    "Expose nearest explicit boolean retryable policy without authorizing operation replay.",
+    "Classify writer admission only via typed TimeoutError subtype; no matching exception messages.",
+    "Preserve prior diagnostic prefix and technical reason handling."
+  ],
+  "limits": [
+    "Does not establish historical M1 v9 SQLite cause, repair its root cause, or alter prior records.",
+    "No retry, timeout, locking, containment, receipt or native behavior changes.",
+    "No wheel build, package installation, credential access, native client, provider or user service campaign.",
+    "Neighboring recovery tests use temporary SQLite and synthetic native peers.",
+    "This is source qualification; installed candidate qualification belongs to a later root-owned step."
+  ],
+  "nodes": [
+    "tests.test_embedded_recovery_diagnostics::test_real_sqlite_writer_lock_preserves_driver_code_and_retryability",
+    "tests.test_embedded_recovery_diagnostics::test_real_writer_gate_timeout_is_distinct_from_sqlite_busy",
+    "tests.test_embedded_recovery_diagnostics::test_extended_constraint_code_survives_explicit_cause_without_sql_or_values",
+    "tests.test_embedded_recovery_diagnostics::test_implicit_context_and_cycle_are_bounded_without_copying_messages",
+    "tests.test_embedded_recovery_diagnostics::test_suppressed_unrelated_context_is_not_reported",
+    "tests.test_embedded_recovery_diagnostics::test_fake_attributes_and_timeout_message_cannot_fabricate_sqlite_or_gate_origin",
+    "tests.test_embedded_recovery_diagnostics::test_driver_name_must_match_public_sqlite_constant[SQLITE_BUSY_BEARER_PRIVATE]",
+    "tests.test_embedded_recovery_diagnostics::test_driver_name_must_match_public_sqlite_constant[private password/path]",
+    "tests.test_embedded_recovery_diagnostics::test_driver_name_must_match_public_sqlite_constant[SQLITE_CONSTRAINT]",
+    "tests.test_embedded_recovery_diagnostics::test_existing_technical_core_diagnostic_is_preserved",
+    "tests.test_sqlite_writer_fairness::test_waiting_writers_precede_immediate_reacquisition",
+    "tests.test_sqlite_writer_fairness::test_expired_waiter_is_removed_without_writing_or_blocking_successor",
+    "tests.test_sqlite_writer_fairness::test_failed_transaction_releases_local_writer_admission[hook]",
+    "tests.test_sqlite_writer_fairness::test_failed_transaction_releases_local_writer_admission[body]",
+    "tests.test_sqlite_writer_fairness::test_failed_transaction_releases_local_writer_admission[begin]",
+    "tests.test_sqlite_writer_fairness::test_failed_transaction_releases_local_writer_admission[commit]",
+    "tests.test_sqlite_writer_fairness::test_queue_wait_reduces_sqlite_lock_wait_budget",
+    "tests.test_sqlite_writer_fairness::test_late_wakeup_cannot_admit_expired_writer[0.02]",
+    "tests.test_sqlite_writer_fairness::test_late_wakeup_cannot_admit_expired_writer[0.021]",
+    "tests.test_sqlite_writer_fairness::test_zero_budget_allows_only_an_immediately_available_slot",
+    "tests.test_import_boundary::test_inner_layers_have_files",
+    "tests.test_import_boundary::test_domain_and_application_do_not_import_infrastructure",
+    "tests.test_import_boundary::test_replay_core_modules_are_in_scope_and_clean",
+    "tests.execution_r4.test_recovery_diagnostic_contention::test_receipt_and_diagnostic_contention_preserve_native_and_retry[codex_app_server]",
+    "tests.execution_r4.test_recovery_diagnostic_contention::test_receipt_and_diagnostic_contention_preserve_native_and_retry[claude_stream]",
+    "tests.execution_r4.test_recovery_diagnostic_contention::test_receipt_and_diagnostic_contention_preserve_native_and_retry[pi_rpc]",
+    "tests.execution_r4.test_recovery_diagnostic_contention::test_nonretryable_diagnostic_failure_is_not_hidden",
+    "tests.execution_r4.test_recovery_diagnostic_contention::test_manual_recovery_does_not_report_stopped_host_ready"
+  ]
+}

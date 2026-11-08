@@ -1,0 +1,14 @@
+{
+  "exit_code": 0,
+  "elapsed_seconds": 67.78714670008048,
+  "input_hashes_unchanged": true,
+  "selection": [
+    "tests/test_embedded_recovery_diagnostics.py",
+    "tests/test_sqlite_writer_fairness.py",
+    "tests/test_import_boundary.py",
+    "tests/execution_r4/test_recovery_diagnostic_contention.py"
+  ],
+  "no_installation": true,
+  "no_provider": true,
+  "scope": "source tests, SQLite temporary databases and synthetic embedded peer"
+}

@@ -1,0 +1,262 @@
+diff --git a/src/okto_nexus/adapters/outbound/sqlite/write_gate.py b/src/okto_nexus/adapters/outbound/sqlite/write_gate.py
+index 0b262d8e..5bb067ef 100644
+--- a/src/okto_nexus/adapters/outbound/sqlite/write_gate.py
++++ b/src/okto_nexus/adapters/outbound/sqlite/write_gate.py
+@@ -4,6 +4,10 @@ import threading
+ import time
+ 
+ 
++class WriterAdmissionTimeout(TimeoutError):
++    """The local FIFO writer gate expired before SQLite admission."""
++
++
+ class WriteGate:
+     def __init__(self):
+         self._condition = threading.Condition()
+@@ -19,13 +23,13 @@ class WriteGate:
+                 while self._active or self._waiting[0] is not ticket:
+                     remaining = deadline - time.monotonic()
+                     if remaining <= 0:
+-                        raise TimeoutError("SQLite writer admission timed out.")
++                        raise WriterAdmissionTimeout("SQLite writer admission timed out.")
+                     self._condition.wait(remaining)
+                 remaining = deadline - time.monotonic()
+                 # Notification does not guarantee the waiter resumed before
+                 # its deadline, even when the preceding holder has released.
+                 if remaining <= 0 and timeout_seconds > 0:
+-                    raise TimeoutError("SQLite writer admission timed out.")
++                    raise WriterAdmissionTimeout("SQLite writer admission timed out.")
+                 self._active = True
+                 return max(0, remaining)
+             finally:
+diff --git a/src/okto_nexus/bootstrap/embedded_agent_recovery.py b/src/okto_nexus/bootstrap/embedded_agent_recovery.py
+index acc6a9d2..ad6c7ecc 100644
+--- a/src/okto_nexus/bootstrap/embedded_agent_recovery.py
++++ b/src/okto_nexus/bootstrap/embedded_agent_recovery.py
+@@ -4,6 +4,7 @@ Publication lag is not evidence of native failure. A slow worker is retained
+ and observed; it is never duplicated or used to revoke a healthy native lease.
+ """
+ import asyncio
++import json
+ import logging
+ import random
+ import re
+@@ -13,6 +14,7 @@ import time
+ from nexus_connector_core import (CoreError, ShutdownPolicy,
+     require_audit_snapshot_not_rolled_back)
+ from ..errors import ErrorCode, OktoNexusError
++from ..adapters.outbound.sqlite.diagnostics import safe_db_diagnostic
+ 
+ from .embedded_reconciliation import EmbeddedReconciliation
+ from .embedded_events import EmbeddedPublicationDeferred
+@@ -24,8 +26,12 @@ def _diagnostic(error):
+     # Keep technical reason identifiers, never arbitrary provider messages,
+     # commands, URLs or environment values in the shared recovery log.
+     suffix = f" ({reason})" if isinstance(reason, str) and re.fullmatch(r'[a-z][a-z0-9_.-]{0,79}', reason) else ''
+-    return (f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} "
+-            f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
++    diagnostic = (f"{type(error).__name__}: {getattr(error, 'code', 'UNAVAILABLE')} "
++                  f"at {getattr(error, 'stage', 'agent runtime history')}{suffix}")
++    database = safe_db_diagnostic(error)
++    if database:
++        diagnostic += ' ' + json.dumps(database, sort_keys=True, separators=(',', ':'))
++    return diagnostic
+ 
+ 
+ _REASON = re.compile(r'[A-Za-z][A-Za-z0-9_.-]{0,79}')
+--- /dev/null
++++ b/src/okto_nexus/adapters/outbound/sqlite/diagnostics.py
+@@ -0,0 +1,49 @@
++"""Bounded SQLite failure metadata; never exception text, SQL or paths."""
++import sqlite3
++
++from .write_gate import WriterAdmissionTimeout
++
++
++_PRIMARY_NAMES = {
++    getattr(sqlite3, 'SQLITE_' + name): 'SQLITE_' + name
++    for name in ('ERROR', 'INTERNAL', 'PERM', 'ABORT', 'BUSY', 'LOCKED', 'NOMEM',
++                 'READONLY', 'INTERRUPT', 'IOERR', 'CORRUPT', 'NOTFOUND', 'FULL',
++                 'CANTOPEN', 'PROTOCOL', 'EMPTY', 'SCHEMA', 'TOOBIG', 'CONSTRAINT',
++                 'MISMATCH', 'MISUSE', 'NOLFS', 'AUTH', 'FORMAT', 'RANGE', 'NOTADB',
++                 'NOTICE', 'WARNING')
++}
++
++
++def safe_db_diagnostic(error):
++    """Project actual typed causes, without guessing from their messages.
++
++    Retryability is the nearest explicit boolean policy, not permission to
++    replay an operation. A gate timeout is distinct from a SQLite BUSY result.
++    Suppressed contexts and oversized/cyclic chains do not invent a cause.
++    """
++    result = {}
++    seen = set()
++    current = error
++    for _ in range(16):
++        if not isinstance(current, BaseException) or id(current) in seen:
++            break
++        seen.add(id(current))
++        retryable = getattr(current, 'retryable', None)
++        if 'retryable' not in result and type(retryable) is bool:
++            result['retryable'] = retryable
++        if isinstance(current, WriterAdmissionTimeout):
++            result['writer_gate_timeout'] = True
++        if isinstance(current, sqlite3.Error) and 'sqlite_errorcode' not in result:
++            code = getattr(current, 'sqlite_errorcode', None)
++            if type(code) is int and 0 <= code <= 0x7fffffff and code & 255 in _PRIMARY_NAMES:
++                primary = _PRIMARY_NAMES[code & 255]
++                result.update(sqlite_errorcode=code, sqlite_primary_errorcode=code & 255,
++                              sqlite_primary_errorname=primary)
++                name = getattr(current, 'sqlite_errorname', None)
++                if (type(name) is str and (name == primary or name.startswith(primary + '_'))
++                        and len(name) <= 80 and getattr(sqlite3, name, None) == code):
++                    result['sqlite_errorname'] = name
++        cause = current.__cause__
++        current = cause if cause is not None else (
++            None if current.__suppress_context__ else current.__context__)
++    return result
+--- /dev/null
++++ b/tests/test_embedded_recovery_diagnostics.py
+@@ -0,0 +1,141 @@
++"""Real local SQLite failures retain classification, never arbitrary text."""
++import json
++import sqlite3
++
++import pytest
++
++from nexus_connector_core import CoreError
++from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
++from okto_nexus.adapters.outbound.sqlite.diagnostics import safe_db_diagnostic
++from okto_nexus.adapters.outbound.sqlite.write_gate import WriterAdmissionTimeout
++from okto_nexus.bootstrap.embedded_agent_recovery import _diagnostic
++from okto_nexus.config import NexusConfig
++from okto_nexus.errors import ErrorCode, OktoNexusError, db_error_from_exception
++
++
++def factory_at(tmp_path):
++    factory = ConnectionFactory(NexusConfig(home_dir=tmp_path, busy_timeout_ms=10))
++    with factory.unit_of_work() as uow:
++        uow.connection.execute('CREATE TABLE samples(value TEXT UNIQUE)')
++    return factory
++
++
++def metadata(error):
++    text = _diagnostic(error)
++    return text, json.loads(text[text.index('{'):])
++
++
++def test_real_sqlite_writer_lock_preserves_driver_code_and_retryability(tmp_path):
++    factory = factory_at(tmp_path)
++    holder = factory.get_connection()
++    holder.execute('BEGIN IMMEDIATE')
++    try:
++        with pytest.raises(OktoNexusError) as caught:
++            with factory.unit_of_work():
++                pytest.fail('A competing SQLite writer must not enter')
++    finally:
++        holder.close()
++    error = caught.value
++    assert isinstance(error.__cause__, sqlite3.OperationalError)
++    text, details = metadata(error)
++    assert details == {'retryable': True, 'sqlite_errorcode': sqlite3.SQLITE_BUSY,
++                       'sqlite_errorname': 'SQLITE_BUSY',
++                       'sqlite_primary_errorcode': sqlite3.SQLITE_BUSY,
++                       'sqlite_primary_errorname': 'SQLITE_BUSY'}
++    assert 'database is locked' not in text and str(tmp_path) not in text
++    with factory.unit_of_work() as uow:
++        assert uow.connection.execute('SELECT COUNT(*) FROM samples').fetchone()[0] == 0
++
++
++def test_real_writer_gate_timeout_is_distinct_from_sqlite_busy(tmp_path):
++    factory = factory_at(tmp_path)
++    with factory.unit_of_work():
++        with pytest.raises(OktoNexusError) as caught:
++            with factory.unit_of_work():
++                pytest.fail('The local gate must expire before SQLite BEGIN')
++    assert isinstance(caught.value.__cause__, WriterAdmissionTimeout)
++    assert isinstance(caught.value.__cause__, TimeoutError)
++    text, details = metadata(caught.value)
++    assert details == {'retryable': True, 'writer_gate_timeout': True}
++    assert 'SQLite writer admission timed out' not in text
++    with factory.unit_of_work():
++        pass  # A diagnostic must not retain writer ownership.
++
++
++def test_extended_constraint_code_survives_explicit_cause_without_sql_or_values(tmp_path):
++    connection = sqlite3.connect(tmp_path / 'private-secret-path.sqlite')
++    try:
++        connection.execute('CREATE TABLE private_secret_column(value TEXT UNIQUE)')
++        connection.execute('INSERT INTO private_secret_column VALUES(?)', ('sensitive-private-value',))
++        try:
++            connection.execute('INSERT INTO private_secret_column VALUES(?)', ('sensitive-private-value',))
++        except sqlite3.IntegrityError as original:
++            wrapped = db_error_from_exception('sensitive SQL INSERT path password', original)
++            wrapped.__cause__ = original
++        else:
++            pytest.fail('Expected an actual SQLite UNIQUE constraint error')
++    finally:
++        connection.close()
++    text, details = metadata(wrapped)
++    assert details == {'retryable': False, 'sqlite_errorcode': sqlite3.SQLITE_CONSTRAINT_UNIQUE,
++                       'sqlite_errorname': 'SQLITE_CONSTRAINT_UNIQUE',
++                       'sqlite_primary_errorcode': sqlite3.SQLITE_CONSTRAINT,
++                       'sqlite_primary_errorname': 'SQLITE_CONSTRAINT'}
++    for secret in ('private_secret_column', 'sensitive-private-value', 'private-secret-path', 'password', 'INSERT'):
++        assert secret not in text
++
++
++def test_implicit_context_and_cycle_are_bounded_without_copying_messages():
++    try:
++        raise sqlite3.OperationalError('password=hunter2 path=C:/personal SQL=SELECT secret')
++    except sqlite3.OperationalError:
++        try:
++            raise OktoNexusError(ErrorCode.DB_ERROR, 'Bearer private material', {}, retryable=False)
++        except OktoNexusError as caught:
++            error = caught
++    # A manually constructed driver error has no SQLite result code. No guess.
++    assert safe_db_diagnostic(error) == {'retryable': False}
++    error.__context__.__context__ = error
++    assert safe_db_diagnostic(error) == {'retryable': False}
++    text = _diagnostic(error)
++    assert not any(secret in text for secret in ('hunter2', 'personal', 'SELECT', 'Bearer'))
++
++
++def test_suppressed_unrelated_context_is_not_reported():
++    hidden = WriterAdmissionTimeout('private context')
++    current = ValueError('not the original failure')
++    current.__context__ = hidden
++    current.__suppress_context__ = True
++    assert safe_db_diagnostic(current) == {}
++
++
++def test_fake_attributes_and_timeout_message_cannot_fabricate_sqlite_or_gate_origin():
++    error = TimeoutError('SQLite writer admission timed out.')
++    error.sqlite_errorcode = sqlite3.SQLITE_BUSY
++    error.sqlite_errorname = 'SQLITE_BUSY'
++    error.retryable = 'true'
++    assert safe_db_diagnostic(error) == {}
++    wrapped = OktoNexusError(ErrorCode.DB_ERROR, 'historical failure without retained cause', {}, retryable=True)
++    wrapped.__cause__ = error
++    assert safe_db_diagnostic(wrapped) == {'retryable': True}
++    assert 'writer_gate_timeout' not in _diagnostic(wrapped)
++
++
++@pytest.mark.parametrize('name', ['SQLITE_BUSY_BEARER_PRIVATE', 'private password/path', 'SQLITE_CONSTRAINT'])
++def test_driver_name_must_match_public_sqlite_constant(name):
++    error = sqlite3.OperationalError('private message')
++    error.sqlite_errorcode = sqlite3.SQLITE_BUSY
++    error.sqlite_errorname = name
++    details = safe_db_diagnostic(error)
++    assert details['sqlite_errorcode'] == sqlite3.SQLITE_BUSY
++    assert 'sqlite_errorname' not in details
++    assert name not in json.dumps(details)
++
++
++def test_existing_technical_core_diagnostic_is_preserved():
++    error = CoreError('RECONCILIATION_REQUIRED', 'embedded_session_recovery')
++    assert _diagnostic(error) == 'CoreError: RECONCILIATION_REQUIRED at embedded_session_recovery'
++    error.details = {'reason': 'safe_technical_reason'}
++    assert _diagnostic(error).endswith('(safe_technical_reason)')
++    error.details = {'reason': 'C:/private command --password=secret'}
++    assert _diagnostic(error) == 'CoreError: RECONCILIATION_REQUIRED at embedded_session_recovery'

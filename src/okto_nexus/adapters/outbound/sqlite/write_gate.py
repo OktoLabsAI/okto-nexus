@@ -4,6 +4,10 @@ import threading
 import time
 
 
+class WriterAdmissionTimeout(TimeoutError):
+    """The local FIFO writer gate expired before SQLite admission."""
+
+
 class WriteGate:
     def __init__(self):
         self._condition = threading.Condition()
@@ -19,13 +23,13 @@ class WriteGate:
                 while self._active or self._waiting[0] is not ticket:
                     remaining = deadline - time.monotonic()
                     if remaining <= 0:
-                        raise TimeoutError("SQLite writer admission timed out.")
+                        raise WriterAdmissionTimeout("SQLite writer admission timed out.")
                     self._condition.wait(remaining)
                 remaining = deadline - time.monotonic()
                 # Notification does not guarantee the waiter resumed before
                 # its deadline, even when the preceding holder has released.
                 if remaining <= 0 and timeout_seconds > 0:
-                    raise TimeoutError("SQLite writer admission timed out.")
+                    raise WriterAdmissionTimeout("SQLite writer admission timed out.")
                 self._active = True
                 return max(0, remaining)
             finally:

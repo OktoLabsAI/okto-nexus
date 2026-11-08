@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-08T01:13:12.703927+00:00",
+  "updated_at": "2026-11-08T01:23:13.992123+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12443,6 +12443,17 @@
       "cleanup": "NORMAL_EXIT_TASKS_ABSENT_DATA_RETAINED",
       "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
       "controller_checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588"
+    },
+    "r3_m1_recovery_diagnostics": {
+      "status": "SOURCE_TESTS_PASS_NOT_CAMPAIGN_ACCEPTANCE",
+      "tests_passed": 28,
+      "new_focused_tests": 10,
+      "provider_calls": 0,
+      "service_actions": 0,
+      "historical_db_cause_recovered": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-recovery-diagnostics/qualification.json"
+      ]
     }
   },
   "history": [
@@ -13582,6 +13593,15 @@
       "summary": "Local setup succeeded (21815 new observed tokens); useful open failed DB_ERROR/PREPARATION_FAILED before native admission. Observer faults/reservation retained; same-generation normal drain and retained-handle physical exit, then task uninstall. No M1/BASE-06 promotion.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v9-execution/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "milestone": "Safe SQLite recovery diagnostics",
+      "status": "SOURCE_TESTS_PASS_NOT_CAMPAIGN_ACCEPTANCE",
+      "summary": "Retain typed SQLite result codes and writer-gate timeout without exception messages/SQL/paths. 28 source tests pass with checkout import proof. No historical root-cause attribution or retry/containment behavior change.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-recovery-diagnostics/qualification.json"
       ]
     }
   ]
