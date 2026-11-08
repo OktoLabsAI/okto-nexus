@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-08T02:20:25.408169+00:00",
+  "updated_at": "2026-11-08T11:17:09.897177+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12476,11 +12476,11 @@
       ]
     },
     "r3_m1_v10_preparation": {
-      "status": "PREPARED_AWAITING_EXACT_USER_APPROVAL",
+      "status": "AUTHORIZED_INSTALLED_LOCAL_READY",
       "proposal_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
-      "execution_authorized": false,
-      "installation_executed": false,
-      "service_actions_executed": 0,
+      "execution_authorized": true,
+      "installation_executed": true,
+      "service_actions_executed": 2,
       "provider_calls": 0,
       "carry_in_reservations": 5,
       "new_reservations_maximum": 6,
@@ -12489,8 +12489,10 @@
       "acceptance_promoted": false,
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v10-preparation/review.md",
-        "plans/agent_ops/evidence/r3-m1-v10-preparation/root-review.json"
-      ]
+        "plans/agent_ops/evidence/r3-m1-v10-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-v10-authorization/authorization.json"
+      ],
+      "approval_sha256": "8500ae2cd11ff8dca2bc1551a9a5349f76075a0578f2e931c436a09ee2515620"
     }
   },
   "history": [
@@ -13668,6 +13670,15 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v10-preparation/review.md",
         "plans/agent_ops/evidence/r3-m1-v10-preparation/root-review.json"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "milestone": "M1 v10 authorized, installed and local service ready",
+      "status": "AUTHORIZED_INSTALLED_LOCAL_READY",
+      "summary": "Exact user approval retained; one offline product install verified983payloads and pip check. Two Nexus lifecycle actions completed; exact owner and retained physical-exit watcher established. No provider inference dispatched at this checkpoint. Optional Claude Sonnet200k authorized but not selected.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v10-authorization/authorization.json"
       ]
     }
   ]

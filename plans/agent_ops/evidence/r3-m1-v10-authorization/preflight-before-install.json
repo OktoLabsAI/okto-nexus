@@ -1,0 +1,21 @@
+﻿{
+    "status":  "POST_AUTHORIZATION_PREINSTALL_TARGETS_CLEAR",
+    "observed_at":  "2026-11-08T11:11:55.1877498Z",
+    "campaign_root_absent":  true,
+    "proposed_port":  56237,
+    "port_listeners":  0,
+    "tasks":  [
+                  {
+                      "component":  "nexus",
+                      "task_name":  "OktoNexus-server-172e0a933c84bf33220c109d6692bec60faee05c45f4aa4b6725bc3e8891b84c",
+                      "absent":  true
+                  },
+                  {
+                      "component":  "connector",
+                      "task_name":  "OktoNexus-connector-a4c82dcab003a5b130554f7d3f5494aded3db6a5310e1fd68e90879f88f14a63",
+                      "absent":  true
+                  }
+              ],
+    "provider_calls":  0,
+    "lifecycle_mutations":  0
+}

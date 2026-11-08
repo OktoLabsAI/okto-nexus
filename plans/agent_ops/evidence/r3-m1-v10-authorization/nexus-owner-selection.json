@@ -1,0 +1,16 @@
+{
+  "state": "ready",
+  "reason": null,
+  "instance_id": "svc_172e0a933c84bf33220c109d6692bec60faee05c45f4aa4b6725bc3e8891b84c",
+  "generation": "c1645f39dcbd9670d662288aec9c563b",
+  "pid": 48940,
+  "ready_for_queries": true,
+  "supervisor": "windows-task-scheduler",
+  "task": {
+    "name": "OktoNexus-server-172e0a933c84bf33220c109d6692bec60faee05c45f4aa4b6725bc3e8891b84c",
+    "state": 4,
+    "digest": "2bcc4b286830e1fb8a552d06300ab2151500f31a2b1658bef0195d073d7b78a0"
+  },
+  "observed_at": 1794136555.9504945,
+  "birth_filetime": 134386101084231632
+}

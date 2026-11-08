@@ -1,0 +1,19 @@
+{
+  "format": "okto.base06.installation-reservation",
+  "revision": 1,
+  "status": "RESERVED_INCOMPLETE",
+  "proposal_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+  "approval_sha256": "8500ae2cd11ff8dca2bc1551a9a5349f76075a0578f2e931c436a09ee2515620",
+  "proposal_revision": 10,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign",
+  "artifact_pins": {
+    "script_sha256": "d93dcea2b7d9cc561372090eb3a3db0561b8008b9c22d74f22f0f6afd65df15f",
+    "requirements_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+    "dependency_manifest_sha256": "b5f9b58b99e4948e5bf53a152fa5ec8344b897cc4ec1d037f39945efdb668906"
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv",
+  "reserved_at_utc": "2026-11-08T11:13:31.573824+00:00",
+  "possible_effect": true,
+  "retry_allowed": false
+}

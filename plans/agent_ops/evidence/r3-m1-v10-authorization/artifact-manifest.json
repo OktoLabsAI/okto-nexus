@@ -1,0 +1,32 @@
+{
+  "files": {
+    "authorization.json": {
+      "sha256": "8500ae2cd11ff8dca2bc1551a9a5349f76075a0578f2e931c436a09ee2515620",
+      "bytes": 2116
+    },
+    "authorization-pin-check.json": {
+      "sha256": "8bd30db00e456c7895b04d12b9e57e545a5423aca8d5807bccd6fcc197ccbaeb",
+      "bytes": 360
+    },
+    "preflight-before-install.json": {
+      "sha256": "ae5a0d9ab049b3ea74bcf5e26c5a64f2662d942181c2c0ddd22132c4a023eb9f",
+      "bytes": 817
+    },
+    "installation-result.json": {
+      "sha256": "0491c07b463e3b6c11a398505028f24fc64b73ba9ebb627f7d4f5bbbabea7004",
+      "bytes": 3746
+    },
+    "installation-reserved.json": {
+      "sha256": "9824d1c09e88da5f82cb2c03ce459ac4bb204a76e23eccf4b3894bfe895deb12",
+      "bytes": 1066
+    },
+    "nexus-owner-selection.json": {
+      "sha256": "fb9d8beacc99b69558120a4a46138e9c6eb01c1a0a4fa9882ebdda2f03f0722a",
+      "bytes": 571
+    },
+    "nexus-exit-watch-started.json": {
+      "sha256": "1d557e5b47d06f31f59039b5c8a7efce0864986e3dc0a3d7dbad2de7dda3eb9e",
+      "bytes": 145
+    }
+  }
+}

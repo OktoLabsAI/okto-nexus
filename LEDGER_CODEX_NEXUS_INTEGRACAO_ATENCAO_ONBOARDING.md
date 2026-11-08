@@ -1232,3 +1232,7 @@ Evidências: `plans/agent_ops/evidence/r3-m1-v10-observer-component/qualificatio
 A proposta `90c2ed2c…14405a` e seus 37 arquivos/dependências de execução estão congelados e conferidos. A composição do observador e a contenção remota passaram nos testes offline, incluindo a parada após Job vazio e a seleção do Connector sem trabalho anterior. O destino ainda não recebeu produtos nem foi criado; nenhuma inferência ou ação de serviço foi executada. A execução depende de nova autorização para o teto de onze reservas acumuladas, mantendo 67.658 tokens mínimos históricos e os limites 200.000/700.000. Nenhum estado de aceitação foi promovido.
 
 Proposta revisável: `plans/agent_ops/evidence/r3-m1-v10-preparation/review.md`.
+
+## M1 v10 autorizada e instalada
+
+A autorização real `8500ae2c…15620` vincula a proposta `90c2ed2c…14405a`. A instalação única passou com 983 payloads e dependências válidas. Nexus instalado/iniciado, owner confirmado e handle de saída retido; duas ações de serviço, nenhuma inferência neste checkpoint. Claude Sonnet foi autorizado opcionalmente com teto de 200 mil tokens e não foi selecionado. Evidência: `plans/agent_ops/evidence/r3-m1-v10-authorization/authorization.json`.
