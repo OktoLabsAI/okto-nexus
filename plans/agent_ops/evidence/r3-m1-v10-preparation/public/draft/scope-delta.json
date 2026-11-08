@@ -1,0 +1,49 @@
+{
+  "from_revision": 9,
+  "to_revision": 10,
+  "changed": {
+    "carry_in_reservations": [
+      3,
+      5
+    ],
+    "minimum_observed_tokens": [
+      45843,
+      67658
+    ],
+    "cumulative_reservation_limit": [
+      9,
+      11
+    ],
+    "confirmed_historical_productive": [
+      2,
+      3
+    ],
+    "homes_task_ids_port": "Fresh; derived only, not probed",
+    "Nexus": "Pending corrected diagnostic wheel",
+    "observation": "Pending new qualified composition",
+    "requirements": "Explicit LF bytes; final pins absent"
+  },
+  "unchanged": {
+    "new_reservations_maximum": 6,
+    "preventive_tokens": 200000,
+    "tolerance": 700000,
+    "deadline_seconds": 120,
+    "user_tasks": 2,
+    "explicit_lifecycle_commands": 8,
+    "implicit_connector_start_maximum": 1,
+    "force": false,
+    "old_replay": false,
+    "native_build": "0.157.0 exact predecessor reference",
+    "finite_work": "Same two-lane task/continuation/one actual command decision per lane"
+  },
+  "scope_expansion": false,
+  "authorization_inferred": false,
+  "finalization_blockers": [
+    "Corrected Nexus wheel and complete installed qualification pending; no new wheel pin selected.",
+    "New observation composition and its controller integration/qualification pending.",
+    "Revision-10 controller policy/ancestry and all entry guards not composed or qualified.",
+    "Fresh dependency-only environment and manifest-derived payload set not prepared.",
+    "Final artifact snapshot/hash and exact new user authorization receipt absent.",
+    "Pre-effect task absence, port availability, fresh homes and owner checks not performed."
+  ]
+}

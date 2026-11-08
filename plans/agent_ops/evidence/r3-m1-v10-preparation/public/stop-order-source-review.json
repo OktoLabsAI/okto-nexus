@@ -1,0 +1,36 @@
+{
+  "status": "READ_ONLY_IMPLEMENTATION_REVIEW",
+  "files": {
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\platform\\user_service.py": {
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804"
+    },
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\lifecycle.py": {
+      "sha256": "3b7541b832ed1ff7eaba213ddefbc841a56d869754a7eb863f3930ada420c4d8"
+    },
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\service_process.py": {
+      "sha256": "69d4852972168981c638d8169added4e17af36c04ed519222f94a45dd15158ca"
+    }
+  },
+  "verified_by_source": [
+    {
+      "path": "platform/user_service.py",
+      "lines": "216-225",
+      "finding": "start writes desired running; begin_stop writes desired draining with installation token and current logon session."
+    },
+    {
+      "path": "daemon/lifecycle.py",
+      "lines": "229-239",
+      "finding": "SUPERVISOR_PENDING without generation is handled; stop takes launch_exclusion, revalidates current identity and latches begin_stop even before process readiness."
+    },
+    {
+      "path": "daemon/service_process.py",
+      "lines": "29-38",
+      "finding": "Supervised child takes same launch_exclusion and returns before runtime when desired draining matches current logon."
+    }
+  ],
+  "conclusion": "Remote stop must wait until auxiliary Job is empty; otherwise consumer could overwrite the stop latch. After Job0 this still does not prove Scheduler empty or physical service exit. Canonical normal stop applies the current same-logon fence, and separate task/PID-birth/exit checks remain mandatory before uninstall.",
+  "residual_limit": "If Scheduler has accepted a start but ownership changes before stop, canonical stop may return INSTANCE_CHANGED or another uncertainty. The one-shot wrapper does not replay; no shutdown or native exit success is inferred. Helper dispatch is conservatively reserved before its monitor preflight, so refusal before thread start can retain UNKNOWN and requires read-only reconciliation.",
+  "tests_executed_for_this_review": 0,
+  "native_or_scheduler_calls": 0,
+  "product_changes": 0
+}

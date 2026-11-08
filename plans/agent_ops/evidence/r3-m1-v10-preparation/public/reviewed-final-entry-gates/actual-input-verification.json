@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "proposal_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+  "product_payload_count": 983,
+  "all_module_pins": 37,
+  "lf_requirements_verified": true,
+  "products_find_spec": {
+    "okto_nexus": null,
+    "okto_nexus_connector": null,
+    "nexus_connector_core": null
+  },
+  "exact_verifiers": [
+    "verify_wheels",
+    "verify_dependencies",
+    "artifact_pins"
+  ],
+  "approval_created_or_consumed": false,
+  "installation_invoked": false
+}

@@ -1,0 +1,1196 @@
+{
+  "format": "okto.public-artifact-allowlist",
+  "version": 1,
+  "artifacts": [
+    {
+      "path": "README.md",
+      "source_path": "generated summary",
+      "source_sha256": "50f9312fd2b5b9444e2be385c553d30bec6eb4dfc7f6285902ddece3ab3b2bd3",
+      "artifact_sha256": "50f9312fd2b5b9444e2be385c553d30bec6eb4dfc7f6285902ddece3ab3b2bd3",
+      "bytes": 1595,
+      "redactions": 0
+    },
+    {
+      "path": "bind_dependencies_and_qualified_wheels.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\bind_dependencies_and_qualified_wheels.py",
+      "source_sha256": "4f3866e73676e7db578300c3c805edb0b1e13497dbec622e9f31f5c0c9f313be",
+      "artifact_sha256": "4f3866e73676e7db578300c3c805edb0b1e13497dbec622e9f31f5c0c9f313be",
+      "bytes": 5538,
+      "redactions": 0
+    },
+    {
+      "path": "build_skeleton.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\build_skeleton.py",
+      "source_sha256": "643670bd619a3502c8058404ee9989a9507df363e024c5ea03a018bb6bd6c44c",
+      "artifact_sha256": "643670bd619a3502c8058404ee9989a9507df363e024c5ea03a018bb6bd6c44c",
+      "bytes": 18797,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/campaign_context.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\campaign_context.py",
+      "source_sha256": "80aeaf827aa97e65a3f7176e2ecf135421b2ffb057abf90431bfe0656b2c4b2b",
+      "artifact_sha256": "80aeaf827aa97e65a3f7176e2ecf135421b2ffb057abf90431bfe0656b2c4b2b",
+      "bytes": 7242,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/m1_v10_lifecycle.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\m1_v10_lifecycle.py",
+      "source_sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+      "artifact_sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+      "bytes": 3597,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/m1_v10_remote_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\m1_v10_remote_setup.py",
+      "source_sha256": "82f66e09abaed2c89fb1ec6abc0206eed9f2f2050028f19717d626045d5463b0",
+      "artifact_sha256": "82f66e09abaed2c89fb1ec6abc0206eed9f2f2050028f19717d626045d5463b0",
+      "bytes": 5615,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/m1_v10_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\m1_v10_setup.py",
+      "source_sha256": "ab8a189d2c2626498e874e75d821f1cc4d1d86662c86647e7abbd57e16f0fe55",
+      "artifact_sha256": "ab8a189d2c2626498e874e75d821f1cc4d1d86662c86647e7abbd57e16f0fe55",
+      "bytes": 5469,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\result.json",
+      "source_sha256": "8d45bc287eaf6d114b657a8fa19a120e5dff561ba4a7052c403bbbf52e520326",
+      "artifact_sha256": "8d45bc287eaf6d114b657a8fa19a120e5dff561ba4a7052c403bbbf52e520326",
+      "bytes": 2208,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\results.xml",
+      "source_sha256": "ca41973d16e9274ad8d4c855815907c7d9ef913e01c383d6787ced232a82cb6d",
+      "artifact_sha256": "ca41973d16e9274ad8d4c855815907c7d9ef913e01c383d6787ced232a82cb6d",
+      "bytes": 6694,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/test_preparation_entries.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\test_preparation_entries.py",
+      "source_sha256": "65dbd244f476759917523790267bf3f09c47808e647cac598924706eb8358a74",
+      "artifact_sha256": "65dbd244f476759917523790267bf3f09c47808e647cac598924706eb8358a74",
+      "bytes": 3278,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/test_timed_install.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\test_timed_install.py",
+      "source_sha256": "529968830437b854c9a46a81a575b921f5a46d90b922fc233e2128cb1effac50",
+      "artifact_sha256": "529968830437b854c9a46a81a575b921f5a46d90b922fc233e2128cb1effac50",
+      "bytes": 9269,
+      "redactions": 0
+    },
+    {
+      "path": "checks-initial/timed_install.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\timed_install.py",
+      "source_sha256": "d1e3ab744292c9a37b250bb82d62c6381c431e013df40260fc8172aa7d6bd1f6",
+      "artifact_sha256": "d1e3ab744292c9a37b250bb82d62c6381c431e013df40260fc8172aa7d6bd1f6",
+      "bytes": 18182,
+      "redactions": 0
+    },
+    {
+      "path": "compose_observer_v10.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\compose_observer_v10.py",
+      "source_sha256": "fa1660be7bbd97bba4c9bd2b8d58db2f490a38226db6e369a8e78da189d489b4",
+      "artifact_sha256": "fa1660be7bbd97bba4c9bd2b8d58db2f490a38226db6e369a8e78da189d489b4",
+      "bytes": 7024,
+      "redactions": 0
+    },
+    {
+      "path": "curate_public.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\curate_public.py",
+      "source_sha256": "218c2f2a9412f9725fbdef3c16ef45b8a4320d34cdf723eb403672df3f592ed2",
+      "artifact_sha256": "218c2f2a9412f9725fbdef3c16ef45b8a4320d34cdf723eb403672df3f592ed2",
+      "bytes": 9787,
+      "redactions": 0
+    },
+    {
+      "path": "draft/approval-requirements.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\approval-requirements.json",
+      "source_sha256": "75c2931b7c266565e004b266b7c11f0bcdd3a7d4e805f74d81c2e8828886cdcf",
+      "artifact_sha256": "75c2931b7c266565e004b266b7c11f0bcdd3a7d4e805f74d81c2e8828886cdcf",
+      "bytes": 566,
+      "redactions": 0
+    },
+    {
+      "path": "draft/bundle-rebase-result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\bundle-rebase-result.json",
+      "source_sha256": "52efa4414aa86733adb278876ac498878cd1b2bd7503013665401e48dd965f7e",
+      "artifact_sha256": "52efa4414aa86733adb278876ac498878cd1b2bd7503013665401e48dd965f7e",
+      "bytes": 642,
+      "redactions": 0
+    },
+    {
+      "path": "draft/campaign_context.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\campaign_context.py",
+      "source_sha256": "80aeaf827aa97e65a3f7176e2ecf135421b2ffb057abf90431bfe0656b2c4b2b",
+      "artifact_sha256": "80aeaf827aa97e65a3f7176e2ecf135421b2ffb057abf90431bfe0656b2c4b2b",
+      "bytes": 7242,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/api_worker.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\api_worker.py",
+      "source_sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e",
+      "artifact_sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e",
+      "bytes": 3504,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/canonical_fixture.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\canonical_fixture.py",
+      "source_sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "artifact_sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "bytes": 4280,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\controller.py",
+      "source_sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e",
+      "artifact_sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e",
+      "bytes": 1305,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/history_observers.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\history_observers.py",
+      "source_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "artifact_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "bytes": 1681,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/independent_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\independent_controller.py",
+      "source_sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+      "artifact_sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+      "bytes": 14475,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/independent_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\independent_journal.py",
+      "source_sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+      "artifact_sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+      "bytes": 12728,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/legacy_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\legacy_controller.py",
+      "source_sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2",
+      "artifact_sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2",
+      "bytes": 20007,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/observation_guard.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\observation_guard.py",
+      "source_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "artifact_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "bytes": 10253,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/serial_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\serial_flow.py",
+      "source_sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+      "artifact_sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+      "bytes": 1829,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/setup_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\setup_journal.py",
+      "source_sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a",
+      "artifact_sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a",
+      "bytes": 8014,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/test_independent.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\test_independent.py",
+      "source_sha256": "e00401598807a366acc5fe6deb7da3dbf59cd31bef858b9dfa5e59feeb15914c",
+      "artifact_sha256": "e00401598807a366acc5fe6deb7da3dbf59cd31bef858b9dfa5e59feeb15914c",
+      "bytes": 28485,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/test_work_wrapper.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\test_work_wrapper.py",
+      "source_sha256": "1278c220ed9d8c081030fc2098bb8bfeb1709d4b7a043f892c7aa9aa1cb3c981",
+      "artifact_sha256": "1278c220ed9d8c081030fc2098bb8bfeb1709d4b7a043f892c7aa9aa1cb3c981",
+      "bytes": 12400,
+      "redactions": 0
+    },
+    {
+      "path": "draft/controller/token_collector.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\token_collector.py",
+      "source_sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+      "artifact_sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+      "bytes": 22011,
+      "redactions": 0
+    },
+    {
+      "path": "draft/dependency-and-wheel-binding.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\dependency-and-wheel-binding.json",
+      "source_sha256": "63f2013ae51eefb95175a74a1489f50623da57c0695c1a1ff66355bef2874739",
+      "artifact_sha256": "63f2013ae51eefb95175a74a1489f50623da57c0695c1a1ff66355bef2874739",
+      "bytes": 673,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/campaign_context.py.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\campaign_context.py.diff",
+      "source_sha256": "f6d3f2a3854c82ca490e82bab6e50b5c09bba9b7ed4c9140c360d86905164ba8",
+      "artifact_sha256": "f6d3f2a3854c82ca490e82bab6e50b5c09bba9b7ed4c9140c360d86905164ba8",
+      "bytes": 2561,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/controller.py.observer.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\controller.py.observer.diff",
+      "source_sha256": "924a958a6fa6d0eb43ae0c4197bf0da3bbc3f6adcbb79a7a853845a485cd214b",
+      "artifact_sha256": "924a958a6fa6d0eb43ae0c4197bf0da3bbc3f6adcbb79a7a853845a485cd214b",
+      "bytes": 2038,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/legacy_controller.py.observer.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\legacy_controller.py.observer.diff",
+      "source_sha256": "d8aeefbc87d419c520adcfa3802777615f6a5999d123ed631ca186788e00d78f",
+      "artifact_sha256": "d8aeefbc87d419c520adcfa3802777615f6a5999d123ed631ca186788e00d78f",
+      "bytes": 4549,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/m1_v10_lifecycle.py.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\m1_v10_lifecycle.py.diff",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/m1_v10_remote_setup.py.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\m1_v10_remote_setup.py.diff",
+      "source_sha256": "b322e242736be5dad05d74b99da4424e1e8c00c9ad962bcd0e33dde2414adb1c",
+      "artifact_sha256": "b322e242736be5dad05d74b99da4424e1e8c00c9ad962bcd0e33dde2414adb1c",
+      "bytes": 779,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/m1_v10_setup.py.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\m1_v10_setup.py.diff",
+      "source_sha256": "e361e8ff54892fdc7e75f09708d73ccfd21902f24146620b3934335223020413",
+      "artifact_sha256": "e361e8ff54892fdc7e75f09708d73ccfd21902f24146620b3934335223020413",
+      "bytes": 747,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/m1_v10_work.py.observer.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\m1_v10_work.py.observer.diff",
+      "source_sha256": "734e2d9a5296bdf2bc63e1f5ead392b7af14b6f50fba690178b0a13f4f0c5a05",
+      "artifact_sha256": "734e2d9a5296bdf2bc63e1f5ead392b7af14b6f50fba690178b0a13f4f0c5a05",
+      "bytes": 583,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/remote_setup.final.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\remote_setup.final.diff",
+      "source_sha256": "fe02218496add5a0a1ce80c772e28b911a32e031fd4e96c693abd90e4b3e8132",
+      "artifact_sha256": "fe02218496add5a0a1ce80c772e28b911a32e031fd4e96c693abd90e4b3e8132",
+      "bytes": 9334,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/test_independent.py.observer.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\test_independent.py.observer.diff",
+      "source_sha256": "a5f4cafdb00d1e0e1fb8a7c42130e286ef1aed63e6f5a06b06e778e4a1cd9e5b",
+      "artifact_sha256": "a5f4cafdb00d1e0e1fb8a7c42130e286ef1aed63e6f5a06b06e778e4a1cd9e5b",
+      "bytes": 6095,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/test_work_wrapper.py.observer.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\test_work_wrapper.py.observer.diff",
+      "source_sha256": "e615daae11bd066ac0cc8bc2886a3ad256d4f5d9e30dff8e16998d58deafd341",
+      "artifact_sha256": "e615daae11bd066ac0cc8bc2886a3ad256d4f5d9e30dff8e16998d58deafd341",
+      "bytes": 4432,
+      "redactions": 0
+    },
+    {
+      "path": "draft/diffs/timed_install.py.diff",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\diffs\\timed_install.py.diff",
+      "source_sha256": "ab77cbb0dc266f6b1aa5bf0aee172304dc788f32bbff4fca8e9b00f221b42eef",
+      "artifact_sha256": "ab77cbb0dc266f6b1aa5bf0aee172304dc788f32bbff4fca8e9b00f221b42eef",
+      "bytes": 6779,
+      "redactions": 0
+    },
+    {
+      "path": "draft/entrypoint-source-map.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\entrypoint-source-map.json",
+      "source_sha256": "1765e24621e5d2f93433ac8cd1017ce00c459355e53e46fea4529f4f64b400aa",
+      "artifact_sha256": "1765e24621e5d2f93433ac8cd1017ce00c459355e53e46fea4529f4f64b400aa",
+      "bytes": 3158,
+      "redactions": 0
+    },
+    {
+      "path": "draft/identity-preparation.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\identity-preparation.json",
+      "source_sha256": "d9809741dc4bd14c6878231f2c62880e1eb574372f82fbacdb433ec4f1ccf3dd",
+      "artifact_sha256": "d9809741dc4bd14c6878231f2c62880e1eb574372f82fbacdb433ec4f1ccf3dd",
+      "bytes": 1132,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/actual-preparation-verification.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\actual-preparation-verification.json",
+      "source_sha256": "0d75307e9a95a77a14aa0b633d2b413deac2eae435e25fa5d6351caa67d4dca1",
+      "artifact_sha256": "0d75307e9a95a77a14aa0b633d2b413deac2eae435e25fa5d6351caa67d4dca1",
+      "bytes": 2006,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/actual-verifier.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\actual-verifier.stderr.txt",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/actual-verifier.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\actual-verifier.stdout.txt",
+      "source_sha256": "c769081f0bcbd54831fa23e2c62d566564871620e37ed569472c935b46e7bc03",
+      "artifact_sha256": "c769081f0bcbd54831fa23e2c62d566564871620e37ed569472c935b46e7bc03",
+      "bytes": 131,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/dependency-manifest.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-manifest.json",
+      "source_sha256": "b5f9b58b99e4948e5bf53a152fa5ec8344b897cc4ec1d037f39945efdb668906",
+      "artifact_sha256": "b5f9b58b99e4948e5bf53a152fa5ec8344b897cc4ec1d037f39945efdb668906",
+      "bytes": 345226,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/dependency-preparation.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-preparation.json",
+      "source_sha256": "536a346d757c5c86e48ec753f86917b8ec32656e952c02556ce754cd0e29c9f9",
+      "artifact_sha256": "536a346d757c5c86e48ec753f86917b8ec32656e952c02556ce754cd0e29c9f9",
+      "bytes": 1439,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/dependency-probe.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-probe.stderr.txt",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/dependency-probe.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-probe.stdout.txt",
+      "source_sha256": "cd687ce60fc9235e49ebb0c5a1a2bd10e7d09f9a061e2b370dfe436d59d71ef9",
+      "artifact_sha256": "cd687ce60fc9235e49ebb0c5a1a2bd10e7d09f9a061e2b370dfe436d59d71ef9",
+      "bytes": 593,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/direct-interpreter-final.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\direct-interpreter-final.json",
+      "source_sha256": "0b83061e3aa65424a38f3f6291290af8bf44564b42df1480fb91084c3d24eac3",
+      "artifact_sha256": "0b83061e3aa65424a38f3f6291290af8bf44564b42df1480fb91084c3d24eac3",
+      "bytes": 978,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/direct-interpreter-final.stderr.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\direct-interpreter-final.stderr.txt",
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/direct-interpreter-final.stdout.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\direct-interpreter-final.stdout.txt",
+      "source_sha256": "0a424b654d36ee7c11bd453991bf55706b6bc3ae677e06f80df2eb011758c228",
+      "artifact_sha256": "0a424b654d36ee7c11bd453991bf55706b6bc3ae677e06f80df2eb011758c228",
+      "bytes": 413,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/environment.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\environment.json",
+      "source_sha256": "b40adc15a002344bbd8c9daa5bfc17a6582848d182b12c72a65383e74d0f0e5b",
+      "artifact_sha256": "b40adc15a002344bbd8c9daa5bfc17a6582848d182b12c72a65383e74d0f0e5b",
+      "bytes": 1048,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/prepare_dependencies.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\prepare_dependencies.py",
+      "source_sha256": "edc8b01d9f87dd767a2c123388a35be5194b31f4ffe75f319112b5f75b345306",
+      "artifact_sha256": "edc8b01d9f87dd767a2c123388a35be5194b31f4ffe75f319112b5f75b345306",
+      "bytes": 4744,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/probe_direct_interpreter.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\probe_direct_interpreter.py",
+      "source_sha256": "5b0341574fc6e9fa1ddaf384c18e1bf0a47cd14f3a500aa719bf43322743bdea",
+      "artifact_sha256": "5b0341574fc6e9fa1ddaf384c18e1bf0a47cd14f3a500aa719bf43322743bdea",
+      "bytes": 2134,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/products-requirements.txt",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\products-requirements.txt",
+      "source_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+      "artifact_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+      "bytes": 622,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/test_timed_install.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\test_timed_install.py",
+      "source_sha256": "529968830437b854c9a46a81a575b921f5a46d90b922fc233e2128cb1effac50",
+      "artifact_sha256": "529968830437b854c9a46a81a575b921f5a46d90b922fc233e2128cb1effac50",
+      "bytes": 9269,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/timed_install.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\timed_install.py",
+      "source_sha256": "d93dcea2b7d9cc561372090eb3a3db0561b8008b9c22d74f22f0f6afd65df15f",
+      "artifact_sha256": "d93dcea2b7d9cc561372090eb3a3db0561b8008b9c22d74f22f0f6afd65df15f",
+      "bytes": 18202,
+      "redactions": 0
+    },
+    {
+      "path": "draft/installation/verify_actual_preparation.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\verify_actual_preparation.py",
+      "source_sha256": "ba40ab959d9b18990947955dc62beb81386d43b04616977fa854ad2cc929a8ae",
+      "artifact_sha256": "ba40ab959d9b18990947955dc62beb81386d43b04616977fa854ad2cc929a8ae",
+      "bytes": 2806,
+      "redactions": 0
+    },
+    {
+      "path": "draft/m1-codex-campaign-proposal-v10-draft.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1-codex-campaign-proposal-v10-draft.json",
+      "source_sha256": "d9f994cce5debbaf748e0c54facb6e16df0785da2c14c6d8bd3e9cb8ce5c4341",
+      "artifact_sha256": "d9f994cce5debbaf748e0c54facb6e16df0785da2c14c6d8bd3e9cb8ce5c4341",
+      "bytes": 37033,
+      "redactions": 0
+    },
+    {
+      "path": "draft/m1-codex-campaign-proposal-v10.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1-codex-campaign-proposal-v10.json",
+      "source_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+      "artifact_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+      "bytes": 336658,
+      "redactions": 0
+    },
+    {
+      "path": "draft/m1_v10_lifecycle.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_lifecycle.py",
+      "source_sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+      "artifact_sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+      "bytes": 3597,
+      "redactions": 0
+    },
+    {
+      "path": "draft/m1_v10_remote_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_remote_setup.py",
+      "source_sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+      "artifact_sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+      "bytes": 10180,
+      "redactions": 0
+    },
+    {
+      "path": "draft/m1_v10_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_setup.py",
+      "source_sha256": "ab8a189d2c2626498e874e75d821f1cc4d1d86662c86647e7abbd57e16f0fe55",
+      "artifact_sha256": "ab8a189d2c2626498e874e75d821f1cc4d1d86662c86647e7abbd57e16f0fe55",
+      "bytes": 5469,
+      "redactions": 0
+    },
+    {
+      "path": "draft/m1_v10_work.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_work.py",
+      "source_sha256": "30c7149bc5baf48b28624fa1e36817935b0d09f0f7a53caaf05bfb90757847bf",
+      "artifact_sha256": "30c7149bc5baf48b28624fa1e36817935b0d09f0f7a53caaf05bfb90757847bf",
+      "bytes": 19129,
+      "redactions": 0
+    },
+    {
+      "path": "draft/observer-candidate-qualification.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\observer-candidate-qualification.json",
+      "source_sha256": "c29d48a32e25c0d77b5cd3be058b08739484c1453a1af0f2336155c205e9f0f9",
+      "artifact_sha256": "c29d48a32e25c0d77b5cd3be058b08739484c1453a1af0f2336155c205e9f0f9",
+      "bytes": 6007,
+      "redactions": 0
+    },
+    {
+      "path": "draft/observer-rebase-map.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\observer-rebase-map.json",
+      "source_sha256": "9b353acefdc4ecc9b3e2ef37afa99c21b1ed99eb16ffc096bc7268ba1aefdc2d",
+      "artifact_sha256": "9b353acefdc4ecc9b3e2ef37afa99c21b1ed99eb16ffc096bc7268ba1aefdc2d",
+      "bytes": 5406,
+      "redactions": 0
+    },
+    {
+      "path": "draft/planning-commands.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\planning-commands.json",
+      "source_sha256": "5c9b6d20f2571c22941f7839192dc11f15bc22e737b5d8df792456cdd9881f28",
+      "artifact_sha256": "5c9b6d20f2571c22941f7839192dc11f15bc22e737b5d8df792456cdd9881f28",
+      "bytes": 5259,
+      "redactions": 0
+    },
+    {
+      "path": "draft/preparation-history/fixture-map-path-key.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\preparation-history\\fixture-map-path-key.json",
+      "source_sha256": "bbfcb9dec40f7608df1fa1a5fb6903062ade662bc42642feb58b2970ae3a514a",
+      "artifact_sha256": "bbfcb9dec40f7608df1fa1a5fb6903062ade662bc42642feb58b2970ae3a514a",
+      "bytes": 341,
+      "redactions": 0
+    },
+    {
+      "path": "draft/preparation-history/metadata-cleanup.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\preparation-history\\metadata-cleanup.json",
+      "source_sha256": "6a6e0c6ef06ad9921f1cb4de3f243a1cf98bc51d2ce98a3c8d85390485ab4cab",
+      "artifact_sha256": "6a6e0c6ef06ad9921f1cb4de3f243a1cf98bc51d2ce98a3c8d85390485ab4cab",
+      "bytes": 449,
+      "redactions": 0
+    },
+    {
+      "path": "draft/preparation-history/observer-compose-refusal.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\preparation-history\\observer-compose-refusal.json",
+      "source_sha256": "8dbd7f789d508fa23b1f7e3c33e60b8f1b029336c3fe357de6964e8b32e4af82",
+      "artifact_sha256": "8dbd7f789d508fa23b1f7e3c33e60b8f1b029336c3fe357de6964e8b32e4af82",
+      "bytes": 497,
+      "redactions": 0
+    },
+    {
+      "path": "draft/preparation-history/pre-dependencies-proposal.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\preparation-history\\pre-dependencies-proposal.json",
+      "source_sha256": "04b849e78170dd551788ba5de52844fe53ca6d6267b5b2b4370556736957ce8b",
+      "artifact_sha256": "04b849e78170dd551788ba5de52844fe53ca6d6267b5b2b4370556736957ce8b",
+      "bytes": 322891,
+      "redactions": 0
+    },
+    {
+      "path": "draft/preparation-history/timed-install-unbound.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\preparation-history\\timed-install-unbound.py",
+      "source_sha256": "d1e3ab744292c9a37b250bb82d62c6381c431e013df40260fc8172aa7d6bd1f6",
+      "artifact_sha256": "d1e3ab744292c9a37b250bb82d62c6381c431e013df40260fc8172aa7d6bd1f6",
+      "bytes": 18182,
+      "redactions": 0
+    },
+    {
+      "path": "draft/proposed-commands.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\proposed-commands.json",
+      "source_sha256": "7b52ba62b2de9e7817a154c4ea0e75734bd750e37c4832e6647a7547b1e63e58",
+      "artifact_sha256": "7b52ba62b2de9e7817a154c4ea0e75734bd750e37c4832e6647a7547b1e63e58",
+      "bytes": 10990,
+      "redactions": 0
+    },
+    {
+      "path": "draft/protected-transfer/owned_job.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\protected-transfer\\owned_job.py",
+      "source_sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+      "artifact_sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+      "bytes": 3714,
+      "redactions": 0
+    },
+    {
+      "path": "draft/protected-transfer/protected_pty.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\protected-transfer\\protected_pty.py",
+      "source_sha256": "820d4a210d35d27dc869a4a8bb64065cdf908e3e323ec4b2361cdbb81e0fa882",
+      "artifact_sha256": "820d4a210d35d27dc869a4a8bb64065cdf908e3e323ec4b2361cdbb81e0fa882",
+      "bytes": 26262,
+      "redactions": 0
+    },
+    {
+      "path": "draft/publication.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\publication.py",
+      "source_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "artifact_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "bytes": 1676,
+      "redactions": 0
+    },
+    {
+      "path": "draft/remote-canonical-recipe.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote-canonical-recipe.json",
+      "source_sha256": "2e69496b8da1e0453b598917a9f28d5b4f7a3fc263f5b554effcc58d448f8f93",
+      "artifact_sha256": "2e69496b8da1e0453b598917a9f28d5b4f7a3fc263f5b554effcc58d448f8f93",
+      "bytes": 21522,
+      "redactions": 0
+    },
+    {
+      "path": "draft/remote_stop_order.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote_stop_order.py",
+      "source_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "artifact_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "bytes": 3267,
+      "redactions": 0
+    },
+    {
+      "path": "draft/remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote_transfer_monitor.py",
+      "source_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "artifact_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "bytes": 10998,
+      "redactions": 0
+    },
+    {
+      "path": "draft/response_loss.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\response_loss.py",
+      "source_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "artifact_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "bytes": 8755,
+      "redactions": 0
+    },
+    {
+      "path": "draft/scope-delta.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\scope-delta.json",
+      "source_sha256": "501e6739359cbc65fefe816b948fc8dbd7448104a4e7acfc959192178b33c9db",
+      "artifact_sha256": "501e6739359cbc65fefe816b948fc8dbd7448104a4e7acfc959192178b33c9db",
+      "bytes": 1631,
+      "redactions": 0
+    },
+    {
+      "path": "draft/source-map.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\source-map.json",
+      "source_sha256": "15d6a1385477ae315310ca2b0c71e5d2c8b0df660e6055636460dda5ec4dc4e1",
+      "artifact_sha256": "15d6a1385477ae315310ca2b0c71e5d2c8b0df660e6055636460dda5ec4dc4e1",
+      "bytes": 1823,
+      "redactions": 0
+    },
+    {
+      "path": "draft/supervisor_check.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\supervisor_check.py",
+      "source_sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+      "artifact_sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+      "bytes": 2251,
+      "redactions": 0
+    },
+    {
+      "path": "draft/test_preparation_entries.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\test_preparation_entries.py",
+      "source_sha256": "781d2ee370c763d1a81300b96106a185cd7ba7d2560c61491bbd27d261db874c",
+      "artifact_sha256": "781d2ee370c763d1a81300b96106a185cd7ba7d2560c61491bbd27d261db874c",
+      "bytes": 3321,
+      "redactions": 0
+    },
+    {
+      "path": "draft/test_remote_setup_composition.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\test_remote_setup_composition.py",
+      "source_sha256": "42304b824709c67c5093754361fef72dbc3dcf90fa08afd4d1bd40f90e102359",
+      "artifact_sha256": "42304b824709c67c5093754361fef72dbc3dcf90fa08afd4d1bd40f90e102359",
+      "bytes": 7910,
+      "redactions": 0
+    },
+    {
+      "path": "draft/test_remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\test_remote_transfer_monitor.py",
+      "source_sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "artifact_sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "bytes": 10220,
+      "redactions": 0
+    },
+    {
+      "path": "draft/unchanged-helper-references.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\unchanged-helper-references.json",
+      "source_sha256": "549ca1ceb54831cddcb42a893dd94d27822cdf9c9e1b3dc5d80c60878c01b567",
+      "artifact_sha256": "549ca1ceb54831cddcb42a893dd94d27822cdf9c9e1b3dc5d80c60878c01b567",
+      "bytes": 1600,
+      "redactions": 0
+    },
+    {
+      "path": "draft/wheel-payload-pins.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\wheel-payload-pins.json",
+      "source_sha256": "f0d73abb25f47cc9d91ccf40d2d56d993df468eeb62b20d82d0db16f6c949ed6",
+      "artifact_sha256": "f0d73abb25f47cc9d91ccf40d2d56d993df468eeb62b20d82d0db16f6c949ed6",
+      "bytes": 271203,
+      "redactions": 0
+    },
+    {
+      "path": "final-entry-gates/actual-input-verification.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\final-entry-gates\\actual-input-verification.json",
+      "source_sha256": "85a69da06b442a88b7a961f9a527c21cf9a5ee59c90225b35c047073588024b5",
+      "artifact_sha256": "85a69da06b442a88b7a961f9a527c21cf9a5ee59c90225b35c047073588024b5",
+      "bytes": 497,
+      "redactions": 0
+    },
+    {
+      "path": "final-entry-gates/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\final-entry-gates\\result.json",
+      "source_sha256": "3c7137631d7fc438f1be574a352d5aa7d154437219c838583f0fabb1616cd66e",
+      "artifact_sha256": "3c7137631d7fc438f1be574a352d5aa7d154437219c838583f0fabb1616cd66e",
+      "bytes": 7346,
+      "redactions": 0
+    },
+    {
+      "path": "final-entry-gates/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\final-entry-gates\\results.xml",
+      "source_sha256": "66d54671e8a6fb690b131c5f9e6e985d6f00f4a07364b68590255c16dbeb6a18",
+      "artifact_sha256": "66d54671e8a6fb690b131c5f9e6e985d6f00f4a07364b68590255c16dbeb6a18",
+      "bytes": 2955,
+      "redactions": 0
+    },
+    {
+      "path": "finalize_candidate_metadata.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\finalize_candidate_metadata.py",
+      "source_sha256": "368846a46670f16e3962153e5a776e316ec92301acef255c712feafef3e4db67",
+      "artifact_sha256": "368846a46670f16e3962153e5a776e316ec92301acef255c712feafef3e4db67",
+      "bytes": 7153,
+      "redactions": 0
+    },
+    {
+      "path": "independent-remote-review.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-remote-order-review-qmp5s4o0\\review.json",
+      "source_sha256": "73672fdd270b5f1050dc9b2058b00a4d9690f685aab2ef193f75023bfd7eb35e",
+      "artifact_sha256": "73672fdd270b5f1050dc9b2058b00a4d9690f685aab2ef193f75023bfd7eb35e",
+      "bytes": 5156,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/module-origins.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\module-origins.json",
+      "source_sha256": "abb83c49737457cb8ca13525b6993ad50a661ba105ba9ff432aea2fe17392276",
+      "artifact_sha256": "abb83c49737457cb8ca13525b6993ad50a661ba105ba9ff432aea2fe17392276",
+      "bytes": 4552,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\result.json",
+      "source_sha256": "6c7e9d796cf712835b5508907fa0bef2141bf930240ec23a9d2aea39f568ffc0",
+      "artifact_sha256": "6c7e9d796cf712835b5508907fa0bef2141bf930240ec23a9d2aea39f568ffc0",
+      "bytes": 3171,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\results.xml",
+      "source_sha256": "742f2433ed87a64d37ee58867a685f477564215dedbed33842669e0647619536",
+      "artifact_sha256": "742f2433ed87a64d37ee58867a685f477564215dedbed33842669e0647619536",
+      "bytes": 3930,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/api_worker.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\api_worker.py",
+      "source_sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e",
+      "artifact_sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e",
+      "bytes": 3504,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/canonical_fixture.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\canonical_fixture.py",
+      "source_sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "artifact_sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "bytes": 4280,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\controller.py",
+      "source_sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e",
+      "artifact_sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e",
+      "bytes": 1305,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/history_observers.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\history_observers.py",
+      "source_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "artifact_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "bytes": 1681,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/independent_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\independent_controller.py",
+      "source_sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+      "artifact_sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+      "bytes": 14475,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/independent_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\independent_journal.py",
+      "source_sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+      "artifact_sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+      "bytes": 12728,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/legacy_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\legacy_controller.py",
+      "source_sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2",
+      "artifact_sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2",
+      "bytes": 20007,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/observation_guard.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\observation_guard.py",
+      "source_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "artifact_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "bytes": 10253,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/serial_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\serial_flow.py",
+      "source_sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+      "artifact_sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+      "bytes": 1829,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/setup_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\setup_journal.py",
+      "source_sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a",
+      "artifact_sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a",
+      "bytes": 8014,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/test_independent.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\test_independent.py",
+      "source_sha256": "e00401598807a366acc5fe6deb7da3dbf59cd31bef858b9dfa5e59feeb15914c",
+      "artifact_sha256": "e00401598807a366acc5fe6deb7da3dbf59cd31bef858b9dfa5e59feeb15914c",
+      "bytes": 28485,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/test_work_wrapper.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\test_work_wrapper.py",
+      "source_sha256": "1278c220ed9d8c081030fc2098bb8bfeb1709d4b7a043f892c7aa9aa1cb3c981",
+      "artifact_sha256": "1278c220ed9d8c081030fc2098bb8bfeb1709d4b7a043f892c7aa9aa1cb3c981",
+      "bytes": 12400,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/controller/token_collector.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\controller\\token_collector.py",
+      "source_sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+      "artifact_sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+      "bytes": 22011,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/m1_v10_work.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\m1_v10_work.py",
+      "source_sha256": "30c7149bc5baf48b28624fa1e36817935b0d09f0f7a53caaf05bfb90757847bf",
+      "artifact_sha256": "30c7149bc5baf48b28624fa1e36817935b0d09f0f7a53caaf05bfb90757847bf",
+      "bytes": 19129,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/publication.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\publication.py",
+      "source_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "artifact_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "bytes": 1676,
+      "redactions": 0
+    },
+    {
+      "path": "observer-composition-initial/sources/response_loss.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\observer-composition-initial\\sources\\response_loss.py",
+      "source_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "artifact_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "bytes": 8755,
+      "redactions": 0
+    },
+    {
+      "path": "prepare_bundle.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\prepare_bundle.py",
+      "source_sha256": "96a688d13523a16f58e1ba9696d696dbcbd9ece583eadb2ea25cffe399ff59fe",
+      "artifact_sha256": "96a688d13523a16f58e1ba9696d696dbcbd9ece583eadb2ea25cffe399ff59fe",
+      "bytes": 10181,
+      "redactions": 0
+    },
+    {
+      "path": "qualification.json",
+      "source_path": "generated from retained reports",
+      "source_sha256": "eb850185712d8c955468b3c089e51b27bd78958f4462bdcb4edddc768595c7c8",
+      "artifact_sha256": "eb850185712d8c955468b3c089e51b27bd78958f4462bdcb4edddc768595c7c8",
+      "bytes": 5470,
+      "redactions": 0
+    },
+    {
+      "path": "qualify_composed_observer.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\qualify_composed_observer.py",
+      "source_sha256": "48a76734bda5b51a683df5dfc33b029329e849b69121980b74efbc280e882838",
+      "artifact_sha256": "48a76734bda5b51a683df5dfc33b029329e849b69121980b74efbc280e882838",
+      "bytes": 3303,
+      "redactions": 0
+    },
+    {
+      "path": "qualify_final_gates.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\qualify_final_gates.py",
+      "source_sha256": "c328913c3d8a7e00f12d7f43d015dc81340b8b5ab98cf1194860f6b2b9b6df25",
+      "artifact_sha256": "c328913c3d8a7e00f12d7f43d015dc81340b8b5ab98cf1194860f6b2b9b6df25",
+      "bytes": 3887,
+      "redactions": 0
+    },
+    {
+      "path": "qualify_remote_composition.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\qualify_remote_composition.py",
+      "source_sha256": "d778e1d048b5ad33bfe6be320e33904d6cceff2072ac7be836ca3b4ad3637ff6",
+      "artifact_sha256": "d778e1d048b5ad33bfe6be320e33904d6cceff2072ac7be836ca3b4ad3637ff6",
+      "bytes": 1770,
+      "redactions": 0
+    },
+    {
+      "path": "qualify_remote_final.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\qualify_remote_final.py",
+      "source_sha256": "037d90dfd09e3877046b6741227924f62dbe59cac599a3dcc35f3d0fc416538a",
+      "artifact_sha256": "037d90dfd09e3877046b6741227924f62dbe59cac599a3dcc35f3d0fc416538a",
+      "bytes": 1727,
+      "redactions": 0
+    },
+    {
+      "path": "qualify_reviewed_final_gates.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\qualify_reviewed_final_gates.py",
+      "source_sha256": "76f5b2f9029e878ffc23dba56dcdd5f449d405a9cc490d93abdddb79df785c1b",
+      "artifact_sha256": "76f5b2f9029e878ffc23dba56dcdd5f449d405a9cc490d93abdddb79df785c1b",
+      "bytes": 3896,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-final/m1_v10_remote_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-final\\m1_v10_remote_setup.py",
+      "source_sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+      "artifact_sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+      "bytes": 10180,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-final/remote_stop_order.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-final\\remote_stop_order.py",
+      "source_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "artifact_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "bytes": 3267,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-final/remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-final\\remote_transfer_monitor.py",
+      "source_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "artifact_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "bytes": 10998,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-final/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-final\\result.json",
+      "source_sha256": "44beb7008d8644cf4f4c8566954bb46b834be499ffe6e2bac15e5e72dbfad4b3",
+      "artifact_sha256": "44beb7008d8644cf4f4c8566954bb46b834be499ffe6e2bac15e5e72dbfad4b3",
+      "bytes": 821,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-final/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-final\\results.xml",
+      "source_sha256": "464e518dbd49efe20adfc584f34dffa2e51fa1a36dd1d256430b572d4cd2fece",
+      "artifact_sha256": "464e518dbd49efe20adfc584f34dffa2e51fa1a36dd1d256430b572d4cd2fece",
+      "bytes": 1200,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-final/test_remote_setup_composition.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-final\\test_remote_setup_composition.py",
+      "source_sha256": "42304b824709c67c5093754361fef72dbc3dcf90fa08afd4d1bd40f90e102359",
+      "artifact_sha256": "42304b824709c67c5093754361fef72dbc3dcf90fa08afd4d1bd40f90e102359",
+      "bytes": 7910,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-final/test_remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-final\\test_remote_transfer_monitor.py",
+      "source_sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "artifact_sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "bytes": 10220,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-initial/m1_v10_remote_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-initial\\m1_v10_remote_setup.py",
+      "source_sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+      "artifact_sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+      "bytes": 10180,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-initial/remote_stop_order.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-initial\\remote_stop_order.py",
+      "source_sha256": "5df53d06a28f1458463228b1ba5231611eda6773898ef6e49d8ef3cac380ac82",
+      "artifact_sha256": "5df53d06a28f1458463228b1ba5231611eda6773898ef6e49d8ef3cac380ac82",
+      "bytes": 3101,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-initial/remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-initial\\remote_transfer_monitor.py",
+      "source_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "artifact_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "bytes": 10998,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-initial/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-initial\\result.json",
+      "source_sha256": "139b6b0cf2bfdc7b62642d567bfe1a61d1f752173fc341bc5634281c2462ced2",
+      "artifact_sha256": "139b6b0cf2bfdc7b62642d567bfe1a61d1f752173fc341bc5634281c2462ced2",
+      "bytes": 821,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-initial/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-initial\\results.xml",
+      "source_sha256": "319910ffcb192094310c9a791cd6c32eef844f634cb12e14e1bee84ccc87082d",
+      "artifact_sha256": "319910ffcb192094310c9a791cd6c32eef844f634cb12e14e1bee84ccc87082d",
+      "bytes": 3308,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-initial/test_remote_setup_composition.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-initial\\test_remote_setup_composition.py",
+      "source_sha256": "622388ce53124e3c7aec60bd3c81640e3791d64613d052b8f1a088b8053b37fd",
+      "artifact_sha256": "622388ce53124e3c7aec60bd3c81640e3791d64613d052b8f1a088b8053b37fd",
+      "bytes": 7521,
+      "redactions": 0
+    },
+    {
+      "path": "remote-composition-initial/test_remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-composition-initial\\test_remote_transfer_monitor.py",
+      "source_sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "artifact_sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "bytes": 10220,
+      "redactions": 0
+    },
+    {
+      "path": "remote-monitor-initial/remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-monitor-initial\\remote_transfer_monitor.py",
+      "source_sha256": "9c43aaf5bfab8a55b8389b4c34738937a778f60badc722953fa11db304c44fce",
+      "artifact_sha256": "9c43aaf5bfab8a55b8389b4c34738937a778f60badc722953fa11db304c44fce",
+      "bytes": 6152,
+      "redactions": 0
+    },
+    {
+      "path": "remote-monitor-initial/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-monitor-initial\\result.json",
+      "source_sha256": "42dcf0d745102be400d0a4dbda503308ebab0c9c35e34c7123cb268d9cd9d3a1",
+      "artifact_sha256": "42dcf0d745102be400d0a4dbda503308ebab0c9c35e34c7123cb268d9cd9d3a1",
+      "bytes": 1191,
+      "redactions": 0
+    },
+    {
+      "path": "remote-monitor-initial/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-monitor-initial\\results.xml",
+      "source_sha256": "133665aa294a67ff30e50ccc225c8d919027b4b86a2ac3d9344e96d8f33a51f9",
+      "artifact_sha256": "133665aa294a67ff30e50ccc225c8d919027b4b86a2ac3d9344e96d8f33a51f9",
+      "bytes": 1942,
+      "redactions": 0
+    },
+    {
+      "path": "remote-monitor-initial/test_remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-monitor-initial\\test_remote_transfer_monitor.py",
+      "source_sha256": "4fc21aed5b43c211d119f738dc72c71c2c389add6f93f0252cf3f6f8ceab5e18",
+      "artifact_sha256": "4fc21aed5b43c211d119f738dc72c71c2c389add6f93f0252cf3f6f8ceab5e18",
+      "bytes": 6747,
+      "redactions": 0
+    },
+    {
+      "path": "requirements_lf.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\requirements_lf.py",
+      "source_sha256": "5aefba77b5bcf9191a65734ab3bfc387b4b2c37a86ed74eb7477dda94612ee4c",
+      "artifact_sha256": "5aefba77b5bcf9191a65734ab3bfc387b4b2c37a86ed74eb7477dda94612ee4c",
+      "bytes": 1565,
+      "redactions": 0
+    },
+    {
+      "path": "reviewed-final-entry-gates/actual-input-verification.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\reviewed-final-entry-gates\\actual-input-verification.json",
+      "source_sha256": "5283fd47268fb2b45001dea96d31382f29e043620f674384079dd5d28d5a18d1",
+      "artifact_sha256": "5283fd47268fb2b45001dea96d31382f29e043620f674384079dd5d28d5a18d1",
+      "bytes": 497,
+      "redactions": 0
+    },
+    {
+      "path": "reviewed-final-entry-gates/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\reviewed-final-entry-gates\\result.json",
+      "source_sha256": "8bbb77962432ff18b940c9deda0269aebc26619bf188df9d0e0cf31e273ae691",
+      "artifact_sha256": "8bbb77962432ff18b940c9deda0269aebc26619bf188df9d0e0cf31e273ae691",
+      "bytes": 7348,
+      "redactions": 0
+    },
+    {
+      "path": "reviewed-final-entry-gates/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\reviewed-final-entry-gates\\results.xml",
+      "source_sha256": "bda6e9f8040b4016e44c570917b7b842ef94cb59a29fc0cbb3bf9ecfb0267a9b",
+      "artifact_sha256": "bda6e9f8040b4016e44c570917b7b842ef94cb59a29fc0cbb3bf9ecfb0267a9b",
+      "bytes": 2955,
+      "redactions": 0
+    },
+    {
+      "path": "root-readonly-preflight.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\root-readonly-preflight.json",
+      "source_sha256": "d580ea930cf3b62db417428afbe28463e4d5769d9ba1278ed0d0aaebe4be224a",
+      "artifact_sha256": "d580ea930cf3b62db417428afbe28463e4d5769d9ba1278ed0d0aaebe4be224a",
+      "bytes": 1211,
+      "redactions": 0
+    },
+    {
+      "path": "run_preparation_checks.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\run_preparation_checks.py",
+      "source_sha256": "5654815190092ae4068a4be171ea1ca7fc97817afda5f941e531ab75884a343b",
+      "artifact_sha256": "5654815190092ae4068a4be171ea1ca7fc97817afda5f941e531ab75884a343b",
+      "bytes": 2056,
+      "redactions": 0
+    },
+    {
+      "path": "stop-order-source-review.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\stop-order-source-review.json",
+      "source_sha256": "1e253cf48af4787d32dfd0052b104704d9197ae72280197b1eae7c223d5330f6",
+      "artifact_sha256": "1e253cf48af4787d32dfd0052b104704d9197ae72280197b1eae7c223d5330f6",
+      "bytes": 2216,
+      "redactions": 0
+    }
+  ],
+  "artifact_count": 147,
+  "aggregate_sha256": "f06a1e3459ddf63edc3b11518a6e44a89b607e3e9cb58d9676308da0e0f73a37",
+  "excluded": [
+    "venvs",
+    "wheels",
+    "test homes",
+    "campaign homes",
+    "databases",
+    "credentials",
+    "private logs",
+    "provider output"
+  ],
+  "redactions": 0,
+  "copy_policy": "Original artifact bytes preserved; generated summaries identified explicitly."
+}

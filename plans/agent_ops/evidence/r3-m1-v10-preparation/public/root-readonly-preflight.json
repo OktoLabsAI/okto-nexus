@@ -1,0 +1,26 @@
+﻿{
+    "status":  "READ_ONLY_PREPARATION_SNAPSHOT_NOT_EXECUTION_AUTHORITY",
+    "observed_at":  "2026-11-08T02:12:35.0430146Z",
+    "campaign_root":  "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign",
+    "campaign_root_absent":  true,
+    "proposed_port":  56237,
+    "port_listeners":  0,
+    "tasks":  [
+                  {
+                      "component":  "nexus",
+                      "task_name":  "OktoNexus-server-172e0a933c84bf33220c109d6692bec60faee05c45f4aa4b6725bc3e8891b84c",
+                      "matches":  0,
+                      "absent":  true
+                  },
+                  {
+                      "component":  "connector",
+                      "task_name":  "OktoNexus-connector-a4c82dcab003a5b130554f7d3f5494aded3db6a5310e1fd68e90879f88f14a63",
+                      "matches":  0,
+                      "absent":  true
+                  }
+              ],
+    "native_sha256":  "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "provider_calls":  0,
+    "lifecycle_mutations":  0,
+    "limitation":  "Snapshot only. Repeat exact absence, port and pins after actual authorization before effects."
+}

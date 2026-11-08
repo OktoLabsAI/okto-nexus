@@ -1,0 +1,68 @@
+--- observer-v9/test_work_wrapper.py
++++ bundle-v10/test_work_wrapper.py
+@@ -12,7 +12,7 @@
+ import pytest
+ 
+ from test_independent import (CanonicalFixture,JournalFixture,create_control,scope,deny_external)
+-from controller import Controller
++from controller import Controller,POLICY
+ from independent_journal import CoreJournalReader
+ 
+ 
+@@ -88,9 +88,9 @@
+         for name in ('server_home','operator_home'):(Path(paths[name])/'terminal/profiles').mkdir(parents=True)
+         self.fixture=CanonicalFixture(Path(paths['server_home']))
+         self.P={'paths':paths,'package_pins':{'fixture':'NO_REAL_PRODUCT_EXECUTION'},
+-            'execution_bundle':{'profiles':{'local':'m1v9-local','connector':'m1v9-remote'},'operator_profile':'m1v9-human',
+-                'files':{'response_loss':{'path':str(self.modules/'response_loss.py')}}},
+-            'request_ids':{'work':['m1v9-'+lane+'-work-'+number for lane in ('local','remote') for number in ('01','02')]},
++            'execution_bundle':{'profiles':{'local':'m1v10-local','connector':'m1v10-remote'},'operator_profile':'m1v10-human',
++                'files':{'response_loss':{'path':str(self.modules.parent/'response_loss.py')}}},
++            'request_ids':{'work':['m1v10-'+lane+'-work-'+number for lane in ('local','remote') for number in ('01','02')]},
+             'finite_work':{'request':'Synthetic finite fixture','continuation':'Synthetic continuation',
+                 'delivery':{'expected_shape':{'row_count':4,'sum':10,'input_sha256':'synthetic'}}}}
+         self.C={'service_selection_args':[]}
+@@ -116,7 +116,7 @@
+     import okto_nexus.adapters.inbound.cli.work as product_work
+     import okto_nexus.adapters.inbound.cli.terminal_target as target
+     def service(args,name,operator,resolver):
+-        lane='local' if name=='m1v9-local' else 'connector'
++        lane='local' if name=='m1v10-local' else 'connector'
+         home=Path(context.P['paths']['server_home' if lane=='local' else 'operator_home'])
+         return types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane=lane)
+     monkeypatch.setattr(target,'resolve_terminal_target',service)
+@@ -125,7 +125,7 @@
+     try:
+         for lane,phase in [('local','useful'),('local','continuation'),('connector','useful'),('connector','continuation')]:
+             context.remaining=[lane,phase]
+-            runpy.run_path(str(Path(__file__).parent/'m1_work_serial_candidate.py'),run_name='__main__')
++            runpy.run_path(str(Path(__file__).parent.parent/'m1_v10_work.py'),run_name='__main__')
+             profile=context.P['execution_bundle']['profiles'][lane]
+             suffix='01' if phase=='useful' else '02'
+             value=json.loads((tmp_path/'public'/(profile+'-work-'+suffix+'-result.json')).read_text())
+@@ -139,7 +139,7 @@
+             results.append(value)
+         assert len([v for v in context.calls if v[1]=='POST'])==4
+         assert results[-1]['summary']['new_reserved_requests']==4
+-        assert results[-1]['summary']['known_observed_tokens']==45843+20+20
++        assert results[-1]['summary']['known_observed_tokens']==POLICY['carry_in_tokens']+20+20
+     finally:
+         for writer in context.writers.values():writer.close()
+ 
+@@ -185,13 +185,13 @@
+         types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane='local'))
+     monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,home,'local'))
+     try:
+-        runpy.run_path(str(Path(__file__).parent/'m1_work_serial_candidate.py'),run_name='__main__')
++        runpy.run_path(str(Path(__file__).parent.parent/'m1_v10_work.py'),run_name='__main__')
+         control=controls[0]
+-        value=json.loads((tmp_path/'public/m1v9-local-work-01-result.json').read_text())
++        value=json.loads((tmp_path/'public/m1v10-local-work-01-result.json').read_text())
+         assert len(stops)==1 and len(ticks)>=4 and control.api.thread is None
+         assert value['summary']['reasons']==['MONITOR_CADENCE_EXCEEDED']
+         assert value['summary']['new_reserved_requests']==1
+-        assert value['summary']['known_observed_tokens']==45853
++        assert value['summary']['known_observed_tokens']==POLICY['carry_in_tokens']+10
+         assert value['record']['settled'] and not value['useful_result_confirmed']
+         assert value['stop_wrapper_exits']==[1]
+         assert value['independent_observation']['worker_in_flight'] is False

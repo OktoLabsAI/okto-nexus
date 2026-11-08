@@ -1,0 +1,82 @@
+{
+  "status": "READ_ONLY_DESIGN_REVIEW_NO_NEW_STRUCTURAL_BLOCKER",
+  "authorization_granted": false,
+  "tests_executed_by_reviewer": false,
+  "real_effects_executed": false,
+  "reviewed_sources": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote_stop_order.py",
+      "sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_remote_setup.py",
+      "sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote_transfer_monitor.py",
+      "sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\independent_controller.py",
+      "sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\legacy_controller.py",
+      "sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-protected-pty-sce7juhl\\protected_pty.py",
+      "sha256": "820d4a210d35d27dc869a4a8bb64065cdf908e3e323ec4b2361cdbb81e0fa882"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-protected-pty-sce7juhl\\owned_job.py",
+      "sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\lifecycle.py",
+      "sha256": "3b7541b832ed1ff7eaba213ddefbc841a56d869754a7eb863f3930ada420c4d8"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\service_process.py",
+      "sha256": "69d4852972168981c638d8169added4e17af36c04ed519222f94a45dd15158ca"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\platform\\user_service.py",
+      "sha256": "1f9e719de119aa772cb69ce0b3cb5e68218d27fac7296e25dddb208a4db69804"
+    }
+  ],
+  "findings": [
+    {
+      "code": "STOP_ORDER_RACE_ADDRESSED",
+      "assessment": "Controller fault callbacks select deferred stops only. Service dispatch is withheld until the sole transfer worker is joined, helper assignment before gate is confirmed, worker exit is an integer, auxiliary Job active process count is integer zero, and public IPC readers are joined."
+    },
+    {
+      "code": "CONNECTOR_WITHOUT_WORK_COVERED",
+      "assessment": "Verified remote readiness enables explicit selection of both owned services independently of work request presence. No productive token admission is fabricated."
+    },
+    {
+      "code": "DISPATCH_FAILURE_ISOLATED",
+      "assessment": "Each selected lane is reserved before dispatch. A dispatch exception records only its type and leaves that lane unreplayed; the other selected lane can still receive its sole attempt."
+    },
+    {
+      "code": "PREVIOUS_STOP_NOT_REPLAYED",
+      "assessment": "An existing canonical lifecycle stop reservation selects reconciliation only. No force or automatic second stop is introduced."
+    },
+    {
+      "code": "CANONICAL_SCHEDULER_DRAIN_ORDER_SUPPORTED",
+      "assessment": "After auxiliary Job zero, no consumer remains to rewrite desired=running. Canonical Connector stop uses launch exclusion and begin_stop; supervised entry checks same-logon desired=draining before acquiring runtime ownership."
+    },
+    {
+      "code": "GLOBAL_ACCOUNTING_UNCHANGED",
+      "assessment": "The transfer phase continues using the existing controller checkpoint, historical readers, token collector and admission ledger. Deferred stop records describe containment ordering, not a second token authority."
+    }
+  ],
+  "limits": [
+    "This review does not execute or certify final bundle tests, provider behavior, Windows scheduling timing, credentials, or service lifecycle effects.",
+    "Helper Job zero excludes remaining auxiliary children; it is not proof of service exit. Canonical task and retained PID/birth/generation exit evidence remain required.",
+    "The helper-start reservation intentionally precedes monitor preflight. A refusal before actual helper invocation may therefore leave helper drainage unknown and stops deferred; no early stop or retry may be inferred from that uncertainty.",
+    "An unconfirmed helper result leaves normal stops deferred. Missing Job-zero proof requires separate reconciliation; it must not be treated as successful containment.",
+    "A gate is a fresh observation, not an atomic OS fence. Already admitted consumer or Scheduler operations cannot be revoked by a later gate denial.",
+    "The final bundle owner must qualify the amended remote composition and verify these exact source hashes or explicitly review subsequent changes."
+  ]
+}

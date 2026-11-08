@@ -1,0 +1,94 @@
+--- observer-v9/test_independent.py
++++ bundle-v10/test_independent.py
+@@ -130,7 +130,7 @@
+ 
+ 
+ def create_control(root,clock=None,*,create=True):
+-    approval={'status':'USER_APPROVED','proposal_revision':9,'proposal_sha256':'a'*64,
++    approval={'status':'USER_APPROVED','proposal_revision':POLICY['revision'],'proposal_sha256':'a'*64,
+         'policy':deepcopy(POLICY),'ancestry':deepcopy(ANCESTRY),'user_quote':'SYNTHETIC ONLY',
+         'campaign_root':str(root.resolve())}
+     ap=root/'synthetic-approval.json';ap.write_text(json.dumps(approval),encoding='utf-8')
+@@ -172,10 +172,11 @@
+         control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={})
+         assert entered.wait(1)
+         writer=JournalFixture(reader.path(flow.selected),flow.selected)
+-        writer.complete('one',150000)
++        observed=(POLICY['preventive_cumulative_tokens']-POLICY['carry_in_tokens'])//2
++        writer.complete('one',observed)
+         fixture.terminal('one',flow.selected)
+         summary=control.poll()
+-        assert summary['known_observed_tokens']==195843
++        assert summary['known_observed_tokens']==POLICY['carry_in_tokens']+observed
+         assert control.api.thread.is_alive() and not stops
+         assert control.data['requests']['one']['settled']
+         assert len([v for v in flow.calls if v[0]=='POST'])==1
+@@ -194,7 +195,7 @@
+         control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={})
+         assert entered.wait(1)
+         writer=JournalFixture(reader.path(flow.selected),flow.selected)
+-        writer.emit('turn/started','one');writer.emit('thread/tokenUsage/updated','one',154157)
++        writer.emit('turn/started','one');writer.emit('thread/tokenUsage/updated','one',(POLICY['preventive_cumulative_tokens']-POLICY['carry_in_tokens']))
+         assert control.poll()['known_observed_tokens']==200000
+         for _ in range(3):control.poll()
+         assert stops==['normal-stop'] and control.fence.event.is_set()
+@@ -230,7 +231,7 @@
+         control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={});consume(control)
+         fixture.terminal('one',flow.selected,'FAILED',preopen=True)
+         result=control.poll();record=control.data['requests']['one']
+-        assert result['known_observed_tokens']==45843 and not result['can_admit']
++        assert result['known_observed_tokens']==POLICY['carry_in_tokens'] and not result['can_admit']
+         assert record['preopen_failure']['billed_tokens'] is None
+         assert not record['preopen_failure']['useful_result_confirmed'] and not record['settled']
+         assert result['new_reserved_requests']==1 and stops==['normal-stop']
+@@ -338,8 +339,8 @@
+             consume(control);writers[1].complete(name,total,thread='remote-native-thread');fixture.terminal(name,remote)
+             control.poll()
+         summary=control.summary()
+-        assert summary['new_reserved_requests']==6 and summary['reserved_requests']==9
+-        assert summary['known_observed_tokens']==45843+200+300+20+40
++        assert summary['new_reserved_requests']==6 and summary['reserved_requests']==POLICY['max_cumulative_admissions']
++        assert summary['known_observed_tokens']==POLICY['carry_in_tokens']+200+300+20+40
+         assert summary['current']==[] and summary['reasons']==['GLOBAL_ALLOCATION_EXHAUSTED']
+         assert dispatches==['setup-local','setup-remote']
+         assert not stop and not remote_stops and not stops
+@@ -395,10 +396,10 @@
+         control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={});consume(control)
+         writer=JournalFixture(reader.path(flow.selected),flow.selected)
+         writer.emit('turn/started','one');writer.emit('thread/tokenUsage/updated','one',100)
+-        assert control.poll()['known_observed_tokens']==45943
++        assert control.poll()['known_observed_tokens']==(POLICY['carry_in_tokens']+100)
+         writer.emit('thread/tokenUsage/updated','one',90)
+         summary=control.poll()
+-        assert summary['known_observed_tokens']==45943 and not summary['can_admit']
++        assert summary['known_observed_tokens']==(POLICY['carry_in_tokens']+100) and not summary['can_admit']
+         assert 'USAGE_COUNTER_RESET_OR_REGRESSION' in control.accounting['faults'] and stops==['normal-stop']
+     finally:
+         control.close()
+@@ -428,7 +429,7 @@
+         fixture.terminal('one',flow.selected)
+         with sqlite3.connect(fixture.path) as db:db.execute("UPDATE execution_sessions SET stream_epoch='other-epoch'")
+         summary=control.poll()
+-        assert summary['known_observed_tokens']==45843 and not summary['can_admit']
++        assert summary['known_observed_tokens']==POLICY['carry_in_tokens'] and not summary['can_admit']
+         assert control.data['requests']['one']['first_observation_error']['reason']=='CANONICAL_CORE_EPOCH_MISMATCH'
+         assert stops==['normal-stop']
+     finally:
+@@ -455,7 +456,7 @@
+         control.poll=pumped
+         control.drain_api()
+         assert len(ticks)>=3 and control.api.thread is None
+-        assert control.summary()['known_observed_tokens']==45933
++        assert control.summary()['known_observed_tokens']==(POLICY['carry_in_tokens']+90)
+         assert control.data['faults'][0]=='PRIMARY_SYNTHETIC_FAILURE'
+         assert not control.summary()['can_admit'] and stops==['normal-stop']
+         assert control.data['independent_observation']['worker_in_flight'] is False
+@@ -479,7 +480,7 @@
+             connector_state=tmp_path/'connector-state',stop_for_lane=lambda lane:stops.append(lane))
+         assert attached==['local']
+         writer.emit('thread/tokenUsage/updated','one',25)
+-        assert control.poll()['known_observed_tokens']==45868
++        assert control.poll()['known_observed_tokens']==(POLICY['carry_in_tokens']+25)
+         with pytest.raises(Exception):
+             attach_existing_work(control,campaign_root=tmp_path,server_home=tmp_path/'wrong-home',
+                 connector_state=tmp_path/'connector-state',stop_for_lane=lambda lane:None)

@@ -1,0 +1,93 @@
+{
+  "modules": {
+    "controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\controller.py",
+      "sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e"
+    },
+    "legacy_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\legacy_controller.py",
+      "sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2"
+    },
+    "independent_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\independent_controller.py",
+      "sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c"
+    },
+    "api_worker": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\api_worker.py",
+      "sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e"
+    },
+    "independent_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\independent_journal.py",
+      "sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3"
+    },
+    "history_observers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\history_observers.py",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57"
+    },
+    "serial_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\serial_flow.py",
+      "sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697"
+    },
+    "setup_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\setup_journal.py",
+      "sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a"
+    },
+    "token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\token_collector.py",
+      "sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e"
+    },
+    "observation_guard": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\controller\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10"
+    },
+    "publication": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    "response_loss": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\response_loss.py",
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56"
+    },
+    "okto_nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nexus_connector_core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "sha256": "2c4ca5d38bac7033748d5eea54aa5acb5d868566136c5a6d6782a5e65c507caf"
+    }
+  },
+  "policy": {
+    "revision": 10,
+    "carry_in_admissions": 5,
+    "carry_in_tokens": 67658,
+    "max_cumulative_admissions": 11,
+    "max_new_admissions": 6,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "ancestry": {
+    "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+    "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+    "predecessor_faults": [
+      "OBSERVATION_UNKNOWN",
+      "STOP_UNCONFIRMED",
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+      "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+      "predecessor_faults": [
+        "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+        "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+        "predecessor_faults": [
+          "CAMPAIGN_RUNNER_EXCEPTION"
+        ]
+      }
+    }
+  }
+}

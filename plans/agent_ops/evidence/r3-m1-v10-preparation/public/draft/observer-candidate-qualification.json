@@ -1,0 +1,94 @@
+{
+  "status": "OFFLINE_SOURCE_CANDIDATE_NOT_CAMPAIGN_AUTHORIZATION",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2",
+  "runtime_files": {
+    "controller.py": "798ed957918eea5073db2f33514a4214abe663a43bf7f91de3047cffe39149c6",
+    "legacy_controller.py": "2ae6bc2c1137d4beaaaf720e0e7b8627bfa47716a65f52e28fa3318dacc4e4cf",
+    "independent_controller.py": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+    "api_worker.py": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e",
+    "independent_journal.py": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+    "history_observers.py": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+    "serial_flow.py": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+    "setup_journal.py": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a",
+    "token_collector.py": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+    "observation_guard.py": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+    "m1_work_serial_candidate.py": "43e5345dc239e8b57bfdc92f481a1aa504bc71bfe7f6c14ce47dfb504f5557e4"
+  },
+  "support_files": {
+    "test_independent.py": "284a08e42435694444fb8fb1966e293e9316f517ee646e14d07e5117ff90cf23",
+    "test_work_wrapper.py": "642f23c6ac7c7b44937e3a1e8c046db9b6168b14a41a1735c56b4b1480b59ce2",
+    "canonical_fixture.py": "268efe827893369a530d3d9274617fcb514c00c4ecbd6eb8eeea44dda9839f9d",
+    "response_loss.py": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "publication.py": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "check_closed_v9.py": "376567807bddc2f5d7cca14cbc7461362aaa477c88b8dfd875df3532df439478",
+    "closed-v9-reader-check.json": "064dcb28a54bc57b0f325c4b0b7ab19aade8490ba3978407beb97511d4724e80",
+    "work-wrapper.diff": "6a034b043207b625f0e8fb8add9c9cef1b94a911d213a652d9835402cd06cc17",
+    "build_work_wrapper.py": "dcb9b67b44f8319728e58990e99352b1b668cb44e20168fa8f9b23dc61b100ac"
+  },
+  "tests": [
+    {
+      "name": "support primitives",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\pure-tests.xml",
+      "sha256": "d04b6923a12c33dbf65d90a59be6b0a4c53d9b6ec08168a1b63d9af213cd28d2",
+      "tests": "22",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.340"
+    },
+    {
+      "name": "initial final composition",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-composition1.xml",
+      "sha256": "ece76cc9efd854649dfb03b62ad3aed7d2b128cb9a64eacd499e84a9605f2ab9",
+      "tests": "25",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "19.490"
+    },
+    {
+      "name": "combined scheduling failures retained",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-final.xml",
+      "sha256": "90e677cd0690c5d6affca373e376dd64897a7863b8e88ab2219d03fb93f1b405",
+      "tests": "47",
+      "failures": "3",
+      "errors": "0",
+      "skipped": "0",
+      "time": "18.265"
+    },
+    {
+      "name": "current composition with sanitized SQLite diagnostics",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-diagnostic.xml",
+      "sha256": "e1e6ad3411d250ba6876b5e7936db842ffe20b6b6d8a086fd46e2786d7c8d5ec",
+      "tests": "25",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "20.914"
+    },
+    {
+      "name": "deterministic 1.038s cadence miss with final late-usage publication",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\tests-cadence-miss.xml",
+      "sha256": "1ffc0619374659e8664a917b5253ab16a308ad6ab662203a79860eca734e42fc",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "6.532"
+    }
+  ],
+  "not_for_distribution": [
+    "serial_observer.py",
+    "prepare_modules.py"
+  ],
+  "policy_rebase_pending": "Runtime constants remain v9 synthetic-test values. v10 owner must rebase literal POLICY/ANCESTRY in shim and legacy, approval/format revisions, wrapper Context paths and response-loss identifiers, then test composed bundle.",
+  "authority": "One inherited global checkpoint, collector, owner lock, policy, ancestry and reservation map across setup/local/continuation/reopen/remote. No baseline migration or second token authority.",
+  "effects": "No provider, credential, real HTTP, native subprocess or new service executed. Windows asyncio private socketpair IPC alone was permitted for actual synthetic Core SQLiteJournal fixtures.",
+  "bounded_observation": "One owner pumps read-only canonical intent and Core usage projections independently of at most one API worker. SQL uses mode=ro/query_only, 40ms busy/progress bounds; timing misses permanently fence and select one normal stop per owned lane. API-boundary monotonic deadline and known-token fence are checked before POST.",
+  "limitations": [
+    "Operational cadence is not an OS hard deadline. One combined run recorded 1.038s cadence and three fail-closed happy-path test failures; original SQLite OperationalError cause was not captured. Current sources preserve safe SQLite code/name for later diagnosis. Production limits were not relaxed.",
+    "A stop wrapper return does not establish native exit. Retained API is drained with owner accounting before result snapshots and lock release; physical exit proof belongs to campaign owner.",
+    "Private Core usage projection does not prove Server event publication, final billing or absence of late usage. Preopen failure retains reservation and unknown billed tokens.",
+    "Remote PTY guarded pump and final v10 lifecycle/bundle are external integration requirements, not qualified by these source tests."
+  ]
+}

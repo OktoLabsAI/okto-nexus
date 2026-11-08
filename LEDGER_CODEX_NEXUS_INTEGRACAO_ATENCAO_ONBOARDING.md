@@ -1226,3 +1226,9 @@ O observador independente mantém a coleta de uso enquanto a API está bloqueada
 A composição final v10 ainda exige a correção da ordem de parada remota: bloquear novos efeitos, comprovar o encerramento dos auxiliares e depois despachar a parada normal dos serviços. Estes testes não executam campanha real nem promovem M1/BASE-06.
 
 Evidências: `plans/agent_ops/evidence/r3-m1-v10-observer-component/qualification.json`, `plans/agent_ops/evidence/r3-m1-v10-pty-component/qualification.json`.
+
+## Proposta finita M1 v10 revisada
+
+A proposta `90c2ed2c…14405a` e seus 37 arquivos/dependências de execução estão congelados e conferidos. A composição do observador e a contenção remota passaram nos testes offline, incluindo a parada após Job vazio e a seleção do Connector sem trabalho anterior. O destino ainda não recebeu produtos nem foi criado; nenhuma inferência ou ação de serviço foi executada. A execução depende de nova autorização para o teto de onze reservas acumuladas, mantendo 67.658 tokens mínimos históricos e os limites 200.000/700.000. Nenhum estado de aceitação foi promovido.
+
+Proposta revisável: `plans/agent_ops/evidence/r3-m1-v10-preparation/review.md`.

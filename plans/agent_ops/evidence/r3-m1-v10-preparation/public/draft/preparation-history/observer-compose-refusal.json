@@ -1,0 +1,8 @@
+{
+  "status": "REFUSED_BEFORE_COPY",
+  "expected_qualification_sha256": "7b8a1d4c2c751de2ec9c4e809eb0879dcbf34d4a5eb5407007ad83513919a3cb",
+  "actual_qualification_sha256": "22809a3d5027c395f08a5111feb0118a8808cb9db5508480e44cd916593299f4",
+  "reason": "Observer owner added the root-requested deterministic cadence regression before copy; runtime files unchanged per owner. Updated manifest explicitly accepted for next preparation attempt.",
+  "target_controller_absent": true,
+  "effects": 0
+}

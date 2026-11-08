@@ -1,0 +1,86 @@
+{
+  "controller\\controller.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\controller.py",
+    "source_sha256": "798ed957918eea5073db2f33514a4214abe663a43bf7f91de3047cffe39149c6",
+    "sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e",
+    "change": "explicit v10 policy/ancestry/revision/intent labels only"
+  },
+  "controller\\legacy_controller.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\legacy_controller.py",
+    "source_sha256": "2ae6bc2c1137d4beaaaf720e0e7b8627bfa47716a65f52e28fa3318dacc4e4cf",
+    "sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2",
+    "change": "explicit v10 policy/ancestry/revision/intent labels only"
+  },
+  "controller\\independent_controller.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\independent_controller.py",
+    "source_sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+    "sha256": "966989521223885aee715036919f83f0726050c99622225f0348dfc30898d64c",
+    "change": "byte-identical"
+  },
+  "controller\\api_worker.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\api_worker.py",
+    "source_sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e",
+    "sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e",
+    "change": "byte-identical"
+  },
+  "controller\\independent_journal.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\independent_journal.py",
+    "source_sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+    "sha256": "b1307ed4efd24af9a60f63f4048299c5b28a342e917415bfee32f0711d1cbbf3",
+    "change": "byte-identical"
+  },
+  "controller\\history_observers.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\history_observers.py",
+    "source_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+    "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+    "change": "byte-identical"
+  },
+  "controller\\serial_flow.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\serial_flow.py",
+    "source_sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+    "sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+    "change": "byte-identical"
+  },
+  "controller\\setup_journal.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\setup_journal.py",
+    "source_sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a",
+    "sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a",
+    "change": "byte-identical"
+  },
+  "controller\\token_collector.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\token_collector.py",
+    "source_sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+    "sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+    "change": "byte-identical"
+  },
+  "controller\\observation_guard.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\observation_guard.py",
+    "source_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+    "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+    "change": "byte-identical"
+  },
+  "m1_v10_work.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\m1_work_serial_candidate.py",
+    "source_sha256": "43e5345dc239e8b57bfdc92f481a1aa504bc71bfe7f6c14ce47dfb504f5557e4",
+    "sha256": "30c7149bc5baf48b28624fa1e36817935b0d09f0f7a53caaf05bfb90757847bf",
+    "change": "explicit v10 policy/ancestry/revision/intent labels only"
+  },
+  "controller\\canonical_fixture.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\canonical_fixture.py",
+    "source_sha256": "268efe827893369a530d3d9274617fcb514c00c4ecbd6eb8eeea44dda9839f9d",
+    "sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+    "change": "byte-identical fixture"
+  },
+  "controller\\test_independent.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\test_independent.py",
+    "source_sha256": "284a08e42435694444fb8fb1966e293e9316f517ee646e14d07e5117ff90cf23",
+    "sha256": "e00401598807a366acc5fe6deb7da3dbf59cd31bef858b9dfa5e59feeb15914c",
+    "change": "tests parameterized by actual v10 POLICY; own wrapper path only"
+  },
+  "controller\\test_work_wrapper.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\test_work_wrapper.py",
+    "source_sha256": "642f23c6ac7c7b44937e3a1e8c046db9b6168b14a41a1735c56b4b1480b59ce2",
+    "sha256": "1278c220ed9d8c081030fc2098bb8bfeb1709d4b7a043f892c7aa9aa1cb3c981",
+    "change": "tests parameterized by actual v10 POLICY; own wrapper path only"
+  }
+}

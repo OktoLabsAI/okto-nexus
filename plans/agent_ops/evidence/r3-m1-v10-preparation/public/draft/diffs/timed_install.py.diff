@@ -1,0 +1,74 @@
+--- v9/timed_install.py
++++ v10/timed_install.py
+@@ -1,4 +1,4 @@
+-"""Single reserved offline product installation for the exact proposed M1 v9.
++"""Single reserved offline product installation for the exact proposed M1 v10.
+ 
+ Preparation is not authorization. The normal mode only validates. --execute
+ additionally requires the exact externally pinned user-approval receipt. Any
+@@ -19,7 +19,7 @@
+ import time
+ import zipfile
+ 
+-ROOT = Path('C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation')
++ROOT = Path('C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation')
+ PREFIX = ROOT / 'venv'
+ PYTHON = PREFIX / 'Scripts/python.exe'
+ BASE_PYTHON = Path('C:/Python313/python.exe')
+@@ -29,10 +29,10 @@
+ RESERVATION = ROOT / 'installation-reserved.json'
+ RESULT = ROOT / 'installation-result.json'
+ UNKNOWN = ROOT / 'installation-unknown.json'
+-CAMPAIGN = Path('C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign')
+-POLICY = {'revision': 9, 'carry_in_admissions': 3, 'carry_in_tokens': 45843, 'max_cumulative_admissions': 9, 'max_new_admissions': 6, 'preventive_cumulative_tokens': 200000, 'operational_tolerance': 700000, 'deadline_seconds': 120}
+-ANCESTRY = {'closure_sha256': '678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d', 'checkpoint_sha256': '6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361', 'predecessor_faults': ['SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE'], 'prior_ancestry': {'closure_sha256': '8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b', 'checkpoint_sha256': '78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e', 'predecessor_faults': ['CAMPAIGN_RUNNER_EXCEPTION']}}
+-WHEELS = {'okto_nexus': {'wheel': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\wheels\\okto_nexus-0.3.3-py3-none-any.whl', 'sha256': '99e1d530b27aeba7dcbd8adae8772ac19eaf4354ad5c31fdb80c0ed6e63d7680', 'files': 691}, 'okto_nexus_connector': {'wheel': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl', 'sha256': '73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5', 'files': 124}, 'nexus_connector_core': {'wheel': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\wheel\\okto_nexus_connector_core-0.0.14-py3-none-any.whl', 'sha256': '609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd', 'files': 167}}
++CAMPAIGN = Path('C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign')
++POLICY = {'revision': 10, 'carry_in_admissions': 5, 'carry_in_tokens': 67658, 'max_cumulative_admissions': 11, 'max_new_admissions': 6, 'preventive_cumulative_tokens': 200000, 'operational_tolerance': 700000, 'deadline_seconds': 120}
++ANCESTRY = {'closure_sha256': 'fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936', 'checkpoint_sha256': '02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588', 'predecessor_faults': ['OBSERVATION_UNKNOWN', 'STOP_UNCONFIRMED', 'CAMPAIGN_RUNNER_EXCEPTION'], 'prior_ancestry': {'closure_sha256': '678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d', 'checkpoint_sha256': '6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361', 'predecessor_faults': ['SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE'], 'prior_ancestry': {'closure_sha256': '8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b', 'checkpoint_sha256': '78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e', 'predecessor_faults': ['CAMPAIGN_RUNNER_EXCEPTION']}}}
++WHEELS = {'okto_nexus': {'wheel': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\wheels\\okto_nexus-0.3.3-py3-none-any.whl', 'sha256': '07b7ed53c0fcd9b1c77099a8af52d6d5404d10aca988abaee15a7f51ca132ae4', 'files': 692}, 'okto_nexus_connector': {'wheel': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl', 'sha256': '73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5', 'files': 124}, 'nexus_connector_core': {'wheel': 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\wheel\\okto_nexus_connector_core-0.0.14-py3-none-any.whl', 'sha256': '609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd', 'files': 167}}
+ PRODUCT_DISTS = ('okto-nexus', 'okto-nexus-connector', 'okto-nexus-connector-core')
+ 
+ 
+@@ -90,14 +90,14 @@
+ 
+ 
+ def validate_documents(proposal, approval, proposal_hash, approval_hash, artifact_pins):
+-    """Pure typed gate: current v9 proposal plus a separately pinned receipt."""
++    """Pure typed gate: current v10 proposal plus a separately pinned receipt."""
+     fail_unless(type(proposal) is dict and type(approval) is dict, 'DOCUMENT_OBJECT_REQUIRED')
+     fail_unless(proposal.get('format') == 'okto.m1.codex-real-campaign-proposal'
+-                and type(proposal.get('revision')) is int and proposal['revision'] == 9,
++                and type(proposal.get('revision')) is int and proposal['revision'] == 10,
+                 'PROPOSAL_REVISION_MISMATCH')
+     fail_unless(approval.get('status') == 'USER_APPROVED'
+                 and type(approval.get('proposal_revision')) is int
+-                and approval['proposal_revision'] == 9
++                and approval['proposal_revision'] == 10
+                 and approval.get('proposal_sha256') == proposal_hash, 'APPROVAL_REQUIRED')
+     fail_unless(type(proposal_hash) is str and re.fullmatch('[0-9a-f]{64}', proposal_hash)
+                 and type(approval_hash) is str and re.fullmatch('[0-9a-f]{64}', approval_hash),
+@@ -131,7 +131,7 @@
+                     and same_path(actual.get('wheel'), Path(expected['wheel']))
+                     and same_path(actual.get('package'), SITE / module), 'PACKAGE_PIN_MISMATCH')
+     return {'proposal_sha256': proposal_hash, 'approval_sha256': approval_hash,
+-            'proposal_revision': 9, 'campaign_root': str(CAMPAIGN)}
++            'proposal_revision': 10, 'campaign_root': str(CAMPAIGN)}
+ 
+ 
+ def write_exclusive(path, document):
+@@ -221,11 +221,11 @@
+     return packages
+ 
+ 
+-FINAL_PINS_BOUND = True  # Exact v9 artifacts qualified; actual approval is still mandatory.
+-EXPECTED_PAYLOAD_COUNT = 982
++FINAL_PINS_BOUND = False  # Installed qualification and final review still pending.
++EXPECTED_PAYLOAD_COUNT = 983
+ 
+ def install(args):
+-    fail_unless(FINAL_PINS_BOUND, 'V9_FINAL_PINS_REQUIRED')
++    fail_unless(FINAL_PINS_BOUND, 'V10_FINAL_PINS_REQUIRED')
+     require_unreserved()
+     proposal = pinned_document(args.proposal, args.expected_proposal_sha256)
+     approval = pinned_document(args.approval_path, args.approval_sha256, limit=65536)

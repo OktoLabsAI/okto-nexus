@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-08T02:09:04.849261+00:00",
+  "updated_at": "2026-11-08T02:20:25.408169+00:00",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -12474,6 +12474,23 @@
         "plans/agent_ops/evidence/r3-m1-v10-observer-component/qualification.json",
         "plans/agent_ops/evidence/r3-m1-v10-pty-component/qualification.json"
       ]
+    },
+    "r3_m1_v10_preparation": {
+      "status": "PREPARED_AWAITING_EXACT_USER_APPROVAL",
+      "proposal_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+      "execution_authorized": false,
+      "installation_executed": false,
+      "service_actions_executed": 0,
+      "provider_calls": 0,
+      "carry_in_reservations": 5,
+      "new_reservations_maximum": 6,
+      "cumulative_reservations_maximum": 11,
+      "observed_token_minimum": 67658,
+      "acceptance_promoted": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v10-preparation/review.md",
+        "plans/agent_ops/evidence/r3-m1-v10-preparation/root-review.json"
+      ]
     }
   },
   "history": [
@@ -13641,6 +13658,16 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v10-observer-component/qualification.json",
         "plans/agent_ops/evidence/r3-m1-v10-pty-component/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "milestone": "M1 v10 finite campaign prepared and independently reviewed",
+      "status": "PREPARED_AWAITING_EXACT_USER_APPROVAL",
+      "summary": "Frozen exact proposal and runtime pins; independent accounting, PTY gates and ordered normal shutdown qualified offline. No successor install/account/service/provider action or acceptance promotion. New execution approval required because the closed v9 finite scope is not replayable.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v10-preparation/review.md",
+        "plans/agent_ops/evidence/r3-m1-v10-preparation/root-review.json"
       ]
     }
   ]

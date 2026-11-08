@@ -1,0 +1,536 @@
+{
+  "format": "okto.m1.codex-real-campaign-proposal",
+  "paths": {
+    "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign",
+    "server_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\nexus-home",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\operator-home",
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\connector-state",
+    "local_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\local-project",
+    "remote_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\connector-project",
+    "private_evidence": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\private",
+    "public_evidence": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\public",
+    "local_deliverables": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\deliverables\\local",
+    "remote_deliverables": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\deliverables\\connector",
+    "codex_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe"
+  },
+  "native_selection": {
+    "personal_cli_observation_from_root": {
+      "version": "0.167.0",
+      "qualified_for_this_campaign": false,
+      "reason": "Current exact-build native request/control allowlists do not qualify this version."
+    },
+    "selected_version": "0.157.0",
+    "platform": "Windows x86_64",
+    "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+    "fingerprint": "sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+    "current_build_identity": "sha256:0bf80fe3ec18c1061c053a3e0f43dd07430ef53827ccd822a649246897526535",
+    "qualified_by": "exact executable fingerprint, not the legacy portable identity entry",
+    "qualified_native_requests": [
+      "item/commandExecution/requestApproval"
+    ],
+    "required_binding": "Review and approve this exact passively discovered installation reference, executable and project through the canonical setup; passive discovery is not launch authority.",
+    "supporting_proof": "prepared-v1/codex-0.157.0-pure-qualification.json",
+    "alternatives_not_selected": [
+      {
+        "version": "0.159.0",
+        "reason": "Qualified conversation/controls but no qualified native permission/question method; insufficient alone for the requested representative native decision."
+      },
+      {
+        "version": "0.159.0-alpha.12.1",
+        "reason": "Qualified requestUserInput only; optional separate exact build, not downloaded or selected for this finite proposal."
+      }
+    ],
+    "limits": [
+      "This preparation has not executed the native binary. Prior campaign observations remain historical; they do not prove successor behavior."
+    ],
+    "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+    "passive_discovery_evidence": "plans/agent_ops/evidence/r3-m1-execution-context/discovery.json"
+  },
+  "provider_context": {
+    "provider_home": "C:/Users/jpamb/.codex",
+    "status": "Proposed native-only use of the same authenticated home; agent never reads its credentials/config/transcripts. Awaiting successor authorization.",
+    "agent_must_not_read": [
+      "auth.json",
+      "credential stores",
+      "personal config files",
+      "personal transcripts"
+    ],
+    "native_behavior_requiring_authorization": "The selected native CLI may read its existing login/config and write its own session history or refresh login material. An isolated executable/project is not an isolated authenticated home.",
+    "credential_copy": false,
+    "new_auth_channel": false,
+    "effective_model": null,
+    "effective_policy": "Preserve canonically reviewed defaults; record reported model, instructions source, approval policy, sandbox, inherited MCP/tool settings and provider-home selection. Do not assume the service inherited an interactive shell configuration.",
+    "decision_gate": "The sibling deliverable remains outside project writable roots under the actual reviewed policy; only a genuine qualified commandExecution/requestApproval is accepted. No request means this gate remains pending. Never change a personal/global sandbox policy merely to force a request."
+  },
+  "finite_work": {
+    "fixture": {
+      "numbers.csv": "value\n1\n2\n3\n4\n",
+      "expected_rows": 4,
+      "expected_sum": 10
+    },
+    "maximum_productive_admissions": 6,
+    "allocation": "At most one local setup, one Connector setup only if the canonical path actually consumes, one useful request and one continuation per lane. Five new admissions if remote setup is nonproductive; six if productive. No unused slot reassignment or extra retries.",
+    "request": "Read only <project>/numbers.csv. Calculate its data row count, sum and SHA-256. Write exactly one JSON object with keys row_count, sum and input_sha256 to <lane_deliverables>/report.json. The deliverables directory is a precreated disposable sibling outside this project writable root but inside the campaign Temp root. Do not change permissions, sandbox, writable roots or global policy to perform this task. If the actual native policy requires a command permission, request it through the native mechanism and wait for the human decision. Do not read or write other paths, use the network, install tools, spawn subagents or retry a denied command with another method.",
+    "continuation": "Using only the existing canonical result, state the reported sum once. Do not run another command or write another file.",
+    "native_decision": "Review one genuine item/commandExecution/requestApproval per topology. Approve only the actual exact command that reads the lane numbers.csv and writes its one report.json. No broad prefix or persistent approval; no policy/sandbox modification. If policy admits the write without a request, record native-decision evidence as pending, not inferred. If denied, do not bypass the decision through another tool or output path.",
+    "serial_execution": true,
+    "parallel_provider_turns": false,
+    "connection_tests_count_toward_tokens": true,
+    "delivery": {
+      "local_output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\deliverables\\local\\report.json",
+      "connector_output": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\deliverables\\connector\\report.json",
+      "setup": "After authorization only, controller creates empty lane deliverables directories; no report exists before the productive request.",
+      "expected_shape": {
+        "row_count": 4,
+        "sum": 10,
+        "input_sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b"
+      },
+      "scope": "Each source is only its selected project/numbers.csv and each output is only its lane report.json. No overwrite of any pre-existing file.",
+      "writable_root_check": "Use reported effective native policy to verify the sibling is outside the project writable roots. This proposal does not modify sandbox or widen allowed paths. If effective roots already include it, do not pretend a native approval occurred.",
+      "native_request_review": "A future approval covers only the actual exact command and these source/output paths; reject any additional command/path, persistent prefix, external network use or policy relaxation.",
+      "non_guarantee": "The sibling output can provoke a legitimate native request under a restricting policy, but is not guaranteed to do so. If no qualified request appears, the useful result may pass while the native-decision M1 case remains pending."
+    },
+    "maximum_cumulative_admissions": 11,
+    "resolved_requests": {
+      "local": "Read only C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\local-project/numbers.csv. Calculate its data row count, sum and SHA-256. Write exactly one JSON object with keys row_count, sum and input_sha256 to C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\deliverables\\local/report.json. The deliverables directory is a precreated disposable sibling outside this project writable root but inside the campaign Temp root. Do not change permissions, sandbox, writable roots or global policy to perform this task. If the actual native policy requires a command permission, request it through the native mechanism and wait for the human decision. Do not read or write other paths, use the network, install tools, spawn subagents or retry a denied command with another method.",
+      "connector": "Read only C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\connector-project/numbers.csv. Calculate its data row count, sum and SHA-256. Write exactly one JSON object with keys row_count, sum and input_sha256 to C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\deliverables\\connector/report.json. The deliverables directory is a precreated disposable sibling outside this project writable root but inside the campaign Temp root. Do not change permissions, sandbox, writable roots or global policy to perform this task. If the actual native policy requires a command permission, request it through the native mechanism and wait for the human decision. Do not read or write other paths, use the network, install tools, spawn subagents or retry a denied command with another method."
+    },
+    "remote_return_scope": "Reopen the human operator CLI and recover the same Connector work; do not rerun Connector connect --identity or claim physical host reconnection.",
+    "counter_semantics": "Five reservations are retained, not five inferences: three productive admissions confirmed; v8 retains one unconfirmed reservation and v9 useful work one reservation despite canonical no-native-admission evidence. No reservation is refunded. Six proposed new reservations yield at most eleven cumulative reservations, not a promise of eleven inferences.",
+    "maximum_confirmed_productive_including_history": 9
+  },
+  "steps": [
+    {
+      "id": "00-package-and-byte-gate",
+      "commands": [],
+      "required_evidence": "Final noneditable wheels/import hashes, pure recheck of exact Codex fingerprint, no source mixing; confirm current candidate path and readiness version.",
+      "proposed_effects": "No model inference.",
+      "gate": "Corrected Nexus diagnostic wheel plus unchanged selected Core/Connector pins, new observer and controller composed and qualified before final freeze.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "01-context-and-service-review",
+      "commands": [
+        "<NEXUS> service status --home <server_home> --json",
+        "<CONNECTOR> --state-dir <connector_state> daemon status --json"
+      ],
+      "required_evidence": "Review exact owned task names, homes, executable/argv, provider context and initial platform. Use separately approved canonical user-service plan/startup review.",
+      "proposed_effects": "Only after explicit authorization: isolated service/task lifecycle; no logout/reboot or personal task changes.",
+      "gate": "Task targets absent or exactly owned; packages and launch context reviewed; token policy clarified.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "02-local-connect-review-apply",
+      "commands": [
+        "<NEXUS> connect --profile m1v10-local --client codex --project <local_project> --candidate-ref <observed_exact_ref> --provider-home <approved_home> --new-agent m1v10-local --plan <service-selection-args>",
+        "<NEXUS> connect --profile m1v10-local --approve <exact_review_revision> --no-chat --timeout 120 <service-selection-args>"
+      ],
+      "required_evidence": "Capture reviewed identity/workspace/preset/effective policy and immutable setup/test/Finish IDs. Local setup test is real inference and belongs in the campaign total.",
+      "proposed_effects": "New isolated identity/workspace, reviewed binding/grant and local setup test.",
+      "gate": "Explicit review approval; provider use authorized; usage collection armed before the first setup test.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "03-local-work-decision-result",
+      "commands": [
+        "<NEXUS> work send --profile m1v10-local --request-id m1v10-local-work-01 --message <finite_work.request> --json <service-selection-args>",
+        "<NEXUS> work watch --profile m1v10-local --timeout 120 --json <service-selection-args>",
+        "<NEXUS> work answer --profile m1v10-local --approval-id <actual_id> --json <service-selection-args>",
+        "<NEXUS> work answer --profile m1v10-local --approval-id <actual_id> --decision <reviewed_approve_or_deny> --review <actual_revision_hash> --json <service-selection-args>"
+      ],
+      "required_evidence": "Actual permission current actor/revision/scope, canonical ACK/terminal outcome, correct fixture answer, result reference and complete token cursor. Confirm report.json exists only at the exact lane destination and its parsed row_count/sum/input_sha256 match the fixture. Preserve the actual native permission request and reviewed command/path metadata. A successful write alone does not prove permission handling.",
+      "proposed_effects": "One useful request and at most one tightly reviewed native permission; no automatic reattempt. One report.json in the authorized sibling directory; no policy change or extra filesystem writes.",
+      "gate": "Real native request, no textual substitute; accounting current and within the agreed operational gate.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "04-local-return-and-continuity",
+      "commands": [
+        "<NEXUS> work status --profile m1v10-local --json <service-selection-args>",
+        "<NEXUS> work resume --profile m1v10-local --json <service-selection-args>",
+        "<NEXUS> work send --profile m1v10-local --request-id m1v10-local-work-02 --message <finite_work.continuation> --json <service-selection-args>"
+      ],
+      "required_evidence": "Exit and reopen only the terminal observer, recover the same request/session/result. No new native session or duplicated productive request for recovery. Continuation is separately explicit and optional only if the existing session remains supported.",
+      "proposed_effects": "At most one explicitly requested continuation.",
+      "gate": "Unsupported native context continuation is reported; never fabricate resume or automatically use --new-session.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "05-connector-root-review-finish",
+      "commands": [
+        "<CONNECTOR> --state-dir <connector_state> connect --server <loopback_origin> --harness codex_app_server --executable <codex_executable> --project <remote_project> --provider-home <approved_home> --request-id m1v10-connector-setup --setup-draft <public_host_draft> --no-start-at-login",
+        "<NEXUS> operator login --profile m1v10-human --server <loopback_origin> --username m1v10-human --password-stdin --home <operator_home>",
+        "<NEXUS> connect --operator-profile m1v10-human --remote-draft <public_host_draft> --profile m1v10-remote --plan --home <operator_home>",
+        "<QUALIFIED_PYTHON> -I -B m1_v10_remote_setup.py <exact proposal and approval selectors> transfer"
+      ],
+      "required_evidence": "Persisted root/children, one-shot host key only through existing protected prompt, human canonical approval, exact Finish receipt and binding; host never receives the operator credential.",
+      "proposed_effects": "New remote project identity/workspace/binding and reviewed host launch configuration, no auto project work.",
+      "gate": "Fresh canonical host draft/review, protected concurrent PTY key transfer, exactly one retained transfer reservation, consumer-only FG=1. Existing user service must be observed ready and exact task/digest/supervisor/owner confirmed after Finish before work. One possible Scheduler ensure/start is explicitly proposed.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "06-connector-work-decision-loss-recovery",
+      "commands": [
+        "<NEXUS> work send --operator-profile m1v10-human --profile m1v10-remote --request-id m1v10-remote-work-01 --message <finite_work.request> --json --home <operator_home>",
+        "<NEXUS> work resume --operator-profile m1v10-human --profile m1v10-remote --json --home <operator_home>",
+        "<NEXUS> work watch --operator-profile m1v10-human --profile m1v10-remote --timeout 120 --json --home <operator_home>",
+        "<NEXUS> work answer --operator-profile m1v10-human --profile m1v10-remote --approval-id <actual_id> --json --home <operator_home>",
+        "<NEXUS> work answer --operator-profile m1v10-human --profile m1v10-remote --approval-id <actual_id> --decision <reviewed_approve_or_deny> --review <actual_revision_hash> --json --home <operator_home>"
+      ],
+      "required_evidence": "Real HTTP/WebSocket/Core/provider path. One response-loss injection only after canonical submission admission and one after a decision ACK if technically controlled; then recover the saved same IDs without a second issue/decision. Retain uncertainty until a canonical receipt resolves it. Confirm report.json exists only at the exact lane destination and its parsed row_count/sum/input_sha256 match the fixture. Preserve the actual native permission request and reviewed command/path metadata. A successful write alone does not prove permission handling.",
+      "proposed_effects": "One useful request and reviewed permission; injected local client response loss is explicit instrumentation, not a claim of a naturally failing network. One report.json in the authorized sibling directory; no policy change or extra filesystem writes.",
+      "gate": "Temporary client fault harness must be reviewed before execution and may only discard a known response. It must not log auth headers, touch provider transport, or mutate product binaries.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "07-operator-return-and-connector-result",
+      "commands": [
+        "<NEXUS> work status --operator-profile m1v10-human --profile m1v10-remote --json --home <operator_home>",
+        "<NEXUS> work resume --operator-profile m1v10-human --profile m1v10-remote --json --home <operator_home>",
+        "<NEXUS> work send --operator-profile m1v10-human --profile m1v10-remote --request-id m1v10-remote-work-02 --message <finite_work.continuation> --json --home <operator_home>"
+      ],
+      "required_evidence": "Close/reopen the operator CLI observer and recover the same work/session/result via canonical GET; one explicit continuation. Does not claim physical Connector host reconnection or replace separate reconnect/lifecycle plan tests.",
+      "proposed_effects": "Read/reconnect, then optional explicit continuation within the finite allocation.",
+      "gate": "Do not force native process restart or claim resume without an exact supported grant; no hidden fresh session.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    },
+    {
+      "id": "08-close-drain-cleanup",
+      "commands": [
+        "<NEXUS> work close --profile m1v10-local --request-id m1v10-local-close --json <service-selection-args>",
+        "<NEXUS> work close --operator-profile m1v10-human --profile m1v10-remote --request-id m1v10-remote-close --json --home <operator_home>",
+        "<CONNECTOR> --state-dir <connector_state> daemon stop --timeout 45",
+        "<NEXUS> service stop --home <server_home> --timeout 45 --json"
+      ],
+      "required_evidence": "Canonical close results, drain state, owned PID/birth exit, exact owned task disable/uninstall receipts under the separately reviewed service plan, final usage high-water per thread and no surviving owned process.",
+      "proposed_effects": "Only campaign sessions/services/tasks. Keep uncertain receipts for recovery; do not delete native personal history or authentication.",
+      "gate": "If normal stop is BUSY/UNKNOWN, inspect bounded canonical metadata and preserve uncertainty. Force is excluded and needs separate explicit authorization; no kill or claim mutation.",
+      "commands_are_reference_only": true,
+      "dispatch_rule": "Use only the frozen approved finite campaign wrappers; these CLI/API references are not standalone dispatch authority."
+    }
+  ],
+  "request_ids": {
+    "setup": [
+      "m1v10-local-setup",
+      "m1v10-connector-setup"
+    ],
+    "work": [
+      "m1v10-local-work-01",
+      "m1v10-local-work-02",
+      "m1v10-remote-work-01",
+      "m1v10-remote-work-02"
+    ],
+    "connector_setup_reservation_condition": "Reserve only if the actual canonical Connector setup consumes a model turn; reserve before that effect, never retrospectively."
+  },
+  "operator_bootstrap": {
+    "username": "m1v10-human",
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\operator-home",
+    "procedure": "Only on pinned own fresh Server, GET operator-auth/status and require configured=false; generate temporary password in memory, create account once via trusted loopback, login via password-stdin. Never log password/headers. On uncertain create, GET status and do not repeat POST. Keep canonical session in own vault namespace.",
+    "no_personal_account_or_credential_read": true
+  },
+  "fixed_plan_map": [
+    {
+      "requirement": "M1 / DX-T39",
+      "proof": "Steps02-04 local real terminal cycle; native service context additionally requires the approved platform lifecycle evidence."
+    },
+    {
+      "requirement": "M1 / DX-T40",
+      "proof": "Steps05-07 actual Connector execution and authenticated human operator; loopback process topology is not a second physical host."
+    },
+    {
+      "requirement": "DX-T43",
+      "proof": "Record service effective instructions/model/tools/limits and explicit provider context; unknown values stay unknown."
+    },
+    {
+      "requirement": "DX-T45",
+      "proof": "Actual native command permission/current actor/revision, never a model-authored permission sentence."
+    },
+    {
+      "requirement": "DX-T46",
+      "proof": "Controlled response loss + same-ID canonical recovery without repeated productive admission; if injection cannot be established, retain this case pending."
+    },
+    {
+      "requirement": "DX-T47 / DX-T50",
+      "proof": "Reopened CLI retrieves work and result without a dashboard; native context resumes only where supported."
+    }
+  ],
+  "evidence_policy": {
+    "public_allowlist": [
+      "JSON metadata/hashes/counters/status/IDs",
+      "reviewed nonsecret command templates",
+      "sanitized event metadata and operation cardinalities",
+      "synthetic fixture hashes"
+    ],
+    "private_only": [
+      "raw local outputs until curated",
+      "operator/host checkpoint material when sensitive"
+    ],
+    "never_collect": [
+      "auth headers",
+      "API keys",
+      "operator cookies",
+      "provider auth/config files",
+      "personal native transcripts"
+    ],
+    "never_commit": [
+      "downloaded executables/ZIPs",
+      "homes/databases/vaults"
+    ]
+  },
+  "excluded": [
+    "Personal file discovery",
+    "Reading/copying authentication files",
+    "Replacing/updating the personal Codex installation",
+    "Unqualified0.167 capability promotion",
+    "Persistent Codex goals",
+    "Background autonomous turns",
+    "Agent spawning",
+    "Unreviewed model/tool/sandbox changes",
+    "Remote administrator credential on Connector",
+    "Reboot/logout",
+    "Force closing any unowned process",
+    "Deleting personal provider history",
+    "M2/global acceptance from this preparation",
+    "Any force stop, including owned tasks",
+    "Old checkpoint fault reset",
+    "Old intent replay",
+    "Historical claim deletion or synthesized release",
+    "Additional service cycles or task restart",
+    "Model/sandbox/tool policy changes to manufacture permission",
+    "Any separate24-action empty-service campaign"
+  ],
+  "base06_measurement": {
+    "start": "installation-result timing.install_started_monotonic_ns/UTC",
+    "end": "first work result useful_confirmed_monotonic_ns only when expected report and canonical SUCCEEDED receipt agree",
+    "preparation_excluded": "Dependency venv copy and synthetic qualifications precede product install timing and are reported separately.",
+    "no_claim_before_measurement": true
+  },
+  "dx43_observation": {
+    "path": "TerminalWork.observe GET canonical session events; replay after_sequence0 for opening metadata when needed.",
+    "native_type": "core/codex_thread_configuration",
+    "fields": [
+      "approvalPolicy",
+      "approvalsReviewer",
+      "cwd",
+      "instructionSources",
+      "model",
+      "modelProvider",
+      "sandbox",
+      "reasoningEffort"
+    ],
+    "retained": "Work result stores closed Core projection with scope/epoch/sequence and reported/missing/invalid statuses.",
+    "limits": "References are not read; metadata is not enforcement or a full tools inventory. Unknown remains unknown; no native turn is created to recover this metadata."
+  },
+  "revision": 10,
+  "status": "OFFLINE_SKELETON_INCOMPLETE_NOT_QUALIFIED_NOT_AUTHORIZED",
+  "prepared_at_utc": "2026-11-08T01:32:12.969007+00:00",
+  "execution_authorized": false,
+  "qualification_status": "PENDING",
+  "final_proposal": false,
+  "blocking_preconditions": [
+    "Corrected Nexus wheel and complete installed qualification pending; no new wheel pin selected.",
+    "New observation composition and its controller integration/qualification pending.",
+    "Revision-10 controller policy/ancestry and all entry guards not composed or qualified.",
+    "Fresh dependency-only environment and manifest-derived payload set not prepared.",
+    "Final artifact snapshot/hash and exact new user authorization receipt absent.",
+    "Pre-effect task absence, port availability, fresh homes and owner checks not performed."
+  ],
+  "authorization": {
+    "execution_authorized": false,
+    "provider_use_authorized_for_successor": false,
+    "service_actions_authorized_for_successor": false,
+    "installation_authorized": false,
+    "approval_receipt_created": false,
+    "direct_user_approval_received": false,
+    "scope": "Preparation only. Prior v7/v8/v9 approvals do not authorize this successor."
+  },
+  "counting": {
+    "conservative_carry_in_reservations": 5,
+    "historical_confirmed_productive": 3,
+    "v8_reserved_without_confirmed_productive": 1,
+    "v9_work_reserved_with_canonical_no_native_admission": 1,
+    "new_reservations_maximum": 6,
+    "cumulative_reservations_maximum": 11,
+    "maximum_confirmed_productive_if_all_new_confirm": 9,
+    "observed_token_minimum_carry_in": 67658,
+    "v9_new_observed_tokens": 21815,
+    "billing_final": false,
+    "unused_slots_reassignable": false
+  },
+  "controller_preparation": {
+    "status": "PENDING_COMPOSITION_AND_QUALIFICATION",
+    "policy": {
+      "revision": 10,
+      "carry_in_admissions": 5,
+      "carry_in_tokens": 67658,
+      "max_cumulative_admissions": 11,
+      "max_new_admissions": 6,
+      "preventive_cumulative_tokens": 200000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+      "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+      "predecessor_faults": [
+        "OBSERVATION_UNKNOWN",
+        "STOP_UNCONFIRMED",
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+        "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+        "predecessor_faults": [
+          "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+          "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+          "predecessor_faults": [
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ]
+        }
+      }
+    },
+    "execution_blocked": true,
+    "approval_receipt_created": false,
+    "controller_sha256": null,
+    "observer_sha256": null
+  },
+  "topology": {
+    "origin": "http://127.0.0.1:56237",
+    "task_names": {
+      "nexus": {
+        "name": "OktoNexus-server-172e0a933c84bf33220c109d6692bec60faee05c45f4aa4b6725bc3e8891b84c",
+        "instance_id": "svc_172e0a933c84bf33220c109d6692bec60faee05c45f4aa4b6725bc3e8891b84c",
+        "exists": null,
+        "absence_observed": false
+      },
+      "connector": {
+        "name": "OktoNexus-connector-a4c82dcab003a5b130554f7d3f5494aded3db6a5310e1fd68e90879f88f14a63",
+        "instance_id": "svc_a4c82dcab003a5b130554f7d3f5494aded3db6a5310e1fd68e90879f88f14a63",
+        "exists": null,
+        "absence_observed": false
+      }
+    },
+    "user_tasks": 2,
+    "port_availability_observed": false,
+    "service_commands": "proposed-commands.json",
+    "implicit_scheduler_start_maximum": 1,
+    "explicit_lifecycle_commands": 8,
+    "network": "Separate isolated processes and homes on loopback for the Connector protocol lane; no claim of a second physical host or cross-host network qualification.",
+    "fresh_home_reason": "Preserve all v9 and earlier faults/receipts; never reset or replay old roots."
+  },
+  "token_accounting": {
+    "observed_tokens_carry_in": 67658,
+    "admissions_carry_in": 5,
+    "new_admissions_maximum": 6,
+    "cumulative_admissions_maximum": 11,
+    "proposed_preventive_threshold": 200000,
+    "proposed_remaining_observed_headroom": 132342,
+    "total_tolerance": 700000,
+    "serial_turn_deadline_seconds": 120,
+    "limits_proposed_not_approved": true,
+    "hard_cap_supported": false,
+    "billing_final": false,
+    "counter_semantics": "Five reservations are retained, not five inferences: three productive admissions confirmed; v8 retains one unconfirmed reservation and v9 useful work one reservation despite canonical no-native-admission evidence. No reservation is refunded. Six proposed new reservations yield at most eleven cumulative reservations, not a promise of eleven inferences.",
+    "required_invariants": [
+      "Reserve durably before each setup/work/continuation; serial effects only.",
+      "Keep the exact predecessor closure/checkpoint and nested ancestry immutable.",
+      "Carry 67658 minimum observed tokens once; unknown observation is not zero or final billing.",
+      "Monitor setup and work without replacing endpoint diagnostics or inferring all([]) completion.",
+      "Unknown coverage or stop confirmation blocks new admissions; no automatic replay or fault reset.",
+      "At 200000 observed cumulative tokens select canonical interruption/close/normal owned stop; no force.",
+      "The observation component must define bounded calls and preserve first sanitized error; pending qualification."
+    ],
+    "remote_setup_source": "Canonical remote configuration/probe path sends no model turn. Native probes are ephemeral auxiliary processes. Unknown extra model consumption stops the campaign; no imaginary remote journal or automatic extra turn."
+  },
+  "package_pins": {
+    "status": "PENDING_FINAL_WHEELS_AND_MANIFEST",
+    "packages": {
+      "okto_nexus": {
+        "wheel": null,
+        "sha256": null,
+        "status": "PENDING_DIAGNOSTIC_FIX_WHEEL",
+        "manifest_payload_count": null,
+        "installed_in_target": false
+      },
+      "okto_nexus_connector": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+        "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+        "status": "UNCHANGED_PREDECESSOR_PIN_REFERENCE",
+        "manifest_payload_count": null,
+        "installed_in_target": false
+      },
+      "nexus_connector_core": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\wheel\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+        "status": "UNCHANGED_PREDECESSOR_PIN_REFERENCE",
+        "manifest_payload_count": null,
+        "installed_in_target": false
+      }
+    },
+    "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+    "files": [],
+    "expected_product_payload_count": null,
+    "expected_total_pin_count": null,
+    "count_rule": "Derive exact raw-byte payload set from final wheel manifests and compare source/wheel/install; add verified interpreter pins separately. Never retain v9 counts as a v10 acceptance constant."
+  },
+  "base06_installation": {
+    "status": "OPTIONAL_SINGLE_OFFLINE_INSTALL_NOT_PREPARED",
+    "selected": null,
+    "maximum_install_attempts_after_reservation": 1,
+    "installer_enabled": false,
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+    "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv",
+    "products_installed": false,
+    "dependencies_prepared": false,
+    "expected_payload_count": null,
+    "requirements": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\products-requirements.txt",
+    "requirements_sha256": null,
+    "requirements_encoding": "UTF-8 without BOM; LF bytes via exclusive binary write; hash the actual bytes",
+    "script": null,
+    "script_sha256": null,
+    "result": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\installation-result.json",
+    "reservation": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\installation-reserved.json",
+    "requirements_renderer": "../requirements_lf.py",
+    "effects_executed": 0,
+    "guard": "Actual installer remains absent. Validate final proposal and approval before reservation; any reserved/unknown result forbids replay. No pip, environment creation or install in this preparation."
+  },
+  "execution_bundle": {
+    "status": "NOT_COMPOSED",
+    "entry_gate": "../execution_gate.py",
+    "all_entry_points_blocked": true,
+    "unconditional_error": "V10_SKELETON_NOT_EXECUTABLE",
+    "requires_root_composition": true,
+    "lifecycle_runner": null,
+    "setup_runner": null,
+    "work_runner": null,
+    "observer": null,
+    "approval_path": null
+  },
+  "predecessor": {
+    "closure": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-v9-execution\\public\\closure.json",
+    "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+    "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+    "original_approved_v9_proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+    "executed_derived_v9_proposal_sha256": "099215c658e4b16cfb69456ea1ad9a21875b45a090c439a6504b05912491d204",
+    "historical_evidence_unchanged": true,
+    "new_execution_authority_inherited": false
+  },
+  "acceptance": {
+    "promoted": false,
+    "m1_complete": false,
+    "base06_measured": false,
+    "scope": "Finite preparation only. No installation, service, account or provider effect."
+  }
+}

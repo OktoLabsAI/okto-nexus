@@ -1,0 +1,145 @@
+{
+  "status": "FROZEN_REFERENCE_COMMANDS_REQUIRING_EXACT_V10_APPROVAL",
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign",
+  "local_plan": {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "connect",
+      "--profile",
+      "m1v10-local",
+      "--client",
+      "codex",
+      "--project",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\local-project",
+      "--candidate-ref",
+      "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+      "--provider-home",
+      "C:/Users/jpamb/.codex",
+      "--new-agent",
+      "m1v10-local",
+      "--plan",
+      "--json",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\nexus-home",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "56237",
+      "--project-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\local-project",
+      "--embedding-mode",
+      "off",
+      "--feature-harness-integrations",
+      "true",
+      "--metrics-mode",
+      "disabled",
+      "--harness-root",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+    ],
+    "result": "Canonical own server_home/terminal/profiles/m1v10-local.json; setup script reads this exact document."
+  },
+  "connector_host_draft": {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "--state-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\connector-state",
+      "connect",
+      "--server",
+      "http://127.0.0.1:56237",
+      "--harness",
+      "codex_app_server",
+      "--executable",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+      "--project",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\connector-project",
+      "--provider-home",
+      "C:/Users/jpamb/.codex",
+      "--request-id",
+      "m1v10-connector-setup",
+      "--setup-draft",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\public\\connector-draft.json",
+      "--no-start-at-login"
+    ],
+    "nonsecret_stdin": "1\n",
+    "meaning": "Only final Save draft choice, with exact installation/project/provider supplied. Unexpected prompt/choice or mismatching draft stops review; no credential here."
+  },
+  "operator_login": {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "operator",
+      "login",
+      "--profile",
+      "m1v10-human",
+      "--server",
+      "http://127.0.0.1:56237",
+      "--username",
+      "m1v10-human",
+      "--password-stdin",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\operator-home"
+    ],
+    "stdin": "Generated own password in memory only, from canonical fresh-account bootstrap described in proposal; never a personal credential."
+  },
+  "remote_plan": {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "connect",
+      "--operator-profile",
+      "m1v10-human",
+      "--remote-draft",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\public\\connector-draft.json",
+      "--profile",
+      "m1v10-remote",
+      "--new-agent",
+      "m1v10-remote",
+      "--plan",
+      "--json",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\campaign\\operator-home"
+    ],
+    "result": "Canonical own operator_home/terminal/profiles/m1v10-remote.json. Review scope and write public/remote-review-selection.json with exact proposal_sha256/review_revision/server_id/profile before transfer."
+  },
+  "productive_and_transfer_scripts": {
+    "lifecycle": [
+      "initialize",
+      "nexus install|start|stop|uninstall",
+      "connector install|start|stop|uninstall"
+    ],
+    "setup": [
+      "local"
+    ],
+    "work": [
+      "local useful",
+      "local continuation",
+      "connector useful",
+      "connector continuation"
+    ],
+    "remote_setup": [
+      "transfer"
+    ]
+  },
+  "cleanup": "Use canonical work close then observe exact exit/PIDbirth and task stopped; lifecycle wrapper uninstall requires cleanup-component.json proof. Stop reservation shared with controller callbacks. No force or duplicate stop.",
+  "execution_authorized": false,
+  "execution_blocked": true,
+  "commands_executed": 0,
+  "remote_recipe": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote-canonical-recipe.json",
+    "sha256": "2e69496b8da1e0453b598917a9f28d5b4f7a3fc263f5b554effcc58d448f8f93"
+  }
+}

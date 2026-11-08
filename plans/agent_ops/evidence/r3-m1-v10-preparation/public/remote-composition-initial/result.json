@@ -1,0 +1,14 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 5.527142699924298,
+  "source_before": {
+    "remote_transfer_monitor.py": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+    "remote_stop_order.py": "5df53d06a28f1458463228b1ba5231611eda6773898ef6e49d8ef3cac380ac82",
+    "m1_v10_remote_setup.py": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+    "test_remote_transfer_monitor.py": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+    "test_remote_setup_composition.py": "622388ce53124e3c7aec60bd3c81640e3791d64613d052b8f1a088b8053b37fd"
+  },
+  "source_unchanged": true,
+  "campaign_root_absent": true,
+  "scope": "Synthetic callbacks/threads and own test files only. Product Popen/helper transfer are substituted, no real HTTP/provider/credential/native service."
+}

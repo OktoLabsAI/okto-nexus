@@ -1,0 +1,35 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 6.302852199994959,
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\test_timed_install.py",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\test_preparation_entries.py",
+    "--basetemp",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\pytest-tmp",
+    "--junitxml",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\checks-initial\\results.xml"
+  ],
+  "source_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\campaign_context.py": "80aeaf827aa97e65a3f7176e2ecf135421b2ffb057abf90431bfe0656b2c4b2b",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_lifecycle.py": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_setup.py": "ab8a189d2c2626498e874e75d821f1cc4d1d86662c86647e7abbd57e16f0fe55",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_remote_setup.py": "82f66e09abaed2c89fb1ec6abc0206eed9f2f2050028f19717d626045d5463b0",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\test_preparation_entries.py": "65dbd244f476759917523790267bf3f09c47808e647cac598924706eb8358a74",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\timed_install.py": "d1e3ab744292c9a37b250bb82d62c6381c431e013df40260fc8172aa7d6bd1f6",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\test_timed_install.py": "529968830437b854c9a46a81a575b921f5a46d90b922fc233e2128cb1effac50"
+  },
+  "source_unchanged": true,
+  "campaign_root_absent": true,
+  "installation_unreserved": true,
+  "scope": "Fake installer subprocess transitions and denied Python script entries only; no product installation/provider/service."
+}

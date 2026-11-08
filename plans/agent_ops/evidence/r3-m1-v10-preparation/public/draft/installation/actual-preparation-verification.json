@@ -1,0 +1,34 @@
+{
+  "status": "PASS_REAL_VERIFIERS_NO_INSTALL",
+  "functions": [
+    "verify_wheels",
+    "verify_dependencies",
+    "artifact_pins"
+  ],
+  "script_sha256": "d93dcea2b7d9cc561372090eb3a3db0561b8008b9c22d74f22f0f6afd65df15f",
+  "requirements_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+  "requirements_lf_only": true,
+  "payload_count_from_wheels": 983,
+  "gate_entry_count": 984,
+  "products_find_spec_before_after": {
+    "okto_nexus": null,
+    "okto_nexus_connector": null,
+    "nexus_connector_core": null
+  },
+  "campaign_absent_before_after": true,
+  "install_reservation_result_unknown_absent_before_after": true,
+  "inputs_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\timed_install.py": "d93dcea2b7d9cc561372090eb3a3db0561b8008b9c22d74f22f0f6afd65df15f",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\products-requirements.txt": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-manifest.json": "b5f9b58b99e4948e5bf53a152fa5ec8344b897cc4ec1d037f39945efdb668906",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\environment.json": "b40adc15a002344bbd8c9daa5bfc17a6582848d182b12c72a65383e74d0f0e5b",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\direct-interpreter-final.json": "0b83061e3aa65424a38f3f6291290af8bf44564b42df1480fb91084c3d24eac3",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-preparation.json": "536a346d757c5c86e48ec753f86917b8ec32656e952c02556ce754cd0e29c9f9"
+  },
+  "inputs_unchanged": true,
+  "approval_document_created_or_consumed": false,
+  "installer_install_function_called": false,
+  "subprocesses_inside_verification": 0,
+  "product_imports": 0,
+  "provider_or_service_calls": 0
+}

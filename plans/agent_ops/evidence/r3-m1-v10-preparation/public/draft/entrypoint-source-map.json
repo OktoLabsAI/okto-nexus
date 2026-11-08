@@ -1,0 +1,50 @@
+{
+  "campaign_context.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\campaign_context.py",
+    "source_sha256": "04f082f5368dd779d8342e0ef784bf9251b3834ab8956d0b6b12893fb3b1550e",
+    "sha256": "80aeaf827aa97e65a3f7176e2ecf135421b2ffb057abf90431bfe0656b2c4b2b",
+    "change": "revision/intent/module labels only; approval, authority and dispatch guards unchanged"
+  },
+  "m1_v10_lifecycle.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\m1_v9_lifecycle.py",
+    "source_sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "change": "revision/intent/module labels only; approval, authority and dispatch guards unchanged"
+  },
+  "m1_v10_setup.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\m1_v9_setup.py",
+    "source_sha256": "700bcb3bbbef4d345fa2459706aa653cd3eb44c64ee4b3d70571f994210772fb",
+    "sha256": "ab8a189d2c2626498e874e75d821f1cc4d1d86662c86647e7abbd57e16f0fe55",
+    "change": "revision/intent/module labels only; approval, authority and dispatch guards unchanged"
+  },
+  "m1_v10_remote_setup.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\m1_v9_remote_setup.py",
+    "source_sha256": "5d772264131f4f24d9ddefd4a9c173c873d08acc09c020c48feb8db092519eea",
+    "sha256": "82f66e09abaed2c89fb1ec6abc0206eed9f2f2050028f19717d626045d5463b0",
+    "change": "revision/intent/module labels only; approval, authority and dispatch guards unchanged"
+  },
+  "publication.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\publication.py",
+    "source_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "change": "byte-identical"
+  },
+  "response_loss.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\response_loss.py",
+    "source_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "change": "byte-identical"
+  },
+  "supervisor_check.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\supervisor_check.py",
+    "source_sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "change": "byte-identical"
+  },
+  "installation/timed_install.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\timed_install.py",
+    "source_sha256": "1cd1b2a20874dcfb51b79e39411d62e6edca45d5c4eb548f9dc49fd2df08a34f",
+    "sha256": "d93dcea2b7d9cc561372090eb3a3db0561b8008b9c22d74f22f0f6afd65df15f",
+    "change": "fixed targets/revision10/policy/ancestry; manifest-derived qualified wheel pins; approval and replay guards unchanged"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 5.094183100038208,
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\test_remote_transfer_monitor.py",
+    "--basetemp",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-monitor-initial\\pytest-tmp",
+    "--junitxml",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\remote-monitor-initial\\results.xml"
+  ],
+  "source_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote_transfer_monitor.py": "9c43aaf5bfab8a55b8389b4c34738937a778f60badc722953fa11db304c44fce",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\test_remote_transfer_monitor.py": "4fc21aed5b43c211d119f738dc72c71c2c389add6f93f0252cf3f6f8ceab5e18"
+  },
+  "source_unchanged": true,
+  "scope": "Only fake transfer callbacks and Python threads. No PTY/helper/service/provider/native product was invoked."
+}

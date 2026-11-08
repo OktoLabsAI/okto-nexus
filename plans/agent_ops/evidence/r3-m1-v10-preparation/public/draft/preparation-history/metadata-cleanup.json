@@ -1,0 +1,12 @@
+{
+  "status": "PREPARATION_METADATA_ONLY",
+  "before": "50a8f6f99825781e99745ee3a579981ed44ceac2713e8d90a1488df25af9b4d6",
+  "after": "97d3ccbcc8f8219630c050731a9e9bb0e2af87b645764b5e01afc8cada9b36db",
+  "changes": [
+    "Removed inherited v9 final_gate_result",
+    "Corrected own bundle directory",
+    "Kept v10 composition qualification pending",
+    "Closed artifact/environment blockers only after their separate proofs"
+  ],
+  "effects": 0
+}

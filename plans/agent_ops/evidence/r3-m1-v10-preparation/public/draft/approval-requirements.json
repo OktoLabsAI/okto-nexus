@@ -1,0 +1,18 @@
+{
+  "is_receipt": false,
+  "execution_authorized": false,
+  "purpose": "Requirements only; not an approval template with a purported user quote.",
+  "required_after_final_freeze": [
+    "actual user authorization of final v10 scope",
+    "exact proposal SHA256",
+    "receipt SHA256",
+    "proposal_revision=10",
+    "exact policy",
+    "exact nested ancestry",
+    "exact fresh campaign_root",
+    "actual nonempty user_quote",
+    "qualified package and entrypoint hashes"
+  ],
+  "no_receipt_created": true,
+  "entry_guard_remains_unconditionally_blocked": true
+}

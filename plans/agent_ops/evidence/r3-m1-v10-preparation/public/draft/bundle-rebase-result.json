@@ -1,0 +1,24 @@
+{
+  "status": "PREPARED_NOT_QUALIFIED_NOT_AUTHORIZED",
+  "wheel_payload_count": 983,
+  "counts_by_package": {
+    "okto_nexus": 692,
+    "okto_nexus_connector": 124,
+    "nexus_connector_core": 167
+  },
+  "scripts_compiled": [
+    "campaign_context.py",
+    "m1_v10_lifecycle.py",
+    "m1_v10_remote_setup.py",
+    "m1_v10_setup.py",
+    "publication.py",
+    "response_loss.py",
+    "supervisor_check.py",
+    "installation\\test_timed_install.py",
+    "installation\\timed_install.py"
+  ],
+  "controller_work_adapter_pending": true,
+  "campaign_directory_absent": true,
+  "product_install_executed": false,
+  "requirements_has_cr": false
+}

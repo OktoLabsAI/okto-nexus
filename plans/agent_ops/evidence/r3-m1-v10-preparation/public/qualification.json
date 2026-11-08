@@ -1,0 +1,121 @@
+{
+  "status": "OFFLINE_PREPARATION_QUALIFIED_EXECUTION_NOT_AUTHORIZED",
+  "proposal_path": "draft/m1-codex-campaign-proposal-v10.json",
+  "proposal_sha256": "90c2ed2ca18e7fd86380c614e516a5f8975af2a2052b56a3609004be4814405a",
+  "final_proposal": true,
+  "root_review": "Implementation and final metadata approved for presenting the exact successor proposal; not campaign execution.",
+  "test_reports": [
+    {
+      "path": "checks-initial/results.xml",
+      "sha256": "ca41973d16e9274ad8d4c855815907c7d9ef913e01c383d6787ced232a82cb6d",
+      "records": 41,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "remote-monitor-initial/results.xml",
+      "sha256": "133665aa294a67ff30e50ccc225c8d919027b4b86a2ac3d9344e96d8f33a51f9",
+      "records": 12,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "observer-composition-initial/results.xml",
+      "sha256": "742f2433ed87a64d37ee58867a685f477564215dedbed33842669e0647619536",
+      "records": 26,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "remote-composition-initial/results.xml",
+      "sha256": "319910ffcb192094310c9a791cd6c32eef844f634cb12e14e1bee84ccc87082d",
+      "records": 21,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "remote-composition-final/results.xml",
+      "sha256": "464e518dbd49efe20adfc584f34dffa2e51fa1a36dd1d256430b572d4cd2fece",
+      "records": 6,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "final-entry-gates/results.xml",
+      "sha256": "66d54671e8a6fb690b131c5f9e6e985d6f00f4a07364b68590255c16dbeb6a18",
+      "records": 14,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    {
+      "path": "reviewed-final-entry-gates/results.xml",
+      "sha256": "bda6e9f8040b4016e44c570917b7b842ef94cb59a29fc0cbb3bf9ecfb0267a9b",
+      "records": 14,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  ],
+  "historical_test_records": 134,
+  "unique_test_identities": 92,
+  "counts_rule": "Union of classname/name; repeated runs are retained, not added as new coverage. Separate prior component/product qualifications are not included.",
+  "coverage": {
+    "fake_installer_cases": 30,
+    "actual_unauthorized_entry_cases": 14,
+    "rebased_v10_observer_and_work_cases": 26,
+    "remote_monitor_cases": 16,
+    "remote_wrapper_cases": 6
+  },
+  "module_pins": 37,
+  "product_payloads": 983,
+  "product_plus_interpreter_pins": 984,
+  "dependency_only_target": {
+    "files": 3209,
+    "products_find_spec": {
+      "okto_nexus": null,
+      "okto_nexus_connector": null,
+      "nexus_connector_core": null
+    },
+    "installation_reserved": false,
+    "product_installation_executed": false
+  },
+  "actual_verifier": "reviewed-final-entry-gates/actual-input-verification.json",
+  "positive_origin_proof": "observer-composition-initial/module-origins.json",
+  "scope_limits": [
+    "No provider, authenticated account, native product CLI, HTTP, vault or service/Scheduler mutation was executed.",
+    "Synthetic receipts exist only in discarded test roots, never at the campaign approval path; no user approval is fabricated.",
+    "A cadence miss over one second fences effects and selects containment. OS scheduling is not a hard real-time guarantee; the earlier component 44 PASS/3 FAIL attempt remains retained in its immutable qualification.",
+    "Helper preflight refusal can conservatively retain unknown dispatch; no retry or automatic stop release. Job0 is not service/native exit; separate canonical task/PID-birth exit proof remains required.",
+    "Observed tokens are a conservative minimum, not final provider billing; carry5/67658 is preserved, six new conservative reservations at most, nominal five productive admissions.",
+    "Public artifacts are allowlisted scripts, metadata, hashes, XML and diffs. No venv/wheel/database/home/credential/transcript is included."
+  ],
+  "external_qualified_components": {
+    "nexus": {
+      "qualification": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\public\\qualification.json",
+      "sha256": "42435098b8cf73e04560935d21a300452961487b848095c986e2d6c248fa130f",
+      "proof": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\public\\package-proof-after.json",
+      "proof_sha256": "134f5b63fee783f6fb012a4a535c604eed6a2c320032b068c2b3662939fc98af",
+      "installed_tests": 59,
+      "scope": "Separate reference environment only, not a product install in the campaign target."
+    },
+    "pty": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-protected-pty-sce7juhl\\public\\qualification.json",
+      "sha256": "941d9ebf009590b2cb9d93a943668728ec4d50773d4c3f618ab71acaddf1a511",
+      "unique_passed": 20,
+      "scope": "Benign Python-only helper qualification; no product CLI/provider/service. Strict producer/consumer effect gates and shared deadline."
+    },
+    "observer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-observation-review-zouioqck\\integration-v2\\qualification.json",
+      "sha256": "22809a3d5027c395f08a5111feb0118a8808cb9db5508480e44cd916593299f4"
+    }
+  },
+  "live_checks": "Root read-only preflight is a historical snapshot. Exact targets and current pins must be rechecked after explicit approval, before any effect.",
+  "no_current_authorization": true,
+  "redactions": 0
+}

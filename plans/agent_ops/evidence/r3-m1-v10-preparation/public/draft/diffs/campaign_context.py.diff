@@ -1,0 +1,38 @@
+--- v9/campaign_context.py
++++ v10/campaign_context.py
+@@ -24,7 +24,7 @@
+         raw=Path(args.proposal).read_bytes()
+         require(hashlib.sha256(raw).hexdigest()==args.expected_proposal_sha256,'PROPOSAL_HASH_MISMATCH')
+         proposal=json.loads(raw)
+-        require(proposal.get('revision')==9,'PROPOSAL_REVISION_MISMATCH')
++        require(proposal.get('revision')==10,'PROPOSAL_REVISION_MISMATCH')
+         # Before package imports, checkpoint creation, binding, HTTP, or Popen.
+         require(args.approval_path and args.approval_sha256,'AUTHORIZATION_REQUIRED')
+         receipt_raw=Path(args.approval_path).read_bytes()
+@@ -32,7 +32,7 @@
+         receipt=json.loads(receipt_raw)
+         root=Path(proposal['paths']['campaign_root']).resolve()
+         contract=proposal['controller_preparation']
+-        require(receipt.get('status')=='USER_APPROVED' and receipt.get('proposal_revision')==9
++        require(receipt.get('status')=='USER_APPROVED' and receipt.get('proposal_revision')==10
+           and receipt.get('proposal_sha256')==args.expected_proposal_sha256
+           and receipt.get('campaign_root')==str(root)
+           and receipt.get('policy')==contract['policy'] and receipt.get('ancestry')==contract['ancestry']
+@@ -43,7 +43,7 @@
+             installation=proposal['base06_installation']
+             installed=json.loads(Path(installation['result']).read_text())
+             require(installed.get('format')=='okto.base06.installation' and installed.get('revision')==1
+-                and installed.get('status')=='INSTALLED_VERIFIED' and installed.get('proposal_revision')==9
++                and installed.get('status')=='INSTALLED_VERIFIED' and installed.get('proposal_revision')==10
+                 and installed.get('proposal_sha256')==args.expected_proposal_sha256
+                 and installed.get('approval_sha256')==args.approval_sha256
+                 and installed.get('campaign_root')==str(root)
+@@ -99,7 +99,7 @@
+         return Controller(self.ROOT/'private/controller.json',self.ROOT,create=create,
+             approval_path=self.args.approval_path,approval_sha256=self.args.approval_sha256,
+             expected_proposal_sha256=self.args.expected_proposal_sha256)
+-    def lifecycle_script(self): return Path(__file__).with_name('m1_v9_lifecycle.py')
++    def lifecycle_script(self): return Path(__file__).with_name('m1_v10_lifecycle.py')
+     def stop_argv(self,component):
+         return [self.P['package_pins']['python'],'-I','-B',str(self.lifecycle_script()),*self.common_args(),component,'stop']
+ 

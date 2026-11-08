@@ -1,0 +1,6 @@
+{
+  "status": "PREPARATION_METADATA_CORRECTED",
+  "issue": "Windows relative-path key used backslash; first metadata update used slash and raised KeyError after fixture path correction. No tests or effects had started.",
+  "correction": "Selected exact existing key by normalized separators and updated test hash.",
+  "product_effects": 0
+}
