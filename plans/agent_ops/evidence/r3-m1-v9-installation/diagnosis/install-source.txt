@@ -1,0 +1,73 @@
+def install(args):
+    fail_unless(FINAL_PINS_BOUND, 'V9_FINAL_PINS_REQUIRED')
+    require_unreserved()
+    proposal = pinned_document(args.proposal, args.expected_proposal_sha256)
+    approval = pinned_document(args.approval_path, args.approval_sha256, limit=65536)
+    pins = artifact_pins()
+    authorization = validate_documents(proposal, approval, args.expected_proposal_sha256,
+                                       args.approval_sha256, pins)
+    verify_dependencies()
+    verify_wheels()
+    if not args.execute:
+        return {'status': 'VALIDATED_NO_INSTALL', **authorization, 'products_installed': False}
+    reservation = {'format': 'okto.base06.installation-reservation', 'revision': 1,
+                   'status': 'RESERVED_INCOMPLETE', **authorization, 'artifact_pins': pins,
+                   'python': str(PYTHON), 'python_prefix': str(PREFIX),
+                   'reserved_at_utc': utc_now(), 'possible_effect': True,
+                   'retry_allowed': False}
+    # O_EXCL is the linearization point: two callers cannot both install.
+    reservation_hash = write_exclusive(RESERVATION, reservation)
+    timing = {}
+    phase = 'preinstall_recheck'
+    try:
+        verify_dependencies()
+        verify_wheels()
+        phase = 'pip_install'
+        timing.update(install_started_at_utc=utc_now(), install_started_monotonic_ns=time.monotonic_ns())
+        # Exact wheel requirements carry hashes, so pip rechecks the bytes it
+        # consumes rather than relying only on the earlier filesystem check.
+        pip = run_process([str(BASE_PYTHON), '-I', '-B', '-X', 'utf8', '-m', 'pip',
+            '--isolated', '--disable-pip-version-check', '--no-input', 'install',
+            '--no-index', '--no-deps', '--no-cache-dir', '--no-compile', '--require-hashes',
+            '-r', str(REQUIREMENTS)], 'product-install')
+        timing.update(install_completed_at_utc=utc_now(), install_completed_monotonic_ns=time.monotonic_ns())
+        timing['install_duration_ns'] = timing['install_completed_monotonic_ns'] - timing['install_started_monotonic_ns']
+        fail_unless(pip['returncode'] == 0, 'PIP_INSTALL_FAILED')
+        phase = 'package_verification'
+        packages = installed_payloads()
+        probe_code = '''import importlib, json, sys
+from pathlib import Path
+names = ('okto_nexus', 'okto_nexus_connector', 'nexus_connector_core')
+expected = Path(sys.argv[1])
+assert Path(sys.prefix) == expected
+origins = {name: importlib.import_module(name).__file__ for name in names}
+assert all(Path(origin).is_relative_to(expected / 'Lib/site-packages') for origin in origins.values())
+print(json.dumps(origins))
+'''
+        probe = run_process([str(BASE_PYTHON), '-I', '-B', '-X', 'utf8', '-c', probe_code, str(PREFIX)], 'installed-imports', timeout=30)
+        fail_unless(probe['returncode'] == 0, 'INSTALLED_IMPORT_PREFIX_FAILED')
+        imports = strict_json((ROOT / 'installed-imports.stdout.txt').read_bytes())
+        phase = 'pip_check'
+        check = run_process([str(BASE_PYTHON), '-I', '-B', '-X', 'utf8', '-m', 'pip',
+                             '--isolated', '--disable-pip-version-check', 'check'], 'pip-check', timeout=30)
+        fail_unless(check['returncode'] == 0, 'PIP_CHECK_FAILED')
+        timing.update(verified_at_utc=utc_now(), verified_monotonic_ns=time.monotonic_ns())
+        result = {'format': 'okto.base06.installation', 'revision': 1, 'status': 'INSTALLED_VERIFIED',
+                  **authorization, 'python': str(PYTHON), 'python_prefix': str(PREFIX),
+                  'payload_count': EXPECTED_PAYLOAD_COUNT, 'packages': packages, 'imports': imports, 'pip_check': check,
+                  'pip_install': pip, 'timing': timing, 'reservation_sha256': reservation_hash,
+                  'provider_or_service_used': False, 'retry_allowed': False,
+                  'limits': 'Product install only: dependency preparation/download/build and waiting for user approval are excluded. First useful canonical result must be timed separately on the same boot/campaign; this receipt alone does not satisfy BASE-06.'}
+        write_exclusive(RESULT, result)
+        return result
+    except BaseException as error:
+        # No rollback/uninstall/retry. Even if publishing this diagnostic fails,
+        # the exclusive reservation remains and blocks any second installation.
+        try:
+            write_exclusive(UNKNOWN, {'format': 'okto.base06.installation-unknown', 'revision': 1,
+                'status': 'UNKNOWN_REQUIRES_INSPECTION', **authorization, 'phase': phase,
+                'error_type': type(error).__name__, 'timing': timing, 'possible_effect': True,
+                'retry_allowed': False, 'reservation_sha256': reservation_hash})
+        except Exception:
+            pass
+        raise

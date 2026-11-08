@@ -1,0 +1,12 @@
+{
+  "kind": "PRE_EFFECT_REQUIREMENTS_LINE_ENDING_NORMALIZATION",
+  "original_proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "original_approval_sha256": "44dba586ced5eb3319bd4243a68ea3b2943b29cff1326f63fd8e942bf8ab8676",
+  "original_requirements_sha256": "09f767239c78086ee55f12455a9d5ccc2f98b29ddf99b3442571781e25963b93",
+  "corrected_requirements_sha256": "4855ded4fc17b0fe38357463af53b97aaf0dfdddb8f6f71dddbec00c28b0b546",
+  "removed_bytes": "Exactly three CR bytes immediately preceding LF; no URI/hash/order/content change.",
+  "prior_attempt": "REFUSED REQUIREMENTS_CHANGED before exclusive installation reservation or subprocess dispatch.",
+  "same_authorized_effects": true,
+  "new_user_authorization_claimed": false,
+  "new_service_cycles_or_provider_admissions": 0
+}

@@ -1,0 +1,60 @@
+{
+  "format": "okto.base06.installation",
+  "revision": 1,
+  "status": "INSTALLED_VERIFIED",
+  "proposal_sha256": "099215c658e4b16cfb69456ea1ad9a21875b45a090c439a6504b05912491d204",
+  "approval_sha256": "301a6a20779730e1cb684882266e9c4dbdf990e26042aa5aca9d8616a344e5e4",
+  "proposal_revision": 9,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\campaign",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv",
+  "payload_count": 982,
+  "packages": {
+    "okto_nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-check-recovery-inopit5p\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "99e1d530b27aeba7dcbd8adae8772ac19eaf4354ad5c31fdb80c0ed6e63d7680",
+      "files": 691,
+      "package": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus"
+    },
+    "okto_nexus_connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+      "files": 124,
+      "package": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus_connector"
+    },
+    "nexus_connector_core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\wheel\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+      "files": 167,
+      "package": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\nexus_connector_core"
+    }
+  },
+  "imports": {
+    "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+    "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+    "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+  },
+  "pip_check": {
+    "returncode": 0,
+    "stdout_sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "pip_install": {
+    "returncode": 0,
+    "stdout_sha256": "731c675284580df9e2ab38a296707f940daf7e551ca0d7ce493b7b17d8dfa3a7",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "timing": {
+    "install_started_at_utc": "2026-11-08T00:54:01.750396+00:00",
+    "install_started_monotonic_ns": 592607955276100,
+    "install_completed_at_utc": "2026-11-08T00:54:09.105320+00:00",
+    "install_completed_monotonic_ns": 592615310196100,
+    "install_duration_ns": 7354920000,
+    "verified_at_utc": "2026-11-08T00:54:35.473194+00:00",
+    "verified_monotonic_ns": 592641678079300
+  },
+  "reservation_sha256": "ca1c734321a894b4cf529e749f7258ac58d5fd6260f608c93044a421b8c77fab",
+  "provider_or_service_used": false,
+  "retry_allowed": false,
+  "limits": "Product install only: dependency preparation/download/build and waiting for user approval are excluded. First useful canonical result must be timed separately on the same boot/campaign; this receipt alone does not satisfy BASE-06."
+}

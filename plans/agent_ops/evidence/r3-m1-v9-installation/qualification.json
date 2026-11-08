@@ -1,0 +1,52 @@
+{
+  "status": "INSTALLATION_VERIFIED_HISTORICAL_CHECKPOINT",
+  "checkpoint_at_utc": "2026-11-08T00:54:35.473194+00:00",
+  "not_live_campaign_state": true,
+  "original_proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "original_approval_sha256": "44dba586ced5eb3319bd4243a68ea3b2943b29cff1326f63fd8e942bf8ab8676",
+  "derived_proposal_sha256": "099215c658e4b16cfb69456ea1ad9a21875b45a090c439a6504b05912491d204",
+  "derived_authorization_sha256": "301a6a20779730e1cb684882266e9c4dbdf990e26042aa5aca9d8616a344e5e4",
+  "direct_user_approval_for_corrected_hash": false,
+  "authorization_basis": "Existing explicit authorization; exactly three CR bytes removed before installation. No new scope or user response claimed.",
+  "proposal_semantic_delta_verified": [
+    "base06_installation.requirements_sha256",
+    "execution_bundle.files.install_requirements.sha256",
+    "input_representation_correction (audit metadata only)"
+  ],
+  "first_refusal": {
+    "code": "REQUIREMENTS_CHANGED",
+    "reservation_exists": false,
+    "subprocess_install_effect": false,
+    "source": "first-refusal/timed_install-execute.stdout",
+    "effect_boundary_proof": "diagnosis/diagnosis.json"
+  },
+  "validation": "Actual corrected documents passed VALIDATED_NO_INSTALL before execution; no mocked validation or relaxed byte comparison.",
+  "installation": {
+    "effect_invocations": 1,
+    "status": "INSTALLED_VERIFIED",
+    "payload_count": 982,
+    "package_files": {
+      "okto_nexus": 691,
+      "okto_nexus_connector": 124,
+      "nexus_connector_core": 167
+    },
+    "pip_install_returncode": 0,
+    "pip_check_returncode": 0,
+    "duration_ns": 7354920000,
+    "reservation_sha256": "ca1c734321a894b4cf529e749f7258ac58d5fd6260f608c93044a421b8c77fab",
+    "receipt_sha256": "2a221093198244eb6acdeaa169c7c9a05fc8d1f11a7ba894991219c86ad71e0f",
+    "provider_or_service_used_by_install": false,
+    "retry_allowed": false
+  },
+  "limits": [
+    "This is installation evidence only; it does not assert the campaign is currently stopped or that later service/provider actions have not occurred.",
+    "BASE-06 requires the separately timed first useful canonical result; installation alone does not satisfy it.",
+    "No M1, task, scenario, invariant, milestone or acceptance criterion is promoted.",
+    "No wheels, venv, campaign database, private profile, credential, cookie or provider transcript is collected."
+  ],
+  "original_evidence": [
+    "plans/agent_ops/evidence/r3-m1-v9-authorization/authorization.json",
+    "plans/agent_ops/evidence/r3-m1-v9-preparation/root-review.json"
+  ],
+  "redactions": 0
+}

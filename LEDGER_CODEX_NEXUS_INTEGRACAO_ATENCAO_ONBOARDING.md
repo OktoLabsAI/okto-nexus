@@ -1177,3 +1177,24 @@ Evidência: `plans/agent_ops/evidence/r3-m1-v9-preparation/root-review.json`.
 O usuário respondeu “autorizo” à proposta final `9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279`. Recibo novo fixa seis novas/nove reservas cumulativas, preventiva200mil/tolerância700mil, duas tarefas/oito ações e até um início implícito do Connector. Preflight confirmou alvos ausentes, porta livre e hashes. Nenhum efeito novo neste checkpoint.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v9-authorization/authorization.json`.
+
+## 2026-11-07 — M1 v9: correção LF e checkpoint de instalação
+
+O instalador recusou `REQUIREMENTS_CHANGED` antes de reservar a instalação ou
+iniciar subprocessos: o arquivo aprovado tinha três pares CRLF, enquanto o
+validador exigia LF. Os bytes originais e a recusa foram preservados. A correção
+removeu somente três CR; URLs, ordem, hashes dos wheels e efeitos não mudaram.
+
+A proposta original `9a7004d…` e o recibo `44dba586…` permanecem imutáveis.
+A derivação `099215c…`, com registro `301a6a20…`, usa a mesma autorização e declara
+`direct_user_approval_for_corrected_hash: false`. Não se inventa outra resposta do
+usuário nem autorização adicional. A validação real passou antes do efeito.
+
+Uma única instalação offline terminou em 7,35492 s; 982 payloads (691 Nexus,
+124 Connector e 167 Core), imports no prefixo isolado e `pip check` foram
+verificados. O recibo de reserva continua preservado e impede replay. Estes
+números encerram apenas o checkpoint de 2026-11-08T00:54:35.473194+00:00; não são
+uma afirmação sobre o estado posterior dos serviços ou da campanha em execução.
+Nenhum aceite M1/BASE-06 ou status de tarefa/cenário/marco foi promovido.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v9-installation/qualification.json`.

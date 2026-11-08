@@ -1,0 +1,19 @@
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--proposal', required=True)
+    parser.add_argument('--expected-proposal-sha256', required=True)
+    parser.add_argument('--approval-path', required=True)
+    parser.add_argument('--approval-sha256', required=True)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--execute', action='store_true')
+    mode.add_argument('--validate-only', action='store_true')
+    args = parser.parse_args(argv)
+    try:
+        result = install(args)
+    except (Exception, KeyboardInterrupt) as error:
+        print(json.dumps({'status': 'REFUSED_OR_INCOMPLETE',
+                          'code': str(error) if isinstance(error, GateError) else type(error).__name__,
+                          'reservation_exists': RESERVATION.exists(), 'retry_allowed': False}))
+        return 2
+    print(json.dumps(result, ensure_ascii=False))
+    return 0

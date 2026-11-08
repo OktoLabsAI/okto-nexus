@@ -1,0 +1,33 @@
+{
+  "files": {
+    "diagnose_requirements.py": {
+      "sha256": "3a6b86c2543d790b61b277b2ce289608acd197fa24e826185b9d1c09ccd0a3d2",
+      "bytes": 5900
+    },
+    "diagnosis.json": {
+      "sha256": "190293b5f1da92cccd0e9109327a58801cca652b2579bd6ce34f5f04287361d3",
+      "bytes": 3370
+    },
+    "expected-requirements-lf.txt": {
+      "sha256": "4855ded4fc17b0fe38357463af53b97aaf0dfdddb8f6f71dddbec00c28b0b546",
+      "bytes": 606
+    },
+    "frozen-authorized-requirements-crlf.txt": {
+      "sha256": "09f767239c78086ee55f12455a9d5ccc2f98b29ddf99b3442571781e25963b93",
+      "bytes": 609
+    },
+    "install-source.txt": {
+      "sha256": "d211000f10d69735528b5baea805d7640aa495e299777b31554bc3ef53f5dd89",
+      "bytes": 4906
+    },
+    "main-source.txt": {
+      "sha256": "5d44f4e4fea8858e31b9db4dbfc2d4e392c6e1771385e80e67e8de1dee7928ef",
+      "bytes": 989
+    },
+    "verify_wheels-source.txt": {
+      "sha256": "f2d8c4290179e47b6a1b68f91ce20d31f47103adeb4d7f0387e4cd6a282df026",
+      "bytes": 400
+    }
+  },
+  "scope": "Finite public read-only diagnostic; no secrets or campaign data."
+}

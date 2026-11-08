@@ -1,0 +1,6 @@
+def verify_wheels():
+    for pin in WHEELS.values():
+        fail_unless(sha(Path(pin['wheel']).read_bytes()) == pin['sha256'], 'WHEEL_BYTES_CHANGED')
+    expected = ''.join(Path(pin['wheel']).as_uri() + ' --hash=sha256:' + pin['sha256'] + '\n'
+                       for pin in WHEELS.values())
+    fail_unless(REQUIREMENTS.read_bytes() == expected.encode('utf-8'), 'REQUIREMENTS_CHANGED')

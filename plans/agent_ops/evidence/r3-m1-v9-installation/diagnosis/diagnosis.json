@@ -1,0 +1,58 @@
+{
+  "status": "CONFIRMED_PREPARATION_NEWLINE_DEFECT",
+  "observed_at_utc": "2026-11-08T00:53:17.912825+00:00",
+  "original_proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "installer_sha256": "1cd1b2a20874dcfb51b79e39411d62e6edca45d5c4eb548f9dc49fd2df08a34f",
+  "actual": {
+    "bytes": 609,
+    "sha256": "09f767239c78086ee55f12455a9d5ccc2f98b29ddf99b3442571781e25963b93",
+    "CRLF": 3,
+    "matches_authorized_pin": true
+  },
+  "expected": {
+    "bytes": 606,
+    "sha256": "4855ded4fc17b0fe38357463af53b97aaf0dfdddb8f6f71dddbec00c28b0b546",
+    "LF": 3
+  },
+  "only_change_needed": "Three CRLF pairs become LF; all wheel URLs, order and SHA256 pins identical.",
+  "v8_requirements": {
+    "sha256": "86526f256478d173e74a535b918714988aac60abee1c5736f577e5bd6eb65f0c",
+    "CRLF": 0,
+    "LF": 3
+  },
+  "live_readonly_observation": {
+    "reservation_result_unknown_exists": {
+      "installation-reserved.json": false,
+      "installation-result.json": false,
+      "installation-unknown.json": false
+    },
+    "product_directories_exist": {
+      "okto_nexus": false,
+      "okto_nexus_connector": false,
+      "nexus_connector_core": false
+    }
+  },
+  "source_order": {
+    "verify_wheels_line": 236,
+    "exclusive_reservation_line": 245,
+    "first_pip_run_process_line": 255
+  },
+  "effect_boundary": "REQUIREMENTS_CHANGED is raised before the exclusive installation reservation and before any run_process. Both paths execute=false and execute=true share this gate. The observed refusal plus absent reservation/product artifacts does not represent an installation attempt consuming the one-install slot.",
+  "root_cause": "bind_candidate.py wrote requirements using Path.write_text on Windows, producing CRLF. verify_wheels compares exact UTF-8 bytes generated with LF. Frozen metadata consistently pinned the wrong representation, so isolated mocked gates missed this composition defect.",
+  "minimum_correction": "Preserve original snapshot/receipt and write exact expected UTF-8 bytes via write_bytes (or newline=LF). Rebind only requirements/proposal-derived hashes in an explicit audit derivation. Keep verify_wheels strict, all wheels/argv/prefix/policy and one-install reservation unchanged. Root owns the authorization-scope decision.",
+  "required_regression_before_effect": [
+    "Invoke canonical timed_install.py --validate-only with the real corrected proposal and derived approval documents and their exact external hashes; no mocks or weakened validators.",
+    "Require VALIDATED_NO_INSTALL exit0 using actual wheel hashes, dependency manifest, Python prefix/hash proof and exact requirements bytes.",
+    "Verify reservation/result/unknown remain absent and all three product directories remain absent after validation.",
+    "Only after successful real composition validation may root invoke the same single authorized installation effect; any reserved/unknown state must retain the no-replay rule."
+  ],
+  "diagnostic_actions": {
+    "product_install": false,
+    "native_or_provider": false,
+    "service": false,
+    "credential": false,
+    "authorized_original_mutated": false,
+    "receipt_mutated": false
+  },
+  "scope_limit": "This diagnostic did not execute validation with corrected documents or installation; those belong to root."
+}
