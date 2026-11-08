@@ -1,0 +1,32 @@
+{
+  "status": "STATIC_PREPARATION_ONLY",
+  "compiled_files": [
+    "campaign_context.py",
+    "m1_v9_lifecycle.py",
+    "m1_v9_remote_setup.py",
+    "m1_v9_setup.py",
+    "m1_v9_work.py",
+    "publication.py",
+    "response_loss.py",
+    "supervisor_check.py",
+    "test_entry_guards.py",
+    "controller/controller.py",
+    "controller/setup_journal.py",
+    "controller/token_collector.py",
+    "installation/timed_install.py"
+  ],
+  "native_cli_calls": 0,
+  "provider_calls": 0,
+  "service_calls": 0,
+  "credential_reads": 0,
+  "campaign_root_created": false,
+  "products_installed": false,
+  "environment_created": false,
+  "originals_unchanged": true,
+  "reserves_cumulative": 9,
+  "confirmed_productive_history": 2,
+  "new_maximum": 6,
+  "billing_final": false,
+  "tests_executed": 0,
+  "live_task_or_port_preflight": false
+}

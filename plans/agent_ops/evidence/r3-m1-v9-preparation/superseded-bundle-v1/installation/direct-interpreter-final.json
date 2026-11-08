@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scope": "Benign own Python metadata only; no product install/import",
+  "metadata": {
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Scripts\\python.exe",
+    "pid": 36672,
+    "pip_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\pip\\__init__.py",
+    "products_absent": true
+  },
+  "launcher_pid_matches_child": true,
+  "observed_pid": 36672,
+  "returncode": 0,
+  "base_executable": "C:\\Python313\\python.exe",
+  "base_executable_sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+  "venv_python_sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+  "requirements_sha256": "09f767239c78086ee55f12455a9d5ccc2f98b29ddf99b3442571781e25963b93"
+}

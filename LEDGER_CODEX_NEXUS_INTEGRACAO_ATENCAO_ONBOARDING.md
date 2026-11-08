@@ -1152,3 +1152,22 @@ intermediárias;1 novo caso final passou na fonte. Sem provedor/serviço real,
 sem replay/reset da v8 e sem promoção de aceite. A reserva conservadora permanece.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-check-recovery/qualification.json`.
+
+## 2026-11-07 — M1 v9 preparada, aguardando autorização
+
+Nova proposta pinada incorpora o wheel Nexus corrigido e qualificado em59 casos
+instalados. Controlador preserva3 reservas/45.843 tokens, incluindo o slot v8 sem
+inferência confirmada. Propõe6 novas/9 reservas cumulativas, preventiva200mil e
+tolerância700mil,2 tarefas temporárias/8 ações explícitas e até1start implícito.
+
+51 casos puros únicos (24controller+27instalador),1 regressão do pin Python e12
+recusas de entrada passaram. Candidato anterior sem o pin foi rejeitado/preservado.
+Repetições não foram somadas. Novo prefixo tem3.209 dependências e produtos ausentes.
+Raiz confirmou27 módulos/3wheels/binário por hash,982 pins futuros contra wheels,
+tarefas ausentes,porta54913 disponível e raiz nova inexistente. Não reserva a porta.
+
+Proposta `9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279`
+aguarda recibo novo: v8 excluía ciclos adicionais de serviço. Sem force/logout/
+reboot/replay/reset, instalação real ou chamada ao provedor. Nenhum aceite promovido.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v9-preparation/root-review.json`.

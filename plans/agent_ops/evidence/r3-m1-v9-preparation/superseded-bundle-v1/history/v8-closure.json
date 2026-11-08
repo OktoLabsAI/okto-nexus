@@ -1,0 +1,34 @@
+{
+  "format": "okto.m1.closed_campaign",
+  "revision": 1,
+  "campaign_revision": 8,
+  "closed_at": "2026-11-08T00:08:11.879091+00:00",
+  "status": "CLOSED_AFTER_VERSION_CHECK_RESPONSE_LOSS_NO_M1_ACCEPTANCE",
+  "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+  "controller_checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+  "faults_preserved": [
+    "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+  ],
+  "controller_mutated": false,
+  "cumulative_reserved_admissions": 3,
+  "new_reserved_admissions": 1,
+  "historical_confirmed_productive_admissions": 2,
+  "new_confirmed_productive_admissions": 0,
+  "new_observed_tokens": 0,
+  "carry_in_minimum_observed_tokens": 45843,
+  "billing_final": false,
+  "closed_without_force": true,
+  "replay_allowed": false,
+  "all_temporary_tasks_absent": true,
+  "data_retained": true,
+  "first_useful_result": false,
+  "acceptance_promoted": false,
+  "evidence_sha256": {
+    "local-setup-result.json": "39767e4a0b1628b9fd0b11e06fb05179dfaad204cbc9e5f9ddb57db397b46ba7",
+    "cleanup-nexus.json": "52fc94b2a1e85123f1adef3f02841a10f2a368c4d3a18a294fdba612d9fbf860",
+    "final-cleanup-verification.json": "9d5f546cc64bc622e5775a3ecd3ac98a4c0dc7f707909a581bde35436dc988a8",
+    "lifecycle-nexus-uninstall-result.json": "ae3b98094dabda80e3b38350a3e7ab759a0b75bfd1e7ff6d75891416a8249860"
+  },
+  "diagnosis_sha256": "5a42a75be8fd0fba7f6f6f8ef1da2562536f86fc08672c5b6bda4e92f2a5baf9",
+  "limits": "Read-only SQLite projection places the stop before setup:test. The conservative reserved slot and permanent fault remain; zero observed usage is not final billing. A successor needs its own reviewed proposal and approval."
+}

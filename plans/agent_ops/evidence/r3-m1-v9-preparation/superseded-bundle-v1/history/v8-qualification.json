@@ -1,0 +1,36 @@
+{
+  "status": "PARTIAL_EXECUTION_CLOSED_NO_M1_ACCEPTANCE",
+  "proposal_sha256": "a41d1de0eef405f30dd8615019a1d3929e33910ce7106006162543bc2520eccb",
+  "installation": "INSTALLED_VERIFIED",
+  "package_payloads": 982,
+  "new_reserved_admissions": 1,
+  "new_observed_tokens": 0,
+  "carry_in_minimum_observed_tokens": 45843,
+  "usage_final_or_billed": false,
+  "productive_admission_confirmed": false,
+  "profile_state": "check_submitted",
+  "failure": "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE",
+  "cli_code": "OUTCOME_UNKNOWN",
+  "explicit_service_actions": 4,
+  "service_actions": [
+    "nexus install",
+    "nexus start",
+    "nexus stop",
+    "nexus uninstall"
+  ],
+  "normal_stop": "DRAINED",
+  "force_used": false,
+  "replay_used": false,
+  "connector_started": false,
+  "final_cleanup": "PASS",
+  "data_retained": true,
+  "first_useful_result": false,
+  "new_acceptances": [],
+  "limits": [
+    "Reservation is not proof of productive admission. Zero observed new tokens is not a billing statement.",
+    "The local profile stopped at check_submitted before test_submitted; further read-only reconciliation is tracked separately.",
+    "Nexus start timed out at45s; a later canonical status confirmed the same generation ready without replay.",
+    "PID exit was proved by current PID absence, not a retained process handle or historical birth comparison.",
+    "This frozen campaign cannot be retried or have its controller fault reset."
+  ]
+}

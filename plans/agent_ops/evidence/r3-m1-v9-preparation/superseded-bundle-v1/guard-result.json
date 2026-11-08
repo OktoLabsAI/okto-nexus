@@ -1,0 +1,101 @@
+{
+  "status": "PASS_ENTRY_GUARDS_ONLY",
+  "unique_cases": 12,
+  "cases": [
+    {
+      "script": "m1_v9_lifecycle.py",
+      "case": "missing",
+      "refusal": "AUTHORIZATION_REQUIRED",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_lifecycle.py",
+      "case": "wrong_receipt",
+      "refusal": "APPROVAL_SCOPE_MISMATCH",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_lifecycle.py",
+      "case": "wrong_proposal",
+      "refusal": "PROPOSAL_HASH_MISMATCH",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_setup.py",
+      "case": "missing",
+      "refusal": "AUTHORIZATION_REQUIRED",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_setup.py",
+      "case": "wrong_receipt",
+      "refusal": "APPROVAL_SCOPE_MISMATCH",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_setup.py",
+      "case": "wrong_proposal",
+      "refusal": "PROPOSAL_HASH_MISMATCH",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_work.py",
+      "case": "missing",
+      "refusal": "AUTHORIZATION_REQUIRED",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_work.py",
+      "case": "wrong_receipt",
+      "refusal": "APPROVAL_SCOPE_MISMATCH",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_work.py",
+      "case": "wrong_proposal",
+      "refusal": "PROPOSAL_HASH_MISMATCH",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_remote_setup.py",
+      "case": "missing",
+      "refusal": "AUTHORIZATION_REQUIRED",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_remote_setup.py",
+      "case": "wrong_receipt",
+      "refusal": "APPROVAL_SCOPE_MISMATCH",
+      "dispatches": 0
+    },
+    {
+      "script": "m1_v9_remote_setup.py",
+      "case": "wrong_proposal",
+      "refusal": "PROPOSAL_HASH_MISMATCH",
+      "dispatches": 0
+    }
+  ],
+  "effects": {
+    "popen": 0,
+    "socket": 0,
+    "vault": 0
+  },
+  "campaign_root_remains_absent": true,
+  "static_compile": "PASS",
+  "synthetic_approval_created": false,
+  "provider_calls": 0,
+  "scope": "No tests of approved execution, product integration, setup, services, or native behavior.",
+  "inputs": {
+    "campaign_context.py": "04f082f5368dd779d8342e0ef784bf9251b3834ab8956d0b6b12893fb3b1550e",
+    "m1_v9_lifecycle.py": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "m1_v9_remote_setup.py": "5d772264131f4f24d9ddefd4a9c173c873d08acc09c020c48feb8db092519eea",
+    "m1_v9_setup.py": "700bcb3bbbef4d345fa2459706aa653cd3eb44c64ee4b3d70571f994210772fb",
+    "m1_v9_work.py": "425ef79d7058c11179d3a235999264e47badabf6b132cdbc6a041e6867c2222a",
+    "publication.py": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "response_loss.py": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "run_final_gates.py": "ed7b23994f5ced84ede67b9db9f579c41d75b4fd277981fad2c65d1657859e77",
+    "run_pure_checks.py": "1fe0ac22a5615af6fdf1f58f475de379391539717dce6ec671b2c86757821496",
+    "supervisor_check.py": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "test_entry_guards.py": "00d34ed8718c102fc68075b0d510abda5e0b3d869a9ed7edd9565ed802782901"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "status": "DEPENDENCIES_ONLY_READY",
+  "products_installed": false,
+  "source_modified": false,
+  "probe": {
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Scripts\\python.exe",
+    "products_find_spec": {
+      "okto_nexus": null,
+      "okto_nexus_connector": null,
+      "nexus_connector_core": null
+    },
+    "product_dist_info_absent": true,
+    "pip_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Lib\\site-packages\\pip\\__init__.py",
+    "pip_version": "24.3.1",
+    "mcp_version": "1.30.0",
+    "system_site_packages": false
+  },
+  "excluded_top_level": [
+    "__pycache__",
+    "nexus_connector_core",
+    "okto_nexus",
+    "okto_nexus-0.3.3.dist-info",
+    "okto_nexus_connector",
+    "okto_nexus_connector-0.0.12.dist-info",
+    "okto_nexus_connector_core-0.0.14.dist-info"
+  ],
+  "dependency_files": 3209,
+  "dependency_manifest_sha256": "6520870894d0b01e7205569816ddc6aae22b5c6e6a9474fc031fd7712d228b96",
+  "environment_sha256": "33817326357993f45c6d71d8d0a1a14c51a4459091f8046f3f8c293c7a4d1ef6",
+  "campaign_services_or_provider_used": false,
+  "limits": "Dependency copy and environment preparation are outside the future product-install-to-useful-result interval."
+}

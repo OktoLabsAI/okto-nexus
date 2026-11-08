@@ -1,0 +1,86 @@
+{
+  "campaign_context.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\campaign_context.py",
+    "source_sha256": "7ae7777215bfffe22dbf5ffd5f25938b6f306898adb50723e4d1ea592454f84e",
+    "sha256": "04f082f5368dd779d8342e0ef784bf9251b3834ab8956d0b6b12893fb3b1550e",
+    "reuse": "explicit_v9_delta"
+  },
+  "m1_v9_lifecycle.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\m1_v8_lifecycle.py",
+    "source_sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "reuse": "byte_identical"
+  },
+  "m1_v9_setup.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\m1_v8_setup.py",
+    "source_sha256": "a2a2b6c2959df45ee0030cbb5dccb678c5224fbac79f78c07b3409d784f11dd4",
+    "sha256": "700bcb3bbbef4d345fa2459706aa653cd3eb44c64ee4b3d70571f994210772fb",
+    "reuse": "explicit_v9_delta"
+  },
+  "m1_v9_work.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\m1_v8_work.py",
+    "source_sha256": "ea12d334a0510ca3e5e902321c22f9bbdaec0255a251acb94e3c354b3fba19b3",
+    "sha256": "425ef79d7058c11179d3a235999264e47badabf6b132cdbc6a041e6867c2222a",
+    "reuse": "explicit_v9_delta"
+  },
+  "m1_v9_remote_setup.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\m1_v8_remote_setup.py",
+    "source_sha256": "52f6e2863ffff81a51dced3ccee1d22b8b43510a3c01779eadc98f5c1c9a7d5f",
+    "sha256": "5d772264131f4f24d9ddefd4a9c173c873d08acc09c020c48feb8db092519eea",
+    "reuse": "explicit_v9_delta"
+  },
+  "supervisor_check.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\supervisor_check.py",
+    "source_sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "reuse": "byte_identical"
+  },
+  "publication.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\publication.py",
+    "source_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "reuse": "byte_identical"
+  },
+  "response_loss.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\response_loss.py",
+    "source_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "reuse": "byte_identical"
+  },
+  "test_entry_guards.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v8-handoff-ready-s4wcxb28\\test_entry_guards.py",
+    "source_sha256": "03d93a562f332ff0b9dd3fc565eba87f63c53541130738de64abcc3f21e972ac",
+    "sha256": "00d34ed8718c102fc68075b0d510abda5e0b3d869a9ed7edd9565ed802782901",
+    "reuse": "explicit_v9_delta"
+  },
+  "controller/token_collector.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-controller-v8-bfx9ol3t\\revision-2\\public\\token_collector.py",
+    "source_sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+    "sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+    "reuse": "byte_identical"
+  },
+  "controller/setup_journal.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-controller-v8-bfx9ol3t\\revision-2\\public\\setup_journal.py",
+    "source_sha256": "3598363815a340d8324b7743fff42738e1bf7e936b87e4d6b1856ecaf6a927e5",
+    "sha256": "3598363815a340d8324b7743fff42738e1bf7e936b87e4d6b1856ecaf6a927e5",
+    "reuse": "byte_identical"
+  },
+  "controller/controller.py": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-controller-v8-bfx9ol3t\\revision-2\\public\\controller.py",
+    "source_sha256": "1370e61ce970c37a6ecf09f5ee9021b25888028b424137c463c4ec1d31851746",
+    "sha256": "2ae6bc2c1137d4beaaaf720e0e7b8627bfa47716a65f52e28fa3318dacc4e4cf",
+    "reuse": "policy_ancestry_format_approval_revision_only"
+  },
+  "installation/prepare_dependencies.py": {
+    "source": "C:/Users/jpamb/AppData/Local/Temp/m1-base06-install-g9ii2zhe/prepare_dependencies.py",
+    "source_sha256": "8143f263d641301461ebb45b7c5bb0f0257bc27ce4d52199240071a42180d807",
+    "sha256": "fb47412accfc63fc20f91fe24b22fb6accc5c53aad33d6b002d966fef029cafc",
+    "reuse": "only_removed_subprocess_probe_timeout30_root_derived_from_file"
+  },
+  "installation/timed_install.py": {
+    "source": "C:/Users/jpamb/AppData/Local/Temp/m1-base06-install-g9ii2zhe/timed_install.py",
+    "source_sha256": "c7b4ff53aac0ac0c121557320b146d5536775fc20f2b388e0a2af2b334c5955e",
+    "sha256": "1cd1b2a20874dcfb51b79e39411d62e6edca45d5c4eb548f9dc49fd2df08a34f",
+    "reuse": "new_target_v9_policy_ancestry_exact_wheels_count_and_approval_revision"
+  }
+}

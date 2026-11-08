@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "returncode": 0,
+  "input_hashes_before": {
+    "m1-codex-campaign-proposal-v9.json": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+    "campaign_context.py": "04f082f5368dd779d8342e0ef784bf9251b3834ab8956d0b6b12893fb3b1550e",
+    "test_entry_guards.py": "00d34ed8718c102fc68075b0d510abda5e0b3d869a9ed7edd9565ed802782901",
+    "check_restored_python_pin.py": "c5bac5eb98e597c6058a94c844b4e498c4f416447a2a4d3f3340ac503747cf8a"
+  },
+  "input_hashes_after": {
+    "m1-codex-campaign-proposal-v9.json": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+    "campaign_context.py": "04f082f5368dd779d8342e0ef784bf9251b3834ab8956d0b6b12893fb3b1550e",
+    "test_entry_guards.py": "00d34ed8718c102fc68075b0d510abda5e0b3d869a9ed7edd9565ed802782901",
+    "check_restored_python_pin.py": "c5bac5eb98e597c6058a94c844b4e498c4f416447a2a4d3f3340ac503747cf8a"
+  },
+  "inputs_unchanged": true,
+  "campaign_or_installation_executed": false
+}

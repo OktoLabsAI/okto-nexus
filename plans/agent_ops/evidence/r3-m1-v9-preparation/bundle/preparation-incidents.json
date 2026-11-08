@@ -1,0 +1,22 @@
+{
+  "incidents": [
+    {
+      "id": "collection-1",
+      "scope": "pure tests only",
+      "result": "Core fixture import failed because products correctly absent",
+      "retained": "checks-attempt-1/",
+      "correction": "Pinned Core wheel zipimport for pure event translation only",
+      "products_installed": false,
+      "campaign_effects": 0
+    },
+    {
+      "id": "shell-edit-not-applied",
+      "scope": "preparation test helper edit",
+      "error_type": "PowerShell ParserError",
+      "effects": 0,
+      "detail": "An optional command to remove an idempotent test monkeypatch did not parse. No file was changed by that command. Final tests retain FINAL_PINS_BOUND=True fixture assignment, equal to the actual qualified module constant; actual module bytes are pinned in the final report."
+    }
+  ],
+  "native_retries": 0,
+  "campaign_runs": 0
+}

@@ -1,0 +1,16 @@
+{
+  "status": "RESTORED_V8_CONTRACT",
+  "previous_v9_proposal_sha256": "0a2fe640c690da3b9fc565c4a3e247df3ce26f2b6ba4b52a51aad33fad739419",
+  "proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "v8_entries": 983,
+  "previous_v9_entries": 982,
+  "corrected_v9_entries": 983,
+  "product_payloads": 982,
+  "interpreter_sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+  "defect": "The v9 builder omitted the extra venv interpreter pin from package_pins.files. The installer check was intact, but the per-command gate had lost this entry.",
+  "correction": "Append the exact owned venv Python hash to the same list consumed by the unchanged campaign_context gate.",
+  "functional_code_changed": false,
+  "campaign_or_installation_executed": false,
+  "old_public_preserved": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\public",
+  "old_manifest_sha256": "3e1c78866ff22bf3fa9002e7cd65cd3037ea765afb32cf714e6a17db51b48f98"
+}

@@ -1,0 +1,27 @@
+{
+  "status": "PASS_READ_ONLY_PREPARATION_PREFLIGHT",
+  "observed_at": "2026-11-08T00:29:53.930556+00:00",
+  "proposal_sha256": "0a2fe640c690da3b9fc565c4a3e247df3ce26f2b6ba4b52a51aad33fad739419",
+  "commands_sha256": "4a05c4a15a0b1fc436b9cddb9c647725e45b85d96e0c8cf13467f3be72989db8",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-6e7df6cdba864d312a10019224651c771e6b603618ad4524cc7821e2fffef32a",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-f6f08d745dd900aa1cb17838507146770ed036cb39ab7bae1479081406f09bd6",
+      "absent": true
+    }
+  },
+  "exclusive_port_probe": 54913,
+  "port_reserved": false,
+  "campaign_root_absent": true,
+  "execution_module_pins_verified": 27,
+  "wheel_pins_verified": 3,
+  "native_pin_verified_without_execution": true,
+  "provider_calls": 0,
+  "service_mutations": 0,
+  "credentials_read": 0,
+  "execution_authorized": false,
+  "limit": "Task absence, fresh root and port availability must be rechecked after approval immediately before effects; this observation does not reserve the port."
+}

@@ -1,0 +1,63 @@
+{
+  "status": "NO_BLOCKER_IN_LIMITED_READONLY_REVIEW",
+  "reviewed_at_utc": "2026-11-08T00:32:49.128577+00:00",
+  "scope": "Final delta only: artifact pins, receipt/revision gate, policy/ancestry, reuse maps and corrected line endings. No test or campaign execution.",
+  "bundle": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\public",
+  "manifest_sha256": "3e1c78866ff22bf3fa9002e7cd65cd3037ea765afb32cf714e6a17db51b48f98",
+  "payloads_verified": 72,
+  "payload_mismatches": [],
+  "proposal_sha256": "0a2fe640c690da3b9fc565c4a3e247df3ce26f2b6ba4b52a51aad33fad739419",
+  "checks": [
+    "Carry 3 conservative reservations / 45843 observed tokens plus at most 6 new reservations gives 9 cumulative reservations; two historical confirmed productive admissions plus six new gives at most eight, not nine confirmed inferences.",
+    "V8 closure/checkpoint and permanent fault retained, with V7 ancestry nested; old state cannot be resumed as v9.",
+    "Controller and context bind actual revision9 receipt, exact proposal/receipt hashes, root, policy and ancestry; no inherited v7/v8 authorization.",
+    "New homes/task names/port54913 agree with eight lifecycle commands; no force/replay and at most one reviewed implicit Scheduler ensure/start.",
+    "New Nexus wheel99e1d530b27aeba7dcbd8adae8772ac19eaf4354ad5c31fdb80c0ed6e63d7680 is selected alongside unchanged Connector/Core; proposal requires separate approved offline install and verified result before campaign effects.",
+    "All execution_bundle reference hashes read and matched; controller and installer hashes match proposal.",
+    "Earlier byte_identical claim inconsistency resolved: lifecycle/supervisor/publication/response_loss bytes now equal their historical source hashes; collector/setup monitor also equal.",
+    "Installer remains validation-only by default; --execute is explicit, durable exclusive reservation and UNKNOWN block replay."
+  ],
+  "read_only_test_evidence": {
+    "xml": {
+      "pure-tests.xml": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "51",
+          "time": "8.288",
+          "timestamp": "2026-11-07T21:26:11.092006-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ],
+      "final-gates.xml": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "27",
+          "time": "0.279",
+          "timestamp": "2026-11-07T21:29:00.179293-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    "unique_pure_cases": 51,
+    "controller": 24,
+    "installer": 27,
+    "entry_denials": 12,
+    "final_repeat_installer": 27,
+    "final_repeat_entry": 12,
+    "repeats_added_to_unique": false,
+    "tests_executed_by_reviewer": 0
+  },
+  "authorization": "PREPARED_FOR_REVIEW_NOT_AUTHORIZED; no user approval created or inferred by reviewer",
+  "limits": [
+    "Guard results are pure preparation, not proof of provider or service execution.",
+    "Live task/port absence remains point-in-time; root reports separate preflight and execution must recheck immediately before effects.",
+    "Observed token high-water is not final billing or an atomic provider cap."
+  ],
+  "blockers": []
+}

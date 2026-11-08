@@ -1,0 +1,15 @@
+# Preparação M1 v9 — ainda não autorizada
+
+Esta proposta inicia uma campanha nova em diretórios próprios e na porta **54913**. Ela não retoma a v8: o encerramento normal, o checkpoint com falha definitiva e a reserva anterior permanecem preservados. Nenhum serviço, CLI nativo, provedor ou cofre foi usado nesta preparação.
+
+O contador conserva **3 reservas e 45.843 tokens observados**. Duas reservas históricas têm inferência confirmada; a terceira, da v8, continua consumida sem inferência confirmada. Propõem-se até **6 novas reservas**, portanto **9 reservas cumulativas**, com no máximo 8 inferências confirmadas se todas as novas forem produtivas. Os números observados não são faturamento final. Mantêm-se a preventiva cumulativa de 200.000 tokens, tolerância de 700.000 e prazo operacional serial de 120 segundos, sem garantia de teto atômico.
+
+O escopo continua sendo duas tarefas próprias do Windows, oito ações explícitas de instalação/início/parada/desinstalação e no máximo um ensure/start implícito da mesma tarefa Connector. Não inclui força, logout, reboot, repetição de ações incertas ou acesso adicional ao contexto pessoal. A chave remota continua pela entrega canônica one-shot: memória protegida e stdin, sem chave em argv, relatório ou arquivo público. O helper PTY V5 é reutilizado sem alteração e aguarda também o marcador de handoff gravado antes de iniciar o consumidor.
+
+O Nexus novo é o wheel `99e1d530…`, qualificado separadamente em 59 testes instalados. Core `609e0fbb…` e Connector `73f1a3ba…` permanecem os mesmos. Os 982 arquivos desses wheels foram comparados com o ambiente qualificado. O alvo v9 contém apenas 3.209 arquivos de dependências; os três produtos continuam ausentes. A prova Python verificou PID próprio, prefixo isolado e ausência de produtos.
+
+A preparação passou em 24 casos puros do controller e 27 do instalador. Somente os 27 gates do instalador foram repetidos após os pins/flag finais; 12 recusas de entrada passaram sem Popen, socket ou API de cofre. Os testes do controller usam transporte sintético, a classe ConnectionError extraída do wheel e o tradutor puro Core via zipimport. Isso não representa campanha ou integração instalada. A primeira falha de collection, por Core ausente no alvo, foi preservada; nenhum produto foi instalado para corrigi-la.
+
+Os comandos e gates concretos estão em `proposed-commands.json`, `planning-commands.json` e `m1-codex-campaign-proposal-v9.json`. Os nomes das duas tarefas foram apenas derivados; esta preparação não consultou o Scheduler nem reservou a porta. A raiz fará a revisão e o preflight somente leitura antes do pedido. Mesmo depois de uma aprovação, a ausência das tarefas, os diretórios, a porta e os hashes devem ser conferidos imediatamente antes dos efeitos.
+
+**Não existe recibo de autorização v9.** O template com `execution_authorized=false` permanece inalterado. Uma futura execução exige o SHA exato desta proposta e um recibo novo, com citação real da autorização. A instalação offline dos produtos também permanece não executada, reservada uma única vez e sujeita a esse gate.

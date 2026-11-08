@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.623" timestamp="2026-11-07T21:24:59.013128-03:00" hostname="Alienware_m15"><testcase classname="" name="controller.test_v9" time="0.000"><error message="collection failure">ImportError while importing test module 'C:\Users\jpamb\AppData\Local\Temp\m1-v9-preparation-t4xaqhca\draft\controller\test_v9.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\controller\test_v9.py:11: in &lt;module&gt;
+    from canonical_fixture import event, page, scope
+..\..\controller\canonical_fixture.py:7: in &lt;module&gt;
+    from nexus_connector_core.native.adapter_types import HarnessEvent
+E   ModuleNotFoundError: No module named 'nexus_connector_core'</error></testcase></testsuite></testsuites>

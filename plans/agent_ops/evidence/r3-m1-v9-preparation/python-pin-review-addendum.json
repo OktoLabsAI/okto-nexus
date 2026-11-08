@@ -1,0 +1,35 @@
+{
+  "status": "NO_BLOCKER_IN_LIMITED_PIN_RESTORATION_REVIEW",
+  "reviewed_at_utc": "2026-11-08T00:39:02.165596+00:00",
+  "prior_review": {
+    "path": "C:/Users/jpamb/AppData/Local/Temp/m1-v9-final-review-mhpmzv_m/review.json",
+    "sha256": "ab77f64ff1d9f3c04d6f9bcd62dc180aef33f11c13d487babf0b356f38efe617"
+  },
+  "superseded_unapproved_proposal_sha256": "0a2fe640c690da3b9fc565c4a3e247df3ce26f2b6ba4b52a51aad33fad739419",
+  "new_proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "public_manifest_sha256": "4d9794320e8170ca9a6b80de90315f2f6a7a587698f414f317ae4d1404f0e043",
+  "public_payloads_verified": 84,
+  "delta": {
+    "previous_pin_entries": 982,
+    "current_pin_entries": 983,
+    "product_payloads": 982,
+    "added": [
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v9-preparation-t4xaqhca\\draft\\installation\\venv\\Scripts\\python.exe",
+        "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+      }
+    ],
+    "removed": [],
+    "functional_files_unchanged": true
+  },
+  "finding": "Restored exact campaign interpreter pin is checked by existing product-pin gate before Context/dispatch. New proposal hash invalidates receipts bound to old proposal. Previous bundle remains preserved and unapproved.",
+  "evidence_read": "Pure Python-pin mismatch regression reports PRODUCT_PIN_CHANGED before Context/effects; 12 entry denials PASS. Reviewer did not rerun tests.",
+  "effects_by_reviewer": {
+    "tests": 0,
+    "product_cli": 0,
+    "provider": 0,
+    "services": 0
+  },
+  "authorization": "No execution approval is inferred or created.",
+  "blockers": []
+}

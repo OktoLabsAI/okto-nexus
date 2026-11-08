@@ -1,0 +1,37 @@
+{
+  "status": "PREPARATION_QUALIFIED_PENDING_FINAL_REVIEW_AND_APPROVAL",
+  "controller": "Only policy/ancestry/state format/receipt revision changed; new cap6 retained, carry-in3 and cumulative9 are reservations.",
+  "changed_scripts": {
+    "campaign_context.py": "explicit_v9_delta",
+    "m1_v9_setup.py": "explicit_v9_delta",
+    "m1_v9_work.py": "explicit_v9_delta",
+    "m1_v9_remote_setup.py": "explicit_v9_delta",
+    "test_entry_guards.py": "explicit_v9_delta",
+    "controller/controller.py": "policy_ancestry_format_approval_revision_only"
+  },
+  "byte_identical_reuse": [
+    "m1_v9_lifecycle.py",
+    "supervisor_check.py",
+    "publication.py",
+    "response_loss.py",
+    "controller/token_collector.py",
+    "controller/setup_journal.py"
+  ],
+  "external_reuse": [
+    "PTY V5 + owned Job + pinned pywinpty at original origin",
+    "qualified Codex binary selection (not executed)",
+    "Connector/Core qualified wheel artifacts (not installed here)"
+  ],
+  "must_qualify": [],
+  "no_status_inheritance": "Only unchanged component proofs are reused; v9 pure results are separately recorded and do not qualify a live campaign.",
+  "qualified_preparation": {
+    "controller": 24,
+    "initial_installer": 27,
+    "entry_denials": 12
+  },
+  "remaining_before_effects": [
+    "Root final review and exact tasks/root/port inspection",
+    "New explicit approval bound to final proposal SHA",
+    "Repeat immediate preflight, perform approved timed product installation once and validate its receipt"
+  ]
+}

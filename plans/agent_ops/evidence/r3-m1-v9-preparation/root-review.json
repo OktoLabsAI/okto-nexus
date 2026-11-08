@@ -1,0 +1,52 @@
+{
+  "status": "PREPARED_REVIEWED_AWAITING_NEW_EXPLICIT_APPROVAL",
+  "proposal_sha256": "9a7004d1670076fd516311932bb894fbd55e47e2625fb6b3dfd89dc66caed279",
+  "reviewed_at": "2026-11-08T00:39:48.605742+00:00",
+  "bundle_manifest_sha256": "4d9794320e8170ca9a6b80de90315f2f6a7a587698f414f317ae4d1404f0e043",
+  "bundle_payloads_verified": 84,
+  "future_product_payload_pins_matched_to_wheels": 982,
+  "python_pin_verified": true,
+  "nexus_fix_commit": "44c3825445144fa48b5c5ccf6b0d2bd48b21c3b7",
+  "installed_product_cases": 59,
+  "controller_unique_cases": 24,
+  "installer_unique_cases": 27,
+  "python_pin_regression_cases": 1,
+  "entry_denial_cases": 12,
+  "repeated_cases_not_added": true,
+  "policy": {
+    "revision": 9,
+    "carry_in_admissions": 3,
+    "carry_in_tokens": 45843,
+    "max_cumulative_admissions": 9,
+    "max_new_admissions": 6,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "counting": {
+    "conservative_carry_in_reservations": 3,
+    "historical_confirmed_productive": 2,
+    "v8_reserved_without_confirmed_productive": 1,
+    "new_reservations_maximum": 6,
+    "cumulative_reservations_maximum": 9,
+    "maximum_confirmed_productive_if_all_new_confirm": 8,
+    "observed_token_minimum_carry_in": 45843,
+    "v8_new_observed_tokens": 0,
+    "billing_final": false,
+    "unused_slots_reassignable": false
+  },
+  "preflight": "27 execution module hashes,3 wheels and native binary hash verified;2 exact tasks absent;port54913 probe released;campaign root absent.",
+  "provider_calls": 0,
+  "native_cli_calls": 0,
+  "service_mutations": 0,
+  "product_installation_executed": false,
+  "execution_authorized": false,
+  "acceptance_promoted": false,
+  "approval_reason": "The authorized v8 excluded additional service cycles. It is closed with its reserved slot and permanent fault preserved. This separate v9 proposes six new reservations and eight explicit lifecycle actions.",
+  "limits": [
+    "Preparation and synthetic guards are not real M1 qualification.",
+    "The exact final proposal needs an actual new user receipt; old approvals and synthetic receipts do not authorize execution.",
+    "Readiness observations do not reserve the port/tasks; recheck immediately before effects.",
+    "No force,logout,reboot,uncertain replay or old controller reset is authorized."
+  ]
+}
