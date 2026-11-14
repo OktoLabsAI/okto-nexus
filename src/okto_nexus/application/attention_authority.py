@@ -613,16 +613,23 @@ def _decision(graph, work, scope, runtime, now, policy):
     actor_data = graph['agent_facts'].get(work['actor_agent_id'])
     actor = _agent(actor_data)
     guard = decision['actor_guard_digest']
-    if not actor or not actor.is_active or not actor.api_key_hash or not guard:
+    if not actor or not actor.is_active or not guard:
         raise AuthorityDenied('native_responder_changed', refs)
     current = _guard(actor_data, policy)
     if guard.startswith('managed-input-v1:'):
         proof = json.loads(guard[len('managed-input-v1:'):])
-        if proof['agent_guard'] != current or decision['kind'] != 'native_input':
+        if not actor.api_key_hash or proof['agent_guard'] != current or decision['kind'] != 'native_input':
             raise AuthorityDenied('native_responder_changed', refs)
         _capability_binding(graph, actor.agent_id, proof['principal'], scope['workspace_id'], now, policy, responding=True)
-    elif guard != current:
-        raise AuthorityDenied('native_responder_changed', refs)
+    else:
+        from .execution_native_decisions import _recorded_actor
+        from .execution_native_facts import authenticate_runtime_facts
+        def authenticate_recorded():
+            context, recorded_guard = _recorded_actor(guard, work['actor_agent_id'])
+            authenticate_runtime_facts(context, actor, feature_enabled=True, require_feature=False)
+            return recorded_guard
+        if _check('native_responder_changed', refs, authenticate_recorded) != current:
+            raise AuthorityDenied('native_responder_changed', refs)
     profile = _profile(runtime['profile']) if runtime else None
     if profile and 'approvals' in profile['config'].get('disabled_capabilities', ()):
         raise AuthorityDenied('native_decisions_disabled', refs)

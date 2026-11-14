@@ -24,6 +24,7 @@ from .execution_semantics import execution_intent_hash
 
 _KEY = ("server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
         "session_id", "session_owner_generation", "canonical_request_id", "kind")
+_ACTOR_PREFIX = "native-actor-v1:"
 
 
 def _fail(message, code=ErrorCode.CONFLICT):
@@ -32,6 +33,49 @@ def _fail(message, code=ErrorCode.CONFLICT):
 
 def _digest(value):
     return "sha256:" + hashlib.sha256(canonical_json(value)).hexdigest()
+
+
+def _record_actor(context, guard):
+    """Persist authenticated modality, never credentials supplied in a decision body."""
+    if guard.startswith(MANAGED_INPUT_PREFIX):
+        return guard
+    proof = dict(actor_agent_id=context.actor_agent_id or "operator", agent_guard=guard,
+        authentication_source=context.authentication_source,
+        trusted_local_operator=context.trusted_local_operator,
+        credential_binding=context.credential_binding)
+    recorded = _ACTOR_PREFIX + canonical_json(proof).decode()
+    _recorded_actor(recorded, proof["actor_agent_id"])
+    return recorded
+
+
+def _recorded_actor(recorded, actor):
+    """Internal committed provenance only; legacy guards cannot establish modality."""
+    if type(recorded) is not str:
+        _fail("The native decision authentication provenance is unavailable.", ErrorCode.PERMISSION_DENIED)
+    if recorded.startswith(MANAGED_INPUT_PREFIX):
+        return RuntimeRequestContext(actor, "session_capability"), recorded
+    try:
+        if not recorded.startswith(_ACTOR_PREFIX):
+            raise ValueError
+        proof = json.loads(recorded[len(_ACTOR_PREFIX):])
+        if not isinstance(proof, dict) or set(proof) != {
+                "actor_agent_id", "agent_guard", "authentication_source",
+                "trusted_local_operator", "credential_binding"}:
+            raise ValueError
+        source, trusted, binding = (proof["authentication_source"],
+            proof["trusted_local_operator"], proof["credential_binding"])
+        local = source in ("http_loopback", "operator_session")
+        if (proof["actor_agent_id"] != actor or type(trusted) is not bool or
+                type(proof["agent_guard"]) is not str or
+                not proof["agent_guard"].startswith("sha256:") or
+                (local and (actor != "operator" or not trusted or binding is not None)) or
+                (not local and (source != "agent_key" or trusted or
+                    type(binding) is not str or not binding))):
+            raise ValueError
+    except (ValueError, TypeError, KeyError):
+        _fail("The native decision authentication provenance is unavailable.", ErrorCode.PERMISSION_DENIED)
+    return RuntimeRequestContext(actor, source, trusted_local_operator=trusted,
+        credential_binding=binding), proof["agent_guard"]
 
 
 class NativeInputRetention:
@@ -294,7 +338,7 @@ class ExecutionNativeDecisions:
             actor_agent_id=decided_by, decision=native_decision, canonical_state="CONFIRMED" if approved else "DENIED",
             native_operation_id=operation_id, response_digest=response_digest, response_ref=response_ref,
             expires_at=row["expires_at"], client_intent_id=body["client_intent_id"], body_hash=body_hash,
-            actor_guard_digest=actor_guard)
+            actor_guard_digest=_record_actor(context, actor_guard))
         conn.execute("INSERT INTO execution_decisions (" + ",".join(values) + ") VALUES (" +
                      ",".join("?" for _ in values) + ")", tuple(values.values()))
         resolved = dict(scope=scope, intent_hash=intent_hash,
@@ -397,13 +441,9 @@ def validate_native_dispatch(uow, *, operation, semantic, access):
             decision["proposal_digest"] != request["request_hash"] or
             not decision["actor_guard_digest"]):
         _fail("The native decision authority changed before dispatch.")
-    actor = access.agents.get(uow, operation["actor_agent_id"])
     checker = ExecutionNativeDecisions(factory=access.cf, access=access, approvals=None)
-    managed = decision['actor_guard_digest'].startswith(MANAGED_INPUT_PREFIX)
-    checker._responder(uow, RuntimeRequestContext(operation["actor_agent_id"],
-        'session_capability' if managed else 'agent_key',
-        credential_binding=None if managed else actor.api_key_hash if actor else None), request,
-        recorded_guard=decision['actor_guard_digest'])
+    context, guard = _recorded_actor(decision["actor_guard_digest"], operation["actor_agent_id"])
+    checker._responder(uow, context, request, recorded_guard=guard)
     frame = json.loads(decision["proposal_json"])
     reduce_r4_approval_request(None, frame)
     scope = checker._live(uow, request, frame)
