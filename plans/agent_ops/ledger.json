@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-08T11:31:46.322321+00:00",
+  "updated_at": "2026-11-14",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -11742,9 +11742,11 @@
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
-        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-v10-execution/summary.json"
       ],
-      "result": "Lifecycle/instalação idempotente/contexto salvo e upgrades têm provas reais e injetadas discriminadas; a sequência de serviço registrado e contexto de credenciais reais não foi executada.",
+      "result": "Instalação, início, parada e remoção de tarefas Windows reais já foram executados na campanha de 24 ações; M1 v10 também comprovou setup local com provedor autenticado, drain normal e saída física. Isso não comprova login real, esgotamento de retry, todos os contextos cwd/PATH/credenciais nem os eventos de sessão pendentes.",
       "qualification_limit": "Mocks de Task Scheduler e processo foreground supervisionado não substituem logon real; cofre sintético não comprova credencial pessoal real.",
       "remaining": [
         "Na plataforma Windows declarada: registrar/iniciar no login, parar sem ressurreição, recuperar crash/backoff, remover e comprovar contexto/cwd/PATH e credenciais no serviço real.",
@@ -12501,6 +12503,35 @@
       "cumulative_reserved_admissions": 6,
       "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
       "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e"
+    },
+    "r3_m1_reader_cache_review": {
+      "date": "2026-11-14",
+      "classification": "OFFLINE_FUNCTIONAL_CORRECTION_WITH_UNRESOLVED_TIMING_AVAILABILITY",
+      "changes": [
+        "Cache read-only SQLite connections without retaining WAL snapshots between polls.",
+        "Explicit owner/identity/path checks and connection closure.",
+        "Publish final blocked snapshot for initialization/read failure without masking primary error."
+      ],
+      "verification": {
+        "complete_run": {
+          "passed": 36,
+          "failed": 2
+        },
+        "single_targeted_followup_passed": 2,
+        "publication_phase_cases_passed": 2,
+        "historical_failed_runs_preserved": true
+      },
+      "limits": [
+        "40ms excludes some path/identity/cleanup work and is not an end-to-end bound.",
+        "100ms initialization and legacy setup40ms both had temporal failures.",
+        "The focal rerun does not establish real campaign availability.",
+        "V9 writer-gate and SQLITE_BUSY synthetic reproductions do not identify the original V9 cause.",
+        "No real service, provider, credentials, new execution authority or acceptance promotion."
+      ],
+      "next": "Review a separate bounded observer candidate against total poll budget and freshness before composing v11.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-reader-cache-review/root-review.json"
+      ]
     }
   },
   "history": [
@@ -13696,6 +13727,15 @@
       "summary": "Setup succeeded with21815 observed tokens. Observer freshness read interrupted before useful reservation/POST; zero work model turns. Exact PID exit, normal drain, uninstall and task absence confirmed; four lifecycle actions, no force/Connector/Claude. Separate readonly reproduction identifies connection schema loading within40ms as a matching mechanism. No acceptance promotion.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v10-execution/summary.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Observer cache correction and remaining scope review",
+      "status": "OFFLINE_FUNCTIONAL_CORRECTION_WITH_UNRESOLVED_TIMING_AVAILABILITY",
+      "summary": "Functional cache/final-publication correction retained with 36 PASS/2 timing failures and single focal 2 PASS. No robustness or M1 acceptance claimed. AC13 narrative corrected to reflect actual installed/start/stop/remove evidence; status unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-reader-cache-review/root-review.json"
       ]
     }
   ]

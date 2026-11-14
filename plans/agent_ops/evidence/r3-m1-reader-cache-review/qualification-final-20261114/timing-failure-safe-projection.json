@@ -1,0 +1,58 @@
+{
+  "faults": [
+    "OBSERVATION_UNKNOWN"
+  ],
+  "request_error": {
+    "exception_type": "OperationalError",
+    "sqlite_errorcode": 9,
+    "sqlite_errorname": "SQLITE_INTERRUPT"
+  },
+  "independent_observation": {
+    "maximum_poll_start_interval_seconds": 0,
+    "reader_initialization": {
+      "local": {
+        "canonical": {
+          "close_error_types": [],
+          "closed": false,
+          "failed": false,
+          "initialization_budget_ms": 100.0,
+          "initializations": [
+            {
+              "budget_ms": 100.0,
+              "elapsed_ms": 33.085000002756715,
+              "file_name": "nexus.db",
+              "status": "PREPARED"
+            }
+          ],
+          "open_connections": 1,
+          "read_budget_ms": 40.0,
+          "schema_changes": []
+        },
+        "core": {
+          "close_error_types": [],
+          "closed": false,
+          "failed": false,
+          "initialization_budget_ms": 100.0,
+          "initializations": [
+            {
+              "budget_ms": 100.0,
+              "elapsed_ms": 81.99890004470944,
+              "file_name": "session-304849f7d014315cb0ef685c680fc1926e458b8e2d3a5254ecff8dcad3bb0b85.db",
+              "status": "PREPARED"
+            }
+          ],
+          "open_connections": 1,
+          "read_budget_ms": 40.0,
+          "schema_changes": []
+        }
+      }
+    },
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "transport_failures": {
+      "discarded": 0,
+      "later": [],
+      "primary": null
+    },
+    "worker_in_flight": false
+  }
+}

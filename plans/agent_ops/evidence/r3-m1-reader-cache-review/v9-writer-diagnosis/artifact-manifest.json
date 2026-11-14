@@ -1,0 +1,28 @@
+{
+  "files": {
+    "curate.py": {
+      "sha256": "941e6775730380d2b0d1a89cb6fe44f34071a2d429192318d3cfb837676be814",
+      "bytes": 7036
+    },
+    "report.json": {
+      "sha256": "d6ebf6084bed69297b10cd99421e0970b476114c496bca7d2c676deb15de107f",
+      "bytes": 13138
+    },
+    "repro.py": {
+      "sha256": "6f752cae9c279258cedc21a345e7e00113d8cb1d5ccc46f5c6efc429ad340a72",
+      "bytes": 5727
+    },
+    "result.json": {
+      "sha256": "017e58af9d830325ed1c1c7962c3dc0bc4b9c800a9ebe5136e2b3f53ed09577d",
+      "bytes": 3832
+    }
+  },
+  "excluded": [
+    "synthetic-db",
+    "synthetic-home",
+    "historical databases",
+    "provider homes",
+    "credentials",
+    "transcripts"
+  ]
+}

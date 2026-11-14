@@ -1,0 +1,200 @@
+{
+  "classification": "FUNCTIONAL_PASS_WITH_OBSERVED_TIMING_FAILURES_NOT_ROBUST_REAL_CAMPAIGN_QUALIFICATION",
+  "scope": "Offline candidate only. No provider, credentials, services, product mutations, commits, or frozen v10 changes.",
+  "runtime_changed_this_resumption": false,
+  "test_change": "Parameterized final-error publication for snapshot_read and schema_initialization; asserts safe metadata, primary error, zero POST and zero reservation.",
+  "attempts": [
+    {
+      "path": "tests-cache-attempt1.xml",
+      "sha256": "2be7f17633a79e26795cb38f94346d477466d96bf45edf2dd9700d9214e2f75b",
+      "tests": 10,
+      "failures": 1,
+      "errors": 0,
+      "seconds": 6.802,
+      "failed_cases": [
+        "test_initialization_budget_is_separate_explicit_and_fails_closed"
+      ]
+    },
+    {
+      "path": "tests-cache-attempt2.xml",
+      "sha256": "7a24a4d3601cbe5e6f8cb12b2f496803031a557ab8be141cb5918bb101e69164",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 5.564,
+      "failed_cases": []
+    },
+    {
+      "path": "tests-cache-ddl.xml",
+      "sha256": "1ca94bab07e2a6851eeb8a0b79584ac45b31ff2586b3c0205f8e74d66ccf23a9",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 3.795,
+      "failed_cases": []
+    },
+    {
+      "path": "tests-composition-fixes.xml",
+      "sha256": "d0fcdfe7069291fe0e39a1ca8ae5d2ed723edddb6bb77eec29bf17de5dc27d33",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 4.657,
+      "failed_cases": []
+    },
+    {
+      "path": "tests-composition.xml",
+      "sha256": "29774744eb3ac2643e0cd268b71145455a4f70d14ebf83610f212ff068f6f8cb",
+      "tests": 38,
+      "failures": 2,
+      "errors": 0,
+      "seconds": 26.057,
+      "failed_cases": [
+        "test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start",
+        "test_cadence_miss_fences_once_then_drains_late_usage_before_public_result"
+      ]
+    },
+    {
+      "path": "qualification-final-20261114/tests-final.xml",
+      "sha256": "bc6cdd6b3050c8824a4877da18b06a4fa0063a954055e12ab3e6ebf99d76bdea",
+      "tests": 38,
+      "failures": 0,
+      "errors": 38,
+      "seconds": 7.271,
+      "failed_cases": [
+        "test_real_closed_v10_full_schema_prepares_once_and_stays_readonly",
+        "test_fresh_wal_snapshot_and_no_read_lock_between_polls",
+        "test_none_and_error_paths_always_release_transaction",
+        "test_unrelated_schema_evolution_is_observed_with_same_connection",
+        "test_file_identity_drift_is_refused_and_cache_closed",
+        "test_path_junction_revalidation_fails_closed",
+        "test_warmed_query_still_interrupts_at40ms_and_never_retries",
+        "test_initialization_budget_is_separate_explicit_and_fails_closed",
+        "test_closed_or_other_owner_cannot_reuse_connections",
+        "test_core_journal_can_initialize_after_reservation_and_controller_closes_all",
+        "test_core_partial_schema_then_legitimate_ddl_and_required_schema_drop",
+        "test_actual_core_journal_accounts_while_http_worker_is_blocked",
+        "test_threshold_and_late_post_fence_share_one_normal_stop",
+        "test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay",
+        "test_terminal_preopen_failure_preserves_reservation_no_usage_inference",
+        "test_journal_privacy_scope_and_real_layout[local]",
+        "test_journal_privacy_scope_and_real_layout[connector]",
+        "test_corrupted_or_rolled_back_journal_fails_closed[gap]",
+        "test_corrupted_or_rolled_back_journal_fails_closed[epoch]",
+        "test_corrupted_or_rolled_back_journal_fails_closed[watermark]",
+        "test_corrupted_or_rolled_back_journal_fails_closed[body_scope]",
+        "test_corrupted_or_rolled_back_journal_fails_closed[counter_type]",
+        "test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start",
+        "test_canonical_intent_drift_never_binds_other_work[intent]",
+        "test_canonical_intent_drift_never_binds_other_work[scope]",
+        "test_canonical_intent_drift_never_binds_other_work[rollback]",
+        "test_canonical_intent_drift_never_binds_other_work[session]",
+        "test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work",
+        "test_effect_boundary_checks_deadline_without_owner_tick",
+        "test_fresh_worker_validation_failure_never_posts",
+        "test_usage_counter_regression_latches_fault_without_reset",
+        "test_api_queue_and_cross_thread_controller_writes_are_refused",
+        "test_present_canonical_and_core_epoch_mismatch_blocks_usage",
+        "test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending",
+        "test_historical_attachment_revalidates_owner_and_accounts_late_tokens",
+        "test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation",
+        "test_cadence_miss_fences_once_then_drains_late_usage_before_public_result",
+        "test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post"
+      ]
+    },
+    {
+      "path": "qualification-final-20261114/tests-publication-phases.xml",
+      "sha256": "47c533b18bc1df4f40f5fb2b455627bb799e9f5b284d125b56c05efb2a4478b8",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 3.718,
+      "failed_cases": []
+    },
+    {
+      "path": "qualification-final-20261114/tests-qualified.xml",
+      "sha256": "545ce93b893e502bc4ae2ca2f990a4a376e93d3427dd6ffdec3d62bd46fda4a9",
+      "tests": 38,
+      "failures": 2,
+      "errors": 0,
+      "seconds": 41.952,
+      "failed_cases": [
+        "test_corrupted_or_rolled_back_journal_fails_closed[gap]",
+        "test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work"
+      ]
+    },
+    {
+      "path": "qualification-final-20261114/tests-timing-followup.xml",
+      "sha256": "c91ed483248be0d3d70baf10d118a3fff73fd21cb457fefd080aad4a141a533f",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 11.677,
+      "failed_cases": []
+    }
+  ],
+  "latest_full_composition": {
+    "passed": 36,
+    "failed": 2,
+    "total": 38,
+    "interpretation": "Two temporal failures; no claim of an all-green complete run."
+  },
+  "targeted_followup": {
+    "passed": 2,
+    "failed": 0,
+    "repetitions": 1,
+    "interpretation": "Both timing failures passed once in isolation with identical runtime and limits. Does not establish availability under load."
+  },
+  "additional_publication_test": {
+    "passed": 2,
+    "phases": [
+      "snapshot_read",
+      "schema_initialization"
+    ]
+  },
+  "infrastructure_error": "First resumption attempt had38 fixture setup errors: missing parent of --basetemp. No test body ran. XML retained unchanged; directory creation fixed invocation only.",
+  "budget_contract": {
+    "origin": "40ms was inherited from the campaign harness;100ms is the candidate explicit initialization ceiling. No product/API latency SLA or empirical tail guarantee was established.",
+    "initialization_ms": 100,
+    "snapshot_ms": 40,
+    "initialization_inside": "safe_path and identity validation; SQLite connect and pragmas; sqlite_schema count and schema_version; identity revalidation and rollback; elapsed check before cache admission.",
+    "initialization_outside": "ReadOnly constructor root resolution and CanonicalIntentReader prechecks precede prepare; diagnostics/cache bookkeeping after elapsed check; cleanup after failure.",
+    "snapshot_inside": "After prepare and extra Path.resolve: identity validation, BEGIN, schema_version and legitimate DDL reprepare, yielded projection/scope validation, final elapsed check.",
+    "snapshot_outside": "Cached prepare safe_path/identity checks and Path.resolve precede snapshot timer; final identity revalidation and rollback follow elapsed check. Thus40ms is not an end-to-end read wall-clock ceiling.",
+    "preemption_limit": "SQLite progress callback every200 VM instructions and elapsed checks cannot preempt Windows filesystem IO/scheduler stalls. Busy timeout is40ms; failure latches reader and closes caches; no hidden retry.",
+    "remaining_setup_reader": "setup_journal remains unchanged: fresh connection each poll,40ms SQLite progress budget; its separate timing failure remains relevant."
+  },
+  "observed_timings": {
+    "real_full_schema_initialization_ms": 74.61750000948086,
+    "real_warm_read_end_to_end_min_ms": 15.557000006083399,
+    "real_warm_read_end_to_end_max_ms": 22.8534999769181,
+    "failed_core_initialization": "Exceeded100ms, SQLITE_INTERRUPT during sqlite_schema count; exact elapsed was not serialized by that failing test. Cannot report a measured maximum.",
+    "failed_setup_reader": "SQLITE_INTERRUPT9 during setup-remote observation; no phase timing retained. Controller persisted OBSERVATION_UNKNOWN and selected containment.",
+    "cold_definition": "New connection and schema cache; OS filesystem cache was not purged."
+  },
+  "verified_behaviors": [
+    "real closed DB hash unchanged before/after",
+    "cached connection reused with fresh rollback-delimited transaction",
+    "WAL writer and checkpoint progress between reads",
+    "fail closed on identity/path/schema rollback and40ms/100ms exhaustion",
+    "legitimate late Core DDL on same connection",
+    "owner-thread enforcement and explicit connection closure",
+    "CONTROLLER_CLOSED before reader IO/reservation",
+    "final blocked public snapshot on read or initialization failure with primary exception retained"
+  ],
+  "causal_diagnosis": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-sqlite-reader-diagnosis-qa6r8kmw\\diagnosis.json",
+    "sha256": "6b76e393bef4b16f78760997cf3f74be126bbf5417f04cbffac60aa803f38d3a",
+    "summary": "Prior native sqlite3_prepare_v2 interrupted at41.08ms before sqlite3_step. Warm prepared queries were fast; causal mechanism supports persistent schema cache, not retrospective exact timing of the original failure."
+  },
+  "real_closed_db_sha256": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "frozen_source_hashes_verified": true,
+  "environment": {
+    "python": "3.13 reference qualification venv",
+    "pytest": "9.2.0",
+    "products": "Imported from reference venv site-packages",
+    "autoload_plugins": false
+  },
+  "runtime_rebase_required": "Candidate policy/controller ancestry and wrapper identifiers intentionally remainv10 for comparison. Preparation owner must rebase carry6/89473/maxnew5/maxcum11 and qualify composedv11 independently.",
+  "recommendation": "Freeze these bytes for review. Do not describe timing availability as qualified. Root must explicitly choose any future budget revision against observation cadence/freshness; retain fail-closed and bounded work semantics."
+}

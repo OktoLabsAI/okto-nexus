@@ -1,0 +1,181 @@
+{
+  "status": "OFFLINE_DIAGNOSIS_HISTORICAL_ROOT_CAUSE_UNCONFIRMED",
+  "historical_evidence": {
+    "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-v9-execution\\diagnosis\\reconciliation.json",
+    "sha256": "4e4404915bcc2599c139c6b4e54a0dbcbbfa20954ec1255c4aa9b6428e3a1518",
+    "retained_facts": [
+      "PREPARATION_FAILED with native_absent=1 and no admitted work dispatch",
+      "session capability issued; session tool credential eventually REMOVED",
+      "DB_ERROR without original SQLite code/phase at28.180058s"
+    ],
+    "not_inferred": [
+      "which call failed",
+      "whether a writer was held",
+      "whether elapsed time was SQLite wait",
+      "provider consumption or final billing"
+    ]
+  },
+  "source_pins": {
+    "bootstrap/embedded_dispatch.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_dispatch.py",
+      "source_sha256": "4c19ee1ee1c7f75f0afdb4df19ec4ad3a3da289cb751fd647e3389327ab52fdd",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_dispatch.py",
+      "installed_sha256": "bbe9d31c89e67f495677433f117d71fd659f56302a6ef93d9d155d1ecbeb4e02",
+      "normalized_text_equal": true
+    },
+    "bootstrap/embedded_tools.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_tools.py",
+      "source_sha256": "b2a2c49569b2343e4744a287bd1c40915d2b5d439c5f007b4ec5508155a5261c",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_tools.py",
+      "installed_sha256": "2024ca25faae5c8a44e42b46814e0de2cda502940674171fe93baf8679b2ce5a",
+      "normalized_text_equal": true
+    },
+    "bootstrap/runtime_host.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\runtime_host.py",
+      "source_sha256": "8226a920259b7402adbb4222f1ef57741060f1ac338c822b398d8bc55985baa5",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\runtime_host.py",
+      "installed_sha256": "ce12d988f51c6b22c2f27f3f7a40c8481b4e05c29221b0ac92abb8c81aa0e891",
+      "normalized_text_equal": true
+    },
+    "adapters/outbound/execution/embedded.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\execution\\embedded.py",
+      "source_sha256": "2b0cb06524d8c26374c7b881ca22a4aaeefe6e5b9bc908d2de1f5551e8b2e330",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\execution\\embedded.py",
+      "installed_sha256": "d251c031308573f243501a0b6ba1b62ec08b1f45e8e350446969c4e6a8e5653e",
+      "normalized_text_equal": true
+    },
+    "application/execution_local_launch.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_local_launch.py",
+      "source_sha256": "05ff346d467ada98f70b3175c6e12ec4fe31dae4fd0781fba53817a6a478c8d3",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_local_launch.py",
+      "installed_sha256": "6609d9b763743ed8b24ca9388788fcdfb852cf25cf232e3ded626c4ea9888577",
+      "normalized_text_equal": true
+    },
+    "application/execution_leases.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_leases.py",
+      "source_sha256": "d0765bb4a3aab932eca9a39cd7ccd96c0a9243e7909f2cd458638abafa1235d0",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_leases.py",
+      "installed_sha256": "a47be84f3cb7ef2e13d3482191cff3671eb38c4cf10cb53cd4a3f867a05b4e4a",
+      "normalized_text_equal": true
+    },
+    "application/execution_capabilities.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_capabilities.py",
+      "source_sha256": "24b2731f9b1afc0f5b4d028a4b07dd1ffd23da7c6af8a8e0acfbd8fb691a87d6",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_capabilities.py",
+      "installed_sha256": "b43678fee7d468ca5be7d7aade1dde458f9f61a94d9e79b31fa41cb5c8cb7430",
+      "normalized_text_equal": true
+    },
+    "application/runtime_access.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\runtime_access.py",
+      "source_sha256": "a362d7df03d648517dafa0d22309985837953ef991790bd03ce9d86a7504f957",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_access.py",
+      "installed_sha256": "a53315b996241ad9cabbfd5da73cba354b765db3abd7d417dc917094e95a2fdd",
+      "normalized_text_equal": true
+    },
+    "application/execution_operator_authority.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_operator_authority.py",
+      "source_sha256": "5293bbbd3a361715e0e03d47a58f0b5a17c59cb3ee394677e0a53be5fd7d2a2d",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_operator_authority.py",
+      "installed_sha256": "ee885a1dbfcd95e32c3266d7af0c9e4dbcc4c6f8e561b9aec0a45fb32b6b2790",
+      "normalized_text_equal": true
+    },
+    "adapters/outbound/sqlite/execution_agent_revisions.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\execution_agent_revisions.py",
+      "source_sha256": "bc701e3056122978ca79cc2f5f7200ebab4fb2cba7bcb2fb5c30386dc1d73e07",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_agent_revisions.py",
+      "installed_sha256": "13033d021684017b7de03675088b1e7e1579fec80146e7b511d2fd9613b1fb5c",
+      "normalized_text_equal": true
+    },
+    "adapters/outbound/sqlite/connection.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\connection.py",
+      "source_sha256": "b5225dca599c4028a7f89cce7e9d49086ce21a973d0c356d64b8e1f0362eb989",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\connection.py",
+      "installed_sha256": "45fdc5083033b2d04c918821209fea7f7e6b3c5a4b2805ae2d450e3a96c3ea32",
+      "normalized_text_equal": true
+    },
+    "adapters/outbound/sqlite/write_gate.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\sqlite\\write_gate.py",
+      "source_sha256": "1287bc3f6023178167fe4ae5eac7cee879f05e1877afbbf9492d98b88a52776f",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\write_gate.py",
+      "installed_sha256": "c9e1bb2a6873c1c756b181e0fe13dcd4cd708afb0c2efc62cc6bca6c68f145fd",
+      "normalized_text_equal": true
+    },
+    "bootstrap/embedded_agent_recovery.py": {
+      "reviewed_source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\bootstrap\\embedded_agent_recovery.py",
+      "source_sha256": "32f5bbbb8147db9301b2b17ceab7b8b935c22af18033b89076d39e989913462c",
+      "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_agent_recovery.py",
+      "installed_sha256": "fcd61acbc27ecab5b62686d4e40694343486eef8ed51652ce93d6599849f386f",
+      "normalized_text_equal": true
+    }
+  },
+  "call_path_after_tool_vault_store": [
+    {
+      "source": "bootstrap/embedded_tools.py:127-136",
+      "calls": "vault.store -> persisted writer -> launch.check",
+      "transaction_boundary": "persisted opens and closes its own writer UoW; launch.check follows after return"
+    },
+    {
+      "source": "bootstrap/embedded_tools.py:95-96; application/execution_local_launch.py:57-66,100-137",
+      "calls": "owner.verify read; launch.check -> current_agent_revisions writer, then separate read UoW; filesystem checks outside UoW; repeat database comparison",
+      "transaction_boundary": "No enclosing product UoW identified across these awaits or filesystem checks"
+    },
+    {
+      "source": "adapters/outbound/execution/embedded.py:50-75",
+      "calls": "local_launch_factory -> host.acquire -> begin_r4_lease_request -> request_grant -> install_r4_lease -> executor return",
+      "transaction_boundary": "Nexus factory work is offloaded; host Core journals are separate files/owners"
+    },
+    {
+      "source": "bootstrap/embedded_dispatch.py:427-445; application/execution_leases.py:78-93,225-281",
+      "calls": "verify -> leases.issue directly in worker; _parse refreshes revisions before issuance writer",
+      "transaction_boundary": "No HTTP-to-self; RuntimeAccessService.authorize uses supplied uow (nullcontext), not a nested writer"
+    }
+  ],
+  "findings": [
+    {
+      "classification": "NO_POSITIVE_DEADLOCK_EVIDENCE",
+      "detail": "Reviewed active path does not retain a Nexus UoW across its external vault call, Core await, or direct lease callback. Session gate is asyncio memory synchronization, not a DB transaction."
+    },
+    {
+      "classification": "PLAUSIBLE_CONTENTION_MECHANISM",
+      "detail": "current_agent_revisions defaults persist=True and requests a writer even for unchanged revisions. Multiple post-store checks can wait on unrelated concurrent writers. This mechanism is reproduced synthetically, not attributed to V9."
+    },
+    {
+      "classification": "HISTORICAL_PHASE_AMBIGUITY",
+      "detail": "REMOVED does not prove the earlier STORED update committed: _remove updates by request_id without requiring prior STORED. The post-vault persisted writer remains in the candidate interval."
+    },
+    {
+      "classification": "DIAGNOSTIC_BOUNDARY",
+      "detail": "agent runtime history is the fallback diagnostic stage, not a proven failed history-reader call. Both actual local writer-gate timeout and SQLITE_BUSY produce that prefix; current typed diagnostic distinguishes them."
+    }
+  ],
+  "reproduction": {
+    "script": "repro.py",
+    "result": "result.json",
+    "outcome": "5 assertions PASS, direct installed Python exit0",
+    "scope": "actual ConnectionFactory/current_agent_revisions/safe diagnostic on minimal synthetic SQLite schema",
+    "not_reproduced": "full authorize_r4 or original campaign failure; locks were deliberately held"
+  },
+  "existing_regression_boundary": {
+    "path": "tests/execution_r4/test_startup_session_isolation.py:189",
+    "test": "test_authorizer_failure_after_core_composition_preserves_healthy_session",
+    "scope": "injects OSError after actual composition and verifies refusal/recovery isolation; does not establish SQLite lock cause"
+  },
+  "small_followup_if_needed": [
+    "A synthetic full-boundary test can retain the real authorizer/lease services and instrument UoW entry/exit depths; use an Event-held writer immediately after fake vault.store, then release and verify progress without native calls.",
+    "A paired expiration case can retain exactly one tool request/capability, refuse opening without native admission and assert the new typed gate/SQLite cause is preserved. This would test controlled contention, not retrospectively identify V9.",
+    "If another real failure occurs, retain the typed SQLite cause plus a bounded phase identifier for persisted_tools, local_launch_recheck or lease_issue; no messages, SQL, paths or material. Do not increase timeouts or change revision authority based solely on this investigation."
+  ],
+  "effects": {
+    "native": 0,
+    "provider": 0,
+    "HTTP": 0,
+    "service": 0,
+    "personal_auth_reads": 0,
+    "repository_changes": 0
+  },
+  "limits": [
+    "Only own synthetic SQLite files were created/read; no historical campaign DB or personal home was opened.",
+    "Current source and installed files match after newline normalization; no change to the qualified environment.",
+    "No root-cause fix is proposed or claimed; V9 original exception specificity remains unavailable."
+  ]
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="38" time="26.057" timestamp="2026-11-08T08:36:45.052465-03:00" hostname="Alienware_m15"><testcase classname="" name="test_real_closed_v10_full_schema_prepares_once_and_stays_readonly" time="0.166" /><testcase classname="" name="test_fresh_wal_snapshot_and_no_read_lock_between_polls" time="0.098" /><testcase classname="" name="test_none_and_error_paths_always_release_transaction" time="0.047" /><testcase classname="" name="test_unrelated_schema_evolution_is_observed_with_same_connection" time="0.083" /><testcase classname="" name="test_file_identity_drift_is_refused_and_cache_closed" time="0.038" /><testcase classname="" name="test_path_junction_revalidation_fails_closed" time="0.034" /><testcase classname="" name="test_warmed_query_still_interrupts_at40ms_and_never_retries" time="0.038" /><testcase classname="" name="test_initialization_budget_is_separate_explicit_and_fails_closed" time="0.040" /><testcase classname="" name="test_closed_or_other_owner_cannot_reuse_connections" time="0.039" /><testcase classname="" name="test_core_journal_can_initialize_after_reservation_and_controller_closes_all" time="0.439" /><testcase classname="" name="test_core_partial_schema_then_legitimate_ddl_and_required_schema_drop" time="0.143" /><testcase classname="" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="0.532" /><testcase classname="" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="1.000" /><testcase classname="" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="2.929" /><testcase classname="" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.375" /><testcase classname="" name="test_journal_privacy_scope_and_real_layout[local]" time="0.117" /><testcase classname="" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.097" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.099" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.090" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.091" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.110" /><testcase classname="" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.116" /><testcase classname="" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.090"><failure message="PermissionError: [WinError 32] O arquivo já está sendo usado por outro processo: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10789\\test_missing_journal_may_arriv0\\owner\\core-runtime\\session-b294d0eec10a6ce73851d887d5ee6a7c7e6be5efad8244ada91dc8c829ea442d.db' -&gt; 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10789\\test_missing_journal_may_arriv0\\owner\\core-runtime\\session-b294d0eec10a6ce73851d887d5ee6a7c7e6be5efad8244ada91dc8c829ea442d.retained'">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10789/test_missing_journal_may_arriv0')
+
+    def test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start(tmp_path):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        assert reader.read(selected) is None
+        writer=JournalFixture(reader.path(selected),selected);writer.complete('one');reader.read(selected);writer.close()
+&gt;       held=writer.path.with_suffix('.retained');writer.path.rename(held)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\test_independent.py:281: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10789/test_missing_journal_may_arriv0/owner/core-runtime/session-b294d0eec10a6ce73851d887d5ee6a7c7e6be5efad8244ada91dc8c829ea442d.db')
+target = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10789/test_missing_journal_may_arriv0/owner/core-runtime/session-b294d0eec10a6ce73851d887d5ee6a7c7e6be5efad8244ada91dc8c829ea442d.retained')
+
+    def rename(self, target):
+        """
+        Rename this path to the target path.
+    
+        The target path may be absolute or relative. Relative paths are
+        interpreted relative to the current working directory, *not* the
+        directory of the Path object.
+    
+        Returns the new Path instance pointing to the target path.
+        """
+&gt;       os.rename(self, target)
+E       PermissionError: [WinError 32] O arquivo já está sendo usado por outro processo: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10789\\test_missing_journal_may_arriv0\\owner\\core-runtime\\session-b294d0eec10a6ce73851d887d5ee6a7c7e6be5efad8244ada91dc8c829ea442d.db' -&gt; 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10789\\test_missing_journal_may_arriv0\\owner\\core-runtime\\session-b294d0eec10a6ce73851d887d5ee6a7c7e6be5efad8244ada91dc8c829ea442d.retained'
+
+C:\Python313\Lib\pathlib\_local.py:767: PermissionError</failure></testcase><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.068" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.076" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.067" /><testcase classname="" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.069" /><testcase classname="" name="test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work" time="3.900" /><testcase classname="" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.335" /><testcase classname="" name="test_fresh_worker_validation_failure_never_posts" time="0.287" /><testcase classname="" name="test_usage_counter_regression_latches_fault_without_reset" time="0.516" /><testcase classname="" name="test_api_queue_and_cross_thread_controller_writes_are_refused" time="0.126" /><testcase classname="" name="test_present_canonical_and_core_epoch_mismatch_blocks_usage" time="0.455" /><testcase classname="" name="test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending" time="1.154" /><testcase classname="" name="test_historical_attachment_revalidates_owner_and_accounts_late_tokens" time="0.544" /><testcase classname="" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="6.176" /><testcase classname="" name="test_cadence_miss_fences_once_then_drains_late_usage_before_public_result" time="1.451"><failure message="independent_journal.JournalUnknown: READER_CLOSED">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10789/test_cadence_miss_fences_once_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000283458B01A0&gt;
+
+    def test_cadence_miss_fences_once_then_drains_late_usage_before_public_result(tmp_path,monkeypatch):
+        from controller import Refused
+        from api_worker import Fenced
+        import subprocess
+        context=Context(tmp_path);context.remaining=['local','useful']
+        entered=threading.Event();release=threading.Event();now=[1000.];ticks=[];controls=[];stops=[]
+        def before_events(flow,request):
+            entered.set();assert release.wait(15)
+        context.before_events=before_events
+        context.stop_argv=lambda component:['SYNTHETIC-NORMAL-STOP',component]
+        context.env=lambda:{}
+        def fake_stop(argv,**kwargs):
+            assert argv==['SYNTHETIC-NORMAL-STOP','nexus']
+            stops.append(argv)
+            return types.SimpleNamespace(pid=123456,returncode=1,poll=lambda:1)
+        monkeypatch.setattr(subprocess,'Popen',fake_stop)
+        base_controller=context.controller
+        def selected_controller():
+            control=base_controller();controls.append(control)
+            control._monotonic=lambda:now[0];control.fence.clock=lambda:now[0]
+            original=control.poll
+            def poll():
+                if entered.is_set():
+                    ticks.append(now[0])
+                    if len(ticks)==1:now[0]+=1.038
+                    if len(ticks)==4:release.set()
+                return original()
+            control.poll=poll
+            return control
+        context.controller=selected_controller
+        module=types.ModuleType('campaign_context');module.load=lambda:context
+        def require(value,reason):
+            if not value:raise AssertionError(reason)
+        module.require=require;monkeypatch.setitem(sys.modules,'campaign_context',module)
+        import okto_nexus.adapters.inbound.cli.work as product_work
+        import okto_nexus.adapters.inbound.cli.terminal_target as target
+        home=Path(context.P['paths']['server_home'])
+        monkeypatch.setattr(target,'resolve_terminal_target',lambda *args:
+            types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane='local'))
+        monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,home,'local'))
+        try:
+            runpy.run_path(str(Path(__file__).parent.parent/'m1_v10_work.py'),run_name='__main__')
+            control=controls[0]
+            value=json.loads((tmp_path/'public/m1v10-local-work-01-result.json').read_text())
+            assert len(stops)==1 and len(ticks)&gt;=4 and control.api.thread is None
+            assert value['summary']['reasons']==['MONITOR_CADENCE_EXCEEDED']
+            assert value['summary']['new_reserved_requests']==1
+            assert value['summary']['known_observed_tokens']==POLICY['carry_in_tokens']+10
+            assert value['record']['settled'] and not value['useful_result_confirmed']
+            assert value['stop_wrapper_exits']==[1]
+            assert value['independent_observation']['worker_in_flight'] is False
+            assert value['maximum_poll_start_interval_seconds']==pytest.approx(1.038)
+            assert len([call for call in context.calls if call[1]=='POST'])==1
+            assert control.data['independent_owner_stops']['local']['native_exit_confirmed'] is False
+            with pytest.raises(Fenced):control.fence.require('POST')
+            with pytest.raises(Refused):
+&gt;               control.start_work('forbidden','local','no',binding=scope('local'),checkpoint={})
+
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\test_work_wrapper.py:203: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\independent_controller.py:108: in start_work
+    if self._readers[lane].read(request_id) is not None:raise Refused('EXISTING_INTENT_NO_REPLAY')
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\independent_journal.py:180: in read
+    with self.io.open(self.database) as db:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\independent_journal.py:130: in open
+    entry=self.prepare(path);path=Path(path).resolve();db=entry['db'];started=self.clock()
+          ^^^^^^^^^^^^^^^^^^
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\independent_journal.py:92: in prepare
+    require(not self.closed,'READER_CLOSED');require(not self.failed,'READER_FAILED')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = False, reason = 'READER_CLOSED'
+
+    def require(value, reason):
+        if not value:
+&gt;           raise JournalUnknown(reason)
+E           independent_journal.JournalUnknown: READER_CLOSED
+
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\independent_journal.py:25: JournalUnknown</failure></testcase><testcase classname="" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post" time="0.304" /></testsuite></testsuites>

@@ -1,0 +1,77 @@
+{
+  "classification": "FUNCTIONAL_PASS_WITH_OBSERVED_TIMING_FAILURES_NOT_ROBUST_REAL_CAMPAIGN_QUALIFICATION",
+  "runtime": [
+    {
+      "path": "controller/api_worker.py",
+      "sha256": "c8d17033d7baa08c8d9353b5c11152c05dc7abf9c5a48d43674931af0000157e"
+    },
+    {
+      "path": "controller/canonical_fixture.py",
+      "sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa"
+    },
+    {
+      "path": "controller/controller.py",
+      "sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e"
+    },
+    {
+      "path": "controller/history_observers.py",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57"
+    },
+    {
+      "path": "controller/independent_controller.py",
+      "sha256": "2891bc659f3ae236a729a93b6b557588f2cec526cb61dc7f3ec00099f7d04ebf"
+    },
+    {
+      "path": "controller/independent_journal.py",
+      "sha256": "36eff1956e6e3bd97d0f7e1abb9f79267cf16b73aba03510c87bd3a381de4a65"
+    },
+    {
+      "path": "controller/legacy_controller.py",
+      "sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2"
+    },
+    {
+      "path": "controller/observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10"
+    },
+    {
+      "path": "controller/serial_flow.py",
+      "sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697"
+    },
+    {
+      "path": "controller/setup_journal.py",
+      "sha256": "5f4a931e4dc85d7d53ea6a1b8f5627c619d1b1b5426ca02dcade093780d6898a"
+    },
+    {
+      "path": "controller/token_collector.py",
+      "sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e"
+    },
+    {
+      "path": "m1_v10_work.py",
+      "sha256": "3979e632c59965b9360ac954f848906daddaf0ee9ad0bfa930110e169e98d0bb"
+    },
+    {
+      "path": "publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    {
+      "path": "response_loss.py",
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56"
+    }
+  ],
+  "tests": [
+    {
+      "path": "controller/test_cached_readonly.py",
+      "sha256": "117de708f257a9a1fb518da59ae4bb9fc14797d0efc5dfc6c56fdb43d323c5e4"
+    },
+    {
+      "path": "controller/test_independent.py",
+      "sha256": "778e6e6c86800e8155716cb91b8f11d5d2601c1f8d57e586e933be502de0c7f4"
+    },
+    {
+      "path": "controller/test_work_wrapper.py",
+      "sha256": "275c23d37b7569daed7964c322b01829841d65a2125ed27eaf9806bfd5c8dbb4"
+    }
+  ],
+  "qualification_sha256": "0f475190296066d59744e1dfe0590e5fb4c70de93336162997babebde7cae050",
+  "frozen_v10_verified": true
+}

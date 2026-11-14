@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="10" time="6.802" timestamp="2026-11-08T08:31:14.953834-03:00" hostname="Alienware_m15"><testcase classname="" name="test_real_closed_v10_full_schema_prepares_once_and_stays_readonly" time="0.244" /><testcase classname="" name="test_fresh_wal_snapshot_and_no_read_lock_between_polls" time="0.085" /><testcase classname="" name="test_none_and_error_paths_always_release_transaction" time="0.056" /><testcase classname="" name="test_new_schema_is_refused_without_reprepare" time="0.056" /><testcase classname="" name="test_file_identity_drift_is_refused_and_cache_closed" time="0.049" /><testcase classname="" name="test_path_junction_revalidation_fails_closed" time="0.058" /><testcase classname="" name="test_warmed_query_still_interrupts_at40ms_and_never_retries" time="0.081" /><testcase classname="" name="test_initialization_budget_is_separate_explicit_and_fails_closed" time="0.053"><failure message="Failed: DID NOT RAISE JournalUnknown">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10786/test_initialization_budget_is_0')
+
+    def test_initialization_budget_is_separate_explicit_and_fails_closed(tmp_path):
+        path=fixture_db(tmp_path);ticks=[0.]
+        def clock():ticks[0]+=.06;return ticks[0]
+        io=ReadOnly(tmp_path,clock=clock)
+&gt;       with pytest.raises(JournalUnknown,match='INITIALIZATION_BUDGET_EXCEEDED'):io.prepare(path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE JournalUnknown
+
+C:\Users\jpamb\AppData\Local\Temp\m1-v11-reader-candidate-tk7v4a1v\controller\test_cached_readonly.py:121: Failed</failure></testcase><testcase classname="" name="test_closed_or_other_owner_cannot_reuse_connections" time="0.044" /><testcase classname="" name="test_core_journal_can_initialize_after_reservation_and_controller_closes_all" time="0.536" /></testsuite></testsuites>

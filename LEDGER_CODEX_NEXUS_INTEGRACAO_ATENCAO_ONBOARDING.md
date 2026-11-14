@@ -1242,3 +1242,23 @@ A autorização real `8500ae2c…15620` vincula a proposta `90c2ed2c…14405a`. 
 O setup real passou e registrou 21.815 tokens. O trabalho útil não chegou a ser reservado nem enviado: a consulta inicial do observador foi interrompida antes da admissão. A reprodução offline no banco preservado mostrou carga/compilação do esquema excedendo o orçamento de 40 ms; não é prova retrospectiva do tempo exato original. O snapshot público anterior à falha é histórico; checkpoint e fechamento finais prevalecem.
 
 A parada normal, a saída física do PID retido e a remoção da tarefa foram confirmadas. Quatro ações de serviço; sem Connector, Claude ou força. Permanecem seis reservas acumuladas e mínimo observado de 89.473 tokens, sem faturamento final. M1/BASE-06 seguem pendentes. Evidência: `plans/agent_ops/evidence/r3-m1-v10-execution/summary.json`.
+
+## 2026-11-14 — cache do observador e revisão das pendências
+
+O candidato reutiliza conexões SQLite somente leitura, libera o snapshot entre
+consultas e publica o estado bloqueado final nas falhas de preparação/leitura.
+A rodada completa teve 36 casos aprovados e duas falhas temporais; ambos passaram
+em uma única repetição focal. Dois casos de publicação por fase também passaram.
+As rodadas anteriores, inclusive falhas, estão preservadas. Isso valida o
+comportamento funcional, mas não comprova disponibilidade temporal da campanha:
+40 ms não abrangiam a chamada inteira, e preparação de 100 ms também falhou.
+Um novo candidato separado deve compatibilizar leitura, preparação e orçamento
+agregado com a cadência antes da composição v11.
+
+O diagnóstico sintético da v9 distingue timeout da fila de escrita de SQLITE_BUSY;
+não identifica retroativamente a causa original. Corrigida a narrativa AC-13:
+instalação, início, parada e remoção reais já ocorreram. Login, suspensão e demais
+eventos pendentes mantêm seus próprios requisitos. Nenhum status foi promovido,
+serviço iniciado ou token de provedor consumido neste marco.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-reader-cache-review/root-review.json`.

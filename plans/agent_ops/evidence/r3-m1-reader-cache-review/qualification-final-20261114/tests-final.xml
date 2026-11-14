@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="38" failures="0" skipped="0" tests="38" time="7.271" timestamp="2026-11-14T10:06:35.778913-03:00" hostname="Alienware_m15"><testcase classname="test_cached_readonly" name="test_real_closed_v10_full_schema_prepares_once_and_stays_readonly" time="0.406"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_fresh_wal_snapshot_and_no_read_lock_between_polls" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_none_and_error_paths_always_release_transaction" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_unrelated_schema_evolution_is_observed_with_same_connection" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_file_identity_drift_is_refused_and_cache_closed" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_path_junction_revalidation_fails_closed" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_warmed_query_still_interrupts_at40ms_and_never_retries" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_initialization_budget_is_separate_explicit_and_fails_closed" time="0.004"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_closed_or_other_owner_cannot_reuse_connections" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_core_journal_can_initialize_after_reservation_and_controller_closes_all" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_cached_readonly" name="test_core_partial_schema_then_legitimate_ddl_and_required_schema_drop" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="0.004"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.004"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_journal_privacy_scope_and_real_layout[local]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.004"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.002"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_fresh_worker_validation_failure_never_posts" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_usage_counter_regression_latches_fault_without_reset" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_api_queue_and_cross_thread_controller_writes_are_refused" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_present_canonical_and_core_epoch_mismatch_blocks_usage" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending" time="0.002"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_independent" name="test_historical_attachment_revalidates_owner_and_accounts_late_tokens" time="0.002"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_work_wrapper" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_work_wrapper" name="test_cadence_miss_fences_once_then_drains_late_usage_before_public_result" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase><testcase classname="test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post" time="0.003"><error message="failed on setup with &quot;FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'&quot;">self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] O sistema não pode encontrar o caminho especificado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-candidate-tk7v4a1v\\qualification-final-20261114\\test-tmp'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError</error></testcase></testsuite></testsuites>

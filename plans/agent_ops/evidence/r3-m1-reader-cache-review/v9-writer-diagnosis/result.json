@@ -1,0 +1,79 @@
+{
+  "status": "PASS_MECHANISM_ONLY",
+  "cases": {
+    "unchanged_revision_still_requests_writer": {
+      "passed": true,
+      "write_units": 1
+    },
+    "other_thread_same_factory_writer": {
+      "code": "DB_ERROR",
+      "elapsed_seconds": 0.08737940003629774,
+      "safe_cause": {
+        "retryable": true,
+        "writer_gate_timeout": true
+      },
+      "recovery_diagnostic": "OktoNexusError: DB_ERROR at agent runtime history {\"retryable\":true,\"writer_gate_timeout\":true}",
+      "passed": true
+    },
+    "readonly_revision_under_writer": {
+      "passed": true,
+      "same_revision": true
+    },
+    "other_sqlite_connection_writer": {
+      "code": "DB_ERROR",
+      "elapsed_seconds": 0.12047680001705885,
+      "safe_cause": {
+        "retryable": true,
+        "sqlite_errorcode": 5,
+        "sqlite_primary_errorcode": 5,
+        "sqlite_primary_errorname": "SQLITE_BUSY",
+        "sqlite_errorname": "SQLITE_BUSY"
+      },
+      "recovery_diagnostic": "OktoNexusError: DB_ERROR at agent runtime history {\"retryable\":true,\"sqlite_errorcode\":5,\"sqlite_errorname\":\"SQLITE_BUSY\",\"sqlite_primary_errorcode\":5,\"sqlite_primary_errorname\":\"SQLITE_BUSY\"}",
+      "passed": true
+    },
+    "post_release_recovery": {
+      "passed": true,
+      "same_revision": true
+    }
+  },
+  "imports": {
+    "okto_nexus.config": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\config.py",
+      "sha256": "f4b5323225d0397ecafe88ad386318aec6bd9e2671d2b1598af21e676f61da05"
+    },
+    "okto_nexus.adapters.outbound.sqlite.connection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\connection.py",
+      "sha256": "45fdc5083033b2d04c918821209fea7f7e6b3c5a4b2805ae2d450e3a96c3ea32"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_agent_revisions": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_agent_revisions.py",
+      "sha256": "13033d021684017b7de03675088b1e7e1579fec80146e7b511d2fd9613b1fb5c"
+    },
+    "okto_nexus.adapters.outbound.sqlite.diagnostics": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\diagnostics.py",
+      "sha256": "fb4cb8debbc18305894bb404a1375e8cffabd332da9e2ac48ec21e9b0b47b51d"
+    },
+    "okto_nexus.bootstrap.embedded_agent_recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_agent_recovery.py",
+      "sha256": "fcd61acbc27ecab5b62686d4e40694343486eef8ed51652ce93d6599849f386f"
+    }
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv",
+  "inputs_unchanged": true,
+  "schema": "minimal synthetic schema for actual current_agent_revisions",
+  "effects": {
+    "HTTP": 0,
+    "provider": 0,
+    "service": 0,
+    "native_client": 0,
+    "credential_access": 0
+  },
+  "limits": [
+    "Contention was deliberately injected, not observed in historical M1v9.",
+    "This does not exercise full authorize_r4, tools issuance or a complete launch.",
+    "No nested product transaction or HTTP-to-self deadlock was reproduced.",
+    "The control uses persist=False only to characterize a read; it is not a proposed authorization patch."
+  ]
+}

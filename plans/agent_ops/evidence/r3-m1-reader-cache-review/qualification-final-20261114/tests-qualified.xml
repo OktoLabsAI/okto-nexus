@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="38" time="41.952" timestamp="2026-11-14T10:06:59.393165-03:00" hostname="Alienware_m15"><testcase classname="test_cached_readonly" name="test_real_closed_v10_full_schema_prepares_once_and_stays_readonly" time="0.474" /><testcase classname="test_cached_readonly" name="test_fresh_wal_snapshot_and_no_read_lock_between_polls" time="0.124" /><testcase classname="test_cached_readonly" name="test_none_and_error_paths_always_release_transaction" time="0.079" /><testcase classname="test_cached_readonly" name="test_unrelated_schema_evolution_is_observed_with_same_connection" time="0.072" /><testcase classname="test_cached_readonly" name="test_file_identity_drift_is_refused_and_cache_closed" time="0.066" /><testcase classname="test_cached_readonly" name="test_path_junction_revalidation_fails_closed" time="0.070" /><testcase classname="test_cached_readonly" name="test_warmed_query_still_interrupts_at40ms_and_never_retries" time="0.069" /><testcase classname="test_cached_readonly" name="test_initialization_budget_is_separate_explicit_and_fails_closed" time="0.090" /><testcase classname="test_cached_readonly" name="test_closed_or_other_owner_cannot_reuse_connections" time="0.077" /><testcase classname="test_cached_readonly" name="test_core_journal_can_initialize_after_reservation_and_controller_closes_all" time="0.806" /><testcase classname="test_cached_readonly" name="test_core_partial_schema_then_legitimate_ddl_and_required_schema_drop" time="0.290" /><testcase classname="test_independent" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="0.923" /><testcase classname="test_independent" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="1.706" /><testcase classname="test_independent" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="4.929" /><testcase classname="test_independent" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.867" /><testcase classname="test_independent" name="test_journal_privacy_scope_and_real_layout[local]" time="0.138" /><testcase classname="test_independent" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.190" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.270"><failure message="sqlite3.OperationalError: interrupted">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp-qualified/test_corrupted_or_rolled_back_0')
+change = 'gap'
+
+    @pytest.mark.parametrize('change',['gap','epoch','watermark','body_scope','counter_type'])
+    def test_corrupted_or_rolled_back_journal_fails_closed(tmp_path,change):
+        owner=tmp_path/'owner';owner.mkdir();selected=scope();reader=CoreJournalReader(tmp_path,owner,'local')
+        writer=JournalFixture(reader.path(selected),selected)
+        try:
+&gt;           writer.complete('one',10);reader.read(selected)
+                                      ^^^^^^^^^^^^^^^^^^^^^
+
+test_independent.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+independent_journal.py:252: in read
+    with self.io.open(path) as db:
+         ^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+independent_journal.py:130: in open
+    entry=self.prepare(path);path=Path(path).resolve();db=entry['db'];started=self.clock()
+          ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;independent_journal.ReadOnly object at 0x000002858BD195A0&gt;
+path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp-...upted_or_rolled_back_0/owner/core-runtime/session-b294d0eec10a6ce73851d887d5ee6a7c7e6be5efad8244ada91dc8c829ea442d.db')
+
+    def prepare(self,path):
+        """One bounded schema initialization; no work/admission and no retained snapshot."""
+        self._owned()
+        require(not self.closed,'READER_CLOSED');require(not self.failed,'READER_FAILED')
+        db=None;started=self.clock();path_name=Path(path).name
+        try:
+            path=safe_path(path,self.root);identity=self._identity(path)
+            if str(path) in self.connections:return self.connections[str(path)]
+            require(len(self.connections)&lt;8,'READER_CONNECTION_LIMIT')
+            db=sqlite3.connect(path.as_uri()+'?mode=ro',uri=True,timeout=self.budget)
+            db.row_factory=sqlite3.Row
+            db.execute('PRAGMA query_only=ON');db.execute('PRAGMA busy_timeout='+str(int(self.budget*1000)))
+            db.set_progress_handler(lambda:int(self.clock()-started&gt;=self.initialization_budget),200)
+            # Schema loading is explicit and bounded separately from each40ms
+            # observation. The query projects a count, never arbitrary SQL/body.
+&gt;           db.execute('SELECT count(*) FROM sqlite_schema').fetchone()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: interrupted
+
+independent_journal.py:104: OperationalError</failure></testcase><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.181" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.170" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.155" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.175" /><testcase classname="test_independent" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.205" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.147" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.140" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.185" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.161" /><testcase classname="test_independent" name="test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work" time="4.023"><failure message="assert False">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-candidate-tk7v4a1v/qualification-final-20261114/test-tmp-qualified/test_one_global_ledger_across_0')
+
+    def test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work(tmp_path):
+        now=[1000.];home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path,lambda:now[0]);writers=[];setups=[];dispatches=[];stop=[]
+        local=scope('local');remote=scope('connector')
+        try:
+            control.setup('setup-local','local',home,lambda:dispatches.append('setup-local'),lambda:stop.append('local'))
+            setups.append(setup_journal(home,1,200));assert control.poll()['can_admit']
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            writers.append(JournalFixture(journal.path(local),local))
+            for name,total in [('local-one',10),('local-two',20)]:
+                control.start_work(name,'local','synthetic',binding=local,checkpoint=deepcopy(flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+                consume(control);writers[0].complete(name,total,thread='local-native-thread');fixture.terminal(name,local)
+                assert control.poll()['can_admit']
+            first_hash=hashlib.sha256(control.path.read_bytes()).hexdigest()
+            first_data=deepcopy(control.data);control.close()
+            control=create_control(tmp_path,lambda:now[0],create=False)
+            assert control.data==first_data and hashlib.sha256(control.path.read_bytes()).hexdigest()==first_hash
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            control.setup('setup-remote','local',home,lambda:dispatches.append('setup-remote'),lambda:stop.append('local'))
+&gt;           setups.append(setup_journal(home,2,300));assert control.poll()['can_admit']
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           assert False
+
+test_independent.py:340: AssertionError</failure></testcase><testcase classname="test_independent" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.762" /><testcase classname="test_independent" name="test_fresh_worker_validation_failure_never_posts" time="0.647" /><testcase classname="test_independent" name="test_usage_counter_regression_latches_fault_without_reset" time="0.968" /><testcase classname="test_independent" name="test_api_queue_and_cross_thread_controller_writes_are_refused" time="0.205" /><testcase classname="test_independent" name="test_present_canonical_and_core_epoch_mismatch_blocks_usage" time="0.703" /><testcase classname="test_independent" name="test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending" time="1.644" /><testcase classname="test_independent" name="test_historical_attachment_revalidates_owner_and_accounts_late_tokens" time="0.989" /><testcase classname="test_work_wrapper" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="12.402" /><testcase classname="test_work_wrapper" name="test_cadence_miss_fences_once_then_drains_late_usage_before_public_result" time="2.056" /><testcase classname="test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post" time="0.518" /></testsuite></testsuites>

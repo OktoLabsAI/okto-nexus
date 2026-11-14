@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-14",
+  "classification": "OFFLINE_FUNCTIONAL_CORRECTION_WITH_UNRESOLVED_TIMING_AVAILABILITY",
+  "changes": [
+    "Cache read-only SQLite connections without retaining WAL snapshots between polls.",
+    "Explicit owner/identity/path checks and connection closure.",
+    "Publish final blocked snapshot for initialization/read failure without masking primary error."
+  ],
+  "verification": {
+    "complete_run": {
+      "passed": 36,
+      "failed": 2
+    },
+    "single_targeted_followup_passed": 2,
+    "publication_phase_cases_passed": 2,
+    "historical_failed_runs_preserved": true
+  },
+  "limits": [
+    "40ms excludes some path/identity/cleanup work and is not an end-to-end bound.",
+    "100ms initialization and legacy setup40ms both had temporal failures.",
+    "The focal rerun does not establish real campaign availability.",
+    "V9 writer-gate and SQLITE_BUSY synthetic reproductions do not identify the original V9 cause.",
+    "No real service, provider, credentials, new execution authority or acceptance promotion."
+  ],
+  "next": "Review a separate bounded observer candidate against total poll budget and freshness before composing v11."
+}
