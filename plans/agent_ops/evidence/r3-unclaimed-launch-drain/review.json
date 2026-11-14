@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-14",
+  "status": "SOURCE_FIX_QUALIFIED_NO_LIVE_ACCEPTANCE",
+  "core_commit": "7810f3b9bd2576bca5ccc8286a4c661789bf73a4",
+  "cause": "A never-claimed failed opening had its owned slot durably released, but its local tombstone lost the release proof. Generic drain correctly refuses a claim without an event stream, leaving this specific opening pending.",
+  "fix": "Retain exact typed NEVER_CLAIMED launch record with the coalesced release obligation; publish bounded local proof only after confirmed durable release. Match key/opening/connection generation/owner generation and require no stream or watermark. No generic None-stream release or shared-owner projection.",
+  "tests": {
+    "passed": 48,
+    "new": 14,
+    "regressions": 34,
+    "initial_focal_subset": 10
+  },
+  "lint": {
+    "baseline": 6,
+    "current": 6,
+    "new": 0,
+    "clean_lint_claimed": false
+  },
+  "history_preserved": [
+    "Original possible_effect/retry_safe and durable claims remain unchanged.",
+    "Unknown/refused release, claimed or unfenced producer, mismatched identity, any stream including two acknowledged ambiguous streams, eviction and restart remain unconfirmed.",
+    "Installed M1 source matched the pre-fix checkout; this fix was not installed into or applied to the stopping M1 owner."
+  ],
+  "effects": {
+    "live_service": false,
+    "provider": false,
+    "installed_payload_mutation": false,
+    "live_journal_write": false
+  },
+  "acceptance_promoted": false,
+  "campaign_closed": false,
+  "evidence": [
+    "plans/agent_ops/evidence/r3-unclaimed-launch-drain/qualification.json",
+    "plans/agent_ops/evidence/r3-unclaimed-launch-drain/tests.xml"
+  ]
+}

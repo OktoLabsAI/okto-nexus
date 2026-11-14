@@ -1,0 +1,32 @@
+{
+  "status": "SOURCE_QUALIFIED_CURRENT_OWNER_UNCLAIMED_RELEASE_ONLY",
+  "source_files": {
+    "src/nexus_connector_core/drain.py": "04ae4c8c62acdb53f685ea3c1cb030bc0591985c432de7e2f795742efe1211f9",
+    "src/nexus_connector_core/journal.py": "424af579ca4aa8f2b0ca2da398c650c8547acc5c491f0a745d1802f6617a4bba",
+    "src/nexus_connector_core/runtime.py": "58c4ddfcb99c4b420fcfbcfb7bfa2f81ff71530ed8656b1d68ae0aa3c0e545bf",
+    "tests/test_unclaimed_launch_drain.py": "bef6c3f5ad62abd28f98b673c079edc1582acb7a78f86b43b211b9c2af92d254"
+  },
+  "tests": {
+    "passed": 48,
+    "new_cases": 14,
+    "regression_cases": 34,
+    "xml_sha256": "dbef7f1f19d18da804689fa17f08de848db9a72e3b09282098d620cb5f0dfc80",
+    "initial_focals_passed": 10,
+    "initial_focals_subset_of_final": true
+  },
+  "lint": {
+    "baseline_diagnostics": 6,
+    "current_diagnostics": 6,
+    "new_diagnostics": 0,
+    "baseline_comparison_tool_chunk": "af80b2",
+    "clean_global_lint_claimed": false
+  },
+  "contract": [
+    "Only original owner ProcessLaunchRecord NEVER_CLAIMED, producer_fenced=true, spawn_claimed=false, settled exact opening and confirmed durable slot release create local proof.",
+    "Proof remains with the coalesced release obligation across uncertain/late release; no proof before durable success.",
+    "Claim must match key/opening/connection_generation/owner_generation and have no stream or watermark, even acknowledged or ambiguous streams.",
+    "Bounded tombstone eviction and restart lose the proof. No generic None-stream release or shared-owner proof exported.",
+    "Durable claim/receipt possible_effect/retry_safe remain unchanged. No live journals, service, provider, recovery POST or installed payload modified."
+  ],
+  "installed_baseline_comparison": "runtime.py/drain.py/journal.py/process_launch_storage.py matched frozen M1 installed text before patch; tool3aeba9."
+}

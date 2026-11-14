@@ -1728,3 +1728,21 @@ A contagem permanece **122/132 cenários VERIFIED**, com 8 IN_PROGRESS e 2 NOT_R
 Evidências: `plans/agent_ops/evidence/r3-opening-capability-refresh/review.json`,
 `plans/agent_ops/evidence/r3-opening-capability-refresh/request11-observation.json`
 e `plans/agent_ops/evidence/r3-foreground-supervisor-source/joint-source-review.json`.
+
+## 2026-11-14 — prova local de abertura nunca iniciada no drain
+
+Core `7810f3b9` conserva a prova tipada de `NEVER_CLAIMED` junto à obrigação
+de liberar a reserva. A prova só chega ao tombstone local após confirmação
+durável da liberação. O drain exige a mesma abertura, namespace, geração de
+conexão e owner, além da ausência de qualquer stream ou watermark. Não torna
+`stream=None` uma prova genérica nem transmite essa autoridade a outro owner.
+Restart ou descarte do tombstone continuam sem prova.
+
+Passaram 48 testes offline: 14 novos e 34 regressões. Os dez focais iniciais
+estão contidos nessa execução final. Ruff apresenta os mesmos seis diagnósticos
+preexistentes, sem novos; não se declara lint global limpo. Claims e os campos
+`possible_effect`/`retry_safe` dos recibos permanecem intactos. A versão instalada
+do M1, o serviço pendente e os bancos reais não foram alterados por esse marco.
+
+Nenhum fechamento ou aceite foi promovido; a contagem permanece 122/132.
+Evidência: `plans/agent_ops/evidence/r3-unclaimed-launch-drain/review.json`.

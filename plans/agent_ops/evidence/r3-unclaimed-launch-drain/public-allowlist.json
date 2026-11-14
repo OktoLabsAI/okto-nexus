@@ -1,0 +1,23 @@
+{
+  "files": {
+    "qualification.json": {
+      "sha256": "6cdec42a817b2c484a51214cf28cf17c9416055f5daec0b1fcbe0db1fff14f07",
+      "bytes": 1917
+    },
+    "review.json": {
+      "sha256": "5ccd3ab62f20957d3436123864b639591c1c2b1fbe7cfcf3a7f0e59cfad4b3d7",
+      "bytes": 1682
+    },
+    "tests.xml": {
+      "sha256": "dbef7f1f19d18da804689fa17f08de848db9a72e3b09282098d620cb5f0dfc80",
+      "bytes": 7421
+    }
+  },
+  "excluded": [
+    "live databases",
+    "credentials",
+    "private process argv",
+    "raw HTTP",
+    "personal configuration"
+  ]
+}
