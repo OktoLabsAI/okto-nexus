@@ -1,0 +1,42 @@
+{
+  "useful": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\invoke.py",
+    "--manifest",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\manifest.json",
+    "--expected-manifest-sha256",
+    "caab43c7188bb3768255d47a2e854524501a1c5e029587f8879d145ba6f0c03c",
+    "useful"
+  ],
+  "continuation": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\invoke.py",
+    "--manifest",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\manifest.json",
+    "--expected-manifest-sha256",
+    "caab43c7188bb3768255d47a2e854524501a1c5e029587f8879d145ba6f0c03c",
+    "continuation"
+  ],
+  "closure_companion_after_original_closure": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-I",
+    "-B",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\close_companion.py",
+    "--manifest",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\manifest.json",
+    "--expected-manifest-sha256",
+    "caab43c7188bb3768255d47a2e854524501a1c5e029587f8879d145ba6f0c03c"
+  ],
+  "original_workflow_cleanup_unchanged": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\workflow.json",
+  "native_decision_path_unchanged": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\private\\native-decision.json"
+}

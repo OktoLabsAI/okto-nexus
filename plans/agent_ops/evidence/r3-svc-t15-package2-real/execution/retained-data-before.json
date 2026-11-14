@@ -1,0 +1,86 @@
+{
+  "connection-tests/e168a999e79c4f0f94579a06d7b67aab/journal.db": {
+    "sha256": "d57ad1fa0a7363af2f8d22bd7232df00e55af13e60586b1b3f713fcd6f6d73e7",
+    "bytes": 163840
+  },
+  "core-runtime/owned-slots.db": {
+    "sha256": "3ff2aabcd2691b951fc76820d91398e468a7e8027b54c2885808b9c169561150",
+    "bytes": 131072
+  },
+  "logs/service.jsonl": {
+    "sha256": "258de560f69bda76ce23602fb3860a2c8544ff03affd7cb1239d79d6fc918f96",
+    "bytes": 837
+  },
+  "nexus.db": {
+    "sha256": "82f95bf06468d53d54ea58c0244a9713b864860ecb31aa7f93d9e4cd59ff21e2",
+    "bytes": 2494464
+  },
+  "nexus.db.launch.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "nexus.db.serve.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "nexus.serve.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "operator-auth.db": {
+    "sha256": "60f8c59653f61c36704f1d41ef3ec966df232d4bb4e167a08903e6c595c8f8ff",
+    "bytes": 20480
+  },
+  "runtime-journal-v1/store-id": {
+    "sha256": "47e8cceb880dd93f525720b6b19d1de4aed0ec26fcb85c4260a988b9d37408c3",
+    "bytes": 36
+  },
+  "runtime-journal-v1/writer.lock": {
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+    "bytes": 1
+  },
+  "runtime-wake.json": {
+    "sha256": "6d12f9a19486675c773f3ab740a2a8654b839aad37d52a380811d06838cb8d89",
+    "bytes": 141
+  },
+  "service-context.json": {
+    "sha256": "815daf137842ea19b0b14468198f307e81b3a94acedcf9fb0d14ffa792939669",
+    "bytes": 5397
+  },
+  "service-launch.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "service-run.json": {
+    "sha256": "20aef2d8f3f686c6e06a7984a292f562a0d89d2c656d0fc8de6291119166cd49",
+    "bytes": 187
+  },
+  "service-shutdown.json": {
+    "sha256": "edaaafb5853cbae469e42cba7ebb628955f192e1bfb9b832aef00ec915961817",
+    "bytes": 97
+  },
+  "service-supervisor-exit.json": {
+    "sha256": "b6abc56e13c6b94f24287138d2fc11148c52a9937165ab4076711c1c2eab434c",
+    "bytes": 93
+  },
+  "service-supervisor-handshake-14e8e705975abca50e641b13e311ce58-1.json": {
+    "sha256": "e08a0d68866ba2766951b33e4bf9add90adfaf06fd4f37c627c841799a062de2",
+    "bytes": 290
+  },
+  "service-supervisor.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "service-supervisor.json": {
+    "sha256": "93b219a576fa54bf16b6559f264b674e035bc71df292c2daea8ae497bd56fdb5",
+    "bytes": 802
+  },
+  "terminal/profiles/svc-t15-final-terminal-only.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "terminal/profiles/svc-t15-final-terminal-only.json": {
+    "sha256": "e9f74917357ddc9b3b4a64177266019d1b7c67a06f8e04cb2dd6156d873bfb2c",
+    "bytes": 6882
+  }
+}

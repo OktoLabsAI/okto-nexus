@@ -1,0 +1,63 @@
+{
+  "files": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\manifest.json",
+      "sha256": "caab43c7188bb3768255d47a2e854524501a1c5e029587f8879d145ba6f0c03c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\entry.py",
+      "sha256": "0a2dfbce4d6ab6ba407291571d0dc0b3fece57bf92f61023127817e0bd0ac282"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\invoke.py",
+      "sha256": "3848b6615b0b32b309e2b875819b42c6856a75e8eae3c7b3c5e4b79471f961c0"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\local_work.py",
+      "sha256": "9b270dd740ceae56103783204642c2fa5fff69cf4464567194e0174b2899a4f1"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\close_companion.py",
+      "sha256": "1133a6b7f3e5e5bf3177e0b4189895d8a8225b38f9f769fcfe9f1bebd4780d11"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\compose.py",
+      "sha256": "85d9e03178be908984788fe08fb78d9c832b5105e589fd6fb766fd66e33082c1"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\test_policy_import.py",
+      "sha256": "f8e6c8a097373c3f249ecf42342e1aaec43b665b5f89bdd829709851c462413f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\qualification.json",
+      "sha256": "785a369e7f6e958a702eddd21907270d3c415887d2e3fddb2d1056fea9d08a4f"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\guard-qualification.json",
+      "sha256": "a048d247ec2aa773db0948abe272137c1b72de114db302841022d7effe5d7e6e"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\workflow.json",
+      "sha256": "34039ead5ff056ee60205c7bc6cdcfdae6e54a1cc6aa98e852b1af5b6744998a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\README.md",
+      "sha256": "f6188143290220f49f0eac03bec5201816bcb909a5d41937898fa54bc32dce7a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\freeze.py",
+      "sha256": "64413a2a2158374c868f72d8c50f4f162d695399a8af724c22acb942c449263c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\runtime-freeze.json",
+      "sha256": "9e3fa0419ee43af56bbcc5c08e4ca65fce366b10b6d74f92eb2ad60df6d5ad3e"
+    }
+  ],
+  "excluded": [
+    "runtime-private",
+    "base private/controller",
+    "base failed stdout/stderr contents",
+    "credentials",
+    "native commands"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "status": "OFFLINE_PACKAGE2_QUALIFIED_NO_RUNTIME_EXECUTION",
+  "amendment_sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d",
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\installation.json",
+    "sha256": "841d9564071170e3a68e2f7e5b318f8e73193a2c659d4f99827c9a786fb89543"
+  },
+  "build": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\build-provenance.json",
+    "sha256": "56942f0d1c1f0466eecfa82eaa4b314ad294bb811b1f4bcb73542738ef1ac3f1"
+  },
+  "probe60": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\probe-qualification.json",
+    "sha256": "5eceab6033fe7970881a0fa98369af82cdc93f9e9b36424d1dd9d5f3cb385a79"
+  },
+  "composed_gate": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\gate-qualification.json",
+    "sha256": "e63f7b072ecb480882a080a8d52934ab4c70ec3ecf0d82b2bad138cf4756c465"
+  },
+  "delta_tests": {
+    "passed": 5,
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\path-delta.xml",
+      "sha256": "daf73b9b05b00da1611fe7738e241f9e5af830fe1694cd671441f33722beccf6"
+    },
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\test_package2_delta.py",
+      "sha256": "34da834fb424c281356af73974b83ff52c3838833f12ce6c41c8a95e6adfe202"
+    },
+    "runner": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+    "flags": [
+      "-I",
+      "-B",
+      "-X",
+      "utf8"
+    ],
+    "scope": "Real constructor path fence, unchanged policy/14modules, exact technical predecessor and no-refund negative fixtures."
+  },
+  "reused_qualification": {
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\qualification.json",
+      "sha256": "fb87ccc41ab163a23774875fdf15098ff14c4676e5502a91384df1af8f85cd7a"
+    },
+    "composition": 20,
+    "upgrade": 10,
+    "controller": 10,
+    "wrappers": 6,
+    "not_rerun": true,
+    "ancestry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\source-ancestry.json",
+      "sha256": "e8846a7eef3b50a6d65ea6fc827861dc7e5ba9a4998c054dd61c7c02784b0a59"
+    }
+  },
+  "technical_predecessor": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\technical-predecessor.json",
+    "sha256": "d13a23c5407aeb02234c6696049359699aa96fbe5960a024080f25be82eb7319"
+  },
+  "carry_tokens": 272648,
+  "carry_reservations": 11,
+  "new_model_reservations": 0,
+  "services_started": 0,
+  "provider_calls": 0,
+  "upgrade_actions": 0,
+  "acceptance_promoted": false,
+  "remote_DX40": "PENDING"
+}

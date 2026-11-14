@@ -1,0 +1,302 @@
+{
+  "format": "r3.svc-t15.terminal-only.fresh",
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEW_PENDING",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+  "homes": {
+    "nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\nexus-home"
+  },
+  "port": 59107,
+  "tasks": {
+    "nexus": "OktoNexus-server-e2282e9685e45c17528f5398bc70573f8607047be63f4d5da37c27054abcf8d9"
+  },
+  "instance_ids": {
+    "nexus": "svc_e2282e9685e45c17528f5398bc70573f8607047be63f4d5da37c27054abcf8d9"
+  },
+  "model_turn_limit": 0,
+  "reference": "provider:SVC_T15_ONLY_CLI_KEY",
+  "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+  "pins": {
+    "run_case.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\run_case.py",
+      "sha256": "33981427fe0a1ae6ef6020e56a2a20814d2c639e50c7441aa8a625c2ba22ad9f"
+    },
+    "connection_case.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\connection_case.py",
+      "sha256": "7d27306a41cd7db45a41f9c1bde178c3a3f03cbac2ef672bbf1a37f8a72a83ef"
+    },
+    "cohort.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\cohort.py",
+      "sha256": "dc443b67c7e8f9c2672d494e4afb81195d07cb79936986fa381eb7e1875e030e"
+    },
+    "runtime_support.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\runtime_support.py",
+      "sha256": "8f72269ecf94506107987cc12f557f378c482b2ffc3f5b25f01528a7baf102f6"
+    },
+    "installation.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\installation.json",
+      "sha256": "b065344f13a9491c5ecfd87b551767122cbdf4140e30a5b857310b7136735f2e"
+    },
+    "native": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+      "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+    },
+    "nexus_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "d67365a6a407b12671412f4501f156cbdb8c5d6d196cf5679352e6c4ffe8dbb0"
+    },
+    "core_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    },
+    "connector_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "06f711467fa43af5996b5e2bf5e2a01e410a431d9013ccac318200b8902e7275"
+    }
+  },
+  "python_images": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\pythonw.exe": "5a90ff0fc0d283786928daebf2330c6851d3f5c7a89d1113ca2f7a2c05ff2f07",
+    "C:\\Python313\\python.exe": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+    "C:\\Python313\\pythonw.exe": "2bea4fc941b7d9436afa1be8cb46551c0694deed23b3fec87b969054238be099"
+  },
+  "commands": {
+    "nexus": {
+      "install": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "install",
+          "--user",
+          "--start-at-login",
+          "--json",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "59107",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case",
+        "environment": "terminal"
+      },
+      "start": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "start",
+          "--timeout",
+          "45",
+          "--json",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "59107",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case",
+        "environment": "terminal"
+      },
+      "plan": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "connect",
+          "--plan",
+          "--client",
+          "codex",
+          "--project",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\project",
+          "--profile",
+          "svc-t15-final-terminal-only",
+          "--new-agent",
+          "svc-t15-final-terminal-only",
+          "--provider-home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\profile\\.codex",
+          "--candidate-ref",
+          "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+          "--no-start-at-login",
+          "--no-chat",
+          "--json",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "59107",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case",
+        "environment": "terminal"
+      },
+      "stop": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "stop",
+          "--timeout",
+          "45",
+          "--json",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "59107",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case",
+        "environment": "terminal"
+      },
+      "uninstall": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "uninstall",
+          "--user",
+          "--json",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\nexus-home",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "59107",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "true",
+          "--metrics-mode",
+          "disabled",
+          "--harness-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case",
+        "environment": "terminal"
+      },
+      "terminal-probe": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\run_case.py",
+          "probe"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case",
+        "environment": "terminal"
+      }
+    }
+  },
+  "connection_plan_arguments": [
+    "connect",
+    "--plan",
+    "--client",
+    "codex",
+    "--project",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\project",
+    "--profile",
+    "svc-t15-final-terminal-only",
+    "--new-agent",
+    "svc-t15-final-terminal-only",
+    "--provider-home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\case\\profile\\.codex",
+    "--candidate-ref",
+    "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+    "--no-start-at-login",
+    "--no-chat",
+    "--json"
+  ],
+  "scope": {
+    "credential": "Random synthetic non-login value generated only during selected run; passed only to CLI children under SVC_T15_ONLY_CLI_KEY. Root/service environment excludes it. No personal vault/key/auth files read.",
+    "products": "Final immutable Core7810f3/Nexus6714d695/Connectore612ff8 wheels copied to own venv; no working-tree imports.",
+    "startup": "One canonical start45 then passive GET180 only pending/transport. Positive refusal or identity drift halts; no start replay. Parent/launcher/runtime query+sync handles retained before setup.",
+    "inventory": "Installed TerminalConnection.options routes through agents/{id}/runtime-options?executor_id=...; explicit workspace_id=None. Only stale/PENDING waits, positive selection errors refuse. GET SERVER_UNREACHABLE only bounded retry, never POST replay.",
+    "setup": "CLI connect --plan; own request differs only secret_bindings.OPENAI_API_KEY reference and unique client_intent_id. At most1 canonical version check and1 setup:test POST, no commit/binding/authorization or model turn. Expect PROVIDER_AUTH_REQUIRED before native open and journal0turn actions.",
+    "cleanup": "One normal stop45 only after CLI wrappers exited. Require drained and physical runtime+launcher+parent exits plus nativeinactive before uninstall; preserve all data. No force/kill. Uncertainty retains handles for root handoff up to7200s, never claims PASS. If readiness failed before complete cohort capture, handoff stays UNKNOWN and reads only the exact task/canonical owner. Empty handles, absent task or null PID never prove physical exit. Later READY may be captured once with exact scope, image/birth, single initial attempt and query-only handles; this never changes the failed campaign outcome.",
+    "limits": {
+      "canonical_cli_max": 6,
+      "version_check_post_max": 1,
+      "setup_test_post_max": 1,
+      "start_deadline_seconds": 45,
+      "passive_ready_seconds": 180,
+      "inventory_seconds": 120,
+      "setup_test_seconds": 120,
+      "cli_wrapper_wait_seconds": 180,
+      "physical_exit_seconds": 30,
+      "failure_handle_observer_seconds": 7200
+    },
+    "prior_failures": "Three attempts retained in r3-svc-t15-terminal-context; no prior acceptance or byte reuse of runtime homes. Startup150s observation is not a cause attribution.",
+    "no_live_effects_during_preparation": true
+  }
+}

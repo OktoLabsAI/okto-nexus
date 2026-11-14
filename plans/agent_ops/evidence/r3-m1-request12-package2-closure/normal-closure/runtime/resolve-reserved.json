@@ -1,0 +1,47 @@
+{
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2",
+  "amendment_sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d",
+  "request": {
+    "agent_id": "m1v12-local",
+    "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+    "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+    "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+    "client_intent_id": "m1v14-package2-cleanup-interrupt12",
+    "intent": "turn.interrupt",
+    "target": {
+      "kind": "native_turn_id",
+      "expected_turn_id": "01a1dbee-1b17-7580-bc34-1799c172f508"
+    }
+  },
+  "operation_before": {
+    "scope": {
+      "agent_id": "m1v12-local",
+      "authorization_revision": 2,
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 1,
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+    "client_intent_id": "initial_2b9f450b2ba627b38b3bcbbf0177d5b2",
+    "action": "turn.submit",
+    "intent_hash": "sha256:c9feed9aba3eb6aa8171202e20c5182f49dbca7fa684442ba3a0c6ee53178e23",
+    "admission_state": "DISPATCHED",
+    "receipt_revision": 1,
+    "possible_effect": true,
+    "retry_safe": false,
+    "executor_stage": "SUBMITTED"
+  },
+  "time": 1794691640.4231489
+}

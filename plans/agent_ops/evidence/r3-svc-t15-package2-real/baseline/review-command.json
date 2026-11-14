@@ -1,0 +1,34 @@
+{
+  "status": "ROOT_REVIEW_REQUIRED_BEFORE_EXECUTION",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\run_case.py",
+    "execute",
+    "--expected-plan-sha256",
+    "28487c117a531945c68f1877925ed1d2a1b417de1ec17629a6d4fd201fef3d0f"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_",
+  "environment": {
+    "SYSTEMROOT": "C:\\WINDOWS",
+    "WINDIR": "C:\\WINDOWS",
+    "COMSPEC": "C:\\WINDOWS\\system32\\cmd.exe",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW;.CPL",
+    "PATH": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\venv\\Scripts;C:\\Python313;C:\\WINDOWS\\System32",
+    "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\isolated\\userprofile",
+    "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\isolated\\appdata",
+    "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\isolated\\localappdata",
+    "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\isolated\\tmp",
+    "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\isolated\\tmp",
+    "PYTHONUTF8": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONNOUSERSITE": "1",
+    "PIP_CONFIG_FILE": "nul"
+  },
+  "port": 59107,
+  "task_name": "OktoNexus-server-e2282e9685e45c17528f5398bc70573f8607047be63f4d5da37c27054abcf8d9",
+  "plan_sha256": "28487c117a531945c68f1877925ed1d2a1b417de1ec17629a6d4fd201fef3d0f"
+}

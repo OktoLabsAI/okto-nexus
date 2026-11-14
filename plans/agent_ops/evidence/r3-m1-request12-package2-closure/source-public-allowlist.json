@@ -1,0 +1,731 @@
+{
+  "excludes": [
+    "private/controller.json",
+    "DBs",
+    "stdout/stderr",
+    "auth",
+    "credentials",
+    "transcripts"
+  ],
+  "files": [
+    {
+      "bytes": 23456,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\amendment.json",
+      "relative_path": "preparation/amendment.json",
+      "sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\amendment.json"
+    },
+    {
+      "bytes": 6499,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\commands.json",
+      "relative_path": "preparation/commands.json",
+      "sha256": "56cc3a917a73c6a43056354b44da8be8d7ab33eff771c36c5291307b1885b343",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\commands.json"
+    },
+    {
+      "bytes": 12310,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\workflow.json",
+      "relative_path": "preparation/workflow.json",
+      "sha256": "e21324b992900b935c419bd5cdc1ad3f48994f0705299f549a075ab3c8763028",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\workflow.json"
+    },
+    {
+      "bytes": 3182,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\qualification.json",
+      "relative_path": "preparation/qualification.json",
+      "sha256": "a5f36e5ddcb77e697433ab094e92568311d26c73f5f012e7fda2e471d9796dfa",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\qualification.json"
+    },
+    {
+      "bytes": 4194,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\README.md",
+      "relative_path": "preparation/README.md",
+      "sha256": "ec1d0f22bdaa18ac89b807cbf20ba17e3c3559d020c8eecca9e7bbf9c8586501",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\README.md"
+    },
+    {
+      "bytes": 8308,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\technical-predecessor.json",
+      "relative_path": "preparation/technical-predecessor.json",
+      "sha256": "d13a23c5407aeb02234c6696049359699aa96fbe5960a024080f25be82eb7319",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\technical-predecessor.json"
+    },
+    {
+      "bytes": 20805,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\source-ancestry.json",
+      "relative_path": "preparation/source-ancestry.json",
+      "sha256": "e8846a7eef3b50a6d65ea6fc827861dc7e5ba9a4998c054dd61c7c02784b0a59",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\source-ancestry.json"
+    },
+    {
+      "bytes": 807,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\historical-grants.json",
+      "relative_path": "preparation/historical-grants.json",
+      "sha256": "4cae4dc96cc073b68b1e9b1d80c928bec7e50b6cdf196fd8b0d38a09c2ae95bb",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\historical-grants.json"
+    },
+    {
+      "bytes": 845,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\preparation-status.json",
+      "relative_path": "preparation/preparation-status.json",
+      "sha256": "0484cd3b2ddc8cc0899b8d63994d8a915f8ccbd1bca8c397a168563db64343ea",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\preparation-status.json"
+    },
+    {
+      "bytes": 4414,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\test_package2_delta.py",
+      "relative_path": "preparation/test_package2_delta.py",
+      "sha256": "34da834fb424c281356af73974b83ff52c3838833f12ce6c41c8a95e6adfe202",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\test_package2_delta.py"
+    },
+    {
+      "bytes": 827,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\path-delta.xml",
+      "relative_path": "preparation/path-delta.xml",
+      "sha256": "daf73b9b05b00da1611fe7738e241f9e5af830fe1694cd671441f33722beccf6",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\path-delta.xml"
+    },
+    {
+      "bytes": 4026,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\build_packages.py",
+      "relative_path": "preparation/build_packages.py",
+      "sha256": "f72c1bec12bfdc154ef84a6586cf2eac30463bd0f9ae7359bfa921f78b8d849b",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\build_packages.py"
+    },
+    {
+      "bytes": 2303,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\probe_new_package.py",
+      "relative_path": "preparation/probe_new_package.py",
+      "sha256": "8c4cb914473711820466534a027abd2c70d6a8f3c3f44bd3d94f05b2d467bd5d",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\probe_new_package.py"
+    },
+    {
+      "bytes": 1933,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\probe-qualification.json",
+      "relative_path": "preparation/probe-qualification.json",
+      "sha256": "5eceab6033fe7970881a0fa98369af82cdc93f9e9b36424d1dd9d5f3cb385a79",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\probe-qualification.json"
+    },
+    {
+      "bytes": 3140,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\compose_package2.py",
+      "relative_path": "preparation/compose_package2.py",
+      "sha256": "129d1caed7ab27b9160946001aa79209ccea2072566a2cad9ba54df369a6269e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\compose_package2.py"
+    },
+    {
+      "bytes": 1192,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\check_composed_gate.py",
+      "relative_path": "preparation/check_composed_gate.py",
+      "sha256": "93df9139b7bdb9cfeede19b196cb9abc95043a99cdaf3e36167555c341feab7e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\check_composed_gate.py"
+    },
+    {
+      "bytes": 833,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\gate-qualification.json",
+      "relative_path": "preparation/gate-qualification.json",
+      "sha256": "e63f7b072ecb480882a080a8d52934ab4c70ec3ecf0d82b2bad138cf4756c465",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\gate-qualification.json"
+    },
+    {
+      "bytes": 4488,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\freeze_package2.py",
+      "relative_path": "preparation/freeze_package2.py",
+      "sha256": "00cafb86c77ca9f898965fa8003e166254631492290fa572ed2e361138fd8936",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\freeze_package2.py"
+    },
+    {
+      "bytes": 1719,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\package\\build-provenance.json",
+      "relative_path": "preparation/package/build-provenance.json",
+      "sha256": "56942f0d1c1f0466eecfa82eaa4b314ad294bb811b1f4bcb73542738ef1ac3f1",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\build-provenance.json"
+    },
+    {
+      "bytes": 365277,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\package\\installation.json",
+      "relative_path": "preparation/package/installation.json",
+      "sha256": "841d9564071170e3a68e2f7e5b318f8e73193a2c659d4f99827c9a786fb89543",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\installation.json"
+    },
+    {
+      "bytes": 345252,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\package\\dependency-manifest.json",
+      "relative_path": "preparation/package/dependency-manifest.json",
+      "sha256": "eedcbbd6ccfe1331591e811aff11326ace074005a25319d1fae6ef3bb5460723",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\dependency-manifest.json"
+    },
+    {
+      "bytes": 3677,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\package\\install_packages.py",
+      "relative_path": "preparation/package/install_packages.py",
+      "sha256": "9704d36128ac46c7b73a522e19bc43012aa1a3f55abb4e2544e4810c5a58a405",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\install_packages.py"
+    },
+    {
+      "bytes": 4740,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\package\\prepare_dependencies.py",
+      "relative_path": "preparation/package/prepare_dependencies.py",
+      "sha256": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\prepare_dependencies.py"
+    },
+    {
+      "bytes": 14422,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\request_context.py",
+      "relative_path": "preparation/request_context.py",
+      "sha256": "8280728add9cf39758464c708e51da7fa9fc044bc770b043663bde7659b11963",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\request_context.py"
+    },
+    {
+      "bytes": 2933,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\request_entry.py",
+      "relative_path": "preparation/request_entry.py",
+      "sha256": "a2cb5d82226d041ae4eb2faf8c4018c2ff3f89049ce463c93b7b5351dc384ea3",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\request_entry.py"
+    },
+    {
+      "bytes": 2696,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\invoke_request.py",
+      "relative_path": "preparation/invoke_request.py",
+      "sha256": "0e8e4f39b81bc84ed0ead70393092a45eeead486defbc8a79cc440d7a4e9f2fe",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\invoke_request.py"
+    },
+    {
+      "bytes": 10657,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\driver_common.py",
+      "relative_path": "preparation/driver_common.py",
+      "sha256": "a6156573724964085153e9337d9f8b7155035ac7dc68a8a3ecbc585dd099e0c2",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\driver_common.py"
+    },
+    {
+      "bytes": 23226,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\local_work.py",
+      "relative_path": "preparation/local_work.py",
+      "sha256": "9de7a1b18dc94ade3c3ca0533af2bf71161d0963c5b694cca3cd987808b0dbd0",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\local_work.py"
+    },
+    {
+      "bytes": 14424,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\cohort.py",
+      "relative_path": "preparation/cohort.py",
+      "sha256": "fd0a45a6583fb6adc724af10f25ca56465015ef14a38ee492eb8cdf60de5603e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\cohort.py"
+    },
+    {
+      "bytes": 5241,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\lifecycle.py",
+      "relative_path": "preparation/lifecycle.py",
+      "sha256": "a2def5d00aa97756305a4d053849bdbfeb74f5be629da69815a005c3261fb437",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\lifecycle.py"
+    },
+    {
+      "bytes": 15158,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\authorize_local.py",
+      "relative_path": "preparation/authorize_local.py",
+      "sha256": "90dfae30a370421002e5bb3c7cf546c5c2da4187670b3016c35d6eaa88a27e2e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\authorize_local.py"
+    },
+    {
+      "bytes": 5106,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\upgrade_environment.py",
+      "relative_path": "preparation/upgrade_environment.py",
+      "sha256": "127c19a0db23e8d4411d5d884f701b3e3a2eab4322426795393962188e6cdd8a",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\upgrade_environment.py"
+    },
+    {
+      "bytes": 4994,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\adopt_local.py",
+      "relative_path": "preparation/adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\adopt_local.py"
+    },
+    {
+      "bytes": 8661,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\m1_v14_observation.py",
+      "relative_path": "preparation/m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\m1_v14_observation.py"
+    },
+    {
+      "bytes": 8641,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\close_campaign.py",
+      "relative_path": "preparation/close_campaign.py",
+      "sha256": "e02c9411e666257ca7ee8516be66092a6c091e315617a852262450694030d4ce",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\close_campaign.py"
+    },
+    {
+      "bytes": 4153,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\confirm_final_presence.py",
+      "relative_path": "preparation/confirm_final_presence.py",
+      "sha256": "485bb9a9f1560cfeb034af2f38a0d56e0e4b795a8db6a7352777b8f4d4e36d7c",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\confirm_final_presence.py"
+    },
+    {
+      "bytes": 5554,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\api_worker.py",
+      "relative_path": "preparation/modules/api_worker.py",
+      "sha256": "b61b5a5262b9268d69835b1a6adf8672c82450ac0e606eb60d41565c1490f396",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\api_worker.py"
+    },
+    {
+      "bytes": 9493,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\cli_flow.py",
+      "relative_path": "preparation/modules/cli_flow.py",
+      "sha256": "fe2fc005f4186b2513a2e6a59bbbee0c2eecb18135fc56a9036ea0ebc1cbcd1b",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\cli_flow.py"
+    },
+    {
+      "bytes": 8399,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\containment_driver.py",
+      "relative_path": "preparation/modules/containment_driver.py",
+      "sha256": "f7b67eecdf05c66d482c4803c1d370f6e6bba9bda13d89e8a80f30ae007952ac",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\containment_driver.py"
+    },
+    {
+      "bytes": 2497,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\controller.py",
+      "relative_path": "preparation/modules/controller.py",
+      "sha256": "cac213d1a5da5fe3eaf98ccecff5b5b4eb7975255f9df25f45debbfb91d6d6d0",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\controller.py"
+    },
+    {
+      "bytes": 10712,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\fresh_work_controller.py",
+      "relative_path": "preparation/modules/fresh_work_controller.py",
+      "sha256": "d8385a815a9b95ac0c429ef3547c6cc585d545c3cc721ce0dfe733417315ed6d",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\fresh_work_controller.py"
+    },
+    {
+      "bytes": 1812,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\history_observers.py",
+      "relative_path": "preparation/modules/history_observers.py",
+      "sha256": "1a1c99805f2e56ea98ab1b1ddd570583889a40237292c0a249c1a8881c76c9b8",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\history_observers.py"
+    },
+    {
+      "bytes": 20211,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\independent_controller.py",
+      "relative_path": "preparation/modules/independent_controller.py",
+      "sha256": "5d1822208a723ffd984ba9fed8e89e3ce521769b6f798473b31d614e465f1d06",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\independent_controller.py"
+    },
+    {
+      "bytes": 22243,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\independent_journal.py",
+      "relative_path": "preparation/modules/independent_journal.py",
+      "sha256": "11b5c1fc44b397365efb9f7c029d89d999de9470a5e22b614f3215d5d6734b9d",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\independent_journal.py"
+    },
+    {
+      "bytes": 21348,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\legacy_controller.py",
+      "relative_path": "preparation/modules/legacy_controller.py",
+      "sha256": "aaaeff73d6d527067d7e861c929a0ca5113691cd29a3a5535c1171d2ab445a10",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\legacy_controller.py"
+    },
+    {
+      "bytes": 6977,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\normal_containment.py",
+      "relative_path": "preparation/modules/normal_containment.py",
+      "sha256": "baf25b43f2b3b4b0353434b5cf70841ecaaddf56cb8161276414c22c4f81c572",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\normal_containment.py"
+    },
+    {
+      "bytes": 10253,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\observation_guard.py",
+      "relative_path": "preparation/modules/observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\observation_guard.py"
+    },
+    {
+      "bytes": 1441,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\observation_limits.py",
+      "relative_path": "preparation/modules/observation_limits.py",
+      "sha256": "4f840bccfc843981617768eec362048bf2d5821b00c36c98256b3d0fc59fc525",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\observation_limits.py"
+    },
+    {
+      "bytes": 1982,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\serial_flow.py",
+      "relative_path": "preparation/modules/serial_flow.py",
+      "sha256": "364ce1afbacb48672438ed4385546e95edc40da3b605fe39d55d07c2dd4e7624",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\serial_flow.py"
+    },
+    {
+      "bytes": 8357,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\setup_journal.py",
+      "relative_path": "preparation/modules/setup_journal.py",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\setup_journal.py"
+    },
+    {
+      "bytes": 22011,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\modules\\token_collector.py",
+      "relative_path": "preparation/modules/token_collector.py",
+      "sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\token_collector.py"
+    },
+    {
+      "bytes": 13900,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\runtime-freeze.json",
+      "relative_path": "preparation/runtime-freeze.json",
+      "sha256": "9706592bce4b58cf7b95bcf5fb60e682c28f1542c12b68f731a7e9f501e8e96b",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-freeze.json"
+    },
+    {
+      "bytes": 12778,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\preparation\\public-allowlist.json",
+      "relative_path": "preparation/public-allowlist.json",
+      "sha256": "4c81dfb5284ed05487f62958835904ed933defbc11780829a61654611e5fc428",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public-allowlist.json"
+    },
+    {
+      "bytes": 3660,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\manifest.json",
+      "relative_path": "overlay/manifest.json",
+      "sha256": "caab43c7188bb3768255d47a2e854524501a1c5e029587f8879d145ba6f0c03c",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\manifest.json"
+    },
+    {
+      "bytes": 4687,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\entry.py",
+      "relative_path": "overlay/entry.py",
+      "sha256": "0a2dfbce4d6ab6ba407291571d0dc0b3fece57bf92f61023127817e0bd0ac282",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\entry.py"
+    },
+    {
+      "bytes": 1992,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\invoke.py",
+      "relative_path": "overlay/invoke.py",
+      "sha256": "3848b6615b0b32b309e2b875819b42c6856a75e8eae3c7b3c5e4b79471f961c0",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\invoke.py"
+    },
+    {
+      "bytes": 23233,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\local_work.py",
+      "relative_path": "overlay/local_work.py",
+      "sha256": "9b270dd740ceae56103783204642c2fa5fff69cf4464567194e0174b2899a4f1",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\local_work.py"
+    },
+    {
+      "bytes": 2447,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\close_companion.py",
+      "relative_path": "overlay/close_companion.py",
+      "sha256": "1133a6b7f3e5e5bf3177e0b4189895d8a8225b38f9f769fcfe9f1bebd4780d11",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\close_companion.py"
+    },
+    {
+      "bytes": 2509,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\compose.py",
+      "relative_path": "overlay/compose.py",
+      "sha256": "85d9e03178be908984788fe08fb78d9c832b5105e589fd6fb766fd66e33082c1",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\compose.py"
+    },
+    {
+      "bytes": 1675,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\test_policy_import.py",
+      "relative_path": "overlay/test_policy_import.py",
+      "sha256": "f8e6c8a097373c3f249ecf42342e1aaec43b665b5f89bdd829709851c462413f",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\test_policy_import.py"
+    },
+    {
+      "bytes": 731,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\qualification.json",
+      "relative_path": "overlay/qualification.json",
+      "sha256": "785a369e7f6e958a702eddd21907270d3c415887d2e3fddb2d1056fea9d08a4f",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\qualification.json"
+    },
+    {
+      "bytes": 292,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\guard-qualification.json",
+      "relative_path": "overlay/guard-qualification.json",
+      "sha256": "a048d247ec2aa773db0948abe272137c1b72de114db302841022d7effe5d7e6e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\guard-qualification.json"
+    },
+    {
+      "bytes": 2019,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\workflow.json",
+      "relative_path": "overlay/workflow.json",
+      "sha256": "34039ead5ff056ee60205c7bc6cdcfdae6e54a1cc6aa98e852b1af5b6744998a",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\workflow.json"
+    },
+    {
+      "bytes": 1861,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\README.md",
+      "relative_path": "overlay/README.md",
+      "sha256": "f6188143290220f49f0eac03bec5201816bcb909a5d41937898fa54bc32dce7a",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\README.md"
+    },
+    {
+      "bytes": 2382,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\freeze.py",
+      "relative_path": "overlay/freeze.py",
+      "sha256": "64413a2a2158374c868f72d8c50f4f162d695399a8af724c22acb942c449263c",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\freeze.py"
+    },
+    {
+      "bytes": 2987,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\runtime-freeze.json",
+      "relative_path": "overlay/runtime-freeze.json",
+      "sha256": "9e3fa0419ee43af56bbcc5c08e4ca65fce366b10b6d74f92eb2ad60df6d5ad3e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\runtime-freeze.json"
+    },
+    {
+      "bytes": 2908,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay\\public-allowlist.json",
+      "relative_path": "overlay/public-allowlist.json",
+      "sha256": "518301dea4917460602b9bbd7400e76b239791bd1bbe5bccbc461900716c59b4",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\public-allowlist.json"
+    },
+    {
+      "bytes": 971,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\root-driver-preparation.json",
+      "relative_path": "execution/root-driver-preparation.json",
+      "sha256": "e2dc111842b164ad4e7926d4aafb9df5270ee5bc6a4c6bebf08d7ad6b48b3ac5",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\root-driver-preparation.json"
+    },
+    {
+      "bytes": 1047,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\environment-upgrade-plan-result.json",
+      "relative_path": "execution/environment-upgrade-plan-result.json",
+      "sha256": "b01fc60bac39b46fcfa33d864886f691944ee334a3549d46ecfd8e98e6246f05",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\environment-upgrade-plan-result.json"
+    },
+    {
+      "bytes": 1154,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\environment-upgrade-apply-result.json",
+      "relative_path": "execution/environment-upgrade-apply-result.json",
+      "sha256": "a3279c10a3256d180d01745ca18de61e76ee67a1906ee340713f8b7a6c50c5f6",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\environment-upgrade-apply-result.json"
+    },
+    {
+      "bytes": 526,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\lifecycle-nexus-install-result.json",
+      "relative_path": "execution/lifecycle-nexus-install-result.json",
+      "sha256": "dbcef65ddfcd85cdf05e36d511057d6757725f9aad7df3bb41909473b8196be3",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\lifecycle-nexus-install-result.json"
+    },
+    {
+      "bytes": 522,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\lifecycle-nexus-start-result.json",
+      "relative_path": "execution/lifecycle-nexus-start-result.json",
+      "sha256": "c4f2124bccc0eb58f6327d6a69225d87274b276d2184560bc7fa9caddde1f169",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\lifecycle-nexus-start-result.json"
+    },
+    {
+      "bytes": 520,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\lifecycle-nexus-stop-result.json",
+      "relative_path": "execution/lifecycle-nexus-stop-result.json",
+      "sha256": "c4df4780eefdd8c843f7fe64ec77af25079747e7a1c8aefb86003e1d11013ae1",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\lifecycle-nexus-stop-result.json"
+    },
+    {
+      "bytes": 588,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\lifecycle-nexus-uninstall-result.json",
+      "relative_path": "execution/lifecycle-nexus-uninstall-result.json",
+      "sha256": "f7ea3e6b2d41168b891064cf65ba0ec334f4b34e0997141898dd216858cedfc9",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\lifecycle-nexus-uninstall-result.json"
+    },
+    {
+      "bytes": 1410,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\nexus-owner-selection.json",
+      "relative_path": "execution/nexus-owner-selection.json",
+      "sha256": "68499fa430ec1e7ac184246d12b218808e7ef95e79f8945fd748a347bfd7109b",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\nexus-owner-selection.json"
+    },
+    {
+      "bytes": 2124,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\nexus-exit-proof.json",
+      "relative_path": "execution/nexus-exit-proof.json",
+      "sha256": "72cd59bf7f07acff9bc12c871f5224830a626dc1ad2cb4bcc3e71c39dd54c162",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\nexus-exit-proof.json"
+    },
+    {
+      "bytes": 1605,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\cleanup-nexus.json",
+      "relative_path": "execution/cleanup-nexus.json",
+      "sha256": "eaf85a58e591a72d81a88548fbffaf43791786c1906fa7156f3c8026585e7473",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\cleanup-nexus.json"
+    },
+    {
+      "bytes": 4740,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\final-presence.json",
+      "relative_path": "execution/final-presence.json",
+      "sha256": "8e5f17c35870866f8f9d17a4d1220873ca939585bcf13c8cbecf8dc01856acf5",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\final-presence.json"
+    },
+    {
+      "bytes": 375608,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\m1v14-local-work-12-dispatch-selection.json",
+      "relative_path": "execution/m1v14-local-work-12-dispatch-selection.json",
+      "sha256": "d1f445afa07088488f3404691f8ae3659137139d94c70271e710237d42cf0db3",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\m1v14-local-work-12-dispatch-selection.json"
+    },
+    {
+      "bytes": 929,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\execution\\original-work-returned.json",
+      "relative_path": "execution/original-work-returned.json",
+      "sha256": "d21281eba2fe23d3fce181ca8a5459870ba144137db90e797424a1762ebe9998",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-private\\work-local-useful.returned.json"
+    },
+    {
+      "bytes": 129,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay-execution\\work-local-useful.claimed.json",
+      "relative_path": "overlay-execution/work-local-useful.claimed.json",
+      "sha256": "5ab4e1859abb29d6746cf1c6f08ded50ae90da8a420371521d19d9f4b25ea2d5",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\runtime-private\\work-local-useful.claimed.json"
+    },
+    {
+      "bytes": 129,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay-execution\\work-local-useful.process.json",
+      "relative_path": "overlay-execution/work-local-useful.process.json",
+      "sha256": "016bac397da946939417e435d25c826bc71a08f60ee0f631b55a5fd29414a1b5",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\runtime-private\\work-local-useful.process.json"
+    },
+    {
+      "bytes": 1108,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay-execution\\work-local-useful.reserved.json",
+      "relative_path": "overlay-execution/work-local-useful.reserved.json",
+      "sha256": "96844acd17e43f34db6fbf559843bcde51c365756d00ea3ff41e1910e9ec96bb",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\runtime-private\\work-local-useful.reserved.json"
+    },
+    {
+      "bytes": 1120,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\overlay-execution\\work-local-useful.returned.json",
+      "relative_path": "overlay-execution/work-local-useful.returned.json",
+      "sha256": "2e230c73b0bafc74d3610abb94494e8c4c8ec8111a3159dca59d88da7c50895f",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\runtime-private\\work-local-useful.returned.json"
+    },
+    {
+      "bytes": 3001,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\observe.py",
+      "relative_path": "normal-closure/observe.py",
+      "sha256": "9a6bb29b48b09e5cfcf40c3a4f0c1b3180e686cf15acd7544e35f53ea60e2117",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\observe.py"
+    },
+    {
+      "bytes": 3554,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\observation.json",
+      "relative_path": "normal-closure/observation.json",
+      "sha256": "9749dbcf75f5d63ed8386192c15f904fbdaff87ad3f954540b553c7aff411d4e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\observation.json"
+    },
+    {
+      "bytes": 6410,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\interrupt.py",
+      "relative_path": "normal-closure/interrupt.py",
+      "sha256": "234fda4c81188fbfa10fd35bf7e7e3ceae2d1e2ef5079d089ab9ea52dfef22f9",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\interrupt.py"
+    },
+    {
+      "bytes": 3929,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\manifest.json",
+      "relative_path": "normal-closure/manifest.json",
+      "sha256": "416e4a0f45125b69b59b228e3bf36a198561d5c5d1257ddc4944089e510b351f",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\manifest.json"
+    },
+    {
+      "bytes": 438,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\workflow.json",
+      "relative_path": "normal-closure/workflow.json",
+      "sha256": "f6b66355661ee9964dac2ecacf6f715338647ca8ba1699f864481dda86865fb1",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\workflow.json"
+    },
+    {
+      "bytes": 9401,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\reconcile_accounting.py",
+      "relative_path": "normal-closure/reconcile_accounting.py",
+      "sha256": "c431bc7816397430a50a8eb6b59fd2dfd9dbf178752fc77cde904c9f585bb8f3",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\reconcile_accounting.py"
+    },
+    {
+      "bytes": 6783,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\accounting-reconciliation.json",
+      "relative_path": "normal-closure/accounting-reconciliation.json",
+      "sha256": "8e1a72942918eb69fd70a6481e78be14ec17b04172b25e9e499ebc8decbb16bc",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\accounting-reconciliation.json"
+    },
+    {
+      "bytes": 4914,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\closure-companion.json",
+      "relative_path": "normal-closure/closure-companion.json",
+      "sha256": "6fa9c07272248afe631d7231a378e95f21b95133684756a4f85979c71c112c56",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\closure-companion.json"
+    },
+    {
+      "bytes": 8301,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\curate_reconciliation.py",
+      "relative_path": "normal-closure/curate_reconciliation.py",
+      "sha256": "3ddd3922a8aa16c320afa964bf7fe351f0b0717dab522f171457de9a76566a23",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\curate_reconciliation.py"
+    },
+    {
+      "bytes": 852,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\execute-reserved.json",
+      "relative_path": "normal-closure/runtime/execute-reserved.json",
+      "sha256": "b3b85e9af3229590abe15a4f818344bf1d0636c2169f96d6fb7817c5b2da9604",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\execute-reserved.json"
+    },
+    {
+      "bytes": 2101,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\resolve-reserved.json",
+      "relative_path": "normal-closure/runtime/resolve-reserved.json",
+      "sha256": "f06ff318dc5e04e58853321ae0cd98d1ccbf4a51393b05e9fd476191e682d4de",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\resolve-reserved.json"
+    },
+    {
+      "bytes": 2216,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\resolved.json",
+      "relative_path": "normal-closure/runtime/resolved.json",
+      "sha256": "d83b49ede366914738e67ebf3c37e7dd6d8a21e29153664968b0ad12e1a84fb9",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\resolved.json"
+    },
+    {
+      "bytes": 866,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\admit-reserved.json",
+      "relative_path": "normal-closure/runtime/admit-reserved.json",
+      "sha256": "500b213e706bd53856d28204e88ff0241e0ac7fb43b9dda2c312fb74e095f9de",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\admit-reserved.json"
+    },
+    {
+      "bytes": 1566,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\admitted.json",
+      "relative_path": "normal-closure/runtime/admitted.json",
+      "sha256": "3d53761cd5229c07ab5df45c763db2888ce40accdb3f94f0405462fa2f9b3ead",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\admitted.json"
+    },
+    {
+      "bytes": 1791,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\execute-result.json",
+      "relative_path": "normal-closure/runtime/execute-result.json",
+      "sha256": "c042db3ebb41398e997f35bd9a2075e260bbf0de7578ee6dee074d061058ce40",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\execute-result.json"
+    },
+    {
+      "bytes": 213,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\data-before.json",
+      "relative_path": "normal-closure/runtime/data-before.json",
+      "sha256": "5df82063ffb7e883e12b64d1093704853c4cd22459a99f2fa4a7e1d6df73a420",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\data-before.json"
+    },
+    {
+      "bytes": 605,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\normal-closure\\runtime\\data-preservation.json",
+      "relative_path": "normal-closure/runtime/data-preservation.json",
+      "sha256": "c980e585a698e1ce6a8799a0e682562943b44c0769913ad080afa2592b42682e",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\data-preservation.json"
+    },
+    {
+      "bytes": 2242,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\diagnosis\\thread-configuration-projection.json",
+      "relative_path": "diagnosis/thread-configuration-projection.json",
+      "sha256": "22f2c89f7f498b4e53272826589501d72a27e2e91b10ce5acf6bbb433137a786",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-cli-refusal-kxl0gj3e\\thread-configuration-projection.json"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-package2-curation-j1w6qkrq\\review.json",
+      "relative_path": "review.json",
+      "sha256": "2b358750af25c330becc899d93a150716ca467652110bb9699eda8f8fef5c78b"
+    }
+  ]
+}

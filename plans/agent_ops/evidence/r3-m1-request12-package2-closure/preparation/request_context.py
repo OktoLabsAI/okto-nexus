@@ -1,0 +1,226 @@
+"""Finite local12/13 amendment; historical authority and new package pins are distinct."""
+from pathlib import Path
+from copy import deepcopy
+from types import SimpleNamespace
+import argparse
+import hashlib
+import importlib.util
+import json
+import sys
+
+HERE = Path(__file__).resolve().parent
+CONTROL, ROOT = HERE.parent, HERE.parent.parent
+_context = None
+
+def require(value, code):
+    if not value: raise RuntimeError(code)
+
+def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def pinned(pin):
+    require(sha(pin['path']) == pin['sha256'], 'AMENDMENT_PIN_CHANGED')
+    return Path(pin['path'])
+
+def module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    value = importlib.util.module_from_spec(spec)
+    sys.modules[name] = value
+    spec.loader.exec_module(value)
+    return value
+
+def python_utf8(argv, interpreter):
+    require(isinstance(argv, list) and argv and argv[0] == interpreter
+        and all(isinstance(arg, str) for arg in argv), 'PYTHON_INTERPRETER_CHANGED')
+    return [argv[0], '-X', 'utf8', *argv[1:]]
+
+def parser():
+    p = argparse.ArgumentParser()
+    p.add_argument('--amendment', required=True)
+    p.add_argument('--expected-amendment-sha256', required=True)
+    return p
+
+def current_commands(original, interpreter):
+    value={key:deepcopy(original[key]) for key in ('tasks','service_selection_args','required_parent_path','origin')}
+    value['steps']=[deepcopy(step) for step in original['steps'] if step.get('component')=='nexus']
+    for step in value['steps']:step['argv']=python_utf8([interpreter,*step['argv'][1:]],interpreter)
+    value['scope']='Local12/13 only; historical command document is separately pinned.'
+    value['counts']={'explicit_lifecycle_commands':4,'canonical_environment_upgrade_commands':2,
+        'task_installations':1,'explicit_scheduler_starts':1,'implicit_starts':0,
+        'new_model_admissions_max':2,'cumulative_model_admissions_max':13}
+    return value
+
+def verify_package(amendment, *, prefix=None):
+    installed = json.loads(pinned(amendment['installation']).read_bytes())
+    require(installed['status'] == 'INSTALLED_VERIFIED' and installed['pip_check']['returncode'] == 0, 'NEW_INSTALLATION_REQUIRED')
+    require(Path(installed['python_prefix']).resolve() == (HERE / 'package/venv').resolve()
+        and Path(prefix or sys.prefix).resolve() == Path(installed['python_prefix']).resolve(), 'INSTALLED_PREFIX_MISMATCH')
+    require(installed['wheels'] == amendment['wheels'], 'WHEELS_CHANGED')
+    for pin in [*installed['wheels'].values(), *installed['files']]: pinned(pin)
+    for path, digest in installed['python_images'].items(): require(sha(path) == digest, 'PYTHON_IMAGE_CHANGED')
+    return installed
+
+
+def verify_technical_predecessor(pin):
+    proof=json.loads(pinned(pin).read_bytes())
+    root=Path(proof['root']).resolve()
+    require(root==CONTROL/'work-request12' and proof['status']=='SUPERSEDED_PREPARATION_NO_MODEL_OR_SERVICE_START',
+        'TECHNICAL_PREDECESSOR_SCOPE_CHANGED')
+    for folder,entries in proof['directories'].items():
+        directory=root/folder
+        require(folder in ('public','private','runtime-private') and directory.is_dir()
+            and sorted(p.name for p in directory.iterdir())==sorted(entries),'TECHNICAL_PREDECESSOR_SELECTION_CHANGED')
+        for name,entry in entries.items():
+            target=directory/name
+            require(target.is_file() and not getattr(target.lstat(),'st_file_attributes',0)&0x400
+                and str(target)==entry['path'] and sha(target)==entry['sha256'],'TECHNICAL_PREDECESSOR_CHANGED')
+    checkpoint=json.loads(pinned(proof['controller']).read_bytes())
+    require(checkpoint['requests']=={} and checkpoint['collector']['state']['requests']=={}
+        and checkpoint['policy']['carry_in_tokens']==272648 and checkpoint['policy']['carry_in_admissions']==11
+        and checkpoint['faults']==[],'PREDECESSOR_ALREADY_ADMITTED')
+    for phase,code in (('plan',0),('apply',2)):
+        returned=json.loads((root/'runtime-private'/('upgrade-'+phase+'.returned.json')).read_bytes())
+        require(returned['mode']=='upgrade' and returned['selection']==[phase]
+            and returned['wrapper_exit_confirmed'] is True and returned['returncode']==code,
+            'PREDECESSOR_WRAPPER_UNKNOWN')
+    failure=json.loads((root/'public/environment-upgrade-apply-result.json').read_bytes())
+    require(failure['returncode']==2 and failure['reported_code']=='UPGRADE_ENVIRONMENT_UNAVAILABLE'
+        and failure['service_started'] is False,'ORIGINAL_UPGRADE_FAILURE_CHANGED')
+    return True
+
+def gate(args):
+    global _context
+    require(sha(args.amendment) == args.expected_amendment_sha256, 'AMENDMENT_CHANGED')
+    if _context is not None:
+        require(not (_context.PUBLIC / 'closure.json').exists(), 'ALREADY_CLOSED')
+        return _context
+    amendment = json.loads(Path(args.amendment).read_bytes())
+    require(amendment['format'] == 'okto.m1.v14.work-request12'
+        and Path(amendment['work_root']).resolve() == HERE
+        and Path(amendment['campaign_root']).resolve() == ROOT
+        and Path(amendment['control_root']).resolve() == CONTROL
+        and CONTROL.name == 'successor14' and HERE.name == 'work-request12-package2', 'AMENDMENT_SCOPE_CHANGED')
+    require(amendment['request_ids'] == {'useful': 'm1v14-local-work-12', 'continuation': 'm1v14-local-work-13'}
+        and amendment['future_force_authorized'] is False, 'FINITE_REQUEST_SCOPE_CHANGED')
+    for pin in [*amendment['sources'].values(), *amendment['basis'].values()]: pinned(pin)
+    for key, name in {'context':'request_context.py','entry':'request_entry.py','invoke':'invoke_request.py',
+        'common':'driver_common.py','work':'local_work.py','cohort':'cohort.py','lifecycle':'lifecycle.py',
+        'authorize':'authorize_local.py','close':'close_campaign.py','final_presence':'confirm_final_presence.py'}.items():
+        require(Path(amendment['sources'][key]['path']).resolve() == HERE / name, 'ENTRY_SOURCE_PATH_CHANGED')
+    require({Path(p['path']).resolve() for p in amendment['sources'].values()} >=
+        {p.resolve() for p in (HERE / 'modules').glob('*.py')}, 'UNPINNED_CONTROLLER_SOURCE')
+    original = amendment['original']
+    require(sha(original['proposal']) == original['proposal_sha256']
+        and sha(original['approval']) == original['approval_sha256'], 'ORIGINAL_AUTHORITY_CHANGED')
+    proposal = json.loads(Path(original['proposal']).read_bytes())
+    receipt = json.loads(Path(original['approval']).read_bytes())
+    common = module('driver_common', pinned(amendment['sources']['common']))
+    common.validate_documents(proposal, receipt, original['proposal_sha256'], original['approval_sha256'])
+    for pin in proposal['execution_bundle']['files'].values(): pinned(pin)
+    require(amendment['source_authority'] == {'proposal_sha256': original['proposal_sha256'],
+        'approval_sha256': original['approval_sha256']}, 'AUTHORITY_BINDING_CHANGED')
+    verify_technical_predecessor(amendment['technical_predecessor'])
+    installed = verify_package(amendment)
+    probe = json.loads(pinned(amendment['installed_probe']).read_bytes())
+    require(probe.get('status') == 'CANONICAL_PROBE60_PASS'
+        and probe.get('installation_sha256') == amendment['installation']['sha256']
+        and probe.get('candidate', {}).get('executable') == installed['python']
+        and probe['candidate'].get('environment_prefix') == installed['python_prefix'], 'NEW_PACKAGE_PROBE_REQUIRED')
+    require(sha(proposal['paths']['codex_executable']) == proposal['native_selection']['fingerprint'].split(':', 1)[1], 'NATIVE_PIN_CHANGED')
+    companion = json.loads(pinned(amendment['basis']['companion']).read_bytes())
+    require(companion['status'] == 'CLOSED_AFTER_AUTHORIZED_FORCE_ACCOUNTING_RECONCILED_ACCEPTANCE_NOT_INFERRED'
+        and companion['physical_exit_confirmed'] is True and companion['nexus_task_absent'] is True
+        and companion['canonical_owner_absent'] is True and companion['original_checkpoint_unchanged'] is True
+        and companion['cumulative_minimum_observed_tokens'] == 272648
+        and companion['cumulative_reserved_admissions'] == 11, 'CLOSED_PREDECESSOR_REQUIRED')
+    for pin in companion['files'].values(): pinned(pin)
+    original_context = module('campaign_context', pinned(proposal['execution_bundle']['files']['context']))
+    commands = json.loads(pinned(amendment['commands']).read_bytes())
+    original_commands = json.loads(pinned(proposal['execution_bundle']['commands']).read_bytes())
+    expected_commands = current_commands(original_commands,installed['python'])
+    require(commands == expected_commands and len(commands['steps']) == 4, 'FINITE_COMMANDS_CHANGED')
+    original_args = SimpleNamespace(proposal=original['proposal'], expected_proposal_sha256=original['proposal_sha256'],
+        approval_path=original['approval'], approval_sha256=original['approval_sha256'])
+    base = original_context.Context(original_args, [], proposal, commands, ROOT, HERE / 'modules')
+    context = Context(base, args, amendment, installed)
+    require(not (context.PUBLIC / 'closure.json').exists(), 'ALREADY_CLOSED')
+    common.HERE, common.gate, common.parser = HERE, gate, parser
+    common.owned_path(HERE, CONTROL)
+    for path in (context.PUBLIC,context.PRIVATE,HERE/'runtime-private',HERE/'package'):
+        common.owned_path(path,HERE)
+    context.common = common
+    original_context.load = lambda: context
+    original_context.reserve_json = common.reserve
+    _context = context
+    return context
+
+class Context:
+    def __init__(self, base, args, amendment, installed):
+        self.base, self.args, self.amendment_args = base, base.args, args
+        self.amendment, self.installed = amendment, installed
+        self.P, self.C = deepcopy(base.P), deepcopy(base.C)
+        self.ROOT, self.CONTROL = ROOT, CONTROL
+        self.PUBLIC, self.PRIVATE, self.modules = HERE / 'public', HERE / 'private', HERE / 'modules'
+        self.remaining = []
+        self.P['package_pins'] = {**installed, 'status': 'QUALIFIED_NEW_INSTALLATION'}
+        self.P['request_ids']['work'] = list(amendment['request_ids'].values())
+        self.P['controller_preparation']['policy'] = deepcopy(amendment['policy'])
+        self.P['controller_preparation']['ancestry'] = deepcopy(amendment['controller_ancestry'])
+        self.P['adoption']['predecessor_work_checkpoint_pin'] = deepcopy(amendment['initial_work_checkpoint'])
+        self.P['adoption']['expected_historical_grants'] = deepcopy(amendment['expected_historical_grants'])
+        self.P['adoption']['predecessor_closure_pin'] = deepcopy(amendment['basis']['companion'])
+        self.P['adoption']['predecessor_session_id'] = amendment['predecessor_session_id']
+        for key, pin in amendment['bundle_overrides'].items(): self.P['execution_bundle']['files'][key] = deepcopy(pin)
+
+    def env(self): return self.base.env()
+
+    def require_ready(self):
+        from cohort import recovery_ready
+        return recovery_ready(self)
+
+    def common_args(self):
+        return ['--amendment', self.amendment_args.amendment,
+            '--expected-amendment-sha256', self.amendment_args.expected_amendment_sha256]
+
+    def controller(self, *, create=False):
+        require(not create, 'DERIVED_CONTROLLER_MUST_BE_PREPARED')
+        sys.path.insert(0, str(self.modules))
+        from fresh_work_controller import FreshWorkController
+        return FreshWorkController(self.PRIVATE / 'controller.json', self.ROOT, original_control_root=self.CONTROL,
+            amendment_path=self.amendment_args.amendment, amendment_sha256=self.amendment_args.expected_amendment_sha256,
+            approval_path=self.args.approval_path, approval_sha256=self.args.approval_sha256,
+            expected_proposal_sha256=self.args.expected_proposal_sha256)
+
+    def stop_argv(self, component):
+        require(component == 'nexus', 'LOCAL_ONLY')
+        return python_utf8([self.P['package_pins']['python'], '-I', '-B', str(HERE / 'request_entry.py'),
+            *self.common_args(), 'lifecycle', 'nexus', 'stop'], self.P['package_pins']['python'])
+
+    def validate_fresh_work(self, document, authorization_basis):
+        pin = self.amendment['initial_work_checkpoint']
+        require(sha(self.PRIVATE / 'predecessor-work-checkpoint.json') == pin['sha256'], 'HISTORY_SNAPSHOT_CHANGED')
+        require(sha(pin['path']) == authorization_basis['work_checkpoint_sha256'], 'AUTHORIZED_CHECKPOINT_CHANGED')
+        require(document.get('session_id') == self.amendment['predecessor_session_id']
+            and document.get('work', {}).get('client_intent_id') == 'm1v14-local-work-11', 'FAILED_PREDECESSOR_CHANGED')
+        return True
+
+def prepare(context):
+    require(not context.PUBLIC.exists() and not context.PRIVATE.exists(), 'PREPARATION_ALREADY_SELECTED')
+    basis = context.amendment['basis']
+    initial = pinned(context.amendment['initial_work_checkpoint'])
+    sys.path.insert(0, str(context.modules))
+    from fresh_work_controller import prepare_derived
+    values = [json.loads(pinned(basis[key]).read_bytes()) for key in ('checkpoint', 'companion', 'accounting')]
+    derived = prepare_derived(*values, source_pins=basis)
+    context.PUBLIC.mkdir()
+    context.common.secure_directory(context.PRIVATE, HERE)
+    context.common.private_outputs()
+    adopted = json.loads(pinned(basis['adoption']).read_bytes())
+    context.common.public_save(context, 'adopt-local-result.json', {**adopted,
+        'carried_from': basis['adoption'], 'fresh_adoption_claimed': False})
+    (context.PRIVATE / 'predecessor-work-checkpoint.json').write_bytes(initial.read_bytes())
+    context.common.reserve(context.PRIVATE / 'controller.json', derived)
+    context.common.public_save(context, 'root-driver-preparation.json', {'status': 'FRESH_LOCAL_CONTEXT_PREPARED',
+        'controller_sha256': sha(context.PRIVATE / 'controller.json'), 'carried_adoption_proof': True,
+        'fresh_adoption_claimed': False, 'new_model_reservations': 0, 'provider_accessed': False,
+        'service_action': False, 'initial_cumulative_tokens': 272648, 'initial_cumulative_reservations': 11})
+    return 0

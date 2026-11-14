@@ -1891,3 +1891,34 @@ os hashes exatos e essa distinção estão retidos no review.
 Nenhum aceite M1 ou cenário foi promovido. Contagem preservada:
 **123/132 VERIFIED, 7 IN_PROGRESS e 2 NOT_RUN**.
 Evidência: `plans/agent_ops/evidence/r3-environment-streaming/review.json`.
+
+## 2026-11-14 — SVC-T15: diagnóstico no serviço real; M1 request12 encerrado
+
+**Somente SVC-T15 passa a VERIFIED: 124/132 VERIFIED, 6 IN_PROGRESS e 2 NOT_RUN.**
+O requisito literal usa “credencial só disponível no terminal **ou** cofre bloqueado”.
+A sentinela sintética resolveu no CLI e ficou ausente do contexto do serviço real.
+O setup:test canônico retornou PROVIDER_AUTH_REQUIRED com falha recuperável;
+o owner permaneceu READY. A sentinela prova disponibilidade de referência, não login
+válido. O ramo de cofre bloqueado não foi exercitado nem acrescentado ao requisito.
+O Core registrou open FAILED, possible_effect=false, retry_safe=true e zero turnos.
+Stop normal drenou, três handles retidos confirmaram saída 0, a tarefa ficou inativa
+antes do uninstall e ausente depois; fingerprints dos dados permaneceram iguais.
+Os 33 testes baseline não foram repetidos; o delta de pacote verificou 988 payloads.
+A incerteza OUTCOME_UNKNOWN do POST de verificação de versão após 10s foi preservada;
+somente GETs reconciliaram o resultado, sem segundo POST.
+Evidência: [revisão SVC-T15](plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json).
+
+A execução M1 package2 continua **sem aceite**. O upgrade canônico passou; a primeira
+invocação útil falhou antes do dispatch por POLICY obsoleta da facade. Um overlay
+explícito de uma linha permitiu uma única admissão request12, depois interrompida
+por API_OBSERVATION_UNKNOWN/CAMPAIGN_RUNNER_EXCEPTION. O turno alvo terminou CANCELLED,
+sessão/lease CLOSED e nenhuma pendência nativa; o recibo do comando interrupt permanece
+SUBMITTED, sem alegação de conclusão desse recibo. Parent, launcher e runtime saíram
+normalmente com provas físicas; tarefas ausentes, porta livre e banco preservado.
+A reconciliação somente leitura observou **295.262 tokens e 12 reservas**, incluindo
+22.614 da request12: input 22.402 (cached 6.912 é subconjunto), output 212
+(reasoning 88 é subconjunto), cache-write 0. O checkpoint original 70826… conserva
+falhas e unsettled; o companion separado não o reescreve. Sem refund, request13,
+faturamento final presumido ou promoção de M1; DX40 remoto continua pendente.
+Evidência: [companion normal](plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/closure-companion.json)
+e [contabilidade RO](plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/accounting-reconciliation.json).

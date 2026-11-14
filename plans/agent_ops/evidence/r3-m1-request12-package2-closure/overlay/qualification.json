@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "tests": 1,
+  "original_facade_assertion_reproduced": true,
+  "actual_overlay_policy_import_passed": true,
+  "policy": {
+    "revision": 14,
+    "carry_in_admissions": 11,
+    "carry_in_tokens": 272648,
+    "max_cumulative_admissions": 13,
+    "max_new_admissions": 2,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "work_source_exact_one_line_delta": true,
+  "controller_created": false,
+  "model_calls": 0,
+  "service_actions": 0,
+  "original_module_sha256": "cac213d1a5da5fe3eaf98ccecff5b5b4eb7975255f9df25f45debbfb91d6d6d0",
+  "overlay_sha256": "9b270dd740ceae56103783204642c2fa5fff69cf4464567194e0174b2899a4f1"
+}

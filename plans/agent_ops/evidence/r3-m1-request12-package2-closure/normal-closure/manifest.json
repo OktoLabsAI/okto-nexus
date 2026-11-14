@@ -1,0 +1,87 @@
+{
+  "status": "PREPARED_EXACT_NORMAL_INTERRUPT_ROOT_REVIEW_REQUIRED",
+  "sources": {
+    "helper": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\interrupt.py",
+      "sha256": "234fda4c81188fbfa10fd35bf7e7e3ceae2d1e2ef5079d089ab9ea52dfef22f9"
+    }
+  },
+  "before": {
+    "controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\private\\controller.json",
+      "sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37"
+    },
+    "observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\observation.json",
+      "sha256": "9749dbcf75f5d63ed8386192c15f904fbdaff87ad3f954540b553c7aff411d4e"
+    },
+    "selection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\nexus-owner-selection.json",
+      "sha256": "68499fa430ec1e7ac184246d12b218808e7ef95e79f8945fd748a347bfd7109b"
+    }
+  },
+  "amendment": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\amendment.json",
+    "sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d"
+  },
+  "scope": {
+    "agent_id": "m1v12-local",
+    "authorization_revision": 2,
+    "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+    "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+  },
+  "operation_id": "op_81de2e90997c1689eb0ec2aaff00e5fb",
+  "native_turn_id": "01a1dbee-1b17-7580-bc34-1799c172f508",
+  "owner": {
+    "pid": 5924,
+    "generation": "3f322a5e7874bdca13a6c4d2cd4f6435",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "task": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "state": 4,
+      "digest": "a3908e9f50d5cf0a97b51a8d9645596bf02ea411e2b538828c56bdb31947fd35"
+    },
+    "component": "nexus",
+    "cohort": {
+      "cycle_id": "916461096073cce30d1162d315bf3dc0",
+      "phase": "running",
+      "attempts_started": 1,
+      "child_acknowledged": true,
+      "parent": {
+        "pid": 25360,
+        "birth": 134391640831034171
+      },
+      "launcher": {
+        "pid": 9960,
+        "birth": 134391641007486054
+      },
+      "child": {
+        "pid": 5924,
+        "birth": 134391641008089611
+      }
+    },
+    "selected_at": 1794690573.1376083,
+    "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+    "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+    "campaign_revision": 14,
+    "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+    "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+    "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2",
+    "amendment_sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d"
+  },
+  "control_request_id": "m1v14-package2-cleanup-interrupt12",
+  "model_admissions": 0,
+  "native_approval_decisions": 0,
+  "maximum_resolve_posts": 1,
+  "maximum_admission_posts": 1,
+  "future_force_authorized": false,
+  "scope_limit": "Exact turn.interrupt only; no new turn, approval/deny, sessionclose, restart, token reconciliation or physical exit claim."
+}

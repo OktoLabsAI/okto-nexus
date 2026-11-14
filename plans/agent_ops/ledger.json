@@ -7142,7 +7142,7 @@
     },
     "SVC-T15": {
       "requirement": "Credencial só disponível no terminal ou cofre bloqueado gera diagnóstico no contexto real do serviço.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-readiness.xml",
         "plans/agent_ops/evidence/pr01-start-stop.xml",
@@ -7150,11 +7150,16 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json"
+        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/execution/result.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/execution/cleanup.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/baseline/offline-reviewed.xml"
       ],
-      "remaining": "Observe unavailable terminal-only credential OR locked vault diagnosis in the real service context. The selected terminal-only branch remains unverified after three attempts failed before setup:test; the vault branch is not additionally required.",
-      "remaining_kind": "real_service_credential_context_diagnosis",
-      "result": "Synthetic terminal reference resolved positively and stable service context excluded it. No service-side credential diagnosis or model turn occurred. Three failures and normal cleanup are retained, with final retained physical-exit proof explicitly unavailable. No acceptance promotion."
+      "remaining": "",
+      "remaining_kind": "none",
+      "result": "The synthetic terminal-only reference resolved in the CLI and was absent from the real service context. Canonical setup:test returned PROVIDER_AUTH_REQUIRED with retryable_failure=true; owner remained READY. Core open FAILED with possible_effect=false/retry_safe=true and zero turn actions/receipts. Normal drained stop, all three retained process exits, native inactivity, task removal and unchanged data fingerprints were confirmed. Prior failed attempts remain preserved.",
+      "qualification_limit": "Literal terminal-only OR branch. Synthetic availability reference is not a valid provider login; locked/personal vault was not tested. No model inference. Version-check POST had OUTCOME_UNKNOWN after10s, followed only by canonical GET reconciliation; not reclassified as immediate POST success."
     },
     "SVC-T16": {
       "requirement": "Definições de serviço, argv, logs e saída JSON não expõem segredos nem ampliam bind/permissões.",
@@ -13491,6 +13496,39 @@
         "plans/agent_ops/evidence/r3-environment-streaming/public-allowlist.json",
         "plans/agent_ops/evidence/r3-environment-streaming/installed/probe-projection.json"
       ]
+    },
+    "r3_svc_t15_package2_real": {
+      "status": "VERIFIED_TERMINAL_ONLY_BRANCH",
+      "summary": "Only SVC-T15 promoted on real service context diagnosis; synthetic reference available to CLI but absent to service, PROVIDER_AUTH_REQUIRED, zero model turns and normal full cohort cleanup.124/132 scenarios VERIFIED;6 IN_PROGRESS;2 NOT_RUN.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/execution/result.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/execution/cleanup.json"
+      ],
+      "new_model_admissions_during_curation": 0
+    },
+    "r3_m1_request12_package2_normal_closure": {
+      "status": "FAILED_CAMPAIGN_NORMAL_CLEANUP_NO_M1_ACCEPTANCE",
+      "summary": "Package2 canonical upgrade succeeded. Original useful wrapper failed before dispatch on stale facade POLICY; exact one-line overlay made one request12 admission, then API_OBSERVATION_UNKNOWN/CAMPAIGN_RUNNER_EXCEPTION. One canonical interrupt was admitted; target CANCELLED/session and lease CLOSED/native pending0. Interrupt receipt remains SUBMITTED. All three retained service handles exited normally; tasks absent, port free and database bytes preserved. Post-exit RO accounting295262 observed tokens/12charged reservations; original70826 checkpoint/faults/unsettled preserved. No request13, refund, billing finality or M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/review.json",
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/execution/final-presence.json"
+      ],
+      "new_model_admissions_during_curation": 0,
+      "observed_tokens": 295262,
+      "charged_reservations": 12,
+      "request12_tokens": 22614,
+      "usage_components": {
+        "input": 22402,
+        "cached_input_subset": 6912,
+        "output": 212,
+        "reasoning_output_subset": 88,
+        "cache_write": 0
+      },
+      "original_checkpoint_sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37",
+      "m1_acceptance": false
     }
   },
   "history": [
@@ -14970,6 +15008,29 @@
       "summary": "Preserved W12 upgrade-apply failure before service start or model access. The original snapshot exceeded the canonical 60-second bound; equivalent streaming retained its fingerprint in 1.697 seconds. Nexus 2f626483 and Connector 645d7bd5 each passed 18 source cases. The new isolated package passed the canonical installed probe in 1.812 seconds without service, upgrade or model actions. Carry remains 272648 tokens and 11 reservations; 123 of 132 scenarios remain verified, with no status changes.",
       "evidence": [
         "plans/agent_ops/evidence/r3-environment-streaming/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_svc_t15_package2_real",
+      "status": "VERIFIED_TERMINAL_ONLY_BRANCH",
+      "summary": "Only SVC-T15 promoted on real service context diagnosis; synthetic reference available to CLI but absent to service, PROVIDER_AUTH_REQUIRED, zero model turns and normal full cohort cleanup.124/132 scenarios VERIFIED;6 IN_PROGRESS;2 NOT_RUN.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/execution/result.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/execution/cleanup.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_request12_package2_normal_closure",
+      "status": "FAILED_CAMPAIGN_NORMAL_CLEANUP_NO_M1_ACCEPTANCE",
+      "summary": "Package2 canonical upgrade succeeded. Original useful wrapper failed before dispatch on stale facade POLICY; exact one-line overlay made one request12 admission, then API_OBSERVATION_UNKNOWN/CAMPAIGN_RUNNER_EXCEPTION. One canonical interrupt was admitted; target CANCELLED/session and lease CLOSED/native pending0. Interrupt receipt remains SUBMITTED. All three retained service handles exited normally; tasks absent, port free and database bytes preserved. Post-exit RO accounting295262 observed tokens/12charged reservations; original70826 checkpoint/faults/unsettled preserved. No request13, refund, billing finality or M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/review.json",
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-request12-package2-closure/execution/final-presence.json"
       ]
     }
   ],

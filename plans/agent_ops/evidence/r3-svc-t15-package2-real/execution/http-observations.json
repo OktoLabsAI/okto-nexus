@@ -1,0 +1,293 @@
+[
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.6843802999937907
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/agents/operator/executors?limit=100",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.22212260001106188
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_a5bb092baf15064acced1b0851fd0915",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.24468580004759133
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_a5bb092baf15064acced1b0851fd0915",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.3003265999723226
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.02188749995548278
+  },
+  {
+    "method": "POST",
+    "route": "/api/v1/runtime-management/runtime/executors/exe_a5bb092baf15064acced1b0851fd0915/installations:check",
+    "status": "ERROR",
+    "code": "OUTCOME_UNKNOWN",
+    "stage": "connect",
+    "possible_effect": true,
+    "elapsed_seconds": 10.00806660001399
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.028766399947926402
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.015859600040130317
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_a5bb092baf15064acced1b0851fd0915",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.07631570001831278
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.019903499982319772
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.03329709998797625
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_a5bb092baf15064acced1b0851fd0915",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.08974359999410808
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.012223800003994256
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.013648000021930784
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_a5bb092baf15064acced1b0851fd0915",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.08855310000944883
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.012618300039321184
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/me",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.010994100011885166
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/agents/operator/runtime-options?executor_id=exe_a5bb092baf15064acced1b0851fd0915",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.07230260001961142
+  },
+  {
+    "method": "POST",
+    "route": "/api/v1/runtime-management/connections/setup:test",
+    "status": "RETURNED",
+    "elapsed_seconds": 1.7963907000375912
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.023638500017113984
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.02395190001698211
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.021145000006072223
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.016255299968179315
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.12307689996669069
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.01782060001278296
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.02200769999762997
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.018391799996607006
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.014588200021535158
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.020912399981170893
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.019862800021655858
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.14092779997736216
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.019827199983410537
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.03865669999504462
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.0777273999992758
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.1030330000212416
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.01905070000793785
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.1278681000112556
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.13861199998063967
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.019568699994124472
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.01442050002515316
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.06792020000284538
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.024338599992915988
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.014918600034434348
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.021539999986998737
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.025148299988359213
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.02888100000564009
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.014169599977321923
+  },
+  {
+    "method": "GET",
+    "route": "/api/v1/runtime-management/connections/setup-tests/svc-t15-final-terminal-only-01",
+    "status": "RETURNED",
+    "elapsed_seconds": 0.12110160000156611
+  }
+]

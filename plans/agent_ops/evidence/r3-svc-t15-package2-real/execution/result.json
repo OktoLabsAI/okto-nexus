@@ -1,0 +1,40 @@
+{
+  "status": "SVC_T15_TERMINAL_ONLY_REFERENCE_DIAGNOSED_IN_REAL_SERVICE",
+  "model_turn_limit": 0,
+  "vault_tested": false,
+  "installed": {
+    "wheel_equal_payloads": 988,
+    "services_or_provider_started_by_verification": false
+  },
+  "plan_sha256": "4d4e36781b217a092dddafc61718ef04d887231342f4912f8d6e512324e535d5",
+  "task_name": "OktoNexus-server-8e32ab09b6a17055d65f781f64b7be1b747b29baf83fb5e5efa6ef4cfbf4b6c0",
+  "terminal": {
+    "resolved": true,
+    "reference": "provider:SVC_T15_ONLY_CLI_KEY",
+    "synthetic_not_login": true,
+    "vault_calls": 0,
+    "unicode_roundtrip": "\u2014"
+  },
+  "context_excludes_terminal_reference": true,
+  "service_test": {
+    "test_id": "svc-t15-final-terminal-only-01",
+    "status": "failed",
+    "stage": "Connection test failed",
+    "retryable_failure": true,
+    "error_code": "PROVIDER_AUTH_REQUIRED"
+  },
+  "owner_ready_after_diagnosis": true,
+  "failure": null,
+  "cleanup_confirmed": true,
+  "all_cli_children_exited": true,
+  "journal": {
+    "open_stage": "FAILED",
+    "error_code": "PROVIDER_AUTH_REQUIRED",
+    "possible_effect": false,
+    "retry_safe": true,
+    "turn_actions": 0,
+    "turn_receipts": 0,
+    "read_after_owner_exit": true,
+    "journal_sha256": "d57ad1fa0a7363af2f8d22bd7232df00e55af13e60586b1b3f713fcd6f6d73e7"
+  }
+}

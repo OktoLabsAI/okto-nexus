@@ -1,0 +1,77 @@
+{
+  "status": "OFFLINE_QUALIFIED_NOT_EXECUTED",
+  "tests_passed": 33,
+  "xml": "offline-reviewed.xml",
+  "prior_offline_cases": {
+    "passed": 27,
+    "xml": "offline-final.xml",
+    "overlap": "All prior27 recur in33; six new edge cases, do not add counts."
+  },
+  "coverage": [
+    "Real installed TerminalConnection.options and dashboard runtime-options route with fake IO.",
+    "Pending/stale inventory and transient GET wait only; positive GET errors and all POST uncertainty are not retried.",
+    "start45 then passive180 readiness; positive refusal/identity drift halt, no start replay.",
+    "Runtime pythonw image path/hash bound before cohort/setup.",
+    "Complete retained runtime/launcher/parent exits and nativeinactive required before uninstall.",
+    "CLI still live forbids parallel cleanup; uncaptured cohort/task absent is UNKNOWN, not physical proof.",
+    "Later READY handoff capture is query-only and keeps cleanup/campaign unconfirmed.",
+    "Synthetic reference must diagnose failed PROVIDER_AUTH_REQUIRED; no success inferred."
+  ],
+  "warning": "One existing Starlette TestClient/httpx deprecation warning; no native network/process/service started by fixtures.",
+  "installed_payloads": 988,
+  "installation_sha256": "b065344f13a9491c5ecfd87b551767122cbdf4140e30a5b857310b7136735f2e",
+  "wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": "d67365a6a407b12671412f4501f156cbdb8c5d6d196cf5679352e6c4ffe8dbb0",
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9",
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": "06f711467fa43af5996b5e2bf5e2a01e410a431d9013ccac318200b8902e7275"
+  },
+  "plan_sha256": "28487c117a531945c68f1877925ed1d2a1b417de1ec17629a6d4fd201fef3d0f",
+  "runtime_pins": {
+    "run_case.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\run_case.py",
+      "sha256": "33981427fe0a1ae6ef6020e56a2a20814d2c639e50c7441aa8a625c2ba22ad9f"
+    },
+    "connection_case.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\connection_case.py",
+      "sha256": "7d27306a41cd7db45a41f9c1bde178c3a3f03cbac2ef672bbf1a37f8a72a83ef"
+    },
+    "cohort.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\cohort.py",
+      "sha256": "dc443b67c7e8f9c2672d494e4afb81195d07cb79936986fa381eb7e1875e030e"
+    },
+    "runtime_support.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\runtime_support.py",
+      "sha256": "8f72269ecf94506107987cc12f557f378c482b2ffc3f5b25f01528a7baf102f6"
+    },
+    "installation.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\installation.json",
+      "sha256": "b065344f13a9491c5ecfd87b551767122cbdf4140e30a5b857310b7136735f2e"
+    },
+    "native": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+      "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+    },
+    "nexus_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "d67365a6a407b12671412f4501f156cbdb8c5d6d196cf5679352e6c4ffe8dbb0"
+    },
+    "core_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    },
+    "connector_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "06f711467fa43af5996b5e2bf5e2a01e410a431d9013ccac318200b8902e7275"
+    }
+  },
+  "effects": {
+    "service_calls": 0,
+    "native_tasks": 0,
+    "provider_processes": 0,
+    "credential_resolution_probes": 0,
+    "model_turns": 0
+  },
+  "prior_real_failures": "Three actual failed attempts retained in plans/agent_ops/evidence/r3-svc-t15-terminal-context; none superseded or promoted.",
+  "new_case_runtime_directories_absent": true,
+  "root_execution_review_pending": true
+}

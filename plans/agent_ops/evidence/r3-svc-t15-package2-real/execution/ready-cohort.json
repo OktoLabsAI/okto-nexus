@@ -1,0 +1,43 @@
+{
+  "runtime": {
+    "pid": 47036,
+    "generation": "e13ffe882becfbfe2831ca7ad8799247",
+    "instance_id": "svc_8e32ab09b6a17055d65f781f64b7be1b747b29baf83fb5e5efa6ef4cfbf4b6c0",
+    "birth_filetime": 134391656236127454
+  },
+  "cycle": {
+    "cycle_id": "14e8e705975abca50e641b13e311ce58",
+    "phase": "running",
+    "attempts_started": 1,
+    "last_exit_code": null,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 52600,
+      "birth": 134391655919598841
+    },
+    "launcher": {
+      "pid": 51028,
+      "birth": 134391656234952459
+    },
+    "child": {
+      "pid": 47036,
+      "birth": 134391656236127454
+    },
+    "child_exit_confirmed": false,
+    "launcher_exit_confirmed": false
+  },
+  "native": {
+    "name": "OktoNexus-server-8e32ab09b6a17055d65f781f64b7be1b747b29baf83fb5e5efa6ef4cfbf4b6c0",
+    "digest": "f42b09f9233a0e9ea27286e2b6575b8a490e4279cc0cea5388934d00b767369f",
+    "interval_seconds": 60,
+    "count": 3,
+    "native_restart_on_failure": false,
+    "last_run_time": "2026-11-14 18:33:09+00:00",
+    "cycle_id": "14e8e705975abca50e641b13e311ce58",
+    "parent": {
+      "pid": 52600,
+      "birth": 134391655919598841
+    }
+  },
+  "query_only": true
+}

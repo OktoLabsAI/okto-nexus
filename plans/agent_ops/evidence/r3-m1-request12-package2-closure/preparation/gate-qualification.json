@@ -1,0 +1,21 @@
+{
+  "status": "COMPOSED_GATE_PASS",
+  "amendment_sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\package\\venv",
+  "payloads": 1002,
+  "policy": {
+    "carry_in_admissions": 11,
+    "carry_in_tokens": 272648,
+    "deadline_seconds": 600,
+    "max_cumulative_admissions": 13,
+    "max_new_admissions": 2,
+    "operational_tolerance": 700000,
+    "preventive_cumulative_tokens": 500000,
+    "revision": 14
+  },
+  "runtime_controller_created": false,
+  "service_actions": 0,
+  "provider_calls": 0,
+  "grant_changes": 0
+}

@@ -1,0 +1,14 @@
+{
+  "state": "RETURNED",
+  "component": "nexus",
+  "action": "start",
+  "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "returncode": 3,
+  "reported_state": "degraded",
+  "reported_code": null,
+  "reported_reason": "SERVICE_UNREACHABLE",
+  "wait_timed_out": true,
+  "cleanup_proof_sha256": null,
+  "output_sha256": "7ca04ca61662a3f7f5d26f3f38050b771d65aee473474c6439c0cbe998f73560",
+  "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

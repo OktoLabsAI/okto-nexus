@@ -1,0 +1,102 @@
+{
+  "accounting": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\accounting-reconciliation.json",
+    "sha256": "8e1a72942918eb69fd70a6481e78be14ec17b04172b25e9e499ebc8decbb16bc"
+  },
+  "budgets_unchanged": {
+    "max_cumulative_admissions": 13,
+    "preventive": 500000,
+    "tolerance": 700000
+  },
+  "charged_reservations": 12,
+  "collector_summary_is_observation_not_admission_authority": true,
+  "configuration_fields_reported_only_not_enforcement": true,
+  "interrupt": {
+    "admission": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\execute-result.json",
+      "sha256": "c042db3ebb41398e997f35bd9a2075e260bbf0de7578ee6dee074d061058ce40"
+    },
+    "completion_receipt_confirmed": false,
+    "effect_evidence": "Target turn CANCELLED; native request STALE; session/lease CLOSED; cohort physical exit.",
+    "operation_id": "op_851b83130e83385e1dc2eb47bfe06452",
+    "receipt_revision": 1,
+    "receipt_stage": "SUBMITTED"
+  },
+  "kind": "NORMAL_CLOSURE_COMPANION_WITH_POST_EXIT_ACCOUNTING",
+  "m1_acceptance": false,
+  "new_execution_authorized_by_companion": false,
+  "normal_cleanup": {
+    "all_three_retained_handles_exited": true,
+    "cleanup_proof": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\cleanup-nexus.json",
+      "sha256": "eaf85a58e591a72d81a88548fbffaf43791786c1906fa7156f3c8026585e7473"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\final-presence.json",
+      "sha256": "8e5f17c35870866f8f9d17a4d1220873ca939585bcf13c8cbecf8dc01856acf5"
+    },
+    "force_used": false,
+    "physical_exit": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\nexus-exit-proof.json",
+      "sha256": "72cd59bf7f07acff9bc12c871f5224830a626dc1ad2cb4bcc3e71c39dd54c162"
+    },
+    "port_probe": 58631,
+    "primary_database_preservation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\runtime\\data-preservation.json",
+      "sha256": "c980e585a698e1ce6a8799a0e682562943b44c0769913ad080afa2592b42682e"
+    },
+    "tasks_absent": true,
+    "uninstall": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\lifecycle-nexus-uninstall-result.json",
+      "sha256": "f7ea3e6b2d41168b891064cf65ba0ec334f4b34e0997141898dd216858cedfc9"
+    }
+  },
+  "observed_tokens": 295262,
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\private\\controller.json",
+    "sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37"
+  },
+  "original_checkpoint_untouched": true,
+  "original_close_helper_executed": false,
+  "original_closure_absent": true,
+  "original_failure_reclassified": false,
+  "original_faults": [
+    "API_OBSERVATION_UNKNOWN",
+    "CAMPAIGN_RUNNER_EXCEPTION"
+  ],
+  "original_pre_dispatch_failure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-private\\work-local-useful.returned.json",
+    "sha256": "d21281eba2fe23d3fce181ca8a5459870ba144137db90e797424a1762ebe9998"
+  },
+  "original_request_settled": false,
+  "overlay_actual_failure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\runtime-private\\work-local-useful.returned.json",
+    "sha256": "2e230c73b0bafc74d3610abb94494e8c4c8ec8111a3159dca59d88da7c50895f"
+  },
+  "overlay_manifest": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\manifest.json",
+    "sha256": "caab43c7188bb3768255d47a2e854524501a1c5e029587f8879d145ba6f0c03c"
+  },
+  "package_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-freeze.json",
+    "sha256": "9706592bce4b58cf7b95bcf5fb60e682c28f1542c12b68f731a7e9f501e8e96b"
+  },
+  "provider_billing_finality_claimed": false,
+  "refunds": 0,
+  "remote_dx40": "PENDING",
+  "request12": {
+    "canonical_stage": "CANCELLED",
+    "collector_post_exit_state": "settled_observed",
+    "cursor": 47,
+    "id": "m1v14-local-work-12",
+    "lease_state": "CLOSED",
+    "native_pending_count": 0,
+    "receipt_revision": 2,
+    "session_state": "CLOSED",
+    "useful_result_accepted": false,
+    "watermark": 47
+  },
+  "request13_selected": false,
+  "scope": "Request12 productive attempt, transparent facade overlay, one canonical interrupt, normal service cohort exit and integration removal. No M1 acceptance.",
+  "status": "FAILED_CAMPAIGN_NORMAL_CLEANUP_CONFIRMED"
+}

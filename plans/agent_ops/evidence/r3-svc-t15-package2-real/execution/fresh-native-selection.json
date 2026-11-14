@@ -1,0 +1,14 @@
+{
+  "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+  "inventory_revision": "sha256:47059aba6a9a94bf29cff0d6c26e8176c006e3a9bd4bfc00dc69c85686a2bfb2",
+  "state": "NOT_PROBED",
+  "trust": "selected",
+  "server_binary_fingerprint_observed": false,
+  "binary_evidence_basis": "Approved local binary hash; canonical public path-derived reference only.",
+  "server_id": "srv_a09822491674dacbebb2924b6ce28190",
+  "executor_id": "exe_a5bb092baf15064acced1b0851fd0915",
+  "approved_native_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+  "local_binary_sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+  "get_observations": 2,
+  "no_post_in_readiness_wait": true
+}

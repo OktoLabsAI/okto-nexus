@@ -1,0 +1,18 @@
+{
+  "status": "OFFLINE_QUALIFIED_NOT_EXECUTED",
+  "executable_manifest_exists": true,
+  "package_installed": true,
+  "real_services_started": 0,
+  "models_called": 0,
+  "grants_issued": 0,
+  "source_context_required": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json",
+    "sha256": "ad0351f04b2c6645a0741e348af99dfb9cae899cbe0b210c6b293cb47db6107b"
+  },
+  "old_plan_must_not_be_reused": true,
+  "old_exactplan_sidecar": "INAPPLICABLE_IF_CANDIDATE_CHANGES",
+  "new_plan_requirement": "Canonical upgrade-plan must inspect the new candidate and issue a new plan revision after own package installation.",
+  "canonical_probe60": "PASS",
+  "root_execution_review_required": true,
+  "previous_preparation_status": "WAITING_STREAMING_FIX_COMMITS_AND_WHEELS"
+}

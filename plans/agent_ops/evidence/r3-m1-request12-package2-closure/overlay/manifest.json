@@ -1,0 +1,72 @@
+{
+  "format": "okto.m1.policy_import_overlay.v1",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap",
+  "maximum_useful_reentries": 1,
+  "new_model_ids": [
+    "m1v14-local-work-12",
+    "m1v14-local-work-13"
+  ],
+  "sources": {
+    "entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\entry.py",
+      "sha256": "0a2dfbce4d6ab6ba407291571d0dc0b3fece57bf92f61023127817e0bd0ac282"
+    },
+    "invoke.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\invoke.py",
+      "sha256": "3848b6615b0b32b309e2b875819b42c6856a75e8eae3c7b3c5e4b79471f961c0"
+    },
+    "close_companion.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\close_companion.py",
+      "sha256": "1133a6b7f3e5e5bf3177e0b4189895d8a8225b38f9f769fcfe9f1bebd4780d11"
+    },
+    "work_overlay": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-package2-facade-reentry-0da1ewap\\local_work.py",
+      "sha256": "9b270dd740ceae56103783204642c2fa5fff69cf4464567194e0174b2899a4f1"
+    }
+  },
+  "basis": {
+    "amendment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\amendment.json",
+      "sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d"
+    },
+    "freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-freeze.json",
+      "sha256": "9706592bce4b58cf7b95bcf5fb60e682c28f1542c12b68f731a7e9f501e8e96b"
+    },
+    "original_work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\local_work.py",
+      "sha256": "9de7a1b18dc94ade3c3ca0533af2bf71161d0963c5b694cca3cd987808b0dbd0"
+    },
+    "original_facade": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\controller.py",
+      "sha256": "cac213d1a5da5fe3eaf98ccecff5b5b4eb7975255f9df25f45debbfb91d6d6d0"
+    },
+    "current_legacy": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\modules\\legacy_controller.py",
+      "sha256": "aaaeff73d6d527067d7e861c929a0ca5113691cd29a3a5535c1171d2ab445a10"
+    },
+    "failed_wrapper": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-private\\work-local-useful.returned.json",
+      "sha256": "d21281eba2fe23d3fce181ca8a5459870ba144137db90e797424a1762ebe9998"
+    },
+    "failed_stderr": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-private\\work-local-useful.stderr",
+      "sha256": "0fee34407e4a66b6e7a97a77d2a6b42061da14d5b8e31fc794019da137612838"
+    }
+  },
+  "initial_checkpoint_sha256": "4dc3e380cf29ce62ba951b07c095449145f8a823e2335215dfa019bb623406e4",
+  "delta": "Exactly one import line: from controller import POLICY -> from legacy_controller import POLICY. Entry requires exact amendment policy equality.",
+  "unchanged": [
+    "Context",
+    "controller modules",
+    "private checkpoint",
+    "package wheels",
+    "grant",
+    "service",
+    "original invocation ledger"
+  ],
+  "model_reservation_created_by_preparation": false,
+  "original_failure_reclassified": false,
+  "future_force_authorized": false,
+  "execution_status": "PREPARED_ROOT_REVIEW_REQUIRED"
+}

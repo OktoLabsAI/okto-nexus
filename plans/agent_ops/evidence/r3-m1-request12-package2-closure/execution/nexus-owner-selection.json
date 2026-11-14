@@ -1,0 +1,37 @@
+{
+  "pid": 5924,
+  "generation": "3f322a5e7874bdca13a6c4d2cd4f6435",
+  "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "task": {
+    "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "state": 4,
+    "digest": "a3908e9f50d5cf0a97b51a8d9645596bf02ea411e2b538828c56bdb31947fd35"
+  },
+  "component": "nexus",
+  "cohort": {
+    "cycle_id": "916461096073cce30d1162d315bf3dc0",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 25360,
+      "birth": 134391640831034171
+    },
+    "launcher": {
+      "pid": 9960,
+      "birth": 134391641007486054
+    },
+    "child": {
+      "pid": 5924,
+      "birth": 134391641008089611
+    }
+  },
+  "selected_at": 1794690573.1376083,
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2",
+  "amendment_sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d"
+}

@@ -1,0 +1,73 @@
+{
+  "status": "REPORTED_THREAD_CONFIGURATION_ONLY",
+  "event_scope": {
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+    "session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc"
+  },
+  "sequence": 1,
+  "stream_epoch": "stream_3f0bc8fb93378879b461693bea5ea1bb",
+  "operation_id": null,
+  "category": "lifecycle",
+  "native_type": "core/codex_thread_configuration",
+  "configuration": {
+    "schema_version": 1,
+    "adapter_id": "codex_app_server",
+    "source": "thread/start/response",
+    "thread_id": "01a1dbed-c56a-71c2-8db0-8f53a3b22cc1",
+    "fields": {
+      "approvalPolicy": {
+        "status": "reported",
+        "value": "on-request"
+      },
+      "approvalsReviewer": {
+        "status": "reported",
+        "value": "user"
+      },
+      "cwd": {
+        "status": "reported",
+        "value": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project"
+      },
+      "instructionSources": {
+        "status": "reported",
+        "value": [
+          "C:\\Users\\jpamb\\.codex\\AGENTS.md"
+        ]
+      },
+      "model": {
+        "status": "reported",
+        "value": "gpt-5.6-terra"
+      },
+      "modelProvider": {
+        "status": "reported",
+        "value": "openai"
+      },
+      "sandbox": {
+        "status": "reported",
+        "value": {
+          "type": "readOnly",
+          "networkAccess": false
+        }
+      },
+      "reasoningEffort": {
+        "status": "reported",
+        "value": "medium"
+      }
+    }
+  },
+  "selection": "Earliest exact configuration event for this session; LIMIT1. No transcript or tool command selected.",
+  "enforcement_proven": false,
+  "DX43_acceptance_claimed": false,
+  "referenced_files_opened": false,
+  "credential_files_opened": false,
+  "query_only": true,
+  "database_name": "session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db",
+  "reader_initializations": [
+    {
+      "file_name": "session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db",
+      "elapsed_ms": 17.232099955435842,
+      "budget_ms": 2000.0,
+      "status": "PREPARED"
+    }
+  ]
+}

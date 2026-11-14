@@ -1,0 +1,68 @@
+{
+  "status": "SVC_T15_VERIFIED_TERMINAL_ONLY_BRANCH",
+  "requirement": "Credencial só disponível no terminal ou cofre bloqueado gera diagnóstico no contexto real do serviço.",
+  "literal_branch": "terminal-only credential reference; OR does not additionally require locked vault",
+  "execution_tool": "root5724b8/session87232 exit0",
+  "plan_sha256": "4d4e36781b217a092dddafc61718ef04d887231342f4912f8d6e512324e535d5",
+  "terminal_reference_resolved": true,
+  "synthetic_value_not_valid_provider_login": true,
+  "service_context_excludes_reference": true,
+  "real_service_diagnosis": "PROVIDER_AUTH_REQUIRED",
+  "retryable_failure": true,
+  "owner_ready_after_diagnosis": true,
+  "native_turns": 0,
+  "vault_tested": false,
+  "personal_credentials_accessed": false,
+  "journal_read_properties": "own exact connection-test journal after owner exit; sqlite mode=ro/query_only; metadata and COUNT only",
+  "core_open": {
+    "open_stage": "FAILED",
+    "error_code": "PROVIDER_AUTH_REQUIRED",
+    "possible_effect": false,
+    "retry_safe": true,
+    "turn_actions": 0,
+    "turn_receipts": 0,
+    "read_after_owner_exit": true,
+    "journal_sha256": "d57ad1fa0a7363af2f8d22bd7232df00e55af13e60586b1b3f713fcd6f6d73e7"
+  },
+  "cleanup": {
+    "normal_drained": true,
+    "three_retained_physical_exits": true,
+    "query_sync_only": true,
+    "native_inactive_gate": "Pinned wait_native_inactive requires task.state3 and not active before uninstall; no separate state artifact.",
+    "uninstall_task_absent": true,
+    "retained_fingerprints_equal": true,
+    "force_used": false,
+    "all_cli_children_exited": true
+  },
+  "preserved_transport_uncertainty": [
+    {
+      "method": "POST",
+      "route": "/api/v1/runtime-management/runtime/executors/exe_a5bb092baf15064acced1b0851fd0915/installations:check",
+      "status": "ERROR",
+      "code": "OUTCOME_UNKNOWN",
+      "stage": "connect",
+      "possible_effect": true,
+      "elapsed_seconds": 10.00806660001399
+    }
+  ],
+  "finite_post_counts": {
+    "installations_check": 1,
+    "setup_test": 1,
+    "setup_commit": 0,
+    "model_turn": 0
+  },
+  "baseline_tests": 33,
+  "baseline_rerun": false,
+  "package2_delta": "4 runtime sources byteidentical; own prefix and988newwheel payloads verified",
+  "historical_qualification_not_rewritten": true,
+  "public_execution_files": 17,
+  "all_copy_hashes_verified": true,
+  "secret_scan_matches": [],
+  "acceptance_delta": {
+    "SVC-T15": "VERIFIED",
+    "scenarios": "124/132 VERIFIED;6 IN_PROGRESS;2 NOT_RUN",
+    "other_statuses": "UNCHANGED",
+    "M1": "NO_PROMOTION"
+  },
+  "prior_failed_attempts_preserved": "plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json"
+}

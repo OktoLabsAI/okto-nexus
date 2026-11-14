@@ -1,0 +1,53 @@
+{
+  "status": "OFFLINE_PACKAGE2_DELTA_QUALIFIED_NOT_EXECUTED",
+  "plan_sha256": "4d4e36781b217a092dddafc61718ef04d887231342f4912f8d6e512324e535d5",
+  "source_bytes_unchanged": {
+    "run_case.py": "33981427fe0a1ae6ef6020e56a2a20814d2c639e50c7441aa8a625c2ba22ad9f",
+    "connection_case.py": "7d27306a41cd7db45a41f9c1bde178c3a3f03cbac2ef672bbf1a37f8a72a83ef",
+    "cohort.py": "dc443b67c7e8f9c2672d494e4afb81195d07cb79936986fa381eb7e1875e030e",
+    "runtime_support.py": "8f72269ecf94506107987cc12f557f378c482b2ffc3f5b25f01528a7baf102f6",
+    "prepare_dependencies.py": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359"
+  },
+  "baseline": {
+    "original_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\plan.json",
+      "sha256": "28487c117a531945c68f1877925ed1d2a1b417de1ec17629a6d4fd201fef3d0f"
+    },
+    "original_qualification": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\qualification.json",
+      "sha256": "3dd2552ccfc3995c7c4ceaef9d647dd287b22e68aa88c9d758d01eb75d8fbe43"
+    },
+    "original_33_tests": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-final-ov2tinp_\\offline-reviewed.xml",
+      "sha256": "7239c17683deb4d01e5701a7c4ce6d1e27b639e46f1b5b1738e4826682df9f93",
+      "rerun": false,
+      "basis": "Runner/connection/cohort/support bytes unchanged; package2 source streaming separately qualified."
+    },
+    "original_never_executed": true,
+    "variant_never_executed": true
+  },
+  "installed": {
+    "wheel_equal_payloads": 988,
+    "services_or_provider_started_by_verification": false
+  },
+  "installation_sha256": "8279c9dc581d3d36100867261f16fb7bd7b9145ab5c2f32bc8f489f96881f540",
+  "module_origins": {
+    "okto_nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-package2-6ly1wurp\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+    "okto_nexus_connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-package2-6ly1wurp\\venv\\Lib\\site-packages\\okto_nexus_connector\\__init__.py",
+    "nexus_connector_core": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-package2-6ly1wurp\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py"
+  },
+  "checks": [
+    "988newwheel payload equality",
+    "All3imports under own new prefix",
+    "Concreteargv oldroot->newroot only",
+    "4runtime source files identical",
+    "Original proposal/case untouched and never executed",
+    "New scope/task/instance from new home; port59107 unchanged",
+    "Pinned native path/hash unchanged"
+  ],
+  "source_tests_rerun": false,
+  "product_cli_calls": 0,
+  "service_calls": 0,
+  "provider_calls": 0,
+  "model_turns": 0
+}

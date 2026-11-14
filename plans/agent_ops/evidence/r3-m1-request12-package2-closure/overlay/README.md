@@ -1,0 +1,9 @@
+# One policy-import overlay, same requests12/13
+
+The original useful invocation exited1 at import, before controller construction, dispatch selection or model reservation. The facade's POLICY still carried9/134199/new4 while the current legacy and independent controllers carry11/272648/new2. The original module, failed invocation and empty checkpoint remain untouched and pinned.
+
+Only local_work's import changes: `from controller import POLICY` becomes `from legacy_controller import POLICY`. The entry additionally requires that imported policy equals the original package2 amendment. The actual-import test reproduced the old assertion and passed with the current policy. A read-only gate check validated the real original gate, failed-wrapper exit, exact assertion traceback and empty current checkpoint without consuming a reservation.
+
+The sidecar preserves Context, modules, FreshWorkController, checkpoint, service, package, grant and all original evidence. It reserves its own useful reentry once and records a retained child exit. A second claim cannot execute. Any new request or dispatch evidence before reentry refuses; this is not a replay after an uncertain model effect. Continuation13 requires useful12's successful canonical session and settled correlated result, and has its own once-only reservation. The original policy and accounting limits remain unchanged.
+
+Use the arrays in workflow.json after root review. Productive and native-decision outputs still use the original package2 public/private paths. Watcher, normal stop, cleanup, uninstall and original closure are unchanged. After original closure, the pure closure companion links this separate invocation ledger, the original rc1 and exact copied accounting; it never reclassifies the original invocation as successful. No future force or new service/grant/package is selected.
