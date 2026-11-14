@@ -1,0 +1,151 @@
+{
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\authorize-local-review.json",
+    "sha256": "8d19cf22238eca3a1004e2ab264156ff99125b0d38688c59a9c892f02454ce96"
+  },
+  "status": "EXPIRED_GRANTS_REVIEWED",
+  "review": {
+    "state": "authorization_review",
+    "scope": {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "agent_id": "m1v12-local",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+      "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a"
+    },
+    "current_grants": [
+      {
+        "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T18:42:36.153081Z",
+        "max_executions": 3,
+        "used_executions": 1
+      },
+      {
+        "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T22:10:10.862526Z",
+        "max_executions": 3,
+        "used_executions": 1
+      },
+      {
+        "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T20:08:18.408235Z",
+        "max_executions": 3,
+        "used_executions": 0
+      },
+      {
+        "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T23:27:07.998684Z",
+        "max_executions": 3,
+        "used_executions": 2
+      },
+      {
+        "grant_id": "grant_89bbed009c65458fab96ff9d0a3ffc72",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T16:22:02.541642Z",
+        "max_executions": 20,
+        "used_executions": 0
+      },
+      {
+        "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T17:26:23.088231Z",
+        "max_executions": 20,
+        "used_executions": 1
+      }
+    ],
+    "total_grants": 6,
+    "has_more_grants": false,
+    "can_issue": true,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ],
+    "request": {
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "client_request_id": "authorize_1596ef42b8d042539b8f18a3958c2a43",
+      "expected_revision": "sha256:b7aa780b34203b0e032bbdd7cbfad475fe5cbb1a9bf8e5edc20e153cb15d6c4d",
+      "expires_at": "2026-11-15T00:54:28.827225Z",
+      "max_executions": 3
+    },
+    "effects": [
+      "Issue one new execution grant for this project identity and connection, with the displayed expiry and action budget.",
+      "Eligible authorized Nexus messages may execute within this grant; existing policy and native approvals still apply.",
+      "Keep existing grants, bindings and sessions unchanged. This does not resume work or move an old session to the new grant.",
+      "For an expired or exhausted session, explicitly close it when appropriate and use work send --new-session to start new work."
+    ],
+    "review_revision": "858a7196ce85f05e8fd2edac4a54348e5be729b1198cc54a6f8f97354e454f25"
+  },
+  "observed_at_utc": "2026-11-14T23:54:29.986471+00:00",
+  "expiry_state_source": "CANONICAL_REVIEW",
+  "repeat_review_allowed": false,
+  "model_admissions": 0,
+  "calls": {
+    "review": 1
+  },
+  "recovery_ready": {
+    "generation": 11,
+    "control_state": "CONTROL_READY",
+    "recovery_generation": 11,
+    "recovery_state": "READY"
+  },
+  "work_checkpoint_sha256": "f345eef918afa1bbf6fdc57c46a4e6d494dabf0e58c88a51d5f4d259fb4c9f80",
+  "amendment_sha256": "2ba49c00992fe3dfcc5b286bb3d685c65b6927b5014474a1aacbf792d341d5ed",
+  "scope": "Completed canonical review only; no current grant state or live accounting asserted."
+}

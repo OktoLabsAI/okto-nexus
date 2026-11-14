@@ -1,0 +1,64 @@
+{
+  "status": "ACTUAL_RECOVERY_PREPARE_INSTALL_START_AND_EXACT_GRANT_ISSUANCE_CONFIRMED",
+  "root_execution_refs": {
+    "prepare": "be13d5/session73399 ->4a60ed0",
+    "install": "2888d5/session72166 ->0d8dfb/57212a0",
+    "start": "2266a0/session44249 ->b31b870",
+    "review": "352795/session53834 ->9ddb890",
+    "review_inspection": "1ae66b",
+    "selection": "6ea91a",
+    "apply": "d2eeef/session78339 ->ed7203exit0"
+  },
+  "completed_steps_only": [
+    "prepare",
+    "install",
+    "start",
+    "authorization-review",
+    "exact-review-selection",
+    "authorization-apply"
+  ],
+  "canonical_review": {
+    "six_historical_grants": "expired",
+    "can_issue": true,
+    "generation": 11,
+    "recovery": "READY",
+    "revision": "858a7196ce85f05e8fd2edac4a54348e5be729b1198cc54a6f8f97354e454f25",
+    "sha256": "8d19cf22238eca3a1004e2ab264156ff99125b0d38688c59a9c892f02454ce96"
+  },
+  "grant": {
+    "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+    "expires_at": "2026-11-15T00:54:28.827225Z",
+    "max_executions": 3,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ]
+  },
+  "authorization_calls": {
+    "review": 1,
+    "recover": 1,
+    "issue": 1
+  },
+  "model_admissions_by_retained_steps": 0,
+  "provider_calls_by_retained_steps": 0,
+  "carry_before_productive_work": {
+    "observed_tokens": 460793,
+    "charged_reservations": 14
+  },
+  "current_live_accounting_asserted": false,
+  "work_result_or_current_service_state_asserted": false,
+  "root_owned_live_handles_polled": false,
+  "live_controller_read_or_mutated": false,
+  "original_failure_preserved": true,
+  "old_historical_grants_not_reset": true,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "acceptance_promoted": false,
+  "scope": "Only completed preparation/lifecycle/grant steps retained. Root-owned useful15 and watcher are outside this milestone; no paid result, current tokens, current balance or cleanup inferred."
+}

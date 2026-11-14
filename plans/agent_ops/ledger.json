@@ -13795,6 +13795,25 @@
       "grant_changes": 0,
       "service_actions": 0,
       "acceptance_promoted": false
+    },
+    "r3_m1_revision17_recovery_actual_start_grant": {
+      "status": "ACTUAL_RECOVERY_PREPARE_INSTALL_START_AND_EXACT_GRANT_ISSUANCE_CONFIRMED",
+      "summary": "Recovery prepare/install/start returned0. Canonical review found six historical grants expired, can_issueTrue and generation11/recoveryREADY; exact root-selected review8d19/revision858a admitted one recover and one issue, confirmed new grant5dc474/max3. These completed steps admitted no model. Pre-work carry460793/14 is historical, not current live accounting. Root-owned useful15/watcher unpolled and outside evidence; no work result, current service/balance, cleanup or acceptance inferred.124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/receipts/lifecycle-nexus-start-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/authorization-review-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/selection/authorize-local-reviewed.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/authorization-apply-projection.json"
+      ],
+      "carry_before_productive_work": {
+        "observed_tokens": 460793,
+        "charged_reservations": 14
+      },
+      "current_live_accounting_asserted": false,
+      "model_admissions_by_retained_steps": 0,
+      "grant_issuances_by_retained_steps": 1,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15443,6 +15462,19 @@
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/closed-preflight.json",
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/runtime-freeze.json",
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/workflow.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision17_recovery_actual_start_grant",
+      "status": "ACTUAL_RECOVERY_PREPARE_INSTALL_START_AND_EXACT_GRANT_ISSUANCE_CONFIRMED",
+      "summary": "Recovery prepare/install/start returned0. Canonical review found six historical grants expired, can_issueTrue and generation11/recoveryREADY; exact root-selected review8d19/revision858a admitted one recover and one issue, confirmed new grant5dc474/max3. These completed steps admitted no model. Pre-work carry460793/14 is historical, not current live accounting. Root-owned useful15/watcher unpolled and outside evidence; no work result, current service/balance, cleanup or acceptance inferred.124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/receipts/lifecycle-nexus-start-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/authorization-review-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/selection/authorize-local-reviewed.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/authorization-apply-projection.json"
       ]
     }
   ],

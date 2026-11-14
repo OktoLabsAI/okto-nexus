@@ -1,0 +1,37 @@
+{
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\authorize-local-apply.json",
+    "sha256": "fad6c60487fa6ad6e7671f645216783da8d82f5a26540030ab1bab89ca6f3dab"
+  },
+  "status": "EXPIRED_GRANT_REPLACEMENT_CONFIRMED",
+  "client_request_id": "authorize_1596ef42b8d042539b8f18a3958c2a43",
+  "request_hash": "sha256:593b2110f260dba28082b0a044a5168a2f216368d87549e3078163ab5f55f22b",
+  "grant": {
+    "grant_id": "grant_5dc474da4bfb4e4288b8ecd82884409b",
+    "expires_at": "2026-11-15T00:54:28.827225Z",
+    "max_executions": 3,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ]
+  },
+  "review_revision": "858a7196ce85f05e8fd2edac4a54348e5be729b1198cc54a6f8f97354e454f25",
+  "review_sha256": "8d19cf22238eca3a1004e2ab264156ff99125b0d38688c59a9c892f02454ce96",
+  "model_admissions": 0,
+  "calls": {
+    "recover": 1,
+    "issue": 1
+  },
+  "recovery_ready": {
+    "generation": 11,
+    "control_state": "CONTROL_READY",
+    "recovery_generation": 11,
+    "recovery_state": "READY"
+  },
+  "work_checkpoint_sha256": "2f3906605b21ff6cad6dd7439b037a5dd96cc53b57e8a70cc53f3727c3075323",
+  "amendment_sha256": "2ba49c00992fe3dfcc5b286bb3d685c65b6927b5014474a1aacbf792d341d5ed",
+  "scope": "Completed exact selected issuance only; subsequent grant consumption and productive work not observed by this curation."
+}

@@ -2158,3 +2158,18 @@ reutilizadas, sem repetir suítes/build/pip. Root revisou o candidato congelado.
 Nenhum serviço, grant ou modelo nesta preparação. **124/132 VERIFIED**,6 IN_PROGRESS
 e2 NOT_RUN, sem promoção de aceite.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/review.json).
+
+## 2026-11-14 — Recuperação17: início e emissão canônica confirmados
+
+Prepare/install/start retornaram0. A revisão canônica confirmou seis grants
+históricos expirados, can_issue=true e generation11/recoveryREADY. Seleção root
+exata vinculou review8d19cf…/revisão858a719…; um recover e um issue confirmaram
+grant5dc474… com três ações, sem reset/revogação do histórico.
+
+Essas etapas concluídas não admitiram modelo nem chamaram provedor. Carry460793/14
+é o valor **anterior ao trabalho produtivo**, não contabilidade atual afirmada.
+Útil15 e watcher permanecem sob execução root e fora desta curadoria; nenhum handle
+foi consultado nem livecontroller lido/alterado. Não se infere resultado, saldo atual,
+estado atual do serviço ou cleanup. **124/132 VERIFIED**,6 IN_PROGRESS e2 NOT_RUN,
+sem promoção de aceite. Falha W17 anterior permanece preservada.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/review.json).

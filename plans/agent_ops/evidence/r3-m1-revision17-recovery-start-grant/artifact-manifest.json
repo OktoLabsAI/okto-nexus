@@ -1,0 +1,73 @@
+{
+  "files": {
+    "receipts/root-driver-preparation.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\root-driver-preparation.json",
+        "sha256": "4c6546a266121153b1bdabc5655211d0718735ae69e2294fddb9566f457683e1"
+      },
+      "sha256": "4c6546a266121153b1bdabc5655211d0718735ae69e2294fddb9566f457683e1"
+    },
+    "receipts/lifecycle-nexus-install-result.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\lifecycle-nexus-install-result.json",
+        "sha256": "dbcef65ddfcd85cdf05e36d511057d6757725f9aad7df3bb41909473b8196be3"
+      },
+      "sha256": "dbcef65ddfcd85cdf05e36d511057d6757725f9aad7df3bb41909473b8196be3"
+    },
+    "receipts/lifecycle-nexus-start-result.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\lifecycle-nexus-start-result.json",
+        "sha256": "c4f006a4ef1e081e231361a551ff0edb78441a130ba0563efe9c7bb06c31224c"
+      },
+      "sha256": "c4f006a4ef1e081e231361a551ff0edb78441a130ba0563efe9c7bb06c31224c"
+    },
+    "wrapper-returns/lifecycle-nexus-install.returned.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\lifecycle-nexus-install.returned.json",
+        "sha256": "61d8431ee45ae39aef07c2ff08b4bcf302ac3c281477a8b227f83871625c3968"
+      },
+      "sha256": "61d8431ee45ae39aef07c2ff08b4bcf302ac3c281477a8b227f83871625c3968"
+    },
+    "wrapper-returns/lifecycle-nexus-start.returned.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\lifecycle-nexus-start.returned.json",
+        "sha256": "f907b7f81bb41baa55d51219f31efaaa00b2a53674f54496ed5be2a6d267ae9f"
+      },
+      "sha256": "f907b7f81bb41baa55d51219f31efaaa00b2a53674f54496ed5be2a6d267ae9f"
+    },
+    "wrapper-returns/authorize_local-review.returned.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\authorize_local-review.returned.json",
+        "sha256": "71a8348a46ff2e6ac81a200f4252458ca7ce1f1903b6861f203677fd42ee0e12"
+      },
+      "sha256": "71a8348a46ff2e6ac81a200f4252458ca7ce1f1903b6861f203677fd42ee0e12"
+    },
+    "wrapper-returns/authorize_local-apply.returned.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-private\\authorize_local-apply.returned.json",
+        "sha256": "f4b08fd6d987000028743209d1ed7c95c0e1eaa58fe005a29d26ac56ec76ae5f"
+      },
+      "sha256": "f4b08fd6d987000028743209d1ed7c95c0e1eaa58fe005a29d26ac56ec76ae5f"
+    },
+    "selection/authorize-local-reviewed.json": {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\private\\authorize-local-reviewed.json",
+        "sha256": "6a8ebc2b4e0e20de98c4b7538f3ea100bbb641f231b889987d8a9084e61cca22"
+      },
+      "sha256": "6a8ebc2b4e0e20de98c4b7538f3ea100bbb641f231b889987d8a9084e61cca22"
+    },
+    "authorization-review-projection.json": {
+      "sha256": "b08c31f6e148aeaf150a3265d79047474d68f5b9a6d6c175b6eb43a1fef97b25",
+      "source": "Allowlisted projection of completed public receipt"
+    },
+    "authorization-apply-projection.json": {
+      "sha256": "f1dfebd36a70e4d543f288bc2d12cc55c7e665da5affda53ad9a2f805a81789c",
+      "source": "Allowlisted projection of completed public receipt"
+    },
+    "review.json": {
+      "sha256": "caf17743b0d5efbc0a32f2349ac6e334d7e453920534bb9f3b42aac059f61889",
+      "source": "Curated bounded metadata/root execution references"
+    }
+  },
+  "private_scope": "Only exact technical issue selection and returned wrapper metadata; no controller/rawstdout/auth/transcripts."
+}
