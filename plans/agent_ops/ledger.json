@@ -13064,6 +13064,81 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-supervisor-last-attempt-diagnostic/review.md"
       ]
+    },
+    "r3_m1_v14_resume": {
+      "date": "2026-11-14",
+      "status": "V14_RESUME_CANCELLED_RECONCILED_CLOSED_NO_M1_ACCEPTANCE",
+      "amendment_sha256": "ff997af68740f1a8348f3800caf7b0e3fd727f2ffb7076520995020a95c651c3",
+      "closure_companion_sha256": "9ab292850914b45c2495a4b9d7f4291ec715b7b3707b5cfe13c59a9160e0b020",
+      "original_closure_sha256": "fad57036638d0e874bbc2ac7222997483b036b389c2d6c6245c7abb9a5d1de23",
+      "original_checkpoint_sha256": "941420d2130cdda4d6ca96e2e855675c53fbe527a6f1b51c41302b940b4b8e0a",
+      "reconciled_checkpoint_sha256": "8bcf5b9bf1b08e9ba26764990479309d9c54bae2abfc1038e9da822b892375a2",
+      "accounting_reconciliation_sha256": "14f46a9e7ab3b4cb2fe4968649e4570e32ae8f61faf29bf008f4d26d3a632ee5",
+      "new_observed_tokens": 138449,
+      "cumulative_minimum_observed_tokens": 272648,
+      "cumulative_reservations": 10,
+      "new_reservations_for_resumption": 0,
+      "original_unsettled_requests": 1,
+      "reconciled_unsettled_requests": 0,
+      "billing_final": false,
+      "faults_preserved": [
+        "OBSERVATION_UNKNOWN",
+        "WORK_TERMINAL_FAILED"
+      ],
+      "usage_breakdown": {
+        "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-monitor-calibration-tnqnqhwd\\measurement.json",
+        "source_sha256": "9d1f6e20b9f6b0a80e302292ec89c44d81f21e8fc991625d94cd450aa012eedf",
+        "derivation": "Public metadata projected from the unique thread components in reconciled checkpoint8bcf5b9; no transcript or credential access.",
+        "components": {
+          "cacheWriteInputTokens": 0,
+          "cachedInputTokens": 118272,
+          "inputTokens": 137009,
+          "outputTokens": 1440,
+          "reasoningOutputTokens": 794,
+          "totalTokens": 138449
+        },
+        "uncached_input_tokens": 18737,
+        "subset_semantics": "cachedInputTokens is a subset of inputTokens; reasoningOutputTokens is a subset of outputTokens. Total=137009+1440=138449; do not sum subsets again.",
+        "billing_final": false
+      },
+      "preparation_qualification": {
+        "controller_focals": 6,
+        "entrypoint_focals": 19,
+        "installed_terminal_focals": 3,
+        "limit": "Offline targeted qualification; antecedents retained. Not evidence of successful real M1."
+      },
+      "work": {
+        "wrapper_exit": 0,
+        "productive_posts": 1,
+        "total_posts": 2,
+        "decision_posts": 0,
+        "useful_result_confirmed": false,
+        "report_exists": false,
+        "continuation_executed": false,
+        "first_observation_error": {
+          "exception_type": "JournalUnknown",
+          "reader": {
+            "phase": "snapshot_read",
+            "budget_ms": 250.0,
+            "elapsed_ms": 317.88510002661496
+          },
+          "reason": "READ_BUDGET_EXCEEDED"
+        },
+        "maximum_poll_start_interval_seconds": 0.5586385999922641
+      },
+      "result": "Same proved never-dispatched request01 reused reservation10, then reached native admission. Live SQL snapshot317.885ms exceeded250ms and selected OBSERVATION_UNKNOWN. Operational cadence5s was not exceeded. Exact canonical interrupt plus normal stop/physical exit/uninstall contained the turn; post-exit journals prove CANCELLED and session/lease CLOSED.",
+      "accounting": "Original closure/checkpoint remain134199/unsettled1. Separate sealed derived checkpoint/companion reconcile272648 (+138449) with10reservations and0unsettled; no refund/reset or final-billing claim.",
+      "configuration": "Native thread/start reported configuration fields only; no enforcement, instruction contents or complete tool inventory inference.",
+      "normal_physical_cleanup": true,
+      "force_used": false,
+      "claude_used": false,
+      "acceptance_promoted": false,
+      "further_execution": "No further effect follows from this evidence; offline monitor validation precedes any new execution decision.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v14-resume/review.json",
+        "plans/agent_ops/evidence/r3-m1-v14-resume/containment/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-v14-resume/containment/accounting-reconciliation.json"
+      ]
     }
   },
   "history": [
@@ -14440,6 +14515,15 @@
       "summary": "Same reviewed setup applied once after retained harness encoding/absent-pid corrections. Real auth absence, concrete CLI guidance, query-ready daemon, normal physical cleanup and zero turns proved. Only DX-T34 promoted.",
       "evidence": [
         "plans/agent_ops/evidence/r3-dx-t34-native-execution/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "V14 same-reservation resumption cancelled and reconciled after SQL reader deadline",
+      "status": "V14_RESUME_CANCELLED_RECONCILED_CLOSED_NO_M1_ACCEPTANCE",
+      "summary": "Reservation10 reused after NEVER_DISPATCHED proof; native admission occurred, then snapshot317.885ms>250ms selected OBSERVATION_UNKNOWN. Normal containment and read-only journals prove CANCELLED/CLOSED.272648 cumulative observed tokens (+138449),10reservations, derivedsettled; original134199/unsettled1 untouched. Config reported only.122/132 scenarios unchanged; no M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v14-resume/review.json"
       ]
     }
   ]

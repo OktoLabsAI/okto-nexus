@@ -1620,3 +1620,40 @@ force. O recibo open mantém possible_effect=true/retry_safe=false.
 Somente DX-T34 passa a VERIFIED: 122 de 132 cenários. SVC-T15 (credencial apenas
 no terminal/cofre bloqueado), trabalho pago e demais aceites M1 não são inferidos.
 Evidência: `plans/agent_ops/evidence/r3-dx-t34-native-execution/review.json`.
+
+## 2026-11-14 — retomada v14: admissão nativa, cancelamento e contabilidade reconciliada
+
+A prova de ausência de transmissão permitiu retomar exatamente request01 e sua
+reserva 10, sem novo setup, restituição ou reset. O amendment local preservou a
+autoridade v14 e os originais, usando checkpoint derivado. A preparação teve
+6 casos focais do controller, 19 dos entrypoints e três do TerminalWork instalado;
+antecedentes de fixture e as rodadas anteriores ficam retidos.
+
+O pedido chegou à admissão nativa (dois POSTs, um produtivo), mas a leitura do
+snapshot levou 317,885 ms e ultrapassou o limite SQL de 250 ms. O monitor selecionou
+OBSERVATION_UNKNOWN. A cadência máxima de 558,639 ms ficou abaixo do limite
+operacional de 5 s; esta falha não decorreu desse limite. O wrapper saiu com zero,
+mas não houve report.json, decisão nativa ou resultado útil confirmado.
+
+A parada interna retornou CLI 3 antes da contenção. Uma interrupção canônica
+exata foi admitida; isso não foi tratado como assentamento. Outra seleção normal
+de stop retornou zero, o handle confirmou a saída do mesmo PID/birth/generation,
+uninstall concluiu e as duas tarefas ficaram ausentes. Nenhum force foi usado.
+Os journals lidos após a saída confirmaram turn CANCELLED e sessão/lease CLOSED.
+
+O checkpoint e a closure originais permanecem em 134.199 tokens e uma solicitação
+pendente. O derivado selado e o companion separado registram 272.648 tokens
+observados cumulativos, dez reservas e nenhuma solicitação pendente. O acréscimo
+de 138.449 é composto por 137.009 tokens de entrada e 1.440 de saída. Os 118.272
+tokens de entrada em cache já integram a entrada; os 794 de reasoning já integram
+a saída. Não se somam esses subconjuntos novamente, nem se infere cobrança final.
+
+Os campos da configuração nativa foram reportados em thread/start; isso não
+comprova enforcement, conteúdo das instruções ou inventário completo de ferramentas.
+Não há aceite M1, continuação ou rota remota. Permanecem 122 de 132 cenários
+verificados; tasks, invariantes, critérios e milestones não mudam. Nenhuma nova
+execução decorre desta reconciliação: o monitor exige validação offline antes
+de outra decisão de execução. Claude não foi usado.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v14-resume/review.json` e
+`plans/agent_ops/evidence/r3-m1-v14-resume/containment/closure-companion.json`.

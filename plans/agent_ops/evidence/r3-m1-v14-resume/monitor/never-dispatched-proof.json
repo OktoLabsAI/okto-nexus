@@ -1,0 +1,47 @@
+{
+  "classification": "NEVER_DISPATCHED",
+  "request_id": "m1v14-local-work-01",
+  "cumulative_reserved_admissions": 10,
+  "observed_tokens": 134199,
+  "reserved_request_reused": true,
+  "refund": false,
+  "source_pins": {
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\private\\controller.json",
+      "sha256": "f4aeeda654c3de7de28cc72498d57f312819f4f77726c879a51710f691220868",
+      "bytes": 6875
+    },
+    "result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\m1v14-local-work-01-result.json",
+      "sha256": "7b78512ee2e283d60ebaecb4f581531a557f78f282f2d801af245017210a3a95",
+      "bytes": 7723
+    },
+    "closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\closure.json",
+      "sha256": "2283c89678697b1916a48a1b3573db9fe6ed30a4be6572d3fa06e7a3da6a7177",
+      "bytes": 3694
+    },
+    "returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\work-local-useful.returned.json",
+      "sha256": "1e42d68c159b9206caa80b23a6e2d39b0d33498315bf83d557aabc1863c61e7c",
+      "bytes": 721
+    }
+  },
+  "absence": {
+    "request_id": "m1v14-local-work-01",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "actor_agent_id": "operator",
+    "canonical_intent_count": 0
+  },
+  "query_only": true,
+  "database_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db",
+  "observed_at_utc": "2026-11-14T17:58:32.656332+00:00",
+  "source_wrapper_exit_confirmed": true,
+  "controller_checkpoint_mutated": false,
+  "status": "PRE_EFFECT_RECONCILED_NOT_WORK_ACCEPTANCE",
+  "original_faults_preserved": [
+    "MONITOR_CADENCE_EXCEEDED",
+    "OBSERVATION_STALE",
+    "WORK_RESPONSE_UNKNOWN"
+  ]
+}

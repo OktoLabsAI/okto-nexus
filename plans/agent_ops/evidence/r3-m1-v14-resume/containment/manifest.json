@@ -1,0 +1,31 @@
+{
+  "format": 1,
+  "helper_sha256": "5a87bf745e5285885cf1dd1dc1320b1359e7ae677cd1160028ce57f9561eb3f9",
+  "context": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\resume_context.py",
+    "sha256": "4e2ee0e36b649f798df60d2797917cd38e20606e819368d3b89afa4901673819"
+  },
+  "observer": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\m1_v14_observation.py",
+    "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10"
+  },
+  "authority": {
+    "amendment": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\amendment.json",
+    "expected_amendment_sha256": "ff997af68740f1a8348f3800caf7b0e3fd727f2ffb7076520995020a95c651c3"
+  },
+  "before_pins": {
+    "owner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\public\\nexus-owner-selection.json",
+      "sha256": "d675523b83e55ad4bb6e9a483833048a3898053b0f0613b751498cc2014255b7"
+    },
+    "historical_controller_snapshot": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\controller-before-snapshot.json",
+      "sha256": "941420d2130cdda4d6ca96e2e855675c53fbe527a6f1b51c41302b940b4b8e0a"
+    },
+    "native_turn_projection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\native-turn-observed.json",
+      "sha256": "13f8dc744cbef114fa756433c77fcb5d4dad9e3edd02d8dcfec303f8e60d2817"
+    }
+  },
+  "scope": "Exactly one canonical turn.interrupt resolve/admit for current owned native turn. No retry POST, provider turn, native approval, force or accounting mutation."
+}

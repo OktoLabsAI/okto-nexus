@@ -1,0 +1,413 @@
+{
+  "request_id": "m1v14-local-work-01",
+  "started": 1794679935.582826,
+  "finished": 1794680038.3777616,
+  "started_monotonic_ns": 308431541505100,
+  "finished_monotonic_ns": 308534336439900,
+  "summary": {
+    "known_observed_tokens": 134199,
+    "new_observed_tokens": 0,
+    "carry_in_tokens": 134199,
+    "reserved_requests": 10,
+    "new_reserved_requests": 1,
+    "policy": {
+      "revision": 14,
+      "carry_in_admissions": 9,
+      "carry_in_tokens": 134199,
+      "max_cumulative_admissions": 13,
+      "max_new_admissions": 4,
+      "preventive_cumulative_tokens": 500000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 600
+    },
+    "ancestry": {
+      "closure_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+      "checkpoint_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+      "closure_companion_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+      "original_checkpoint_sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c",
+      "predecessor_faults": [
+        "DEADLINE120",
+        "WORK_TERMINAL_FAILED"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+        "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+        "predecessor_faults": [
+          "DEADLINE120"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+          "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+          "predecessor_faults": [
+            "OBSERVATION_UNKNOWN",
+            "DEADLINE120"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+            "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+            "predecessor_faults": [
+              "CAMPAIGN_RUNNER_EXCEPTION"
+            ],
+            "prior_ancestry": {
+              "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+              "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+              "predecessor_faults": [
+                "OBSERVATION_UNKNOWN",
+                "STOP_UNCONFIRMED",
+                "CAMPAIGN_RUNNER_EXCEPTION"
+              ],
+              "prior_ancestry": {
+                "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+                "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+                "predecessor_faults": [
+                  "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+                ],
+                "prior_ancestry": {
+                  "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+                  "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+                  "predecessor_faults": [
+                    "CAMPAIGN_RUNNER_EXCEPTION"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "current": [
+      "m1v14-local-work-01"
+    ],
+    "can_admit": false,
+    "reasons": [
+      "OBSERVATION_UNKNOWN",
+      "SERIAL_REQUEST_UNSETTLED",
+      "TURN_TERMINAL_MISSING"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "useful_result_confirmed": false,
+  "useful_confirmed_monotonic_ns": null,
+  "record": {
+    "actor_agent_id": "operator",
+    "api_returned": true,
+    "kind": "work",
+    "lane": "local",
+    "operation": "op_89eeef12d823de4f2e9a83e87aad76fe",
+    "recover": false,
+    "scope": {
+      "agent_id": "m1v12-local",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "session": "ses_602ee3dfeb78deb2668e35c4461effb3",
+    "settled": false,
+    "stage": "useful_work",
+    "started": 1794678256.5125208,
+    "started_monotonic": 306752.4712073,
+    "stop_selected": {
+      "reason": "OBSERVATION_UNKNOWN",
+      "action": "stop_owner"
+    },
+    "stream": "[\"srv_a3f134b449dbffa20c126dae6f9a8aa9\",\"exe_429348b4147e50ab63d19caa4cd2255c\",\"ses_602ee3dfeb78deb2668e35c4461effb3\",\"stream_78c2d182ec9c3424fb63204dd61430ca\"]",
+    "resume_selected": true,
+    "resume_wait_started_monotonic": 308431.505527,
+    "execution_started_monotonic": 308436.7881314,
+    "first_observation_error": {
+      "exception_type": "JournalUnknown",
+      "reader": {
+        "phase": "snapshot_read",
+        "budget_ms": 250.0,
+        "elapsed_ms": 317.88510002661496
+      },
+      "reason": "READ_BUDGET_EXCEEDED"
+    }
+  },
+  "report": {
+    "exists": false
+  },
+  "submission_error": null,
+  "maximum_poll_start_interval_seconds": 0.5586385999922641,
+  "outer_loop_interval_seconds": 3.585271499992814,
+  "calls": {
+    "GET": 202,
+    "POST": 2,
+    "productive_posts": 1,
+    "decision_posts": 0
+  },
+  "independent_observation": {
+    "maximum_poll_start_interval_seconds": 0.5586385999922641,
+    "transport_failures": {
+      "primary": {
+        "exception_type": "ConnectionError",
+        "method": "GET",
+        "route": "/api/v1/runtime-management/runtime/intents/:id",
+        "code": "NOT_FOUND",
+        "stage": "OTHER",
+        "possible_effect": false
+      },
+      "later": [],
+      "discarded": 0
+    },
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "reader_initialization": {
+      "local": {
+        "canonical": {
+          "closed": false,
+          "failed": false,
+          "open_connections": 1,
+          "close_error_types": [],
+          "schema_changes": [],
+          "read_budget_ms": 250.0,
+          "initialization_budget_ms": 250.0,
+          "initializations": [
+            {
+              "file_name": "nexus.db",
+              "elapsed_ms": 173.91059995861724,
+              "budget_ms": 250.0,
+              "status": "PREPARED"
+            }
+          ]
+        },
+        "core": {
+          "closed": false,
+          "failed": true,
+          "open_connections": 0,
+          "close_error_types": [],
+          "schema_changes": [
+            {
+              "file_name": "session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db",
+              "previous": 20,
+              "current": 21
+            }
+          ],
+          "read_budget_ms": 250.0,
+          "initialization_budget_ms": 250.0,
+          "initializations": [
+            {
+              "file_name": "session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db",
+              "elapsed_ms": 50.59859994798899,
+              "budget_ms": 250.0,
+              "status": "PREPARED"
+            }
+          ]
+        }
+      }
+    },
+    "worker_in_flight": false,
+    "budgets": {
+      "initialization_ms": 250,
+      "snapshot_ms": 250,
+      "poll_ms": 600,
+      "freshness_ms": 1000,
+      "cadence_limit_ms": 5000,
+      "target_poll_start_ms": 200,
+      "maximum_previous_poll_ms": 554.0245000156574
+    }
+  },
+  "preopen_failure": null,
+  "publication_diagnostics": {
+    "attempts": 494,
+    "published_snapshots": 494
+  },
+  "pending_publication_diagnostics": {},
+  "codex_thread_configuration": [
+    {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+      "stream_epoch": "stream_78c2d182ec9c3424fb63204dd61430ca",
+      "sequence": 1,
+      "category": "lifecycle",
+      "native_type": "core/codex_thread_configuration",
+      "operation_id": null,
+      "observation": {
+        "schema_version": 1,
+        "adapter_id": "codex_app_server",
+        "source": "thread/start/response",
+        "thread_id": "01a1db43-8b40-7623-ac1d-67ae9742a563",
+        "fields": {
+          "approvalPolicy": {
+            "status": "reported",
+            "value": "on-request"
+          },
+          "approvalsReviewer": {
+            "status": "reported",
+            "value": "user"
+          },
+          "cwd": {
+            "status": "reported",
+            "value": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project"
+          },
+          "instructionSources": {
+            "status": "reported",
+            "value": [
+              "C:\\Users\\jpamb\\.codex\\AGENTS.md"
+            ]
+          },
+          "model": {
+            "status": "reported",
+            "value": "gpt-5.6-terra"
+          },
+          "modelProvider": {
+            "status": "reported",
+            "value": "openai"
+          },
+          "sandbox": {
+            "status": "reported",
+            "value": {
+              "networkAccess": false,
+              "type": "readOnly"
+            }
+          },
+          "reasoningEffort": {
+            "status": "reported",
+            "value": "medium"
+          }
+        }
+      }
+    }
+  ],
+  "configuration_observation_limit": "Canonical Core metadata only: missing/invalid stays unknown; instructionSources are references, not file contents or enforcement proof; no complete tool inventory is inferred.",
+  "decision_count": 0,
+  "recovered_decisions": {},
+  "response_loss": {
+    "admissions": [
+      {
+        "lane": "local",
+        "target": "m1v14-local-work-01",
+        "operation_id": "op_445324998d692973c2980bdef525ee94",
+        "phase": "confirmed"
+      }
+    ],
+    "blocked": false,
+    "campaign_id": "m1-v14",
+    "decisions": [],
+    "faults": {},
+    "format": 1
+  },
+  "canonical_receipt": null,
+  "cli_execution": {
+    "local": {
+      "command_count": 15,
+      "recent": [
+        {
+          "action": "send",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        },
+        {
+          "action": "status",
+          "exit_code": 0,
+          "handler_entered": true,
+          "error_type": null,
+          "possible_effect": false
+        }
+      ],
+      "entrypoint": "INSTALLED_RUN_WORK_PARSER_AND_HANDLERS",
+      "stdout": "OUTER_RUNNER_PRIVATE_CAPTURE",
+      "console_subprocess_proven": false
+    }
+  },
+  "stop_wrapper_exits": [
+    3
+  ],
+  "native_policy_fields": "Only fields actually reported in canonical evidence are attributable; unknown inherited settings remain unknown."
+}

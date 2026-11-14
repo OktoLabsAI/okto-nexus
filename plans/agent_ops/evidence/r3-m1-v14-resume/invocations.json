@@ -1,0 +1,284 @@
+{
+  "scope": "Allowlisted wrapper metadata only",
+  "entries": [
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-install.reserved.json",
+        "sha256": "9032bb56be0c7f63c53666b990cc22b01ebd617e33dd61acf6fe051b86186e9c"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "install"
+        ],
+        "state": "DISPATCH_RESERVED",
+        "selected_at": 1794679815.234728
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-install.process.json",
+        "sha256": "acd4825f76d9cb28b08dc00211ce3f5b6797e30b8ce070e9ad05091fcb7dceef"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 23728,
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "install"
+        ],
+        "created_at": 1794679815.264027
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-install.returned.json",
+        "sha256": "b09df4a6c14a922c19cc1e67e737e48353b3d40fdca7279517a57f89ee00f5e7"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "install"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794679821.5735414,
+        "stdout_sha256": "557830d8595f0f83e455220218e869e61d12ef9d5b5d05cdcef64a1ffd9b38a5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-start.reserved.json",
+        "sha256": "f5d8c099de90b06e49e66f41048211790d83c3b14e1051f2aaa5cfed6131df7c"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "start"
+        ],
+        "state": "DISPATCH_RESERVED",
+        "selected_at": 1794679840.5632634
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-start.process.json",
+        "sha256": "83ef0e380f4541846199593f32bb48a5fe73bedfcab4a806721ff8c7d1144c9d"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 47900,
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "start"
+        ],
+        "created_at": 1794679840.5907357
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-start.returned.json",
+        "sha256": "56d5baef8ee2c40a1f592ac91a5615930d72d84ca9900a6b66b13d4684cde2a1"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "start"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794679870.4618466,
+        "stdout_sha256": "cc94594aa943a56009caf8740678550dee118f41d3108562e6a098604c990089",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\work-local-useful.reserved.json",
+        "sha256": "886e2928e2b63070492da2c2d321dc3dc88c342a93d7deb00849a4d8f2e6245b"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "work",
+        "selection": [
+          "local",
+          "useful"
+        ],
+        "state": "DISPATCH_RESERVED",
+        "selected_at": 1794679931.596071
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\work-local-useful.process.json",
+        "sha256": "4225e38f1736cebb40343b65125057689496ab08ac68bbd84291b17f1317795f"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 50944,
+        "mode": "work",
+        "selection": [
+          "local",
+          "useful"
+        ],
+        "created_at": 1794679931.623378
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\work-local-useful.returned.json",
+        "sha256": "ec806fc8c75a0b9ef3c76198450fc5d9d095c91f5136200088de2e72603f1597"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "work",
+        "selection": [
+          "local",
+          "useful"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794680038.9332902,
+        "stdout_sha256": "b1fb8962ec549470695430c3b5a765a99fa08f6c2e744e7f85fe35dcbd5673ba",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-uninstall.reserved.json",
+        "sha256": "877718d484e6506c881266ce2e4ca729e664873af0c125874d4d565666220f66"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "uninstall"
+        ],
+        "state": "DISPATCH_RESERVED",
+        "selected_at": 1794680465.9904509
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-uninstall.process.json",
+        "sha256": "fb48ac20c9bd31c387783423e2f4dd6044094c14c509823cca7580a9e91616ea"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 51404,
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "uninstall"
+        ],
+        "created_at": 1794680466.0158427
+      }
+    },
+    {
+      "source": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\runtime-private\\lifecycle-nexus-uninstall.returned.json",
+        "sha256": "7c07c95cabdfee8aee3e2f21ce0e081a1fd16159ca5d037a47880db54aabdd21"
+      },
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "uninstall"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794680471.6160228,
+        "stdout_sha256": "3573cdc84c5cc6ba07dbf149c00e7ad15e96cc516832bddec36db3e11f266f0d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "root_tool_observations": {
+    "prepare": {
+      "session_id": 92384,
+      "basis": "Root execution report; no process-exit claim inferred from preparation receipt."
+    },
+    "work": {
+      "session_id": 55588,
+      "exit_code": 0
+    },
+    "interrupt": {
+      "execution_reference": "c83c61",
+      "exit_code": 0
+    },
+    "normal_stop": {
+      "session_id": 60294,
+      "exit_code": 0
+    },
+    "watcher": {
+      "session_id": 33005,
+      "exit_code": 0
+    },
+    "uninstall": {
+      "session_id": 33324,
+      "exit_code": 0
+    },
+    "basis": "Root reported actual tool completions; wrapper metadata/physical exit receipts retained independently."
+  }
+}

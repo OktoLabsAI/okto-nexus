@@ -1,0 +1,99 @@
+{
+  "format": "okto.m1.closed_campaign_reconciliation_companion",
+  "revision": 1,
+  "campaign_revision": 14,
+  "status": "CLOSED_RECONCILED_SETTLED_ACCEPTANCE_NOT_INFERRED",
+  "scope": "Same v14 resumed request01 and reservation10, post-exit accounting reconciliation only.",
+  "files": {
+    "original_closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\public\\closure.json",
+      "sha256": "fad57036638d0e874bbc2ac7222997483b036b389c2d6c6245c7abb9a5d1de23"
+    },
+    "original_checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\private\\controller.json",
+      "sha256": "941420d2130cdda4d6ca96e2e855675c53fbe527a6f1b51c41302b940b4b8e0a"
+    },
+    "derived_checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\controller-reconciled.json",
+      "sha256": "8bcf5b9bf1b08e9ba26764990479309d9c54bae2abfc1038e9da822b892375a2"
+    },
+    "accounting_reconciliation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\accounting-reconciliation.json",
+      "sha256": "14f46a9e7ab3b4cb2fe4968649e4570e32ae8f61faf29bf008f4d26d3a632ee5"
+    },
+    "reconciliation_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\reconcile_accounting.py",
+      "sha256": "10f912ce49bbb9224a77909bc957d6d628e036422e4aeec31f414c8ddfc64270"
+    },
+    "interrupt_manifest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\manifest.json",
+      "sha256": "b85ef009a88e0e2c51b192ba11f031eab729819ee510e79402ccd6d80623348b"
+    },
+    "interrupt_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\runtime\\execute-result.json",
+      "sha256": "0a44857d9ef99c537f3875079e8c795e48a27cdcf5d388ed324503d0569bb6a7"
+    },
+    "normal_stop_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\runtime\\normal-stop-result.json",
+      "sha256": "4fbb1a64c5288b16dd238c684f6ddf62df6da3f1c2b869803ba63ed3d66d116a"
+    },
+    "physical_exit": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\public\\nexus-exit-proof.json",
+      "sha256": "00eff9c1556e2cd0c8f9ba58678a39e77b559356e7388d99db4dc9765bf33274"
+    },
+    "cleanup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\public\\cleanup-nexus.json",
+      "sha256": "5a4048dd48885310ef52f1e8a89d44fd62df0db58a60e86fafd96d0845b7fc8e"
+    },
+    "uninstall_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\public\\lifecycle-nexus-uninstall-result.json",
+      "sha256": "1ae3ea42d667224d4dc17ed8ef12ed619041449239953321253a65ddce140a2d"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\public\\final-presence.json",
+      "sha256": "80189513ad82ab7fe19aee1291ff5318d5609d65d87961f73cd7d730dd3824b1"
+    },
+    "amendment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\amendment.json",
+      "sha256": "ff997af68740f1a8348f3800caf7b0e3fd727f2ffb7076520995020a95c651c3"
+    },
+    "pre_resumption_closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\closure.json",
+      "sha256": "2283c89678697b1916a48a1b3573db9fe6ed30a4be6572d3fa06e7a3da6a7177"
+    },
+    "pre_resumption_checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\private\\controller.json",
+      "sha256": "f4aeeda654c3de7de28cc72498d57f312819f4f77726c879a51710f691220868"
+    }
+  },
+  "original_closure_and_checkpoint_unchanged": true,
+  "original_unsettled_requests": 1,
+  "reconciled_unsettled_requests": 0,
+  "original_cumulative_minimum_observed_tokens": 134199,
+  "new_observed_tokens_since_original_closure": 138449,
+  "cumulative_minimum_observed_tokens": 272648,
+  "cumulative_reserved_admissions": 10,
+  "new_reserved_admissions_for_resumption": 0,
+  "new_model_admissions_during_reconciliation": 0,
+  "faults_preserved": [
+    "OBSERVATION_UNKNOWN",
+    "WORK_TERMINAL_FAILED"
+  ],
+  "terminal_operation_stage": "CANCELLED",
+  "session_lifecycle_state": "CLOSED",
+  "session_lease_state": "CLOSED",
+  "all_temporary_tasks_absent": true,
+  "force_used": false,
+  "late_native_decision_posts": 0,
+  "data_retained": true,
+  "billing_final": false,
+  "acceptance_promoted": false,
+  "authority": "Closure and physical exit establish containment. Independent post-exit canonical/Core observations establish settlement and token high-water; process absence alone does not.",
+  "limits": [
+    "Original closure/checkpoint remain stale and unsettled; this companion does not rewrite them.",
+    "Post-exit observer-only bounds were 2s initialization/snapshot and30s total; live SQL250ms/poll600ms bounds were not altered.",
+    "No useful report, continuation, native decision or remote work acceptance.",
+    "Reported native configuration fields are observations, not enforcement or full tool/instruction-content proof.",
+    "No new effect is authorized by this reconciliation; offline monitor qualification must precede any further campaign decision."
+  ]
+}

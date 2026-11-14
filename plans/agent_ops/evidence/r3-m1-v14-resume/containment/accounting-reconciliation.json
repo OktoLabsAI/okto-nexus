@@ -1,0 +1,108 @@
+{
+  "canonical": {
+    "billed_tokens": null,
+    "opening_operation_id": "op_445324998d692973c2980bdef525ee94",
+    "opening_receipt": {
+      "error_code": null,
+      "possible_effect": 1,
+      "receipt_revision": 1,
+      "retry_safe": 0,
+      "stage": "SUBMITTED"
+    },
+    "operation_admitted": true,
+    "operation_id": "op_89eeef12d823de4f2e9a83e87aad76fe",
+    "operation_receipt": {
+      "error_code": null,
+      "possible_effect": 1,
+      "receipt_revision": 2,
+      "retry_safe": 0,
+      "stage": "CANCELLED"
+    },
+    "preopen_failed": false,
+    "scope": {
+      "agent_id": "m1v12-local",
+      "authorization_revision": 2,
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 1,
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_602ee3dfeb78deb2668e35c4461effb3",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "session_state": {
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "lease_state": "CLOSED",
+      "lifecycle_state": "CLOSED",
+      "open_operation_id": "op_445324998d692973c2980bdef525ee94",
+      "owner_generation": 1,
+      "stream_epoch": "stream_78c2d182ec9c3424fb63204dd61430ca",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "source": "OWN_CANONICAL_DB_READ_ONLY"
+  },
+  "closure_required_separately": true,
+  "derived": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\controller-reconciled.json",
+    "sha256": "8bcf5b9bf1b08e9ba26764990479309d9c54bae2abfc1038e9da822b892375a2"
+  },
+  "elapsed_seconds": 1.3061320999986492,
+  "faults": [
+    "OBSERVATION_UNKNOWN",
+    "WORK_TERMINAL_FAILED"
+  ],
+  "kind": "READONLY_POST_EXIT_DERIVED_CHECKPOINT",
+  "known_observed_tokens": 272648,
+  "live_controller_bounds_unchanged": true,
+  "new_model_admissions": 0,
+  "observed_at": 1794680499.9574213,
+  "original": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\private\\controller.json",
+    "sha256": "941420d2130cdda4d6ca96e2e855675c53fbe527a6f1b51c41302b940b4b8e0a"
+  },
+  "original_first_observation_error": {
+    "exception_type": "JournalUnknown",
+    "reader": {
+      "budget_ms": 250.0,
+      "elapsed_ms": 317.88510002661496,
+      "phase": "snapshot_read"
+    },
+    "reason": "READ_BUDGET_EXCEEDED"
+  },
+  "original_untouched": true,
+  "pages": [
+    {
+      "after_sequence": 25,
+      "cursor_after": 67,
+      "event_count": 42,
+      "page_keys": [
+        "committed_contiguous",
+        "count",
+        "events",
+        "gap_pending",
+        "has_more",
+        "next_after_sequence",
+        "scope",
+        "stream_epoch"
+      ],
+      "page_sha256": "b2dd17a694f0c04cf57854570b928dff25156ba9bdcef50559c408b2a24359bb"
+    }
+  ],
+  "physical_exit_proof": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\public\\nexus-exit-proof.json",
+    "sha256": "00eff9c1556e2cd0c8f9ba58678a39e77b559356e7388d99db4dc9765bf33274"
+  },
+  "post_exit_only_observation_bounds": {
+    "initialization_seconds": 2,
+    "snapshot_seconds": 2,
+    "total_seconds": 30
+  },
+  "reserved_requests": 10,
+  "settled": true,
+  "source_sha256": "10f912ce49bbb9224a77909bc957d6d628e036422e4aeec31f414c8ddfc64270",
+  "useful_result_acceptance_inferred": false
+}

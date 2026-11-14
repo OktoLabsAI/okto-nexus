@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-14",
+  "status": "V14_RESUME_CANCELLED_RECONCILED_CLOSED_NO_M1_ACCEPTANCE",
+  "closure_companion_sha256": "9ab292850914b45c2495a4b9d7f4291ec715b7b3707b5cfe13c59a9160e0b020",
+  "original_closure_sha256": "fad57036638d0e874bbc2ac7222997483b036b389c2d6c6245c7abb9a5d1de23",
+  "original_checkpoint_sha256": "941420d2130cdda4d6ca96e2e855675c53fbe527a6f1b51c41302b940b4b8e0a",
+  "reconciled_checkpoint_sha256": "8bcf5b9bf1b08e9ba26764990479309d9c54bae2abfc1038e9da822b892375a2",
+  "accounting_reconciliation_sha256": "14f46a9e7ab3b4cb2fe4968649e4570e32ae8f61faf29bf008f4d26d3a632ee5",
+  "new_observed_tokens": 138449,
+  "cumulative_minimum_observed_tokens": 272648,
+  "cumulative_reservations": 10,
+  "new_reservations_for_resumption": 0,
+  "original_unsettled_requests": 1,
+  "reconciled_unsettled_requests": 0,
+  "billing_final": false,
+  "faults_preserved": [
+    "OBSERVATION_UNKNOWN",
+    "WORK_TERMINAL_FAILED"
+  ],
+  "preparation": "Root-reviewed explicit resumption of proved NEVER_DISPATCHED request01, same intent/prompt/reservation10; local-only. Source monitor6PASS +entrypoints19PASS+installedTerminalWork3PASS. Previous fixture error is retained in monitor qualification.",
+  "work": {
+    "wrapper_exit": 0,
+    "useful_result_confirmed": false,
+    "report": {
+      "exists": false
+    },
+    "calls": {
+      "GET": 202,
+      "POST": 2,
+      "productive_posts": 1,
+      "decision_posts": 0
+    },
+    "decision_count": 0,
+    "maximum_poll_start_interval_seconds": 0.5586385999922641,
+    "first_observation_error": {
+      "exception_type": "JournalUnknown",
+      "reader": {
+        "phase": "snapshot_read",
+        "budget_ms": 250.0,
+        "elapsed_ms": 317.88510002661496
+      },
+      "reason": "READ_BUDGET_EXCEEDED"
+    },
+    "interpretation": "Native admission occurred. Snapshot317.885ms exceeded live250ms budget and closed admissions with OBSERVATION_UNKNOWN. Poll-start maximum558.639ms was below5s operational cadence; this attempt did not fail the new cadence limit. Wrapper/CLI exit0 does not establish useful result."
+  },
+  "containment": "Internal stop CLI3/SERVICE_UNREACHABLE did not prove exit (service desired ready per root observation). One pinned canonical turn.interrupt resolve/admit was ACCEPTED; acceptance itself was not settlement. A separate selected normal stop returned0, retained watcher confirmed exact PID53004/birth134391534445053432/generationcfec0795237a444636046a3541a5cd7d exit, cleanup/uninstall0 and both temporary tasks absent. No force.",
+  "settlement": "Post-exit read-only canonical/Core journal reconciliation observed original turn CANCELLED, session/lease CLOSED and usage high-water272648. Original checkpoint remains134199/unsettled1; separate derived checkpoint and companion carry the reconciliation.",
+  "configuration_observation": {
+    "source": "core/codex_thread_configuration thread/start/response",
+    "reported_fields": [
+      "approvalPolicy",
+      "approvalsReviewer",
+      "cwd",
+      "instructionSources",
+      "model",
+      "modelProvider",
+      "sandbox",
+      "reasoningEffort"
+    ],
+    "claim": "Reported fields only; no enforcement, instruction contents or complete tool inventory inferred."
+  },
+  "provider": "Codex CLI; Claude unused",
+  "acceptance_promoted": false,
+  "limits": [
+    "No useful work, native approval, continuation, remote lane or M1 acceptance.",
+    "No hard token/billing guarantee and no refund/reset of reservation10.",
+    "No raw controller/database/transcript/provider output/native command line/credential retained.",
+    "No further service/provider effect authorized by this evidence; offline monitor validation remains necessary.",
+    "No ledger, commit, tests, provider or services changed/run during curation."
+  ],
+  "usage_breakdown_projection": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-monitor-calibration-tnqnqhwd\\measurement.json",
+    "source_sha256": "9d1f6e20b9f6b0a80e302292ec89c44d81f21e8fc991625d94cd450aa012eedf",
+    "derivation": "Public metadata projected from the unique thread components in reconciled checkpoint8bcf5b9; no transcript or credential access.",
+    "components": {
+      "cacheWriteInputTokens": 0,
+      "cachedInputTokens": 118272,
+      "inputTokens": 137009,
+      "outputTokens": 1440,
+      "reasoningOutputTokens": 794,
+      "totalTokens": 138449
+    },
+    "uncached_input_tokens": 18737,
+    "subset_semantics": "cachedInputTokens is a subset of inputTokens; reasoningOutputTokens is a subset of outputTokens. Total=137009+1440=138449; do not sum subsets again.",
+    "billing_final": false
+  },
+  "retention_validation": {
+    "copied_source_hashes_verified": 52,
+    "curated_files": 56,
+    "credential_review_scope": "Only curated files; no surrounding private runtime read. No credential values or raw transcripts identified.",
+    "git_diff_check": "One inherited new blank line at EOF in monitor/controller/api_worker.py:133 retained byte-identical to frozen source. No normalization of evidence.",
+    "ledger_check": "Fixed-plan coverage/title checker passed; 122 of132 scenarios remain VERIFIED; status sections unchanged."
+  }
+}

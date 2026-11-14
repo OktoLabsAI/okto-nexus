@@ -1,0 +1,137 @@
+{
+  "format": 1,
+  "runtime": {
+    "api_worker.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\api_worker.py",
+      "sha256": "c9199d7a80211d4ddd425db03c84fe16b0695bb697065e48b23171f68f4e7abc",
+      "bytes": 5493
+    },
+    "canonical_fixture.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\canonical_fixture.py",
+      "sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "bytes": 4280
+    },
+    "cli_flow.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\cli_flow.py",
+      "sha256": "fe2fc005f4186b2513a2e6a59bbbee0c2eecb18135fc56a9036ea0ebc1cbcd1b",
+      "bytes": 9493
+    },
+    "controller.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\controller.py",
+      "sha256": "cac213d1a5da5fe3eaf98ccecff5b5b4eb7975255f9df25f45debbfb91d6d6d0",
+      "bytes": 2497
+    },
+    "history_observers.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\history_observers.py",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "bytes": 1681
+    },
+    "independent_controller.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\independent_controller.py",
+      "sha256": "c5c3711a8f9e2edd0024271fce2fdaefab9c69cbaa709d08b8d5e30872015492",
+      "bytes": 18723
+    },
+    "independent_journal.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\independent_journal.py",
+      "sha256": "8cf8a2862fd725e4901c4cb5c5f4263ba3144f69b076e1d6e603124204ee70b1",
+      "bytes": 20266
+    },
+    "legacy_controller.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\legacy_controller.py",
+      "sha256": "e95d01275e89f5ebd27c448c37fe0b250ff9b34b3a472b09f7aa50f6296d63d9",
+      "bytes": 21347
+    },
+    "observation_guard.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "bytes": 10253
+    },
+    "resumed_controller.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\resumed_controller.py",
+      "sha256": "430e38e6523b4beb367afe7a4d25e827d48a58c477ef5a6e05a1d0f7408fe02b",
+      "bytes": 8984
+    },
+    "serial_flow.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\serial_flow.py",
+      "sha256": "fba505f22231affb8150b58c4a5fff556dd6113054c092725f304eb326e19989",
+      "bytes": 1919
+    },
+    "setup_journal.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\setup_journal.py",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+      "bytes": 8357
+    },
+    "test_cached_readonly.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_cached_readonly.py",
+      "sha256": "eaa391d0238e3230a4cb6084582238f0671617024e91ce720bdeb536757dd7a6",
+      "bytes": 8660
+    },
+    "test_cli_flow.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_cli_flow.py",
+      "sha256": "3863144caa6278569e18f78779019e9f88930e08a95373c7693d0dac3f1d0460",
+      "bytes": 14350
+    },
+    "test_independent.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_independent.py",
+      "sha256": "bbd77cabc414ad76c78d875e6cbbdcfe2214a19874d097502341e8f77b859e24",
+      "bytes": 29134
+    },
+    "test_observation_budget.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_observation_budget.py",
+      "sha256": "ae5b839e9510bdaaeeee7a7f1253990c955a4e8f179de3ad6425315881e2321c",
+      "bytes": 7166
+    },
+    "test_setup_discovery_budget.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_setup_discovery_budget.py",
+      "sha256": "23e065d931f182ebb0aa8233c1d732b48fcc3f99b0d7ad69b1fb83d62d30fdfd",
+      "bytes": 5062
+    },
+    "test_v11_allocation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_v11_allocation.py",
+      "sha256": "6e7c0ec81d2321733e63fc51073a336e9d3a41138d26d6e9a998e40775838046",
+      "bytes": 4124
+    },
+    "test_v14_delta.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_v14_delta.py",
+      "sha256": "a3f8312b53cd49a6f3f1d517f946c1405723c4d13d69b613eb636ee9c3363ed2",
+      "bytes": 4858
+    },
+    "test_work_wrapper.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\test_work_wrapper.py",
+      "sha256": "5ab032efeb018e306198d5f011918b1f312d8cd165fa96231425ba18ab6bf46c",
+      "bytes": 17379
+    },
+    "token_collector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\controller\\token_collector.py",
+      "sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2",
+      "bytes": 22011
+    }
+  },
+  "changed_runtime": [
+    "api_worker.py",
+    "independent_controller.py",
+    "resumed_controller.py",
+    "serial_flow.py"
+  ],
+  "qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\qualification.json",
+    "sha256": "9acb97469c934e97194a61b27340286bf220b0c20ab760f62110e8389f4abb0e",
+    "bytes": 7219
+  },
+  "proof": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\never-dispatched-proof.json",
+    "sha256": "73ff703afe9030cb68f5c5ad74e37b3d1c752e96e84d37e52443157142d286ee",
+    "bytes": 1910
+  },
+  "derived_preview_not_active": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\derived-checkpoint-preview.json",
+    "sha256": "3f697d13f2b0ffde4f6aeb9d12ad067e5355744645ea18e512eeeb202cb895bc",
+    "bytes": 9367
+  },
+  "scope": "Same v14 request and reservation. Original proposal/receipt/checkpoint/closure remain immutable. Root reviews amendment and executes separately.",
+  "canonical_absence": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-scheduling-candidate-tioauo9o\\canonical-absence.json",
+    "sha256": "f212dc6c0cdff729b52996b947e5757c18483491ec1b1fa4aa7fc40483a2221c",
+    "bytes": 160
+  }
+}

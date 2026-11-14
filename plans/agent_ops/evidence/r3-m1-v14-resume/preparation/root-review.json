@@ -1,0 +1,12 @@
+{
+  "status": "ROOT_REVIEWED_FOR_EXECUTION",
+  "date": "2026-11-14",
+  "amendment_sha256": "ff997af68740f1a8348f3800caf7b0e3fd727f2ffb7076520995020a95c651c3",
+  "basis": "Standing user authorization to implement and run the authenticated Codex campaign; this is technical root review, not a claim that the user approved an artifact hash.",
+  "scope": "One explicit local resumption of proved never-dispatched request01, then local continuation, normal lifecycle and cleanup. Remote selectors disabled.",
+  "reviewed": ["ResumedController and NEVER_DISPATCHED proof", "EffectFence and polling cadence change", "Context pinning, original authorization and derived state isolation", "Finite invocation reservations and lifecycle", "Saved request/prompt validation", "UTF8 Python output and native decision binding"],
+  "qualification": {"controller_focals": 6, "entrypoint_focals": 19, "installed_terminal_work_focals": 3},
+  "preserved": {"observed_tokens": 134199, "cumulative_reservations": 10, "max_cumulative_reservations": 13, "preventive_threshold": 500000, "authorized_token_tolerance": 700000, "native_decisions_per_lane_max": 3},
+  "scheduling": "Operational cadence5s with target200ms; every POST requires observation younger than1s. SQL250ms/poll600ms unchanged. Bounded pre-dispatch wait600s and execution600s from durable first-dispatch reservation. This is not a hard billing guarantee.",
+  "historical_state": "Original closed checkpoint/faults remain immutable; derived checkpoint retains explicit historical facts and unchanged reservation/collector. No uncertain POST replay or refund."
+}

@@ -1,0 +1,53 @@
+{
+  "format": "okto.m1.closed_campaign",
+  "revision": 1,
+  "status": "CLOSED_NORMAL_CLEANUP_ACCEPTANCE_NOT_INFERRED",
+  "closed_at": "2026-11-14T18:23:27.792770+00:00",
+  "faults_preserved": [
+    "OBSERVATION_UNKNOWN"
+  ],
+  "new_reserved_admissions": 1,
+  "cumulative_reserved_admissions": 10,
+  "prior_carry_in_tokens": 134199,
+  "new_observed_tokens": 0,
+  "cumulative_minimum_observed_tokens": 134199,
+  "billing_final": false,
+  "unsettled_requests": 1,
+  "controller_checkpoint_sha256": "941420d2130cdda4d6ca96e2e855675c53fbe527a6f1b51c41302b940b4b8e0a",
+  "controller_mutated": false,
+  "final_presence_sha256": "80189513ad82ab7fe19aee1291ff5318d5609d65d87961f73cd7d730dd3824b1",
+  "wrapper_exit_evidence": {
+    "lifecycle-nexus-install.reserved.json": {
+      "reservation_sha256": "9032bb56be0c7f63c53666b990cc22b01ebd617e33dd61acf6fe051b86186e9c",
+      "returned_sha256": "b09df4a6c14a922c19cc1e67e737e48353b3d40fdca7279517a57f89ee00f5e7",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "reservation_sha256": "f5d8c099de90b06e49e66f41048211790d83c3b14e1051f2aaa5cfed6131df7c",
+      "returned_sha256": "56d5baef8ee2c40a1f592ac91a5615930d72d84ca9900a6b66b13d4684cde2a1",
+      "returncode": 0
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "reservation_sha256": "877718d484e6506c881266ce2e4ca729e664873af0c125874d4d565666220f66",
+      "returned_sha256": "7c07c95cabdfee8aee3e2f21ce0e081a1fd16159ca5d037a47880db54aabdd21",
+      "returncode": 0
+    },
+    "work-local-useful.reserved.json": {
+      "reservation_sha256": "886e2928e2b63070492da2c2d321dc3dc88c342a93d7deb00849a4d8f2e6245b",
+      "returned_sha256": "ec806fc8c75a0b9ef3c76198450fc5d9d095c91f5136200088de2e72603f1597",
+      "returncode": 0
+    }
+  },
+  "closed_without_force": true,
+  "replay_allowed": false,
+  "all_temporary_tasks_absent": true,
+  "data_retained": true,
+  "acceptance_promoted": false,
+  "first_useful_result": "requires separate canonical evidence review",
+  "limits": "Closure is not M1 acceptance, a work result, effective provider configuration or final billing. Faults/uncertainty remain. No historical failure cause or fixed token count is copied.",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14"
+}

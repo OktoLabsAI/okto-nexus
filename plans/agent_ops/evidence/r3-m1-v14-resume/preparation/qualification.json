@@ -1,0 +1,56 @@
+{
+  "status": "OFFLINE_QUALIFIED_AWAITING_ROOT_REVIEW_NO_EXECUTION",
+  "scope": "Same v14 request/reservation10; local useful+continuation only. No remote/operator/Connector action selectors. No actual context gate, preparation, service, provider or private-controller derivation executed.",
+  "passed": {
+    "entrypoints": 19,
+    "installed_pending_terminal": 3
+  },
+  "prior_runs": [
+    {
+      "xml": "entrypoints-qualification.xml",
+      "passed": 12
+    },
+    {
+      "xml": "entrypoints-final.xml",
+      "passed": 13
+    }
+  ],
+  "preparation_antecedent": "One shell-quoting attempt to generate the work candidate failed before effect; replaced with a bounded Python source-transformation script. No tests/product effects failed.",
+  "tests": [
+    "Original approval/policy/control retained with isolated evidence paths; amendment mismatch or unpinned module refuses before original gate.",
+    "Closure refuses reentry; same derived controller path and original receipt/authority passed explicitly.",
+    "Durable reservation before Popen; replay refused and spawn failure remains consumed.",
+    "Only local work/Nexus lifecycle allowed; remote/operator/setup/plan and force rejected.",
+    "Original lifecycle receives new context and copied argv with explicit UTF8; frozen original argv unchanged.",
+    "Pending checkpoint identity and reconstructed prompt hash checked without modifying document; later gates do not pin mutable work state.",
+    "Real isolated Python subprocess prints em dash JSON with explicit -X utf8 despite PYTHONUTF8=0; native Codex argv refused by injector.",
+    "Installed TerminalWork: original pending intent with canonical404 resolves/admit once each; existing operation recovers viaGET with noPOST; changed prompt refuses beforeHTTP."
+  ],
+  "commands": [
+    "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -X utf8 -I -B -m pytest test_resume_entrypoints.py -q --tb=short --junitxml=entrypoints-final-utf8.xml",
+    "rtk proxy C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/draft/installation/venv/Scripts/python.exe -I -B -m pytest test_pending_terminal_resume.py -q --tb=short --junitxml=pending-terminal-qualification.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01",
+  "runner_provenance": "Entrypoint tests import candidate explicitly, fake Context/Popen only; UTF8 test spawns only sys.executable -c synthetic JSON. Pending terminal tests import unchanged installed M1 v12 wheel with -I -B and synthetic transport, no PYTHONPATH/source imports.",
+  "monitor_qualification": "Separate peer frozen monitor/ResumedController has6PASS; its runtime freeze is pinned in amendment basis. Not rerun here.",
+  "limits": [
+    "No claim full installed work wrapper with live HTTP was executed.",
+    "No claim provider request, native approval or useful work succeeded.",
+    "No new technical receipt or human approval created; original standing authorization remains authority."
+  ],
+  "amendment": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\amendment.json",
+    "sha256": "ff997af68740f1a8348f3800caf7b0e3fd727f2ffb7076520995020a95c651c3",
+    "bytes": 13576
+  },
+  "workflow": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\resume-request01\\workflow.json",
+    "sha256": "2fccdf9f5a240a6986a4fc2432b27aa1ad8281aafddf47a7e367653ca21093b5",
+    "bytes": 8769
+  },
+  "runtime_directories_exist": {
+    "public": false,
+    "private": false,
+    "runtime-private": false
+  }
+}
