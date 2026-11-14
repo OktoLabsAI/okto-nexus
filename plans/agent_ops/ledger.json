@@ -12570,6 +12570,59 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-observer-budget/root-review.json"
       ]
+    },
+    "r3_m1_installed_cli_component": {
+      "date": "2026-11-14",
+      "status": "INSTALLED_CLI_COMPONENT_QUALIFIED_OFFLINE_REAL_M1_PENDING",
+      "selected_freeze_sha256": "d22afc44b0776b3f34429c59d311c85c53d19f7d15ab5d5d7a96135947d333f0",
+      "retained": {
+        "historical-read100": {
+          "payloads": 36,
+          "allowlist_sha256": "d88d177800eaf6e11c6b5587c93afeb1d412fe9157cc08ae0998655f06fdab79"
+        },
+        "read250": {
+          "payloads": 33,
+          "allowlist_sha256": "691bc422e43ca7817d4d7399155284b0758de487e112d218c1ad5f264e60312d"
+        }
+      },
+      "final_suite": {
+        "passed": 64,
+        "failed": 0,
+        "skipped": 0,
+        "complete_attempts": 1
+      },
+      "installed_cli": "The serial worker invokes installed run_work(argv). Original parser, target/readiness checks, profile lock, open_work factory, TerminalWork, checkpoint and display execute. Factory instrumentation verifies expected home/profile/actor/scope/session and applies the existing transport fence.",
+      "reviewed_cases": [
+        "None-to-session drift refuses before POST.",
+        "events uses the actual displayed projection for CLI exit classification.",
+        "Known handler exceptions survive CLI presentation; return3 alone is not an inferred transport failure.",
+        "Presentation uncertainty preserves possible_effect and does not claim success.",
+        "Status/events/answer-review recovery cannot send POST; uncertain sends/answers are not replayed."
+      ],
+      "budget": {
+        "schema_initialization_ms": 250,
+        "snapshot_ms": 250,
+        "aggregate_poll_ms": 600,
+        "freshness_ms": 1000,
+        "deadline_seconds": 120,
+        "preventive_tokens": 200000,
+        "tolerance_tokens": 700000,
+        "carry_in_admissions": 6,
+        "carry_in_tokens": 89473,
+        "max_new_admissions": 5,
+        "max_cumulative_admissions": 11
+      },
+      "historical_failures": "The prior CLI composition had61 PASS/2 read-budget timing failures at153/211ms. These original results and source bytes are retained. Only the local read default/cap changed100 to250ms; aggregate/freshness/deadline/persistence remain unchanged.",
+      "limits": [
+        "Synthetic native peers and HTTP fixtures; real model/service campaign not executed.",
+        "Installed parser/handlers proven; console process/window closure and dashboard closure remain separate.",
+        "No statistical availability or physical OS IO deadline guarantee.",
+        "No product/wheel change, new execution receipt or acceptance promotion."
+      ],
+      "next": "Compose these exact bytes with the finite v11 proposal and cleanup drivers; validate final pins and entry guards before seeking execution approval.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-installed-cli-component/root-review.json"
+      ]
     }
   },
   "history": [
@@ -13792,6 +13845,15 @@
       "summary": "49 final cases pass. Separate 250ms schema / 100ms observation budgets fit within a 600ms aggregate poll acceptance budget; effects require 1s freshness and the original 120s deadline. OS IO is not preempted, faults fence effects and historical timing failures remain. No M1 acceptance promotion.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-observer-budget/root-review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Installed CLI path and local reader budget qualified",
+      "status": "INSTALLED_CLI_COMPONENT_QUALIFIED_OFFLINE_REAL_M1_PENDING",
+      "summary": "The harness now exercises installed run_work parser/handlers with original readiness and profile locks. 64 final offline tests pass after local read budget calibration to250ms within unchanged600ms aggregate/1s freshness. Prior61/63 timing failures preserved. No real M1/console closure acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-installed-cli-component/root-review.json"
       ]
     }
   ]

@@ -1,0 +1,181 @@
+{
+  "classification": "CLI_COMPONENT_PASS_WITH_COMPOSITION_TIMING_FAILURES",
+  "scope": "Offline harness implementation and tests only. No provider inference, real credential access, service execution, product or wheel modification. Prior v2freeze preserved.",
+  "final_full_suite": {
+    "tests": 63,
+    "passed": 61,
+    "failed": 2,
+    "errors": 0
+  },
+  "installed_cli_component": {
+    "tests": 11,
+    "passed": 11,
+    "parser_and_handler": "okto_nexus.adapters.inbound.cli.work.run_work",
+    "actual_factory_and_application": "Installed open_work and TerminalWork in11focused cases; synthetic in-memory HTTP.",
+    "remote": "Installed RemoteTarget.inspect and RemoteTerminalConnection validation; OperatorProfile supplied a synthetic HTTP client. No claim of real credential authentication.",
+    "wrapper_composition": "Four wrapper cases initially passed with installed parser/handlers and synthetic factory flows. Final full run retained the real100ms/600ms observers and failed two timing cases."
+  },
+  "changes": [
+    "CLIFlow executes send/status/events/answer-review/answer-decision and continuation on the existing single API worker.",
+    "Installed parser, target resolution, readiness, profile guard, checkpoint and display remain active. Only open_work delegates through an observational factory hook.",
+    "The wrapper no longer holds a duplicate outer profile guard. Under the installed CLI guard, the original factory result is checked against the previously reserved home/profile/actor/scope/session, including an expected absent session.",
+    "Original method results and errors are retained privately; display writes naturally to the outer runner private stdout. No process-global stdout redirect or stdout-as-accounting-authority was introduced.",
+    "Exit3 alone does not imply transport failure. Domain failed/blocked states remain explicit; known original errors retain their identity and response-loss metadata. A completed handler with failed CLI presentation becomes CLI_OUTCOME_UNCONFIRMED with possible_effect in the retained outcome.",
+    "events exit classification follows the actual presented event-page projection while returning the complete observation to the existing configuration observer.",
+    "Known-loss recovery uses GET-only status/events/answer-review and existing receipt GETs. resume is not exposed because the installed resume may submit an admission.",
+    "Existing effect fence/counting/FiniteResponseLoss and one global reservation ledger are reused; no duplicate POST validator or new effect retry path was added."
+  ],
+  "unchanged_policy": {
+    "revision": 11,
+    "carry_in_admissions": 6,
+    "carry_in_tokens": 89473,
+    "max_new_admissions": 5,
+    "max_cumulative_admissions": 11,
+    "preventive_tokens": 200000,
+    "tolerance_tokens": 700000,
+    "deadline_seconds": 120,
+    "initialization_ms": 250,
+    "read_ms": 100,
+    "poll_ms": 600,
+    "freshness_ms": 1000
+  },
+  "attempts": [
+    {
+      "path": "events-cli.xml",
+      "sha256": "f64a33327a3956e4527ba9802208bb570b3fd20ab6d79b00a5625d16b5151def",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 6.515,
+      "failed_cases": []
+    },
+    {
+      "path": "final.xml",
+      "sha256": "f5ecdde29c4a0991dcba18edf4660684dc2243e9e8c279570c1a6a7e9904320b",
+      "tests": 63,
+      "failures": 2,
+      "errors": 0,
+      "seconds": 66.941,
+      "failed_cases": [
+        "test_one_global_ledger_across_one_setup_local_continuation_reopen_remote_work",
+        "test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation"
+      ]
+    },
+    {
+      "path": "fixed-cli.xml",
+      "sha256": "21e4cf8d4d8fe5bdf2883a94b49613eee73d41610c102746275be2895a0b27fa",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 3.458,
+      "failed_cases": []
+    },
+    {
+      "path": "initial-cli.xml",
+      "sha256": "ab366e594f05f54cdb40dd01e139dd13f993ebe8faae883a255986627a442098",
+      "tests": 8,
+      "failures": 5,
+      "errors": 0,
+      "seconds": 2.857,
+      "failed_cases": [
+        "test_real_parser_factory_guard_handlers_display_and_reopen_continuation",
+        "test_scope_changed_after_preflight_is_refused_under_cli_guard",
+        "test_lost_admission_exit3_preserves_error_and_status_recovery_never_posts",
+        "test_answer_review_decision_and_lost_reply_recover_by_get_only",
+        "test_presentation_exit3_does_not_promote_completed_handler"
+      ]
+    },
+    {
+      "path": "initial-wrapper.xml",
+      "sha256": "8614af14f50462d04e6d8062a4e9bed26d04b2edf8805158c64f4860d0e6ba21",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 18.815,
+      "failed_cases": []
+    },
+    {
+      "path": "remote-cli.xml",
+      "sha256": "d5cf745131e225a81afd20b85d07d4024c8d6180deceafe5255c856504887d5f",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 3.938,
+      "failed_cases": []
+    },
+    {
+      "path": "session-cli.xml",
+      "sha256": "b220ff40b58866f5326679bcbed7d04496599b0f2f250462136e98c59fafbb7e",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 4.53,
+      "failed_cases": []
+    }
+  ],
+  "preserved_initial_fixture_failure": "Five initial CLI test failures arose from fixture profile agent-local versus selected scope agent-a. Corrected the fixture to use its actual selected agent; runtime gates were not relaxed.",
+  "preserved_runner_failure": "First isolated runner stopped before pytest because it attempted nonexistent unused module nexus_connector. Corrected origin list to the installed Nexus/Core modules actually exercised; initial source snapshot retained.",
+  "timing_failures": [
+    {
+      "case": "test_one_global_ledger_across_0",
+      "faults": [
+        "OBSERVATION_UNKNOWN"
+      ],
+      "request_errors": {
+        "local-one": {
+          "exception_type": "JournalUnknown",
+          "reader": {
+            "budget_ms": 100.0,
+            "elapsed_ms": 211.28650003811345,
+            "phase": "snapshot_read"
+          },
+          "reason": "READ_BUDGET_EXCEEDED"
+        },
+        "local-two": {
+          "exception_type": "JournalUnknown",
+          "reason": "READER_FAILED"
+        }
+      },
+      "maximum_poll_ms": 0
+    },
+    {
+      "case": "test_whole_work_wrapper_local_0",
+      "faults": [
+        "OBSERVATION_UNKNOWN",
+        "OWNER_STOP_UNCONFIRMED",
+        "OBSERVATION_POLL_BUDGET_EXCEEDED"
+      ],
+      "request_errors": {
+        "m1v11-local-work-01": {
+          "exception_type": "JournalUnknown",
+          "reader": {
+            "budget_ms": 100.0,
+            "elapsed_ms": 153.58690003631637,
+            "phase": "snapshot_read"
+          },
+          "reason": "READ_BUDGET_EXCEEDED"
+        },
+        "m1v11-local-work-02": {
+          "exception_type": "JournalUnknown",
+          "reason": "READER_FAILED"
+        }
+      },
+      "maximum_poll_ms": 740.4215999995358
+    }
+  ],
+  "review_fixes": [
+    "Root: events display projection; strict expected-session comparison includingNone.",
+    "Independent preparation review: post-classification outcome metadata must preserve possible_effect for presentation failure."
+  ],
+  "qualification_limits": [
+    "No all-green final composition claim:61/63passed. Core observations of211.2865ms and153.5869ms exceeded100ms; one resulting poll reached740.4216ms. Existing fail-closed behavior denied success.",
+    "All11new installed CLI component cases passed; this does not override composition timing failures or prove statistical availability.",
+    "run_work was invoked as the installed Python parser/handler entrypoint, not a fresh console executable subprocess. No TTY/chat, human interactive shell or dashboard-switch cycle was claimed.",
+    "DX-T39/T40/AC11 remain pending actual approved useful harness/provider work through the two topologies. Synthetic parser proofs and preparation are not that real acceptance.",
+    "The finite campaign supports the preapproved permission decision without an answer file; arbitrary interactive answer-file responses are intentionally outside this increment.",
+    "Readiness GET precedes the factory transport hook and remains the real installed inspection path. Subsequent effects still cross the current-clock fence; OS IO is not preemptible."
+  ],
+  "predecessor_v2_freeze_sha256": "34bc645a74cc5c157b23f04cbd65149dcf60571d186b66ee9fbe8e02b85a744e",
+  "module_origins_sha256": "3e9dfba6c172c3c945b2a842b2f6a7bd7416744bbac7fcda1765baaa0d527c7e",
+  "final_sources_sha256": "bcbcf2e3529f50bd92d4aa6d18bd022e6033ecaf016f0dbff72deb4f9a56c060"
+}

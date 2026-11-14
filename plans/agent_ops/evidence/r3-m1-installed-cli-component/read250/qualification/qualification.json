@@ -1,0 +1,55 @@
+{
+  "classification": "FINAL_OFFLINE_SUITE_PASS_READ250",
+  "final_suite": {
+    "tests": 64,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 41.522,
+    "failed_cases": [],
+    "passed": 64
+  },
+  "complete_suite_attempts": 1,
+  "scope": "Offline harness read-budget calibration only; no service, provider, real credentials, product/wheel mutation or real M1 execution.",
+  "runtime_changes": [
+    "controller/independent_controller.py",
+    "controller/independent_journal.py"
+  ],
+  "change": "ReadOnly default/maximum local read budget100\u2192250ms; controller diagnostic metadata100\u2192250. SQLite connect/busy timeout follows the same local budget.",
+  "unchanged": {
+    "initialization_ms": 250,
+    "aggregate_poll_ms": 600,
+    "freshness_ms": 1000,
+    "deadline_seconds": 120,
+    "preventive_tokens": 200000,
+    "tolerance_tokens": 700000,
+    "policy_revision": 11,
+    "carry_in_admissions": 6,
+    "carry_in_tokens": 89473,
+    "max_new_admissions": 5,
+    "max_cumulative_admissions": 11,
+    "persistence": "unchanged",
+    "deduplication": "none added",
+    "poll_loop": "unchanged",
+    "pty_cadence": "unchanged"
+  },
+  "tests": "Existing100ms rollback and pre-snapshot path tests specify100ms explicitly. Existing40ms interrupt override remains. Added default250ms accepts211ms/refuses251ms test. Global600ms/freshness/120s/fence tests remain unchanged.",
+  "predecessor_failures": "Preserved original61/63CLI-composition run with100ms read failures at211.2865ms and153.5869ms; not relabeled as passes.",
+  "poll740_review": "maximum_previous_poll_ms covers the entire poll including fault persistence/containment after fence. The retained case already had READ_BUDGET_EXCEEDED and denied useful success; it is not evidence of an accepted740ms cycle. Cleanup duration was not separately measured, so the entire excess cannot be attributed to cleanup.",
+  "limits": "600ms remains the aggregate acceptance budget and1s the effect freshness boundary. OS IO/scheduling are not preemptible; no physical wall-clock or statistical tail-latency guarantee is asserted.",
+  "proposal_metadata_required": {
+    "snapshot_ms": 250,
+    "read_budget_ms": 250,
+    "schema_initialization_ms": 250,
+    "aggregate_poll_ms": 600,
+    "freshness_ms": 1000
+  },
+  "authorization_boundary": "Root preparation approval and final real-M1 execution approval are separate. This artifact neither grants execution authorization nor satisfies real DX-T39/T40/AC11 acceptance.",
+  "predecessor_freeze_sha256": "167f5f3f1e62dad1db0018afe23eb174f9d36a10ef5ce677ef92a4e2b14312b3",
+  "predecessor_final_xml_sha256": "f5ecdde29c4a0991dcba18edf4660684dc2243e9e8c279570c1a6a7e9904320b",
+  "final_xml_sha256": "e14073e0b03f5991f35ebecfa1fc7876b13bcff3a283c09d43f35855aa967b3a",
+  "module_origins_sha256": "04e4686302b55fc1f997108b5829a1bd86a0fb6367c8d652ec1e4ee8f21b7a53",
+  "changelog_sha256": "bbb646c4943a58ea065a18abde687673c8cba26d11c81179a82cdb85e3e4f74c",
+  "real_closed_database_sha256": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "prior_freeze_sources_verified_unchanged": true
+}

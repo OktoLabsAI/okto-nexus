@@ -1,0 +1,48 @@
+[
+  {
+    "case": "test_one_global_ledger_across_0",
+    "faults": [
+      "OBSERVATION_UNKNOWN"
+    ],
+    "request_errors": {
+      "local-one": {
+        "exception_type": "JournalUnknown",
+        "reader": {
+          "budget_ms": 100.0,
+          "elapsed_ms": 211.28650003811345,
+          "phase": "snapshot_read"
+        },
+        "reason": "READ_BUDGET_EXCEEDED"
+      },
+      "local-two": {
+        "exception_type": "JournalUnknown",
+        "reason": "READER_FAILED"
+      }
+    },
+    "maximum_poll_ms": 0
+  },
+  {
+    "case": "test_whole_work_wrapper_local_0",
+    "faults": [
+      "OBSERVATION_UNKNOWN",
+      "OWNER_STOP_UNCONFIRMED",
+      "OBSERVATION_POLL_BUDGET_EXCEEDED"
+    ],
+    "request_errors": {
+      "m1v11-local-work-01": {
+        "exception_type": "JournalUnknown",
+        "reader": {
+          "budget_ms": 100.0,
+          "elapsed_ms": 153.58690003631637,
+          "phase": "snapshot_read"
+        },
+        "reason": "READ_BUDGET_EXCEEDED"
+      },
+      "m1v11-local-work-02": {
+        "exception_type": "JournalUnknown",
+        "reason": "READER_FAILED"
+      }
+    },
+    "maximum_poll_ms": 740.4215999995358
+  }
+]

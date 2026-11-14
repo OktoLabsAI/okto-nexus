@@ -1297,3 +1297,23 @@ cinco novas reservas e onze cumulativas. Nenhum status de aceite foi promovido
 e nenhum serviço ou provedor foi acionado neste marco.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-observer-budget/root-review.json`.
+
+## 2026-11-14 — percurso da CLI instalada qualificado offline
+
+O script de campanha agora executa run_work(argv) instalado: parser, seleção,
+prontidão, lock do perfil, factory, handlers, checkpoint e apresentação reais.
+A instrumentação confere ator/escopo/sessão sob o lock e conserva o controle
+antes dos efeitos. Recuperação por status/events/answer-review é somente GET;
+retorno 3 e falha de apresentação preservam a incerteza sem reenvio automático.
+
+A rodada anterior teve 61 casos aprovados e duas falhas de leitura em 153/211 ms.
+Seus arquivos permanecem preservados. O limite individual passou de 100 para
+250 ms; continuaram iguais os 600 ms por ciclo, freshness de 1 s, prazo de 120 s,
+persistência e limites de tokens/reservas. A única rodada completa dos arquivos
+finais passou em 64 casos. Não se somam repetições às contagens finais.
+
+Essa prova usa pares nativos sintéticos. A campanha real, fechamento literal de
+console/dashboard e os aceites DX-T39/DX-T40/AC-11 permanecem pendentes. Nenhum
+serviço ou provedor foi chamado, e nenhum status de aceite foi promovido.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-installed-cli-component/root-review.json`.

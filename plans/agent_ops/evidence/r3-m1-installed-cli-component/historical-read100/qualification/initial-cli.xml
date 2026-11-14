@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="8" time="2.857" timestamp="2026-11-14T10:42:54.282236-03:00" hostname="Alienware_m15"><testcase classname="test_cli_flow" name="test_real_parser_factory_guard_handlers_display_and_reopen_continuation" time="0.091"><failure message="okto_nexus.application.terminal_connection.ConnectionError: The binding no longer belongs to this project identity.">environment = namespace(home=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-cli-candidate-_892mowb/qualification/initial-cli-...ject at 0x0000023017D31BE0&gt;, inspect=&lt;bound method HTTP.inspect of &lt;test_cli_flow.HTTP object at 0x0000023017D31BE0&gt;&gt;))
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002301847AC40&gt;
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x0000023018447B60&gt;
+
+    def test_real_parser_factory_guard_handlers_display_and_reopen_continuation(environment,monkeypatch,capsys):
+        e=environment;factory=cli.open_work;guarded=[]
+        def spy(service,profile):
+            other=ExclusiveFileLock(e.home/'terminal/profiles/project.guard')
+            try:
+                with pytest.raises(LockBusy):other.acquire()
+            finally:other.release()
+            flow=factory(service,profile);assert isinstance(flow,TerminalWork);guarded.append(True);return flow
+        monkeypatch.setattr(cli,'open_work',spy)
+&gt;       first=e.invoke('submit','Synthetic prompt',client_intent_id='first',new_session=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_cli_flow.py:98: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_cli_flow.py:84: in invoke
+    if not result['ok']:raise result['error']
+                        ^^^^^^^^^^^^^^^^^^^^^
+api_worker.py:93: in run
+    try:self.result={'label':label,'ok':True,'value':job()}
+                                                     ^^^^^
+test_cli_flow.py:81: in &lt;lambda&gt;
+    worker.submit(method,lambda:getattr(flow,method)(*args,**kwargs),productive=method in ('submit','decide'))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:143: in submit
+    value=self._execute('send',options,'submit')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:127: in _execute
+    raise capture['error']
+..\..\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\work.py:268: in run_work
+    flow = open_work(service, profile)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:104: in guarded_factory
+    try:return opened(*args,**kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:86: in opened
+    binding=flow.binding();me=flow.api('GET','/connections/me')
+            ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.terminal_work.TerminalWork object at 0x000002301849D810&gt;
+
+    def binding(self):
+        me = self.api('GET', '/connections/me')
+        if me['server_id'] != self.connection['server_id']:
+            raise ConnectionError('SERVER_ID_MISMATCH', 'This project belongs to another Server installation.')
+        identity = self.connection['selection']['agent']
+        binding_id = self.connection.get('result', {}).get('binding', {}).get('binding_id')
+        if self.connection.get('state') != 'done' or not binding_id:
+            raise ConnectionError('CONNECTION_REQUIRED', 'Finish connect before submitting project work.')
+        flow_type = RemoteTerminalConnection if self.connection['selection'].get('operator_profile') else TerminalConnection
+        flow_type(self.call, lambda value: None).observe(self.connection)
+        binding = self.api('GET', '/connections/bindings/' + quote(binding_id, safe=''))
+        if binding['server_id'] != me['server_id'] or binding['agent_id'] != identity:
+&gt;           raise ConnectionError('PROFILE_DRIFT', 'The binding no longer belongs to this project identity.')
+E           okto_nexus.application.terminal_connection.ConnectionError: The binding no longer belongs to this project identity.
+
+..\..\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\okto_nexus\application\terminal_work.py:42: ConnectionError</failure></testcase><testcase classname="test_cli_flow" name="test_scope_changed_after_preflight_is_refused_under_cli_guard" time="0.070"><failure message="AssertionError: assert 'PROFILE_DRIFT' == 'CLI_SCOPE_CHANGED'&#10;  &#10;  - CLI_SCOPE_CHANGED&#10;  + PROFILE_DRIFT">environment = namespace(home=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-cli-candidate-_892mowb/qualification/initial-cli-...ject at 0x000002301849E350&gt;, inspect=&lt;bound method HTTP.inspect of &lt;test_cli_flow.HTTP object at 0x000002301849E350&gt;&gt;))
+
+    def test_scope_changed_after_preflight_is_refused_under_cli_guard(environment):
+        e=environment;e.http.selected['workspace_id']='changed'
+        with pytest.raises(ConnectionError) as caught:e.invoke('submit','Synthetic',client_intent_id='one',new_session=True)
+&gt;       assert caught.value.code=='CLI_SCOPE_CHANGED'
+E       AssertionError: assert 'PROFILE_DRIFT' == 'CLI_SCOPE_CHANGED'
+E         
+E         - CLI_SCOPE_CHANGED
+E         + PROFILE_DRIFT
+
+test_cli_flow.py:113: AssertionError</failure></testcase><testcase classname="test_cli_flow" name="test_cli_refusal_before_handler_does_not_post[readiness]" time="0.041" /><testcase classname="test_cli_flow" name="test_cli_refusal_before_handler_does_not_post[lock]" time="0.050" /><testcase classname="test_cli_flow" name="test_lost_admission_exit3_preserves_error_and_status_recovery_never_posts" time="0.046"><failure message="AssertionError: assert 'connect' == 'm1_response_loss'&#10;  &#10;  - m1_response_loss&#10;  + connect">environment = namespace(home=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-cli-candidate-_892mowb/qualification/initial-cli-...ject at 0x000002301853E520&gt;, inspect=&lt;bound method HTTP.inspect of &lt;test_cli_flow.HTTP object at 0x000002301853E520&gt;&gt;))
+
+    def test_lost_admission_exit3_preserves_error_and_status_recovery_never_posts(environment):
+        e=environment;e.http.lost='admission'
+        with pytest.raises(ConnectionError) as caught:e.invoke('submit','Synthetic',client_intent_id='one',new_session=True)
+&gt;       assert caught.value.stage=='m1_response_loss'
+E       AssertionError: assert 'connect' == 'm1_response_loss'
+E         
+E         - m1_response_loss
+E         + connect
+
+test_cli_flow.py:137: AssertionError</failure></testcase><testcase classname="test_cli_flow" name="test_answer_review_decision_and_lost_reply_recover_by_get_only" time="0.048"><failure message="okto_nexus.application.terminal_connection.ConnectionError: The binding no longer belongs to this project identity.">environment = namespace(home=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-cli-candidate-_892mowb/qualification/initial-cli-...ject at 0x0000023018511B50&gt;, inspect=&lt;bound method HTTP.inspect of &lt;test_cli_flow.HTTP object at 0x0000023018511B50&gt;&gt;))
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x000002301853DF30&gt;
+
+    def test_answer_review_decision_and_lost_reply_recover_by_get_only(environment,capsys):
+&gt;       e=environment;e.invoke('submit','Synthetic',client_intent_id='one',new_session=True)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_cli_flow.py:146: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_cli_flow.py:84: in invoke
+    if not result['ok']:raise result['error']
+                        ^^^^^^^^^^^^^^^^^^^^^
+api_worker.py:93: in run
+    try:self.result={'label':label,'ok':True,'value':job()}
+                                                     ^^^^^
+test_cli_flow.py:81: in &lt;lambda&gt;
+    worker.submit(method,lambda:getattr(flow,method)(*args,**kwargs),productive=method in ('submit','decide'))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:143: in submit
+    value=self._execute('send',options,'submit')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:127: in _execute
+    raise capture['error']
+..\..\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\work.py:268: in run_work
+    flow = open_work(service, profile)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:104: in guarded_factory
+    try:return opened(*args,**kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:86: in opened
+    binding=flow.binding();me=flow.api('GET','/connections/me')
+            ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.terminal_work.TerminalWork object at 0x00000230185B4450&gt;
+
+    def binding(self):
+        me = self.api('GET', '/connections/me')
+        if me['server_id'] != self.connection['server_id']:
+            raise ConnectionError('SERVER_ID_MISMATCH', 'This project belongs to another Server installation.')
+        identity = self.connection['selection']['agent']
+        binding_id = self.connection.get('result', {}).get('binding', {}).get('binding_id')
+        if self.connection.get('state') != 'done' or not binding_id:
+            raise ConnectionError('CONNECTION_REQUIRED', 'Finish connect before submitting project work.')
+        flow_type = RemoteTerminalConnection if self.connection['selection'].get('operator_profile') else TerminalConnection
+        flow_type(self.call, lambda value: None).observe(self.connection)
+        binding = self.api('GET', '/connections/bindings/' + quote(binding_id, safe=''))
+        if binding['server_id'] != me['server_id'] or binding['agent_id'] != identity:
+&gt;           raise ConnectionError('PROFILE_DRIFT', 'The binding no longer belongs to this project identity.')
+E           okto_nexus.application.terminal_connection.ConnectionError: The binding no longer belongs to this project identity.
+
+..\..\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\okto_nexus\application\terminal_work.py:42: ConnectionError</failure></testcase><testcase classname="test_cli_flow" name="test_presentation_exit3_does_not_promote_completed_handler" time="0.047"><failure message="OSError: synthetic presentation error">argv = ['send', '--message', 'Synthetic', '--request-id', 'one', '--new-session', ...]
+
+    def run_work(argv):
+        from .connect import project_profile
+        parser = argparse.ArgumentParser(prog='okto-nexus work',
+            description='Submit project work and observe or decide canonical runtime requests.')
+        args_list = list(argv)
+        action = args_list.pop(0) if args_list and args_list[0] in ACTIONS else None
+        parser.add_argument('--profile')
+        parser.add_argument('--operator-profile', help='use this saved human operator profile on a remote Server')
+        parser.add_argument('--project', type=Path)
+        parser.add_argument('--message')
+        parser.add_argument('--session-id')
+        parser.add_argument('--new-session', action='store_true')
+        parser.add_argument('--request-id', help='stable client intent ID for an explicit submission/retry')
+        parser.add_argument('--target-turn-id')
+        parser.add_argument('--approval-id')
+        parser.add_argument('--decision', choices=('approve', 'deny'))
+        parser.add_argument('--review', help='hash of the exact displayed native question or authorization review')
+        parser.add_argument('--minutes', type=int, help='authorize: lifetime from review, 1..1440 minutes (default 60)')
+        parser.add_argument('--actions', type=int, help='authorize: runtime action budget, 1..1000 (default 20)')
+        parser.add_argument('--answer-file', type=Path, help='UTF-8 JSON native response object, read only for this submission')
+        parser.add_argument('--control', action='store_true', help='observe or resume the saved interrupt/close action')
+        parser.add_argument('--after-sequence', type=int, default=0)
+        parser.add_argument('--stream-epoch')
+        parser.add_argument('--timeout', type=float, default=300)
+        parser.add_argument('--json', action='store_true')
+        args, service_args = parser.parse_known_args(args_list)
+        action = action or ('chat' if sys.stdin.isatty() and not args.json else 'status')
+        if not 0 &lt; args.timeout &lt;= 300 or args.after_sequence &lt; 0:
+            parser.error('timeout must be in (0, 300]; after-sequence must be nonnegative')
+        if action in ('send', 'steer') and not args.message:
+            parser.error('send and steer require --message')
+        if args.message is not None and action not in ('send', 'steer', 'interrupt', 'close'):
+            parser.error('--message requires send, steer, interrupt or close')
+        if (args.decision or args.answer_file) and action != 'answer':
+            parser.error('decision options require the answer command')
+        if args.review and action not in ('answer', 'authorize'):
+            parser.error('--review requires answer or authorize')
+        if args.minutes is not None or args.actions is not None:
+            if action != 'authorize' or args.review:
+                parser.error('authorization limits require authorize without --review')
+        if args.minutes is not None and not 1 &lt;= args.minutes &lt;= 1440 or args.actions is not None and not 1 &lt;= args.actions &lt;= 1000:
+            parser.error('authorization limits are 1..1440 minutes and 1..1000 actions')
+        if args.answer_file and not args.decision:
+            parser.error('--answer-file requires an explicit --decision and --review')
+        if args.new_session and action != 'send':
+            parser.error('--new-session requires send')
+        if args.target_turn_id and action not in ('steer', 'interrupt'):
+            parser.error('--target-turn-id requires steer or interrupt')
+        if action == 'answer' and not args.approval_id:
+            parser.error('answer requires --approval-id')
+        if action == 'chat' and (args.json or not sys.stdin.isatty()):
+            parser.error('chat requires an interactive terminal; use send/status/watch/answer with --json')
+        guard = flow = checkpoint = None
+        try:
+            from .terminal_target import resolve_terminal_target, terminal_target_selection
+            project, profile = project_profile(args.project, args.profile)
+            # Read durable uncertainty before opening the operator vault/client.
+            # Topology selection itself performs no authentication or lifecycle effect.
+            home, _ = terminal_target_selection(service_args, profile, args.operator_profile)
+            checkpoint_path = home / 'terminal/work' / (profile + '.json')
+            checkpoint = read_json(checkpoint_path) if checkpoint_path.exists() else None
+            service = resolve_terminal_target(service_args, profile, args.operator_profile, resolve_local_service)
+            target = service.adapter.home / 'terminal/profiles' / (profile + '.json')
+            if not target.exists():
+                raise ConnectionError('CONNECTION_REQUIRED', 'Run connect for this project before using work.')
+            status = service.inspect()
+            if status['state'] != 'ready':
+                display({'state': 'service_not_ready', 'service': status}, args.json)
+                return 3
+            guard = ExclusiveFileLock(target.with_suffix('.guard'))
+            guard.acquire()
+&gt;           flow = open_work(service, profile)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\work.py:268: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cli_flow.py:104: in guarded_factory
+    try:return opened(*args,**kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:86: in opened
+    binding=flow.binding();me=flow.api('GET','/connections/me')
+            ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.application.terminal_work.TerminalWork object at 0x000002301862D040&gt;
+
+    def binding(self):
+        me = self.api('GET', '/connections/me')
+        if me['server_id'] != self.connection['server_id']:
+            raise ConnectionError('SERVER_ID_MISMATCH', 'This project belongs to another Server installation.')
+        identity = self.connection['selection']['agent']
+        binding_id = self.connection.get('result', {}).get('binding', {}).get('binding_id')
+        if self.connection.get('state') != 'done' or not binding_id:
+            raise ConnectionError('CONNECTION_REQUIRED', 'Finish connect before submitting project work.')
+        flow_type = RemoteTerminalConnection if self.connection['selection'].get('operator_profile') else TerminalConnection
+        flow_type(self.call, lambda value: None).observe(self.connection)
+        binding = self.api('GET', '/connections/bindings/' + quote(binding_id, safe=''))
+        if binding['server_id'] != me['server_id'] or binding['agent_id'] != identity:
+&gt;           raise ConnectionError('PROFILE_DRIFT', 'The binding no longer belongs to this project identity.')
+E           okto_nexus.application.terminal_connection.ConnectionError: The binding no longer belongs to this project identity.
+
+..\..\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\okto_nexus\application\terminal_work.py:42: ConnectionError
+
+During handling of the above exception, another exception occurred:
+
+environment = namespace(home=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-cli-candidate-_892mowb/qualification/initial-cli-...ject at 0x0000023018531F20&gt;, inspect=&lt;bound method HTTP.inspect of &lt;test_cli_flow.HTTP object at 0x0000023018531F20&gt;&gt;))
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000230185B4950&gt;
+
+    def test_presentation_exit3_does_not_promote_completed_handler(environment,monkeypatch):
+        e=environment;original=cli.display;failed=[False]
+        def display(value,*args,**kwargs):
+            if not failed[0]:failed[0]=True;raise OSError('synthetic presentation error')
+            return original(value,*args,**kwargs)
+        monkeypatch.setattr(cli,'display',display)
+&gt;       with pytest.raises(ConnectionError) as caught:e.invoke('submit','Synthetic',client_intent_id='one',new_session=True)
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_cli_flow.py:163: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_cli_flow.py:84: in invoke
+    if not result['ok']:raise result['error']
+                        ^^^^^^^^^^^^^^^^^^^^^
+api_worker.py:93: in run
+    try:self.result={'label':label,'ok':True,'value':job()}
+                                                     ^^^^^
+test_cli_flow.py:81: in &lt;lambda&gt;
+    worker.submit(method,lambda:getattr(flow,method)(*args,**kwargs),productive=method in ('submit','decide'))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:143: in submit
+    value=self._execute('send',options,'submit')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cli_flow.py:110: in _execute
+    outcome['exit_code']=cli.run_work([action,*options,*self.args])
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\m1-recovery-diagnostics-installed-xtfm5o4x\venv\Lib\site-packages\okto_nexus\adapters\inbound\cli\work.py:328: in run_work
+    display({'state': 'unconfirmed' if possible_effect else 'refused',
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = {'state': 'refused', 'code': 'PROFILE_DRIFT', 'message': 'The binding no longer belongs to this project identity.', 'possible_effect': False}
+args = (True,), kwargs = {}
+
+    def display(value,*args,**kwargs):
+&gt;       if not failed[0]:failed[0]=True;raise OSError('synthetic presentation error')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       OSError: synthetic presentation error
+
+test_cli_flow.py:160: OSError</failure></testcase><testcase classname="test_cli_flow" name="test_parser_rejection_keeps_original_systemexit_and_zero_effect" time="0.038" /></testsuite></testsuites>
