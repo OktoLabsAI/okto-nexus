@@ -1,0 +1,156 @@
+{
+  "status": "PRESERVED_PRE_CLI_RUNTIME_52_PASS_PARTIAL_SCOPE",
+  "proposal_sha256": "0b3df88d76956b20b9b55422d771d631fdb24ac387089f310bb17ce47887f9b7",
+  "files": {
+    "context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\campaign_context.py",
+      "sha256": "40cb6cb3dfef01591ab351d34f00d58c22aebe9231dd9e2d8c13766cc2911aca"
+    },
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\m1_v11_lifecycle.py",
+      "sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a"
+    },
+    "setup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\m1_v11_setup.py",
+      "sha256": "1b840a88cf36950a8689f2bdc8c4bd89f79d197234f727a3475133cc51afde67"
+    },
+    "remote_setup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\m1_v11_remote_setup.py",
+      "sha256": "2d8167af134e8044a5a8714b844efe9dd50477bb38502b899bfa1071cf02266a"
+    },
+    "supervisor_check": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\supervisor_check.py",
+      "sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3"
+    },
+    "publication": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    "response_loss": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\response_loss.py",
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56"
+    },
+    "protected_pty": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\protected-transfer\\protected_pty.py",
+      "sha256": "480262b72e805f1e3ec26336940135c81430534debe2962922f234f9fc8e090c"
+    },
+    "owned_job": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\protected-transfer\\owned_job.py",
+      "sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c"
+    },
+    "remote_transfer_monitor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\remote_transfer_monitor.py",
+      "sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6"
+    },
+    "pty_base_python": {
+      "path": "C:\\Python313\\python.exe",
+      "sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9"
+    },
+    "pty_dependency_0": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\OpenConsole.exe",
+      "sha256": "6b2915a9a91c0738346a6c6a7b3ee2b74e26582b0c92b1b16066e72570dddd68"
+    },
+    "pty_dependency_1": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\__init__.py",
+      "sha256": "95a4e2f6c2e308bc9cc9a4183b7c0cbe164d20adaf87fa4ebc64c94f639de10b"
+    },
+    "pty_dependency_2": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\conpty.dll",
+      "sha256": "1f5ffd52ff118db975eeb25bac0051f4ceff3e051313fa03a5afffa9e75ee502"
+    },
+    "pty_dependency_3": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\enums.py",
+      "sha256": "2809bb5c914f93b9cc5b0509c6f60796a97dd9cafacbe636e081caddf7342435"
+    },
+    "pty_dependency_4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\ptyprocess.py",
+      "sha256": "86e70255f06b89d1d173820f88416b124745854f9429241bc9951af7b11c7837"
+    },
+    "pty_dependency_5": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\__init__.py",
+      "sha256": "7f36fd7039cfb764776ffad687ab2a0e021b890399b4195fb15d5aabe50b4f64"
+    },
+    "pty_dependency_6": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_pty.py",
+      "sha256": "017ba34326d784aaf4b7450aa4d052a9e01fb26e1f1e853fa209db8a87011792"
+    },
+    "pty_dependency_7": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_ptyprocess.py",
+      "sha256": "31e1a9fcffb392c784a748977225a1f456b9e3c85819dbe571a1f2fd6344c17a"
+    },
+    "pty_dependency_8": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty-agent.exe",
+      "sha256": "44467a83d86b6127bc7b876e8b2fb33fa75fde09d9b9ff27c7f8ef84ba969b29"
+    },
+    "pty_dependency_9": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.cp313-win_amd64.pyd",
+      "sha256": "50b107ec1a9393a464071459023e8c6fc4b0f236e97731c31a741dcd56524df8"
+    },
+    "pty_dependency_10": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.dll",
+      "sha256": "5177f321aac2fa85436dd6ec6bfc6d41459d25f5b533aa03349ef513461b4c79"
+    },
+    "pty_dependency_11": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.pyi",
+      "sha256": "f957a7a300afcbcb63219502bef6f9559c3947573a0135c451fb22132219c231"
+    },
+    "remote_stop_order": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\remote_stop_order.py",
+      "sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386"
+    },
+    "planning_commands": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\planning-commands.json",
+      "sha256": "5942809c4e94665bf55dc14a8710354edd125fa888102526df5a6a2b798c1910"
+    },
+    "remote_canonical_recipe": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\remote-canonical-recipe.json",
+      "sha256": "3e6ae454d18c18bb7530ceca2c9a87be703a818dfdd24d86f096c6b9748ce616"
+    },
+    "work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\m1_v11_work.py",
+      "sha256": "1ae5d8da11e92e829bc97dae16df902f57c1b78a3b191cb54993a2dcabfe779b"
+    },
+    "controller_api_worker": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\api_worker.py",
+      "sha256": "268de25713f364ce2034c824b250030adf1f861147423f95514c1b2756fa42a8"
+    },
+    "controller_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\controller.py",
+      "sha256": "818cd7ec00ba0d56d935c8466bafad68de5bb8572ca75124e6317aad3f1f5029"
+    },
+    "controller_history_observers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\history_observers.py",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57"
+    },
+    "controller_independent_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\independent_controller.py",
+      "sha256": "56fb14dc78a64d64e14c2c32a27300a61fe7a820588ece96725749b8263e13fd"
+    },
+    "controller_independent_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\independent_journal.py",
+      "sha256": "f30daf7c2647e5017c5212752f2c794c3b747fafe0ecd5b02ad23b4952ae8dcf"
+    },
+    "controller_legacy_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\legacy_controller.py",
+      "sha256": "8756e29d67e5143b62c7744ca142c86c9fa181672063e5df6e008b392dbaa8da"
+    },
+    "controller_observation_guard": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10"
+    },
+    "controller_serial_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\serial_flow.py",
+      "sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697"
+    },
+    "controller_setup_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\setup_journal.py",
+      "sha256": "326497241dd3c94f1775b338e7b1b4e70689fc455d1e83db21fda6103b7305dc"
+    },
+    "controller_token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\token_collector.py",
+      "sha256": "498cde0a6cc114c45998bc7c7292264b808277e15ab715c24d676b8887bc55f6"
+    }
+  },
+  "qualification": "observer-composition-final/results.xml",
+  "qualification_sha256": "6e6eb226d19820f80043f432e0b0ababe7d7b8da23c5d2280e29f250107adb3c"
+}

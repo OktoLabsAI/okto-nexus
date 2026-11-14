@@ -12623,6 +12623,27 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-installed-cli-component/root-review.json"
       ]
+    },
+    "r3_m1_v11_preparation": {
+      "date": "2026-11-14",
+      "status": "V11_PREPARATION_REVIEWED_REAL_EXECUTION_PENDING",
+      "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+      "public_manifest_sha256": "b7b4463c8ed3d30700c6d5849870387cc6b6f417d1d07ade443a78373b1f5a02",
+      "artifacts_retained": 235,
+      "root_review_sha256": "c242a52d0a9577e9bc18f02ef63cc9ff2881a24fcfc25d14069767c2a1eb2986",
+      "authorization_basis": "The user already authorized proceeding with the plan, real authenticated Codex execution and token tolerance. The optional authenticated Claude Sonnet ceiling is200000; Claude is not selected. A v11 receipt will technically bind that existing authorization to these reviewed bytes, not assert a new human approval of this digest.",
+      "authorization_correction": "The prior requirement for another exact-successor approval was an assistant-authored interpretation. The historical v10 receipt and closed campaign remain unchanged; no prior intent is replayed.",
+      "scope": "Fresh isolated v11 campaign, carry6 reservations/89473 tokens, at most5 new reservations/11 cumulative, preventive200000 and tolerance700000 tokens,120s request deadline. Two owned tasks,8 explicit lifecycle selections and at most1 implicit Connector ensure/start. No force, logout, reboot, personal-task changes or provider-auth-file inspection.",
+      "operator_gap_closed": "Own loopback account creation and canonical password-stdin login now have one pinned finite driver. Temporary password stays in memory, effects reserve before the current observation grant, historical token observation continues; no new model admission.",
+      "limits": [
+        "Offline qualification is not actual M1 acceptance.",
+        "Installed CLI handlers do not prove literal terminal/dashboard closure.",
+        "Task and port preflight is instantaneous availability, not a reservation.",
+        "No completion status is promoted by preparation."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v11-preparation/review.json"
+      ]
     }
   },
   "history": [
@@ -13854,6 +13875,15 @@
       "summary": "The harness now exercises installed run_work parser/handlers with original readiness and profile locks. 64 final offline tests pass after local read budget calibration to250ms within unchanged600ms aggregate/1s freshness. Prior61/63 timing failures preserved. No real M1/console closure acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-installed-cli-component/root-review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Finite v11 campaign preparation completed",
+      "status": "V11_PREPARATION_REVIEWED_REAL_EXECUTION_PENDING",
+      "summary": "Installed CLI/observer, finite lifecycle and operator bootstrap are frozen and qualified. Existing user authorization is retained without inventing a new approval requirement. Actual execution and M1 acceptance remain pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v11-preparation/review.json"
       ]
     }
   ]

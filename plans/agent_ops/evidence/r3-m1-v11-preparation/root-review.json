@@ -1,0 +1,31 @@
+{
+  "status": "ROOT_REVIEW_PINS_AND_PASSIVE_PREFLIGHT_PASS",
+  "observed_at_utc": "2026-11-14T14:28:01.791608+00:00",
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "public_manifest_sha256": "b7b4463c8ed3d30700c6d5849870387cc6b6f417d1d07ade443a78373b1f5a02",
+  "qualification_sha256": "24fbb6c47d0fdec0a7c9bad8a99d063d953dfbd8a3fde8e3f514e6c84fff3063",
+  "public_artifacts_verified": 235,
+  "runtime_pins_verified": 46,
+  "expected_installed_pins": 984,
+  "requirements_lf": true,
+  "campaign_absent": true,
+  "installation_unreserved": true,
+  "operator_driver_bound": true,
+  "recipe_revision": 11,
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-822654ebed7d7cf607a82ececeb984647036c433ccf0769a3f57b251979f5d84",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-bddb196d1d2d2160bb3df4cb899b5610bf93e4ac4f8749b746107bb21f14a4a4",
+      "absent": true
+    }
+  },
+  "exclusive_port_probe_not_reserved": 57589,
+  "task_reader_origin": "D:\\Projetos/Techridy/okto_labs_okto_nexus/src\\okto_nexus\\adapters\\outbound\\service_manager\\windows_tasks.py",
+  "provider_calls": 0,
+  "service_mutations": 0,
+  "credentials_read": 0,
+  "limits": "Instantaneous availability only; technical v11 receipt still to be recorded from existing user authorization. No product installation or execution occurred."
+}

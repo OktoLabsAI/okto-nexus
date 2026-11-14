@@ -1,0 +1,83 @@
+...........................F.................F......                     [100%]
+================================== FAILURES ===================================
+_ test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work _
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-bundle-racan37z/observer-composition-initial/pytest-tmp/test_one_global_ledger_across_0')
+
+    def test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work(tmp_path):
+        now=[1000.];home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path,lambda:now[0]);writers=[];setups=[];dispatches=[];stop=[]
+        local=scope('local');remote=scope('connector')
+        try:
+            control.setup('setup-local','local',home,lambda:dispatches.append('setup-local'),lambda:stop.append('local'))
+            setups.append(setup_journal(home,1,200));assert control.poll()['can_admit']
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            writers.append(JournalFixture(journal.path(local),local))
+            for name,total in [('local-one',10),('local-two',20)]:
+                control.start_work(name,'local','synthetic',binding=local,checkpoint=deepcopy(flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+                consume(control);writers[0].complete(name,total,thread='local-native-thread');fixture.terminal(name,local)
+                assert control.poll()['can_admit']
+            first_hash=hashlib.sha256(control.path.read_bytes()).hexdigest()
+            first_data=deepcopy(control.data);control.close()
+            control=create_control(tmp_path,lambda:now[0],create=False)
+            assert control.data==first_data and hashlib.sha256(control.path.read_bytes()).hexdigest()==first_hash
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            control.setup('setup-remote','local',home,lambda:dispatches.append('setup-remote'),lambda:stop.append('local'))
+            setups.append(setup_journal(home,2,300));assert control.poll()['can_admit']
+            remote_flow,remote_reader,remote_stops=attach(control,fixture,tmp_path,home,'connector',remote)
+            writers.append(JournalFixture(remote_reader.path(remote),remote))
+            for name,total in [('remote-one',30),('remote-two',40)]:
+>               control.start_work(name,'connector','synthetic',binding=remote,checkpoint=deepcopy(remote_flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+
+..\draft\controller\test_independent.py:344: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\draft\controller\independent_controller.py:149: in start_work
+    self._reserve(request_id,{'kind':'work','lane':lane,'stage':stage,'operation':None,'session':None,
+..\draft\controller\independent_controller.py:122: in _reserve
+    super()._reserve(request_id,record)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <independent_controller.Controller object at 0x00000226364DB8A0>
+request_id = 'remote-two'
+record = {'kind': 'work', 'lane': 'connector', 'stage': 'continuation', 'operation': None, ...}
+
+    def _reserve(self, request_id, record):
+        self._require_authorized()
+        if record['lane'] not in self.stops: raise Refused('OWNER_STOP_NOT_ATTACHED')
+        self.poll()
+        if request_id in self.data['requests'] or not self.summary()['can_admit']:
+>           raise Refused('NEW_DISPATCH_NOT_PERMITTED')
+E           legacy_controller.Refused: NEW_DISPATCH_NOT_PERMITTED
+
+..\draft\controller\legacy_controller.py:215: Refused
+______________ test_actual_five_requests_roundtrip_sixth_refused ______________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-bundle-racan37z/observer-composition-initial/pytest-tmp/test_actual_five_requests_roun0')
+
+    def test_actual_five_requests_roundtrip_sixth_refused(tmp_path):
+        assert POLICY=={'revision':11,'carry_in_admissions':6,'carry_in_tokens':89473,
+            'max_cumulative_admissions':11,'max_new_admissions':5,'preventive_cumulative_tokens':200000,
+            'operational_tolerance':700000,'deadline_seconds':120}
+        assert ANCESTRY['closure_sha256']=='c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0'
+        home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path);flow,reader,stops=attach(control,fixture,tmp_path,home);writer=None
+        try:
+            for index in range(5):
+                name='allocation-'+str(index)
+                checkpoint={} if index==0 else {'session_id':flow.selected['session_id']}
+                control.start_work(name,'local','synthetic',binding=flow.selected,checkpoint=checkpoint,
+                    stage='useful_work' if index==0 else 'continuation')
+                result=consume(control);assert result['ok']
+                if writer is None:writer=JournalFixture(reader.path(flow.selected),flow.selected)
+                writer.complete(name,(index+1)*10);fixture.terminal(name,flow.selected)
+                summary=control.poll()
+>               assert control.data['requests'][name]['settled']
+E               assert False
+
+..\draft\controller\test_v11_allocation.py:26: AssertionError
+=========================== short test summary info ===========================
+FAILED ..\draft\controller\test_independent.py::test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work
+FAILED ..\draft\controller\test_v11_allocation.py::test_actual_five_requests_roundtrip_sixth_refused
+2 failed, 50 passed in 34.60s

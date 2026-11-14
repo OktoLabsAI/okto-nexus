@@ -1,0 +1,20 @@
+{
+  "status": "STANDING_USER_AUTHORIZATION_CONFIRMED_BY_ROOT_NO_NEW_HASH_APPROVAL_REQUIRED",
+  "historical_receipt": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-approved-execution\\authorization.json",
+  "historical_receipt_sha256": "8500ae2cd11ff8dca2bc1551a9a5349f76075a0578f2e931c436a09ee2515620",
+  "actual_user_quote": "pode seguir e pode usar o claude se quiser testar com a conta autenticada atualmente com limite de 200k tokens do modelo sonnet",
+  "assistant_authored_interpretation": "User authorizes proceeding with the exact reviewed v10 Codex campaign. Claude Sonnet is an optional separately authorized alternative with 200000 token ceiling; it is not selected or executed by this receipt.",
+  "assistant_authored_scope": "One finite v10 campaign. No predecessor replay, no forced service stop, no extra allocation.",
+  "finding": "The available human messages authorize continuing the work; no explicit human restriction to v10 or exclusion of another necessary finite cycle was found. The exact-v10-only and new-human-hash-approval restrictions came from assistant-authored artifact interpretation.",
+  "root_resolution": "Continue preparation under the standing authorization and unchanged material limits. After final freeze/review, root may create a truthful v11 technical binding to that authorization, without claiming the user textually approved the artifact hash.",
+  "not_authorized": [
+    "forced service stop",
+    "logout/reboot",
+    "personal-file/authentication-file access by the assistant",
+    "old intent replay or accounting reset",
+    "budget increase"
+  ],
+  "v10_receipt_modified": false,
+  "v11_technical_binding_created": false,
+  "effects_executed": 0
+}

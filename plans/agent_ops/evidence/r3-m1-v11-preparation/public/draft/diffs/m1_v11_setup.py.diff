@@ -1,0 +1,11 @@
+--- v10/m1_v10_setup.py
++++ v11/m1_v11_setup.py
+@@ -16,7 +16,7 @@
+ require(configuration['harness_settings']=={} and configuration['secret_bindings']=={}
+     and configuration['tool_access']=='ask' and not review['request']['broadcast_handoff_auto_claim'],'SETUP_POLICY_MISMATCH')
+ require(configuration['authorization']=={'minutes':60,'no_expiry':False,'actions':20,'unlimited_actions':False},'SETUP_LIMIT_MISMATCH')
+-request='m1v10-local-setup'
++request='m1v11-local-setup'
+ require(request in P['request_ids']['setup'],'SETUP_INTENT_OUTSIDE_PROPOSAL')
+ require(not (ROOT/'public/local-setup-result.json').exists(),'SETUP_RESULT_ALREADY_EXISTS')
+ require(not (ROOT/'private/controller.json').exists(),'SETUP_CANNOT_REPLAY_OR_RECREATE_CONTROLLER')

@@ -1,0 +1,17 @@
+{
+  "status": "REVIEWED_SCOPE_GAP_NO_EXECUTION_CLAIM",
+  "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "plan_references": {
+    "SVC-09": 343,
+    "SVC-T09": 835,
+    "M1": 375,
+    "terminal_first": 518,
+    "real_campaign": 998
+  },
+  "work_wrapper_sha256": "1ae5d8da11e92e829bc97dae16df902f57c1b78a3b191cb54993a2dcabfe779b",
+  "distinction": "SVC-09 is version/upgrade; SVC-T09 is terminal/dashboard closure preserving service-owned components and execution.",
+  "observed_implementation": "The temporary wrapper opens installed TerminalWork, uses canonical HTTP, and exits after settled work. A subsequent wrapper reloads the product checkpoint. It does not invoke the work parser, open/close a dashboard, or prove active terminal closure.",
+  "acceptance": "Do not infer SVC-T09 total coverage, literal CLI re-entry, logout or reboot. M1 itself requires zero dashboard visits; the distinct dashboard closure case needs separate evidence.",
+  "recommendation": "Review the literal run_work parser shim and record exact observables without substituting API success for CLI/frontend acceptance.",
+  "campaign_effects": 0
+}

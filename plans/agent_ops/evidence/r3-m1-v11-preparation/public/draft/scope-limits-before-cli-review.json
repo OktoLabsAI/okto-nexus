@@ -1,0 +1,17 @@
+{
+  "status": "OFFLINE_PARTIAL_SCOPE_NOT_M1_APPROVAL_READY",
+  "work_path": "m1_v11_work.py -> installed adapters.inbound.cli.work.open_work -> installed application.terminal_work.TerminalWork -> canonical HTTP; SerialFlow/Controller serialize and fence API effects.",
+  "work_cli_parser_executed": false,
+  "literal_cli_reentry_qualified": false,
+  "dashboard_open_close_exercised": false,
+  "scope": "The existing wrapper proves application-flow behavior when executed; it does not invoke work CLI parser/rendering or establish literal terminal/dashboard closure.",
+  "real_cli_when_authorized": [
+    "service lifecycle",
+    "setup/connect",
+    "remote bootstrap"
+  ],
+  "no_execution_in_preparation": true,
+  "no_m1_or_dx39_dx40_ac11_promotion": true,
+  "frontend_distinction": "SVC-09 concerns version/upgrade; SVC-T09 concerns closing terminal/dashboard while service-owned work survives. No logout/reboot or dashboard event is inferred.",
+  "pending": "Review the minimal literal work CLI shim before final campaign scope approval."
+}

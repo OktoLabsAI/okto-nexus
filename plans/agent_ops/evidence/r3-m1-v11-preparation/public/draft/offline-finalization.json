@@ -1,0 +1,45 @@
+{
+  "status": "FINAL_ARTIFACTS_READY_FOR_ROOT_REVIEW_TECHNICAL_BINDING_PENDING",
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "groups": {
+    "installed-controller-cli-component": {
+      "tests": 64,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-read250-candidate-q537zfyi\\qualification\\final.xml",
+      "xml_sha256": "e14073e0b03f5991f35ebecfa1fc7876b13bcff3a283c09d43f35855aa967b3a"
+    },
+    "root-driver-component": {
+      "tests": 78,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\pure-tests-003.xml",
+      "xml_sha256": "53a38c589edac3adec33267aa8051dd7dbc75992a455622a3ca90d81c3487418"
+    },
+    "installer-checks": {
+      "tests": 30,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\installer-checks\\results.xml",
+      "xml_sha256": "70496df51a04045e613f6395c40e55d13c3df0d17b756b69d4b9102a7df5980c"
+    },
+    "remote-composition-final": {
+      "tests": 22,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\remote-composition-final\\results.xml",
+      "xml_sha256": "28021b8c9c45c0b136258be137f01c2c2c84ab2b2888ad5c83346ead4d2378ad"
+    },
+    "lifecycle-cleanup-checks": {
+      "tests": 7,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\lifecycle-cleanup-checks\\results.xml",
+      "xml_sha256": "95e1cb1054e8730f02076fee6291156dea2d712d5960df1ac3b002d17b541220"
+    }
+  },
+  "source_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-read250-candidate-q537zfyi\\qualification\\runtime-freeze.json",
+    "sha256": "d22afc44b0776b3f34429c59d311c85c53d19f7d15ab5d5d7a96135947d333f0",
+    "classification": "FINAL_OFFLINE_SUITE_PASS_READ250"
+  },
+  "runtime_pins": 46,
+  "package_pins": 984,
+  "campaign_absent": true,
+  "products_not_installed": true,
+  "real_approval_absent": true,
+  "standing_user_authorization": true,
+  "new_human_hash_approval_required": false,
+  "technical_v11_binding_created": false,
+  "predecessor_attempt_manifest_sha256": "ccb58d570517a447c4966f73ba1348fb3161cecaffbf726719b50a1b0df09199"
+}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="52" time="33.918" timestamp="2026-11-14T10:26:09.786167-03:00" hostname="Alienware_m15"><testcase classname="draft.controller.test_cached_readonly" name="test_real_closed_v10_full_schema_prepares_once_and_stays_readonly" time="0.210" /><testcase classname="draft.controller.test_cached_readonly" name="test_fresh_wal_snapshot_and_no_read_lock_between_polls" time="0.074" /><testcase classname="draft.controller.test_cached_readonly" name="test_none_and_error_paths_always_release_transaction" time="0.052" /><testcase classname="draft.controller.test_cached_readonly" name="test_unrelated_schema_evolution_is_observed_with_same_connection" time="0.046" /><testcase classname="draft.controller.test_cached_readonly" name="test_file_identity_drift_is_refused_and_cache_closed" time="0.043" /><testcase classname="draft.controller.test_cached_readonly" name="test_path_junction_revalidation_fails_closed" time="0.037" /><testcase classname="draft.controller.test_cached_readonly" name="test_warmed_query_still_interrupts_at40ms_and_never_retries" time="0.048" /><testcase classname="draft.controller.test_cached_readonly" name="test_initialization_budget_is_separate_explicit_and_fails_closed" time="0.038" /><testcase classname="draft.controller.test_cached_readonly" name="test_closed_or_other_owner_cannot_reuse_connections" time="0.042" /><testcase classname="draft.controller.test_cached_readonly" name="test_core_journal_can_initialize_after_reservation_and_controller_closes_all" time="0.513" /><testcase classname="draft.controller.test_cached_readonly" name="test_core_partial_schema_then_legitimate_ddl_and_required_schema_drop" time="0.162" /><testcase classname="draft.controller.test_independent" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="0.594" /><testcase classname="draft.controller.test_independent" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="1.083" /><testcase classname="draft.controller.test_independent" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="3.734" /><testcase classname="draft.controller.test_independent" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.431" /><testcase classname="draft.controller.test_independent" name="test_journal_privacy_scope_and_real_layout[local]" time="0.106" /><testcase classname="draft.controller.test_independent" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.130" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.114" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.107" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.107" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.103" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.110" /><testcase classname="draft.controller.test_independent" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.104" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.079" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.083" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.080" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.082" /><testcase classname="draft.controller.test_independent" name="test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work" time="3.662"><failure message="legacy_controller.Refused: NEW_DISPATCH_NOT_PERMITTED">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-bundle-racan37z/observer-composition-initial/pytest-tmp/test_one_global_ledger_across_0')
+
+    def test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work(tmp_path):
+        now=[1000.];home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path,lambda:now[0]);writers=[];setups=[];dispatches=[];stop=[]
+        local=scope('local');remote=scope('connector')
+        try:
+            control.setup('setup-local','local',home,lambda:dispatches.append('setup-local'),lambda:stop.append('local'))
+            setups.append(setup_journal(home,1,200));assert control.poll()['can_admit']
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            writers.append(JournalFixture(journal.path(local),local))
+            for name,total in [('local-one',10),('local-two',20)]:
+                control.start_work(name,'local','synthetic',binding=local,checkpoint=deepcopy(flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+                consume(control);writers[0].complete(name,total,thread='local-native-thread');fixture.terminal(name,local)
+                assert control.poll()['can_admit']
+            first_hash=hashlib.sha256(control.path.read_bytes()).hexdigest()
+            first_data=deepcopy(control.data);control.close()
+            control=create_control(tmp_path,lambda:now[0],create=False)
+            assert control.data==first_data and hashlib.sha256(control.path.read_bytes()).hexdigest()==first_hash
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            control.setup('setup-remote','local',home,lambda:dispatches.append('setup-remote'),lambda:stop.append('local'))
+            setups.append(setup_journal(home,2,300));assert control.poll()['can_admit']
+            remote_flow,remote_reader,remote_stops=attach(control,fixture,tmp_path,home,'connector',remote)
+            writers.append(JournalFixture(remote_reader.path(remote),remote))
+            for name,total in [('remote-one',30),('remote-two',40)]:
+&gt;               control.start_work(name,'connector','synthetic',binding=remote,checkpoint=deepcopy(remote_flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+
+..\draft\controller\test_independent.py:344: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\draft\controller\independent_controller.py:149: in start_work
+    self._reserve(request_id,{'kind':'work','lane':lane,'stage':stage,'operation':None,'session':None,
+..\draft\controller\independent_controller.py:122: in _reserve
+    super()._reserve(request_id,record)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;independent_controller.Controller object at 0x00000226364DB8A0&gt;
+request_id = 'remote-two'
+record = {'kind': 'work', 'lane': 'connector', 'stage': 'continuation', 'operation': None, ...}
+
+    def _reserve(self, request_id, record):
+        self._require_authorized()
+        if record['lane'] not in self.stops: raise Refused('OWNER_STOP_NOT_ATTACHED')
+        self.poll()
+        if request_id in self.data['requests'] or not self.summary()['can_admit']:
+&gt;           raise Refused('NEW_DISPATCH_NOT_PERMITTED')
+E           legacy_controller.Refused: NEW_DISPATCH_NOT_PERMITTED
+
+..\draft\controller\legacy_controller.py:215: Refused</failure></testcase><testcase classname="draft.controller.test_independent" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.445" /><testcase classname="draft.controller.test_independent" name="test_fresh_worker_validation_failure_never_posts" time="0.361" /><testcase classname="draft.controller.test_independent" name="test_usage_counter_regression_latches_fault_without_reset" time="0.667" /><testcase classname="draft.controller.test_independent" name="test_api_queue_and_cross_thread_controller_writes_are_refused" time="0.155" /><testcase classname="draft.controller.test_independent" name="test_present_canonical_and_core_epoch_mismatch_blocks_usage" time="0.574" /><testcase classname="draft.controller.test_independent" name="test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending" time="1.443" /><testcase classname="draft.controller.test_independent" name="test_historical_attachment_revalidates_owner_and_accounts_late_tokens" time="0.918" /><testcase classname="draft.controller.test_observation_budget" name="test_snapshot_clock_includes_rollback_and_closes_on_exhaustion" time="0.083" /><testcase classname="draft.controller.test_observation_budget" name="test_aggregate_primary_survives_failed_rollback_but_cache_is_discarded" time="0.056" /><testcase classname="draft.controller.test_observation_budget" name="test_aggregate_only_preserves_reader_for_late_observations" time="0.070" /><testcase classname="draft.controller.test_observation_budget" name="test_public_observation_includes_io_before_snapshot" time="0.008" /><testcase classname="draft.controller.test_observation_budget" name="test_worker_post_checks_new_clock_after_get_io[freshness]" time="0.003" /><testcase classname="draft.controller.test_observation_budget" name="test_worker_post_checks_new_clock_after_get_io[poll_budget]" time="0.002" /><testcase classname="draft.controller.test_observation_budget" name="test_first_setup_gets_complete_fresh_empty_poll_before_effect" time="0.141" /><testcase classname="draft.controller.test_observation_budget" name="test_poll_checks_new_clock_after_final_persist_and_does_not_refresh" time="0.125" /><testcase classname="draft.controller.test_observation_budget" name="test_deadline_crossed_during_final_persist_is_faulted_before_return" time="0.285" /><testcase classname="draft.controller.test_observation_budget" name="test_usage_fences_effects_before_durable_io" time="0.679" /><testcase classname="draft.controller.test_v11_allocation" name="test_actual_five_requests_roundtrip_sixth_refused" time="3.272"><failure message="assert False">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-bundle-racan37z/observer-composition-initial/pytest-tmp/test_actual_five_requests_roun0')
+
+    def test_actual_five_requests_roundtrip_sixth_refused(tmp_path):
+        assert POLICY=={'revision':11,'carry_in_admissions':6,'carry_in_tokens':89473,
+            'max_cumulative_admissions':11,'max_new_admissions':5,'preventive_cumulative_tokens':200000,
+            'operational_tolerance':700000,'deadline_seconds':120}
+        assert ANCESTRY['closure_sha256']=='c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0'
+        home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path);flow,reader,stops=attach(control,fixture,tmp_path,home);writer=None
+        try:
+            for index in range(5):
+                name='allocation-'+str(index)
+                checkpoint={} if index==0 else {'session_id':flow.selected['session_id']}
+                control.start_work(name,'local','synthetic',binding=flow.selected,checkpoint=checkpoint,
+                    stage='useful_work' if index==0 else 'continuation')
+                result=consume(control);assert result['ok']
+                if writer is None:writer=JournalFixture(reader.path(flow.selected),flow.selected)
+                writer.complete(name,(index+1)*10);fixture.terminal(name,flow.selected)
+                summary=control.poll()
+&gt;               assert control.data['requests'][name]['settled']
+E               assert False
+
+..\draft\controller\test_v11_allocation.py:26: AssertionError</failure></testcase><testcase classname="draft.controller.test_v11_allocation" name="test_collector_rejects_previous_six_request_policy_even_with_valid_hash" time="0.002" /><testcase classname="draft.controller.test_v11_allocation" name="test_actual_legacy_state_rejects_six_records_even_with_valid_seal" time="0.065" /><testcase classname="draft.controller.test_work_wrapper" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="8.478" /><testcase classname="draft.controller.test_work_wrapper" name="test_cadence_miss_fences_once_then_drains_late_usage_before_public_result" time="2.089" /><testcase classname="draft.controller.test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[snapshot_read]" time="0.498" /><testcase classname="draft.controller.test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[schema_initialization]" time="0.486" /></testsuite></testsuites>

@@ -1317,3 +1317,25 @@ console/dashboard e os aceites DX-T39/DX-T40/AC-11 permanecem pendentes. Nenhum
 serviço ou provedor foi chamado, e nenhum status de aceite foi promovido.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-installed-cli-component/root-review.json`.
+
+## 2026-11-14 — preparação finita da campanha v11
+
+Foram congelados e revisados os comandos de instalação, ciclo dos dois serviços,
+CLI instalada, observação de consumo e bootstrap/login do operador. A senha
+temporária do operador fica em memória e é transmitida pela entrada padrão da
+CLI canônica; criação e login são reservados uma única vez, com observação do
+consumo histórico mantida durante a operação.
+
+A exigência anterior de outra aprovação humana para cada sucessora era uma
+interpretação nossa. O usuário já autorizou continuar o plano e executar os
+testes reais dentro do orçamento. O registro técnico v11 vinculará essa
+autorização existente aos arquivos revisados, sem atribuir ao usuário uma nova
+aprovação textual do hash. O recibo v10 e a campanha encerrada ficam preservados.
+
+Continuam seis reservas e 89.473 tokens históricos, até cinco reservas novas,
+onze cumulativas, limite preventivo de 200 mil tokens e tolerância de 700 mil.
+Claude Sonnet permanece opcional e não selecionado, com teto próprio de 200 mil.
+Não estão incluídos force, logout, reboot, tarefas pessoais ou leitura de
+credenciais do provedor. Preparação offline não promove nenhum aceite M1.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v11-preparation/review.json`.

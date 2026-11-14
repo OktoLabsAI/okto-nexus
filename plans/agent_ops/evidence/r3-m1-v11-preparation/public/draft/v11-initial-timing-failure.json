@@ -1,0 +1,87 @@
+{
+  "status": "OBSERVED_TIMING_LIMITATION_FAIL_CLOSED",
+  "original_suite": "observer-composition-initial/results.xml",
+  "policy_case": "Five work requests for allocation ceiling, not selected nominal one-setup/four-work route.",
+  "faults": [
+    "OBSERVATION_UNKNOWN"
+  ],
+  "first_errors": {
+    "allocation-0": {
+      "exception_type": "JournalUnknown",
+      "reason": "READER_FAILED"
+    },
+    "allocation-1": {
+      "exception_type": "JournalUnknown",
+      "reason": "READER_FAILED"
+    },
+    "allocation-2": {
+      "exception_type": "OperationalError",
+      "reader": {
+        "budget_ms": 100.0,
+        "elapsed_ms": 105.28740001609549,
+        "phase": "snapshot_read"
+      },
+      "sqlite_errorcode": 9,
+      "sqlite_errorname": "SQLITE_INTERRUPT"
+    }
+  },
+  "reserved": 3,
+  "observation": {
+    "budgets": {
+      "freshness_ms": 1000,
+      "initialization_ms": 250,
+      "maximum_previous_poll_ms": 500.6796999950893,
+      "poll_ms": 600,
+      "snapshot_ms": 100
+    },
+    "maximum_poll_start_interval_seconds": 0.5380725000286475,
+    "reader_initialization": {
+      "local": {
+        "canonical": {
+          "close_error_types": [],
+          "closed": false,
+          "failed": false,
+          "initialization_budget_ms": 250.0,
+          "initializations": [
+            {
+              "budget_ms": 250.0,
+              "elapsed_ms": 17.692699970211834,
+              "file_name": "nexus.db",
+              "status": "PREPARED"
+            }
+          ],
+          "open_connections": 1,
+          "read_budget_ms": 100.0,
+          "schema_changes": []
+        },
+        "core": {
+          "close_error_types": [],
+          "closed": false,
+          "failed": true,
+          "initialization_budget_ms": 250.0,
+          "initializations": [
+            {
+              "budget_ms": 250.0,
+              "elapsed_ms": 31.426900008227676,
+              "file_name": "session-304849f7d014315cb0ef685c680fc1926e458b8e2d3a5254ecff8dcad3bb0b85.db",
+              "status": "PREPARED"
+            }
+          ],
+          "open_connections": 0,
+          "read_budget_ms": 100.0,
+          "schema_changes": []
+        }
+      }
+    },
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "transport_failures": {
+      "discarded": 0,
+      "later": [],
+      "primary": null
+    },
+    "worker_in_flight": false
+  },
+  "runtime_changed": false,
+  "budget_changed": false,
+  "later_pass_erases_failure": false
+}

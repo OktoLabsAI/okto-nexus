@@ -1,0 +1,62 @@
+--- frozen-source/controller/test_work_wrapper.py
++++ v11/controller\test_work_wrapper.py
+@@ -88,9 +88,9 @@
+         for name in ('server_home','operator_home'):(Path(paths[name])/'terminal/profiles').mkdir(parents=True)
+         self.fixture=CanonicalFixture(Path(paths['server_home']))
+         self.P={'paths':paths,'package_pins':{'fixture':'NO_REAL_PRODUCT_EXECUTION'},
+-            'execution_bundle':{'profiles':{'local':'m1v10-local','connector':'m1v10-remote'},'operator_profile':'m1v10-human',
++            'execution_bundle':{'profiles':{'local':'m1v11-local','connector':'m1v11-remote'},'operator_profile':'m1v11-human',
+                 'files':{'response_loss':{'path':str(self.modules.parent/'response_loss.py')}}},
+-            'request_ids':{'work':['m1v10-'+lane+'-work-'+number for lane in ('local','remote') for number in ('01','02')]},
++            'request_ids':{'work':['m1v11-'+lane+'-work-'+number for lane in ('local','remote') for number in ('01','02')]},
+             'finite_work':{'request':'Synthetic finite fixture','continuation':'Synthetic continuation',
+                 'delivery':{'expected_shape':{'row_count':4,'sum':10,'input_sha256':'synthetic'}}}}
+         self.C={'service_selection_args':[]}
+@@ -116,7 +116,7 @@
+     import okto_nexus.adapters.inbound.cli.work as product_work
+     import okto_nexus.adapters.inbound.cli.terminal_target as target
+     def service(args,name,operator,resolver):
+-        lane='local' if name=='m1v10-local' else 'connector'
++        lane='local' if name=='m1v11-local' else 'connector'
+         home=Path(context.P['paths']['server_home' if lane=='local' else 'operator_home'])
+         return types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane=lane)
+     monkeypatch.setattr(target,'resolve_terminal_target',service)
+@@ -125,7 +125,7 @@
+     try:
+         for lane,phase in [('local','useful'),('local','continuation'),('connector','useful'),('connector','continuation')]:
+             context.remaining=[lane,phase]
+-            runpy.run_path(str(Path(__file__).parent.parent/'m1_v10_work.py'),run_name='__main__')
++            runpy.run_path(str(Path(__file__).parent.parent/'m1_v11_work.py'),run_name='__main__')
+             profile=context.P['execution_bundle']['profiles'][lane]
+             suffix='01' if phase=='useful' else '02'
+             value=json.loads((tmp_path/'public'/(profile+'-work-'+suffix+'-result.json')).read_text())
+@@ -185,9 +185,9 @@
+         types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane='local'))
+     monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,home,'local'))
+     try:
+-        runpy.run_path(str(Path(__file__).parent.parent/'m1_v10_work.py'),run_name='__main__')
++        runpy.run_path(str(Path(__file__).parent.parent/'m1_v11_work.py'),run_name='__main__')
+         control=controls[0]
+-        value=json.loads((tmp_path/'public/m1v10-local-work-01-result.json').read_text())
++        value=json.loads((tmp_path/'public/m1v11-local-work-01-result.json').read_text())
+         assert len(stops)==1 and len(ticks)>=4 and control.api.thread is None
+         assert value['summary']['reasons']==['MONITOR_CADENCE_EXCEEDED']
+         assert value['summary']['new_reserved_requests']==1
+@@ -235,7 +235,7 @@
+     if phase=='snapshot_read':monkeypatch.setattr(CanonicalIntentReader,'read',fail_before_admission)
+     else:monkeypatch.setattr(ReadOnly,'prepare',fail_before_admission)
+     with pytest.raises(sqlite3.OperationalError) as caught:
+-        runpy.run_path(str(Path(__file__).parent.parent/'m1_v10_work.py'),run_name='__main__')
++        runpy.run_path(str(Path(__file__).parent.parent/'m1_v11_work.py'),run_name='__main__')
+     assert caught.value is primary
+     assert not any(call[1]=='POST' for call in context.calls)
+     checkpoint=json.loads((tmp_path/'private/controller.json').read_text())
+@@ -243,7 +243,7 @@
+     public=json.loads((tmp_path/'public/live-accounting.json').read_text())
+     assert public['summary']['can_admit'] is False and public['summary']['current']==[]
+     assert public['summary']['new_reserved_requests']==0
+-    error=json.loads((tmp_path/'public/m1v10-local-work-01-runner-error.json').read_text())
++    error=json.loads((tmp_path/'public/m1v11-local-work-01-runner-error.json').read_text())
+     assert error['error_type']=='OperationalError'
+     assert error['reader_diagnostic']=={key:primary.m1_reader_diagnostic[key] for key in ('phase','budget_ms','elapsed_ms')}
+     assert error['final_publication_diagnostics']['published_snapshots']==1

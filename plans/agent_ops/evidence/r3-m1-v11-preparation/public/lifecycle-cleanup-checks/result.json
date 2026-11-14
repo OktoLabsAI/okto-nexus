@@ -1,0 +1,11 @@
+{
+  "exit_code": 0,
+  "duration_seconds": 9.659042199957184,
+  "source_before": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\test_lifecycle_cleanup_pending.py": "bbcd785cee7baf329c079f85d953471410f31c1b2650b9d66191744311413af6",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\m1_v11_lifecycle.py": "b7e72d9070fda69d27fb493c950c83d4c836338a61fbdb03a1c110b8d638f868"
+  },
+  "sources_unchanged": true,
+  "campaign_absent": true,
+  "scope": "Actual lifecycle wrapper via runpy, fake isolated Context, fake validator and fake subprocess only. Production helper semantics qualified separately; no real approval/product install/provider/service."
+}

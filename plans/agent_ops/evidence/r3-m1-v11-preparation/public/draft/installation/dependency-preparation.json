@@ -1,0 +1,28 @@
+{
+  "status": "DEPENDENCIES_ONLY_READY",
+  "products_installed": false,
+  "source_modified": false,
+  "source_manifest": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-manifest.json",
+  "source_manifest_sha256": "b5f9b58b99e4948e5bf53a152fa5ec8344b897cc4ec1d037f39945efdb668906",
+  "source_bytes_rechecked_after": true,
+  "probe": {
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\installation\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\installation\\venv\\Scripts\\python.exe",
+    "products_find_spec": {
+      "okto_nexus": null,
+      "okto_nexus_connector": null,
+      "nexus_connector_core": null
+    },
+    "product_dist_info_absent": true,
+    "pip_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\installation\\venv\\Lib\\site-packages\\pip\\__init__.py",
+    "pip_version": "24.3.1",
+    "mcp_version": "1.30.0",
+    "system_site_packages": false
+  },
+  "dependency_files": 3209,
+  "dependency_bytes": 58227272,
+  "dependency_manifest_sha256": "24a3efbfc55b5f6030ede5a8858eb15ef80f296d6bfca92fb083bc9fd04b9bef",
+  "environment_sha256": "19c3b3a5a0fb8865254c5f2e2d85fc0f355b15f07caa78cc85a108f6f17ce04b",
+  "campaign_services_or_provider_used": false,
+  "limits": "Only pinned dependency bytes copied; product install remains absent and unauthorized."
+}

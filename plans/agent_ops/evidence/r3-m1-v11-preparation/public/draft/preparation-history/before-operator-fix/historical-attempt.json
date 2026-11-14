@@ -1,0 +1,14 @@
+{
+  "status": "HISTORICAL_ATTEMPT_NOT_AUTHORIZED_OPERATOR_STAGE_MISSING",
+  "proposal_sha256": "fbc181746c253193b11bac6fa48b7b124a9b79755499340b6fdee6709689fff7",
+  "public_manifest_sha256": "ccb58d570517a447c4966f73ba1348fb3161cecaffbf726719b50a1b0df09199",
+  "public_qualification_sha256": "1f8c4d9b7ff872463bb152241e76c0ef6d443f35864c9887295326e9cd886a9f",
+  "root_preflight_sha256": "8b622d769ae3938535e0eda14b0cd57df8289e47ff0a9aa2bb0555f92512a48a",
+  "root_preflight_is_current_approval": false,
+  "limitations": [
+    "Recipe retained v10 policy/authority labels.",
+    "Planned operator account/bootstrap/login did not have a reachable frozen executor."
+  ],
+  "public209_modified": false,
+  "effects_executed": 0
+}

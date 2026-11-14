@@ -1,0 +1,11 @@
+--- frozen-source/m1_v10_work.py
++++ v11/m1_v11_work.py
+@@ -33,7 +33,7 @@
+ assert not (ROOT/'public'/(request+'-result.json')).exists()
+ controller=X.controller()
+ driverpath=ROOT/'private/response-loss.json'
+-faults=CampaignState(driverpath,**({'campaign_id':'m1-v10'} if not driverpath.exists() else {}))
++faults=CampaignState(driverpath,**({'campaign_id':'m1-v11'} if not driverpath.exists() else {}))
+ flows={}; raw_flows={}; bindings={}; observed={}; guards=[]; stops=[]; handles=[]; selected_decisions=set()
+ recovered_decisions={}
+ publication_diagnostics={}

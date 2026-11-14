@@ -1,0 +1,49 @@
+--- v10/lifecycle.py
++++ v11/lifecycle.py
+@@ -1,6 +1,6 @@
+ """Exactly one each of the eight proposed lifecycle actions; no force/replay."""
+ from pathlib import Path
+-import hashlib,json,os,subprocess,sys,time
++import hashlib,importlib.util,json,os,subprocess,sys,time
+ sys.path.insert(0,str(Path(__file__).parent))
+ from campaign_context import load,reserve_json,require
+ X=load()  # refuses before any product import or effect when approval is absent
+@@ -27,12 +27,25 @@
+     if record.exists():
+         print(json.dumps({'status':'EXISTING_ACTION_RECONCILE_ONLY','component':component,'action':action,'record':str(record),'replayed':False}))
+         return 3
++    cleanup_proof_sha256=None
+     if action=='uninstall':
+-        proof=json.loads((ROOT/'public'/f'cleanup-{component}.json').read_text())
+-        require(proof.get('task_name')==command['task_name'] and proof.get('owned_pid_birth_exit_confirmed') is True
+-                and proof.get('task_stopped_confirmed') is True and proof.get('force_used') is False,'NORMAL_STOP_EXIT_PROOF_REQUIRED')
++        raw=(ROOT/'public'/f'cleanup-{component}.json').read_bytes()
++        proof=json.loads(raw)
++        cleanup_proof_sha256=hashlib.sha256(raw).hexdigest()
++        if proof.get('kind')=='NEVER_STARTED_OWNER_ABSENT':
++            require(proof.get('component')==component and proof.get('task_name')==command['task_name'],
++                    'CLEANUP_TARGET_MISMATCH')
++            pin=P['execution_bundle']['files']['root_driver_confirm_cleanup']
++            require(hashlib.sha256(Path(pin['path']).read_bytes()).hexdigest()==pin['sha256'],'CLEANUP_VALIDATOR_CHANGED')
++            spec=importlib.util.spec_from_file_location('m1_v11_cleanup_validator',pin['path'])
++            helper=importlib.util.module_from_spec(spec);sys.modules[spec.name]=helper;spec.loader.exec_module(helper)
++            require(helper.validate_never_started(X,proof,allow_current_uninstall=True) is True,'NEVER_STARTED_PROOF_REQUIRED')
++        else:
++            require(proof.get('task_name')==command['task_name'] and proof.get('owned_pid_birth_exit_confirmed') is True
++                    and proof.get('task_stopped_confirmed') is True and proof.get('force_used') is False,'NORMAL_STOP_EXIT_PROOF_REQUIRED')
+     reserve_json(record,{'state':'DISPATCH_RESERVED','component':component,'action':action,
+-        'task_name':command['task_name'],'argv':command['argv'],'proposal_sha256':X.args.expected_proposal_sha256,'time':time.time()})
++        'task_name':command['task_name'],'argv':command['argv'],'proposal_sha256':X.args.expected_proposal_sha256,
++        'cleanup_proof_sha256':cleanup_proof_sha256,'time':time.time()})
+     out,err=ROOT/'private'/f'{component}-{action}.stdout',ROOT/'private'/f'{component}-{action}.stderr'
+     with out.open('xb') as stdout,err.open('xb') as stderr:
+         process=subprocess.Popen(command['argv'],cwd=ROOT,env=X.env(),stdout=stdout,stderr=stderr,creationflags=subprocess.CREATE_NO_WINDOW)
+@@ -41,7 +54,7 @@
+     try:value=json.loads(out.read_text(encoding='utf-8'))
+     except (ValueError,UnicodeError):value={}
+     public={'state':'RETURNED','component':component,'action':action,'task_name':command['task_name'],'returncode':code,
+-        'reported_state':value.get('state'),'reported_code':value.get('code'),
++        'reported_state':value.get('state'),'reported_code':value.get('code'),'cleanup_proof_sha256':cleanup_proof_sha256,
+         'output_sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'error_sha256':hashlib.sha256(err.read_bytes()).hexdigest()}
+     reserve_json(ROOT/'public'/f'lifecycle-{component}-{action}-result.json',public)
+     print(json.dumps(public));return code

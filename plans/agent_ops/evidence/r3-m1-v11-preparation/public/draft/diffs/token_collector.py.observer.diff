@@ -1,0 +1,20 @@
+--- frozen-source/controller/token_collector.py
++++ v11/controller\token_collector.py
+@@ -46,7 +46,7 @@
+ 
+ 
+ def initial_state():
+-    return {'version': 1, 'revision': 0, 'stop_at': 200000, 'tolerance': 700000, 'max_requests': 6,
++    return {'version': 1, 'revision': 0, 'stop_at': 200000, 'tolerance': 700000, 'max_requests': 5,
+             'streams': {}, 'threads': {}, 'turns': {}, 'requests': {},
+             'current_request': None, 'faults': []}
+ 
+@@ -424,7 +424,7 @@
+     require(type(document) is dict and document.get('format') == 'm1-token-collector-v8', 'CHECKPOINT_INVALID')
+     state = document.get('state')
+     require(type(state) is dict and state.get('version') == 1 and state.get('stop_at') == 200000
+-            and state.get('tolerance') == 700000 and state.get('max_requests') == 6
++            and state.get('tolerance') == 700000 and state.get('max_requests') == 5
+             and document.get('sha256') == fingerprint(state), 'CHECKPOINT_INVALID')
+     require(set(state) == set(initial_state()), 'CHECKPOINT_INVALID')
+     return deepcopy(state)

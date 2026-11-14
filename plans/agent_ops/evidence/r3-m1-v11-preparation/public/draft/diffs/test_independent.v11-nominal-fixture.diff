@@ -1,0 +1,41 @@
+--- initial-v11/test_independent.py
++++ corrected-v11/test_independent.py
+@@ -317,7 +317,7 @@
+     return journal
+ 
+ 
+-def test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work(tmp_path):
++def test_one_global_ledger_across_one_setup_local_continuation_reopen_remote_work(tmp_path):
+     now=[1000.];home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+     control=create_control(tmp_path,lambda:now[0]);writers=[];setups=[];dispatches=[];stop=[]
+     local=scope('local');remote=scope('connector')
+@@ -336,8 +336,8 @@
+         control=create_control(tmp_path,lambda:now[0],create=False)
+         assert control.data==first_data and hashlib.sha256(control.path.read_bytes()).hexdigest()==first_hash
+         flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+-        control.setup('setup-remote','local',home,lambda:dispatches.append('setup-remote'),lambda:stop.append('local'))
+-        setups.append(setup_journal(home,2,300));assert control.poll()['can_admit']
++        # Selected v11 remote bootstrap has zero productive model turns.
++        assert control.poll()['can_admit']
+         remote_flow,remote_reader,remote_stops=attach(control,fixture,tmp_path,home,'connector',remote)
+         writers.append(JournalFixture(remote_reader.path(remote),remote))
+         for name,total in [('remote-one',30),('remote-two',40)]:
+@@ -346,13 +346,13 @@
+             consume(control);writers[1].complete(name,total,thread='remote-native-thread');fixture.terminal(name,remote)
+             control.poll()
+         summary=control.summary()
+-        assert summary['new_reserved_requests']==6 and summary['reserved_requests']==POLICY['max_cumulative_admissions']
+-        assert summary['known_observed_tokens']==POLICY['carry_in_tokens']+200+300+20+40
++        assert summary['new_reserved_requests']==5 and summary['reserved_requests']==POLICY['max_cumulative_admissions']
++        assert summary['known_observed_tokens']==POLICY['carry_in_tokens']+200+20+40
+         assert summary['current']==[] and summary['reasons']==['GLOBAL_ALLOCATION_EXHAUSTED']
+-        assert dispatches==['setup-local','setup-remote']
++        assert dispatches==['setup-local']
+         assert not stop and not remote_stops and not stops
+-        with pytest.raises(Refused):control.start_work('seventh','connector','forbidden',binding=remote,checkpoint=deepcopy(remote_flow.document))
+-        assert control.summary()['new_reserved_requests']==6
++        with pytest.raises(Refused):control.start_work('sixth','connector','forbidden',binding=remote,checkpoint=deepcopy(remote_flow.document))
++        assert control.summary()['new_reserved_requests']==5
+     finally:
+         control.close()
+         for writer in writers:writer.close()
