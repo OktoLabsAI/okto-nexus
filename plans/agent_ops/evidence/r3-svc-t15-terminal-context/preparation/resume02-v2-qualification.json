@@ -1,0 +1,31 @@
+{
+  "status": "OFFLINE_COMPATIBILITY_DELTA_PASS",
+  "delta_cases": 1,
+  "delta_xml": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\delta-test.xml",
+    "sha256": "ec59e97bfcd3a4c73f377f272ef66476dd4a95495f054c708994f25e7d741f76"
+  },
+  "driver": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\run_case.py",
+    "sha256": "e12f28399d88e57ec5c91a5da1fa7d612fd1b1ff3f5e245a21f6605075649937"
+  },
+  "tests": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\test_resume02.py",
+    "sha256": "92fd88bdbc66513cf739913e1220b51dee46d4d5c99b36399ea95de32bf50a70"
+  },
+  "retained_prior_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02\\qualification.json",
+    "sha256": "7b0a22ac29c94bf8128169d5cf45bd62f27f221949f276ff8340d32bef702e85"
+  },
+  "prior_cases": 12,
+  "prior_cases_rerun": false,
+  "test_overlap": "The one strengthened observer case was already among prior12; do not count13 unique cases.",
+  "observed_outcome": "Real observe_candidate called real installed TerminalConnection.options twice with explicit workspace_id=None; fake IO returned stale then actual projected fresh schema.",
+  "failure_not_claimed": "Missing workspace key was guarded by request.get in installed source; no observed/proven KeyError in resume02.",
+  "service_actions": 0,
+  "model_calls": 0,
+  "setup_posts": 0,
+  "execution_directory_exists": false,
+  "tool_session": 36214,
+  "completion_tool_chunk": "4688ba"
+}

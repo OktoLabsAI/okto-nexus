@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="11" time="6.978" timestamp="2026-11-14T16:48:30.570143-03:00" hostname="Alienware_m15"><testcase classname="tests.test_user_service_installation" name="test_stop_persists_recovery_latch_before_request_and_never_stops_os_task" time="0.261"><failure message="KeyError: 'shutdown'">host = (&lt;okto_nexus.adapters.outbound.service_manager.local.LocalServerLifecycle object at 0x0000027D199C1D30&gt;, &lt;test_user_service_installation.FakeTasks object at 0x0000027D199C1BE0&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000027D1982D6E0&gt;
+
+    def test_stop_persists_recovery_latch_before_request_and_never_stops_os_task(host, monkeypatch):
+        adapter, tasks, receipt = install(host)
+        current = {'state': 'ready', 'instance_id': receipt['instance_id'], 'generation': 'current', 'pid': 123, 'supervisor': SUPERVISOR}
+        monkeypatch.setattr(adapter, '_inspect_process', lambda **_: current)
+        opener = Mock()
+        def open_request(request, **kwargs):
+            assert read_json(adapter.home / CONTROL_NAME)['desired'] == 'draining'
+            assert json.loads(request.data)['generation'] == 'current'
+            raise TimeoutError('observation only')
+        opener.open.side_effect = open_request
+        monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.local.build_opener', lambda *_: opener)
+        result = adapter.request_stop(current, timeout=.1)
+&gt;       assert result['shutdown']['state'] == 'UNCONFIRMED'
+               ^^^^^^^^^^^^^^^^^^
+E       KeyError: 'shutdown'
+
+tests\test_user_service_installation.py:355: KeyError</failure></testcase><testcase classname="tests.test_user_service_installation" name="test_stale_stop_cannot_latch_new_generation" time="0.140" /><testcase classname="tests.test_user_service_installation" name="test_stop_positive_identity_change_never_latches_or_posts[generation-new]" time="0.152" /><testcase classname="tests.test_user_service_installation" name="test_stop_positive_identity_change_never_latches_or_posts[instance_id-other]" time="0.142" /><testcase classname="tests.test_user_service_installation" name="test_stop_positive_identity_change_never_latches_or_posts[pid-456]" time="0.130" /><testcase classname="tests.test_user_service_installation" name="test_stop_transport_loss_is_reobserved_within_original_budget[False]" time="0.131" /><testcase classname="tests.test_user_service_installation" name="test_stop_transport_loss_is_reobserved_within_original_budget[True]" time="0.211" /><testcase classname="tests.test_service_drain_decision" name="test_local_force_preserves_explicit_refusal_without_echoing_peer_text[True]" time="0.045" /><testcase classname="tests.test_service_drain_decision" name="test_local_force_preserves_explicit_refusal_without_echoing_peer_text[False]" time="0.050" /><testcase classname="tests.test_service_drain_decision" name="test_normal_stop_keeps_old_wire_shape_while_force_is_explicit[False]" time="0.053" /><testcase classname="tests.test_service_drain_decision" name="test_normal_stop_keeps_old_wire_shape_while_force_is_explicit[True]" time="0.049" /></testsuite></testsuites>

@@ -1,0 +1,37 @@
+{
+  "status": "UNCONFIRMED",
+  "model_turn_limit": 0,
+  "installed_payload": {
+    "wheel_equal_files": 890,
+    "site_packages": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages"
+  },
+  "plan_sha256": "14a12c846839a3c308bfebe4bd65dfc7e5b960c4f618df186e12d831203401fa",
+  "task_name": "OktoNexus-server-fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+  "instance_id": "svc_fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+  "criterion_branch": "credential available only in terminal environment",
+  "vault_tested": false,
+  "terminal": {
+    "resolved": true,
+    "reference": "provider:SVC_T15_ONLY_CLI_KEY",
+    "synthetic_not_login": true,
+    "vault_calls": 0,
+    "unicode_roundtrip": "\u2014"
+  },
+  "context_excludes_terminal_reference": true,
+  "owner": {
+    "pid": 44744,
+    "generation": "fb75c3f13217839c1b45f816b1b31b72",
+    "instance_id": "svc_fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+    "birth_filetime": 134391557920069528
+  },
+  "normal_stop": {
+    "exit_code": 0,
+    "state": "stopped",
+    "shutdown_outcome": "drained"
+  },
+  "physical_owner_exit": true,
+  "task_absent": true,
+  "data_preserved": true,
+  "all_cli_children_exited": true,
+  "failure": "PLAN_FAILED"
+}

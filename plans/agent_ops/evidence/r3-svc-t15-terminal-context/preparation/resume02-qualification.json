@@ -1,0 +1,48 @@
+{
+  "status": "OFFLINE_SCHEMA_ROUTE_AND_BOUNDED_OBSERVATION_PASS",
+  "counts": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "test_tool_session": 85993,
+  "completion_tool_chunk": "bac362",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+  "driver": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02\\run_case.py",
+    "sha256": "5bec0807fdd8c77268db35ae1aea2d3be3bab94c6fc6c8888a373fdc47840b57"
+  },
+  "tests": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02\\test_resume02.py",
+    "sha256": "e6292835f0fe9ed575a3e8b881a7fdae8e1c5ca2f8bdbf873c78dbd7dea93893"
+  },
+  "installed_sources": {
+    "installed_manifest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\installation.json",
+      "sha256": "1e33f1dd7ebe2ca7b68552479560867e1b13e4caf2dea83f27b996aae8bbc876"
+    },
+    "installed_dashboard_router": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\dashboard_runtime.py",
+      "sha256": "298f7c280d9ebb5309b68534a2d1655b97f3fb088a3dcef14a1cff93785adb13"
+    },
+    "installed_runtime_options": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_runtime_options.py",
+      "sha256": "a29952398b450cc668b886bc3ab7d0d120794e7ca32ed2797c14feecf3c388ec"
+    },
+    "installed_terminal_connection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py",
+      "sha256": "82f9f29c5d6058255ef7074ffc9128e2cb708d05c320f2c946011ba8ca6f911d"
+    }
+  },
+  "starting_db_sha256": "cf6faa5adcd47d6aec46b0b99911d34cee9852f8caca8a90fe204ea90d80d140",
+  "setup_commits": 0,
+  "setup_journals": 0,
+  "profile_present": false,
+  "service_actions": 0,
+  "setup_posts": 0,
+  "provider_calls": 0,
+  "model_turns": 0,
+  "execution_directory_exists": false,
+  "limits": "ASGI fake IO and actual installed schema projection; no live SVC15 acceptance. Historical failed attempts remain unchanged."
+}

@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "instance_id": "svc_fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+  "generation": "f35d9b9d00e2df1db25cc5136a6a3d24",
+  "shutdown": {
+    "state": "DRAINED",
+    "deadline_monotonic": 313799.5597045,
+    "phase": "closing",
+    "force_requested": false,
+    "safety_shutdown": false,
+    "force_available": false,
+    "resources": [],
+    "error_codes": []
+  }
+}

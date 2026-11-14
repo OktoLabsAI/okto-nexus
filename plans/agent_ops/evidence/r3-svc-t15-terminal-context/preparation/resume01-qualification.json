@@ -1,0 +1,26 @@
+{
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEW_REQUIRED",
+  "tests": 7,
+  "failures": 0,
+  "prior_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\qualification.json",
+    "sha256": "4552ff4ecf4a56db8e28da0ead6c3ff454c1f211f1484591e85bc9f55e1b43df",
+    "tests": 14
+  },
+  "xml_sha256": "14f8934b8393042045d0209e7873817e71ed2545a3be3980e5a68f04fe4bffc7",
+  "plan_sha256": "488f0da53414e65a0121ce39d5145b47a14eff824cbb2d3427a6e20168dd3f4b",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+  "runner": "Installed final T19 wheels, -I -B -X utf8, no PYTHONPATH, no editable product imports.",
+  "command": "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe -I -B -X utf8 -m pytest -c C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\pytest.ini --rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01 --basetemp=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\offline-tmp --junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\offline-tests.xml C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\test_resume.py -q",
+  "delta_cases": [
+    "PENDING then PRESENT",
+    "wrong path reference",
+    "wrong native fingerprint",
+    "wrong build identity",
+    "duplicate and stale inventory",
+    "actual GET observer progression without POST",
+    "prior setup reservation refuses resumption"
+  ],
+  "actual_service_native_model_started_by_preparation": false,
+  "future_execution_is_root_owned_separate_from_offline_qualification": true
+}

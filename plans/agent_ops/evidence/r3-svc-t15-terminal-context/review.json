@@ -1,0 +1,61 @@
+{
+  "status": "THREE_REAL_ATTEMPTS_FAILED_BEFORE_SETUP_NO_SVC_T15_ACCEPTANCE",
+  "scenario": "SVC-T15",
+  "selected_disjunct": "credential available only in terminal environment",
+  "vault_tested": false,
+  "synthetic_credential_is_valid_login": false,
+  "terminal_resolution_verified": true,
+  "stable_service_context_excludes_reference": true,
+  "service_credential_diagnostic_observed": false,
+  "setup_posts": 0,
+  "model_turns": 0,
+  "attempts": [
+    {
+      "id": "initial",
+      "failure": "PLAN_FAILED / INSTALLATION_SELECTION_REQUIRED",
+      "physical_exit_confirmed": true,
+      "diagnosis": "Correct candidate; inventory PENDING before PRESENT is consistent with race, exact response not retained."
+    },
+    {
+      "id": "resume01",
+      "failure": "ConnectionError",
+      "physical_exit_confirmed": true,
+      "diagnosis": "GET metadata/executors preceded bounded inventory loop; exception class retained without exact stage/code."
+    },
+    {
+      "id": "resume02-v2",
+      "failure": "REAL_SERVICE_NOT_READY",
+      "physical_exit_confirmed": false,
+      "diagnosis": "CLI deadline expired before actual READY. Later stop recheck lost HTTP observation and incorrectly classified null generation as changed."
+    }
+  ],
+  "latest_timeline_utc": {
+    "start_reserved_file_mtime": "2026-11-14T19:32:41.344383Z",
+    "runtime_STARTING_log": "2026-11-14T19:34:24Z",
+    "start_returned_file_mtime": "2026-11-14T19:34:44.928568Z",
+    "runtime_READY_log": "2026-11-14T19:36:54Z",
+    "runtime_DRAINED_log": "2026-11-14T19:41:03Z"
+  },
+  "timing_interpretation": "STARTING to READY150s; approximately103s from CLI reservation mtime to STARTING. These are different boundaries, not per-stage spans. No definitive cause for slow startup; HTTP intermittency cannot alone explain READY after CLI return.",
+  "inspection_correction": "ensure_running polls with <=1s HTTP reads; 0.2s applies pre-start inspection. Installed stop recheck0.5s conflates missing generation with changed identity. New source preserves transient uncertainty and retries GET within existing deadline, never repeating POST.",
+  "cleanup": {
+    "canonical_stop": "DRAINED exact generation",
+    "force_used": false,
+    "native_task_inactive": true,
+    "task_absent": true,
+    "data_fingerprints_equal": true,
+    "retained_physical_exit_proof": false,
+    "limitation": "Earlier retained-handle observer timed out before later canonical POST. No physical-exit proof is claimed."
+  },
+  "remaining": "Observe actual service-side terminal-only credential unavailability and concrete diagnostic without fallback; source fixes and terminal sentinel resolution do not close this criterion.",
+  "new_repetition_prepared": false,
+  "acceptance_promoted": false,
+  "excluded": [
+    "raw private stdout",
+    "native argv/nonce",
+    "auth/config contents",
+    "DB bytes",
+    "provider transcripts",
+    "environment values"
+  ]
+}

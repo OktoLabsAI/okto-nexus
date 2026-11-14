@@ -1,0 +1,44 @@
+{
+  "status": "INITIAL_PLAN_FAILED_NOT_SVC_T15_ACCEPTANCE",
+  "prior_plan_sha256": "14a12c846839a3c308bfebe4bd65dfc7e5b960c4f618df186e12d831203401fa",
+  "prior_result_sha256": "e20986112a53f673a1f23caa35d4ae921069731c0042df3949cec5217b6ef302",
+  "stopped_db_pin_at_preparation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\case\\nexus-home\\nexus.db",
+    "sha256": "f0f82cdc1c1dd7e2511f3cd36ea6f06f8318a3f13f9523a0b0a215012eb2b3f9"
+  },
+  "observed": {
+    "terminal_resolution_positive": true,
+    "service_context_excludes_sentinel": true,
+    "install_exit": 0,
+    "start_exit": 0,
+    "plan_exit": 3,
+    "plan_code": "INSTALLATION_SELECTION_REQUIRED",
+    "plan_possible_effect": false,
+    "physical_owner_exit": true,
+    "task_absent": true,
+    "data_preserved": true,
+    "all_cli_children_exited": true
+  },
+  "query": "SELECT publication_sequence,canonical_projection FROM execution_inventory_snapshots ORDER BY publication_sequence",
+  "query_context": "Own persisted DB mode=ro/query_only after retained physical exit and task removal; queried before successor existed. No auth/transcript tables read.",
+  "sanitized_projection": [
+    {
+      "publication_sequence": 2,
+      "codex_availability_rows": 0,
+      "codex_observation_state": "PENDING"
+    },
+    {
+      "publication_sequence": 3,
+      "codex_availability_rows": 1,
+      "codex_observation_state": "PRESENT",
+      "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+      "technical_state": "NOT_PROBED",
+      "content_fingerprint": "sha256:ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f",
+      "build_identity": "sha256:0bf80fe3ec18c1061c053a3e0f43dd07430ef53827ccd822a649246897526535"
+    }
+  ],
+  "conclusion": "The approved candidate_ref was correct. Inventory had a PENDING publication before PRESENT; readiness of HTTP does not guarantee this adapter discovery completed. The plan failure is consistent with that timing, not a different executable selection.",
+  "remaining_uncertainty": "No contemporaneous GET runtime-options response was retained by the failed CLI; the exact publication read by that request is inferred from the two retained snapshots and zero-match CLI code.",
+  "post_absence_basis": "Pinned original driver reaches setup reservation/POST only after successful plan; plan exit3 failed first, all children joined; no setup reservation/request/profile/journal exists; successor gate additionally requires canonical setup commit count zero before reinstall.",
+  "new_effects_in_diagnosis": false
+}

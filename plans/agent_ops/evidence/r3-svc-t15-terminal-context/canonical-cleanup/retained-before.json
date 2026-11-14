@@ -1,0 +1,66 @@
+{
+  "core-runtime/owned-slots.db": {
+    "sha256": "4264b7f8334b576f38fba8a881bd3715bd7f0221b4279d723fbcfedafe183f28",
+    "bytes": 131072
+  },
+  "logs/service.jsonl": {
+    "sha256": "d3738d9286c4cb1f81795e8805adc8493cf776260f61ea1d18d7558c313acd9f",
+    "bytes": 2511
+  },
+  "nexus.db": {
+    "sha256": "daae726416132d2482c748d024cb395a176992f97e06b9844c4b0001fad33100",
+    "bytes": 2494464
+  },
+  "nexus.db.launch.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "nexus.db.serve.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "nexus.serve.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "operator-auth.db": {
+    "sha256": "8d2f7e4c90a512069a1bf9e03d9e9ef52c3aa520bf4ce4ebeeabac971eb8dc94",
+    "bytes": 20480
+  },
+  "runtime-journal-v1/store-id": {
+    "sha256": "5859ee4f39716fc8dd4d95c8ddeaff5f2637518cac18f9270a627a52e6226321",
+    "bytes": 36
+  },
+  "runtime-journal-v1/writer.lock": {
+    "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+    "bytes": 1
+  },
+  "runtime-wake.json": {
+    "sha256": "5995122b24aca4ddb8188fa6484f0ae55e41b4e9f9a6d288fa2e94807df3ec2d",
+    "bytes": 141
+  },
+  "service-context.json": {
+    "sha256": "18a0ca17d63df84fd86b945b96583276655528c9753e32c86f52125d922ccba5",
+    "bytes": 5341
+  },
+  "service-launch.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "service-run.json": {
+    "sha256": "31359d2be86e8eeb5fee99ae202f4824f170fe112c35f195689540fc32f1649a",
+    "bytes": 187
+  },
+  "service-shutdown.json": {
+    "sha256": "41721a0daa72d40d25b2333aa982bfe75070e230a8e6544435e6efcc12ae4f60",
+    "bytes": 97
+  },
+  "service-supervisor-exit.json": {
+    "sha256": "a0706c1920a8829637101823125b54f734370cd4dabfe09a5687cb9a738c5b1e",
+    "bytes": 93
+  },
+  "terminal/profiles/svc-t15-terminal-only.guard": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  }
+}

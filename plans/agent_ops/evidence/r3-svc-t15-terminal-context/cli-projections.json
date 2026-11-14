@@ -1,0 +1,33 @@
+{
+  "execution/private/start.stdout": {
+    "source_sha256": "b3d90478de6ae5fd75b718cb589dfc59cfcd6e583856d79ab994d8864de1aa88",
+    "fields": {
+      "instance_id": "svc_fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+      "generation": null,
+      "state": "degraded",
+      "ready_for_queries": false,
+      "reason": "SERVICE_UNREACHABLE",
+      "wait_timed_out": true
+    }
+  },
+  "execution/private/stop.stdout": {
+    "source_sha256": "ca12ea975b59734a68b3cb0c0ea724ecaa01f4218d5e452fb6505ec507a20adf",
+    "fields": {
+      "instance_id": "svc_fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+      "generation": null,
+      "state": "degraded",
+      "ready_for_queries": false,
+      "reason": "SERVICE_UNREACHABLE"
+    }
+  },
+  "normal-cleanup/stop.stdout": {
+    "source_sha256": "a41841821e318ffe42e183d9c5f49d54dc32d7f5ca1f7e3ab4b3dc5f91d69e7e",
+    "fields": {
+      "instance_id": "svc_fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+      "generation": null,
+      "state": "failed",
+      "ready_for_queries": false,
+      "reason": "INSTANCE_CHANGED"
+    }
+  }
+}

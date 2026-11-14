@@ -1,0 +1,28 @@
+{
+  "status": "OFFLINE_QUALIFIED_PENDING_ROOT_REVIEW_AND_REAL_CASE",
+  "tests": 14,
+  "failures": 0,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+  "python_version": "3.13.1",
+  "installed": {
+    "wheel_equal_files": 890,
+    "site_packages": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages"
+  },
+  "plan_sha256": "14a12c846839a3c308bfebe4bd65dfc7e5b960c4f618df186e12d831203401fa",
+  "tests_xml_sha256": "944172f955e41b3fcbf3ac684e345f252cfc5ddf032ee8f8d06aa0124397a6cd",
+  "runner_provenance": "Installed T19 final venv; -I -B -X utf8; no PYTHONPATH or source editable import.",
+  "command": "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe -I -B -X utf8 -m pytest -c C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\pytest.ini --rootdir=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82 --basetemp=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\offline-tmp --junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\offline-tests.xml C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\test_case.py -q",
+  "effects": {
+    "actual_service_started": false,
+    "native_started": false,
+    "provider_turns": 0,
+    "personal_auth_or_vault_read": false,
+    "global_environment_changed": false,
+    "new_installation_or_wheel_build": false,
+    "own_synthetic_cli_probe": true
+  },
+  "known_warning": "pytest-asyncio default fixture-loop scope unset; no async pytest fixtures used.",
+  "case_root_absent_during_offline_tests": true,
+  "case_root_present_at_qualification_recording": true,
+  "scope": "first OR branch only; terminal-only synthetic credential reference availability"
+}

@@ -1,0 +1,18 @@
+{
+  "status": "UNCONFIRMED",
+  "force_used": false,
+  "model_turns": 0,
+  "owner": {
+    "pid": 49196,
+    "generation": "f35d9b9d00e2df1db25cc5136a6a3d24",
+    "instance_id": "svc_fed47f29ff76edb7a5c4c8e9ddfc36c7b365855705d7970522cb3f0f50d0034c",
+    "birth_filetime": 134391583645378390
+  },
+  "normal_stop": {
+    "exit_code": 3,
+    "state": "failed",
+    "shutdown_outcome": null
+  },
+  "physical_owner_exit": false,
+  "failure": "NORMAL_EXIT_UNCONFIRMED"
+}

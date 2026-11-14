@@ -7149,11 +7149,12 @@
         "plans/agent_ops/evidence/pr02-nexus-service-logs-installed.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
         "plans/agent_ops/evidence/pr03-project-doctor-installed.xml",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json"
       ],
-      "remaining": "Real terminal-only credential and locked OS vault under service user is unexecuted.",
-      "remaining_kind": "real_service_vault_campaign",
-      "result": "Diagnostic layers distinguish credential/auth/service state; safe/default checks avoid credential reads. Scope/remaining: Real terminal-only credential and locked OS vault under service user is unexecuted."
+      "remaining": "Observe unavailable terminal-only credential OR locked vault diagnosis in the real service context. The selected terminal-only branch remains unverified after three attempts failed before setup:test; the vault branch is not additionally required.",
+      "remaining_kind": "real_service_credential_context_diagnosis",
+      "result": "Synthetic terminal reference resolved positively and stable service context excluded it. No service-side credential diagnosis or model turn occurred. Three failures and normal cleanup are retained, with final retained physical-exit proof explicitly unavailable. No acceptance promotion."
     },
     "SVC-T16": {
       "requirement": "Definições de serviço, argv, logs e saída JSON não expõem segredos nem ampliam bind/permissões.",
@@ -13340,6 +13341,35 @@
         "plans/agent_ops/evidence/r3-unclaimed-launch-drain/qualification.json",
         "plans/agent_ops/evidence/r3-unclaimed-launch-drain/tests.xml"
       ]
+    },
+    "r3_svc_t15_terminal_context_failures": {
+      "date": "2026-11-14",
+      "status": "THREE_REAL_ATTEMPTS_FAILED_BEFORE_SETUP_NO_SVC_T15_ACCEPTANCE",
+      "real_attempts": 3,
+      "setup_posts": 0,
+      "model_turns": 0,
+      "vault_tested": false,
+      "terminal_sentinel_resolved": true,
+      "service_credential_diagnostic_observed": false,
+      "final_cleanup": "CANONICAL_CLEANUP_CONFIRMED_WITH_EXIT_PROOF_LIMITATION",
+      "final_retained_physical_exit_proof": false,
+      "task_absent": true,
+      "data_preserved": true,
+      "source_fixes": {
+        "nexus": "6714d695",
+        "connector": "e612ff8",
+        "focused_pass": {
+          "nexus": 15,
+          "connector": 4
+        }
+      },
+      "source_fixes_installed_in_attempts": false,
+      "acceptance_promoted": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/qualification.json",
+        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/artifact-manifest.json"
+      ]
     }
   },
   "history": [
@@ -14781,6 +14811,16 @@
       "summary": "Core7810f3b9:48offlinePASS(14new+34regressions);same6baselineRuffdiagnostics/no additions. Preserve claims/receipts and unknown states; no live mutation, closure or acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-unclaimed-launch-drain/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_svc_t15_terminal_context_failures",
+      "status": "THREE_REAL_ATTEMPTS_FAILED_BEFORE_SETUP_NO_SVC_T15_ACCEPTANCE",
+      "summary": "Terminal-only branch remains pending: inventory selection, HTTP observation and actual startup150s prevented setup. Normal final canonical drain/uninstall preserved data but retained observer expired before stop. Source Nexus15/Connector4 focused PASS; no acceptance or token/reservation change.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-terminal-context/qualification.json"
       ]
     }
   ]

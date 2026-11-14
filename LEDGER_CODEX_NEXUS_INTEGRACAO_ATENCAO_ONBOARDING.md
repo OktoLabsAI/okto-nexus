@@ -1746,3 +1746,35 @@ do M1, o serviço pendente e os bancos reais não foram alterados por esse marco
 
 Nenhum fechamento ou aceite foi promovido; a contagem permanece 122/132.
 Evidência: `plans/agent_ops/evidence/r3-unclaimed-launch-drain/review.json`.
+
+## 2026-11-14 — SVC-T15: falhas preservadas e observação de stop
+
+A alternativa escolhida é credencial disponível somente no terminal. O requisito
+usa **OU**: não exige testar também um cofre bloqueado. A sentinela sintética
+resolveu no processo CLI e ficou fora do ambiente estável do serviço; não representa
+login válido. Três tentativas reais falharam antes de setup:test: seleção enquanto
+inventário ainda era possivelmente PENDING, ConnectionError durante leitura e
+REAL_SERVICE_NOT_READY. Nenhuma produziu o diagnóstico de credencial no serviço;
+nenhum turno de modelo ou POST de setup ocorreu. SVC-T15 permanece IN_PROGRESS.
+
+Na última geração, STARTING19:34:24Z→READY19:36:54Z levou150s, após o CLI ter
+retornado19:34:44Z. A reserva do CLI foi publicada aproximadamente103s antes de
+STARTING. Não há spans que atribuam a causa interna dessa lentidão. O polling de
+ensure_running usa leituras HTTP de até1s; .2s é a inspeção anterior ao start.
+O stop posterior confundiu timeout HTTP no recheck de .5s com INSTANCE_CHANGED.
+Nexus6714d695 reobserva apenas GET dentro do mesmo prazo, exige geração/instance/PID
+iguais e conserva SERVICE_UNREACHABLE se a observação continua incerta. Não amplia
+startup nem repete POST. Quinze focais passaram; a falha inicial de fixture com
+relógio real e o passe intermediário permanecem retidos sem contagem duplicada.
+
+O stop canônico posterior confirmou DRAINED da mesma geração, tarefa inativa,
+uninstall e fingerprints dos dados iguais. O observer com handle retido já tinha
+expirado antes desse POST: não há alegação de prova física de saída da última
+tentativa. As duas anteriores tinham essa prova. Não houve force.
+
+Connector e612ff8 conserva shutdown_outcome=unconfirmed ao parar somente o
+supervisor, bloqueia restart automático e permite remover apenas a integração
+positivamente inativa, preservando dados. Quatro focais passaram. Ruff passou
+nos dois deltas. Nenhum desses fixes foi instalado nas tentativas preservadas.
+A contagem permanece122/132 VERIFIED, sem alteração de tokens/reservas ou aceite.
+Evidência: `plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json`.

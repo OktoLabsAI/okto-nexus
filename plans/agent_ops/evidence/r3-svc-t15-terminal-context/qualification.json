@@ -1,0 +1,24 @@
+{
+  "status": "SOURCE_QUALIFIED_NOT_INSTALLED_OR_REAL_RETEST",
+  "nexus_commit": "6714d695",
+  "connector_commit": "e612ff8",
+  "nexus_cases": 15,
+  "connector_cases": 4,
+  "nexus_initial": "10 passed/1 fixture failure: former 0.1s wall-clock test now encountered the correctly consumed filesystem budget; use deterministic fake clock for latch-order assertion. Original XML retained.",
+  "nexus_intermediate": "11 passed before additional four root-review cases; overlap is not additive.",
+  "runner": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+  "imports": "sys.path source Nexus/Connector and Core; no PYTHONPATH, no editable install, shared venv unchanged",
+  "commands": [
+    "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc15_stop_observation_tests.py",
+    "rtk proxy ruff check src/okto_nexus/adapters/outbound/service_manager/local.py tests/test_user_service_installation.py tests/test_service_drain_decision.py",
+    "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\connector-bounded-supervision-omkbffxa\\run_outcome_delta.py",
+    "rtk proxy ruff check src/okto_nexus_connector/daemon/lifecycle.py tests/unit/test_bounded_service_supervisor.py"
+  ],
+  "ruff": "PASS both",
+  "diff_check": "PASS both",
+  "services_started_by_tests": 0,
+  "provider_calls": 0,
+  "startup_budget_changed": false,
+  "post_budget": "remaining existing stop deadline; identity generation+instance+PID required before latch/POST",
+  "connector": "supervisor_only physical stop keeps shutdown_outcome=unconfirmed; automatic restart blocked; positively inactive integration uninstall retains data"
+}

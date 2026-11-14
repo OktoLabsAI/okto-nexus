@@ -1,0 +1,267 @@
+{
+  "scope": "explicit public files and allowlisted projections only",
+  "origins": {
+    "initial/result.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\case\\public\\result.json",
+      "sha256": "e20986112a53f673a1f23caa35d4ae921069731c0042df3949cec5217b6ef302"
+    },
+    "initial/start-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\case\\public\\start-returned.json",
+      "sha256": "1db4ff1ebfa5de009be3b03f9bebfed18ededc1008c7ec4052972926060b44f3"
+    },
+    "initial/stop-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\case\\public\\stop-returned.json",
+      "sha256": "b83fa538ec1746ecf586ddc12f3aa8c970f1db32faefde1f3c8d51124980731b"
+    },
+    "initial/plan-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\case\\public\\plan-returned.json",
+      "sha256": "02b08c7352252a9ca3c18eea9434faf40c9ef8eb40a272dec44183fd1873a472"
+    },
+    "resume01/result.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\execution\\public\\result.json",
+      "sha256": "53b0d71dcc0f8466898467976cebb6dbb3bfe74bf7068f93a676b3b328610b5e"
+    },
+    "resume01/start-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\execution\\public\\start-returned.json",
+      "sha256": "eae4af528af423925199696a4629d1ba4a86e13a7c7daedd44f48796d3e6ebcf"
+    },
+    "resume01/stop-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\execution\\public\\stop-returned.json",
+      "sha256": "1e8db9f90c95c284e9bebfdf10fbcdb8380624f235fbc5535f90820637ce1021"
+    },
+    "resume02-v2/result.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\execution\\public\\result.json",
+      "sha256": "8c36ad263f9dd0b8f2da64a3543949b146b2874db136a74135d3072e6d831613"
+    },
+    "resume02-v2/start-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\execution\\public\\start-returned.json",
+      "sha256": "6b2cf5b3e910b2a64dd30cfc27a15e7618c335538886213491e06f12f11093c1"
+    },
+    "resume02-v2/stop-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\execution\\public\\stop-returned.json",
+      "sha256": "3c339109d55b6f17206406ba7e7e262b93aad5e004df11af34322acd7d1fcc92"
+    },
+    "initial/diagnosis.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\diagnosis.json",
+      "sha256": "3bfb91d603f1ea9ad92e3c37886eac22afece299c47608f264314cd85a95d726"
+    },
+    "normal-cleanup/result.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\normal-cleanup\\result.json",
+      "sha256": "f8c94adf7fbd7e8904c5728db3ba67f7dd1fa0b5ea78258c892dc3e795068350"
+    },
+    "normal-cleanup/stop-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\normal-cleanup\\stop-returned.json",
+      "sha256": "65415d9d99c88186153449a2256048686377ec9b6e94c91aed966bd33f94f7a7"
+    },
+    "normal-cleanup/selected-owner.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\normal-cleanup\\selected-owner.json",
+      "sha256": "d37437782b22eca1bc5abde5614dc51acc0620ade568e91d10eac40af0a4bff4"
+    },
+    "normal-cleanup/canonical-normal-stop-returned.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\normal-cleanup\\canonical-normal-stop-returned.json",
+      "sha256": "a2d1b7a2883fa2896b0439fb8036dd8a685d244ae52cd4406efb9fbc4147f76f"
+    },
+    "canonical-cleanup/result.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\canonical-cleanup\\result.json",
+      "sha256": "85a8dcf2dc3cbd77d12c5bc107cb03d1bfc8d85ecbe8eeb454049ba547a6eb7e"
+    },
+    "canonical-cleanup/retained-before.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\canonical-cleanup\\retained-before.json",
+      "sha256": "247517876b1aadd8c395bd26098adcf534402a901dade9ecee885fd39cb5f957"
+    },
+    "canonical-cleanup/retained-after.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\canonical-cleanup\\retained-after.json",
+      "sha256": "247517876b1aadd8c395bd26098adcf534402a901dade9ecee885fd39cb5f957"
+    },
+    "preparation/initial-qualification.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\qualification.json",
+      "sha256": "4552ff4ecf4a56db8e28da0ead6c3ff454c1f211f1484591e85bc9f55e1b43df"
+    },
+    "preparation/resume01-qualification.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume01\\qualification.json",
+      "sha256": "96f110848eda9151677477ae57928274beea8add01f04a828ab36f47b8b4d26e"
+    },
+    "preparation/resume02-qualification.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02\\qualification.json",
+      "sha256": "7b0a22ac29c94bf8128169d5cf45bd62f27f221949f276ff8340d32bef702e85"
+    },
+    "preparation/resume02-v2-qualification.json": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-t15-env-zrrzik82\\resume02-v2\\qualification.json",
+      "sha256": "2207ee39f3ac05507fe5ce8b5d86922d3ee212aea8e27d9eca1779a1a2addf28"
+    },
+    "stop-fix/initial-10pass-1failure.xml": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc15-stop-observation-_xelv4vx\\source.xml",
+      "sha256": "157c4cb161563bf9c7b6b3cdb04f6b844cf973fff432d4611b48d00cb863c443"
+    },
+    "stop-fix/intermediate-11pass.xml": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc15-stop-observation-7tba3e8l\\source.xml",
+      "sha256": "7868e646102d4cdf73e357cbbd6609e5ade0d055bb97b132560a410d3514728d"
+    },
+    "stop-fix/final-15pass.xml": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc15-stop-observation-c618s8di\\source.xml",
+      "sha256": "2f636d449e2cc00202a2256735020d2473016f89ad1cd554870be5343cb865d1"
+    },
+    "stop-fix/run_tests.py": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc15_stop_observation_tests.py",
+      "sha256": "f78357c6e0e46b621fd9533277de90116d3aeb2430c7c144ce2a59ac05a8d87a"
+    },
+    "connector-outcome/source-outcome-delta.xml": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\connector-bounded-supervision-omkbffxa\\source-outcome-delta.xml",
+      "sha256": "c5c119e55795b66db834e6f2a23e0c4f37d87685fa319b4ca504655fcf72c392"
+    },
+    "connector-outcome/run_outcome_delta.py": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\connector-bounded-supervision-omkbffxa\\run_outcome_delta.py",
+      "sha256": "dac5c00cd0112a69b7bb989fbf5ecf62a62f4afa586dc40d8b20c30f855a9a9d"
+    }
+  },
+  "files": {
+    "canonical-cleanup/result.json": {
+      "sha256": "85a8dcf2dc3cbd77d12c5bc107cb03d1bfc8d85ecbe8eeb454049ba547a6eb7e",
+      "bytes": 439
+    },
+    "canonical-cleanup/retained-after.json": {
+      "sha256": "247517876b1aadd8c395bd26098adcf534402a901dade9ecee885fd39cb5f957",
+      "bytes": 2142
+    },
+    "canonical-cleanup/retained-before.json": {
+      "sha256": "247517876b1aadd8c395bd26098adcf534402a901dade9ecee885fd39cb5f957",
+      "bytes": 2142
+    },
+    "cli-projections.json": {
+      "sha256": "9c8270b40297ad596f954987060f656dfdd78d7a9f0ad59dcd6a41a20bd1f3ad",
+      "bytes": 1172
+    },
+    "connector-outcome/run_outcome_delta.py": {
+      "sha256": "dac5c00cd0112a69b7bb989fbf5ecf62a62f4afa586dc40d8b20c30f855a9a9d",
+      "bytes": 591
+    },
+    "connector-outcome/source-outcome-delta.xml": {
+      "sha256": "c5c119e55795b66db834e6f2a23e0c4f37d87685fa319b4ca504655fcf72c392",
+      "bytes": 894
+    },
+    "initial/diagnosis.json": {
+      "sha256": "3bfb91d603f1ea9ad92e3c37886eac22afece299c47608f264314cd85a95d726",
+      "bytes": 2658
+    },
+    "initial/plan-returned.json": {
+      "sha256": "02b08c7352252a9ca3c18eea9434faf40c9ef8eb40a272dec44183fd1873a472",
+      "bytes": 195
+    },
+    "initial/result.json": {
+      "sha256": "e20986112a53f673a1f23caa35d4ae921069731c0042df3949cec5217b6ef302",
+      "bytes": 1301
+    },
+    "initial/start-returned.json": {
+      "sha256": "1db4ff1ebfa5de009be3b03f9bebfed18ededc1008c7ec4052972926060b44f3",
+      "bytes": 195
+    },
+    "initial/stop-returned.json": {
+      "sha256": "b83fa538ec1746ecf586ddc12f3aa8c970f1db32faefde1f3c8d51124980731b",
+      "bytes": 195
+    },
+    "installed-source-excerpts.json": {
+      "sha256": "7378200994102b1793d13bf68a225aefce64a690bebd86428a92ff6e9ca149c6",
+      "bytes": 12509
+    },
+    "lifecycle-projection.json": {
+      "sha256": "823acf2a195b9511a702a6e60b0f89e6d1aee2d91061bef53d1c15d980071400",
+      "bytes": 1872
+    },
+    "normal-cleanup/canonical-normal-stop-returned.json": {
+      "sha256": "a2d1b7a2883fa2896b0439fb8036dd8a685d244ae52cd4406efb9fbc4147f76f",
+      "bytes": 415
+    },
+    "normal-cleanup/result.json": {
+      "sha256": "f8c94adf7fbd7e8904c5728db3ba67f7dd1fa0b5ea78258c892dc3e795068350",
+      "bytes": 463
+    },
+    "normal-cleanup/selected-owner.json": {
+      "sha256": "d37437782b22eca1bc5abde5614dc51acc0620ade568e91d10eac40af0a4bff4",
+      "bytes": 200
+    },
+    "normal-cleanup/stop-returned.json": {
+      "sha256": "65415d9d99c88186153449a2256048686377ec9b6e94c91aed966bd33f94f7a7",
+      "bytes": 102
+    },
+    "preparation/initial-qualification.json": {
+      "sha256": "4552ff4ecf4a56db8e28da0ead6c3ff454c1f211f1484591e85bc9f55e1b43df",
+      "bytes": 1857
+    },
+    "preparation/resume01-qualification.json": {
+      "sha256": "96f110848eda9151677477ae57928274beea8add01f04a828ab36f47b8b4d26e",
+      "bytes": 1744
+    },
+    "preparation/resume02-qualification.json": {
+      "sha256": "7b0a22ac29c94bf8128169d5cf45bd62f27f221949f276ff8340d32bef702e85",
+      "bytes": 2294
+    },
+    "preparation/resume02-v2-qualification.json": {
+      "sha256": "2207ee39f3ac05507fe5ce8b5d86922d3ee212aea8e27d9eca1779a1a2addf28",
+      "bytes": 1589
+    },
+    "preparation/source-pins.json": {
+      "sha256": "fb4b364827b737849ead1fb613b01a744b24a90969f5aecf7378f271ce4ac3e6",
+      "bytes": 2742
+    },
+    "qualification.json": {
+      "sha256": "1213b4a95a08f3a1a2f0fe18978e986c54e719f6f0370f475bd9ba161f517420",
+      "bytes": 1890
+    },
+    "README.md": {
+      "sha256": "3fcc03a91fa68c0e1f59bfe557558150153fc6fd0d89f6a756f03bf8d56c3e3e",
+      "bytes": 1493
+    },
+    "receipts/service-run.json": {
+      "sha256": "4b4536315b2ed7ad79a74e4598e248a2de4cddcc9a78bd7cbf190b2334d7c653",
+      "bytes": 305
+    },
+    "receipts/service-shutdown.json": {
+      "sha256": "5ca91ecc88248b691c859811a924c70f259220353a07c970e38bc05beba7b1aa",
+      "bytes": 213
+    },
+    "resume01/result.json": {
+      "sha256": "53b0d71dcc0f8466898467976cebb6dbb3bfe74bf7068f93a676b3b328610b5e",
+      "bytes": 1305
+    },
+    "resume01/start-returned.json": {
+      "sha256": "eae4af528af423925199696a4629d1ba4a86e13a7c7daedd44f48796d3e6ebcf",
+      "bytes": 195
+    },
+    "resume01/stop-returned.json": {
+      "sha256": "1e8db9f90c95c284e9bebfdf10fbcdb8380624f235fbc5535f90820637ce1021",
+      "bytes": 195
+    },
+    "resume02-v2/result.json": {
+      "sha256": "8c36ad263f9dd0b8f2da64a3543949b146b2874db136a74135d3072e6d831613",
+      "bytes": 1090
+    },
+    "resume02-v2/start-returned.json": {
+      "sha256": "6b2cf5b3e910b2a64dd30cfc27a15e7618c335538886213491e06f12f11093c1",
+      "bytes": 195
+    },
+    "resume02-v2/stop-returned.json": {
+      "sha256": "3c339109d55b6f17206406ba7e7e262b93aad5e004df11af34322acd7d1fcc92",
+      "bytes": 195
+    },
+    "review.json": {
+      "sha256": "82f375fd808f77a624bf4c124585ffed670698303c9e44debd6d4559e5afc528",
+      "bytes": 2981
+    },
+    "stop-fix/final-15pass.xml": {
+      "sha256": "2f636d449e2cc00202a2256735020d2473016f89ad1cd554870be5343cb865d1",
+      "bytes": 2514
+    },
+    "stop-fix/initial-10pass-1failure.xml": {
+      "sha256": "157c4cb161563bf9c7b6b3cdb04f6b844cf973fff432d4611b48d00cb863c443",
+      "bytes": 3290
+    },
+    "stop-fix/intermediate-11pass.xml": {
+      "sha256": "7868e646102d4cdf73e357cbbd6609e5ade0d055bb97b132560a410d3514728d",
+      "bytes": 1891
+    },
+    "stop-fix/run_tests.py": {
+      "sha256": "f78357c6e0e46b621fd9533277de90116d3aeb2430c7c144ce2a59ac05a8d87a",
+      "bytes": 758
+    }
+  }
+}
