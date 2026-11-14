@@ -12681,6 +12681,45 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-setup-discovery-budget/root-review.json"
       ]
+    },
+    "r3_m1_v11_execution": {
+      "date": "2026-11-14",
+      "status": "V11_CLOSED_AFTER_SETUP_OBSERVATION_FAILURE_NO_M1_ACCEPTANCE",
+      "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+      "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+      "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+      "packages_installed_verified": 983,
+      "provider": "Codex CLI selected; Claude not used",
+      "new_observed_tokens": 0,
+      "cumulative_minimum_observed_tokens": 89473,
+      "new_reservations": 1,
+      "cumulative_reservations": 7,
+      "unsettled_requests": 1,
+      "billing_final": false,
+      "failure": {
+        "exception_type": "JournalUnknown",
+        "reader": {
+          "budget_ms": 250.0,
+          "elapsed_ms": 317.6963999867439,
+          "phase": "snapshot_read"
+        },
+        "reason": "SETUP_READ_BUDGET_EXCEEDED"
+      },
+      "setup_cli_exit": 3,
+      "setup_code": "INSTALLATION_UNCONFIRMED",
+      "outer_wrapper_exit": 0,
+      "wrapper_exit_is_not_setup_acceptance": true,
+      "lifecycle": "One Nexus install/start/normal-stop/uninstall. Start CLI timed out, later canonical inspection confirmed ready without restart. Retained process handle proves physical exit. Connector never selected or installed.",
+      "cleanup": "Original final-presence driver refused POSSIBLE_UNSELECTED_START because it conservatively treated local commands as possible Connector starts. Qualified supplemental read-only reconciliation proves the exact finished local-only history, physical Nexus cleanup, canonical absence of both owners/tasks and free port; original refusal retained.",
+      "acceptance_promoted": false,
+      "limits": [
+        "No useful work, native decision, continuation or remote lane completed.",
+        "Zero observed new tokens is not a claim of final billing or refunded reservation.",
+        "No forced stop, replay, personal credential inspection or historical fault reset."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v11-execution/review.json"
+      ]
     }
   },
   "history": [
@@ -13930,6 +13969,15 @@
       "summary": "Removed SQL snapshot timer from absent-journal discovery; existing schema/read250ms, aggregate600ms, freshness1s and deadline120s remain.73 offline cases pass, one historical DB case excluded. Real v11 cause retained without retry or acceptance promotion.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-setup-discovery-budget/root-review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "V11 actual execution closed after setup observation failure",
+      "status": "V11_CLOSED_AFTER_SETUP_OBSERVATION_FAILURE_NO_M1_ACCEPTANCE",
+      "summary": "Installed983 qualified payloads, registered/started Nexus, then setup observer fault selected normal stop. No new token usage observed; reserve7 and unsettled setup retained. Physical exit/uninstall and supplemental local-only final absence confirmed. No M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v11-execution/review.json"
       ]
     }
   ]

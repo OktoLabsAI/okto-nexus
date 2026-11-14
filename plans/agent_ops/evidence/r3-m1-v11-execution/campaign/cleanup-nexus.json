@@ -1,0 +1,20 @@
+{
+  "kind": "PHYSICAL_OWNER_EXIT",
+  "component": "nexus",
+  "task_name": "OktoNexus-server-822654ebed7d7cf607a82ececeb984647036c433ccf0769a3f57b251979f5d84",
+  "owned_pid_birth_exit_confirmed": true,
+  "task_stopped_confirmed": true,
+  "force_used": false,
+  "task_state": 3,
+  "task_digest": "dc125d5ff7fc30994b614f78766cb80162265e9e695509de22cc8678f9360b5f",
+  "drain_sha256": "5b421e5deba1eed6c64b828d73b386b1718fdfd6e316c19d4226268bdd029f6b",
+  "drain_state": "DRAINED",
+  "generation": "372517dc715c3011202bcfc7162f7f58",
+  "instance_id": "svc_822654ebed7d7cf607a82ececeb984647036c433ccf0769a3f57b251979f5d84",
+  "pid": 44584,
+  "birth_filetime": 134391403410649092,
+  "observed_at": 1794667046.335395,
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "approval_sha256": "ee0d6f0dd13a1439499bf79e344451a603b11606e84ce7c5212c83de07931f8f",
+  "campaign_revision": 11
+}

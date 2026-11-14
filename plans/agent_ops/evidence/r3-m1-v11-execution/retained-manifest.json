@@ -1,0 +1,272 @@
+{
+  "files": {
+    "campaign/authorization-reference.json": {
+      "sha256": "4a8592599dca8755af8b26e876ff192ee40d9066840ef087714f95b121ccd820",
+      "bytes": 245
+    },
+    "campaign/cleanup-nexus.json": {
+      "sha256": "2e2743de535b385adc481e89f67b548749ed3448f54b48e9e17037a2954edf9f",
+      "bytes": 915
+    },
+    "campaign/closure.json": {
+      "sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+      "bytes": 3715
+    },
+    "campaign/final-presence-original-refusal.json": {
+      "sha256": "48327be2a77ce41787a237dd9050147719332bbe4900b08f1ca3de96ff9c71fc",
+      "bytes": 806
+    },
+    "campaign/final-presence-reconciled.json": {
+      "sha256": "1ccf2e7c0e156c5d3a46bffe598190d461855b7ab3dc7b54fc22415b4407b466",
+      "bytes": 11898
+    },
+    "campaign/lifecycle-nexus-install-result.json": {
+      "sha256": "c883f464b6d3c8f41bdf80509f9fc44e5bab17c0c607c14215a88b36687bdb8e",
+      "bytes": 463
+    },
+    "campaign/lifecycle-nexus-install.json": {
+      "sha256": "c522384f047c49d1662e45b6c3c260eefe3e0312e16b6df49b5d9d18b3a84ace",
+      "bytes": 1204
+    },
+    "campaign/lifecycle-nexus-start-result.json": {
+      "sha256": "2ba4f8c3822dbe194d8daad842eba442f80ca1cb088684fe02c0be750c5a5cd3",
+      "bytes": 462
+    },
+    "campaign/lifecycle-nexus-start.json": {
+      "sha256": "4695cd53a787fc461cd333c6a2bd320ec6c271cdab940d0dd2ccbe9d4cfa2401",
+      "bytes": 1160
+    },
+    "campaign/lifecycle-nexus-stop-result.json": {
+      "sha256": "bf62d3adf8229c6a735bbeb984eeff6ba80fd43e0cd0107689cae158910ce7bb",
+      "bytes": 460
+    },
+    "campaign/lifecycle-nexus-stop.json": {
+      "sha256": "c44bd18051fda047f4974f9cd4ce1dce5e390279fb49fdc0151700cfd8dd5914",
+      "bytes": 1158
+    },
+    "campaign/lifecycle-nexus-uninstall-result.json": {
+      "sha256": "cabe5860cc3c9d9fa1d2a87f643783ca14d8e4b1599f329bbb02d31fa5c338db",
+      "bytes": 527
+    },
+    "campaign/lifecycle-nexus-uninstall.json": {
+      "sha256": "28d58debab1defed524d17702a1ae76b8455c548427867dd0a4037b055694386",
+      "bytes": 1245
+    },
+    "campaign/live-accounting.json": {
+      "sha256": "9833e2650ce511d608c1022ab3ccc0d5e3ad9601e07494b7100fa87c8c60c654",
+      "bytes": 2181
+    },
+    "campaign/local-setup-dispatch.json": {
+      "sha256": "e30462be87cf79e30b57358c5e6b68f4e26e5738603ad1c059ad8161eb7113a0",
+      "bytes": 213
+    },
+    "campaign/local-setup-result.json": {
+      "sha256": "1554fac92e0e05edf4972cf9263d63898827066c3b0d9f5915fb6e577695824b",
+      "bytes": 3349
+    },
+    "campaign/nexus-exit-proof.json": {
+      "sha256": "cdf6244007ee27cad24318c3814d534543c0e522f7b70966518c8a73821cfbfe",
+      "bytes": 587
+    },
+    "campaign/nexus-exit-watch-started.json": {
+      "sha256": "67e0f6147a581f502818aebcf18c0ddded9c56d63da8daff272567c4d749596b",
+      "bytes": 473
+    },
+    "campaign/nexus-owner-selection.json": {
+      "sha256": "7cc5f064d3a0b05a24cfa449fc16c1ffb39d07d972e4287b4f183fb398507ce8",
+      "bytes": 677
+    },
+    "campaign/process-nexus-install.json": {
+      "sha256": "2c0a02d53922a02bb528ad0a0e903b7a74f2fb5483e27f5f729f6c3bc271773c",
+      "bytes": 103
+    },
+    "campaign/process-nexus-start.json": {
+      "sha256": "e62bfe10ba1812e957dae23597b1d9645176bc90f3f5ec6fedcca3474a3c7b6f",
+      "bytes": 100
+    },
+    "campaign/process-nexus-stop.json": {
+      "sha256": "f7093c89a218535f3175af72d361994f3731e78569df3b3502a60ad240298eb0",
+      "bytes": 99
+    },
+    "campaign/process-nexus-uninstall.json": {
+      "sha256": "339cc8b805ff2370c9ebcf272eda09aa5e620cb5ef2a187e5951f773a4391b99",
+      "bytes": 104
+    },
+    "campaign/root-driver-preparation.json": {
+      "sha256": "96bce079944e4fec888258e965770a7cd51e6d4715528706b794cd8de18c836a",
+      "bytes": 377
+    },
+    "invocations/lifecycle-initialize.reserved.json": {
+      "sha256": "5b19fb6adf7fbbffcd058d978acac563050c982914c26ec5f8f14464a202725b",
+      "bytes": 339
+    },
+    "invocations/lifecycle-initialize.returned.json": {
+      "sha256": "4a5ee191e9ef72d54f53f8b524effad4881a6c9b02f870f9570084ff7fb1acef",
+      "bytes": 535
+    },
+    "invocations/lifecycle-initialize.process.json": {
+      "sha256": "1d0a4346c8d9bfe61f359fea611170890fb5398a20c9c4cdc312e9312dd26473",
+      "bytes": 322
+    },
+    "invocations/lifecycle-nexus-install.reserved.json": {
+      "sha256": "1d603166452471208eaf7daa484d325b79a8a660b50d6cfef1d4656b993abeef",
+      "bytes": 349
+    },
+    "invocations/lifecycle-nexus-install.returned.json": {
+      "sha256": "cd2a755dede513cb1f3d882210821f5f14d1d034cc6110125fdcc3694ebef02b",
+      "bytes": 545
+    },
+    "invocations/lifecycle-nexus-install.process.json": {
+      "sha256": "4f03572cf436059b3c8806e6b1380bc8f5d3895a8068cb9e49fdf2a932773a91",
+      "bytes": 332
+    },
+    "invocations/lifecycle-nexus-start.reserved.json": {
+      "sha256": "cb20e4b2797ad9eeac385c8f5c660f5b7ce549df15d0ef4a6a5e00b0e0e8d42d",
+      "bytes": 347
+    },
+    "invocations/lifecycle-nexus-start.returned.json": {
+      "sha256": "fca09bcfa659f5e4b6b9299bae36f2f955985d15ccf2d1e588a0efb86914139c",
+      "bytes": 543
+    },
+    "invocations/lifecycle-nexus-start.process.json": {
+      "sha256": "006db799b9a9b2d1a3af7f4ba9e00d39601fe0b5701e6fb76138e9f57d3a45d7",
+      "bytes": 330
+    },
+    "invocations/lifecycle-nexus-uninstall.reserved.json": {
+      "sha256": "039bffc144e1b32a3581d5a48171e5fa761b07bb07fb8b00780885f9a881d328",
+      "bytes": 350
+    },
+    "invocations/lifecycle-nexus-uninstall.returned.json": {
+      "sha256": "d497fb88fe735759b71f072f3a8eb8a6dc0bbd7f929f65a4c38905beed03c4f8",
+      "bytes": 547
+    },
+    "invocations/lifecycle-nexus-uninstall.process.json": {
+      "sha256": "b8ee5023087152b033ec85603f9c7d7236cb8318074a9d65f285709a8619c290",
+      "bytes": 334
+    },
+    "invocations/plan-local_plan.reserved.json": {
+      "sha256": "6010d4a615e7a613486c60499fb6091b6875f3e1c556febab8813acf7aa54520",
+      "bytes": 334
+    },
+    "invocations/plan-local_plan.returned.json": {
+      "sha256": "16632e4fe4bbef4571dbfc2c3a649b4be84b90975941cf257206f03b483a6f69",
+      "bytes": 530
+    },
+    "invocations/plan-local_plan.process.json": {
+      "sha256": "7ae22b4425a5998016812f14f985a3d1cfb69d2d1d47ccd058c4404378f55203",
+      "bytes": 317
+    },
+    "invocations/setup-local.reserved.json": {
+      "sha256": "012d131c32c5347e9d9a15530de36f6bd9e51c832f621c01c972746c0f8caf36",
+      "bytes": 330
+    },
+    "invocations/setup-local.returned.json": {
+      "sha256": "3ebd04d1bf99de73f781309a0bcf557458be6ecc9bb2fb71be0b804b289a7b1b",
+      "bytes": 526
+    },
+    "invocations/setup-local.process.json": {
+      "sha256": "d30124e2c82f371d8b1b32997818cb968e3bff6304c72beadc2043ce4dc00432",
+      "bytes": 313
+    },
+    "execution-authorization.json": {
+      "sha256": "ee0d6f0dd13a1439499bf79e344451a603b11606e84ce7c5212c83de07931f8f",
+      "bytes": 3413
+    },
+    "root-review-operator-final.json": {
+      "sha256": "c242a52d0a9577e9bc18f02ef63cc9ff2881a24fcfc25d14069767c2a1eb2986",
+      "bytes": 1387
+    },
+    "installation/installation-result.json": {
+      "sha256": "57458443b50af0ad90a20eb8c414253bd6f770a5ea7039a72a1ec034f4f2f6be",
+      "bytes": 3747
+    },
+    "installation/installation-reserved.json": {
+      "sha256": "1bd2456bed4600c5e753c416bb8d67741e0b0c94d4fb78001ef92139fe67001e",
+      "bytes": 1066
+    },
+    "reconciliation/reconcile_presence.py": {
+      "sha256": "894e6a4206f26344ebc62df9046ddf55afd59f58c456bd80c978c0b726022f33",
+      "bytes": 15474
+    },
+    "reconciliation/test_reconcile_presence.py": {
+      "sha256": "21af4b0db6acbf2c188ca08a77cea6e20896439ea700ad6344a422e1b29c4d1f",
+      "bytes": 12528
+    },
+    "reconciliation/qualify.py": {
+      "sha256": "57747e483475deae66bd96d36907dddd383df21c1c2a176d7aa8aceabd8d2d0e",
+      "bytes": 475
+    },
+    "reconciliation/results.xml": {
+      "sha256": "66e178143f8bf2d9615e1241ed5e77c0c9f2c044509ec9a68c5a7ef2bf1505e3",
+      "bytes": 3988
+    },
+    "reconciliation/README.md": {
+      "sha256": "bf406933debcddc3966042ee128db8db5a060b06444e9ce2dc6560d81367614f",
+      "bytes": 4206
+    },
+    "reconciliation/evidence-reference.json": {
+      "sha256": "e6f7b1b73180904a9475bf04dad8a32b81c8c189222abb23f17e27292a555645",
+      "bytes": 8513
+    },
+    "reconciliation/source-pins.json": {
+      "sha256": "e6f42eda666f569e81d081232409d9e571f898bae3e596be7feb3b410f2a6555",
+      "bytes": 2617
+    },
+    "reconciliation/qualification.json": {
+      "sha256": "732ab37bec4c6499ad02bfeffd8f405bdf82ef9c0c60be9e570e382958f497a7",
+      "bytes": 1048
+    },
+    "reconciliation/previous-supplement-refusal.json": {
+      "sha256": "862e47161359b2b6b762615d8410643374ad96fceab41cae78dba2d40db8a7bd",
+      "bytes": 1479
+    },
+    "reconciliation/runtime-freeze.json": {
+      "sha256": "81c358cd7c73ffec1d8ab6d5a54598bb4d7f50eb2475c04a353bf38efcea1f28",
+      "bytes": 1512
+    },
+    "reconciliation/public-allowlist.json": {
+      "sha256": "c7d69ca1a99a04ef9c239884ee0e7ec54eea6f7fd838edee245dc411a0ca7af4",
+      "bytes": 1610
+    },
+    "reconciliation-v1/reconcile_presence.py": {
+      "sha256": "5c71ab31bc31eb4b330eff6e9c21b70e123486e20b9738cda32fd17bde2f4d95",
+      "bytes": 14372
+    },
+    "reconciliation-v1/test_reconcile_presence.py": {
+      "sha256": "5c23027bc3ec89a01af149e6be7ab71833d4291b2816639e090185995341e339",
+      "bytes": 10781
+    },
+    "reconciliation-v1/qualify.py": {
+      "sha256": "57747e483475deae66bd96d36907dddd383df21c1c2a176d7aa8aceabd8d2d0e",
+      "bytes": 475
+    },
+    "reconciliation-v1/results.xml": {
+      "sha256": "ea35dbee32b899b5b66c0e60683a95290c34c3ab4312b7f0187970d07fdad896",
+      "bytes": 2719
+    },
+    "reconciliation-v1/README.md": {
+      "sha256": "af0040a7ec1954ff86833e7ce9ede2cfdaada0108d4d0dcb13ef8391691fe5c3",
+      "bytes": 3510
+    },
+    "reconciliation-v1/evidence-reference.json": {
+      "sha256": "e6f7b1b73180904a9475bf04dad8a32b81c8c189222abb23f17e27292a555645",
+      "bytes": 8513
+    },
+    "reconciliation-v1/source-pins.json": {
+      "sha256": "ec778466eba4780357cf5dbd083a16c8f5fb2d3015c485b1fd2694272d41516e",
+      "bytes": 2317
+    },
+    "reconciliation-v1/qualification.json": {
+      "sha256": "1c922fd269820fd08545217a34f31abacafdc9d8fc9a2106b3686d76c4270261",
+      "bytes": 1245
+    },
+    "reconciliation-v1/runtime-freeze.json": {
+      "sha256": "8c13559d48632dbc9eb9b13ffc90222f3e63e91cac1e91a5d0539d1e3aa67a79",
+      "bytes": 1340
+    },
+    "reconciliation-v1/public-allowlist.json": {
+      "sha256": "5cfdf035a312cdd683b2a230f682555300fe84c304ae223ed5334a3a9e4887e5",
+      "bytes": 1438
+    }
+  }
+}

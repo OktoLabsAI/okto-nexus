@@ -1,0 +1,31 @@
+{
+  "status": "OFFLINE_FIXTURES_PASSED_AWAITING_ROOT_REAL_OBSERVATION",
+  "tests": 27,
+  "passed": 27,
+  "failed": 0,
+  "skipped": 0,
+  "duration_seconds": 11.51,
+  "actual_reconciliation_observed": false,
+  "actual_closure_written": false,
+  "provider_calls": 0,
+  "service_commands": 0,
+  "database_reads": 0,
+  "runtime_freezes_modified": false,
+  "python": "C:/Users/jpamb/AppData/Local/Temp/m1-recovery-diagnostics-installed-xtfm5o4x/venv/Scripts/python.exe",
+  "python_options": [
+    "-I",
+    "-B",
+    "-X",
+    "utf8"
+  ],
+  "pytest_plugin_autoload": false,
+  "test_result_sha256": "ea35dbee32b899b5b66c0e60683a95290c34c3ab4312b7f0187970d07fdad896",
+  "helper_sha256": "5c71ab31bc31eb4b330eff6e9c21b70e123486e20b9738cda32fd17bde2f4d95",
+  "reference_sha256": "e6f7b1b73180904a9475bf04dad8a32b81c8c189222abb23f17e27292a555645",
+  "original_refusal_sha256": "48327be2a77ce41787a237dd9050147719332bbe4900b08f1ca3de96ff9c71fc",
+  "limitations": [
+    "Fixture qualification only; live absence and port not yet re-observed.",
+    "Original setup uncertainty, fault list and reservation remain unchanged.",
+    "Close appends distinct neutral closure; no normal final-presence evidence is manufactured."
+  ]
+}

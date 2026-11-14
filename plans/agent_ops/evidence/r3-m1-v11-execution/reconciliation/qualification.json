@@ -1,0 +1,26 @@
+{
+  "status": "OFFLINE_FIXTURES_PASSED_AWAITING_ROOT_REAL_OBSERVATION",
+  "tests": 39,
+  "passed": 39,
+  "failed": 0,
+  "skipped": 0,
+  "duration_seconds": 16.04,
+  "scope": "Only supplemental helper tests rerun once after exact Connector representation correction. Includes real installed dataclass construction; no live status method called.",
+  "actual_reconciliation_observed": false,
+  "actual_closure_written": false,
+  "provider_calls": 0,
+  "service_commands": 0,
+  "database_reads": 0,
+  "prior_freezes_modified": false,
+  "python": "C:/Users/jpamb/AppData/Local/Temp/m1-recovery-diagnostics-installed-xtfm5o4x/venv/Scripts/python.exe",
+  "python_options": [
+    "-I",
+    "-B",
+    "-X",
+    "utf8"
+  ],
+  "test_result_sha256": "66e178143f8bf2d9615e1241ed5e77c0c9f2c044509ec9a68c5a7ef2bf1505e3",
+  "helper_sha256": "894e6a4206f26344ebc62df9046ddf55afd59f58c456bd80c978c0b726022f33",
+  "reference_sha256": "e6f7b1b73180904a9475bf04dad8a32b81c8c189222abb23f17e27292a555645",
+  "previous_attempt_preserved": true
+}

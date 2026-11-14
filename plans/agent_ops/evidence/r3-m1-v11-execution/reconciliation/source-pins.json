@@ -1,0 +1,45 @@
+{
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "dependencies": {
+    "controller_token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\controller\\token_collector.py",
+      "sha256": "498cde0a6cc114c45998bc7c7292264b808277e15ab715c24d676b8887bc55f6"
+    },
+    "root_driver_common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\driver_common.py",
+      "sha256": "1a622d21d0645d5418ae732a4fef2d7425e10da1477d0cd3147969cd6649a950"
+    },
+    "root_driver_invoke": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\invoke.py",
+      "sha256": "430a19fac382751406314e4001231148ee69792491c4f633d28d9217a26926ad"
+    },
+    "root_driver_prepare_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\prepare_observation.py",
+      "sha256": "47baab56262aab511a9fd2401efc7561359beb3d83de1daf546a6698e50b7516"
+    },
+    "root_driver_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\m1_v11_observation.py",
+      "sha256": "e5d02998292dbf694bb4c31e4d8188ddae7995520e8314c728f376b320887172"
+    },
+    "root_driver_confirm_cleanup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\m1_v11_confirm_cleanup.py",
+      "sha256": "031494150fa3a054804537dd8bd54a578a28cbe0ceb99cc24b7182f6e5fdb380"
+    },
+    "root_driver_confirm_final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\confirm_final_presence.py",
+      "sha256": "f8999c0a161a1e4c16844f253137f84275f5083a118c05a2f77d2696314fa6ae"
+    },
+    "root_driver_close_campaign": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\close_campaign.py",
+      "sha256": "2565971cc85c38b28cfcb89ce2ed1631956624ef902969aebf0854203993c5e1"
+    },
+    "root_driver_operator_bootstrap": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\operator_bootstrap.py",
+      "sha256": "d016c0717ec9bfdd6d6435251c8ff0ba615b6f455212c8b852b1a9fc2cdbe973"
+    },
+    "installed_connector_manager": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus_connector\\daemon\\manager.py",
+      "sha256": "65ee837a61af3bbb2c4a3e98f13e2d02cd691c0ca2bf41d4f0c555d6d9a47611"
+    }
+  }
+}

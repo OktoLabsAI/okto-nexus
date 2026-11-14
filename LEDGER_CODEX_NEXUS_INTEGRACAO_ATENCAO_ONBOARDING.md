@@ -1357,3 +1357,26 @@ publicado ainda não estava READY_FOR_RUNTIME. Não se atribui a demora a uma
 causa interna não medida. A correção offline não promove aceite real M1.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-setup-discovery-budget/root-review.json`.
+
+## 2026-11-14 — execução real v11 encerrada com falha de observação
+
+A instalação conferiu 983 arquivos dos pacotes fixados. O primeiro start do
+Nexus excedeu a espera da CLI; uma observação posterior confirmou o mesmo
+serviço pronto, sem repetir a partida. O setup local terminou não confirmado
+com INSTALLATION_UNCONFIRMED. Antes disso, o observador selecionou parada por
+SETUP_READ_BUDGET_EXCEEDED: 317,7 ms na descoberta sem journal, contra 250 ms.
+DEADLINE120 foi registrado depois. O retorno zero do wrapper externo apenas
+confirma sua saída; a CLI interna retornou 3 e não houve aceite de setup.
+
+A parada normal chegou a DRAINED, o handle retido confirmou a saída física e
+a tarefa Nexus foi removida. Connector nunca foi instalado/selecionado. A
+checagem final original recusou a história local como possível partida remota;
+a recusa foi preservada. Uma reconciliação suplementar somente de leitura
+confirmou a história local exata e a ausência canônica dos dois serviços/tarefas.
+
+Ficam preservados sete reservas cumulativas, 89.473 tokens observados e uma
+solicitação não assentada. Zero tokens novos observados não significa cobrança
+final zero nem devolução da reserva. Claude não foi usado. Os dados permanecem;
+não houve force, replay ou promoção de aceite M1.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v11-execution/review.json`.

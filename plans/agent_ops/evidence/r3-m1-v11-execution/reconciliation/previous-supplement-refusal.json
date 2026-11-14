@@ -1,0 +1,46 @@
+{
+  "first_supplement_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-presence-reconciliation-twhnt5ki",
+  "first_helper_sha256": "5c71ab31bc31eb4b330eff6e9c21b70e123486e20b9738cda32fd17bde2f4d95",
+  "first_allowlist_sha256": "5cfdf035a312cdd683b2a230f682555300fe84c304ae223ed5334a3a9e4887e5",
+  "offline_tests": {
+    "passed": 27,
+    "failed": 0
+  },
+  "real_attempt": {
+    "source": "Root reported one real observe invocation, RTK exit 1; no supplemental presence or closure created.",
+    "returned_status": "RECONCILIATION_REFUSED",
+    "returned_code": "Refused"
+  },
+  "read_only_diagnosis": {
+    "tool_chunk": "6494e4",
+    "passed": [
+      "load_dependencies",
+      "snapshot",
+      "nexus_original_check",
+      "connector_task_absence"
+    ],
+    "failed_phase": "connector_canonical_absence",
+    "original_guard_code": "CANONICAL_OWNER_ABSENCE_UNCONFIRMED",
+    "cause": "Connector DaemonStatus default generation is empty string; original common observer requires None.",
+    "source_lines": [
+      42,
+      89,
+      90,
+      91,
+      92,
+      93
+    ],
+    "actual_projection_chunk": "1356fe",
+    "projection": {
+      "state": "stopped",
+      "reason": "NO_SERVICE_OWNER",
+      "pid": null,
+      "generation": "",
+      "running": false,
+      "ipc_ok": false,
+      "expected_instance_matched": true
+    }
+  },
+  "old_freeze_unchanged": true,
+  "campaign_modified_during_preparation": false
+}

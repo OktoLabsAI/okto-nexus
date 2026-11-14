@@ -1,0 +1,63 @@
+{
+  "controller_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+  "faults": [
+    "OBSERVATION_UNKNOWN",
+    "DEADLINE120"
+  ],
+  "first_observation_error": {
+    "exception_type": "JournalUnknown",
+    "reader": {
+      "budget_ms": 250.0,
+      "elapsed_ms": 317.6963999867439,
+      "phase": "snapshot_read"
+    },
+    "reason": "SETUP_READ_BUDGET_EXCEEDED"
+  },
+  "setup_monitor": {
+    "caught_up": false,
+    "close_stage": null,
+    "cursor": 0,
+    "high_water": 0,
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\nexus-home",
+    "home_identity": [
+      14764524303808498864,
+      12947848931175475
+    ],
+    "journal": null,
+    "journal_identity": null,
+    "owned_slot_released": false,
+    "prior_journals": [],
+    "result_stage": null,
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\nexus-home\\connection-tests",
+    "started": false,
+    "terminal": false,
+    "thread": null,
+    "turn": null,
+    "usage_seen": false
+  },
+  "stop_selected": {
+    "action": "stop_owner",
+    "reason": "OBSERVATION_UNKNOWN"
+  },
+  "settled": false,
+  "independent_observation": {
+    "budgets": {
+      "freshness_ms": 1000,
+      "initialization_ms": 250,
+      "maximum_previous_poll_ms": 436.2537999986671,
+      "poll_ms": 600,
+      "snapshot_ms": 250
+    },
+    "maximum_poll_start_interval_seconds": 0.6602623999933712,
+    "reader_initialization": {},
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "transport_failures": {
+      "discarded": 0,
+      "later": [],
+      "primary": null
+    },
+    "worker_in_flight": false
+  },
+  "raw_checkpoint_exported": false,
+  "checkpoint_mutated": false
+}

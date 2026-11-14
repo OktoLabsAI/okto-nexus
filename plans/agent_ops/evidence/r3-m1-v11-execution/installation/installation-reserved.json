@@ -1,0 +1,19 @@
+{
+  "format": "okto.base06.installation-reservation",
+  "revision": 1,
+  "status": "RESERVED_INCOMPLETE",
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "approval_sha256": "ee0d6f0dd13a1439499bf79e344451a603b11606e84ce7c5212c83de07931f8f",
+  "proposal_revision": 11,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign",
+  "artifact_pins": {
+    "script_sha256": "2ff9235c1aa7796ac2d5600c7ef989901aab99860b049d94c721efdabc82deac",
+    "requirements_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+    "dependency_manifest_sha256": "24a3efbfc55b5f6030ede5a8858eb15ef80f296d6bfca92fb083bc9fd04b9bef"
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\installation\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\installation\\venv",
+  "reserved_at_utc": "2026-11-14T14:29:40.308420+00:00",
+  "possible_effect": true,
+  "retry_allowed": false
+}

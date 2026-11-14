@@ -1,0 +1,62 @@
+{
+  "status": "USER_APPROVED",
+  "proposal_revision": 11,
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign",
+  "policy": {
+    "revision": 11,
+    "carry_in_admissions": 6,
+    "carry_in_tokens": 89473,
+    "max_cumulative_admissions": 11,
+    "max_new_admissions": 5,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "ancestry": {
+    "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+    "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+    "predecessor_faults": [
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+      "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+      "predecessor_faults": [
+        "OBSERVATION_UNKNOWN",
+        "STOP_UNCONFIRMED",
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+        "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+        "predecessor_faults": [
+          "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+          "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+          "predecessor_faults": [
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ]
+        }
+      }
+    }
+  },
+  "user_quote": "pode seguir e pode usar o claude se quiser testar com a conta autenticada atualmente com limite de 200k tokens do modelo sonnet",
+  "supporting_user_instructions": [
+    "conta já autenticada e limite de 200k tokens",
+    "pode exceder o limite em 500k tokens",
+    "sim pode executar",
+    "pode seguir",
+    "autorizo"
+  ],
+  "recorded_at_utc": "2026-11-14T14:29:13.042044+00:00",
+  "authorization_basis": "Existing user authorization to continue implementation and execute real authenticated tests within the stated budget. This is a technical binding of that standing authorization after completing review, not a claim that the user supplied or separately approved this proposal digest.",
+  "interpretation_correction": "The prior assistant-authored exact-v10-only restriction is not a demonstrated user restriction. The v10 receipt is retained unchanged as historical evidence, its campaign stays closed, and no prior request or reservation is replayed.",
+  "selected_provider": "Pinned Codex CLI with its currently authenticated provider home, used only by the native client.",
+  "optional_claude_executed": false,
+  "optional_claude_limit_tokens": 200000,
+  "scope": "One bounded v11 execution with cumulative carry retained. Two own temporary service tasks; eight explicit lifecycle selections and at most one implicit Connector ensure/start. At most five new model reservations and eleven cumulative. No force, personal task change, logout/reboot, extra allocation, predecessor replay or credential-file inspection.",
+  "review_sha256": "c242a52d0a9577e9bc18f02ef63cc9ff2881a24fcfc25d14069767c2a1eb2986"
+}

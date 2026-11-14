@@ -1,0 +1,15 @@
+{
+  "status": "ORIGINAL_FINAL_PRESENCE_DRIVER_REFUSED",
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "approval_sha256": "ee0d6f0dd13a1439499bf79e344451a603b11606e84ce7c5212c83de07931f8f",
+  "campaign_revision": 11,
+  "driver_sha256": "f8999c0a161a1e4c16844f253137f84275f5083a118c05a2f77d2696314fa6ae",
+  "observation_source": "Root tool result chunk a69aa9, rtk proxy execution; transcription of the actual returned JSON, not a second invocation.",
+  "rtk_reported_exit_code": 1,
+  "driver_output": {
+    "status": "REFUSED_OR_UNCONFIRMED",
+    "code": "POSSIBLE_UNSELECTED_START"
+  },
+  "original_final_presence_created": false,
+  "scope": "No effect was requested by this read-only final-presence check. The refusal is preserved, not relabeled as a pass."
+}

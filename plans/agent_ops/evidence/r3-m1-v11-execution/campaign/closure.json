@@ -1,0 +1,95 @@
+{
+  "format": "okto.m1.closed_campaign",
+  "revision": 1,
+  "status": "CLOSED_RECONCILED_CLEANUP_ACCEPTANCE_NOT_INFERRED",
+  "closed_at": "2026-11-14T14:52:04.519330+00:00",
+  "faults_preserved": [
+    "OBSERVATION_UNKNOWN",
+    "DEADLINE120"
+  ],
+  "new_reserved_admissions": 1,
+  "cumulative_reserved_admissions": 7,
+  "prior_carry_in_tokens": 89473,
+  "new_observed_tokens": 0,
+  "cumulative_minimum_observed_tokens": 89473,
+  "billing_final": false,
+  "unsettled_requests": 1,
+  "controller_checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+  "controller_mutated": false,
+  "database_read": false,
+  "final_presence_sha256": "1ccf2e7c0e156c5d3a46bffe598190d461855b7ab3dc7b54fc22415b4407b466",
+  "final_presence_file": "final-presence-reconciled.json",
+  "wrapper_exit_evidence": {
+    "lifecycle-initialize.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "initialize"
+      ],
+      "reservation_sha256": "5b19fb6adf7fbbffcd058d978acac563050c982914c26ec5f8f14464a202725b",
+      "returned_sha256": "4a5ee191e9ef72d54f53f8b524effad4881a6c9b02f870f9570084ff7fb1acef",
+      "returncode": 0
+    },
+    "lifecycle-nexus-install.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "install"
+      ],
+      "reservation_sha256": "1d603166452471208eaf7daa484d325b79a8a660b50d6cfef1d4656b993abeef",
+      "returned_sha256": "cd2a755dede513cb1f3d882210821f5f14d1d034cc6110125fdcc3694ebef02b",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "start"
+      ],
+      "reservation_sha256": "cb20e4b2797ad9eeac385c8f5c660f5b7ce549df15d0ef4a6a5e00b0e0e8d42d",
+      "returned_sha256": "fca09bcfa659f5e4b6b9299bae36f2f955985d15ccf2d1e588a0efb86914139c",
+      "returncode": 3
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "uninstall"
+      ],
+      "reservation_sha256": "039bffc144e1b32a3581d5a48171e5fa761b07bb07fb8b00780885f9a881d328",
+      "returned_sha256": "d497fb88fe735759b71f072f3a8eb8a6dc0bbd7f929f65a4c38905beed03c4f8",
+      "returncode": 0
+    },
+    "plan-local_plan.reserved.json": {
+      "mode": "plan",
+      "selection": [
+        "local_plan"
+      ],
+      "reservation_sha256": "6010d4a615e7a613486c60499fb6091b6875f3e1c556febab8813acf7aa54520",
+      "returned_sha256": "16632e4fe4bbef4571dbfc2c3a649b4be84b90975941cf257206f03b483a6f69",
+      "returncode": 0
+    },
+    "setup-local.reserved.json": {
+      "mode": "setup",
+      "selection": [
+        "local"
+      ],
+      "reservation_sha256": "012d131c32c5347e9d9a15530de36f6bd9e51c832f621c01c972746c0f8caf36",
+      "returned_sha256": "3ebd04d1bf99de73f781309a0bcf557458be6ecc9bb2fb71be0b804b289a7b1b",
+      "returncode": 0
+    }
+  },
+  "closed_without_force": true,
+  "replay_allowed": false,
+  "all_temporary_tasks_absent": true,
+  "data_retained": true,
+  "acceptance_promoted": false,
+  "setup_still_unconfirmed": true,
+  "original_helper_passed": false,
+  "original_refusal_code": "POSSIBLE_UNSELECTED_START",
+  "limits": "Neutral supplemental closure only. Faults and unsettled setup persist; zero new observed tokens does not prove zero provider use or final billing.",
+  "helper_sha256": "894e6a4206f26344ebc62df9046ddf55afd59f58c456bd80c978c0b726022f33",
+  "reference_sha256": "e6f7b1b73180904a9475bf04dad8a32b81c8c189222abb23f17e27292a555645",
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "approval_sha256": "ee0d6f0dd13a1439499bf79e344451a603b11606e84ce7c5212c83de07931f8f",
+  "campaign_revision": 11
+}
