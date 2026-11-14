@@ -1,0 +1,96 @@
+{
+  "format": "m1-v13-offline-successor-qualification",
+  "status": "PASS",
+  "generated_at_utc": "2026-11-14T16:06:45.385780+00:00",
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "runtime_manifest_sha256": "c6858e1711f30e26c2370075de6306a90f44943d70b45b723534346536380de0",
+  "groups": {
+    "affected-composition": {
+      "tests": 69,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\affected-final\\results.xml",
+      "sha256": "6e8ac970577e97c72f6ead06c0756d51c9d4529ea09258168839edf5dd40a636",
+      "failures": 0,
+      "errors": 0
+    },
+    "threshold-delta": {
+      "tests": 8,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\threshold-delta\\results.xml",
+      "sha256": "801ce2658e655f14015d59c2c0c288764edd8763878744801db3d1168ab37def",
+      "failures": 0,
+      "errors": 0
+    },
+    "drivers": {
+      "tests": 119,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-driver-candidate-l5h1djy4\\qualification\\final.xml",
+      "sha256": "cf0d4f2a6b4afdc9bd6af39231e7150bc756985af86413acc922632808604919",
+      "failures": 0,
+      "errors": 0
+    },
+    "entry-guards": {
+      "tests": 21,
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\final-entry-gates\\results.xml",
+      "sha256": "367f3e7b1c95fe0e62693f9289c77280469ceec5a753cfd413cfd84e2587b29e",
+      "failures": 0,
+      "errors": 0
+    }
+  },
+  "unique_passed": 212,
+  "summed_group_cases": 217,
+  "deduplication": "Exact pytest classname plus parametrized test name; threshold-delta repeats related cases already present in affected-composition. Historical64/73/121 suites are component references and are not added.",
+  "overlaps": {
+    "affected-composition / threshold-delta": 5
+  },
+  "coverage_basis": "69-case composition passed before threshold change; reviewed scalar-only delta in controller/legacy/collector/EffectFence was then covered by8 focal cases. Other runtime modules remain byte-identical to that composition.10drivers copied byte-for-byte from119PASS peer freeze; no117/119 rerun. Final origins and21 denied entries check actual composed paths.",
+  "historical_attempts": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\affected-001\\results.xml",
+      "sha256": "08cb6882e0cd82d2f337e1e5316d7a639859ad78ec9695932a57a632054db58c",
+      "status": "58PASS2FAIL",
+      "reason": "Two inherited assertions expected no max-allocation reason at final slot; runtime completed four work intents. Updated expectations only; no limit relaxation."
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-driver-candidate-l5h1djy4\\qualification\\antecedent-117pass-1fail.xml",
+      "sha256": "91a87967d0ae47a91814e821db1d87a6d075f61e31499c2f927e14cad78a9a9e",
+      "status": "117PASS1FAIL",
+      "reason": "Inherited no-controller fixture expected old89473 instead of111651; peer qualifier preserves exact history."
+    }
+  ],
+  "invariants": {
+    "carry_in_reservations": 8,
+    "carry_in_tokens": 111651,
+    "new_reservations": 4,
+    "maximum_cumulative": 12,
+    "preventive_tokens": 500000,
+    "tolerance_tokens": 700000,
+    "deadline_seconds": 120,
+    "init_ms": 250,
+    "read_ms": 250,
+    "poll_ms": 600,
+    "freshness_ms": 1000,
+    "prior_setup_replayed": false,
+    "old_tokens_counted_twice": false,
+    "predecessor_checkpoint_mutated": false,
+    "new_installation": false,
+    "actual_user_receipt_created": false,
+    "service_provider_credentials_effects": false
+  },
+  "adopted_installation": {
+    "revision": 12,
+    "payloads": 983,
+    "interpreter_plus_payload_pins": 984,
+    "original_install_timing_preserved": true
+  },
+  "acceptance": {
+    "M1": false,
+    "DX39_DX40_AC11": false,
+    "BASE06_first_useful_measured": false,
+    "billing_final": false
+  },
+  "limitations": [
+    "Offline correctness is not real campaign or billing acceptance.",
+    "Windows latency bounds are fail-closed contracts, not guaranteed availability; earlier source timing failures remain historical.",
+    "Existing qualified wheels precede later SVC-T19 diagnostic patches.",
+    "No literal console-window/dashboard closure is inferred from installed parser/handler invocation.",
+    "An insufficient available grant window refuses work; no automatic repeat review/issuance."
+  ]
+}

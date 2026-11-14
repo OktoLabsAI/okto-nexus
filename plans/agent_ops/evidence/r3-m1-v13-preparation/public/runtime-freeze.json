@@ -1,0 +1,205 @@
+{
+  "format": "m1-v13-final-runtime-freeze",
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "files": {
+    "context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\campaign_context.py",
+      "sha256": "3f2e74a7316a970fa262ca7f17a88f71507e3d00c4ffc92ea8de0414f98bc4ad"
+    },
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\m1_v13_lifecycle.py",
+      "sha256": "5d40b67502c16363efc135dce0d45510804660bbfa4d81bea9ceb17eec8ad48c"
+    },
+    "remote_setup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\m1_v13_remote_setup.py",
+      "sha256": "8b1e4f6401c53b02873e880f5a581583923db086595572f89ea3022937634538"
+    },
+    "supervisor_check": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\supervisor_check.py",
+      "sha256": "36aab135f9bebf8ca05b7e13d5b21a37c91bb2b2190fc11ab8e1d5429dbcf010"
+    },
+    "publication": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+    },
+    "response_loss": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\response_loss.py",
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56"
+    },
+    "protected_pty": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\protected-transfer\\protected_pty.py",
+      "sha256": "480262b72e805f1e3ec26336940135c81430534debe2962922f234f9fc8e090c"
+    },
+    "owned_job": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\protected-transfer\\owned_job.py",
+      "sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c"
+    },
+    "remote_transfer_monitor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\remote_transfer_monitor.py",
+      "sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6"
+    },
+    "pty_base_python": {
+      "path": "C:\\Python313\\python.exe",
+      "sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9"
+    },
+    "pty_dependency_0": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\OpenConsole.exe",
+      "sha256": "6b2915a9a91c0738346a6c6a7b3ee2b74e26582b0c92b1b16066e72570dddd68"
+    },
+    "pty_dependency_1": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\__init__.py",
+      "sha256": "95a4e2f6c2e308bc9cc9a4183b7c0cbe164d20adaf87fa4ebc64c94f639de10b"
+    },
+    "pty_dependency_2": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\conpty.dll",
+      "sha256": "1f5ffd52ff118db975eeb25bac0051f4ceff3e051313fa03a5afffa9e75ee502"
+    },
+    "pty_dependency_3": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\enums.py",
+      "sha256": "2809bb5c914f93b9cc5b0509c6f60796a97dd9cafacbe636e081caddf7342435"
+    },
+    "pty_dependency_4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\ptyprocess.py",
+      "sha256": "86e70255f06b89d1d173820f88416b124745854f9429241bc9951af7b11c7837"
+    },
+    "pty_dependency_5": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\__init__.py",
+      "sha256": "7f36fd7039cfb764776ffad687ab2a0e021b890399b4195fb15d5aabe50b4f64"
+    },
+    "pty_dependency_6": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_pty.py",
+      "sha256": "017ba34326d784aaf4b7450aa4d052a9e01fb26e1f1e853fa209db8a87011792"
+    },
+    "pty_dependency_7": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\tests\\test_ptyprocess.py",
+      "sha256": "31e1a9fcffb392c784a748977225a1f456b9e3c85819dbe571a1f2fd6344c17a"
+    },
+    "pty_dependency_8": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty-agent.exe",
+      "sha256": "44467a83d86b6127bc7b876e8b2fb33fa75fde09d9b9ff27c7f8ef84ba969b29"
+    },
+    "pty_dependency_9": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.cp313-win_amd64.pyd",
+      "sha256": "50b107ec1a9393a464071459023e8c6fc4b0f236e97731c31a741dcd56524df8"
+    },
+    "pty_dependency_10": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.dll",
+      "sha256": "5177f321aac2fa85436dd6ec6bfc6d41459d25f5b533aa03349ef513461b4c79"
+    },
+    "pty_dependency_11": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-protected-pty-j_c21e97\\venv\\Lib\\site-packages\\winpty\\winpty.pyi",
+      "sha256": "f957a7a300afcbcb63219502bef6f9559c3947573a0135c451fb22132219c231"
+    },
+    "remote_stop_order": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\remote_stop_order.py",
+      "sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386"
+    },
+    "planning_commands": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\planning-commands.json",
+      "sha256": "157c411b7e4b88dcca67503cef686ba524177625baef0fd846ea9ee58f7c8789"
+    },
+    "remote_canonical_recipe": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\remote-canonical-recipe.json",
+      "sha256": "551daf420bd1ff4b8b4386575f4e9399fd22f7f2eeb3051eef7280415119dbbd"
+    },
+    "work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\m1_v13_work.py",
+      "sha256": "cf52f0476e19b0ec5d3a7b533ae2d0b505677c43b3cee462748ff601f506de52"
+    },
+    "controller_api_worker": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\api_worker.py",
+      "sha256": "53f1d3f9f0faecab7379180e5afd2562e21f4776ddeb88226482dd439bf7aba2"
+    },
+    "controller_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\controller.py",
+      "sha256": "b00704a0eb6173db2bf2fd7209479d313e2a3c9525a24fccc22ed4b43af0d139"
+    },
+    "controller_history_observers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\history_observers.py",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57"
+    },
+    "controller_independent_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\independent_controller.py",
+      "sha256": "08912cb0cff4fa34eb6118f70fb56ae41ed24811e6d2e4813d7ea7aa733fce23"
+    },
+    "controller_independent_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\independent_journal.py",
+      "sha256": "8cf8a2862fd725e4901c4cb5c5f4263ba3144f69b076e1d6e603124204ee70b1"
+    },
+    "controller_legacy_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\legacy_controller.py",
+      "sha256": "7946c1582c15db7fad6322025d9b86da95dd7fc3673c5f9e658e21fc2141e2d0"
+    },
+    "controller_observation_guard": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10"
+    },
+    "controller_serial_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\serial_flow.py",
+      "sha256": "d074e1ee6155a251721528be3531724c0f5eb7fa89f9bb6b6ee752b779abdb9e"
+    },
+    "controller_setup_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\setup_journal.py",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889"
+    },
+    "controller_token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\token_collector.py",
+      "sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2"
+    },
+    "root_driver_common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\driver_common.py",
+      "sha256": "7dee1201558587217293917a0e0ec035d57b2de971ed23729f4d80bb38e813b5"
+    },
+    "root_driver_invoke": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\invoke.py",
+      "sha256": "ae601c5e27c9dc4d7abf48d4f56f93cb6626f0e1fe200223eb6429b80c2490a7"
+    },
+    "root_driver_prepare_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\prepare_observation.py",
+      "sha256": "59a28f16083ce00ed49b46e1cc8d4f01b6551370c34460b217cfa22ec09eec2f"
+    },
+    "root_driver_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\m1_v13_observation.py",
+      "sha256": "806516c556709821f574937b16f3a0e0e73dc610d64f8c9a427a4ed1a3968f27"
+    },
+    "root_driver_confirm_cleanup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\m1_v13_confirm_cleanup.py",
+      "sha256": "440af651f430bde42eef568218e1b39d5b09a416bcb4588976d7e06cbeddaeed"
+    },
+    "root_driver_confirm_final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\confirm_final_presence.py",
+      "sha256": "bf13310bfd14e8be450b377156cffdc74eafdeadbae0ba3e0ce125937173ae3b"
+    },
+    "root_driver_close_campaign": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\close_campaign.py",
+      "sha256": "b1c0bfc3d29d8c6ee2a24a0cf321792487dc6dd43a8edfc3caa9544f9f1979e4"
+    },
+    "controller_cli_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\cli_flow.py",
+      "sha256": "c3f2287f6c9bfdbc674e1197d12f979706502b3030129997ccfc61998209d281"
+    },
+    "root_driver_operator_bootstrap": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\operator_bootstrap.py",
+      "sha256": "4bb63b51f26ab584a5bd7e4e6194f92ef058ef95e9e86c687a195d09af3ec153"
+    },
+    "root_driver_adopt_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\adopt_local.py",
+      "sha256": "eb30968872bfc27abd929fe2743bb9259b7ef82f765f835e0db4c6ce8b43d060"
+    },
+    "root_driver_authorize_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\authorize_local.py",
+      "sha256": "defedf1cc86089c9913fad64e177018a2df7764853fe85ec23c8d8b6a44928f1"
+    }
+  },
+  "policy": {
+    "revision": 13,
+    "carry_in_admissions": 8,
+    "carry_in_tokens": 111651,
+    "max_cumulative_admissions": 12,
+    "max_new_admissions": 4,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "real_effects_executed": false
+}

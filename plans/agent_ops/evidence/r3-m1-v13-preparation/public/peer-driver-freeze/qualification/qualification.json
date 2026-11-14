@@ -1,0 +1,83 @@
+{
+  "format": "m1-v13-root-driver-offline-qualification",
+  "status": "PASS",
+  "generated_at": "2026-11-14T16:03:48.438100+00:00",
+  "runtime_manifest_sha256": "04cddc931f019dbbb2917f0a11d86a3d7353c052647c024f36eb62ca0753e512",
+  "pytest": {
+    "tests": 119,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "xml": "final.xml",
+    "xml_sha256": "cf0d4f2a6b4afdc9bd6af39231e7150bc756985af86413acc922632808604919",
+    "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/draft/installation/venv/Scripts/python.exe -I -B C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-driver-candidate-l5h1djy4\\run_qualification.py test_drivers.py test_operator_bootstrap.py test_local_only_presence.py test_successor_adoption_authorization.py",
+    "isolation": "Installed adopted v12 Python prefix, no source-editable product imports; -I -B; runner explicitly adds candidate directory; fixture CLIFlow path is successor13 draft/controller.",
+    "subprocess_network_service_provider_effects": "Forbidden by synthetic fixtures; installed CLI parser/handlers execute against fixture HTTP and topology only"
+  },
+  "ruff": {
+    "command": "rtk proxy python -m ruff check --select E9,F63,F7,F82 C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-driver-candidate-l5h1djy4",
+    "exit_code": 0
+  },
+  "compile": {
+    "method": "compile(source, filename, exec), no imports or pyc writes",
+    "files": [
+      "adopt_local.py",
+      "authorize_local.py",
+      "operator_bootstrap.py",
+      "driver_common.py",
+      "invoke.py",
+      "prepare_observation.py",
+      "m1_v13_observation.py",
+      "m1_v13_confirm_cleanup.py",
+      "confirm_final_presence.py",
+      "close_campaign.py",
+      "test_drivers.py",
+      "test_operator_bootstrap.py",
+      "test_local_only_presence.py",
+      "test_successor_adoption_authorization.py",
+      "run_qualification.py"
+    ],
+    "result": "PASS"
+  },
+  "origins": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\work.py": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_authorization.py": "b58507fd91ed398503fedc14ed82bbe6c0f28024526ba2df620ab78a63f03063",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_work.py": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py": "614dd004363fc78295f3ff38241900fc352dad65beb4fb04a4278639a705222e",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\cli_flow.py": "c3f2287f6c9bfdbc674e1197d12f979706502b3030129997ccfc61998209d281",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller\\token_collector.py": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2"
+  },
+  "antecedents": [
+    {
+      "counts": "75 passed, 3 failed",
+      "reason": "Inherited tests still expected old local_plan and pre-successor absence routing; adapted finite-selection fixtures.",
+      "artifact": "Tool transcript retained; no earlier XML was generated."
+    },
+    {
+      "counts": "117 passed",
+      "reason": "Initial successor runtime/fixture composition passed before carry-fixture and closure work-only refinements."
+    },
+    {
+      "counts": "117 passed, 1 failed",
+      "reason": "Inherited no-controller fixture still asserted prior carry89473; corrected expected111651, no product/runtime fault.",
+      "xml": "antecedent-117pass-1fail.xml",
+      "sha256": "91a87967d0ae47a91814e821db1d87a6d075f61e31499c2f927e14cad78a9a9e"
+    }
+  ],
+  "root_review": "Root reviewed final sources read-only and accepted freeze after119PASS; no additional changes requested.",
+  "scope": [
+    "Dual-root v13 receipt and evidence gates",
+    "No setup/local_plan selections",
+    "One GET-only predecessor adoption",
+    "Installed work authorize review/apply with canonical expired/available distinction, strict scope/CAS and effect allowlist",
+    "No extra model/token reservation",
+    "Canonical never-selected Connector absence after local work/operator bootstrap",
+    "Inherited physical PID/birth/generation cleanup and strict install-only refusal remain"
+  ],
+  "limitations": [
+    "No real receipt/controller/service/HTTP/login/provider/campaign executed.",
+    "Offline qualification does not promote plan acceptance or prove provider billing finality.",
+    "Short available grant window refuses finite local useful admission; no automatic second review.",
+    "Installed-but-never-started Connector after local work stays outside strict install-only proof and requires honest reconciliation."
+  ]
+}

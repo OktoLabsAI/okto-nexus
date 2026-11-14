@@ -1447,3 +1447,31 @@ critérios mantêm seu estado. XML com token temporário e saídas brutas perman
 na área protegida, fora do repositório.
 
 Evidência: `plans/agent_ops/evidence/r3-native-t17-preservation/review.json`.
+
+## 2026-11-14 — sucessor de trabalho v13 adota o setup concluído v12
+
+O v12 concluiu canonicamente o setup local, com 22.178 tokens, mas encerrou
+com DEADLINE120 antes de trabalho útil. Seu fechamento, checkpoint com a falha,
+perfil DONE, identidade e binding são preservados. O v13 adota os 983 arquivos
+instalados e as mesmas pastas; não reinstala produtos nem repete setup/test/Finish.
+Somente o controle e as evidências ficam em successor13.
+
+Carregam-se oito reservas e 111.651 tokens mínimos observados. Restam quatro
+pedidos de trabalho: útil e continuação em cada topologia, teto cumulativo doze.
+O limiar preventivo passa a 500 mil dentro dos 700 mil já autorizados pelo usuário,
+preservando margem de 200 mil para observação e contenção. O prazo de trabalho
+permanece 120 s; SQL/schema 250 ms, agregado 600 ms e freshness 1 s não mudam.
+
+Uma revisão canônica somente leitura observa o grant local. Se ainda disponível,
+ele é reutilizado somente com janela suficiente. Uma nova autorização de 60 min
+e 20 ações é possível uma única vez apenas se a anterior estiver expirada com
+uso 0/20 e mesmo escopo/CAS; o grant antigo permanece histórico. Não há nova
+reserva de modelo para essa manutenção.
+
+A qualificação registra 212 casos únicos: 69 da composição anterior ao ajuste
+do limiar, oito focais que qualificam esse delta, 119 dos drivers e 21 recusas de
+entrada, descontando cinco sobreposições. Os 47 pins e 984 hashes instalados
+foram conferidos em processo isolado. Isso não promove aceite real M1. O relógio
+BASE06 mantém o início da instalação v12 e inclui toda a espera posterior.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v13-preparation/review.json`.

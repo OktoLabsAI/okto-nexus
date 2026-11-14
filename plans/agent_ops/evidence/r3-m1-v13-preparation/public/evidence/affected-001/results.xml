@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="60" time="47.111" timestamp="2026-11-14T12:53:46.147917-03:00" hostname="Alienware_m15"><testcase classname="draft.controller.test_v11_allocation" name="test_actual_four_requests_roundtrip_fifth_refused" time="5.600" /><testcase classname="draft.controller.test_v11_allocation" name="test_collector_rejects_previous_five_request_policy_even_with_valid_hash" time="0.002" /><testcase classname="draft.controller.test_v11_allocation" name="test_actual_legacy_state_rejects_five_records_even_with_valid_seal" time="0.064" /><testcase classname="draft.controller.test_independent" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="0.808" /><testcase classname="draft.controller.test_independent" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="2.102" /><testcase classname="draft.controller.test_independent" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="6.571" /><testcase classname="draft.controller.test_independent" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.587" /><testcase classname="draft.controller.test_independent" name="test_journal_privacy_scope_and_real_layout[local]" time="0.140" /><testcase classname="draft.controller.test_independent" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.250" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.214" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.182" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.151" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.162" /><testcase classname="draft.controller.test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.135" /><testcase classname="draft.controller.test_independent" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.162" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.094" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.136" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.137" /><testcase classname="draft.controller.test_independent" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.122" /><testcase classname="draft.controller.test_independent" name="test_adopted_setup_ignored_across_local_continuation_reopen_remote_work" time="5.797"><failure message="AssertionError: assert ([] == []&#10;  &#10;  Use -v to get more diff and ['GLOBAL_ALLO...IONS_REACHED'] == ['GLOBAL_ALLO...ON_EXHAUSTED']&#10;  &#10;  Left contains one more item: 'MAX_PRODUCTIVE_ADMISSIONS_REACHED'&#10;  Use -v to get more diff)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor13/affected-001/pytest-tmp/test_adopted_setup_ignored_acr0')
+
+    def test_adopted_setup_ignored_across_local_continuation_reopen_remote_work(tmp_path):
+        now=[1000.];home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+        control=create_control(tmp_path,lambda:now[0]);writers=[];setups=[];dispatches=[];stop=[]
+        local=scope('local');remote=scope('connector')
+        try:
+            # Predecessor setup lives in the same home, but its 22178 tokens are already carry-in.
+            setups.append(setup_journal(home,1,22178))
+            with pytest.raises(Refused,match='LOCAL_SETUP_EXCLUDED_FOR_WORK_SUCCESSOR'):
+                control.setup('setup-local','local',home,lambda:dispatches.append('setup-local'),lambda:stop.append('local'))
+            assert control.poll()['known_observed_tokens']==111651
+            assert control.poll()['new_reserved_requests']==0
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            writers.append(JournalFixture(journal.path(local),local))
+            for name,total in [('local-one',10),('local-two',20)]:
+                control.start_work(name,'local','synthetic',binding=local,checkpoint=deepcopy(flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+                consume(control);writers[0].complete(name,total,thread='local-native-thread');fixture.terminal(name,local)
+                assert control.poll()['can_admit']
+            first_hash=hashlib.sha256(control.path.read_bytes()).hexdigest()
+            first_data=deepcopy(control.data);control.close()
+            control=create_control(tmp_path,lambda:now[0],create=False)
+            assert control.data==first_data and hashlib.sha256(control.path.read_bytes()).hexdigest()==first_hash
+            flow,journal,stops=attach(control,fixture,tmp_path,home,selected=local)
+            # Selected v11 remote bootstrap has zero productive model turns.
+            assert control.poll()['can_admit']
+            remote_flow,remote_reader,remote_stops=attach(control,fixture,tmp_path,home,'connector',remote)
+            writers.append(JournalFixture(remote_reader.path(remote),remote))
+            for name,total in [('remote-one',30),('remote-two',40)]:
+                control.start_work(name,'connector','synthetic',binding=remote,checkpoint=deepcopy(remote_flow.document),
+                    stage='continuation' if name.endswith('two') else 'useful_work')
+                consume(control);writers[1].complete(name,total,thread='remote-native-thread');fixture.terminal(name,remote)
+                control.poll()
+            summary=control.summary()
+            assert summary['new_reserved_requests']==4 and summary['reserved_requests']==POLICY['max_cumulative_admissions']
+            assert summary['known_observed_tokens']==POLICY['carry_in_tokens']+20+40
+&gt;           assert summary['current']==[] and summary['reasons']==['GLOBAL_ALLOCATION_EXHAUSTED']
+E           AssertionError: assert ([] == []
+E             
+E             Use -v to get more diff and ['GLOBAL_ALLO...IONS_REACHED'] == ['GLOBAL_ALLO...ON_EXHAUSTED']
+E             
+E             Left contains one more item: 'MAX_PRODUCTIVE_ADMISSIONS_REACHED'
+E             Use -v to get more diff)
+
+..\draft\controller\test_independent.py:357: AssertionError</failure></testcase><testcase classname="draft.controller.test_independent" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.602" /><testcase classname="draft.controller.test_independent" name="test_fresh_worker_validation_failure_never_posts" time="0.473" /><testcase classname="draft.controller.test_independent" name="test_usage_counter_regression_latches_fault_without_reset" time="0.722" /><testcase classname="draft.controller.test_independent" name="test_api_queue_and_cross_thread_controller_writes_are_refused" time="0.176" /><testcase classname="draft.controller.test_independent" name="test_present_canonical_and_core_epoch_mismatch_blocks_usage" time="0.747" /><testcase classname="draft.controller.test_independent" name="test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending" time="1.466" /><testcase classname="draft.controller.test_independent" name="test_historical_attachment_revalidates_owner_and_accounts_late_tokens" time="0.798" /><testcase classname="draft.controller.test_work_wrapper" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="10.748"><failure message="AssertionError: assert (['GLOBAL_ALLO...IONS_REACHED'] == []&#10;  &#10;  Left contains 2 more items, first extra item: 'GLOBAL_ALLOCATION_EXHAUSTED'&#10;  Use -v to get more diff)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor13/affected-001/pytest-tmp/test_whole_work_wrapper_local_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000208D2456740&gt;
+
+    def test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation(tmp_path,monkeypatch):
+        context=Context(tmp_path)
+        module=types.ModuleType('campaign_context')
+        module.load=lambda:context
+        def require(value,reason):
+            if not value:raise AssertionError(reason)
+        module.require=require
+        monkeypatch.setitem(sys.modules,'campaign_context',module)
+        supervisor=types.ModuleType('supervisor_check');supervisor.require_work_owner=lambda selected:None
+        monkeypatch.setitem(sys.modules,'supervisor_check',supervisor)
+        import okto_nexus.adapters.inbound.cli.work as product_work
+        import okto_nexus.adapters.inbound.cli.terminal_target as target
+        def service(args,name,operator,resolver):
+            lane='local' if name=='m1v12-local' else 'connector'
+            home=Path(context.P['paths']['server_home' if lane=='local' else 'operator_home'])
+            return types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane=lane,inspect=lambda:{'state':'ready'})
+        monkeypatch.setattr(target,'resolve_terminal_target',service)
+        monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,selected.adapter.home,selected.lane))
+        results=[]
+        try:
+            for lane,phase in [('local','useful'),('local','continuation'),('connector','useful'),('connector','continuation')]:
+                context.remaining=[lane,phase]
+                runpy.run_path(str(Path(__file__).parent.parent/'m1_v13_work.py'),run_name='__main__')
+                profile=context.P['execution_bundle']['profiles'][lane]
+                suffix='01' if phase=='useful' else '02'
+                value=json.loads((tmp_path/'successor13/public'/(profile+'-work-'+suffix+'-result.json')).read_text())
+                assert value['record']['settled'] and value['canonical_receipt']['executor_stage']=='SUCCEEDED'
+&gt;               assert value['summary']['reasons']==[] and value['summary']['current']==[]
+E               AssertionError: assert (['GLOBAL_ALLO...IONS_REACHED'] == []
+E                 
+E                 Left contains 2 more items, first extra item: 'GLOBAL_ALLOCATION_EXHAUSTED'
+E                 Use -v to get more diff)
+
+..\draft\controller\test_work_wrapper.py:135: AssertionError</failure></testcase><testcase classname="draft.controller.test_work_wrapper" name="test_cadence_miss_fences_once_then_drains_late_usage_before_public_result" time="1.962" /><testcase classname="draft.controller.test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[snapshot_read]" time="0.434" /><testcase classname="draft.controller.test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[schema_initialization]" time="0.428" /><testcase classname="draft.test_remote_setup_composition" name="test_remote_wrapper_defers_both_stops_until_owned_helper_drains[normal]" time="0.363" /><testcase classname="draft.test_remote_setup_composition" name="test_remote_wrapper_defers_both_stops_until_owned_helper_drains[late_start]" time="0.674" /><testcase classname="draft.test_remote_setup_composition" name="test_remote_wrapper_defers_both_stops_until_owned_helper_drains[unknown_job]" time="0.489" /><testcase classname="draft.test_remote_setup_composition" name="test_remote_wrapper_defers_both_stops_until_owned_helper_drains[existing_stop]" time="0.735" /><testcase classname="draft.test_remote_setup_composition" name="test_remote_wrapper_defers_both_stops_until_owned_helper_drains[setup_only_fault]" time="0.068" /><testcase classname="draft.test_remote_setup_composition" name="test_remote_wrapper_defers_both_stops_until_owned_helper_drains[local_spawn_failure]" time="0.556" /><testcase classname="draft.test_remote_transfer_monitor" name="test_both_gates_refresh_on_owner_and_join_exact_worker" time="0.016" /><testcase classname="draft.test_remote_transfer_monitor" name="test_initial_fresh_refusal_never_calls_transfer[summary0]" time="0.001" /><testcase classname="draft.test_remote_transfer_monitor" name="test_initial_fresh_refusal_never_calls_transfer[summary1]" time="0.002" /><testcase classname="draft.test_remote_transfer_monitor" name="test_initial_fresh_refusal_never_calls_transfer[summary2]" time="0.001" /><testcase classname="draft.test_remote_transfer_monitor" name="test_late_usage_selects_one_fault_and_denies_consumer_without_replay" time="0.016" /><testcase classname="draft.test_remote_transfer_monitor" name="test_out_of_order_duplicate_or_unknown_phase_is_denied[phases0]" time="0.050" /><testcase classname="draft.test_remote_transfer_monitor" name="test_out_of_order_duplicate_or_unknown_phase_is_denied[phases1]" time="0.057" /><testcase classname="draft.test_remote_transfer_monitor" name="test_out_of_order_duplicate_or_unknown_phase_is_denied[phases2]" time="0.003" /><testcase classname="draft.test_remote_transfer_monitor" name="test_owner_continues_poll_and_retains_worker_after_observation_exception" time="0.056" /><testcase classname="draft.test_remote_transfer_monitor" name="test_worker_exception_message_is_not_copied_to_metadata" time="0.002" /><testcase classname="draft.test_remote_transfer_monitor" name="test_deadline_after_producer_refuses_consumer_and_joins" time="0.010" /><testcase classname="draft.test_remote_transfer_monitor" name="test_failed_fault_persistence_does_not_reopen_gate_or_abandon_worker" time="0.016" /><testcase classname="draft.test_remote_transfer_monitor" name="test_public_result_drops_unknown_payloads_and_keeps_only_owned_identity_metadata" time="0.001" /><testcase classname="draft.test_remote_transfer_monitor" name="test_owner_cancellation_unblocks_pending_gate_with_false" time="0.003" /><testcase classname="draft.test_remote_transfer_monitor" name="test_phase_arms_exact_shared_deadline_without_token_reservation" time="0.036" /><testcase classname="draft.test_remote_transfer_monitor" name="test_remote_cadence_miss_with_settled_history_denies_consumer" time="0.029" /><testcase classname="test_lifecycle_cleanup" name="test_uninstall_binds_the_exact_validated_proof_before_dispatch[NEVER_STARTED_OWNER_ABSENT]" time="0.152" /><testcase classname="test_lifecycle_cleanup" name="test_uninstall_binds_the_exact_validated_proof_before_dispatch[physical]" time="0.125" /><testcase classname="test_lifecycle_cleanup" name="test_uninstall_unknown_or_invalid_proof_never_reserves_or_dispatches[validator_refuses]" time="0.041" /><testcase classname="test_lifecycle_cleanup" name="test_uninstall_unknown_or_invalid_proof_never_reserves_or_dispatches[wrong_pin]" time="0.030" /><testcase classname="test_lifecycle_cleanup" name="test_uninstall_unknown_or_invalid_proof_never_reserves_or_dispatches[unknown_kind]" time="0.041" /><testcase classname="test_lifecycle_cleanup" name="test_uninstall_unknown_or_invalid_proof_never_reserves_or_dispatches[wrong_component]" time="0.041" /><testcase classname="test_lifecycle_cleanup" name="test_uninstall_unknown_or_invalid_proof_never_reserves_or_dispatches[wrong_task]" time="0.038" /></testsuite></testsuites>

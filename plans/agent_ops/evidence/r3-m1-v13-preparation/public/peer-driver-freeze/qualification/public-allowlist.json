@@ -1,0 +1,93 @@
+{
+  "format": "m1-v13-root-driver-public-allowlist",
+  "files": [
+    {
+      "relative_path": "adopt_local.py",
+      "sha256": "eb30968872bfc27abd929fe2743bb9259b7ef82f765f835e0db4c6ce8b43d060"
+    },
+    {
+      "relative_path": "authorize_local.py",
+      "sha256": "defedf1cc86089c9913fad64e177018a2df7764853fe85ec23c8d8b6a44928f1"
+    },
+    {
+      "relative_path": "operator_bootstrap.py",
+      "sha256": "4bb63b51f26ab584a5bd7e4e6194f92ef058ef95e9e86c687a195d09af3ec153"
+    },
+    {
+      "relative_path": "driver_common.py",
+      "sha256": "7dee1201558587217293917a0e0ec035d57b2de971ed23729f4d80bb38e813b5"
+    },
+    {
+      "relative_path": "invoke.py",
+      "sha256": "ae601c5e27c9dc4d7abf48d4f56f93cb6626f0e1fe200223eb6429b80c2490a7"
+    },
+    {
+      "relative_path": "prepare_observation.py",
+      "sha256": "59a28f16083ce00ed49b46e1cc8d4f01b6551370c34460b217cfa22ec09eec2f"
+    },
+    {
+      "relative_path": "m1_v13_observation.py",
+      "sha256": "806516c556709821f574937b16f3a0e0e73dc610d64f8c9a427a4ed1a3968f27"
+    },
+    {
+      "relative_path": "m1_v13_confirm_cleanup.py",
+      "sha256": "440af651f430bde42eef568218e1b39d5b09a416bcb4588976d7e06cbeddaeed"
+    },
+    {
+      "relative_path": "confirm_final_presence.py",
+      "sha256": "bf13310bfd14e8be450b377156cffdc74eafdeadbae0ba3e0ce125937173ae3b"
+    },
+    {
+      "relative_path": "close_campaign.py",
+      "sha256": "b1c0bfc3d29d8c6ee2a24a0cf321792487dc6dd43a8edfc3caa9544f9f1979e4"
+    },
+    {
+      "relative_path": "test_drivers.py",
+      "sha256": "7227f30a0699c7ae2421fd9682ab1b728e72b228ab6d72c1b3200e25cb8b1b97"
+    },
+    {
+      "relative_path": "test_operator_bootstrap.py",
+      "sha256": "172f1d22f8b091c2d92fa1dd01ab88442041a53a363be041a074c1a74c85cc34"
+    },
+    {
+      "relative_path": "test_local_only_presence.py",
+      "sha256": "0178bf8fb5b53cd44ffe511b6736cb60ac5b43a4a946b51d37a8b2d055f56cc2"
+    },
+    {
+      "relative_path": "test_successor_adoption_authorization.py",
+      "sha256": "f7e12ec1c50babf4af946c6f7d6d51c3abe2cb32b49e4f2bb7481864ce8f5ade"
+    },
+    {
+      "relative_path": "run_qualification.py",
+      "sha256": "48a9968ce521a7fc28b586ed3bff56b1c8b50d7adcb88f76748e6b0ec24802a5"
+    },
+    {
+      "relative_path": "README.md",
+      "sha256": "86a6e8a904aa7a8cd7162a88bce3f2cfc0fe92a3ee6a3c0c1c09d808b0d31ba1"
+    },
+    {
+      "relative_path": "qualification/runtime-pins.json",
+      "sha256": "04cddc931f019dbbb2917f0a11d86a3d7353c052647c024f36eb62ca0753e512"
+    },
+    {
+      "relative_path": "qualification/qualification.json",
+      "sha256": "a977bcda088a3a542549ddcbbef788aaa15f18d54ab73653359754b9a9f81beb"
+    },
+    {
+      "relative_path": "qualification/final.xml",
+      "sha256": "cf0d4f2a6b4afdc9bd6af39231e7150bc756985af86413acc922632808604919"
+    },
+    {
+      "relative_path": "qualification/antecedent-117pass-1fail.xml",
+      "sha256": "91a87967d0ae47a91814e821db1d87a6d075f61e31499c2f927e14cad78a9a9e"
+    }
+  ],
+  "excluded": [
+    "fixture-temp",
+    "runtime-private",
+    "__pycache__",
+    "adapt_tests.py",
+    "freeze_candidate.py"
+  ],
+  "contains_real_auth_private_databases_transcripts_or_provider_outputs": false
+}

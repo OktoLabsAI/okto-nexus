@@ -12827,6 +12827,58 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-native-t17-preservation/review.json"
       ]
+    },
+    "r3_m1_v13_preparation": {
+      "date": "2026-11-14",
+      "status": "V13_WORK_SUCCESSOR_PREPARATION_REVIEWED",
+      "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+      "public_manifest_sha256": "4591fae5497e3466ffde685aca3077ad1733ba929a6b44a7eaecdb82845fc705",
+      "public_artifacts": 87,
+      "root_review_sha256": "9511f84d04ce6c48cd8d723c94345dcd7c22c29e7248d802c5b60cbaf9dc7460",
+      "predecessor_closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+      "predecessor_checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+      "predecessor_faults": [
+        "DEADLINE120"
+      ],
+      "allocation": {
+        "carry_reservations": 8,
+        "carry_tokens": 111651,
+        "new_reservations_max": 4,
+        "cumulative_reservations_max": 12,
+        "preventive_tokens": 500000,
+        "tolerance_tokens": 700000,
+        "deadline_seconds": 120
+      },
+      "allocation_reason": "Preserve configured v12 setup, all historical reservations/tokens and faulted checkpoint. Only four unsubmitted useful/continuation intents remain. Preventive threshold500k is within existing user authorization200k+500k=700k, leaving200k observation/containment margin; no new user budget or reservation ceiling.",
+      "authorization": "Standing user authorization; exact technical binding after root review does not claim separate human approval of a hash.",
+      "changes": [
+        "Adopt983 installed v12 payloads and existing DONE profile/home/binding without pip or local setup/test/Finish replay.",
+        "Separate ownership root B12 from successor13 control/private/public evidence.",
+        "One canonical authorization review; reuse unique available grant with sufficient window or at most one new grant only for expired0/20, identical scope60min20actions and CAS.",
+        "Cleanup recognizes strictly proved local work/operator history with Connector never selected; canonical absence remains exact."
+      ],
+      "qualification": {
+        "unique_passed": 212,
+        "groups": {
+          "affected_pre_threshold_delta": 69,
+          "focused_threshold_delta": 8,
+          "drivers": 119,
+          "entry_refusals": 21
+        },
+        "overlapping_cases": 5,
+        "scope": "69 composition cases preceded scalar threshold delta;8 focal cases requalify changed threshold/fence.119 driver sources copied unchanged;47 runtime pins/984 installed hashes/fresh origins checked. Historical64/73 suites not rerun or added."
+      },
+      "scope": "Two own temporary tasks with finite normal lifecycle; no force, personal task mutation, logout/reboot or personal credential-file read. Claude optional200k unused.",
+      "base06": "Original v12 install timestamp remains start; all elapsed waiting/preparation before first useful result counts.",
+      "acceptance_promoted": false,
+      "limits": [
+        "No real M1/DX39/DX40/AC11 or billing acceptance from offline qualification.",
+        "Original timing failures and fixture failures remain historical.",
+        "No console-window/dashboard closure inferred from parser invocation."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v13-preparation/review.json"
+      ]
     }
   },
   "history": [
@@ -14112,6 +14164,15 @@
       "summary": "Both actual installed hosts preserve the same task digest and installation receipt across repeated install/enable. A Description-only external change makes enable/uninstall refuse SERVICE_DEFINITION_CHANGED while retaining the edited task and receipt. Exact original XML restored with compare-and-replace, then canonical uninstall confirms absence.",
       "evidence": [
         "plans/agent_ops/evidence/r3-native-t17-preservation/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "V13 work successor adopting configured v12",
+      "status": "V13_WORK_SUCCESSOR_PREPARATION_REVIEWED",
+      "summary": "Closed v12 configured setup and983 installed payloads adopted without setup replay; separate control root, four work intents, carry8/111651, cumulative12. Preventive500k/tolerance700k uses existing user authorization. Offline212uniquePASS with explicit pre-delta/retest distinction; no actual acceptance promoted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v13-preparation/review.json"
       ]
     }
   ]
