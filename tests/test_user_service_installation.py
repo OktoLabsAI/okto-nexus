@@ -261,6 +261,25 @@ def test_failed_preownership_supervised_attempt_is_actionable_without_relaunch(h
     assert [call[0] for call in tasks.calls].count('start') == 1
 
 
+@pytest.mark.parametrize('last_result', [1, 2, 3])
+def test_failed_attempt_after_runtime_entry_remains_actionable_without_relaunch(host, last_result):
+    adapter, tasks, receipt = install(host)
+    adapter.installation.start()
+    control = adapter.installation.control(receipt)
+    atomic_json(adapter.home / CONTROL_NAME, {**control, 'launch_requested': False})
+    tasks.tasks[receipt['name']] = replace(tasks.tasks[receipt['name']], state=3, last_result=last_result)
+    before = (adapter.home / CONTROL_NAME).read_bytes()
+    result = adapter.inspect()
+    assert result['state'] == 'unknown' and result['reason'] == 'SUPERVISOR_LAST_ATTEMPT_FAILED'
+    assert 'retry outcome are unconfirmed' in result['next_action']
+    assert adapter.start()['reason'] == 'SUPERVISOR_LAST_ATTEMPT_FAILED'
+    assert (adapter.home / CONTROL_NAME).read_bytes() == before
+    assert [call[0] for call in tasks.calls].count('start') == 1
+    adapter.installation.begin_stop(None)
+    stopped = adapter.inspect()
+    assert stopped['state'] == 'stopped' and stopped['shutdown_outcome'] == 'drained'
+
+
 @pytest.mark.parametrize('state,last_result', [(2, 2), (4, 2), (0, 2), (3, 0), (3, 0x41303)])
 def test_pending_supervisor_does_not_misattribute_stale_failure_or_status_code(host, state, last_result):
     adapter, tasks, receipt = install(host)
