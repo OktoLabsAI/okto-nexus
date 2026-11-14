@@ -83,6 +83,51 @@ def test_review_requires_exact_consent_then_finish_and_reconnect_preserve_config
     assert [item['state'] for item in t.saved] == ['review', 'approved', 'check_submitted', 'approved', 'test_submitted', 'finish', 'done']
 
 
+@pytest.mark.parametrize('home_kind', [None, 'approved-provider-home', '.codex'])
+def test_provider_login_guidance_preserves_failed_request_without_replay(terminal, monkeypatch, tmp_path, capsys, home_kind):
+    t = terminal
+    if home_kind:
+        provider = tmp_path / home_kind
+        provider.mkdir()
+        t.selection['provider_home'] = str(provider)
+    else:
+        options = t.flow.options
+        def without_home_suggestion(*args, **kwargs):
+            value = deepcopy(options(*args, **kwargs))
+            for row in value['options']:
+                row.pop('provider_home_suggestion', None)
+            return value
+        monkeypatch.setattr(t.flow, 'options', without_home_suggestion)
+    async def auth_required(entry, request, candidate):
+        t.turns.append(request['client_intent_id'])
+        entry.update(status='failed', stage='Connection test failed', details=['PROVIDER_AUTH_REQUIRED'], cleanup_confirmed=True)
+    monkeypatch.setattr(t.app.state.connection_tests, 'run', auth_required)
+    before = snapshot(t.deps)
+    document = t.flow.review(t.selection)
+    result = t.flow.apply(document, approval=document['review_revision'])
+    assert result['state'] == 'test_failed' and result['error_code'] == 'PROVIDER_AUTH_REQUIRED'
+    assert result['work_state'] == 'not_submitted'
+    assert 'codex login' in result['next_action'] and 'CODEX_HOME' in result['next_action']
+    if home_kind:
+        assert 'approved provider_home: ' + str(provider) in result['next_action']
+        assert 'Set HOME to ' + str(provider) in result['next_action']
+        if home_kind == '.codex':
+            assert 'Set CODEX_HOME to ' + str(provider) + '.' in result['next_action']
+            assert str(provider / '.codex') not in result['next_action']
+        else:
+            assert 'otherwise set CODEX_HOME to ' + str(provider / '.codex') in result['next_action']
+            assert 'auth.json or config.toml' in result['next_action']
+    else:
+        assert '--provider-home' in result['next_action']
+    assert 'No login or new test was started' in result['next_action']
+    assert document['state'] == 'test_submitted' and len(t.turns) == 1
+    assert t.flow.apply(deepcopy(t.saved[-1])) == result
+    assert len(t.turns) == 1 and snapshot(t.deps) == before
+    assert not any(path.endswith('setup:finish') for _, path in t.calls)
+    connect._display(result, False)
+    assert result['next_action'] in json.loads(capsys.readouterr().out)['next_action']
+
+
 @pytest.mark.parametrize('lost', ['installations:check', 'setup:test', 'setup:finish'])
 def test_response_loss_resumes_without_repeating_native_effects(terminal, lost):
     t = terminal

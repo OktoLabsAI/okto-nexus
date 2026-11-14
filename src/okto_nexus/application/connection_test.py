@@ -175,9 +175,13 @@ class ConnectionTests:
                 # Core open acknowledges a live session as SUBMITTED; terminal
                 # SUCCEEDED is required for the subsequent model turn.
                 if opened.stage not in ('SUBMITTED', 'SUCCEEDED'):
-                    raise CoreError('CONNECTION_FAILED','test')
+                    code = 'PROVIDER_AUTH_REQUIRED' if opened.error_code == 'PROVIDER_AUTH_REQUIRED' else 'CONNECTION_FAILED'
+                    raise CoreError(code,'test')
                 progress('Waiting for a model response')
-                await runtime.submit(TurnOperation('turn','session','Reply with exactly NEXUS_CONNECTION_OK.'),context)
+                submitted = await runtime.submit(TurnOperation('turn','session','Reply with exactly NEXUS_CONNECTION_OK.'),context)
+                if getattr(submitted, 'stage', None) == 'FAILED':
+                    code = 'PROVIDER_AUTH_REQUIRED' if submitted.error_code == 'PROVIDER_AUTH_REQUIRED' else 'MODEL_RESPONSE_FAILED'
+                    raise CoreError(code,'test')
                 output = ''
                 async for event in runtime.events(EventCursor('connection-test','local','session','epoch')):
                     if event.operation_id != 'turn':
@@ -188,7 +192,8 @@ class ConnectionTests:
                     if event.operation_id == 'turn' and event.payload.get('delivery_phase') == 'terminal':
                         receipt = await journal.get_receipt(OperationKey('connection-test','local','turn'))
                         if event.payload.get('delivery_outcome') != 'success' or not receipt or receipt.stage != 'SUCCEEDED':
-                            raise CoreError('MODEL_RESPONSE_FAILED','test')
+                            code = 'PROVIDER_AUTH_REQUIRED' if getattr(receipt, 'error_code', None) == 'PROVIDER_AUTH_REQUIRED' else 'MODEL_RESPONSE_FAILED'
+                            raise CoreError(code,'test')
                         if 'NEXUS_CONNECTION_OK' not in output:
                             raise CoreError('UNEXPECTED_MODEL_RESPONSE','test')
                         break

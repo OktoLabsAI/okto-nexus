@@ -1,6 +1,7 @@
 """Terminal setup facade over the existing operator HTTP setup contract."""
 from urllib.parse import quote, urlencode
 from copy import deepcopy
+from pathlib import Path
 import hashlib
 import json
 import os
@@ -336,8 +337,32 @@ class TerminalConnection:
             self.sleep(min(1, max(0, deadline - self.monotonic())))
             test = self.api('GET', '/connections/setup-tests/' + quote(request['client_intent_id'], safe=''))
         if test['status'] != 'succeeded':
-            return {'state': 'test_' + test['status'], 'setup_run_id': request['client_intent_id'],
-                    'test': test, 'work_state': 'not_submitted'}
+            result = {'state': 'test_' + test['status'], 'setup_run_id': request['client_intent_id'],
+                      'test': test, 'work_state': 'not_submitted'}
+            if test['status'] == 'failed' and 'PROVIDER_AUTH_REQUIRED' in test.get('details', []):
+                home = request['configuration']['provider_home']
+                result['error_code'] = 'PROVIDER_AUTH_REQUIRED'
+                if request['configuration']['adapter_id'] == 'codex_app_server':
+                    if home:
+                        action = 'On the Server host, use the approved provider_home: ' + home + '. Set HOME to ' + home + '. '
+                        if Path(home).name == '.codex':
+                            action += 'Set CODEX_HOME to ' + home + '. '
+                        else:
+                            action += ('Set CODEX_HOME to ' + home + ' if it already contains auth.json or config.toml, '
+                                'or is the discovered Codex state directory; otherwise set CODEX_HOME to ' + str(Path(home) / '.codex') + '. ')
+                    else:
+                        action = ('Review setup with --provider-home selecting the provider login home on the Server host. '
+                            'Set HOME to that selected home. Set CODEX_HOME to the selected home if it is named .codex, '
+                            'contains auth.json or config.toml, or is the discovered Codex state directory; otherwise use its .codex subdirectory. ')
+                    action += 'Then run codex login in your terminal. '
+                else:
+                    action = (
+                        'Complete provider sign-in locally on the Server host using the approved provider_home: ' + home + '. '
+                        if home else 'Review setup with --provider-home selecting the provider login home on the Server host, '
+                                     'and complete provider sign-in there. '
+                    )
+                result['next_action'] = action + 'Then explicitly review setup with a new --profile before approving another connection test. No login or new test was started; this saved request will not be replayed.'
+            return result
         document['state'] = 'finish'
         self.save(document)
         result = self.api('POST', '/connections/setup:finish', request)
