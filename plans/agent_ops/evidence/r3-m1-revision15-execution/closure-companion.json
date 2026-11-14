@@ -1,0 +1,74 @@
+{
+  "status": "CANCELLED_WORK_NORMAL_CLOSURE_CONFIRMED_NO_M1_ACCEPTANCE",
+  "original_closure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\closure.json",
+    "sha256": "e35d0e7c4cc6748df0282adf2018e5a15ead387d231108d7bcebd04dd47ac9b9"
+  },
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\private\\controller.json",
+    "sha256": "05c09e7168f6251523e1d75a4c523792e12967a2ef0474264a8c754fe6eaf0d3"
+  },
+  "original_checkpoint_and_closure_untouched": true,
+  "request_id": "m1v15-local-useful-13",
+  "canonical_stage": "CANCELLED",
+  "session_state": "CLOSED",
+  "lease_state": "CLOSED",
+  "collector_request_settled": true,
+  "native_pending_count": 0,
+  "active_owned_slots": 0,
+  "cursor": 51,
+  "watermark": 51,
+  "interrupt": {
+    "operation_id": "op_a7dac52535834052da7facc362f81dc7",
+    "admission_state": "DISPATCHED",
+    "receipt_stage": "SUBMITTED",
+    "receipt_revision": 1,
+    "completion_receipt_confirmed": false
+  },
+  "accounting": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\accounting-reconciliation.json",
+    "sha256": "fa987bf4eac144f9b0e1654f5d37a1d097682bf5460b9f1e06b8fcb3f5b7c5e9"
+  },
+  "carry_in_tokens": 295262,
+  "increment_tokens": 46014,
+  "cumulative_observed_tokens": 341276,
+  "charged_reservations": 13,
+  "refunds": 0,
+  "billing_final": false,
+  "normal_cleanup": {
+    "all_three_retained_handles_exited": true,
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "force_used": false,
+    "tasks_absent": true,
+    "port_free": true,
+    "data_directories_retained": true
+  },
+  "decision": {
+    "canonical_state": "CONFIRMED",
+    "native_stage": "REFUSED_BEFORE_EFFECT",
+    "server_code": "PERMISSION_DENIED",
+    "approval_replayed": false,
+    "decision_count": 1
+  },
+  "request14_selected": false,
+  "remote_execution": "HELD",
+  "report_exists": false,
+  "useful_result_confirmed": false,
+  "m1_acceptance": false,
+  "no_new_admission_authorized_by_companion": true,
+  "configuration_fields": "Reported metadata only, not proof of enforcement.",
+  "new_reconciliation_effects": {
+    "provider": 0,
+    "service": 0,
+    "database_writes": 0
+  },
+  "technical_limits_unchanged": {
+    "maximum_cumulative_requests": 16,
+    "preventive_tokens": 500000,
+    "tolerance_tokens": 700000
+  }
+}

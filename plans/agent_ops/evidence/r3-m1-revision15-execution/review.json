@@ -1,0 +1,47 @@
+{
+  "status": "ACTUAL_CANCELLED_WORK_NORMAL_CLOSURE_NO_ACCEPTANCE",
+  "copied_or_projected_artifacts": 38,
+  "copy_hashes_verified": true,
+  "secret_scan_matches": [],
+  "scope": "Finite public receipts, exact returned wrapper metadata and explicit projections only; no controller, DB, event bodies, command lines, stdout, transcript or credentials copied.",
+  "observed_tokens": 341276,
+  "charged_reservations": 13,
+  "request13_increment": 46014,
+  "original_checkpoint_sha256": "05c09e7168f6251523e1d75a4c523792e12967a2ef0474264a8c754fe6eaf0d3",
+  "original_closure_sha256": "e35d0e7c4cc6748df0282adf2018e5a15ead387d231108d7bcebd04dd47ac9b9",
+  "original_faults": [
+    "WORK_TERMINAL_FAILED"
+  ],
+  "interrupt_completion_confirmed": false,
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "reconciliation": {
+    "tool": "e5a430",
+    "exit_code": 0,
+    "elapsed_seconds": 0.07366260001435876,
+    "source": "normal-interrupt/reconcile_accounting.py",
+    "preparation_failures_preserved": [
+      {
+        "tools": [
+          "5838e3",
+          "4b0182"
+        ],
+        "result": "Copy-builder replacement-order assertion, then absent generated script; both before DB access. Corrected builder4b316e and boundedROe5a430 passed."
+      }
+    ]
+  },
+  "root_execution_refs": {
+    "interrupt": "97bfe9 exit0",
+    "work": "1f3f89 exit0; result CANCELLED",
+    "watch": "7eb0d4 exit0",
+    "cleanup": "27caa7 exit0",
+    "uninstall": "1b3898 exit0",
+    "final_presence": "cbb46e exit0",
+    "closure": "0b241c exit0"
+  },
+  "root_execution_refs_are_reported_not_synthetic_process_receipts": true
+}

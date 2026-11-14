@@ -1,0 +1,108 @@
+{
+  "kind": "BOUNDED_READONLY_NATIVE_DECISION_REFUSAL_DIAGNOSIS",
+  "recorded_at_utc": "2026-11-14T22:35:00.431378+00:00",
+  "database_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\nexus.db",
+  "database_open": "mode=ro; query_only=ON; timeout1; progress deadline2",
+  "decision": {
+    "decision_id": "r4decision_bd7e39ba9902581c61f44510052d5e30",
+    "canonical_request_id": "r4request_e133588fe9c28d66ac53353d1fedbde4f26e5c4607e382226d013500f0ad48c7",
+    "native_operation_id": "r4op_a2af6ef15a743a59ab2834140425a20f",
+    "actor_agent_id": "operator",
+    "canonical_state": "CONFIRMED",
+    "managed_input_v1": 0,
+    "plain_agent_guard": 1
+  },
+  "operation": {
+    "operation_id": "r4op_a2af6ef15a743a59ab2834140425a20f",
+    "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+    "actor_agent_id": "operator",
+    "subject_agent_id": "m1v12-local",
+    "action": "approval.decide"
+  },
+  "actor": {
+    "agent_id": "operator",
+    "is_active": 1,
+    "credential_present": 0
+  },
+  "server_receipt_count": 0,
+  "dispatch": {
+    "state": "RESOLVED_TERMINAL",
+    "error": {
+      "code": "PERMISSION_DENIED",
+      "stage": "dispatch",
+      "possible_effect": false,
+      "retry_safe": false
+    },
+    "message": "Runtime action is not authorized."
+  },
+  "recovered_public_receipt": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\r4request_e133588fe9c28d66ac53353d1fedbde4f26e5c4607e382226d013500f0ad48c7-recovered-decision.json",
+    "bytes": 924,
+    "sha256": "184b88df770402a5d71c3ad19cad99f5b49f2867440d82a2eb35f58abe39b842"
+  },
+  "code": [
+    {
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_native_decisions.py",
+        "bytes": 28880,
+        "sha256": "615a1d98316803447c5739b1c63ffbd2f33dbb35245c959f3db95c764ca82793"
+      },
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_native_decisions.py",
+        "bytes": 28880,
+        "sha256": "615a1d98316803447c5739b1c63ffbd2f33dbb35245c959f3db95c764ca82793"
+      },
+      "bytes_equal": true
+    },
+    {
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_input_authority.py",
+        "bytes": 3183,
+        "sha256": "1175330919514aa691bcee20b38b937eaf900722925bf902123231b62936857b"
+      },
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_input_authority.py",
+        "bytes": 3183,
+        "sha256": "1175330919514aa691bcee20b38b937eaf900722925bf902123231b62936857b"
+      },
+      "bytes_equal": true
+    },
+    {
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_access.py",
+        "bytes": 15547,
+        "sha256": "a362d7df03d648517dafa0d22309985837953ef991790bd03ce9d86a7504f957"
+      },
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\runtime_access.py",
+        "bytes": 15547,
+        "sha256": "a362d7df03d648517dafa0d22309985837953ef991790bd03ce9d86a7504f957"
+      },
+      "bytes_equal": true
+    },
+    {
+      "installed": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_native_facts.py",
+        "bytes": 13060,
+        "sha256": "e19d28a6a7b757c2a4cc2f2f66b0b38fb1862728c7510e536ba390ee7768a591"
+      },
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_native_facts.py",
+        "bytes": 12845,
+        "sha256": "5223cec7a17ab2a8c63aa9e69dc383b52effc0d7efbd49839cae25076072c203"
+      },
+      "bytes_equal": false
+    }
+  ],
+  "causal_path": [
+    "validate_native_dispatch reconstructs every non-managed responder as agent_key.",
+    "This committed decision has a plain agent guard and operator has no API-key credential.",
+    "input_authority invokes access.authenticate before checking recorded guard.",
+    "authenticate_runtime_facts rejects agent_key context without credential with the exact persisted message."
+  ],
+  "limitations": [
+    "Server outbox/receipt evidence, not a raw Core journal or provider transcript.",
+    "No approval replay, credential value/hash export, service mutation, force or provider operation.",
+    "Canonical CONFIRMED records the human decision; it does not establish native delivery."
+  ]
+}

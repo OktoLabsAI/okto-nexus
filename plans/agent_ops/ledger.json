@@ -13581,6 +13581,41 @@
       "observed_tokens": 295262,
       "charged_reservations": 12,
       "acceptance_promoted": false
+    },
+    "r3_m1_revision15_cancelled_normal_closure": {
+      "status": "CANCELLED_WORK_NORMAL_CLOSURE_NO_M1_ACCEPTANCE",
+      "summary": "Revision15 install/start passed. One request13 admitted; human decision CONFIRMED but native delivery REFUSED_BEFORE_EFFECT/PERMISSION_DENIED. Normal stop45 returned3/stopping; one exact canonical interrupt admitted. Productive target CANCELLED/session and lease CLOSED/native pending0/slots0; interrupt remains SUBMITTEDrev1/DISPATCHED. Work wrapper exit0 is completed observation, not useful success; report absent, no continuation14 or remote15/16. All three retained handles exited0; native inactive, tasks absent/port free/data retained. Original closure/checkpoint and WORK_TERMINAL_FAILED preserved. RO accounting341276 observed tokens/13charged reservations; no refund/billing finality or acceptance promotion.124/132 remains verified.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/execution/work-result-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/normal-interrupt/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/diagnosis/diagnosis.json"
+      ],
+      "observed_tokens": 341276,
+      "charged_reservations": 13,
+      "request13_tokens": 46014,
+      "usage_components": {
+        "input": 45127,
+        "cached_input_subset": 29184,
+        "output": 887,
+        "reasoning_output_subset": 437,
+        "cache_write": 0
+      },
+      "original_checkpoint_sha256": "05c09e7168f6251523e1d75a4c523792e12967a2ef0474264a8c754fe6eaf0d3",
+      "original_closure_sha256": "e35d0e7c4cc6748df0282adf2018e5a15ead387d231108d7bcebd04dd47ac9b9",
+      "interrupt_completion_confirmed": false,
+      "request14_selected": false,
+      "remote_execution_enabled": false,
+      "acceptance_promoted": false,
+      "billing_final": false,
+      "new_model_admissions_during_curation": 0,
+      "technical_limits": {
+        "maximum_cumulative_requests": 16,
+        "preventive_tokens": 500000,
+        "tolerance_tokens": 700000
+      }
     }
   },
   "history": [
@@ -15121,6 +15156,20 @@
         "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-plan-result.json",
         "plans/agent_ops/evidence/r3-m1-revision15-migration/selection/environment-upgrade-reviewed.json",
         "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-apply-result.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision15_cancelled_normal_closure",
+      "status": "CANCELLED_WORK_NORMAL_CLOSURE_NO_M1_ACCEPTANCE",
+      "summary": "Revision15 install/start passed. One request13 admitted; human decision CONFIRMED but native delivery REFUSED_BEFORE_EFFECT/PERMISSION_DENIED. Normal stop45 returned3/stopping; one exact canonical interrupt admitted. Productive target CANCELLED/session and lease CLOSED/native pending0/slots0; interrupt remains SUBMITTEDrev1/DISPATCHED. Work wrapper exit0 is completed observation, not useful success; report absent, no continuation14 or remote15/16. All three retained handles exited0; native inactive, tasks absent/port free/data retained. Original closure/checkpoint and WORK_TERMINAL_FAILED preserved. RO accounting341276 observed tokens/13charged reservations; no refund/billing finality or acceptance promotion.124/132 remains verified.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/execution/work-result-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/normal-interrupt/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-execution/diagnosis/diagnosis.json"
       ]
     }
   ],

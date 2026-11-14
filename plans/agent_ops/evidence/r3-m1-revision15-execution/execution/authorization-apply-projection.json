@@ -1,0 +1,26 @@
+{
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\authorize-local-apply.json",
+    "sha256": "6c0960226d8b5311b585eebe114bf91d260c1e5b5c85574879c1aee9af8b193f"
+  },
+  "status": "EXPIRED_GRANT_REPLACEMENT_CONFIRMED",
+  "grant": {
+    "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+    "expires_at": "2026-11-14T23:27:07.998684Z",
+    "max_executions": 3,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ]
+  },
+  "review_revision": "f76d060a73ba804bc59acdeffb5c48a41cbab38b9429ef72168295a63577b423",
+  "review_sha256": "40f6bd5f00adbc663d476b8e37ad48ef7b2ea62d72fc89846a4468db33a3af90",
+  "model_admissions": 0,
+  "calls": {
+    "recover": 1,
+    "issue": 1
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "active_owned_slots": 0,
+  "bounds_seconds": {
+    "offline_total": 30,
+    "schema_initialization": 2,
+    "snapshot": 1
+  },
+  "cached_input_is_subset_of_input": true,
+  "canonical": {
+    "billed_tokens": null,
+    "initial_admission_state": "RESOLVED_TERMINAL",
+    "opening_operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+    "opening_receipt": {
+      "error_code": null,
+      "possible_effect": 1,
+      "receipt_revision": 1,
+      "retry_safe": 0,
+      "stage": "SUBMITTED"
+    },
+    "operation_admitted": true,
+    "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+    "operation_receipt": {
+      "error_code": null,
+      "possible_effect": 1,
+      "receipt_revision": 2,
+      "retry_safe": 0,
+      "stage": "CANCELLED"
+    },
+    "preopen_failed": false,
+    "scope": {
+      "agent_id": "m1v12-local",
+      "authorization_revision": 2,
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 1,
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "session_state": {
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "lease_state": "CLOSED",
+      "lifecycle_state": "CLOSED",
+      "open_operation_id": "op_b6e5b1ad8c2df100ae062e91007abb1e",
+      "owner_generation": 1,
+      "stream_epoch": "stream_e5a3b74158a21953cdaeb22c0e11b870",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "source": "OWN_CANONICAL_DB_READ_ONLY"
+  },
+  "carry_in_tokens": 295262,
+  "charged_reservations": 13,
+  "collector_post_exit_sha256": "931554b26ee70dfb62d48a48b71b6bfb6516db87a991504994fd8c9c3701b48a",
+  "collector_request_state_observed_post_exit": "settled_observed",
+  "collector_summary": {
+    "at_or_above_operational_tolerance": false,
+    "can_reserve_new_request": true,
+    "current_request": null,
+    "final_usage_authoritative": false,
+    "known_observed_tokens": 46014,
+    "limitation": "usage_seen means any usage observation for a turn, not a guaranteed final update. Observed totals and interrupts are asynchronous, not an atomic hard cap.",
+    "max_productive_admissions": 4,
+    "observed_prefix_covered": true,
+    "operational_tolerance": 700000,
+    "reasons": [],
+    "request_preventive_interrupt": false,
+    "reserved_requests": 1,
+    "revision": 30,
+    "stop_at": 500000
+  },
+  "core_operations": [
+    {
+      "error_code": null,
+      "native_id": null,
+      "operation_id": "op_a7dac52535834052da7facc362f81dc7",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "stage": "SUBMITTED"
+    },
+    {
+      "error_code": null,
+      "native_id": null,
+      "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "stage": "CANCELLED"
+    }
+  ],
+  "cumulative_observed_tokens": 341276,
+  "cursor": 51,
+  "elapsed_seconds": 0.07366260001435876,
+  "final_presence": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\final-presence.json",
+    "sha256": "da3703ed92e97959faa0cde51f916c3d8f50b360cb7c9fa5fc952b5136b79cac"
+  },
+  "interrupt_admission": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\runtime\\execute-result.json",
+    "sha256": "b51ae5e034e753fda91148d1899c6203446e61b8ee552c2fe6f3ca94fcbe3a0f"
+  },
+  "interrupt_operation": {
+    "action": "turn.interrupt",
+    "admission_state": "DISPATCHED",
+    "operation_id": "op_a7dac52535834052da7facc362f81dc7",
+    "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611"
+  },
+  "interrupt_receipt": {
+    "error_code": null,
+    "possible_effect": 1,
+    "receipt_revision": 1,
+    "retry_safe": 0,
+    "stage": "SUBMITTED"
+  },
+  "kind": "POST_EXIT_READONLY_ACCOUNTING_COMPANION_NOT_CONTROLLER",
+  "live_bounds_unchanged": true,
+  "m1_acceptance": false,
+  "method": "mode=ro, query_only; exact session/operation metadata and token counter projection only; no event bodies, transcript, auth or credentials",
+  "native_pending_count": 0,
+  "native_requests": [
+    {
+      "canonical_request_id": "r4request_e133588fe9c28d66ac53353d1fedbde4f26e5c4607e382226d013500f0ad48c7",
+      "kind": "native_approval",
+      "request_revision": 1,
+      "source_operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+      "source_sequence": 38,
+      "state": "DECIDED"
+    }
+  ],
+  "new_admissions_during_reconciliation": 0,
+  "observed_at": 1794695986.633768,
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\private\\controller.json",
+    "sha256": "05c09e7168f6251523e1d75a4c523792e12967a2ef0474264a8c754fe6eaf0d3"
+  },
+  "original_checkpoint_untouched": true,
+  "original_closure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\closure.json",
+    "sha256": "e35d0e7c4cc6748df0282adf2018e5a15ead387d231108d7bcebd04dd47ac9b9"
+  },
+  "original_faults": [
+    "WORK_TERMINAL_FAILED"
+  ],
+  "original_observed_increment": 46014,
+  "original_request_settled": true,
+  "pages": [
+    {
+      "after_sequence": 51,
+      "committed_contiguous": 51,
+      "event_count": 0,
+      "has_more": false,
+      "next_after_sequence": 51,
+      "projection_sha256": "36ffb259d52b14433570876c38088e75906fd769932d4c9a7423e3684dc47d35"
+    }
+  ],
+  "physical_exit": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\nexus-exit-proof.json",
+    "sha256": "a932bc43be244e8f5d0538b19ca052ec3da698676839fc17849eb21cf5625449"
+  },
+  "provider_billing_finality_claimed": false,
+  "reasoning_output_is_subset_of_output": true,
+  "refunds": 0,
+  "request13_observed_tokens": 46014,
+  "request14_selected": false,
+  "request_id": "m1v15-local-useful-13",
+  "runtime_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\runtime-freeze.json",
+    "sha256": "9e198d1c97f446e51eb9a642a568283e6f6046e01e3425cb2609f2ffc95b5e1c"
+  },
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\reconcile_accounting.py",
+    "sha256": "535f461508e7212325bde9595936a2bcd80f919eec683106114f3839c7b9a28c"
+  },
+  "usage_components": {
+    "cacheWriteInputTokens": 0,
+    "cachedInputTokens": 29184,
+    "inputTokens": 45127,
+    "outputTokens": 887,
+    "reasoningOutputTokens": 437,
+    "totalTokens": 46014
+  },
+  "useful_result_acceptance": false,
+  "watermark": 51
+}

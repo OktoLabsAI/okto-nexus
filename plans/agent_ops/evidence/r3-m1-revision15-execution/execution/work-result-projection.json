@@ -1,0 +1,235 @@
+{
+  "request_id": "m1v15-local-useful-13",
+  "started": 1794695310.2304688,
+  "finished": 1794695811.073139,
+  "useful_result_confirmed": false,
+  "record": {
+    "kind": "work",
+    "lane": "local",
+    "stage": "useful_work",
+    "operation": "op_d7ee27186ba720011a5c3704196eab09",
+    "session": "ses_86bf8a7f016fafe06e794ce5f0028611",
+    "stream": "[\"srv_a3f134b449dbffa20c126dae6f9a8aa9\",\"exe_429348b4147e50ab63d19caa4cd2255c\",\"ses_86bf8a7f016fafe06e794ce5f0028611\",\"stream_e5a3b74158a21953cdaeb22c0e11b870\"]",
+    "recover": false,
+    "scope": {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "agent_id": "m1v12-local",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c"
+    },
+    "actor_agent_id": "operator",
+    "started": 1794695312.0477104,
+    "settled": true,
+    "stop_selected": null,
+    "started_monotonic": 323808.0063925,
+    "api_returned": true,
+    "canonical_stage": "CANCELLED"
+  },
+  "report": {
+    "exists": false
+  },
+  "submission_error": null,
+  "maximum_poll_start_interval_seconds": 0.9650180999888107,
+  "outer_loop_interval_seconds": 6.55946469999617,
+  "calls": {
+    "GET": 7653,
+    "POST": 3,
+    "productive_posts": 1,
+    "decision_posts": 1
+  },
+  "independent_observation": {
+    "maximum_poll_start_interval_seconds": 0.9650180999888107,
+    "transport_failures": {
+      "primary": null,
+      "later": [],
+      "discarded": 0
+    },
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "reader_initialization": {
+      "local": {
+        "canonical": {
+          "closed": false,
+          "failed": false,
+          "open_connections": 1,
+          "close_error_types": [],
+          "schema_changes": [],
+          "read_budget_ms": 1000.0,
+          "initialization_budget_ms": 2000.0,
+          "initializations": [
+            {
+              "file_name": "nexus.db",
+              "elapsed_ms": 30.569399998057634,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            }
+          ]
+        },
+        "core": {
+          "closed": false,
+          "failed": false,
+          "open_connections": 4,
+          "close_error_types": [],
+          "schema_changes": [
+            {
+              "file_name": "session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db",
+              "previous": 20,
+              "current": 21
+            }
+          ],
+          "read_budget_ms": 1000.0,
+          "initialization_budget_ms": 2000.0,
+          "initializations": [
+            {
+              "file_name": "session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db",
+              "elapsed_ms": 23.443799989763647,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            },
+            {
+              "file_name": "session-8a199d6a40061025c42fc87fe000fb631aec1a46dc14f1bcc3011341ea3518b4.db",
+              "elapsed_ms": 20.270499982871115,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            },
+            {
+              "file_name": "session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db",
+              "elapsed_ms": 22.32170000206679,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            },
+            {
+              "file_name": "session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db",
+              "elapsed_ms": 43.71190001256764,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            }
+          ]
+        }
+      }
+    },
+    "worker_in_flight": false,
+    "budgets": {
+      "initialization_ms": 2000.0,
+      "snapshot_ms": 1000.0,
+      "poll_ms": 17000.0,
+      "freshness_ms": 18000.0,
+      "cadence_limit_ms": 22000.0,
+      "target_poll_start_ms": 200.0,
+      "maximum_previous_poll_ms": 957.8443999635056
+    }
+  },
+  "decision_count": 1,
+  "recovered_decisions": {
+    "r4request_e133588fe9c28d66ac53353d1fedbde4f26e5c4607e382226d013500f0ad48c7": {
+      "decision_id": "r4decision_bd7e39ba9902581c61f44510052d5e30",
+      "client_intent_id": "terminal_decision_eadeb72c88164c4cb10ed8155978206d",
+      "canonical_state": "CONFIRMED",
+      "native_stage": "REFUSED_BEFORE_EFFECT",
+      "actor_agent_id": "operator",
+      "request_hash": "sha256:f947d0d12441cd8f54f9fe2ebd307d73036263da9acd43a0e5c348158f696952",
+      "approval_key": {
+        "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+        "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+        "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+        "agent_id": "m1v12-local",
+        "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+        "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+        "session_owner_generation": 1,
+        "canonical_request_id": "r4request_e133588fe9c28d66ac53353d1fedbde4f26e5c4607e382226d013500f0ad48c7",
+        "kind": "native_approval"
+      }
+    }
+  },
+  "stop_wrapper_exits": [
+    null
+  ],
+  "configuration_observation_limit": "Canonical Core metadata only: missing/invalid stays unknown; instructionSources are references, not file contents or enforcement proof; no complete tool inventory is inferred.",
+  "native_policy_fields": "Only fields actually reported in canonical evidence are attributable; unknown inherited settings remain unknown.",
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\m1v15-local-useful-13-result.json",
+    "sha256": "b355c92007a36e7a2b8045df712c4de0b0d3af0bf9b352e40588c9214fea60f5"
+  },
+  "summary": {
+    "known_observed_tokens": 341276,
+    "new_observed_tokens": 46014,
+    "carry_in_tokens": 295262,
+    "reserved_requests": 13,
+    "new_reserved_requests": 1,
+    "policy": {
+      "revision": 15,
+      "carry_in_admissions": 12,
+      "carry_in_tokens": 295262,
+      "max_cumulative_admissions": 16,
+      "max_new_admissions": 4,
+      "preventive_cumulative_tokens": 500000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 600
+    },
+    "current": [],
+    "can_admit": false,
+    "reasons": [
+      "WORK_TERMINAL_FAILED"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "configuration_reported_only": [
+    {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+      "stream_epoch": "stream_e5a3b74158a21953cdaeb22c0e11b870",
+      "sequence": 1,
+      "category": "lifecycle",
+      "native_type": "core/codex_thread_configuration",
+      "operation_id": null,
+      "observation": {
+        "schema_version": 1,
+        "adapter_id": "codex_app_server",
+        "source": "thread/start/response",
+        "thread_id": "01a1dc2d-64c7-7851-b64a-8b8fb6d033af",
+        "fields": {
+          "approvalPolicy": {
+            "status": "reported",
+            "value": "on-request"
+          },
+          "approvalsReviewer": {
+            "status": "reported",
+            "value": "user"
+          },
+          "cwd": {
+            "status": "reported",
+            "value": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project"
+          },
+          "instructionSources": {
+            "status": "reported",
+            "value": [
+              "C:\\Users\\jpamb\\.codex\\AGENTS.md"
+            ]
+          },
+          "model": {
+            "status": "reported",
+            "value": "gpt-5.6-terra"
+          },
+          "modelProvider": {
+            "status": "reported",
+            "value": "openai"
+          },
+          "sandbox": {
+            "status": "reported",
+            "value": {
+              "networkAccess": false,
+              "type": "readOnly"
+            }
+          },
+          "reasoningEffort": {
+            "status": "reported",
+            "value": "medium"
+          }
+        }
+      }
+    }
+  ]
+}

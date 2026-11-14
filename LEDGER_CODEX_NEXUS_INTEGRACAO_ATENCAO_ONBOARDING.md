@@ -1984,3 +1984,25 @@ de trabalho. Instalação/start/watcher continuam etapas separadas sob execuçã
 **295.262 tokens observados, 12 reservas cobradas e 124/132 VERIFIED** permanecem;
 6 cenários IN_PROGRESS e 2 NOT_RUN. Sem promoção de status.
 Evidência: [revisão da migração](plans/agent_ops/evidence/r3-m1-revision15-migration/review.json).
+
+## 2026-11-14 — Revisão15: pedido13 cancelado, encerramento normal
+
+Install e start retornaram0. A decisão humana registrada CONFIRMED teve entrega
+nativa REFUSED_BEFORE_EFFECT/PERMISSION_DENIED; o diagnóstico identifica a
+reconstrução assíncrona da autoridade operator como agent_key sem credencial.
+Após stop45 retornar3/stopping, uma interrupção canônica exata foi admitida.
+O alvo terminou CANCELLED, sessão/lease CLOSED, slots0 e native pending0; o recibo
+interrupt permanece SUBMITTEDrev1/DISPATCHED. Não se infere sua conclusão.
+
+O wrapper útil saiu0 ao concluir observação, mas useful=false/report ausente:
+não houve continuação14 nem remoto15/16. Três handles retidos comprovaram saída0
+sem force; tarefas ausentes, porta livre e diretórios preservados. Closure e
+checkpoint originais foram preservados com WORK_TERMINAL_FAILED.
+
+Releitura pós-saída RO confirmou **341.276 tokens observados / 13 reservas**:
+carry295262 +46014; input45127/output887, cached29184 incluído em input e
+reasoning437 incluído em output. Cursor/watermark51/51; sem refund/faturamento
+final presumido. Limites16/500k/700k inalterados, sem nova admissão nesta curadoria.
+**124/132 VERIFIED, 6 IN_PROGRESS e 2 NOT_RUN**, sem promoção de aceite.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision15-execution/review.json)
+e [companion](plans/agent_ops/evidence/r3-m1-revision15-execution/closure-companion.json).

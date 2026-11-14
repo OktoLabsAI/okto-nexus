@@ -1,0 +1,100 @@
+{
+  "status": "PREPARED_EXACT_NORMAL_INTERRUPT_ROOT_REVIEW_REQUIRED",
+  "sources": {
+    "helper": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\interrupt.py",
+      "sha256": "7e761f54ce6354458586c45cdfe136d35d2baa2bba52a314402caccbe4667a8f"
+    },
+    "observation_helper": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\observe.py",
+      "sha256": "04e7838e5307abccf991508bf09a9b26dda6ec7d7fed17aee4f503d99cbc81ed"
+    }
+  },
+  "before": {
+    "observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\observation.json",
+      "sha256": "f0f4d464203465a5bc5325540755b84084a5c2c3bc46c473958dee87b53ee2a3"
+    },
+    "selection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\nexus-owner-selection.json",
+      "sha256": "9ffbc241b18dc1f8dfb3440d8f2e18e94679c3d460810ab9a01b6ae745271d83"
+    },
+    "normal_stop": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\lifecycle-nexus-stop-result.json",
+      "sha256": "b1546c820c4a2132f261e2852e9d8bc8460aaf166911e8852ccbff37834cc364"
+    },
+    "normal_stop_returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\runtime-private\\lifecycle-nexus-stop.returned.json",
+      "sha256": "62439f81615321d12f871ee3831353f3a47a588dcb36c1c5b5a29b158029a882"
+    }
+  },
+  "amendment": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\amendment.json",
+    "sha256": "440bbd1a336f86dd4fbd9f74c22b2a7ea8342f28490162e2421a25236d00d554"
+  },
+  "scope": {
+    "agent_id": "m1v12-local",
+    "authorization_revision": 2,
+    "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+    "binding_revision": 1,
+    "configuration_revision": 2,
+    "credential_epoch": 1,
+    "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "session_id": "ses_86bf8a7f016fafe06e794ce5f0028611",
+    "session_owner_generation": 1,
+    "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+    "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+  },
+  "operation_id": "op_d7ee27186ba720011a5c3704196eab09",
+  "native_turn_id": "01a1dc2d-6f44-7ac1-b61e-72e2088cf6e8",
+  "owner": {
+    "pid": 11748,
+    "generation": "000516de38262af8bdf99dee1c5271bc",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "task": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "state": 4,
+      "digest": "756eaba511cb5604e3b682d89f2c7a3f4ce1f309a1d717ce21bef442e6cfaab6"
+    },
+    "component": "nexus",
+    "cohort": {
+      "cycle_id": "5cf8d5b2b114615674c31731fd1a836b",
+      "phase": "running",
+      "attempts_started": 1,
+      "child_acknowledged": true,
+      "parent": {
+        "pid": 45280,
+        "birth": 134391687546207183
+      },
+      "launcher": {
+        "pid": 53216,
+        "birth": 134391687599174840
+      },
+      "child": {
+        "pid": 11748,
+        "birth": 134391687599588237
+      }
+    },
+    "selected_at": 1794695196.7233577,
+    "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+    "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+    "campaign_revision": 14,
+    "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+    "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+    "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15",
+    "amendment_sha256": "440bbd1a336f86dd4fbd9f74c22b2a7ea8342f28490162e2421a25236d00d554"
+  },
+  "control_request_id": "m1v15-cleanup-interrupt13",
+  "model_admissions": 0,
+  "native_approval_decisions": 0,
+  "maximum_resolve_posts": 1,
+  "maximum_admission_posts": 1,
+  "future_force_authorized": false,
+  "controller_policy": "Concurrent observer remains live; read-only snapshots, no static controller hash or writes.",
+  "scope_limit": "Exact turn.interrupt only after returned normal stop and fresh stopping owner. No new turn, approval replay, close, restart, force, accounting mutation or physical exit claim.",
+  "ancestor_helper": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\interrupt.py",
+    "sha256": "234fda4c81188fbfa10fd35bf7e7e3ceae2d1e2ef5079d089ab9ea52dfef22f9"
+  }
+}
