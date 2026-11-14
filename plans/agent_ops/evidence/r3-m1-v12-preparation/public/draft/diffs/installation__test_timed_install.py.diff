@@ -1,0 +1,30 @@
+--- v11/test_timed_install.py
++++ v12/test_timed_install.py
+@@ -26,23 +26,23 @@
+ 
+ 
+ def documents():
+-    proposal = {'format': 'okto.m1.codex-real-campaign-proposal', 'revision': 11,
++    proposal = {'format': 'okto.m1.codex-real-campaign-proposal', 'revision': 12,
+         'paths': {'campaign_root': str(module.CAMPAIGN)},
+         'controller_preparation': {'policy': copy.deepcopy(module.POLICY), 'ancestry': copy.deepcopy(module.ANCESTRY)},
+         'base06_installation': {**PIN, 'python': str(module.PYTHON), 'python_prefix': str(module.PREFIX),
+             'script': str(module.SCRIPT), 'result': str(module.RESULT), 'reservation': str(module.RESERVATION)},
+         'package_pins': {'python': str(module.PYTHON), 'python_prefix': str(module.PREFIX),
+             'packages': {name: {**pin, 'package': str(module.SITE / name)} for name, pin in module.WHEELS.items()}}}
+-    approval = {'status': 'USER_APPROVED', 'proposal_revision': 11, 'proposal_sha256': P_HASH,
++    approval = {'status': 'USER_APPROVED', 'proposal_revision': 12, 'proposal_sha256': P_HASH,
+         'campaign_root': str(module.CAMPAIGN), 'policy': copy.deepcopy(module.POLICY),
+         'ancestry': copy.deepcopy(module.ANCESTRY), 'user_quote': 'SYNTHETIC IN-MEMORY GATE TEST, NOT REAL AUTHORIZATION'}
+     return proposal, approval
+ 
+ 
+-def test_exact_v11_receipt_gate_does_not_install():
++def test_exact_v12_receipt_gate_does_not_install():
+     proposal, approval = documents()
+     assert module.validate_documents(proposal, approval, P_HASH, A_HASH, PIN) == {
+-        'proposal_sha256': P_HASH, 'approval_sha256': A_HASH, 'proposal_revision': 11,
++        'proposal_sha256': P_HASH, 'approval_sha256': A_HASH, 'proposal_revision': 12,
+         'campaign_root': str(module.CAMPAIGN)}
+ 
+ 

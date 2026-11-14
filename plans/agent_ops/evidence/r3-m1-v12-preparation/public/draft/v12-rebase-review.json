@@ -1,0 +1,274 @@
+{
+  "status": "REVIEWABLE_V12_REBASE",
+  "schema_format": 11,
+  "campaign_policy_revision": 12,
+  "schema_note": "Persisted controller schema remains11; no structural change. Policy/receipt revision12 and new root reject old campaign state and receipt.",
+  "deltas": [
+    "carry7 +new5 =cumulative12; token limits and ancestor faults preserved",
+    "new labels, own paths/task identities/port58631",
+    "setup_journal discovery fix from qualified3efa6edf freeze",
+    "strict local-only final-presence and raw Connector representation pending separate driver freeze"
+  ],
+  "records": [
+    {
+      "path": "campaign_context.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\campaign_context.py",
+      "source_sha256": "40cb6cb3dfef01591ab351d34f00d58c22aebe9231dd9e2d8c13766cc2911aca",
+      "sha256": "405fb4da2525a1899e472c7bccd9bb4050b4272813668667a6c9ef12b91bded5",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\campaign_context.py.diff"
+    },
+    {
+      "path": "m1_v12_lifecycle.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\m1_v11_lifecycle.py",
+      "source_sha256": "b7e72d9070fda69d27fb493c950c83d4c836338a61fbdb03a1c110b8d638f868",
+      "sha256": "0c01aff86afb3ddb69a8e720615a94673fe6e51cab0e716fd361cbe59c38515c",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\m1_v12_lifecycle.py.diff"
+    },
+    {
+      "path": "m1_v12_remote_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\m1_v11_remote_setup.py",
+      "source_sha256": "2d8167af134e8044a5a8714b844efe9dd50477bb38502b899bfa1071cf02266a",
+      "sha256": "a51cdd3bdc47aead1ac3485c0165159265f044d5f934ff87cf95ba4f4e379561",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\m1_v12_remote_setup.py.diff"
+    },
+    {
+      "path": "m1_v12_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\m1_v11_setup.py",
+      "source_sha256": "1b840a88cf36950a8689f2bdc8c4bd89f79d197234f727a3475133cc51afde67",
+      "sha256": "a40e1a94a3d7b28c0728ada9afeebc037a743b8b579f4884810ed2edf3caa8c9",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\m1_v12_setup.py.diff"
+    },
+    {
+      "path": "m1_v12_work.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\m1_v11_work.py",
+      "source_sha256": "808834d3c0970c6d8349c3913a327fbdfdbcd9113698c771ba0c22745d6e8816",
+      "sha256": "cce190ba9e40521424846a3b3a39f5eb68007d248e56dad79c8988c8eab1777a",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\m1_v12_work.py.diff"
+    },
+    {
+      "path": "publication.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\publication.py",
+      "source_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "byte_identical": true
+    },
+    {
+      "path": "remote_stop_order.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\remote_stop_order.py",
+      "source_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "byte_identical": true
+    },
+    {
+      "path": "remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\remote_transfer_monitor.py",
+      "source_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "byte_identical": true
+    },
+    {
+      "path": "response_loss.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\response_loss.py",
+      "source_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "byte_identical": true
+    },
+    {
+      "path": "supervisor_check.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\supervisor_check.py",
+      "source_sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+      "sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+      "byte_identical": true
+    },
+    {
+      "path": "test_preparation_entries.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\test_preparation_entries.py",
+      "source_sha256": "4772b27691ae26957c2dd13a31ef1473e0a1758883690555c69b940498a9c21f",
+      "sha256": "5f8d3bdf332f1071cf9188c3703d8182953ecdc323561b528d2c64f92cd251d3",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\test_preparation_entries.py.diff"
+    },
+    {
+      "path": "test_remote_setup_composition.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\test_remote_setup_composition.py",
+      "source_sha256": "1f094bccffcda89cd122a27fdc90ab43a461593ce3d0a26a852beaa29180472b",
+      "sha256": "a77c3a32bd89b5363af19d1e45ab0a3ddf43eba330ad48f883d6604125920753",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\test_remote_setup_composition.py.diff"
+    },
+    {
+      "path": "test_remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\test_remote_transfer_monitor.py",
+      "source_sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "sha256": "badacd8dae5eade616c5aa98cd3b9514ba3d5485ec93eed77384c94bd2c116ea",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/api_worker.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\api_worker.py",
+      "source_sha256": "268de25713f364ce2034c824b250030adf1f861147423f95514c1b2756fa42a8",
+      "sha256": "268de25713f364ce2034c824b250030adf1f861147423f95514c1b2756fa42a8",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/canonical_fixture.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\canonical_fixture.py",
+      "source_sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/cli_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\cli_flow.py",
+      "source_sha256": "c3f2287f6c9bfdbc674e1197d12f979706502b3030129997ccfc61998209d281",
+      "sha256": "c3f2287f6c9bfdbc674e1197d12f979706502b3030129997ccfc61998209d281",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\controller.py",
+      "source_sha256": "818cd7ec00ba0d56d935c8466bafad68de5bb8572ca75124e6317aad3f1f5029",
+      "sha256": "917c6482aedbe67ed3d4da2055b1bcb72a16bd5325adec2675a8cb8ee2ae8256",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\controller__controller.py.diff"
+    },
+    {
+      "path": "controller/history_observers.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\history_observers.py",
+      "source_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/independent_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\independent_controller.py",
+      "source_sha256": "1282b611bb5a38b09690bbef3b305f24360aefae3f210494dbd34ee123147cc1",
+      "sha256": "1282b611bb5a38b09690bbef3b305f24360aefae3f210494dbd34ee123147cc1",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/independent_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\independent_journal.py",
+      "source_sha256": "8cf8a2862fd725e4901c4cb5c5f4263ba3144f69b076e1d6e603124204ee70b1",
+      "sha256": "8cf8a2862fd725e4901c4cb5c5f4263ba3144f69b076e1d6e603124204ee70b1",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/legacy_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\legacy_controller.py",
+      "source_sha256": "8756e29d67e5143b62c7744ca142c86c9fa181672063e5df6e008b392dbaa8da",
+      "sha256": "7b4e1e501ed7b5065469bf623331c9252c887fc074c82a45dd5134b9a2e0c999",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\controller__legacy_controller.py.diff"
+    },
+    {
+      "path": "controller/observation_guard.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\observation_guard.py",
+      "source_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/serial_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\serial_flow.py",
+      "source_sha256": "d074e1ee6155a251721528be3531724c0f5eb7fa89f9bb6b6ee752b779abdb9e",
+      "sha256": "d074e1ee6155a251721528be3531724c0f5eb7fa89f9bb6b6ee752b779abdb9e",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/setup_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\setup_journal.py",
+      "source_sha256": "326497241dd3c94f1775b338e7b1b4e70689fc455d1e83db21fda6103b7305dc",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\controller__setup_journal.py.diff"
+    },
+    {
+      "path": "controller/test_cached_readonly.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\test_cached_readonly.py",
+      "source_sha256": "eaa391d0238e3230a4cb6084582238f0671617024e91ce720bdeb536757dd7a6",
+      "sha256": "eaa391d0238e3230a4cb6084582238f0671617024e91ce720bdeb536757dd7a6",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/test_cli_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\test_cli_flow.py",
+      "source_sha256": "3863144caa6278569e18f78779019e9f88930e08a95373c7693d0dac3f1d0460",
+      "sha256": "3863144caa6278569e18f78779019e9f88930e08a95373c7693d0dac3f1d0460",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/test_independent.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\test_independent.py",
+      "source_sha256": "d394bc20c215c31ab4e138b8a3834a7045443d7f6ef3660bf2c45f85ca791c4c",
+      "sha256": "d394bc20c215c31ab4e138b8a3834a7045443d7f6ef3660bf2c45f85ca791c4c",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/test_observation_budget.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\test_observation_budget.py",
+      "source_sha256": "00e4ab9a100f9fbb9f1dee6c3e3e64127cd86938c7ab22ecf8692639e97bd491",
+      "sha256": "00e4ab9a100f9fbb9f1dee6c3e3e64127cd86938c7ab22ecf8692639e97bd491",
+      "byte_identical": true
+    },
+    {
+      "path": "controller/test_v11_allocation.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\test_v11_allocation.py",
+      "source_sha256": "91089f670103d57165846cd6b17a694da8d754f6631c4175b4b557ccd3730019",
+      "sha256": "3778edc8a62ea4acdd6af276def67ce31443ac64afa83703549e318333ad01c3",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\controller__test_v11_allocation.py.diff"
+    },
+    {
+      "path": "controller/test_work_wrapper.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\test_work_wrapper.py",
+      "source_sha256": "1f99c30a2206a5f62791038f499f884d8b4c30da633a66049d9beb61791547e7",
+      "sha256": "f7b347dd7604805b804a962ef4b450dd93c3b098d5884e46674e4c0bd38989b8",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\controller__test_work_wrapper.py.diff"
+    },
+    {
+      "path": "controller/token_collector.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\controller\\token_collector.py",
+      "source_sha256": "498cde0a6cc114c45998bc7c7292264b808277e15ab715c24d676b8887bc55f6",
+      "sha256": "498cde0a6cc114c45998bc7c7292264b808277e15ab715c24d676b8887bc55f6",
+      "byte_identical": true
+    },
+    {
+      "path": "installation/prepare_dependencies.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\installation\\prepare_dependencies.py",
+      "source_sha256": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359",
+      "sha256": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359",
+      "byte_identical": true
+    },
+    {
+      "path": "installation/probe_direct_interpreter.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\installation\\probe_direct_interpreter.py",
+      "source_sha256": "5b0341574fc6e9fa1ddaf384c18e1bf0a47cd14f3a500aa719bf43322743bdea",
+      "sha256": "5b0341574fc6e9fa1ddaf384c18e1bf0a47cd14f3a500aa719bf43322743bdea",
+      "byte_identical": true
+    },
+    {
+      "path": "installation/test_timed_install.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\installation\\test_timed_install.py",
+      "source_sha256": "e9c36e84954d46d8c99728b349423ce849e18396b3fadeec3314f68f0ac6c745",
+      "sha256": "7f5ae5ae6fb7a0bdec5bc321a3e337b2f4416f5927653867037787dda81b024d",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\installation__test_timed_install.py.diff"
+    },
+    {
+      "path": "installation/timed_install.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\public-operator-final\\draft\\installation\\timed_install.py",
+      "source_sha256": "2ff9235c1aa7796ac2d5600c7ef989901aab99860b049d94c721efdabc82deac",
+      "sha256": "3c60f20d66e0226f7a8317dad8d76ab2d66d274f6c8b9d26bcd7fb839f93f5fd",
+      "byte_identical": false,
+      "diff": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\diffs\\installation__timed_install.py.diff"
+    }
+  ],
+  "provider_or_service_actions": 0
+}

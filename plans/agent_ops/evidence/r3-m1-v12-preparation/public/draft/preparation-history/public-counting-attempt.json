@@ -1,0 +1,9 @@
+{
+  "status": "SUPERSEDED_PUBLIC_COUNT_ONLY",
+  "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\public",
+  "manifest_sha256": "e0d8bea7fae0fa0ceb54f810ed67cec5526dc3d985ef0553b1a7b2eff0c51b68",
+  "reason": "Source/driver sanitized XML omit classname; raw(classname,name) failed to deduplicate17 repeated source/affected cases. Tests and proposal unchanged; final uses exact case name with collision review.",
+  "reported_unique_before": 290,
+  "correct_unique": 273,
+  "test_failures_added": 0
+}

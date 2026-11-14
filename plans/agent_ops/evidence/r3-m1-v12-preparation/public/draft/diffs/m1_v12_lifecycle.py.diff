@@ -1,0 +1,11 @@
+--- v11/m1_v11_lifecycle.py
++++ v12/m1_v12_lifecycle.py
+@@ -37,7 +37,7 @@
+                     'CLEANUP_TARGET_MISMATCH')
+             pin=P['execution_bundle']['files']['root_driver_confirm_cleanup']
+             require(hashlib.sha256(Path(pin['path']).read_bytes()).hexdigest()==pin['sha256'],'CLEANUP_VALIDATOR_CHANGED')
+-            spec=importlib.util.spec_from_file_location('m1_v11_cleanup_validator',pin['path'])
++            spec=importlib.util.spec_from_file_location('m1_v12_cleanup_validator',pin['path'])
+             helper=importlib.util.module_from_spec(spec);sys.modules[spec.name]=helper;spec.loader.exec_module(helper)
+             require(helper.validate_never_started(X,proof,allow_current_uninstall=True) is True,'NEVER_STARTED_PROOF_REQUIRED')
+         else:

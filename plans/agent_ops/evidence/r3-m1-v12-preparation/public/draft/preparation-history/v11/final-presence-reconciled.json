@@ -1,0 +1,170 @@
+{
+  "status": "RECONCILED_LOCAL_ONLY_CONNECTOR_UNSELECTED_CLEANUP_CONFIRMED",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-822654ebed7d7cf607a82ececeb984647036c433ccf0769a3f57b251979f5d84",
+      "absent": true,
+      "owner_cleanup_evidence": {
+        "cleanup_sha256": "2e2743de535b385adc481e89f67b548749ed3448f54b48e9e17037a2954edf9f",
+        "uninstall_result_sha256": "cabe5860cc3c9d9fa1d2a87f643783ca14d8e4b1599f329bbb02d31fa5c338db"
+      },
+      "canonical_absence": {
+        "state": "stopped",
+        "reason": "NO_SERVICE_OWNER",
+        "instance_id": "svc_822654ebed7d7cf607a82ececeb984647036c433ccf0769a3f57b251979f5d84",
+        "pid": null,
+        "generation": null
+      }
+    },
+    "connector": {
+      "name": "OktoNexus-connector-bddb196d1d2d2160bb3df4cb899b5610bf93e4ac4f8749b746107bb21f14a4a4",
+      "absent": true,
+      "canonical_absence": {
+        "state": "stopped",
+        "reason": "NO_SERVICE_OWNER",
+        "instance_id": "svc_bddb196d1d2d2160bb3df4cb899b5610bf93e4ac4f8749b746107bb21f14a4a4",
+        "pid": null,
+        "generation": "",
+        "running": false,
+        "ipc_ok": false
+      },
+      "owner_cleanup_evidence": {},
+      "basis": "EXACT_RETURNED_LOCAL_ONLY_HISTORY_AND_PRISTINE_CONNECTOR_ROOT"
+    }
+  },
+  "invocation_evidence": {
+    "lifecycle-initialize.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "initialize"
+      ],
+      "reservation_sha256": "5b19fb6adf7fbbffcd058d978acac563050c982914c26ec5f8f14464a202725b",
+      "returned_sha256": "4a5ee191e9ef72d54f53f8b524effad4881a6c9b02f870f9570084ff7fb1acef",
+      "returncode": 0
+    },
+    "lifecycle-nexus-install.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "install"
+      ],
+      "reservation_sha256": "1d603166452471208eaf7daa484d325b79a8a660b50d6cfef1d4656b993abeef",
+      "returned_sha256": "cd2a755dede513cb1f3d882210821f5f14d1d034cc6110125fdcc3694ebef02b",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "start"
+      ],
+      "reservation_sha256": "cb20e4b2797ad9eeac385c8f5c660f5b7ce549df15d0ef4a6a5e00b0e0e8d42d",
+      "returned_sha256": "fca09bcfa659f5e4b6b9299bae36f2f955985d15ccf2d1e588a0efb86914139c",
+      "returncode": 3
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "uninstall"
+      ],
+      "reservation_sha256": "039bffc144e1b32a3581d5a48171e5fa761b07bb07fb8b00780885f9a881d328",
+      "returned_sha256": "d497fb88fe735759b71f072f3a8eb8a6dc0bbd7f929f65a4c38905beed03c4f8",
+      "returncode": 0
+    },
+    "plan-local_plan.reserved.json": {
+      "mode": "plan",
+      "selection": [
+        "local_plan"
+      ],
+      "reservation_sha256": "6010d4a615e7a613486c60499fb6091b6875f3e1c556febab8813acf7aa54520",
+      "returned_sha256": "16632e4fe4bbef4571dbfc2c3a649b4be84b90975941cf257206f03b483a6f69",
+      "returncode": 0
+    },
+    "setup-local.reserved.json": {
+      "mode": "setup",
+      "selection": [
+        "local"
+      ],
+      "reservation_sha256": "012d131c32c5347e9d9a15530de36f6bd9e51c832f621c01c972746c0f8caf36",
+      "returned_sha256": "3ebd04d1bf99de73f781309a0bcf557458be6ecc9bb2fb71be0b804b289a7b1b",
+      "returncode": 0
+    }
+  },
+  "controller_checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+  "summary": {
+    "faults_preserved": [
+      "OBSERVATION_UNKNOWN",
+      "DEADLINE120"
+    ],
+    "new_reserved_admissions": 1,
+    "cumulative_reserved_admissions": 7,
+    "prior_carry_in_tokens": 89473,
+    "new_observed_tokens": 0,
+    "cumulative_minimum_observed_tokens": 89473,
+    "billing_final": false,
+    "unsettled_requests": 1
+  },
+  "setup_result_sha256": "1554fac92e0e05edf4972cf9263d63898827066c3b0d9f5915fb6e577695824b",
+  "retained_files": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\private\\controller.json": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\authorization-reference.json": "4a8592599dca8755af8b26e876ff192ee40d9066840ef087714f95b121ccd820",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\cleanup-nexus.json": "2e2743de535b385adc481e89f67b548749ed3448f54b48e9e17037a2954edf9f",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\final-presence-original-refusal.json": "48327be2a77ce41787a237dd9050147719332bbe4900b08f1ca3de96ff9c71fc",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-install-result.json": "c883f464b6d3c8f41bdf80509f9fc44e5bab17c0c607c14215a88b36687bdb8e",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-install.json": "c522384f047c49d1662e45b6c3c260eefe3e0312e16b6df49b5d9d18b3a84ace",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-start-result.json": "2ba4f8c3822dbe194d8daad842eba442f80ca1cb088684fe02c0be750c5a5cd3",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-start.json": "4695cd53a787fc461cd333c6a2bd320ec6c271cdab940d0dd2ccbe9d4cfa2401",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-stop-result.json": "bf62d3adf8229c6a735bbeb984eeff6ba80fd43e0cd0107689cae158910ce7bb",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-stop.json": "c44bd18051fda047f4974f9cd4ce1dce5e390279fb49fdc0151700cfd8dd5914",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-uninstall-result.json": "cabe5860cc3c9d9fa1d2a87f643783ca14d8e4b1599f329bbb02d31fa5c338db",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\lifecycle-nexus-uninstall.json": "28d58debab1defed524d17702a1ae76b8455c548427867dd0a4037b055694386",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\live-accounting.json": "9833e2650ce511d608c1022ab3ccc0d5e3ad9601e07494b7100fa87c8c60c654",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\local-setup-dispatch.json": "e30462be87cf79e30b57358c5e6b68f4e26e5738603ad1c059ad8161eb7113a0",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\local-setup-result.json": "1554fac92e0e05edf4972cf9263d63898827066c3b0d9f5915fb6e577695824b",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\nexus-exit-proof.json": "cdf6244007ee27cad24318c3814d534543c0e522f7b70966518c8a73821cfbfe",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\nexus-exit-watch-started.json": "67e0f6147a581f502818aebcf18c0ddded9c56d63da8daff272567c4d749596b",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\nexus-owner-selection.json": "7cc5f064d3a0b05a24cfa449fc16c1ffb39d07d972e4287b4f183fb398507ce8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\process-nexus-install.json": "2c0a02d53922a02bb528ad0a0e903b7a74f2fb5483e27f5f729f6c3bc271773c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\process-nexus-start.json": "e62bfe10ba1812e957dae23597b1d9645176bc90f3f5ec6fedcca3474a3c7b6f",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\process-nexus-stop.json": "f7093c89a218535f3175af72d361994f3731e78569df3b3502a60ad240298eb0",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\process-nexus-uninstall.json": "339cc8b805ff2370c9ebcf272eda09aa5e620cb5ef2a187e5951f773a4391b99",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\root-driver-preparation.json": "96bce079944e4fec888258e965770a7cd51e6d4715528706b794cd8de18c836a",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-initialize.reserved.json": "5b19fb6adf7fbbffcd058d978acac563050c982914c26ec5f8f14464a202725b",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-initialize.returned.json": "4a5ee191e9ef72d54f53f8b524effad4881a6c9b02f870f9570084ff7fb1acef",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-nexus-install.reserved.json": "1d603166452471208eaf7daa484d325b79a8a660b50d6cfef1d4656b993abeef",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-nexus-install.returned.json": "cd2a755dede513cb1f3d882210821f5f14d1d034cc6110125fdcc3694ebef02b",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-nexus-start.reserved.json": "cb20e4b2797ad9eeac385c8f5c660f5b7ce549df15d0ef4a6a5e00b0e0e8d42d",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-nexus-start.returned.json": "fca09bcfa659f5e4b6b9299bae36f2f955985d15ccf2d1e588a0efb86914139c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-nexus-uninstall.reserved.json": "039bffc144e1b32a3581d5a48171e5fa761b07bb07fb8b00780885f9a881d328",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\lifecycle-nexus-uninstall.returned.json": "d497fb88fe735759b71f072f3a8eb8a6dc0bbd7f929f65a4c38905beed03c4f8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\plan-local_plan.reserved.json": "6010d4a615e7a613486c60499fb6091b6875f3e1c556febab8813acf7aa54520",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\plan-local_plan.returned.json": "16632e4fe4bbef4571dbfc2c3a649b4be84b90975941cf257206f03b483a6f69",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\setup-local.reserved.json": "012d131c32c5347e9d9a15530de36f6bd9e51c832f621c01c972746c0f8caf36",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-operator-candidate-sqp53mdk\\runtime-private\\setup-local.returned.json": "3ebd04d1bf99de73f781309a0bcf557458be6ecc9bb2fb71be0b804b289a7b1b"
+  },
+  "remote_helper_evidence": {
+    "selected": false,
+    "basis": "NO_REMOTE_SELECTION_OR_CANONICAL_RESERVATION"
+  },
+  "exclusive_port_probe_passed_not_reserved": 57589,
+  "data_directories_retained": true,
+  "force_used": false,
+  "database_read": false,
+  "controller_mutated": false,
+  "observed_at": 1794667909.1408637,
+  "original_helper_passed": false,
+  "original_refusal_code": "POSSIBLE_UNSELECTED_START",
+  "original_refusal_evidence": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\campaign\\public\\final-presence-original-refusal.json",
+    "sha256": "48327be2a77ce41787a237dd9050147719332bbe4900b08f1ca3de96ff9c71fc"
+  },
+  "acceptance_promoted": false,
+  "setup_still_unconfirmed": true,
+  "scope": "Supplemental one-campaign local-only reconciliation; instantaneous absence and port availability. No work success or final billing inferred.",
+  "helper_sha256": "894e6a4206f26344ebc62df9046ddf55afd59f58c456bd80c978c0b726022f33",
+  "reference_sha256": "e6f7b1b73180904a9475bf04dad8a32b81c8c189222abb23f17e27292a555645",
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "approval_sha256": "ee0d6f0dd13a1439499bf79e344451a603b11606e84ce7c5212c83de07931f8f",
+  "campaign_revision": 11
+}

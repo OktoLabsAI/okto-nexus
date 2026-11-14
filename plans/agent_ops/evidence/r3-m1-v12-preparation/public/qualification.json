@@ -1,0 +1,140 @@
+{
+  "status": "OFFLINE_V12_QUALIFIED_STANDING_AUTHORIZATION_TECHNICAL_BINDING_PENDING",
+  "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040",
+  "groups": {
+    "retained-discovery-source": {
+      "tests": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "467973bb394457528c9677f9967aaa500d0779ed59c6626f8f539ad53268e322",
+      "artifact": "component-evidence/retained-discovery-source/results.xml",
+      "scope": "73PASS;1 historical private DB case deselected. Source revision11 evidence, combined with V12 affected policy/identity checks; original64 not rerun."
+    },
+    "v12-affected-composition": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "83ae7dff8fd6df9f72e7cffc53e11afb6fc0f9bf214833082ce085401ec1e883",
+      "artifact": "affected-composition-final/results.xml",
+      "scope": "76PASS:3allocation+10discovery+4workwrapper+30installer+22remote+7lifecycle; overlaps retained source counted once."
+    },
+    "v12-root-drivers": {
+      "tests": 121,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "15c553d716699d9ae74c694d2234001f05c749177a951179be1aa92f700e38f3",
+      "artifact": "component-evidence/v12-root-drivers/results.xml",
+      "scope": "121PASS:78base+43strictlocalonly/representation cases; copied runtime bytes identical."
+    },
+    "v12-final-entry-gates": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "be90b5884a579e2c1be91a6e35816b7eec98f173dc8e9d044435e05eb78fd751",
+      "artifact": "final-entry-gates/results.xml",
+      "scope": "20 actual entry refusals; all46 source pins,984 payload/interpreter pins, real wheels/deps/LF verified, no installation."
+    }
+  },
+  "unique_test_cases": 273,
+  "counting": "Source XML omits classname. Exact testcase names deduplicate17 known source/affected overlaps (10discovery+3allocation+4workwrapper); all groups have unique names and no other collisions. Total273=73+76+121+20-17. Historical64 and earlier attempts are not added.",
+  "history": "V11 closed with one unsettled setup reservation retained. Earlier timing failures and collection error are preserved; no historical failure relabeled.",
+  "source_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-setup-discovery-candidate-nsuy793o\\qualification\\runtime-freeze.json",
+    "sha256": "3efa6edfad572ed9940e941cc9a4dc5ab0ada1c1af2d909cf54bc95b4d597690",
+    "classification": "73_PASS_1_HISTORICAL_PRIVATE_DB_CASE_DESELECTED"
+  },
+  "policy": {
+    "revision": 12,
+    "carry_in_admissions": 7,
+    "carry_in_tokens": 89473,
+    "max_cumulative_admissions": 12,
+    "max_new_admissions": 5,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "policy_delta": {
+    "previous_cumulative_reservation_limit": 11,
+    "next_cumulative_reservation_limit": 12,
+    "carry_in_admissions": 7,
+    "new_admissions": 5,
+    "carry_in_tokens": 89473,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "claude_sonnet_optional_user_limit": 200000,
+    "claude_selected": false,
+    "reason": "Previous admission ceiling was our finite technical policy, not the user token budget. Literal DX-20/DX-T39/DX-T40 require useful work plus conversation continuation in each topology. Preserve all seven reservations; no refund, replay, extra retries or token-budget increase."
+  },
+  "ancestry": {
+    "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+    "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+    "predecessor_faults": [
+      "OBSERVATION_UNKNOWN",
+      "DEADLINE120"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+      "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+      "predecessor_faults": [
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+        "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+        "predecessor_faults": [
+          "OBSERVATION_UNKNOWN",
+          "STOP_UNCONFIRMED",
+          "CAMPAIGN_RUNNER_EXCEPTION"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+          "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+          "predecessor_faults": [
+            "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+            "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+            "predecessor_faults": [
+              "CAMPAIGN_RUNNER_EXCEPTION"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "scope_qualification": {
+    "status": "OFFLINE_INSTALLED_CLI_PARSER_HANDLERS_V12_COMPOSITION_QUALIFIED_REAL_M1_PENDING",
+    "work_path": "CLIFlow -> installed run_work parser/handlers -> original open_work/TerminalWork under installed profile guard -> existing serialized/fenced canonical HTTP.",
+    "offline_installed_parser_exercised": true,
+    "real_campaign_cli_executed": false,
+    "console_subprocess_exit_proven": false,
+    "dashboard_open_close_exercised": false,
+    "factory_instrumentation": "Observes original factory methods and transport; parser/readiness/lock/checkpoint/display remain installed code. No stdout redirect or duplicate POST authority.",
+    "recovery": "GET-only installed status/events/answer review and existing receipt GETs. work resume is not used as a GET-only recovery operation.",
+    "acceptance": "DX-T39/DX-T40/AC11 and M1 remain pending actual approved harness/provider work; SVC-T09 terminal/dashboard closure is not proved by invoking a parser function.",
+    "allocation_test_clock": "Only test_actual_five_requests_roundtrip_sixth_refused fixes controller/reader clocks to isolate five-new/twelve-cumulative reservation logic; actual SQLite/persistence/reopen remain. Other fixtures retain their documented clocks.",
+    "historical_failures": "Initial local52suite50PASS2FAIL preserved (inherited six-turn fixture and105.287ms snapshot); predecessorCLI63suite61PASS2timingFAIL at211.2865/153.5869ms preserved. Subsequent reviewed read250 suite64PASS ran once; no earlier failure relabeled.",
+    "old_740ms_poll": "Retained failed poll includes fault/containment; not an accepted cycle. Cleanup duration was not separately measured, so the entire excess is not attributed to cleanup."
+  },
+  "product_build_scope": "Unchanged prior qualified wheels07b7ed53/73f1a3ba/609e0fbb. Later SVC-T19/SUPERVISOR_PENDING diagnostic patches in current repositories are not present in these campaign wheels.",
+  "runtime_pin_count": 46,
+  "product_payload_count": 983,
+  "all_package_pins": 984,
+  "dependency_files": 3209,
+  "lf_requirements_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+  "campaign_directory_created": false,
+  "products_installed": false,
+  "technical_v12_binding_created": false,
+  "standing_user_authorization_received": true,
+  "new_human_approval_of_hash_required": false,
+  "provider_calls": 0,
+  "service_actions": 0,
+  "credentials_read": 0,
+  "m1_complete": false,
+  "publication": "Allowlisted offline metadata/source/fixtures only. No environment, product binaries/wheels, private live DB/vault, credentials or synthetic approval directories."
+}

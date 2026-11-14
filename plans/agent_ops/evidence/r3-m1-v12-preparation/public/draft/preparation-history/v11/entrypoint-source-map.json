@@ -1,0 +1,73 @@
+{
+  "campaign_context.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\campaign_context.py",
+    "source_sha256": "80aeaf827aa97e65a3f7176e2ecf135421b2ffb057abf90431bfe0656b2c4b2b",
+    "sha256": "40cb6cb3dfef01591ab351d34f00d58c22aebe9231dd9e2d8c13766cc2911aca",
+    "change": "revision/module/request labels only"
+  },
+  "m1_v11_lifecycle.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_lifecycle.py",
+    "source_sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "sha256": "ad1804dfc0417e68dd12760050401068f9913157589b95d8262985aa66f6d31a",
+    "change": "byte-identical"
+  },
+  "m1_v11_setup.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_setup.py",
+    "source_sha256": "ab8a189d2c2626498e874e75d821f1cc4d1d86662c86647e7abbd57e16f0fe55",
+    "sha256": "1b840a88cf36950a8689f2bdc8c4bd89f79d197234f727a3475133cc51afde67",
+    "change": "revision/module/request labels only"
+  },
+  "m1_v11_remote_setup.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\m1_v10_remote_setup.py",
+    "source_sha256": "1dbfb97b02ccc96b059cd86395766b6f62d8819d0fbfbe73b1ee8d73d9c1c429",
+    "sha256": "2d8167af134e8044a5a8714b844efe9dd50477bb38502b899bfa1071cf02266a",
+    "change": "revision/module/request labels only"
+  },
+  "supervisor_check.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\supervisor_check.py",
+    "source_sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "sha256": "c1becafab3a870d0f1fd5f6701e00f5d92f70827e6b7968bc12269f0ab7a87c3",
+    "change": "byte-identical"
+  },
+  "publication.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\publication.py",
+    "source_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+    "change": "byte-identical"
+  },
+  "response_loss.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\response_loss.py",
+    "source_sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+    "change": "byte-identical"
+  },
+  "protected-transfer/protected_pty.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\protected-transfer\\protected_pty.py",
+    "source_sha256": "820d4a210d35d27dc869a4a8bb64065cdf908e3e323ec4b2361cdbb81e0fa882",
+    "sha256": "480262b72e805f1e3ec26336940135c81430534debe2962922f234f9fc8e090c",
+    "change": "byte-identical"
+  },
+  "protected-transfer/owned_job.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\protected-transfer\\owned_job.py",
+    "source_sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+    "sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+    "change": "byte-identical"
+  },
+  "remote_transfer_monitor.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote_transfer_monitor.py",
+    "source_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+    "sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+    "change": "byte-identical"
+  },
+  "remote_stop_order.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\remote_stop_order.py",
+    "source_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+    "sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+    "change": "byte-identical"
+  },
+  "installation/timed_install.py": {
+    "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\timed_install.py",
+    "sha256": "2ff9235c1aa7796ac2d5600c7ef989901aab99860b049d94c721efdabc82deac",
+    "change": "fixed targets/revision10/policy/ancestry; manifest-derived qualified wheel pins; approval and replay guards unchanged"
+  }
+}

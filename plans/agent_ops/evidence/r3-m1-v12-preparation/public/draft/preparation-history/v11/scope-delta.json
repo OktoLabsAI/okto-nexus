@@ -1,0 +1,51 @@
+{
+  "from_revision": 10,
+  "to_revision": 11,
+  "carry_reservations": [
+    5,
+    6
+  ],
+  "carry_minimum_observed_tokens": [
+    67658,
+    89473
+  ],
+  "maximum_new_reservations": [
+    6,
+    5
+  ],
+  "maximum_cumulative_reservations": [
+    11,
+    11
+  ],
+  "nominal_productive_allocation": 5,
+  "remote_setup_productive_turns": 0,
+  "unchanged": [
+    "three product wheels",
+    "Codex build/path/provider-home selection",
+    "200000 preventive",
+    "700000 tolerance",
+    "120 seconds",
+    "2 tasks/8 lifecycle actions/at most1 implicit Connector start",
+    "no forced service stop/replay"
+  ],
+  "new": [
+    "fresh roots/task names/port/dependency-only target",
+    "installed CLI parser/handler observer with250ms read/init and600ms aggregate/1s freshness",
+    "root drivers and independently revalidated never-started cleanup path"
+  ],
+  "allocation_rebase_required": [
+    "token_collector initial max_requests6→5",
+    "token_collector checkpoint validation6→5",
+    "legacy_controller len(requests)>6→5",
+    "legacy_controller summary>=6→5",
+    "POLICY max_new6→5"
+  ],
+  "authorization_inferred": false,
+  "product_install_executed": false,
+  "observer_source_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-read250-candidate-q537zfyi\\qualification\\runtime-freeze.json",
+    "sha256": "d22afc44b0776b3f34429c59d311c85c53d19f7d15ab5d5d7a96135947d333f0",
+    "classification": "FINAL_OFFLINE_SUITE_PASS_READ250"
+  },
+  "allocation_rebase_verified_by": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-read250-candidate-q537zfyi\\qualification\\final.xml"
+}

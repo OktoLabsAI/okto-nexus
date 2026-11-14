@@ -1,0 +1,132 @@
+{
+  "status": "OFFLINE_V11_QUALIFIED_STANDING_AUTHORIZATION_TECHNICAL_BINDING_PENDING",
+  "proposal_sha256": "dd04c4c0507022c021b99c540c4d4c307232ceb0a4b9661d38bd6eeaf335b812",
+  "groups": {
+    "installed-controller-cli-component": {
+      "tests": 64,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "e14073e0b03f5991f35ebecfa1fc7876b13bcff3a283c09d43f35855aa967b3a",
+      "artifact": "component-evidence/installed-controller-cli-component/results.xml"
+    },
+    "root-driver-component": {
+      "tests": 78,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "53a38c589edac3adec33267aa8051dd7dbc75992a455622a3ca90d81c3487418",
+      "artifact": "component-evidence/root-driver-component/results.xml"
+    },
+    "installer-checks": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "70496df51a04045e613f6395c40e55d13c3df0d17b756b69d4b9102a7df5980c",
+      "artifact": "installer-checks/results.xml"
+    },
+    "remote-composition-final": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "28021b8c9c45c0b136258be137f01c2c2c84ab2b2888ad5c83346ead4d2378ad",
+      "artifact": "remote-composition-final/results.xml"
+    },
+    "lifecycle-cleanup-checks": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "95e1cb1054e8730f02076fee6291156dea2d712d5960df1ac3b002d17b541220",
+      "artifact": "lifecycle-cleanup-checks/results.xml"
+    },
+    "operator-final-entry-gates": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "4dd6b10850334d5280049775450dc05e23948539079458417a1c41c226dfe6de",
+      "artifact": "operator-final-entry-gates/results.xml"
+    }
+  },
+  "unique_test_cases": 221,
+  "source_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-read250-candidate-q537zfyi\\qualification\\runtime-freeze.json",
+    "sha256": "d22afc44b0776b3f34429c59d311c85c53d19f7d15ab5d5d7a96135947d333f0",
+    "classification": "FINAL_OFFLINE_SUITE_PASS_READ250"
+  },
+  "scope_qualification": {
+    "status": "OFFLINE_INSTALLED_CLI_PARSER_HANDLERS_QUALIFIED_REAL_M1_PENDING",
+    "work_path": "CLIFlow -> installed run_work parser/handlers -> original open_work/TerminalWork under installed profile guard -> existing serialized/fenced canonical HTTP.",
+    "offline_installed_parser_exercised": true,
+    "real_campaign_cli_executed": false,
+    "console_subprocess_exit_proven": false,
+    "dashboard_open_close_exercised": false,
+    "factory_instrumentation": "Observes original factory methods and transport; parser/readiness/lock/checkpoint/display remain installed code. No stdout redirect or duplicate POST authority.",
+    "recovery": "GET-only installed status/events/answer review and existing receipt GETs. work resume is not used as a GET-only recovery operation.",
+    "acceptance": "DX-T39/DX-T40/AC11 and M1 remain pending actual approved harness/provider work; SVC-T09 terminal/dashboard closure is not proved by invoking a parser function.",
+    "allocation_test_clock": "Only test_actual_five_requests_roundtrip_sixth_refused fixes controller/reader clocks to isolate five-new/eleven-cumulative reservation logic; actual SQLite/persistence/reopen remain. Other fixtures retain their documented clocks.",
+    "historical_failures": "Initial local52suite50PASS2FAIL preserved (inherited six-turn fixture and105.287ms snapshot); predecessorCLI63suite61PASS2timingFAIL at211.2865/153.5869ms preserved. Subsequent reviewed read250 suite64PASS ran once; no earlier failure relabeled.",
+    "old_740ms_poll": "Retained failed poll includes fault/containment; not an accepted cycle. Cleanup duration was not separately measured, so the entire excess is not attributed to cleanup."
+  },
+  "source_attempts": "Selected source candidate history remains independently preserved; successful composition does not erase predecessor timing failures or prove real-time scheduling.",
+  "product_build_scope": "Unchanged prior qualified wheels07b7ed53/73f1a3ba/609e0fbb. Later SVC-T19/SUPERVISOR_PENDING diagnostic patches in current repositories are not present in these campaign wheels.",
+  "policy": {
+    "revision": 11,
+    "carry_in_admissions": 6,
+    "carry_in_tokens": 89473,
+    "max_cumulative_admissions": 11,
+    "max_new_admissions": 5,
+    "preventive_cumulative_tokens": 200000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "ancestry": {
+    "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+    "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+    "predecessor_faults": [
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+      "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+      "predecessor_faults": [
+        "OBSERVATION_UNKNOWN",
+        "STOP_UNCONFIRMED",
+        "CAMPAIGN_RUNNER_EXCEPTION"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+        "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+        "predecessor_faults": [
+          "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+          "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+          "predecessor_faults": [
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ]
+        }
+      }
+    }
+  },
+  "product_payload_count": 983,
+  "all_package_pins": 984,
+  "runtime_pin_count": 46,
+  "dependency_files": 3209,
+  "lf_requirements_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+  "campaign_directory_created": false,
+  "products_installed": false,
+  "real_approval_created": false,
+  "technical_v11_binding_created": false,
+  "standing_user_authorization_received": true,
+  "new_human_approval_of_hash_required": false,
+  "provider_calls": 0,
+  "service_actions": 0,
+  "credentials_read": 0,
+  "m1_complete": false,
+  "publication": "Allowlisted source and sanitized offline test evidence; no wheels, executable binaries, environment, databases, vault, live provider data or synthetic approval fixture directories."
+}

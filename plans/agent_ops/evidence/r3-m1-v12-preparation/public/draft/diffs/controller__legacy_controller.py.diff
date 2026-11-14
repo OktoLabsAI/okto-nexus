@@ -1,0 +1,40 @@
+--- v11/legacy_controller.py
++++ v12/legacy_controller.py
+@@ -23,8 +23,8 @@
+     pass
+ 
+ 
+-POLICY = {'revision': 11, 'carry_in_admissions': 6, 'carry_in_tokens': 89473, 'max_cumulative_admissions': 11, 'max_new_admissions': 5, 'preventive_cumulative_tokens': 200000, 'operational_tolerance': 700000, 'deadline_seconds': 120}
+-ANCESTRY = {'closure_sha256': 'c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0', 'checkpoint_sha256': '8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e', 'predecessor_faults': ['CAMPAIGN_RUNNER_EXCEPTION'], 'prior_ancestry': {'closure_sha256': 'fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936', 'checkpoint_sha256': '02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588', 'predecessor_faults': ['OBSERVATION_UNKNOWN', 'STOP_UNCONFIRMED', 'CAMPAIGN_RUNNER_EXCEPTION'], 'prior_ancestry': {'closure_sha256': '678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d', 'checkpoint_sha256': '6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361', 'predecessor_faults': ['SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE'], 'prior_ancestry': {'closure_sha256': '8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b', 'checkpoint_sha256': '78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e', 'predecessor_faults': ['CAMPAIGN_RUNNER_EXCEPTION']}}}}
++POLICY = {'revision': 12, 'carry_in_admissions': 7, 'carry_in_tokens': 89473, 'max_cumulative_admissions': 12, 'max_new_admissions': 5, 'preventive_cumulative_tokens': 200000, 'operational_tolerance': 700000, 'deadline_seconds': 120}
++ANCESTRY = {'closure_sha256': '849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883', 'checkpoint_sha256': '5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c', 'predecessor_faults': ['OBSERVATION_UNKNOWN', 'DEADLINE120'], 'prior_ancestry': {'closure_sha256': 'c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0', 'checkpoint_sha256': '8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e', 'predecessor_faults': ['CAMPAIGN_RUNNER_EXCEPTION'], 'prior_ancestry': {'closure_sha256': 'fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936', 'checkpoint_sha256': '02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588', 'predecessor_faults': ['OBSERVATION_UNKNOWN', 'STOP_UNCONFIRMED', 'CAMPAIGN_RUNNER_EXCEPTION'], 'prior_ancestry': {'closure_sha256': '678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d', 'checkpoint_sha256': '6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361', 'predecessor_faults': ['SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE'], 'prior_ancestry': {'closure_sha256': '8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b', 'checkpoint_sha256': '78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e', 'predecessor_faults': ['CAMPAIGN_RUNNER_EXCEPTION']}}}}}
+ 
+ 
+ def digest(document):
+@@ -99,7 +99,7 @@
+             receipt = json.loads(raw)
+             return (hashlib.sha256(raw).hexdigest() == self.approval_sha256
+                     and receipt.get('status') == 'USER_APPROVED'
+-                    and receipt.get('proposal_revision') == 11
++                    and receipt.get('proposal_revision') == 12
+                     and receipt.get('proposal_sha256') == self.expected_proposal_sha256
+                     and digest(receipt.get('policy')) == digest(POLICY)
+                     and digest(receipt.get('ancestry')) == digest(ANCESTRY)
+@@ -112,7 +112,7 @@
+         if (not self._approval_valid()
+                 or self.data.get('authorization_sha256') != self.approval_sha256
+                 or self.data.get('proposal_sha256') != self.expected_proposal_sha256):
+-            raise Refused('V11_APPROVAL_REQUIRED')
++            raise Refused('V12_APPROVAL_REQUIRED')
+ 
+     def close(self):
+         if self._lock is not None:
+@@ -172,7 +172,7 @@
+         reasons = list(self.data['faults'])
+         if (not self._approval_valid() or self.data['authorization_sha256'] != self.approval_sha256
+                 or self.data['proposal_sha256'] != self.expected_proposal_sha256):
+-            reasons.append('V11_APPROVAL_REQUIRED')
++            reasons.append('V12_APPROVAL_REQUIRED')
+         if any(r['kind']=='work' for r in self.data['requests'].values()):
+             reasons += work['reasons']
+         if current: reasons.append('SERIAL_REQUEST_UNSETTLED')

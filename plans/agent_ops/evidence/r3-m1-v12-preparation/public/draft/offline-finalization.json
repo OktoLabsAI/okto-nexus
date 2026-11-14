@@ -1,0 +1,31 @@
+{
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEW_TECHNICAL_BINDING_PENDING",
+  "groups": {
+    "retained-discovery-source": {
+      "xml": "C:/Users/jpamb/AppData/Local/Temp/m1-v11-setup-discovery-candidate-nsuy793o/qualification/final.xml",
+      "xml_sha256": "467973bb394457528c9677f9967aaa500d0779ed59c6626f8f539ad53268e322",
+      "scope": "73PASS;1 historical private DB case deselected. Source revision11 evidence, combined with V12 affected policy/identity checks; original64 not rerun."
+    },
+    "v12-affected-composition": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\affected-composition-final\\results.xml",
+      "xml_sha256": "83ae7dff8fd6df9f72e7cffc53e11afb6fc0f9bf214833082ce085401ec1e883",
+      "scope": "76PASS:3allocation+10discovery+4workwrapper+30installer+22remote+7lifecycle; overlaps retained source counted once."
+    },
+    "v12-root-drivers": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\results.xml",
+      "xml_sha256": "15c553d716699d9ae74c694d2234001f05c749177a951179be1aa92f700e38f3",
+      "scope": "121PASS:78base+43strictlocalonly/representation cases; copied runtime bytes identical."
+    },
+    "v12-final-entry-gates": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\final-entry-gates\\results.xml",
+      "xml_sha256": "be90b5884a579e2c1be91a6e35816b7eec98f173dc8e9d044435e05eb78fd751",
+      "scope": "20 actual entry refusals; all46 source pins,984 payload/interpreter pins, real wheels/deps/LF verified, no installation."
+    }
+  },
+  "runtime_pins": 46,
+  "package_pins": 984,
+  "campaign_absent": true,
+  "products_not_installed": true,
+  "technical_v12_binding_created": false,
+  "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040"
+}

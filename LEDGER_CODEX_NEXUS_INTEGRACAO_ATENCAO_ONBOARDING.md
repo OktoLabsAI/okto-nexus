@@ -1380,3 +1380,25 @@ final zero nem devolução da reserva. Claude não foi usado. Os dados permanece
 não houve force, replay ou promoção de aceite M1.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v11-execution/review.json`.
+
+## 2026-11-14 — preparação finita v12 com histórico v11 preservado
+
+A proposta v12 incorpora a correção da descoberta sem journal e o encerramento
+estrito da rota local falha, além da representação canônica vazia de generation
+do Connector. Os limites SQL/schema de 250 ms, agregado de 600 ms, freshness de
+1 s e deadline de 120 s permanecem iguais. Os pacotes M1 qualificados continuam
+fixados; as correções posteriores do diagnóstico T19 não foram inseridas neles.
+
+O fechamento v11 e seu checkpoint são ancestrais imutáveis. Mantêm-se as sete
+reservas e 89.473 tokens mínimos observados, a solicitação não assentada e as
+falhas OBSERVATION_UNKNOWN/DEADLINE120. O teto técnico cumulativo passa de onze
+para doze para comportar as mesmas cinco novas etapas, sem refundar a tentativa
+falha nem reduzir a continuação exigida pelo plano nas duas topologias. Os
+limites autorizados de tokens continuam 200 mil preventivos/700 mil de tolerância.
+
+A autorização existente do usuário cobre a execução; o registro técnico será
+vinculado aos arquivos finais sem inventar outra aprovação humana de hash.
+Claude permanece opcional, não selecionado, com teto próprio de 200 mil tokens.
+Qualificação offline e preflight não promovem nenhum aceite real M1.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v12-preparation/review.json`.

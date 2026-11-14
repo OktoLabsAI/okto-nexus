@@ -1,0 +1,32 @@
+--- v11/setup_journal.py
++++ v12/setup_journal.py
+@@ -9,7 +9,7 @@
+ import re
+ import sqlite3
+ import time
+-from independent_journal import ReadOnly,JournalUnknown
++from independent_journal import ReadOnly
+ 
+ 
+ class SetupUnknown(ValueError):
+@@ -52,17 +52,12 @@
+ def poll(record, known_journals=(), pending_new=False, *, io=None):
+     owned=io is None
+     if owned:io=ReadOnly(record['home'])
+-    started=io.clock();before=len(io.initializations)
+     try:
+         value=_poll(record,known_journals,pending_new,io=io)
+-        initialization=sum(item['elapsed_ms']/1000 for item in io.initializations[before:])
++        # Discovery can return before any SQLite snapshot exists. Its path and
++        # identity checks remain inside the controller's aggregate poll budget;
++        # ReadOnly.open separately enforces schema and snapshot read budgets.
+         io.check_aggregate()
+-        if io.clock()-started-initialization>=io.budget:
+-            error=JournalUnknown('SETUP_READ_BUDGET_EXCEEDED')
+-            error.m1_reader_diagnostic={'phase':'snapshot_read','budget_ms':io.budget*1000,
+-                'elapsed_ms':(io.clock()-started-initialization)*1000}
+-            io.failed=True;io._release()
+-            raise error
+         return value
+     finally:
+         if owned:io.close()

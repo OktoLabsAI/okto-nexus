@@ -1,0 +1,67 @@
+{
+  "status": "FROZEN_OFFLINE_QUALIFIED",
+  "runtime": {
+    "driver_common.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\driver_common.py",
+      "sha256": "4f686889002bb24e8119aba0ed15cc06599909823ff2e10a3537fc55d1b7626c",
+      "bytes": 10179
+    },
+    "invoke.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\invoke.py",
+      "sha256": "430a19fac382751406314e4001231148ee69792491c4f633d28d9217a26926ad",
+      "bytes": 3499
+    },
+    "prepare_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\prepare_observation.py",
+      "sha256": "47baab56262aab511a9fd2401efc7561359beb3d83de1daf546a6698e50b7516",
+      "bytes": 1355
+    },
+    "m1_v12_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\m1_v12_observation.py",
+      "sha256": "68b462f85dcb1b1a9ffd014ebfa74979e80e5cfa1aafbffd1ecc728a1da04cc0",
+      "bytes": 8670
+    },
+    "m1_v12_confirm_cleanup.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\m1_v12_confirm_cleanup.py",
+      "sha256": "e2d780069fc7f539b22b246ad64289845917573f82c40a20e99cb11224b1b6c2",
+      "bytes": 8811
+    },
+    "confirm_final_presence.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\confirm_final_presence.py",
+      "sha256": "3f78e578a1b55a408a7f3930f225e1952ee15ed53a5c3839d2ab561f65eae174",
+      "bytes": 12649
+    },
+    "close_campaign.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\close_campaign.py",
+      "sha256": "2565971cc85c38b28cfcb89ce2ed1631956624ef902969aebf0854203993c5e1",
+      "bytes": 7618
+    },
+    "operator_bootstrap.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\operator_bootstrap.py",
+      "sha256": "b64ed6270ffcb5cb27147d2ad4fa7b8cad702ba66fe2a0fcb4f74487f7e8861d",
+      "bytes": 11285
+    }
+  },
+  "tests": {
+    "test_drivers.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\test_drivers.py",
+      "sha256": "ca433384bdd93cb0c64055e59a2a5d2c418fac4f2c47ffc19697c91f7574c9b1",
+      "bytes": 22827
+    },
+    "test_local_only_presence.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\test_local_only_presence.py",
+      "sha256": "7db3cc779b56c70246041fc0d3aa744bce476c0a91245ca4240b541458189798",
+      "bytes": 11322
+    },
+    "test_operator_bootstrap.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\test_operator_bootstrap.py",
+      "sha256": "68f1322b3f1519f23095d857f5954dac578a8efb634a4f7d69eceaa3f0879f96",
+      "bytes": 15337
+    }
+  },
+  "qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-presence-candidate-y6vdz9jf\\qualification.json",
+    "sha256": "8441ad0ab880c3d0ae11ab21a70adcd1304e8614786366bb8d30ebc59530613e",
+    "bytes": 832
+  }
+}

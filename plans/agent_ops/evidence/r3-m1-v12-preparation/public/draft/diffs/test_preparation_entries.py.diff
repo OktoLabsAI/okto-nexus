@@ -1,0 +1,35 @@
+--- v11/test_preparation_entries.py
++++ v12/test_preparation_entries.py
+@@ -7,7 +7,7 @@
+ import pytest
+ 
+ D=Path(__file__).resolve().parent
+-P=D/'m1-codex-campaign-proposal-v11.json'
++P=D/'m1-codex-campaign-proposal-v12.json'
+ INSTALL=D/'installation'
+ 
+ 
+@@ -27,10 +27,10 @@
+ 
+ 
+ @pytest.mark.parametrize('script,selection',[
+-    ('m1_v11_lifecycle.py',['initialize']),
+-    ('m1_v11_setup.py',['local']),
+-    ('m1_v11_remote_setup.py',['transfer']),
+-    ('m1_v11_work.py',['local','useful']),
++    ('m1_v12_lifecycle.py',['initialize']),
++    ('m1_v12_setup.py',['local']),
++    ('m1_v12_remote_setup.py',['transfer']),
++    ('m1_v12_work.py',['local','useful']),
+ ])
+ @pytest.mark.parametrize('case,expected',[
+     ('missing','AUTHORIZATION_REQUIRED'),
+@@ -73,7 +73,7 @@
+     value=json.loads(result.stdout)
+     assert value['status']=='REFUSED_OR_INCOMPLETE' and value['reservation_exists'] is False
+     assert value['retry_allowed'] is False
+-    assert value['code'] in ('V11_FINAL_PINS_REQUIRED','APPROVAL_REQUIRED')
++    assert value['code'] in ('V12_FINAL_PINS_REQUIRED','APPROVAL_REQUIRED')
+     unchanged()
+ 
+ 

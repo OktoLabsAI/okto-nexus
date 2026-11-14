@@ -1,0 +1,34 @@
+--- v11/test_v11_allocation.py
++++ v12/test_v11_allocation.py
+@@ -7,10 +7,10 @@
+ from test_independent import deny_external, create_control, attach, consume, CanonicalFixture, JournalFixture
+ 
+ def test_actual_five_requests_roundtrip_sixth_refused(tmp_path):
+-    assert POLICY=={'revision':11,'carry_in_admissions':6,'carry_in_tokens':89473,
+-        'max_cumulative_admissions':11,'max_new_admissions':5,'preventive_cumulative_tokens':200000,
++    assert POLICY=={'revision':12,'carry_in_admissions':7,'carry_in_tokens':89473,
++        'max_cumulative_admissions':12,'max_new_admissions':5,'preventive_cumulative_tokens':200000,
+         'operational_tolerance':700000,'deadline_seconds':120}
+-    assert ANCESTRY['closure_sha256']=='c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0'
++    assert ANCESTRY['closure_sha256']=='849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883'
+     home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home)
+     # This case isolates reservation policy, not wall-clock performance. The
+     # actual modules, SQLite journals, persistence, reopen and API fence remain.
+@@ -31,7 +31,7 @@
+             summary=control.poll()
+             assert control.data['requests'][name]['settled']
+             assert summary['new_reserved_requests']==index+1
+-            assert summary['reserved_requests']==6+index+1
++            assert summary['reserved_requests']==7+index+1
+             assert summary['known_observed_tokens']==89473+(index+1)*10
+         assert len([call for call in flow.calls if call[0]=='POST'])==5
+         assert summary['can_admit'] is False and 'GLOBAL_ALLOCATION_EXHAUSTED' in summary['reasons']
+@@ -44,7 +44,7 @@
+         flow,reader,stops=attach(control,fixture,tmp_path,home)
+         control._readers['local'].io.clock=lambda:now[0]
+         reader.io.clock=lambda:now[0]
+-        assert control.summary()['reserved_requests']==11
++        assert control.summary()['reserved_requests']==12
+         with pytest.raises(Refused,match='NEW_DISPATCH_NOT_PERMITTED'):
+             control.start_work('sixth','local','synthetic',binding=flow.selected,
+                 checkpoint={'session_id':flow.selected['session_id']},stage='continuation')

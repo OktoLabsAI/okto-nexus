@@ -12720,6 +12720,48 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v11-execution/review.json"
       ]
+    },
+    "r3_m1_v12_preparation": {
+      "date": "2026-11-14",
+      "status": "V12_PREPARATION_REVIEWED_REAL_EXECUTION_PENDING",
+      "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040",
+      "public_manifest_sha256": "783133ace9dd597ee055d24154a9ab8aee6a4f928c0e004484d1b07acba6a88a",
+      "public_artifacts": 146,
+      "root_review_sha256": "0098161f57ab1f43e5247a4703fcf5ad390f4ed44d75a03558b73115c1f45e58",
+      "predecessor_closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+      "predecessor_checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+      "predecessor_faults": [
+        "OBSERVATION_UNKNOWN",
+        "DEADLINE120"
+      ],
+      "prior_unsettled_retained": 1,
+      "allocation": {
+        "carry_reservations": 7,
+        "carry_tokens": 89473,
+        "new_reservations_max": 5,
+        "cumulative_reservations_max": 12,
+        "preventive_tokens": 200000,
+        "tolerance_tokens": 700000,
+        "deadline_seconds": 120
+      },
+      "allocation_reason": "Internal cap11 to12 preserves the failed v11 reservation while retaining five nominal new admissions: local setup plus useful work and continuation in each topology. No refund, extra retry slot or change to user token budget.",
+      "authorization": "Standing user authorization to proceed and perform real authenticated tests. Technical receipt binds this exact reviewed proposal; no new textual human approval of its hash is claimed or required.",
+      "changes": [
+        "Discovery without a journal uses existing aggregate600ms budget; actual SQL/schema250ms and freshness1s unchanged.",
+        "Final absence handles a strictly proved failed local-only setup without pretending Connector ran.",
+        "Connector canonical absence preserves generation empty string, runningfalse/ipcfalse and exact instance.",
+        "Fresh own identities and closed-v11 ancestry; checkpoint schema11 remains structurally unchanged while policy/receipt revision12."
+      ],
+      "scope": "Two own temporary tasks,8 explicit lifecycle selections and at most1 implicit Connector ensure/start; no force, personal task mutation, logout/reboot or provider credential-file reading. Claude optional ceiling200000 remains unused.",
+      "acceptance_promoted": false,
+      "limits": [
+        "Offline tests and passive preflight do not prove M1 acceptance.",
+        "Original v11 failure and both cleanup refusals remain retained.",
+        "Actual console/dashboard closing and separate native OS scenarios are not inferred."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v12-preparation/review.json"
+      ]
     }
   },
   "history": [
@@ -13978,6 +14020,15 @@
       "summary": "Installed983 qualified payloads, registered/started Nexus, then setup observer fault selected normal stop. No new token usage observed; reserve7 and unsettled setup retained. Physical exit/uninstall and supplemental local-only final absence confirmed. No M1 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v11-execution/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "V12 finite preparation with setup discovery and local-only cleanup",
+      "status": "V12_PREPARATION_REVIEWED_REAL_EXECUTION_PENDING",
+      "summary": "Reviewed corrected discovery, strict local-only cleanup and actual Connector absence representation. Closed-v11 ancestry and all7 reservations retained;5 nominal new admissions imply internal cap12, with original token budget unchanged. No actual acceptance promoted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v12-preparation/review.json"
       ]
     }
   ]

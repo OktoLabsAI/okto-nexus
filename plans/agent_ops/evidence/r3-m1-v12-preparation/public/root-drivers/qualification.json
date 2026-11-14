@@ -1,0 +1,29 @@
+{
+  "status": "OFFLINE_QUALIFIED_PENDING_PARENT_COMPOSITION",
+  "tests": 121,
+  "passed": 121,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "existing_driver_tests": 78,
+  "new_local_only_tests": 43,
+  "duration_seconds": 21.25,
+  "python": "C:/Users/jpamb/AppData/Local/Temp/m1-v11-bundle-racan37z/draft/installation/venv/Scripts/python.exe",
+  "options": [
+    "-I",
+    "-B",
+    "-X",
+    "utf8"
+  ],
+  "policy_revision": 12,
+  "checkpoint_format": 11,
+  "carry_in_admissions": 7,
+  "carry_in_tokens": 89473,
+  "max_new_admissions": 5,
+  "max_cumulative_admissions": 12,
+  "provider_calls": 0,
+  "real_service_operations": 0,
+  "real_campaign_observation": false,
+  "new_authorization_receipt_created": false,
+  "tests_sha256": "15c553d716699d9ae74c694d2234001f05c749177a951179be1aa92f700e38f3"
+}

@@ -1,0 +1,11 @@
+--- v11/m1_v11_remote_setup.py
++++ v12/m1_v12_remote_setup.py
+@@ -18,7 +18,7 @@
+ require(document.get('kind')=='remote_project_setup' and document.get('state')=='review','FRESH_REMOTE_REVIEW_REQUIRED')
+ review=document['remote_review'];draft=review['draft']
+ require(document['review_revision']==review['review_revision'],'REMOTE_REVISION_MISMATCH')
+-require(draft['server_origin']==C['origin'] and draft['setup_run_id']=='m1v11-connector-setup'
++require(draft['server_origin']==C['origin'] and draft['setup_run_id']=='m1v12-connector-setup'
+     and draft['installation']['candidate_ref']==P['native_selection']['candidate_ref']
+     and draft['start_at_login'] is False,'REMOTE_DRAFT_SCOPE_MISMATCH')
+ # This explicit operator selection is made from the current canonical plan by

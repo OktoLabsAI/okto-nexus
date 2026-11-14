@@ -1,0 +1,25 @@
+{
+  "status": "SOURCE_REVIEW_NO_REMAINING_BLOCKERS_PENDING_FROZEN_COMPOSITION",
+  "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-cli-candidate-_892mowb",
+  "reviewed_files": {
+    "controller/cli_flow.py": "c3f2287f6c9bfdbc674e1197d12f979706502b3030129997ccfc61998209d281",
+    "controller/serial_flow.py": "d074e1ee6155a251721528be3531724c0f5eb7fa89f9bb6b6ee752b779abdb9e",
+    "m1_v11_work.py": "808834d3c0970c6d8349c3913a327fbdfdbcd9113698c771ba0c22745d6e8816",
+    "controller/test_cli_flow.py": "3863144caa6278569e18f78779019e9f88930e08a95373c7693d0dac3f1d0460",
+    "controller/test_work_wrapper.py": "1f99c30a2206a5f62791038f499f884d8b4c30da633a66049d9beb61791547e7"
+  },
+  "resolved_finding": "Post-handler CLI presentation failure now records CLI_OUTCOME_UNCONFIRMED and possible_effect=True in retained diagnostics as well as raised error.",
+  "verified": [
+    "Installed run_work parser, target resolution, inspection and ExclusiveFileLock retained.",
+    "Factory hook delegates to original installed open_work after lock; actor, scope and exact current session revalidated.",
+    "Installed TerminalWork retains checkpoint persistence and canonical request behavior.",
+    "Serialized worker retains existing transport/effect fence.",
+    "Recovery status/events/answer review denies non-GET; no work resume retry.",
+    "CLI exit code and captured method outcome checked; no success inferred from exit3."
+  ],
+  "limits": [
+    "Console subprocess/actual terminal window exit and dashboard closure not proved.",
+    "Installed parser/handler integration is narrower than OS frontend closure.",
+    "Only fake HTTP/credentials in offline tests; no actual provider, service or vault access."
+  ]
+}

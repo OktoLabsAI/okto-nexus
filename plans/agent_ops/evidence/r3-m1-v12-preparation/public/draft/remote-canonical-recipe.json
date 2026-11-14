@@ -1,0 +1,437 @@
+{
+  "format": "m1-v12-readonly-remote-recipe",
+  "revision": 1,
+  "status": "FROZEN_V12_RECIPE_WITH_EXECUTABLE_OPERATOR_STAGE_NOT_EXECUTED",
+  "proposal": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\m1-codex-campaign-proposal-v12.json",
+    "sha256": "<EXACT_FINAL_V12_PROPOSAL_SHA256>"
+  },
+  "authority": "The existing user authorization covers continuation within the unchanged recorded material scope/budgets. Runtime requires final reviewed v12 artifacts and a truthful technical receipt binding that authorization to the exact proposal SHA. No new human approval of the hash is required; prior v10 artifact receipts remain historical and cannot be mechanically reused or replayed.",
+  "limits": {
+    "policy": {
+      "revision": 12,
+      "carry_in_admissions": 7,
+      "carry_in_tokens": 89473,
+      "max_cumulative_admissions": 12,
+      "max_new_admissions": 5,
+      "preventive_cumulative_tokens": 200000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "preparation_only": {
+      "product_commands_executed": 0,
+      "http_requests": 0,
+      "personal_credentials_read": 0,
+      "services_mutated": 0,
+      "checkout_changed": false
+    },
+    "runtime_scope": "After exact authorization only: bounded own loopback account/bootstrap and canonical operator login/status, while the existing global controller continues historical accounting. No productive model reservation is added."
+  },
+  "paths": {
+    "bundle": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft",
+    "campaign": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "origin": "http://127.0.0.1:58631"
+  },
+  "prerequisites": [
+    "Use pinned installed Python and campaign allowlisted environment/cwd only after successful timed-install receipt.",
+    "Enter the remote lane only after previous work is settled, controller can_admit=true and current is empty. No resetting inherited faults/reservations.",
+    "Canonical Server ready and exact campaign identity/owner verified; Connector ready with exact task/instance/digest before transfer. No additional lifecycle action beyond the eight reserved ones.",
+    "Reattach historical accounting before each phase and retain it while requests are in flight; no unresolved request or selected fault can be cleared by this recipe."
+  ],
+  "operator_bootstrap": {
+    "read_first": {
+      "method": "GET",
+      "url": "http://127.0.0.1:58631/api/v1/operator-auth/status",
+      "require": {
+        "ok": true,
+        "data.configured": false,
+        "data.local": true
+      }
+    },
+    "note": "data.authenticated may already be true under trusted loopback even when configured=false. Configured=true is not permission to overwrite an existing account.",
+    "temporary_password": "Generate one temporary >=12 and <=1024 character password in memory; no secret in argv, files, reports, captured request headers/body or public logs.",
+    "create_once": {
+      "method": "POST",
+      "url": "http://127.0.0.1:58631/api/v1/operator-auth/account",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Nexus-UI": "1",
+        "Origin": "http://127.0.0.1:58631"
+      },
+      "json_template": {
+        "username": "m1v12-human",
+        "password": "<IN_MEMORY_TEMPORARY_PASSWORD>"
+      },
+      "require": {
+        "ok": true,
+        "data.configured": true
+      }
+    },
+    "transport": "Direct loopback/proxy-disabled bounded HTTP; no forwarded headers, no personal cookie, and do not set x-nexus-operator-session-required=1 on the fresh-account bootstrap.",
+    "lost_response": "GET status only; never repeat account POST blindly. If configured is now true and the same generated password remains in memory, the canonical login can confirm that credential. If material is unavailable or state differs, stop rather than rotate.",
+    "login": {
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "operator",
+        "login",
+        "--profile",
+        "m1v12-human",
+        "--server",
+        "http://127.0.0.1:58631",
+        "--username",
+        "m1v12-human",
+        "--password-stdin",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+      ],
+      "stdin": "Generated own password in memory only, from canonical fresh-account bootstrap described in proposal; never a personal credential."
+    },
+    "verify_login_argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "operator",
+      "status",
+      "--profile",
+      "m1v12-human",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+    ],
+    "require_login": "exit0, state authenticated, exact origin and canonical Server ID. Canonical OperatorProfile uses its own protected vault namespace; no plaintext fallback or operator credential delivered to Connector.",
+    "references": [
+      "operator_auth.py:117-137,145-200",
+      "cli/operator.py:19-52",
+      "operator_client.py:67-94"
+    ],
+    "reservation": "Durably reserve account creation and login once in own public nonsecret metadata before each dispatch; no password/request-body logging. Lost or unavailable state is not permission to replay.",
+    "implementation_status": "FROZEN_DRIVER_QUALIFIED",
+    "stage": "After settled local setup/useful/continuation, before remote plan and protected transfer.",
+    "controller": "Existing campaign/private/controller.json only (create=False); reattach historical work/setup observations and require current empty/can_admit before phase. No baseline reset or new productive reservation.",
+    "monitoring": "Keep the existing owner accounting loop and effect fence active throughout bounded HTTP and login/status subprocesses. Preserve120-second phase deadline and600ms aggregate/1s freshness; do not emit secrets in metadata.",
+    "productive_model_turns": 0,
+    "executor": {
+      "key": "root_driver_operator_bootstrap",
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\operator_bootstrap.py",
+      "sha256": "b64ed6270ffcb5cb27147d2ad4fa7b8cad702ba66fe2a0fcb4f74487f7e8861d",
+      "invoke_mode": "operator_bootstrap",
+      "invoke_selection": [
+        "once"
+      ]
+    }
+  },
+  "connector_draft": {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus_connector.cli.main",
+      "--state-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+      "connect",
+      "--server",
+      "http://127.0.0.1:58631",
+      "--harness",
+      "codex_app_server",
+      "--executable",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+      "--project",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project",
+      "--provider-home",
+      "C:/Users/jpamb/.codex",
+      "--request-id",
+      "m1v12-connector-setup",
+      "--setup-draft",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\public\\connector-draft.json",
+      "--no-start-at-login"
+    ],
+    "nonsecret_stdin": "1\n",
+    "meaning": "Only final Save draft choice, with exact installation/project/provider supplied. Unexpected prompt/choice or mismatching draft stops review; no credential here.",
+    "assertions": [
+      "One exact inventoried candidate is selected by harness+absolute executable. No candidate prompt if unique; otherwise stop instead of feeding guesses.",
+      "Project/provider paths already supplied, existing and absolute; --no-start-at-login bypasses startup question and preserves current service mode.",
+      "Only final Save draft selection consumes 1\\n (option1=True; default is Cancel). No credential read/import here.",
+      "exit0, awaiting_operator_bootstrap, request_id=m1v12-connector-setup, runtime_started=false; draft format/version, origin, candidate_ref, project/provider selection, configuration and start_at_login=false match proposal.",
+      "No replay of draft command if local intent already exists with conflicting explicit selection."
+    ],
+    "references": [
+      "connect_setup.py:50-97",
+      "connect.py:225-258",
+      "configure_local.py:44-51",
+      "configure_startup.py:10-17",
+      "wizard_prompts.py:20-31"
+    ]
+  },
+  "remote_plan": {
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "okto_nexus.adapters.inbound.cli.main",
+      "connect",
+      "--operator-profile",
+      "m1v12-human",
+      "--remote-draft",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\public\\connector-draft.json",
+      "--profile",
+      "m1v12-remote",
+      "--new-agent",
+      "m1v12-remote",
+      "--plan",
+      "--json",
+      "--home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+    ],
+    "result": "Canonical own operator_home/terminal/profiles/m1v12-remote.json. Review scope and write public/remote-review-selection.json with exact proposal_sha256/review_revision/server_id/profile before transfer.",
+    "assertions": [
+      "exit0; own operator-home profile kind=remote_project_setup,state=review",
+      "document.review_revision == remote_review.review_revision; server_id equals authenticated Server",
+      "Root reviews exact new agent/workspace, candidate, configuration, permissions, limits, remote_machine_policy/previous_machines and children before approval. No approval merely from matching display names."
+    ]
+  },
+  "remote_review_selection": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\public\\remote-review-selection.json",
+    "fields": {
+      "proposal_sha256": "<EXACT_FINAL_PROPOSAL_SHA256>",
+      "review_revision": "<exact current canonical document.review_revision>",
+      "server_id": "<exact authenticated document.server_id>",
+      "profile": "m1v12-remote"
+    },
+    "secret_free": true
+  },
+  "protected_transfer": {
+    "argv_template": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\m1_v12_remote_setup.py",
+      "--proposal",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\m1-codex-campaign-proposal-v12.json",
+      "--expected-proposal-sha256",
+      "<EXACT_FINAL_PROPOSAL_SHA256>",
+      "--approval-path",
+      "<v11 technical authorization binding path>",
+      "--approval-sha256",
+      "<v11 technical authorization binding SHA256>",
+      "transfer"
+    ],
+    "rule": "Use the frozen wrapper and protected concurrent PTY helper. Do not substitute an ad-hoc shell pipe or print one-shot key. Producer has no --json; consumer alone has OKTO_NEXUS_CONNECTER_DAEMON_FG=1.",
+    "preconditions": "No existing handoff/transfer reservation; reviewed current profile; exact controller/current and owner checks.",
+    "success": "TRANSFERRED_ONCE; both exits0; auxiliary job empty; no forced cleanup; canonical profile done on same Server; same task/instance/digest, canonical service owner outside auxiliary Job. Retain handoff/Finish metadata without key.",
+    "unknown": "Non-replayable reservation. Fence effects and retain observation until auxiliary worker returns. Explicit Job0 and worker-exit proof precede selected normal service stops, including Connector without a work request. Missing proof remains unknown. Scheduler effects are external; canonical desired=draining and physical exit/task proof remain required.",
+    "reference": "m1_v12_remote_setup.py, remote_transfer_monitor.py and remote_stop_order.py from the final approved bundle"
+  },
+  "close_and_get_recovery": [
+    {
+      "lane": "local",
+      "component": "nexus",
+      "work_close_dispatch": false,
+      "normal_stop": "Use the existing pinned lifecycle wrapper selection nexus stop once, with the same v11 technical binding.",
+      "qualified_steps": [
+        {
+          "component": "nexus",
+          "action": "stop",
+          "task_name": "OktoNexus-server-822654ebed7d7cf607a82ececeb984647036c433ccf0769a3f57b251979f5d84",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "okto_nexus.adapters.inbound.cli.main",
+            "service",
+            "stop",
+            "--home",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58631",
+            "--project-root",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+            "--embedding-mode",
+            "off",
+            "--feature-harness-integrations",
+            "true",
+            "--metrics-mode",
+            "disabled",
+            "--harness-root",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+            "--timeout",
+            "45",
+            "--json"
+          ]
+        },
+        {
+          "component": "nexus",
+          "action": "uninstall",
+          "task_name": "OktoNexus-server-822654ebed7d7cf607a82ececeb984647036c433ccf0769a3f57b251979f5d84",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "okto_nexus.adapters.inbound.cli.main",
+            "service",
+            "uninstall",
+            "--user",
+            "--home",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "58631",
+            "--project-root",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+            "--embedding-mode",
+            "off",
+            "--feature-harness-integrations",
+            "true",
+            "--metrics-mode",
+            "disabled",
+            "--harness-root",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+            "--timeout",
+            "45",
+            "--json"
+          ]
+        }
+      ],
+      "success_oracle": [
+        "Exact owned generation/instance and retained PID/birth handle physically exited.",
+        "Canonical shutdown record DRAINED and expected task stopped with unchanged identity/digest.",
+        "Existing pinned cleanup validator confirms proof before the single uninstall; action/result bind cleanup proof SHA.",
+        "Final presence/closure drivers retain accounting and require owned process/task absence; no per-work close-intent receipt is invented."
+      ],
+      "uncertainty": "Keep unknown state and retained observations. No forced service stop, replay, restart or extra lifecycle action."
+    },
+    {
+      "lane": "connector",
+      "component": "connector",
+      "work_close_dispatch": false,
+      "normal_stop": "Use the existing pinned lifecycle wrapper selection connector stop once, with the same v11 technical binding.",
+      "qualified_steps": [
+        {
+          "component": "connector",
+          "action": "stop",
+          "task_name": "OktoNexus-connector-bddb196d1d2d2160bb3df4cb899b5610bf93e4ac4f8749b746107bb21f14a4a4",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "okto_nexus_connector.cli.main",
+            "--state-dir",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+            "--non-interactive",
+            "daemon",
+            "stop",
+            "--timeout",
+            "45",
+            "--json"
+          ]
+        },
+        {
+          "component": "connector",
+          "action": "uninstall",
+          "task_name": "OktoNexus-connector-bddb196d1d2d2160bb3df4cb899b5610bf93e4ac4f8749b746107bb21f14a4a4",
+          "argv": [
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+            "-I",
+            "-B",
+            "-m",
+            "okto_nexus_connector.cli.main",
+            "--state-dir",
+            "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+            "--non-interactive",
+            "service",
+            "uninstall",
+            "--json"
+          ]
+        }
+      ],
+      "success_oracle": [
+        "Exact owned generation/instance and retained PID/birth handle physically exited.",
+        "Canonical shutdown record DRAINED and expected task stopped with unchanged identity/digest.",
+        "Existing pinned cleanup validator confirms proof before the single uninstall; action/result bind cleanup proof SHA.",
+        "Final presence/closure drivers retain accounting and require owned process/task absence; no per-work close-intent receipt is invented."
+      ],
+      "uncertainty": "Keep unknown state and retained observations. No forced service stop, replay, restart or extra lifecycle action."
+    }
+  ],
+  "canonical_get_routes": {
+    "prefix": "/api/v1/runtime-management",
+    "intent": "GET /api/v1/runtime-management/runtime/intents/{exact_client_intent_id}",
+    "operation": "GET /api/v1/runtime-management/runtime/operations/{exact_operation_id}",
+    "session": "GET /api/v1/runtime-management/runtime/sessions/{exact_session_id}?executor_id={exact_executor_id}",
+    "decision": "GET /api/v1/approvals/{exact_approval_id}, then only the returned executed_result.decision_id via GET /api/v1/runtime-management/runtime/approval-decisions/{id}; confirm same approval_key/request_hash/intent and native_stage=CONFIRMED.",
+    "scope": "Revalidate current actor/Server and exact server/executor/binding/agent/workspace/session tuple. Missing receipt or SUBMITTED is not terminal success.",
+    "warning": "work resume --control is NOT GET-only: terminal_work.resume may call _admit when operation=None (186-200). Use status/watch --control without --session-id or explicit GET. close exit0/admitted is not proof of closure."
+  },
+  "source_hashes": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\operator_auth.py",
+      "sha256": "e9df44732b6089c9ba06dc2ed4731e249848a11b46f368f3788f66d4ba733cd8",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\operator.py",
+      "sha256": "b6b9d0e473076252f6fcd337bd64123bf2ab15d7088036bd761253d45516a2c2",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\operator_client.py",
+      "sha256": "1a805c7cf076e65f8270ab900472005869a7ddc971fa80156ef4446d6888a9a2",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\work.py",
+      "sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_work.py",
+      "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\connect.py",
+      "sha256": "c055eeef569ef43bba4aa81a37378e18dd49680154271e74f4ae7c3b0262a7d4",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\connect_setup.py",
+      "sha256": "dce10c03c58b5a827b7aad83b09abc1fd252729366493b654385bc3424c55983",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\configure_local.py",
+      "sha256": "eff8932363be322af0107bbaea1ead053c18a3b8203583315829e966ff53f166",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\commands\\configure_startup.py",
+      "sha256": "48b7f386c16a83cf1422592b02aa6ee7dc814d606f04faf669a0bce147c13f20",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\venv\\Lib\\site-packages\\okto_nexus_connector\\cli\\wizard_prompts.py",
+      "sha256": "4a0d2db1d59c43234734b3ee882d89b52aed2116dd2eb23313d5b28ac51ba45a",
+      "basis": "unchanged qualified installed reference product, matching campaign wheel payload"
+    }
+  ],
+  "conclusion": "Qualified v11 metadata and reachable operator-bootstrap executor. Existing standing user authorization will be bound technically by root after final review; no HTTP, operator account, credential access, service or provider effect occurred during preparation.",
+  "source_ancestry": {
+    "recipe": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-bundle-racan37z\\draft\\remote-canonical-recipe.json",
+    "sha256": "fce6d1bb22bb1ddbfd0d45c54886bf70c0707ae7a4fc1aa4e561d56f40dc6a94",
+    "change": "V12 identity and explicit carry7/new5/cumulative12 only; no token budget increase."
+  },
+  "proposal_revision": 12
+}

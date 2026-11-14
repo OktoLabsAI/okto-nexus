@@ -1,0 +1,28 @@
+--- v11/test_remote_setup_composition.py
++++ v12/test_remote_setup_composition.py
+@@ -35,11 +35,11 @@
+             if self.closed:raise RuntimeError('FENCED')
+         def close(self):events.append('controller-closed')
+     control=Control()
+-    profile='m1v11-connector';profile_file=root/'operator-home/terminal/profiles'/f'{profile}.json'
++    profile='m1v12-connector';profile_file=root/'operator-home/terminal/profiles'/f'{profile}.json'
+     profile_file.parent.mkdir(parents=True)
+     doc={'kind':'remote_project_setup','state':'review','review_revision':'r1','server_id':'server',
+          'remote_review':{'review_revision':'r1','draft':{'server_origin':'http://127.0.0.1:1',
+-          'setup_run_id':'m1v11-connector-setup','installation':{'candidate_ref':'candidate'},'start_at_login':False}}}
++          'setup_run_id':'m1v12-connector-setup','installation':{'candidate_ref':'candidate'},'start_at_login':False}}}
+     profile_file.write_text(json.dumps(doc))
+     (root/'public/remote-review-selection.json').write_text(json.dumps({'proposal_sha256':'a'*64,
+         'review_revision':'r1','server_id':'server','profile':profile}))
+@@ -106,9 +106,9 @@
+         def poll(self):return 0
+     monkeypatch.setattr(subprocess,'Popen',Child)
+     if mode=='existing_stop':(root/'public/lifecycle-nexus-stop.json').write_text('{"state":"DISPATCH_RESERVED"}')
+-    if mode=='normal':runpy.run_path(str(Path(__file__).parent/'m1_v11_remote_setup.py'),run_name='__main__')
++    if mode=='normal':runpy.run_path(str(Path(__file__).parent/'m1_v12_remote_setup.py'),run_name='__main__')
+     else:
+-        with pytest.raises(SystemExit) as e:runpy.run_path(str(Path(__file__).parent/'m1_v11_remote_setup.py'),run_name='__main__')
++        with pytest.raises(SystemExit) as e:runpy.run_path(str(Path(__file__).parent/'m1_v12_remote_setup.py'),run_name='__main__')
+         assert e.value.code==3
+     stops=[v for v in events if v.startswith('stop-')]
+     if mode in ('normal','unknown_job','setup_only_fault'):assert stops==[]

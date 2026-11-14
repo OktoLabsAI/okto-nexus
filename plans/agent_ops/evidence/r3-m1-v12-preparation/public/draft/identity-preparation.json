@@ -1,0 +1,26 @@
+{
+  "source": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\platform\\service_identity.py",
+  "source_sha256": "f61f0d437fa6b0b2ffce1cb7d76e256ae096c21cb9ee28661f3bf85b06ce25d5",
+  "principal_sha256": "b132ba6c412f507d07b3947610afb888e8db05d439c2ff39aeea5f72fbf694e8",
+  "prior_v11_names_reproduced": true,
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "exists": null,
+      "absence_observed": false
+    },
+    "connector": {
+      "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "exists": null,
+      "absence_observed": false
+    }
+  },
+  "new_names_distinct": true,
+  "process_sid_only": true,
+  "scheduler_queries": 0,
+  "scheduler_mutations": 0,
+  "port_checks": 0,
+  "campaign_directory_created": false
+}
