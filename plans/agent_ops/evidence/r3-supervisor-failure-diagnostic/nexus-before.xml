@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.690" timestamp="2026-11-14T10:12:13.469561-03:00" hostname="Alienware_m15"><testcase classname="tests.test_user_service_installation" name="test_failed_preownership_supervised_attempt_is_actionable_without_relaunch" time="1.382"><failure message="AssertionError: {'component': 'server', 'instance_id': 'svc_e44ad4419219ddaeadd6c9a23b8892a3da57a82619cefd14ac2584a082cd9700', 'installed_version': '0.3.3', 'active_version': None, ...}&#10;assert 'SUPERVISOR_PENDING' == 'SUPERVISOR_ATTEMPT_FAILED'&#10;  &#10;  - SUPERVISOR_ATTEMPT_FAILED&#10;  + SUPERVISOR_PENDING">tests\test_user_service_installation.py:246: in test_failed_preownership_supervised_attempt_is_actionable_without_relaunch
+    assert result['reason'] == 'SUPERVISOR_ATTEMPT_FAILED', result
+E   AssertionError: {'component': 'server', 'instance_id': 'svc_e44ad4419219ddaeadd6c9a23b8892a3da57a82619cefd14ac2584a082cd9700', 'installed_version': '0.3.3', 'active_version': None, ...}
+E   assert 'SUPERVISOR_PENDING' == 'SUPERVISOR_ATTEMPT_FAILED'
+E     
+E     - SUPERVISOR_ATTEMPT_FAILED
+E     + SUPERVISOR_PENDING</failure></testcase></testsuite></testsuites>

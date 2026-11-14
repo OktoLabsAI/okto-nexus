@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-14",
+  "review": "Accepted source correction; no native Scheduler exhaustion acceptance.",
+  "findings_resolved": [
+    "Both startup wait loops accept historical failure while waiting for the same owner.",
+    "Canonical stop accepts the new pending diagnostic and retains ownership revalidation.",
+    "Connector timeout retains possible_effect for the pending launch."
+  ],
+  "test_commands": [
+    {
+      "cwd": "D:/Projetos/Techridy/okto_labs_okto_nexus",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_user_service_installation.py tests/test_service_start.py -k \"not native_preflight and not native_host_preflight\" --tb=short -q --junitxml=C:/Users/jpamb/AppData/Local/Temp/r3-t19-offline-7nuutqjp/nexus-final-v2.xml",
+      "passed": 64,
+      "deselected": 2
+    },
+    {
+      "cwd": "D:/Projetos/Techridy/okto-nexus-connector",
+      "command": "rtk proxy D:/Projetos/Techridy/okto_labs_okto_nexus/.venv/Scripts/python.exe -m pytest tests/unit/test_user_service_lifecycle.py -k \"not native_preflight\" --tb=short -q --junitxml=C:/Users/jpamb/AppData/Local/Temp/r3-t19-offline-7nuutqjp/connector-final-v2.xml",
+      "passed": 40,
+      "deselected": 1
+    }
+  ],
+  "runner": "Nexus .venv Python; Nexus and Connector editable .pth paths point to their respective checkout src directories. Nexus pytest additionally sets pythonpath=['src']. Core 0.0.14 installed from vendor wheel.",
+  "provenance_limit": "qualification.json source_imports were collected in a separate isolated collector with explicit source paths, not traced from inside pytest. Editable mappings and pytest configuration separately corroborate the tested source selection.",
+  "lint": "Global Ruff 0.15.1 passed for all six changed Python files. The initial python -m ruff invocation lacked the module; it did not validate code. git diff --check passed in both repositories.",
+  "effects": "No real service, provider, personal credential, native interruption or Core policy change.",
+  "documentation": "Both lifecycle guides describe historical failure, bounded wait and canonical stop before explicit retry."
+}

@@ -170,6 +170,7 @@ def test_facade_never_retries_failed_or_stopping_service(state, reason):
 @pytest.mark.parametrize('initial', [
     {'state': 'starting', 'reason': 'STARTUP_PENDING'},
     {'state': 'unknown', 'reason': 'INSTANCE_METADATA_UNAVAILABLE'},
+    {'state': 'unknown', 'reason': 'SUPERVISOR_LAST_ATTEMPT_FAILED'},
 ])
 def test_wait_timeout_leaves_one_launch_intact_and_recovers_by_inspection(initial):
     adapter = Mock()
@@ -193,6 +194,20 @@ def test_transient_metadata_failure_waits_for_current_owner_without_another_star
     assert service.ensure_running(timeout=1)['generation'] == 'same-launch'
     adapter.start.assert_called_once()
     adapter.inspect.assert_called_once()
+    adapter.request_stop.assert_not_called()
+
+
+def test_stale_supervisor_failure_waits_for_same_launch_to_become_ready():
+    adapter = Mock()
+    adapter.start.return_value = {'state': 'unknown', 'reason': 'SUPERVISOR_LAST_ATTEMPT_FAILED'}
+    adapter.inspect.side_effect = [
+        {'state': 'starting', 'reason': 'SUPERVISOR_PENDING'},
+        {'state': 'ready', 'generation': 'same-launch'},
+    ]
+    service = ServiceLifecycle(adapter, monotonic=lambda: 0, sleep=Mock())
+    assert service.ensure_running(timeout=1)['generation'] == 'same-launch'
+    adapter.start.assert_called_once()
+    assert adapter.inspect.call_count == 2
     adapter.request_stop.assert_not_called()
 
 

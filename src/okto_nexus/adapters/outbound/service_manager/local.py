@@ -102,6 +102,14 @@ class LocalServerLifecycle:
         elif result['state'] == 'stopped' and (task.active or task.state == 0 or control.get('launch_requested')):
             result = {**result, 'state': 'stopping' if control['desired'] == 'draining' else 'starting',
                 'reason': 'SUPERVISOR_PENDING', 'next_action': 'Observe the same scheduled task; no detached process was launched.'}
+            # These are the supervised entrypoint's failure exit codes, not
+            # Scheduler success/status codes. LastTaskResult may predate the
+            # current launch; it does not establish exhausted or absent retries.
+            if (control['desired'] == 'running' and control.get('launch_requested')
+                    and task.state == 3 and task.last_result in {1, 2, 3}):
+                result = {**result, 'state': 'unknown', 'reason': 'SUPERVISOR_LAST_ATTEMPT_FAILED',
+                    'next_action': 'The last observed scheduled attempt failed; the current launch and retry outcome are unconfirmed. '
+                        'Inspect the selected task and startup diagnostics. Use service stop before an explicit retry; no launch was repeated.'}
         elif result['state'] == 'stopped' and control['desired'] == 'draining':
             drained = control.get('generation') is None or self.shutdown_receipt(control.get('generation')) == 'DRAINED'
             result = {**result, 'shutdown_outcome': 'drained' if drained else 'unconfirmed',
@@ -243,7 +251,7 @@ class LocalServerLifecycle:
     def request_stop(self, current, *, timeout, force=False):
         if type(force) is not bool:
             raise ValueError('Force must be a boolean.')
-        pending = current.get('reason') == 'SUPERVISOR_PENDING' and not current.get('generation')
+        pending = current.get('reason') in {'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED'} and not current.get('generation')
         if force:
             actual = self._inspect_process(timeout=min(.5, timeout))
             if (not current.get('generation') or actual.get('generation') != current['generation']

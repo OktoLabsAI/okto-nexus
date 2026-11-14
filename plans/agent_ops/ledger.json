@@ -1091,7 +1091,8 @@
         "plans/agent_ops/evidence/pr03-terminal-policy-installed.xml",
         "plans/agent_ops/evidence/r3-service-boundaries/summary.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json"
       ],
       "result": "Readiness and failure-state contracts, including actual startup config/migration/storage failures and interrupted connect observation, are verified. Real provider readiness remains separately pending.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1104,7 +1105,8 @@
         "owner_change_during_readiness": "VERIFIED",
         "connector_passive_service_status": "VERIFIED",
         "explicit_settings_provenance_and_legacy_stored_overrides": "VERIFIED",
-        "finite_empty_windows_user_task_lifecycle": "VERIFIED"
+        "finite_empty_windows_user_task_lifecycle": "VERIFIED",
+        "historical_supervisor_failure_diagnostic_source_contract": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Explicit state/readiness correlates owner/version; local query readiness is not provider/authority readiness; failure and stopping stay observable.",
@@ -1577,7 +1579,8 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-wheel.json",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json"
       ],
       "result": "Durable launch/mutation/drain recovery and exact receipt reuse are implemented. Synthetic recovery preserves occupied Core resources and grant authority. Remaining: Real supervisor crash/backoff/limit and suspend/return context still not qualified; OS loss is not proof of child death.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1590,7 +1593,8 @@
         "connector_pending_native_effects_isolated": "VERIFIED",
         "enablement_response_loss_isolated": "VERIFIED",
         "reviewed_pending_detached_launch_recovery": "VERIFIED",
-        "released_session_drain_installed_contract": "VERIFIED"
+        "released_session_drain_installed_contract": "VERIFIED",
+        "historical_supervisor_failure_diagnostic_source_contract": "VERIFIED"
       },
       "reconciliation": {
         "current_implementation": "Durable launch/mutation/drain recovery and exact receipt reuse are implemented. Synthetic recovery preserves occupied Core resources and grant authority.",
@@ -7219,11 +7223,12 @@
       "evidence": [
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json"
       ],
       "remaining": "Real supervised crash/backoff/limit exhaustion and actionable persistent failure not executed.",
       "remaining_kind": "real_supervisor_crash_campaign",
-      "result": "Definition/recovery suppression and failure exit codes implemented/injected. Scope/remaining: Real supervised crash/backoff/limit exhaustion and actionable persistent failure not executed."
+      "result": "Supervised entrypoint failures now produce an actionable historical last-attempt diagnostic when no owner exists and the selected task is idle. Source tests preserve stop suppression, bounded readiness wait and possible-effect reporting. Injected Scheduler states do not prove actual crash recovery or retry exhaustion; the real campaign remains pending."
     },
     "SVC-T20": {
       "requirement": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
@@ -12532,6 +12537,18 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-reader-cache-review/root-review.json"
       ]
+    },
+    "r3_supervisor_failure_diagnostic": {
+      "status": "SOURCE_CONTRACT_VERIFIED_NATIVE_T19_REMAINS_UNQUALIFIED",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json"
+      ],
+      "final_unique_cases": 104,
+      "new_unique_cases": 16,
+      "native_service_effects": 0,
+      "provider_calls": 0,
+      "scope": "Source contracts with injected Scheduler state. Explicit stop, bounded startup wait and possible-effect reporting remain intact.",
+      "remaining": "Actual Windows Scheduler crash/retry/limit qualification remains pending; LastTaskResult is historical, not proof of exhaustion."
     }
   },
   "history": [
@@ -13736,6 +13753,15 @@
       "summary": "Functional cache/final-publication correction retained with 36 PASS/2 timing failures and single focal 2 PASS. No robustness or M1 acceptance claimed. AC13 narrative corrected to reflect actual installed/start/stop/remove evidence; status unchanged.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-reader-cache-review/root-review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Actionable supervised startup failure diagnosis",
+      "status": "SOURCE_CONTRACT_VERIFIED_NATIVE_T19_REMAINS_UNQUALIFIED",
+      "summary": "Nexus and Connector no longer expose only SUPERVISOR_PENDING after a known idle-task entrypoint failure. 104 final source tests pass, including16 new cases. No retry, ownership, force or Core policy changes; native T19 remains pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json"
       ]
     }
   ]

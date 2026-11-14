@@ -39,7 +39,7 @@ class ServiceLifecycle:
         while result['state'] in {'starting', 'degraded', 'unknown'}:
             if result.get('reason') not in {'STARTUP_PENDING', 'CONCURRENT_START',
                     'SERVICE_UNREACHABLE', 'INSTANCE_OWNERSHIP_UNCONFIRMED',
-                    'INSTANCE_METADATA_UNAVAILABLE', 'SUPERVISOR_PENDING'}:
+                    'INSTANCE_METADATA_UNAVAILABLE', 'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED'}:
                 return result
             # A concurrent publisher/Windows file-sharing window can prevent
             # reading owner metadata. Re-inspect within this deadline; never
@@ -64,7 +64,7 @@ class ServiceLifecycle:
                     'next_action': 'Inspect the current generation; no force was requested.'}
         if before['state'] == 'stopped':
             return before
-        pending = before.get('reason') == 'SUPERVISOR_PENDING' and not before.get('generation')
+        pending = before.get('reason') in {'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED'} and not before.get('generation')
         if before['state'] not in {'ready', 'stopping'} and not pending:
             return before
         generation = before.get('generation')

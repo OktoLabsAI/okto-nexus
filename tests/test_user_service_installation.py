@@ -5,6 +5,7 @@ from dataclasses import replace
 import asyncio
 import json
 import os
+import time
 from unittest.mock import Mock
 
 import pytest
@@ -228,6 +229,49 @@ def test_failed_supervised_start_remains_nonzero_for_bounded_os_recovery(host, m
     adapter, tasks, receipt = install(host)
     monkeypatch.setattr('okto_nexus.adapters.inbound.cli.serve.run_serve', Mock(return_value=1))
     assert run_supervised(adapter.home, adapter.database, receipt['token'], installation=adapter.installation) == 1
+
+
+def test_failed_preownership_supervised_attempt_is_actionable_without_relaunch(host, monkeypatch):
+    adapter, tasks, receipt = install(host)
+    adapter.installation.start()
+    monkeypatch.setattr('okto_nexus.adapters.inbound.cli.supervised_service.validate_context',
+        Mock(side_effect=OSError('private startup detail')))
+    monkeypatch.setattr('okto_nexus.adapters.inbound.cli.serve.run_serve',
+        Mock(side_effect=AssertionError('no runtime may bootstrap')))
+    for _ in range(4):
+        assert run_supervised(adapter.home, adapter.database, receipt['token'],
+            installation=adapter.installation) == 2
+    tasks.tasks[receipt['name']] = replace(tasks.tasks[receipt['name']], state=3, last_result=2)
+    before = (adapter.home / CONTROL_NAME).read_bytes()
+    result = adapter.inspect()
+    assert result['reason'] == 'SUPERVISOR_LAST_ATTEMPT_FAILED', result
+    assert result['state'] == 'unknown'
+    assert result['user_service']['last_result'] == 2
+    assert 'current launch and retry outcome are unconfirmed' in result['next_action']
+    assert 'private startup detail' not in json.dumps(result)
+    assert adapter.installation.start() is True
+    assert [call[0] for call in tasks.calls].count('start') == 1
+    assert (adapter.home / CONTROL_NAME).read_bytes() == before
+    assert not adapter.database.exists()
+    stopped = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep).stop(timeout=1)
+    assert stopped['state'] == 'stopped' and stopped['shutdown_outcome'] == 'drained'
+    assert adapter.installation.control(receipt)['desired'] == 'draining'
+    assert run_supervised(adapter.home, adapter.database, receipt['token'],
+        installation=adapter.installation) == 0
+    assert [call[0] for call in tasks.calls].count('start') == 1
+
+
+@pytest.mark.parametrize('state,last_result', [(2, 2), (4, 2), (0, 2), (3, 0), (3, 0x41303)])
+def test_pending_supervisor_does_not_misattribute_stale_failure_or_status_code(host, state, last_result):
+    adapter, tasks, receipt = install(host)
+    adapter.installation.start()
+    tasks.tasks[receipt['name']] = replace(tasks.tasks[receipt['name']], state=state, last_result=last_result)
+    before = (adapter.home / CONTROL_NAME).read_bytes()
+    result = adapter.inspect()
+    assert result['reason'] == 'SUPERVISOR_PENDING'
+    assert result['state'] == 'starting'
+    assert (adapter.home / CONTROL_NAME).read_bytes() == before
+    assert [call[0] for call in tasks.calls].count('start') == 1
 
 
 def test_facade_preflights_then_drains_before_registration_or_removal():

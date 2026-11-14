@@ -1,0 +1,91 @@
+{
+  "status": "SOURCE_CONTRACT_VERIFIED_NATIVE_T19_REMAINS_UNQUALIFIED",
+  "reports": {
+    "connector-before.xml": {
+      "sha256": "d491078027ae949b60a6f0c29891b63ad037d3d767ab468dcad920b94686d755",
+      "cases": 1,
+      "failed": 1,
+      "skipped": 0
+    },
+    "connector-final-v2.xml": {
+      "sha256": "9148b9b2e71d9395a7ce6e473a2cc5e22aa5f97a11598b2771f88465d6da67ad",
+      "cases": 40,
+      "failed": 0,
+      "skipped": 0
+    },
+    "connector-focused.xml": {
+      "sha256": "775e1f90159087be41792d256f125eff28d5d44fcf7924dd9b2bfeb39f503adc",
+      "cases": 6,
+      "failed": 0,
+      "skipped": 0
+    },
+    "connector-regression.xml": {
+      "sha256": "95aa39254b9add7a1e566d1a500101c1d0259f53bf80caca45c64a2f22060ecd",
+      "cases": 38,
+      "failed": 0,
+      "skipped": 0
+    },
+    "nexus-before.xml": {
+      "sha256": "bf96528ceb8819bdda60979230b261eafa66ed05ea4e883413351a365c9a3276",
+      "cases": 1,
+      "failed": 1,
+      "skipped": 0
+    },
+    "nexus-final-v2.xml": {
+      "sha256": "220910b985df79b6f4b7eebc45b8a192f8379dcc0105dcfc86bf53289b6a0b05",
+      "cases": 64,
+      "failed": 0,
+      "skipped": 0
+    },
+    "nexus-final.xml": {
+      "sha256": "ccabd1c4ae1463558e3b625a48a9bfbfa977faa60cdc6443ba629fd7df3b0a6f",
+      "cases": 62,
+      "failed": 0,
+      "skipped": 0
+    },
+    "nexus-focused.xml": {
+      "sha256": "dec76666f035f4fa1095d3206d42c8f338c8c5fc5caaadb1a616d42d9b48e886",
+      "cases": 6,
+      "failed": 1,
+      "skipped": 0
+    },
+    "nexus-regression.xml": {
+      "sha256": "16664afa855740d65e522c6ed206df2bfbc6a65e2c271b9ded516558d4a7dd17",
+      "cases": 62,
+      "failed": 1,
+      "skipped": 0
+    }
+  },
+  "final_unique_cases": 104,
+  "new_unique_cases": 16,
+  "source_imports": {
+    "okto_nexus.adapters.outbound.service_manager.local": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\service_manager\\local.py",
+    "okto_nexus.application.service_lifecycle": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\service_lifecycle.py",
+    "okto_nexus_connector.daemon.lifecycle": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\lifecycle.py"
+  },
+  "source_sha256": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\service_manager\\local.py": "3399c7600a90152c6b18f5ae7ab14cfdc50b8056e83f37cf69009d6414fab140",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\service_lifecycle.py": "2aa62d471e354c1539ce8ac21faacdd86be4bbe26a176069bbe44ad06978373c",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_user_service_installation.py": "06051f430d6baeff8d98de3ce58fdcb8467611c2e57fac9b8cc7e2c3887e56aa",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_start.py": "2cdee1300139bb815166c891ef31eb836fea6d35d4c28a1514cb2609852abfb9",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\lifecycle.py": "f22fbb3f226b402677809669c115e3857df006595fe78fa16f6642c75ef04576",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_user_service_lifecycle.py": "cbf81b3fa07c4d1ef5c4be0990a07494635b19865b921b79d1b7f019c53a6a8c"
+  },
+  "reproduction": "Each real supervised entrypoint was called four times with an injected pre-owner OSError; fake Scheduler state3/exit2 then exposed an indefinitely SUPERVISOR_PENDING projection in both unpatched hosts.",
+  "correction": "Pending launch + no owner + idle task + supervised exit1/2/3 exposes historical last-attempt failure, current launch/retry unknown, and an actionable diagnostic. Active/queued/unknown Scheduler states are not reclassified. Stop fencing, bounded observation and possible-effect accounting are preserved.",
+  "invariants": [
+    "No implicit launch retry, latch clearing, force, policy or ownership changes.",
+    "Explicit stop follows the original no-owner revalidation and suppresses queued entry in the same login.",
+    "Stale failure -> starting -> ready waits without another selection; timeout retains the diagnostic and possible effect.",
+    "Raw exception detail is absent from public observation."
+  ],
+  "limits": [
+    "Source-only validation, not wheel/installed acceptance.",
+    "Task Scheduler effects and states are injected; four calls do not prove real OS retry exhaustion.",
+    "No actual service registration/start/stop, provider, account, personal credential, inference or interruption campaign.",
+    "Existing native-preflight tests excluded to avoid COM Scheduler validation.",
+    "Historical LastTaskResult does not identify the current request or establish retries absent/exhausted.",
+    "Only the supervised entrypoint exit codes1/2/3 are diagnosed by this bounded change.",
+    "Initial red tests and intermediate fixture/facade failures remain in reports; repeated cases are not added to final counts."
+  ]
+}

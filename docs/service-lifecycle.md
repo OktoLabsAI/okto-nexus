@@ -126,6 +126,15 @@ reports native task state separately from application readiness; queued/running
 does not certify that the application is ready. A persisted start intent also
 prevents resubmission after a lost native response.
 
+If a launch remains pending without an application owner and the idle task's
+last result is an entrypoint failure (1, 2 or 3), status reports
+`SUPERVISOR_LAST_ATTEMPT_FAILED` with state `unknown`. That historical result
+does not prove the current launch failed or Scheduler retries are exhausted.
+Start still waits within its observation timeout; it does not submit another
+launch. Inspect the selected task and startup diagnostics, then use `service
+stop` before an explicit retry. Stop retains its ownership checks and fences
+queued startup without forcing a process to exit.
+
 Stop persists a suppression latch before requesting canonical drain. It never
 calls Task Scheduler's forced stop operation. During that login session, a crash
 retry observes the latch and exits without admitting work. A later login is

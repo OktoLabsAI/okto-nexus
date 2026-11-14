@@ -1262,3 +1262,19 @@ eventos pendentes mantêm seus próprios requisitos. Nenhum status foi promovido
 serviço iniciado ou token de provedor consumido neste marco.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-reader-cache-review/root-review.json`.
+
+## 2026-11-14 — diagnóstico de tentativa supervisionada com falha
+
+Nexus e Connector agora mostram SUPERVISOR_LAST_ATTEMPT_FAILED quando há início
+pendente, nenhum owner e a tarefa inativa registra um código de falha conhecido.
+O estado permanece incerto: LastTaskResult pode ser anterior ao pedido atual e
+não comprova esgotamento das tentativas. A espera limitada aceita a transição
+posterior para pronto, sem novo start; a parada canônica continua suprimindo
+entrada pendente. O Connector preserva a indicação de efeito possível.
+
+Passaram 104 casos de fonte (64 Nexus e 40 Connector), incluindo 16 casos novos.
+Falhas iniciais e rodadas intermediárias foram preservadas sem somar repetições.
+Scheduler foi injetado; nenhum serviço real, provedor ou credencial foi usado.
+SVC-T19 continua IN_PROGRESS, e a política do Core permanece intacta.
+
+Evidência: `plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json`.
