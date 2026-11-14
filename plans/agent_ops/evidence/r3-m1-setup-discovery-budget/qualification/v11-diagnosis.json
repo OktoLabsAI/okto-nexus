@@ -1,0 +1,150 @@
+{
+  "classification": "SANITIZED_V11_POST_EXIT_READONLY_DIAGNOSIS_NOT_M1_ACCEPTANCE",
+  "public_source_sha256": {
+    "local-setup-dispatch.json": "e30462be87cf79e30b57358c5e6b68f4e26e5738603ad1c059ad8161eb7113a0",
+    "local-setup-result.json": "1554fac92e0e05edf4972cf9263d63898827066c3b0d9f5915fb6e577695824b",
+    "lifecycle-nexus-stop.json": "c44bd18051fda047f4974f9cd4ce1dce5e390279fb49fdc0151700cfd8dd5914",
+    "lifecycle-nexus-stop-result.json": "bf62d3adf8229c6a735bbeb984eeff6ba80fd43e0cd0107689cae158910ce7bb",
+    "nexus-exit-proof.json": "cdf6244007ee27cad24318c3814d534543c0e522f7b70966518c8a73821cfbfe",
+    "cleanup-nexus.json": "2e2743de535b385adc481e89f67b548749ed3448f54b48e9e17037a2954edf9f"
+  },
+  "source_code_sha256": {
+    "draft\\controller\\setup_journal.py": "326497241dd3c94f1775b338e7b1b4e70689fc455d1e83db21fda6103b7305dc",
+    "draft\\controller\\independent_journal.py": "8cf8a2862fd725e4901c4cb5c5f4263ba3144f69b076e1d6e603124204ee70b1",
+    "draft\\controller\\independent_controller.py": "1282b611bb5a38b09690bbef3b305f24360aefae3f210494dbd34ee123147cc1",
+    "draft\\controller\\api_worker.py": "268de25713f364ce2034c824b250030adf1f861147423f95514c1b2756fa42a8",
+    "draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py": "614dd004363fc78295f3ff38241900fc352dad65beb4fb04a4278639a705222e",
+    "draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_local_observations.py": "7cf2c9c261460d0151fde60503bcc1159f6ab9e26444b02858affd039a54d1a5",
+    "draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_inventory.py": "42e3eefebe26e8cac9aa1ef0a132affbfeed1e2117a27d2194e9812a26898ed4"
+  },
+  "private_projection_sha256": "6385c791656d55b1d8c2412340b7e6b20554d43044282172fae9b34f9c154cb2",
+  "projection_hash_encoding": "JSON sort_keys=True,separators=comma-colon,UTF8; projection below only",
+  "projection": {
+    "first_observation_error": {
+      "exception_type": "JournalUnknown",
+      "reason": "SETUP_READ_BUDGET_EXCEEDED",
+      "reader": {
+        "phase": "snapshot_read",
+        "budget_ms": 250.0,
+        "elapsed_ms": 317.6963999867439
+      }
+    },
+    "faults": [
+      "OBSERVATION_UNKNOWN",
+      "DEADLINE120"
+    ],
+    "profile": {
+      "state": "check_submitted",
+      "version_check_required": true
+    },
+    "version_observations": [
+      [
+        "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+        "0.157.0",
+        "win32",
+        "2026-11-14T14:36:14.521306Z"
+      ]
+    ],
+    "inventory_snapshots": [
+      [
+        14,
+        "sha256:47059aba6a9a94bf29cff0d6c26e8176c006e3a9bd4bfc00dc69c85686a2bfb2",
+        "2026-11-14T14:35:57.727Z",
+        0
+      ],
+      [
+        15,
+        "sha256:47059aba6a9a94bf29cff0d6c26e8176c006e3a9bd4bfc00dc69c85686a2bfb2",
+        "2026-11-14T14:36:03.591Z",
+        0
+      ]
+    ],
+    "final_candidate_state": [
+      [
+        15,
+        "codex_app_server",
+        "NOT_PROBED",
+        null
+      ]
+    ],
+    "connection_tests_directory_exists": false,
+    "setup_monitor": {
+      "started": false,
+      "journal": null,
+      "high_water": 0,
+      "usage_seen": false,
+      "terminal": false
+    },
+    "accounting": {
+      "reserved_requests": 7,
+      "new_reserved_requests": 1,
+      "known_observed_tokens": 89473,
+      "new_observed_tokens": 0,
+      "carry_in_tokens": 89473,
+      "final_or_billed_usage": false
+    },
+    "observer_maximum_poll_ms": 436.2537999986671,
+    "cli": {
+      "cli_exit": 3,
+      "reported_state": "unconfirmed",
+      "reported_code": "INSTALLATION_UNCONFIRMED",
+      "maximum_poll_start_interval_seconds": 0.660234099952504,
+      "poll_count": 535
+    }
+  },
+  "immutable_sql_queries": {
+    "version_observation": "SELECT candidate_ref,version,platform,observed_at FROM execution_local_observations WHERE candidate_ref=?",
+    "snapshot_metadata": "SELECT publication_sequence,inventory_revision,received_at,observation_age_ms FROM execution_inventory_snapshots ORDER BY publication_sequence",
+    "candidate_state": "SELECT s.publication_sequence,json_extract(j.value,?),json_extract(j.value,?),json_extract(j.value,?) FROM execution_inventory_snapshots s,json_each(s.canonical_projection,?) j WHERE s.publication_sequence=(SELECT MAX(publication_sequence) FROM execution_inventory_snapshots) AND json_extract(j.value,?)=?"
+  },
+  "timeline": [
+    {
+      "event": "setup_cli_dispatched",
+      "epoch": 1794666898.6525965,
+      "utc": "2026-11-14T14:34:58.652596Z"
+    },
+    {
+      "event": "last_inventory_published_NOT_PROBED",
+      "utc": "2026-11-14T14:36:03.591Z",
+      "publication_sequence": 15
+    },
+    {
+      "event": "normal_stop_reserved",
+      "epoch": 1794666969.8766494,
+      "utc": "2026-11-14T14:36:09.876649Z"
+    },
+    {
+      "event": "version_0_157_0_observation_committed",
+      "utc": "2026-11-14T14:36:14.521306Z"
+    },
+    {
+      "event": "service_DRAINED_and_EXIT_reported",
+      "utc": "2026-11-14T14:36:22Z"
+    },
+    {
+      "event": "setup_wrapper_result_recorded",
+      "epoch": 1794667024.6110523,
+      "utc": "2026-11-14T14:37:04.611052Z"
+    }
+  ],
+  "established": [
+    "First recorded observer failure was SETUP_READ_BUDGET_EXCEEDED:317.696ms against250ms, phase snapshot_read.",
+    "The wrapper applied a SQL-labelled whole-poll budget even when discovery returned without a journal or SQL query.",
+    "The independent controller caught JournalUnknown, retained first_observation_error, selected OBSERVATION_UNKNOWN and normal stop.",
+    "A durable version observation succeeded for the selected candidate, but the last inventory publication remained NOT_PROBED.",
+    "The terminal profile remained check_submitted; CLI confirmation requires fresh READY_FOR_RUNTIME, which was not observed.",
+    "No setup journal, turn start or new token usage was observed; this is not a zero-billing assertion."
+  ],
+  "uncertainty": [
+    "No timing breakdown proves that hashing, discovery cache, process startup or version subprocess caused the76-second pre-observation delay.",
+    "Stop before a fresh version publication is consistent with the timeline; exact internal refresh-versus-stop order is not persisted.",
+    "The first observation error does not carry a per-error timestamp; stop reservation is a later public effect boundary."
+  ],
+  "safety": {
+    "private_database_copied": false,
+    "raw_transcript_auth_or_private_payload_exported": false,
+    "provider_or_service_executed": false,
+    "checkpoint_or_reservation_modified": false,
+    "sqlite_mode": "ro&immutable=1 after verified physical exit; no WAL/SHM present"
+  }
+}

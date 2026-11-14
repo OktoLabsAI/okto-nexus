@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-14",
+  "status": "SETUP_DISCOVERY_FIX_QUALIFIED_OFFLINE_REAL_SUCCESSOR_PENDING",
+  "freeze_sha256": "3efa6edfad572ed9940e941cc9a4dc5ab0ada1c1af2d909cf54bc95b4d597690",
+  "qualification_sha256": "a29fb23203d7568ecaf1584cd61494d2fc5da2c70a2881c16845a1aa2b0eb326",
+  "diagnosis_sha256": "58d96f139ca4da98a164be49bdb6f7cea3bbb6f4ecafb2c227bccb5628ead3d1",
+  "changed_runtime": [
+    "controller/setup_journal.py"
+  ],
+  "other_runtime_files_unchanged": 14,
+  "final_suite": {
+    "passed": 73,
+    "deselected": 1,
+    "complete_attempts": 1,
+    "new_deterministic_cases": 10
+  },
+  "excluded_case": "Historical closed-v10 private database test; unchanged prior evidence retained, not reexecuted.",
+  "cause": "Real v11 first observation error was SETUP_READ_BUDGET_EXCEEDED at317.696ms while finding an absent setup journal. The wrapper applied the SQL read budget to discovery with no SQLite snapshot.",
+  "fix": "Remove only that outer SQL timer. ReadOnly.open retains schema/snapshot budgets and identity/rollback checks; discovery remains bounded by the existing aggregate controller budget.",
+  "unchanged_limits": {
+    "schema_ms": 250,
+    "snapshot_ms": 250,
+    "aggregate_ms": 600,
+    "freshness_ms": 1000,
+    "deadline_seconds": 120
+  },
+  "installation_observation": "Version0.157.0 was recorded after stop was reserved; the last published inventory remained NOT_PROBED. This supports missing READY_FOR_RUNTIME publication, not an asserted --version/cache/hash failure cause.",
+  "limits": [
+    "Offline qualification does not prove real M1 success.",
+    "OS filesystem latency is not a hard real-time guarantee.",
+    "No campaign replay, checkpoint reset, provider call or source-wheel change."
+  ],
+  "acceptance_promoted": false
+}

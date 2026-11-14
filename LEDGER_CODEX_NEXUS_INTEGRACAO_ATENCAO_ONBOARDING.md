@@ -1339,3 +1339,21 @@ Não estão incluídos force, logout, reboot, tarefas pessoais ou leitura de
 credenciais do provedor. Preparação offline não promove nenhum aceite M1.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v11-preparation/review.json`.
+
+## 2026-11-14 — correção da medição de descoberta do journal de setup
+
+O primeiro erro real v11 foi SETUP_READ_BUDGET_EXCEEDED, em 317,7 ms. O cronômetro
+SQL de 250 ms abrangia também a descoberta do diretório, mesmo sem journal ou
+snapshot SQLite. A correção remove somente esse cronômetro externo; ReadOnly.open
+conserva os limites de schema/snapshot, e o ciclo completo continua limitado a
+600 ms, com freshness de 1 s e deadline de 120 s. Identidade e reparse continuam
+verificados. Nenhum limite de tokens foi aumentado.
+
+A rodada final única passou em 73 casos, incluindo dez casos determinísticos
+novos; um teste de banco privado histórico foi excluído, com evidência anterior
+preservada. Os outros 14 arquivos runtime são idênticos ao freeze anterior.
+A versão Codex 0.157.0 foi observada após a seleção de parada, mas o inventário
+publicado ainda não estava READY_FOR_RUNTIME. Não se atribui a demora a uma
+causa interna não medida. A correção offline não promove aceite real M1.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-setup-discovery-budget/root-review.json`.
