@@ -1,0 +1,14 @@
+{
+  "returncode": 3,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "4354addf5441dfcfff2aea786f4951404d635423bf413d2163785c4a7dd0aa99",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "degraded",
+    "reason": "SERVICE_UNREACHABLE",
+    "generation": null,
+    "instance_id": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+    "--non-interactive",
+    "--json",
+    "daemon",
+    "stop",
+    "--timeout",
+    "45"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b",
+  "environment_sha256": "c685c0295f29426d5724962ef45d4f6e108aaf1a510cd51c039f27e534f51c45",
+  "at": 1794674511.5711498
+}

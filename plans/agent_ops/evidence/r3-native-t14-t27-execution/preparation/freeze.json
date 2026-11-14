@@ -1,0 +1,46 @@
+{
+  "status": "AWAITING_ROOT_REVIEW_AND_EXECUTION",
+  "runtime": [
+    {
+      "path": "run.py",
+      "sha256": "c905811ea0a48d457a52bc60d6292d0b8dfa977a96f6eb2280ff4bb37b1576b5",
+      "bytes": 19074
+    },
+    {
+      "path": "plan.json",
+      "sha256": "647a8c30eb74fe40d786f4da62d1248a1c4d09b7aeaf958c4536d71591605c8b",
+      "bytes": 13073
+    }
+  ],
+  "execute_argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\run.py",
+    "execute",
+    "--expected-plan-sha256",
+    "647a8c30eb74fe40d786f4da62d1248a1c4d09b7aeaf958c4536d71591605c8b",
+    "--expected-runner-sha256",
+    "c905811ea0a48d457a52bc60d6292d0b8dfa977a96f6eb2280ff4bb37b1576b5"
+  ],
+  "qualification": {
+    "path": "qualification-offline.json",
+    "sha256": "6f1505fa9f6deb2e4e3a2429f3c1fe131c726151757781e5edc847c6116327ea",
+    "bytes": 1142
+  },
+  "prohibited": [
+    "provider inference",
+    "login",
+    "force",
+    "automatic resubmit",
+    "M1 service or data mutations"
+  ],
+  "limits": [
+    "Readiness polling only; start/stop selections are exclusive and never automatically repeated.",
+    "Connector T14 is scoped to its canonical state root, not a project binding or productive remote work.",
+    "T27 requires runtime-created DBs and byte preservation across uninstall; foreground may legitimately change DB bytes.",
+    "No M1 files/services/accounts modified. Root executes after M1 preparation."
+  ]
+}

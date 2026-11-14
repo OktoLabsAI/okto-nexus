@@ -1487,3 +1487,15 @@ As duas suítes selecionadas contra os wheels novos instalados passaram: 17 caso
 DX-T34 permanece NOT_RUN. Ainda falta observar Codex real sem login, a instrução emitida, o daemon responsivo e cleanup. Não houve inferência real, leitura de credenciais pessoais, alteração M1 nem promoção de outros cenários ou critérios.
 
 Evidência: `plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json`.
+
+## 2026-11-14 — T14/T27 reais: contexto nativo e estado retido em foreground
+
+Os dois hosts instalados iniciaram a partir de caller B com PATH reduzido, usando o executável e contexto A gravados nas tarefas reais. Nexus manteve project-root A; Connector manteve sua raiz canônica de estado, sem alegação de vínculo com projeto remoto. A partida Nexus retornou CLI 3/SERVICE_UNREACHABLE antes da confirmação posterior de READY; houve só uma seleção de start, sem repetição.
+
+Após parada normal e saída física por handle retido, uninstall preservou exatamente 11 arquivos Nexus e 12 Connector, incluindo os bancos criados pelo runtime. Foram excluídos somente os recibos de integração legitimamente removidos. O foreground posterior abriu o mesmo estado e identidade com geração nova, ficou pronto e encerrou normalmente. As duas tarefas ficaram ausentes. Não se exige igualdade de bytes após reiniciar o banco.
+
+As 12 seleções canônicas não fizeram login, inferência ou force. Os 984 pins (983 payloads e python.exe), mais imagens Python, coincidiram antes/depois. As definições nativas usam -I sem -B e podem escrever __pycache__ no interpretador compartilhado; não se afirma imutabilidade física de todo o venv. A falha inicial de fixture offline e o resultado de start CLI 3 permanecem retidos.
+
+SVC-T14 e SVC-T27 passam a VERIFIED no escopo descrito: 121 de 132 cenários verificados. Tasks, invariantes, critérios e milestones mantêm seus estados. Nenhum aceite M1 ou trabalho remoto/produtivo foi inferido.
+
+Evidência: `plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json`.

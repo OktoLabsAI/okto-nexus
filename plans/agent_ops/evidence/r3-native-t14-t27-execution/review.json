@@ -1,0 +1,110 @@
+{
+  "date": "2026-11-14",
+  "status": "ACTUAL_WINDOWS_T14_T27_PASS_SCOPED",
+  "runner_session": {
+    "id": 17781,
+    "exit_code": 0,
+    "source": "Root observed tool return; public qualification also reached successful final gate."
+  },
+  "qualification_sha256": "90e4368c5268058df9a7e0f7232c152cf297e213d80a1def24a6483834c7b918",
+  "runner_sha256": "c905811ea0a48d457a52bc60d6292d0b8dfa977a96f6eb2280ff4bb37b1576b5",
+  "plan_sha256": "647a8c30eb74fe40d786f4da62d1248a1c4d09b7aeaf958c4536d71591605c8b",
+  "hosts": {
+    "nexus": {
+      "installed": {
+        "state": "ready",
+        "reason": null,
+        "pid": 47156,
+        "generation": "f78093b0a364d78ac2526cd73c71a14e",
+        "instance_id": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+        "supervisor": "windows-task-scheduler",
+        "ready_for_queries": true,
+        "storage_initialized": true
+      },
+      "foreground": {
+        "state": "ready",
+        "reason": null,
+        "pid": 46740,
+        "generation": "95f3b88980a08d83d97bcbce37b59f61",
+        "instance_id": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+        "supervisor": "foreground",
+        "ready_for_queries": true,
+        "storage_initialized": true
+      },
+      "retained_file_count": 11,
+      "runtime_created_store": "nexus.db",
+      "uninstall_fingerprints_equal": true,
+      "both_generations_physically_exited": true,
+      "task_absent": true,
+      "project_scope": "Nexus project-root A",
+      "start_cli_exit": 3
+    },
+    "connector": {
+      "installed": {
+        "state": "ready",
+        "reason": null,
+        "pid": 26036,
+        "generation": "1bba3eaa08ebeab06888a7ee11f9b9e7",
+        "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+        "supervisor": "windows-task-scheduler",
+        "ready_for_queries": true,
+        "running": true,
+        "ipc_ok": true
+      },
+      "foreground": {
+        "state": "ready",
+        "reason": null,
+        "pid": 34788,
+        "generation": "2a36bdb17c290cbacb1b85b9016d58c2",
+        "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+        "supervisor": "foreground",
+        "ready_for_queries": true,
+        "running": true,
+        "ipc_ok": true
+      },
+      "retained_file_count": 12,
+      "runtime_created_store": "owned-slots.db",
+      "uninstall_fingerprints_equal": true,
+      "both_generations_physically_exited": true,
+      "task_absent": true,
+      "project_scope": "Connector canonical state root; no project binding/work claimed",
+      "start_cli_exit": 0
+    }
+  },
+  "cli_selections": 12,
+  "service_starts": 2,
+  "foreground_starts": 2,
+  "normal_stops": 4,
+  "provider_calls": 0,
+  "login_attempts": 0,
+  "force_used": false,
+  "offline_preparation": {
+    "final_passes": 22,
+    "initial": "21 PASS / 1 fixture assertion failure (Path compared with string); original XML retained."
+  },
+  "nexus_start_result_preserved": {
+    "returncode": 3,
+    "reason": "SERVICE_UNREACHABLE",
+    "later_observation": "Same one selected startup reached READY within bounded passive observation; no second start."
+  },
+  "package_proof_scope": {
+    "pins_checked_before_and_after": 984,
+    "site_packages_payloads": 983,
+    "pinned_interpreter_files_in_that_count": 1,
+    "python_images_also_pinned": 4,
+    "shared_cache_limit": "Native task definitions use pythonw -I -m without -B. Shared __pycache__ creation/update is possible; full venv immutability is not claimed. Product payload/interpreter pins matched before and after."
+  },
+  "limits": [
+    "T14 Nexus proves actual project-root A, executable, saved configuration and cwd/PATH across different caller context.",
+    "T14 Connector proves its canonical state root and native context; no remote project binding or productive project work is claimed.",
+    "T27 uses fresh runtime-created stores, not productive work or pre-existing personal credentials. All retained files match exactly across uninstall.",
+    "Foreground reopened the same stores and identity with new generation; DB bytes after startup are not required to remain unchanged.",
+    "Port availability is an instantaneous bind check at final qualification, not a continuing reservation.",
+    "No M1 service/home/account/payload changed and no M1 or other scenario acceptance inferred."
+  ],
+  "promoted_scenarios": [
+    "SVC-T14",
+    "SVC-T27"
+  ],
+  "task_or_completion_status_promoted": false
+}

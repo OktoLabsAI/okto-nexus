@@ -1,0 +1,20 @@
+{
+  "pid": 26036,
+  "generation": "1bba3eaa08ebeab06888a7ee11f9b9e7",
+  "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+  "birth_filetime": 134391480956974029,
+  "retained_handle": true,
+  "physical_exit_confirmed": true,
+  "force_used": false,
+  "canonical": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "pid": null,
+    "generation": "",
+    "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+    "supervisor": "foreground",
+    "ready_for_queries": false,
+    "running": false,
+    "ipc_ok": false
+  }
+}

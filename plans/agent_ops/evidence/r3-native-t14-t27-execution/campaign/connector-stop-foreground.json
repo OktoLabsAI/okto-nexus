@@ -1,0 +1,19 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "9ccc42a63e987e9aa3a3bf28e6f7b8cabf5ddbdbbdd142a16a4238591e83730c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "pid": null,
+    "generation": "",
+    "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+    "supervisor": "foreground",
+    "ready_for_queries": false,
+    "running": false,
+    "ipc_ok": false,
+    "shutdown_outcome": "drained",
+    "stopped": true
+  }
+}

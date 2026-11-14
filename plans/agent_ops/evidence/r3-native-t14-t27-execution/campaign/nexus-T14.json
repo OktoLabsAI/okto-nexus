@@ -1,0 +1,32 @@
+{
+  "status": "PASS_SCOPED",
+  "caller_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b",
+  "caller_path": "C:/WINDOWS/System32",
+  "start_cli_exit": 3,
+  "context": {
+    "task_name": "OktoNexus-server-86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "task_digest": "df548f53e25e8e7cc7c5b0720f8de6c3ec3bcf1546c6c2c607d86a6f65843efa",
+    "active": true,
+    "enabled": true,
+    "context_sha256": "bbc1fb0e712c9cb1f0885d42ab66ce689d88da1521ed61b7086c725437621996",
+    "recorded_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "recorded_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a",
+    "native_action_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\pythonw.exe",
+    "native_working_directory": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a",
+    "recorded_path_matches_A_not_caller_B": true,
+    "project_scope": "Nexus project-root A"
+  },
+  "readiness": {
+    "state": "ready",
+    "reason": null,
+    "pid": 47156,
+    "generation": "f78093b0a364d78ac2526cd73c71a14e",
+    "instance_id": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": true,
+    "storage_initialized": true
+  },
+  "process_image": "C:\\Python313\\pythonw.exe",
+  "birth_filetime": 134391480015996513,
+  "provider_calls": 0
+}

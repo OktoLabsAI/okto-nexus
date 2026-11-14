@@ -1,0 +1,59 @@
+{
+  "files": [
+    {
+      "path": "run.py",
+      "sha256": "c905811ea0a48d457a52bc60d6292d0b8dfa977a96f6eb2280ff4bb37b1576b5",
+      "bytes": 19074
+    },
+    {
+      "path": "prepare.py",
+      "sha256": "4516e7283b8e9a5c07dd40812b897c7ec2fbc4333b0d0cf56e9f803e4ec82000",
+      "bytes": 4984
+    },
+    {
+      "path": "plan.json",
+      "sha256": "647a8c30eb74fe40d786f4da62d1248a1c4d09b7aeaf958c4536d71591605c8b",
+      "bytes": 13073
+    },
+    {
+      "path": "test_runner.py",
+      "sha256": "269cafe2cccf070d2fb75e32d7e63560e54d861b143d1bb4e187fb4faf451f3d",
+      "bytes": 6648
+    },
+    {
+      "path": "README.md",
+      "sha256": "2f8463f10ade891b73101ea269ddba5c3da81dde83b7b8c535ac74294e1b98e9",
+      "bytes": 3837
+    },
+    {
+      "path": "freeze_offline.py",
+      "sha256": "ba85fac345164a31eb9d5f27469c1c596dcc42fddade97f7a061e23023020deb",
+      "bytes": 2615
+    },
+    {
+      "path": "package-proof-offline.json",
+      "sha256": "3892493ceef576e9f6dbc958415a168a07a09307197ca54e7f65cb4a40530007",
+      "bytes": 858
+    },
+    {
+      "path": "tests-offline-initial.xml",
+      "sha256": "85707ad5386c8662e088ca2ca47555b4e3966728a7cae22e38b94274c2500126",
+      "bytes": 3872
+    },
+    {
+      "path": "tests-offline-final.xml",
+      "sha256": "e1383a7c3e57088498a3478a22017e7e7367918a718203158b983ac5e7f8e9ad",
+      "bytes": 2637
+    },
+    {
+      "path": "qualification-offline.json",
+      "sha256": "6f1505fa9f6deb2e4e3a2429f3c1fe131c726151757781e5edc847c6116327ea",
+      "bytes": 1142
+    },
+    {
+      "path": "freeze.json",
+      "sha256": "7333f52f3882282e2b604f5a436a3d9cbc2c038cc18d71021c0442dbcd85d102",
+      "bytes": 1586
+    }
+  ]
+}

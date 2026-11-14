@@ -1,0 +1,15 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "776c7aa04d57a2cf247ffa2006a9476fb3c56756285bf0341ab5217002656fac",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "USER_SERVICE_INSTALLED",
+    "generation": null,
+    "instance_id": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "installation_state": "installed"
+  }
+}

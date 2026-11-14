@@ -1,0 +1,249 @@
+{
+  "files": {
+    "preparation/run.py": {
+      "sha256": "c905811ea0a48d457a52bc60d6292d0b8dfa977a96f6eb2280ff4bb37b1576b5",
+      "bytes": 19074
+    },
+    "preparation/prepare.py": {
+      "sha256": "4516e7283b8e9a5c07dd40812b897c7ec2fbc4333b0d0cf56e9f803e4ec82000",
+      "bytes": 4984
+    },
+    "preparation/plan.json": {
+      "sha256": "647a8c30eb74fe40d786f4da62d1248a1c4d09b7aeaf958c4536d71591605c8b",
+      "bytes": 13073
+    },
+    "preparation/test_runner.py": {
+      "sha256": "269cafe2cccf070d2fb75e32d7e63560e54d861b143d1bb4e187fb4faf451f3d",
+      "bytes": 6648
+    },
+    "preparation/README.md": {
+      "sha256": "2f8463f10ade891b73101ea269ddba5c3da81dde83b7b8c535ac74294e1b98e9",
+      "bytes": 3837
+    },
+    "preparation/freeze_offline.py": {
+      "sha256": "ba85fac345164a31eb9d5f27469c1c596dcc42fddade97f7a061e23023020deb",
+      "bytes": 2615
+    },
+    "preparation/package-proof-offline.json": {
+      "sha256": "3892493ceef576e9f6dbc958415a168a07a09307197ca54e7f65cb4a40530007",
+      "bytes": 858
+    },
+    "preparation/tests-offline-initial.xml": {
+      "sha256": "85707ad5386c8662e088ca2ca47555b4e3966728a7cae22e38b94274c2500126",
+      "bytes": 3872
+    },
+    "preparation/tests-offline-final.xml": {
+      "sha256": "e1383a7c3e57088498a3478a22017e7e7367918a718203158b983ac5e7f8e9ad",
+      "bytes": 2637
+    },
+    "preparation/qualification-offline.json": {
+      "sha256": "6f1505fa9f6deb2e4e3a2429f3c1fe131c726151757781e5edc847c6116327ea",
+      "bytes": 1142
+    },
+    "preparation/freeze.json": {
+      "sha256": "7333f52f3882282e2b604f5a436a3d9cbc2c038cc18d71021c0442dbcd85d102",
+      "bytes": 1586
+    },
+    "preparation/public-allowlist.json": {
+      "sha256": "a8582c1da19e2ef62a663ac4046709ef0a3e71ce3e57e1739e7539839386411c",
+      "bytes": 1682
+    },
+    "invocations/nexus-install-A.reserved.json": {
+      "sha256": "03df0145621af5b5b40b9202635f0cfcbd47f37433647f0bf3f05e679d7b63da",
+      "bytes": 887
+    },
+    "invocations/nexus-install-A.process.json": {
+      "sha256": "07885edf26c8c0f4d0cd542c241606547524acdde18aab44fe88baad52721cb2",
+      "bytes": 19
+    },
+    "invocations/nexus-start-B.reserved.json": {
+      "sha256": "32e2489eafc3005c5769d0f9a9d30246d4509bedc90aa671a3d08767c70c7f39",
+      "bytes": 584
+    },
+    "invocations/nexus-start-B.process.json": {
+      "sha256": "cc71e189b28a674d88f60efb6490e60e8ce46b81e42b74ec28bf91aa04faba1f",
+      "bytes": 19
+    },
+    "invocations/nexus-stop-installed.reserved.json": {
+      "sha256": "7b4374db9ec8a36f4c6d0a28524c60383df3e4f475470ac1bab479c83d46bbec",
+      "bytes": 583
+    },
+    "invocations/nexus-stop-installed.process.json": {
+      "sha256": "b66ceb5b18d501e22102baa14314cec8f43aa63a04ea27de67491f78bc4a2481",
+      "bytes": 19
+    },
+    "invocations/nexus-stop-foreground.reserved.json": {
+      "sha256": "3cf1469573c85c6dc80eaee6a2827ceba0dcf5fbcc75e5f45841a62b82b18921",
+      "bytes": 583
+    },
+    "invocations/nexus-stop-foreground.process.json": {
+      "sha256": "a9aec821f05a11a46fb1d01765fccf9f1ddf3eab8bba265f50e91eda21d0d20f",
+      "bytes": 19
+    },
+    "invocations/nexus-uninstall.reserved.json": {
+      "sha256": "09585ca033f5cfcfaafc709f4a177f77ce3ed1f914f8098b670af34d213eef55",
+      "bytes": 575
+    },
+    "invocations/nexus-uninstall.process.json": {
+      "sha256": "255d518df5ceaa90c1fc5b40c05b48e65e0286145ff32fd806bddd0061676735",
+      "bytes": 19
+    },
+    "invocations/nexus-foreground.reserved.json": {
+      "sha256": "8fbf4532801f606324b84de041b835115eda150819c02ca8a4970270401c92af",
+      "bytes": 816
+    },
+    "invocations/nexus-foreground.process.json": {
+      "sha256": "8ceca6be8d43b2a739faadd745bb7fc0123b63682762e200b697874e4eb4c672",
+      "bytes": 19
+    },
+    "invocations/connector-install-A.reserved.json": {
+      "sha256": "4f1ff8fb15d3c402d705be8e93f81f737aa011ea5d424ad851824405f79c53b6",
+      "bytes": 587
+    },
+    "invocations/connector-install-A.process.json": {
+      "sha256": "cbf03ea3d39edf8f3cb7f5f61490c5725ee4d430f2cc0958f9cfcb6c3f721f3a",
+      "bytes": 19
+    },
+    "invocations/connector-start-B.reserved.json": {
+      "sha256": "ac96cdf8ae0415adc509c764cac406030f2290079c0af9fa8459e5ca0d46cf2f",
+      "bytes": 610
+    },
+    "invocations/connector-start-B.process.json": {
+      "sha256": "c0a2c2231d64828fb7e31104598231e39c13f9d13a5971f104feccc7eafcf64e",
+      "bytes": 19
+    },
+    "invocations/connector-stop-installed.reserved.json": {
+      "sha256": "8ec3b67b9dc3f1038a8fea167f80bd4ad7752c90ef0fc1b06e7b9abc47b26d52",
+      "bytes": 609
+    },
+    "invocations/connector-stop-installed.process.json": {
+      "sha256": "9c86eb9c6591964f6b36d37d97e32913c7cd7b507fb7a99ee8b662c6d17193dc",
+      "bytes": 19
+    },
+    "invocations/connector-stop-foreground.reserved.json": {
+      "sha256": "ec6bce23c1bec5a63e31dff62c1f8561605a09e667ae1604c1ba9fd828f7dd9a",
+      "bytes": 609
+    },
+    "invocations/connector-stop-foreground.process.json": {
+      "sha256": "4e24db5f20ef3674ba3a400deaa50df9994188c587a7f70ca99737fef2d277ed",
+      "bytes": 19
+    },
+    "invocations/connector-uninstall.reserved.json": {
+      "sha256": "55ca22699ea4f607e881dbd2ffabc3b0458497a5a3cdffc7fd2cef915f744894",
+      "bytes": 588
+    },
+    "invocations/connector-uninstall.process.json": {
+      "sha256": "504bbb27902a92235b95f70620bcb9f2e4485bb08a502827b57906912b51570b",
+      "bytes": 19
+    },
+    "invocations/connector-foreground.reserved.json": {
+      "sha256": "b8bb2d1af15f9db14557047f73a991f0f2cfdf07f781e845c9078df81deffc73",
+      "bytes": 581
+    },
+    "invocations/connector-foreground.process.json": {
+      "sha256": "ff3418c1b85017171895c66375d3ac8b7e6e5ba53ac4206deec17cbb8d0e96cf",
+      "bytes": 19
+    },
+    "campaign/connector-T14.json": {
+      "sha256": "d0286bbda9a3fb880e5361d8440a1e2deeccbe454635a4c8731cc166fe0f295f",
+      "bytes": 1625
+    },
+    "campaign/connector-foreground-exit.json": {
+      "sha256": "5b651266dd64e1de60a31eb1cdc196c2b4bbbcf977e39031c9a1ffe10695c059",
+      "bytes": 230
+    },
+    "campaign/connector-foreground-ready.json": {
+      "sha256": "0b84edb6d4bb4667880f4aa6c20ca503538545bb01c115b9b3adc87d25a3d94a",
+      "bytes": 636
+    },
+    "campaign/connector-install-A.json": {
+      "sha256": "7fd638f0d0db1a56a8e1eeabb95225f9dc7a699f0e76d53314222ba441607438",
+      "bytes": 271
+    },
+    "campaign/connector-start-B.json": {
+      "sha256": "e8389bc7769e3024d0170899201dde5d9badb0925a7c25c1a39659f7d0abd6f4",
+      "bytes": 569
+    },
+    "campaign/connector-stop-foreground-physical-exit.json": {
+      "sha256": "f295fb8dac1b066845f2492957f66bd8ad2a93908e6faf95e87cc263eb26c79c",
+      "bytes": 601
+    },
+    "campaign/connector-stop-foreground.json": {
+      "sha256": "87187d09fade49df8eb2ad0d6d2e83d0084d03fe4a5e5af2b02d80996030f706",
+      "bytes": 599
+    },
+    "campaign/connector-stop-installed-physical-exit.json": {
+      "sha256": "9f4376bf89afbd64a518edf0a61fd5ef08a049c65f06b7722f20070d841c458d",
+      "bytes": 601
+    },
+    "campaign/connector-stop-installed.json": {
+      "sha256": "c973fe97493de3553c7071287c9da44f684dead19b0043daec0399cae4f3bc81",
+      "bytes": 611
+    },
+    "campaign/connector-uninstall-data.json": {
+      "sha256": "3a361b640cf0c9202a4bcb7c6452625206b456cce946b5acbce0c8f4773086b0",
+      "bytes": 3439
+    },
+    "campaign/connector-uninstall.json": {
+      "sha256": "c5ea80df573cdc67955b0607cd21fed8567c1ed3da37c1f259438d28bacf1b36",
+      "bytes": 246
+    },
+    "campaign/nexus-T14.json": {
+      "sha256": "aa3c638d30d4577ac0e33a938dd880f0ef4ab5d4a9701f45da1d9edd5bbc03c0",
+      "bytes": 1571
+    },
+    "campaign/nexus-foreground-exit.json": {
+      "sha256": "3b5aae85b4064a8acbde20991bd477383a8c4b909d6af68a22bcf72f38de19cb",
+      "bytes": 230
+    },
+    "campaign/nexus-foreground-ready.json": {
+      "sha256": "9f40a28beaaba7819b03fb279f6c144e07eb06dbd2d5e5c6add48bdcfeeba2d9",
+      "bytes": 618
+    },
+    "campaign/nexus-install-A.json": {
+      "sha256": "9feb9415a22ee6f298478b964f3ec1e964b670562303b67097c72687779d30ba",
+      "bytes": 542
+    },
+    "campaign/nexus-start-B.json": {
+      "sha256": "c6223011cc7212e5275f9c8996e100c49eed74f1da7f1aad4477512209a0beb1",
+      "bytes": 501
+    },
+    "campaign/nexus-stop-foreground-physical-exit.json": {
+      "sha256": "fbb8207a68c1bcfa0612b232745c6ea4e3f44479659d858b42d0d6d2a1e7fd05",
+      "bytes": 511
+    },
+    "campaign/nexus-stop-foreground.json": {
+      "sha256": "a392494891bbd99a0b26ae6ce2feabbb6e8cc7732a8004473996b0611c321d20",
+      "bytes": 489
+    },
+    "campaign/nexus-stop-installed-physical-exit.json": {
+      "sha256": "c24fc69bd27b6786fb5eb968a2e99ab255c20a60caa13e40a4f7231121f47afa",
+      "bytes": 591
+    },
+    "campaign/nexus-stop-installed.json": {
+      "sha256": "ad04c3feabed0cdec534995a6aa80ef3fe64e1dc7cd0f70df308394b5567625e",
+      "bytes": 533
+    },
+    "campaign/nexus-uninstall-data.json": {
+      "sha256": "018b7c7603cfe326758d90b59bd64017879632b5bc9768cea532de8e1a303e49",
+      "bytes": 3275
+    },
+    "campaign/nexus-uninstall.json": {
+      "sha256": "f45eb4f9ce07fc91526a7ea13e93869ecdc78c21d81df29d2ca5fb7e517b12dc",
+      "bytes": 493
+    },
+    "campaign/qualification.json": {
+      "sha256": "90e4368c5268058df9a7e0f7232c152cf297e213d80a1def24a6483834c7b918",
+      "bytes": 1809
+    },
+    "campaign/started.json": {
+      "sha256": "c1db5f8a8f0a80125270be3128270f3430156965af9497e61eb37cc177351be9",
+      "bytes": 1135
+    },
+    "review.json": {
+      "sha256": "9493764e2a71b5dce511962e71ec5fe5827f75283745e16131753ee48c5d2bab",
+      "bytes": 4516
+    }
+  },
+  "raw_databases_credentials_task_xml_and_stdout_excluded": true
+}

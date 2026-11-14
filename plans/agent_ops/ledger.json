@@ -7115,21 +7115,24 @@
     },
     "SVC-T14": {
       "requirement": "Serviço iniciado com cwd/PATH diferentes encontra executável, configuração e projeto corretos.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-detached-process.xml",
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json"
       ],
-      "remaining": "Actual registered service with reduced/different PATH/cwd and correct project still needs service context campaign.",
-      "remaining_kind": "real_service_context_campaign",
-      "result": "Saved absolute executable/cwd/paths/environment contracts and changed launcher cwd tested. Scope/remaining: Actual registered service with reduced/different PATH/cwd and correct project still needs service context campaign.",
+      "remaining": null,
+      "remaining_kind": null,
+      "result": "Actual installed Nexus and Connector started from caller B with reduced PATH while native task/context retained executable and context A. Nexus used project-root A; Connector used its canonical state root. Same-instance readiness and native process identities observed. Nexus initial CLI3 retained; no start replay.",
       "subscopes": {
-        "finite_empty_windows_campaign": "PARTIAL"
-      }
+        "finite_empty_windows_campaign": "PARTIAL",
+        "actual_windows_context_and_retained_data": "VERIFIED_SCOPED"
+      },
+      "qualification_limit": "Windows current-user native tasks; fresh runtime-created state. Connector context is its canonical state root, not remote project work. Shared interpreter bytecode caches may change; payload pins did not."
     },
     "SVC-T15": {
       "requirement": "Credencial só disponível no terminal ou cofre bloqueado gera diagnóstico no contexto real do serviço.",
@@ -7389,18 +7392,21 @@
     },
     "SVC-T27": {
       "requirement": "Desinstalação remove só a integração selecionada, preservando dados e execução foreground posterior.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json"
       ],
-      "remaining": "Actual native removal followed by same preserved data in foreground remains native campaign scope.",
-      "remaining_kind": "authorized_native_campaign_pending",
-      "result": "Injected uninstall requires inactive/drained selected integration and preserves DB/credentials/context; repeated absence passive. Scope/remaining: Actual native removal followed by same preserved data in foreground remains native campaign scope.",
+      "remaining": null,
+      "remaining_kind": null,
+      "result": "Both hosts drained normally and physically exited. Uninstall removed only selected integration receipts/task; all11 Nexus and12 Connector retained files matched by bytes/hash. Foreground reopened the same stores/instance with a new generation, became ready, then drained/exited normally with tasks absent.",
       "subscopes": {
-        "finite_empty_windows_campaign": "PARTIAL"
-      }
+        "finite_empty_windows_campaign": "PARTIAL",
+        "actual_windows_context_and_retained_data": "VERIFIED_SCOPED"
+      },
+      "qualification_limit": "Windows current-user native tasks; fresh runtime-created state. Connector context is its canonical state root, not remote project work. Shared interpreter bytecode caches may change; payload pins did not."
     },
     "SVC-T28": {
       "requirement": "Container/supervisor externo usa foreground sem dupla supervisão ou dupla daemonização.",
@@ -12903,6 +12909,29 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json"
       ]
+    },
+    "r3_native_t14_t27_execution": {
+      "date": "2026-11-14",
+      "status": "ACTUAL_WINDOWS_T14_T27_PASS_SCOPED",
+      "scenarios": [
+        "SVC-T14",
+        "SVC-T27"
+      ],
+      "cli_selections": 12,
+      "provider_calls": 0,
+      "force_used": false,
+      "qualification_sha256": "90e4368c5268058df9a7e0f7232c152cf297e213d80a1def24a6483834c7b918",
+      "limits": [
+        "T14 Nexus proves actual project-root A, executable, saved configuration and cwd/PATH across different caller context.",
+        "T14 Connector proves its canonical state root and native context; no remote project binding or productive project work is claimed.",
+        "T27 uses fresh runtime-created stores, not productive work or pre-existing personal credentials. All retained files match exactly across uninstall.",
+        "Foreground reopened the same stores and identity with new generation; DB bytes after startup are not required to remain unchanged.",
+        "Port availability is an instantaneous bind check at final qualification, not a continuing reservation.",
+        "No M1 service/home/account/payload changed and no M1 or other scenario acceptance inferred."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json"
+      ]
     }
   },
   "history": [
@@ -14206,6 +14235,15 @@
       "summary": "Nexus preserves missing-provider-auth failures and gives approved-home login instructions; Core classifies default-context Codex missing login before a turn and contains its child. Installed selected suites: Nexus17PASS + Core62PASS. Source/collection fixture failures retained. No actual native auth or M1 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Actual native context and retained-state foreground on both hosts",
+      "status": "VERIFIED_SCOPED",
+      "summary": "T14/T27 native campaign passed on both hosts with twelve canonical selections, normal physical cleanup and exact retained-file fingerprints. Connector project scope and shared bytecode-cache limits remain explicit. No provider or M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json"
       ]
     }
   ]

@@ -1,0 +1,19 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "025d3c48e82994c35606a011fa443c0373a178fccf72f72902088673007f4f5b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "pid": null,
+    "generation": "",
+    "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "running": false,
+    "ipc_ok": false,
+    "shutdown_outcome": "drained",
+    "stopped": true
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "before": {
+    "logs/daemon.log": {
+      "sha256": "602fe8f2d877840f890186df60178cf9d4dcf609d09b6717de4d215e170720b2",
+      "bytes": 190
+    },
+    "owned-slots.db": {
+      "sha256": "5cf58b18d878ecb7c25d331ede95b221666be80f6d4ee614e683bea529ccc319",
+      "bytes": 131072
+    },
+    "run/daemon.lock": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "run/drain.json": {
+      "sha256": "9774aebcc26aaec4947a218b0899f57533b75b07acf22fd8e6bae53d8afe7783",
+      "bytes": 213
+    },
+    "run/ipc-token": {
+      "sha256": "54ce046116b3654ada5c0d075e193dd658cbce1514f0236ffde64169e139927f",
+      "bytes": 43
+    },
+    "run/service-exit.json": {
+      "sha256": "9eedafe47063d52d27e00375c571831c422c6c3410edc1551147d7be9fc1c771",
+      "bytes": 84
+    },
+    "run/service-launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "run/shutdown.json": {
+      "sha256": "3f74171f5716845bd8ea21da56eb7165cc8d4ebd55716b557ab626064a9384a7",
+      "bytes": 115
+    },
+    "service-context.json": {
+      "sha256": "7a9e3b8dd75366a9553897a7eb7bf0d11d1a75144e3702b94bbb888458811875",
+      "bytes": 1488
+    },
+    "service-run.json": {
+      "sha256": "6d12771c1c86cf975f3795407fff560d6e8d0b3b05a82a1a1cc7b948ed14af9b",
+      "bytes": 182
+    },
+    "state.json": {
+      "sha256": "0085adb7ba3a9bf4647eee3050eebeb24a6738ddb7af9d974924ea5be958192d",
+      "bytes": 541
+    },
+    "state.lock": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "after": {
+    "logs/daemon.log": {
+      "sha256": "602fe8f2d877840f890186df60178cf9d4dcf609d09b6717de4d215e170720b2",
+      "bytes": 190
+    },
+    "owned-slots.db": {
+      "sha256": "5cf58b18d878ecb7c25d331ede95b221666be80f6d4ee614e683bea529ccc319",
+      "bytes": 131072
+    },
+    "run/daemon.lock": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "run/drain.json": {
+      "sha256": "9774aebcc26aaec4947a218b0899f57533b75b07acf22fd8e6bae53d8afe7783",
+      "bytes": 213
+    },
+    "run/ipc-token": {
+      "sha256": "54ce046116b3654ada5c0d075e193dd658cbce1514f0236ffde64169e139927f",
+      "bytes": 43
+    },
+    "run/service-exit.json": {
+      "sha256": "9eedafe47063d52d27e00375c571831c422c6c3410edc1551147d7be9fc1c771",
+      "bytes": 84
+    },
+    "run/service-launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "run/shutdown.json": {
+      "sha256": "3f74171f5716845bd8ea21da56eb7165cc8d4ebd55716b557ab626064a9384a7",
+      "bytes": 115
+    },
+    "service-context.json": {
+      "sha256": "7a9e3b8dd75366a9553897a7eb7bf0d11d1a75144e3702b94bbb888458811875",
+      "bytes": 1488
+    },
+    "service-run.json": {
+      "sha256": "6d12771c1c86cf975f3795407fff560d6e8d0b3b05a82a1a1cc7b948ed14af9b",
+      "bytes": 182
+    },
+    "state.json": {
+      "sha256": "0085adb7ba3a9bf4647eee3050eebeb24a6738ddb7af9d974924ea5be958192d",
+      "bytes": 541
+    },
+    "state.lock": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "identical": true,
+  "excluded_only_integration_receipts": [
+    "service-installation.json",
+    "service-control.json"
+  ],
+  "task_absent": true
+}

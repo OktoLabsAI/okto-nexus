@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "serve",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "58843",
+    "--project-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a",
+    "--embedding-mode",
+    "off",
+    "--feature-harness-integrations",
+    "false",
+    "--metrics-mode",
+    "disabled"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b",
+  "environment_sha256": "c685c0295f29426d5724962ef45d4f6e108aaf1a510cd51c039f27e534f51c45",
+  "at": 1794674482.436556
+}

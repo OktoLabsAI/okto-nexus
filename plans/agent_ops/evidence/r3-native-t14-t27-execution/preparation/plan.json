@@ -1,0 +1,333 @@
+{
+  "format": "okto.r3.t14-t27.finite",
+  "revision": 1,
+  "status": "OFFLINE_PREPARED_NOT_EXECUTED",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+  "homes": {
+    "nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+    "connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector"
+  },
+  "project_a": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a",
+  "caller_b": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b",
+  "port": 58843,
+  "instance_ids": {
+    "nexus": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "connector": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124"
+  },
+  "tasks": {
+    "nexus": "OktoNexus-server-86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "connector": "OktoNexus-connector-22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124"
+  },
+  "environments": {
+    "A": {
+      "COMSPEC": "C:/WINDOWS/System32/cmd.exe",
+      "PATHEXT": ".COM;.EXE;.BAT;.CMD",
+      "SYSTEMROOT": "C:/WINDOWS",
+      "WINDIR": "C:/WINDOWS",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONUNBUFFERED": "1",
+      "OKTO_NEXUS_NO_BANNER": "1",
+      "OKTO_NEXUS_CONNECTOR_VAULT": "file",
+      "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile",
+      "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\appdata",
+      "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\localappdata",
+      "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\tmp",
+      "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\tmp",
+      "PATH": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts;C:/Python313;C:/WINDOWS/System32"
+    },
+    "B": {
+      "COMSPEC": "C:/WINDOWS/System32/cmd.exe",
+      "PATHEXT": ".COM;.EXE;.BAT;.CMD",
+      "SYSTEMROOT": "C:/WINDOWS",
+      "WINDIR": "C:/WINDOWS",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONUNBUFFERED": "1",
+      "OKTO_NEXUS_NO_BANNER": "1",
+      "OKTO_NEXUS_CONNECTOR_VAULT": "file",
+      "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile",
+      "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\appdata",
+      "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\localappdata",
+      "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\tmp",
+      "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\profile\\tmp",
+      "PATH": "C:/WINDOWS/System32"
+    }
+  },
+  "commands": {
+    "nexus": {
+      "install-A": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "install",
+          "--user",
+          "--start-at-login",
+          "--json",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58843",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "false",
+          "--metrics-mode",
+          "disabled"
+        ],
+        "environment": "A",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a"
+      },
+      "start-B": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "start",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+          "--timeout",
+          "45",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "stop-installed": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "stop",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+          "--timeout",
+          "45",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "stop-foreground": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "stop",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+          "--timeout",
+          "45",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "uninstall": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "uninstall",
+          "--user",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "foreground": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "serve",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "58843",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "false",
+          "--metrics-mode",
+          "disabled"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      }
+    },
+    "connector": {
+      "install-A": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+          "--non-interactive",
+          "--json",
+          "service",
+          "install"
+        ],
+        "environment": "A",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\project-a"
+      },
+      "start-B": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+          "--non-interactive",
+          "--json",
+          "daemon",
+          "start",
+          "--timeout",
+          "45"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "stop-installed": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+          "--non-interactive",
+          "--json",
+          "daemon",
+          "stop",
+          "--timeout",
+          "45"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "stop-foreground": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+          "--non-interactive",
+          "--json",
+          "daemon",
+          "stop",
+          "--timeout",
+          "45"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "uninstall": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+          "--non-interactive",
+          "--json",
+          "service",
+          "uninstall"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      },
+      "foreground": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+          "--non-interactive",
+          "--json",
+          "daemon",
+          "run"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b"
+      }
+    }
+  },
+  "python_images": {
+    "C:\\Python313\\python.exe": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+    "C:\\Python313\\pythonw.exe": "2bea4fc941b7d9436afa1be8cb46551c0694deed23b3fec87b969054238be099",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\pythonw.exe": "5a90ff0fc0d283786928daebf2330c6851d3f5c7a89d1113ca2f7a2c05ff2f07"
+  },
+  "observation_timeout_seconds": 180,
+  "canonical_stop_timeout_seconds": 45,
+  "uninstall_removes": {
+    "nexus": [
+      "service-installation.json",
+      "service-control.json",
+      "nexus.db.service-installation.json"
+    ],
+    "connector": [
+      "service-installation.json",
+      "service-control.json"
+    ]
+  },
+  "actions": {
+    "canonical_cli_selections": 12,
+    "scheduled_service_starts": 2,
+    "foreground_starts": 2,
+    "normal_stops": 4,
+    "uninstalls": 2,
+    "native_manual_edits": 0,
+    "provider_calls": 0,
+    "login_attempts": 0,
+    "force": false
+  },
+  "limits": [
+    "Readiness polling only; start/stop selections are exclusive and never automatically repeated.",
+    "Connector T14 is scoped to its canonical state root, not a project binding or productive remote work.",
+    "T27 requires runtime-created DBs and byte preservation across uninstall; foreground may legitimately change DB bytes.",
+    "No M1 files/services/accounts modified. Root executes after M1 preparation."
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "before": {
+    "logs/service.jsonl": {
+      "sha256": "daf1ce9659c526b6fc2330b544137e9912928d850db4474919ebcea1017838c0",
+      "bytes": 837
+    },
+    "nexus.db": {
+      "sha256": "b712f33fe66e8994571d12a5016de014f7612a4dba65033d4490712d2e9528b0",
+      "bytes": 2478080
+    },
+    "nexus.db.launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.db.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "operator-auth.db": {
+      "sha256": "cd5e16eba07afdb93e2279f51e6dd5bfeefca1baab872eb89803b9d8ee15cb21",
+      "bytes": 20480
+    },
+    "service-context.json": {
+      "sha256": "bbc1fb0e712c9cb1f0885d42ab66ce689d88da1521ed61b7086c725437621996",
+      "bytes": 5114
+    },
+    "service-launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "service-run.json": {
+      "sha256": "f4a474ba50f57b908c89e347e65e840880a4320bbcf9c514747fae9ed240db06",
+      "bytes": 187
+    },
+    "service-shutdown.json": {
+      "sha256": "3c0dbbff96d2c5a5db7b0b1b452a3ce55d9155a80b9cb5b8c5215f0883c1acf5",
+      "bytes": 97
+    },
+    "service-supervisor-exit.json": {
+      "sha256": "f11c34f01ceb7fcaeed601ec31d6149ef4b013ecd39bb61cf15dcea9f0365973",
+      "bytes": 93
+    }
+  },
+  "after": {
+    "logs/service.jsonl": {
+      "sha256": "daf1ce9659c526b6fc2330b544137e9912928d850db4474919ebcea1017838c0",
+      "bytes": 837
+    },
+    "nexus.db": {
+      "sha256": "b712f33fe66e8994571d12a5016de014f7612a4dba65033d4490712d2e9528b0",
+      "bytes": 2478080
+    },
+    "nexus.db.launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.db.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "operator-auth.db": {
+      "sha256": "cd5e16eba07afdb93e2279f51e6dd5bfeefca1baab872eb89803b9d8ee15cb21",
+      "bytes": 20480
+    },
+    "service-context.json": {
+      "sha256": "bbc1fb0e712c9cb1f0885d42ab66ce689d88da1521ed61b7086c725437621996",
+      "bytes": 5114
+    },
+    "service-launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "service-run.json": {
+      "sha256": "f4a474ba50f57b908c89e347e65e840880a4320bbcf9c514747fae9ed240db06",
+      "bytes": 187
+    },
+    "service-shutdown.json": {
+      "sha256": "3c0dbbff96d2c5a5db7b0b1b452a3ce55d9155a80b9cb5b8c5215f0883c1acf5",
+      "bytes": 97
+    },
+    "service-supervisor-exit.json": {
+      "sha256": "f11c34f01ceb7fcaeed601ec31d6149ef4b013ecd39bb61cf15dcea9f0365973",
+      "bytes": 93
+    }
+  },
+  "identical": true,
+  "excluded_only_integration_receipts": [
+    "service-installation.json",
+    "service-control.json",
+    "nexus.db.service-installation.json"
+  ],
+  "task_absent": true
+}

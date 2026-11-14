@@ -1,0 +1,33 @@
+{
+  "status": "PASS_SCOPED",
+  "caller_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\caller-b",
+  "caller_path": "C:/WINDOWS/System32",
+  "start_cli_exit": 0,
+  "context": {
+    "task_name": "OktoNexus-connector-22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+    "task_digest": "f9598daa6c1c375e0404241b547716b3df5d449a1339479efb05d65ba6e7af17",
+    "active": true,
+    "enabled": true,
+    "context_sha256": "7a9e3b8dd75366a9553897a7eb7bf0d11d1a75144e3702b94bbb888458811875",
+    "recorded_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "recorded_cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+    "native_action_executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\pythonw.exe",
+    "native_working_directory": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+    "recorded_path_matches_A_not_caller_B": true,
+    "project_scope": "Connector canonical state root; no project binding/work claimed"
+  },
+  "readiness": {
+    "state": "ready",
+    "reason": null,
+    "pid": 26036,
+    "generation": "1bba3eaa08ebeab06888a7ee11f9b9e7",
+    "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": true,
+    "running": true,
+    "ipc_ok": true
+  },
+  "process_image": "C:\\Python313\\pythonw.exe",
+  "birth_filetime": 134391480956974029,
+  "provider_calls": 0
+}

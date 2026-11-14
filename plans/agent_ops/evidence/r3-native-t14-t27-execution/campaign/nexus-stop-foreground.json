@@ -1,0 +1,14 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "7b9ceeb5d1ff79eb96033d7af097203dda8d4459c27d0f85cd6386f68d1db0ae",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "generation": null,
+    "instance_id": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "ready_for_queries": false,
+    "shutdown_outcome": "drained"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "status": "OFFLINE_QUALIFIED_NOT_EXECUTED",
+  "tests": 22,
+  "passed": 22,
+  "initial": {
+    "passed": 21,
+    "failed": 1,
+    "cause": "Test compared installed parser Path with string; corrected assertion to Path.",
+    "xml": {
+      "path": "tests-offline-initial.xml",
+      "sha256": "85707ad5386c8662e088ca2ca47555b4e3966728a7cae22e38b94274c2500126",
+      "bytes": 3872
+    }
+  },
+  "final": {
+    "path": "tests-offline-final.xml",
+    "sha256": "e1383a7c3e57088498a3478a22017e7e7367918a718203158b983ac5e7f8e9ad",
+    "bytes": 2637
+  },
+  "runner": {
+    "path": "run.py",
+    "sha256": "c905811ea0a48d457a52bc60d6292d0b8dfa977a96f6eb2280ff4bb37b1576b5",
+    "bytes": 19074
+  },
+  "tests_source": {
+    "path": "test_runner.py",
+    "sha256": "269cafe2cccf070d2fb75e32d7e63560e54d861b143d1bb4e187fb4faf451f3d",
+    "bytes": 6648
+  },
+  "package_proof": {
+    "path": "package-proof-offline.json",
+    "sha256": "3892493ceef576e9f6dbc958415a168a07a09307197ca54e7f65cb4a40530007",
+    "bytes": 858
+  },
+  "native_service_operations_executed": 0,
+  "provider_calls": 0,
+  "login_attempts": 0,
+  "real_scenario_acceptance": false
+}

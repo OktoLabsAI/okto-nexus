@@ -1,0 +1,18 @@
+{
+  "readiness": {
+    "state": "ready",
+    "reason": null,
+    "pid": 46740,
+    "generation": "95f3b88980a08d83d97bcbce37b59f61",
+    "instance_id": "svc_86fde0d310a7b7cb519dd87516c9bd83d9d7d8f39139c233ee2e475818d6ece6",
+    "supervisor": "foreground",
+    "ready_for_queries": true,
+    "storage_initialized": true
+  },
+  "process_image": "C:\\Python313\\python.exe",
+  "birth_filetime": 134391480824971915,
+  "same_retained_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\nexus",
+  "required_store": "nexus.db",
+  "task_absent": true,
+  "data_bytes_not_compared_after_startup": true
+}

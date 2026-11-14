@@ -1,0 +1,19 @@
+{
+  "readiness": {
+    "state": "ready",
+    "reason": null,
+    "pid": 34788,
+    "generation": "2a36bdb17c290cbacb1b85b9016d58c2",
+    "instance_id": "svc_22f3685206fbd33b65afb3f9074b577057a68090d2d9e13e451c2be30f2d8124",
+    "supervisor": "foreground",
+    "ready_for_queries": true,
+    "running": true,
+    "ipc_ok": true
+  },
+  "process_image": "C:\\Python313\\python.exe",
+  "birth_filetime": 134391481090348165,
+  "same_retained_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t14-t27-ptkanqz3\\connector",
+  "required_store": "owned-slots.db",
+  "task_absent": true,
+  "data_bytes_not_compared_after_startup": true
+}
