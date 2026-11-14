@@ -13748,6 +13748,22 @@
       "acceptance_promoted": false,
       "observed_tokens": 460793,
       "charged_reservations": 14
+    },
+    "r3_m1_revision17_pre_review_guard_failure": {
+      "status": "PRE_REVIEW_GUARD_FAILED_NO_AUTHORIZATION_API_NORMAL_CLEANUP",
+      "summary": "W17 prepare/install/start succeeded; authorization review refused before any authorization API (calls{}) because exact historical checkpoint state review was excluded by helper None/done guard. No request15/model reservation;460793/14 unchanged. Automatic normal stop and three retained physical exits0, tasks absent/port free/data retained. Original AUTHORIZATION_MAINTENANCE_UNCONFIRMED checkpoint73e792 and closurea2d7 preserved. No manual checkpoint mutation, replay/refund or acceptance;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/diagnosis.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/checkpoint-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/execution/final-presence.json"
+      ],
+      "observed_tokens": 460793,
+      "charged_reservations": 14,
+      "new_model_reservations": 0,
+      "authorization_api_calls": 0,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15368,6 +15384,19 @@
         "plans/agent_ops/evidence/r3-m1-revision17-preparation/amendment.json",
         "plans/agent_ops/evidence/r3-m1-revision17-preparation/runtime-freeze.json",
         "plans/agent_ops/evidence/r3-m1-revision17-preparation/workflow.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision17_pre_review_guard_failure",
+      "status": "PRE_REVIEW_GUARD_FAILED_NO_AUTHORIZATION_API_NORMAL_CLEANUP",
+      "summary": "W17 prepare/install/start succeeded; authorization review refused before any authorization API (calls{}) because exact historical checkpoint state review was excluded by helper None/done guard. No request15/model reservation;460793/14 unchanged. Automatic normal stop and three retained physical exits0, tasks absent/port free/data retained. Original AUTHORIZATION_MAINTENANCE_UNCONFIRMED checkpoint73e792 and closurea2d7 preserved. No manual checkpoint mutation, replay/refund or acceptance;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/diagnosis.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/checkpoint-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/execution/final-presence.json"
       ]
     }
   ],

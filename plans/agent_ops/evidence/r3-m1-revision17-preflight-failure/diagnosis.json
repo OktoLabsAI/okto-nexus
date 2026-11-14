@@ -1,0 +1,54 @@
+{
+  "status": "PINNED_REVIEW_CHECKPOINT_REFUSED_BEFORE_AUTHORIZATION_API",
+  "observations": [
+    "5ed358",
+    "02c1cd"
+  ],
+  "checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json",
+    "sha256": "cadfc7bdc6aaaa4a16d385942749cc673f7e24b17332a8642037859267356c21",
+    "matches_original_amendment": true,
+    "matches_predecessor_snapshot": true,
+    "authorization_state": "review",
+    "review_revision": "7d1f585640cc2d02b69fea7aebb8f11ecd7c3dd5f9505114f5e96f20c7685445",
+    "prior_can_issue": false,
+    "review_revision_integrity": true,
+    "manual_edit": false
+  },
+  "failure": {
+    "artifact": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\public\\authorize-local-review-unconfirmed.json",
+      "sha256": "32e8a00e2049e2defb0c589de5ca15dcbe7c23bc77a02c4773de5f6b9c51b3ee"
+    },
+    "error_type": "Refused",
+    "calls": {},
+    "model_admissions": 0,
+    "guard": "pending is None or pending.state == done",
+    "predicate_result": false
+  },
+  "controller_observation": {
+    "checkpoint_sha256": "73e792d6928e379f82cf1f97b08e524c71c0bdd9c63d0bc9c8b96b4f1bd49681",
+    "requests": [],
+    "faults": [
+      "AUTHORIZATION_MAINTENANCE_UNCONFIRMED"
+    ],
+    "modified": false
+  },
+  "installed_contract": {
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_authorization.py",
+      "sha256": "4997e36bcc2f0e28ab412802397fd7332531eb8c7ff1e66d4c77cc1dc60e3561"
+    },
+    "review_state": "Fresh POST authorization:review is canonical; saves new reviewed request/revision after response. Does not issue or recover.",
+    "submitted_state": "authorization_review delegates authorize; may recover/issue. Must remain refused by review-only helper.",
+    "unknown_state": "Refuse at helper boundary; no automatic recovery or guessed settlement."
+  },
+  "minimal_remedy": "Separate pinned successor/overlay helper may permit only exact historical review snapshot with valid revision and expected scope, then one canonical CLI review. Preserve failed frozen W17 artifacts and controller fault; no manual checkpoint mutation, replay, fake settlement or grant issuance without exact new review selection.",
+  "effects_performed": {
+    "service": 0,
+    "provider": 0,
+    "authorization_api": 0,
+    "runtime_mutations": 0
+  },
+  "limits": "Source/predicate diagnosis and exact metadata only; no terminal receipt status, current grant availability or future recovery success inferred."
+}

@@ -2122,3 +2122,18 @@ replay, nova aprovação humana de hash ou promoção de aceite.
 **124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-preparation/review.json)
 e [qualificação](plans/agent_ops/evidence/r3-m1-revision17-preparation/qualification.json).
+
+## 2026-11-14 — Revisão17: guard recusou revisão antiga antes da API
+
+Prepare/install/start passaram. A revisão de autorização recusou o checkpoint
+histórico state=review porque o helper aceitava apenas None/done. Calls{} e
+requests{} confirmam ausência de API de autorização e de nova reserva/modelo.
+O CLI canônico permite nova revisão nesse estado; submitted é distinto, pois
+pode recuperar/emitir grant. Nenhuma edição manual do checkpoint foi feita.
+
+Stop automático normal e três saídas físicas0 confirmadas, tarefas ausentes,
+porta livre e dados retidos. Fault AUTHORIZATION_MAINTENANCE_UNCONFIRMED, checkpoint
+73e792… e closure a2d7c6… permanecem intactos. **460.793 tokens/14 reservas**,
+sem útil15/continuação16/remoto, refund ou aceite. **124/132 VERIFIED**,6 IN_PROGRESS
+e2 NOT_RUN. Recuperação será composição finita separada, não apagamento da falha.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/review.json).

@@ -1,0 +1,42 @@
+{
+  "kind": "PHYSICAL_SUPERVISOR_COHORT_EXIT",
+  "component": "nexus",
+  "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "task_stopped_confirmed": true,
+  "owned_pid_birth_exit_confirmed": true,
+  "force_used": false,
+  "exit_proof_sha256": "96eaaa9705a553d933969a268ca5d5106ad315c1c01a5dd335ff7773849d4b97",
+  "cohort": {
+    "cycle_id": "8013f51f47ed55ace82cfde419457fb5",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 38344,
+      "birth": 134391730748687907
+    },
+    "launcher": {
+      "pid": 44536,
+      "birth": 134391730779824536
+    },
+    "child": {
+      "pid": 25480,
+      "birth": 134391730780299931
+    }
+  },
+  "canonical_absence": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "pid": null,
+    "generation": null
+  },
+  "runtime_work_settlement": "NOT_ASSERTED",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17",
+  "amendment_sha256": "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32"
+}

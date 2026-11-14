@@ -1,0 +1,49 @@
+{
+  "status": "PRE_REVIEW_GUARD_FAILED_NO_AUTHORIZATION_API_NORMAL_CLEANUP",
+  "original_closure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\public\\closure.json",
+    "sha256": "a2d7c6d8a50f92ba2cdebe0a3fc12def193175f720ee1b3093474d01e55f7ad4"
+  },
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\private\\controller.json",
+    "sha256": "73e792d6928e379f82cf1f97b08e524c71c0bdd9c63d0bc9c8b96b4f1bd49681"
+  },
+  "failure_preserved": true,
+  "calls": {},
+  "new_model_reservations": 0,
+  "observed_tokens": 460793,
+  "charged_reservations": 14,
+  "billing_final": false,
+  "cause": "Exact predecessor authorization.state=review was excluded by helper None/done guard before authorization API. Installed canonical authorization_review can refresh review; submitted may recover/issue and remains forbidden.",
+  "terminal_work_checkpoint_unchanged_sha256": "cadfc7bdc6aaaa4a16d385942749cc673f7e24b17332a8642037859267356c21",
+  "root_execution_refs": {
+    "prepare": "9227bc",
+    "install": "bbfab9 ->bc70df",
+    "start": "2776ab ->306f46",
+    "watch": "5e3302/session11757",
+    "authorization_review": "eab279/session61217 ->323473; wrapper1/actual2",
+    "closure": "6bf206"
+  },
+  "cleanup": {
+    "three_retained_physical_exits": true,
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "force_used": false,
+    "tasks_absent": true,
+    "port_free": true,
+    "data_directories_retained": true
+  },
+  "request15_selected": false,
+  "continuation16_selected": false,
+  "remote_selected": false,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "acceptance_promoted": false,
+  "scope": "No paid work or authorization API called. Failure/fault/closure kept immutable. Recovery needs separate explicit finite namespace; no counter refund, manual checkpoint edit, historical settlement or approval inferred."
+}

@@ -1,0 +1,26 @@
+{
+  "checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\private\\controller.json",
+    "sha256": "73e792d6928e379f82cf1f97b08e524c71c0bdd9c63d0bc9c8b96b4f1bd49681"
+  },
+  "requests": {},
+  "faults": [
+    "AUTHORIZATION_MAINTENANCE_UNCONFIRMED"
+  ],
+  "policy": {
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "deadline_seconds": 600,
+    "max_cumulative_admissions": 18,
+    "max_new_admissions": 4,
+    "operational_tolerance": 700000,
+    "preventive_cumulative_tokens": 600000,
+    "revision": 17
+  },
+  "original_checkpoint_copied": false,
+  "original_checkpoint_mutated": false,
+  "cumulative_minimum_observed_tokens": 460793,
+  "cumulative_reserved_admissions": 14,
+  "new_reserved_admissions": 0,
+  "historical_original_unsettled_requests": 2
+}

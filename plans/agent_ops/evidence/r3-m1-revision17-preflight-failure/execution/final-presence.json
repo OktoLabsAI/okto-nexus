@@ -1,0 +1,88 @@
+{
+  "status": "NORMAL_CLEANUP_CONFIRMED",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "absent": true,
+      "canonical_absence": {
+        "state": "stopped",
+        "reason": "NO_SERVICE_OWNER",
+        "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "pid": null,
+        "generation": null
+      },
+      "basis": "COHORT_EXIT_AND_UNINSTALL"
+    },
+    "connector": {
+      "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "absent": true,
+      "canonical_absence": {
+        "state": "stopped",
+        "reason": "NO_SERVICE_OWNER",
+        "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "pid": null,
+        "generation": "",
+        "running": false,
+        "ipc_ok": false
+      },
+      "basis": "CLOSED_PREDECESSOR_AND_FINITE_LOCAL_ONLY_LEDGER"
+    }
+  },
+  "invocation_evidence": {
+    "authorize_local-review.reserved.json": {
+      "mode": "authorize_local",
+      "selection": [
+        "review"
+      ],
+      "reservation_sha256": "c00b13ffcb8f96fe242a5ceb5206eb3903380fcd6ee063c92620be5e96e14d14",
+      "returned_sha256": "9eb07ad999644f3c11720b418b0a3d3547e680f35453f02928b2bbe02c2a5349",
+      "returncode": 2
+    },
+    "lifecycle-nexus-install.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "install"
+      ],
+      "reservation_sha256": "1c509e82614af250356b2deb4728f74460b0d4bb2217260ccbe01c3941ba194f",
+      "returned_sha256": "759f132e18150e6f62d22323b5cf3f78ba52ffa89d54629514ebacb577f6a611",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "start"
+      ],
+      "reservation_sha256": "0800f941e0a9210ec48ae38addc9cb290fdf9cfda8943d5eb81e46237ed08c4e",
+      "returned_sha256": "59c344ac0477f35d09f41ad422423f1bd192c523c800c37fdd4eea8878f7bb02",
+      "returncode": 0
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "uninstall"
+      ],
+      "reservation_sha256": "a9fe585ca2bd3585eb64cfe67e9843523441ab18b18e2c3302a2b5eb4fc0f694",
+      "returned_sha256": "9bfca295c7f99de3da814aa8bc2b0005e49db0f94c35aa3e22de24422ac24201",
+      "returncode": 0
+    }
+  },
+  "data_directories_retained": true,
+  "force_used": false,
+  "observed_at": 1794699672.5745046,
+  "exclusive_port_probe_passed_not_reserved": 58631,
+  "remote_helper_evidence": {
+    "selected": false
+  },
+  "runtime_work_settlement": "NOT_ASSERTED",
+  "scope": "Service cohort exit and integration removal only; no M1 acceptance or accounting finality.",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17",
+  "amendment_sha256": "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32"
+}

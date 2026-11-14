@@ -1,0 +1,118 @@
+{
+  "format": "okto.m1.closed_campaign",
+  "revision": 1,
+  "status": "CLOSED_NORMAL_CLEANUP_ACCEPTANCE_NOT_INFERRED",
+  "closed_at": "2026-11-14T23:41:25.889287+00:00",
+  "faults_preserved": [
+    "AUTHORIZATION_MAINTENANCE_UNCONFIRMED"
+  ],
+  "closed_predecessor_faults": [],
+  "closed_predecessor_evidence": {
+    "accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+      "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+    },
+    "adoption": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-result.json",
+      "sha256": "ed18e1c5475b5b0b0f494265e894675c3522a4bb49dacb17c52a01272b2d29ed"
+    },
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\controller.json",
+      "sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712"
+    },
+    "command_failure_diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-useful-diagnosis-3tis1ae5\\projection.json",
+      "sha256": "96644c917326bb6461cce875fdd2fa97c742c04414e5f268c27ef7b6efaf3e89"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision16-execution\\closure-companion.json",
+      "sha256": "68df967826cd90436983678548664df1f0b384a2b78af8d22b6fa6acc6431c8b"
+    },
+    "controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\controller-qualification\\runtime-freeze.json",
+      "sha256": "3a5210602088af8419fde448afad8a2fc1dcd7bb8605627513f54eae39cffd76"
+    },
+    "execution_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-technical-plan-pito7b7o\\execution-plan.json",
+      "sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31"
+    },
+    "historical_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\controller-qualification\\runtime-freeze.json",
+      "sha256": "2605a4dd25b58e5f47d8927bfca7df3f3b71ee6389a125e1b43d87f58cc90798"
+    },
+    "historical_grants": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\historical-grants.json",
+      "sha256": "bf2015d133599da66eaf96ba5b62c8ce84128b52138d25659925ee258681fbbe"
+    },
+    "native_refusal_diagnosis": {
+      "path": "C:/Users/jpamb/AppData/Local/Temp/r3-w15-native-decision-diagnosis-w1hv7idf/diagnosis.json",
+      "sha256": "292277c6548bed3779ebc121ef722db9118fc80f70dc9dd25ca65c79ef66f692"
+    },
+    "path_diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-rtk-path-udc_bg1y\\projection.json",
+      "sha256": "a80ba1fd2eb71976faaf1dc9413ebc277e73f19625894c2c72ca2530ff8fe948"
+    },
+    "predecessor_closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\closure.json",
+      "sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9"
+    },
+    "predecessor_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-freeze.json",
+      "sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94"
+    },
+    "technical_predecessor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\technical-predecessor.json",
+      "sha256": "f351fda06b7266ea28d52abaa3a4169a9bd2f789bcf9b8bfb4aca31a1d195e89"
+    }
+  },
+  "historical_original_unsettled_requests": 2,
+  "historical_control_receipt_stage_snapshot": "SUBMITTED",
+  "historical_control_receipt_completion_asserted": false,
+  "historical_stream_settlement_synthesized": false,
+  "new_reserved_admissions": 0,
+  "cumulative_reserved_admissions": 14,
+  "prior_carry_in_tokens": 460793,
+  "new_observed_tokens": 0,
+  "cumulative_minimum_observed_tokens": 460793,
+  "billing_final": false,
+  "unsettled_requests": 0,
+  "controller_checkpoint_sha256": "73e792d6928e379f82cf1f97b08e524c71c0bdd9c63d0bc9c8b96b4f1bd49681",
+  "controller_mutated": false,
+  "final_presence_sha256": "a5706ce641564d606206ab42eccd2965be9585dda32010fdea4935f4bccd3a60",
+  "wrapper_exit_evidence": {
+    "authorize_local-review.reserved.json": {
+      "reservation_sha256": "c00b13ffcb8f96fe242a5ceb5206eb3903380fcd6ee063c92620be5e96e14d14",
+      "returned_sha256": "9eb07ad999644f3c11720b418b0a3d3547e680f35453f02928b2bbe02c2a5349",
+      "returncode": 2
+    },
+    "lifecycle-nexus-install.reserved.json": {
+      "reservation_sha256": "1c509e82614af250356b2deb4728f74460b0d4bb2217260ccbe01c3941ba194f",
+      "returned_sha256": "759f132e18150e6f62d22323b5cf3f78ba52ffa89d54629514ebacb577f6a611",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "reservation_sha256": "0800f941e0a9210ec48ae38addc9cb290fdf9cfda8943d5eb81e46237ed08c4e",
+      "returned_sha256": "59c344ac0477f35d09f41ad422423f1bd192c523c800c37fdd4eea8878f7bb02",
+      "returncode": 0
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "reservation_sha256": "a9fe585ca2bd3585eb64cfe67e9843523441ab18b18e2c3302a2b5eb4fc0f694",
+      "returned_sha256": "9bfca295c7f99de3da814aa8bc2b0005e49db0f94c35aa3e22de24422ac24201",
+      "returncode": 0
+    }
+  },
+  "closed_without_force": true,
+  "replay_allowed": false,
+  "all_temporary_tasks_absent": true,
+  "data_retained": true,
+  "acceptance_promoted": false,
+  "first_useful_result": "requires separate canonical evidence review",
+  "limits": "Closure is not M1 acceptance, a work result, effective provider configuration or final billing. Faults/uncertainty remain. No historical failure cause or fixed token count is copied.",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17",
+  "amendment_sha256": "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32"
+}
