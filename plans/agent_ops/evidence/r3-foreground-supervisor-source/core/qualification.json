@@ -1,0 +1,35 @@
+{
+  "status": "SOURCE_QUALIFIED_NOT_INSTALLED",
+  "source_files": [
+    {
+      "path": "src/nexus_connector_core/user_service_definition.py",
+      "sha256": "4efee7d04699ae297def8932e9898546b6f5362ae524c6ecd5473592b4ae2689",
+      "bytes": 9998
+    },
+    {
+      "path": "src/nexus_connector_core/user_service_supervision.py",
+      "sha256": "392db0cbf98a3bd85d2085333d2e803bea3625c43c3a08b1f111fb343b98de21",
+      "bytes": 4216
+    },
+    {
+      "path": "tests/test_user_service_definition.py",
+      "sha256": "cc097574d53f412e912098b0517f3b4e637cdff47fec8cf716a072fa95449f01",
+      "bytes": 8644
+    },
+    {
+      "path": "tests/test_user_service_supervision.py",
+      "sha256": "b39c304a15a04150b38eb1f06515b04a0534dbc28d3c50512d9447f5ba2a9b83",
+      "bytes": 2968
+    }
+  ],
+  "tests": {
+    "passed": 36,
+    "xml": "core-initial.xml",
+    "test_formatting_after_run": "Three one-line with statements expanded for Ruff only; production bytes unchanged."
+  },
+  "contract": "Pure initial+3 retry policy, 60-second monotonic backoff, persistent attempt reservation; no effects or import-time OS work. Native definition revision2 omits RestartOnFailure.",
+  "limitations": [
+    "No installed wheel or real service recovery acceptance in this milestone."
+  ],
+  "review": "Root approved API and source review in this conversation."
+}

@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-14",
+  "status": "SOURCE_FIX_QUALIFIED_REAL_M1_NOT_ACCEPTED",
+  "commit": "27da0a75",
+  "problem": "Opening MCP materialization retained an initial monotonic deadline after the same canonical capability was extended by an applied lease.",
+  "change": "Internal opening-transport metadata uses the existing applied-lease/grant/scope gate; public metadata and domain actions still require READY. Recheck after materialization and selection/home checks. No secret issuance or TTL increase.",
+  "qualification": {
+    "distinct_passed": 13,
+    "initial_passed": 9,
+    "final_delta_regressions_passed": 6,
+    "overlap": 2,
+    "ruff": "PASS",
+    "initial_environment_failure": "9 fixtures refused Core0.0.12; corrected runner used installed Core0.0.14. No test-body failure is hidden.",
+    "test_evidence_kind": "Recorded tool results and source hashes; no XML was produced for these runs."
+  },
+  "source_files": {
+    "src/okto_nexus/application/execution_capabilities.py": "bb3d811f4db1899824cf670f288358600fe276626085336f21f936beea29c7ce",
+    "src/okto_nexus/application/execution_local_launch.py": "861057e6ca030eb282c1094493c3df61d2c58b171c178a8b2005e9b931b64ebb",
+    "src/okto_nexus/bootstrap/embedded_tools.py": "991e335fd7ef281686b57a35f6ef38baae72c024491521ad826fa149b26b1b3a",
+    "tests/execution_r4/test_opening_capability_refresh.py": "5b409b99dbfe06eac407bb2306c83630c038366e07194a29a1c3e51fb272ac70"
+  },
+  "acceptance_promoted": false,
+  "installed_into_live_M1": false
+}

@@ -1,0 +1,27 @@
+{
+  "classification": "OFFLINE_PRODUCT_REGRESSION_PASS_NOT_REAL_M1_ACCEPTANCE",
+  "source_files": {
+    "src/okto_nexus/application/execution_capabilities.py": "bb3d811f4db1899824cf670f288358600fe276626085336f21f936beea29c7ce",
+    "src/okto_nexus/application/execution_local_launch.py": "861057e6ca030eb282c1094493c3df61d2c58b171c178a8b2005e9b931b64ebb",
+    "src/okto_nexus/bootstrap/embedded_tools.py": "991e335fd7ef281686b57a35f6ef38baae72c024491521ad826fa149b26b1b3a",
+    "tests/execution_r4/test_opening_capability_refresh.py": "5b409b99dbfe06eac407bb2306c83630c038366e07194a29a1c3e51fb272ac70"
+  },
+  "tests": {
+    "initial": {
+      "passed": 9,
+      "tool_chunk": "53675a",
+      "duration_seconds": 128.84
+    },
+    "final_delta_and_regressions": {
+      "passed": 6,
+      "deselected": 7,
+      "tool_chunk": "62f7c1",
+      "duration_seconds": 55.07
+    },
+    "unique_passed": 13,
+    "overlap": 2,
+    "initial_environment_refusal": "Python default Core0.0.12 instead of required0.0.14;9fixture errors before test bodies",
+    "ruff": "4files PASS chunk2e0acd"
+  },
+  "limits": "No service/provider/native process started; frozen M1 installation and active controller unmodified; no TTL increase or new capability issuance. Initial capability expiration before any applied lease remains refused."
+}

@@ -1,0 +1,24 @@
+{
+  "files": {
+    "qualification.json": {
+      "sha256": "c3533bcb4fb67d46236c42cb9b0160e472cece462176a06e687ba4a61fea8216",
+      "bytes": 1345
+    },
+    "request11-observation.json": {
+      "sha256": "1a632cd98f89531c52463c201c61f988c2d445b94dae04ec14bbe115420f4f21",
+      "bytes": 3373
+    },
+    "review.json": {
+      "sha256": "3408faf90fed64c883cf00387ca503329465e2f14b4b32e1145aec4fd32bc050",
+      "bytes": 1512
+    }
+  },
+  "excluded": [
+    "database files",
+    "credential material",
+    "process argv",
+    "private CLI output",
+    "personal config",
+    "force proposal or authorization"
+  ]
+}

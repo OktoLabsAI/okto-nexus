@@ -1,0 +1,85 @@
+{
+  "status": "PRELAUNCH_FAILED_REQUEST11_CLEANUP_PENDING_POINT_IN_TIME",
+  "request_id": "m1v14-local-work-11",
+  "known_observed_tokens": 272648,
+  "cumulative_reservations": 11,
+  "request11_new_model_tokens_observed": 0,
+  "billing_final": false,
+  "reservation_refunded": false,
+  "controller_request_settled": false,
+  "controller_faults_preserved": [
+    "DEADLINE600",
+    "MONITOR_CADENCE_EXCEEDED"
+  ],
+  "opening": {
+    "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+    "stage": "FAILED",
+    "error_code": "PROCESS_LAUNCH_FENCED",
+    "possible_effect": true,
+    "retry_safe": false,
+    "durable_stop_proof": "NEVER_CLAIMED",
+    "spawn_claimed": false,
+    "producer_fenced": true,
+    "process_birth_count": 0,
+    "turn_submit_or_steer_action_count": 0,
+    "event_count": 0
+  },
+  "initial_turn": {
+    "operation_id": "op_dcd0455d4820f9abd40a57fad32c8fa9",
+    "admission_state": "RESOLVED_TERMINAL",
+    "error_code": "INITIAL_OPEN_FAILED",
+    "stage": "dispatch",
+    "possible_effect": false,
+    "dispatch_attempt": 0
+  },
+  "session": {
+    "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+    "lifecycle_state": "FAILED",
+    "lease_state": "CLOSED",
+    "containment_reason": "AUTH_EXPIRED",
+    "stream": null
+  },
+  "authority_observation": {
+    "selected_grant_expiry_utc": "2026-11-14T20:08:18.408235Z",
+    "selected_grant_used_executions": 0,
+    "capability_issued_at_utc": "2026-11-14T19:11:43.013536Z",
+    "applied_lease_serial": 2,
+    "applied_lease_at_utc": "2026-11-14T19:13:34.653942Z",
+    "canonical_capability_valid_until_utc": "2026-11-14T19:15:22.956474Z",
+    "containment_at_utc": "2026-11-14T19:14:07.123467Z",
+    "interpretation": "The grant was not expired. The local materialization deadline stayed at its initial TTL although an applied lease extended the same capability. Exact initial monotonic deadline is inferred from source TTL120; expires_in is not persisted."
+  },
+  "normal_containment": {
+    "action": "UNCONFIRMED",
+    "elapsed_seconds": 179.67250259994762,
+    "reason": "NORMAL_CONTAINMENT_DEADLINE",
+    "force_used": false,
+    "physical_exit": null
+  },
+  "shutdown_observation": {
+    "tool_chunk": "c13632",
+    "state": "stopping",
+    "phase": "waiting",
+    "shutdown_state": "DRAINING_PENDING",
+    "principal_reason": "SESSION_RECONCILIATION_PENDING",
+    "stream_epoch": null,
+    "process_state": "STOPPED",
+    "core_release_pending": false,
+    "force_requested": false
+  },
+  "sources": {
+    "result_sha256": "56358aebca1f6c242b55d3f203f65e965ed49ab9c767477b9d01482eae32b6a2",
+    "checkpoint_sha256": "1b10144fb626b9ab4f855828f4fa2aa2c474f6228adf1c994cb7f0b756b5f7de",
+    "normal_containment_sha256": "1f140ff375b01c7a79bba55464d3a1ebcd4d66a3bb5332c1ed9d430fd317ed0c",
+    "readonly_allowlisted_sql_tool_chunks": [
+      "76b4f1",
+      "6bc838"
+    ],
+    "later_accounting_projection_tool_chunk": "830fd5"
+  },
+  "limits": [
+    "No closure, physical exit or successful M1 inferred. This records the state before any later authorized containment.",
+    "Opening possible_effect=true remains unchanged; separate NEVER_CLAIMED proof is not a receipt rewrite, replay permission or reservation refund.",
+    "The source fix was not installed into this running owner. No personal configuration, credential material, transcript, raw HTTP body or database is copied."
+  ]
+}

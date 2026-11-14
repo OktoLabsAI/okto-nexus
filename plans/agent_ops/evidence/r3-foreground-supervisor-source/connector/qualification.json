@@ -1,0 +1,163 @@
+{
+  "status": "SOURCE_AND_BENIGN_PYTHON_HANDSHAKE_QUALIFIED_NOT_NATIVE_SERVICE_ACCEPTANCE",
+  "repo": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+  "branch": "feature/v0.0.12",
+  "commit": "42b73ca3fc95e1bcf10fb91976931369dd5229ea",
+  "pushed": true,
+  "worktree_clean_after_commit": true,
+  "sources": {
+    "docs/service-lifecycle.md": "b8336b4c79b87be5c61dd91c1c49f9b7931e12d7308a2361ab762604533c8b2a",
+    "src/okto_nexus_connector/daemon/lifecycle.py": "ce62099ffcf09b464c4250639bb7af884d088da32600957c8f7d028b99d4ee5c",
+    "src/okto_nexus_connector/daemon/service_process.py": "7347a132ebb440150ea97bfef717bf85af87ef690a58fd898a4b156b6148e2da",
+    "src/okto_nexus_connector/daemon/service_supervisor.py": "7ee1b8c31c128ca05211852a63683d88383e9dcebd9c31fc8a815e2d4323b95d",
+    "src/okto_nexus_connector/platform/user_service.py": "1cebc4c370174e908f59f2eea1de1c1bcd441513039f57a90e2312b452ffd0d1",
+    "src/okto_nexus_connector/platform/service_supervision.py": "4f6b3df6d28b6eb50669ed185b4cf728ffb5bc2e4753ba4e21dbea492ed526e9",
+    "src/okto_nexus_connector/service_upgrade.py": "de0cc1cd4ed9f42ea13d84c443791cf16b95d833b73349a34b86a0b731c80cbb",
+    "tests/unit/test_bounded_service_supervisor.py": "429bc1490789b52e50235a44691e07ad2a789124968656f31814a7d4bdd74cc8",
+    "tests/unit/test_user_service_lifecycle.py": "f0153b3f5b4df614381fc014b98cc5e53d20900a5d32dea27f2c7a9ab9b0421c"
+  },
+  "core_dependencies": {
+    "src/nexus_connector_core/user_service_supervision.py": "392db0cbf98a3bd85d2085333d2e803bea3625c43c3a08b1f111fb343b98de21",
+    "src/nexus_connector_core/user_service_definition.py": "4efee7d04699ae297def8932e9898546b6f5362ae524c6ecd5473592b4ae2689"
+  },
+  "runner": {
+    "python": "C:/Users/jpamb/AppData/Local/Temp/r3-native-t19-t20-39ycaumc/venv/Scripts/python.exe",
+    "flags": [
+      "-I",
+      "-B",
+      "-X",
+      "utf8"
+    ],
+    "source_imports": [
+      "D:\\Projetos\\Techridy\\okto-nexus-connector\\src",
+      "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src"
+    ],
+    "mechanism": "run_verified.py inserts the two source roots explicitly into sys.path; no PYTHONPATH and no editable/package install.",
+    "shared_venv_mutated": false,
+    "final_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/r3-native-t19-t20-39ycaumc/venv/Scripts/python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\connector-bounded-supervision-omkbffxa\\run_verified.py",
+    "pytest_modules": [
+      "tests/unit/test_bounded_service_supervisor.py",
+      "tests/unit/test_user_service_lifecycle.py",
+      "tests/unit/test_service_upgrade.py",
+      "tests/unit/test_service_install.py"
+    ],
+    "selector": "not native_preflight_on_worker_thread",
+    "deselected": 1
+  },
+  "runs": {
+    "source-initial.xml": {
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.462",
+      "sha256": "31f68c193a9b24f476f99149900b95cbaf3236ebe0618894d303c5c1f022fa1e"
+    },
+    "source-regression-initial.xml": {
+      "tests": "99",
+      "failures": "5",
+      "errors": "0",
+      "skipped": "0",
+      "time": "39.066",
+      "sha256": "b700c3a2e53aa739053ec4f68be02aa6dd6e3f6b1a76830e45f09970d2414d88"
+    },
+    "source-regression-final.xml": {
+      "tests": "99",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "32.984",
+      "sha256": "57b4c558823ed4f1cedc856adb4f12fe5a36c3c64df39da35f1cedc1039528c9"
+    },
+    "handshake-initial.xml": {
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "15.946",
+      "sha256": "c5845af21fe6f85c6d880c978d9a21bddfeb6b1a907fc0b136b9f12e25b4d430"
+    },
+    "source-handshake-final.xml": {
+      "tests": "112",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "51.230",
+      "sha256": "9def22f77af05c6e3250bdbcf2d421b4a5459ed0db25eb6ea72e447607f549d6"
+    }
+  },
+  "antecedents": [
+    "Initial expanded regression retained:94PASS/5FAIL. Five legacy-task fixtures incorrectly represented the new parent installation. They now explicitly preserve a legacy task/receipt, retain legacy read/stop coverage and require explicit policy migration for new start.",
+    "The original direct-Popen-PID assumption passed injected tests but was invalid for the real Windows venv redirector. Final code uses two-writer nonce handshake, OS ancestry and both retained handles. The final112 cases supersede that assumption.",
+    "Intermediate Ruff unused sys import removed; final Ruff passed."
+  ],
+  "final_checks": {
+    "pytest_passed": 112,
+    "pytest_deselected": 1,
+    "ruff_errors": 0,
+    "git_diff_cached_check_exit": 0
+  },
+  "ruff_command": "rtk proxy ruff check src/okto_nexus_connector/daemon/lifecycle.py src/okto_nexus_connector/daemon/service_process.py src/okto_nexus_connector/daemon/service_supervisor.py src/okto_nexus_connector/platform/user_service.py src/okto_nexus_connector/platform/service_supervision.py src/okto_nexus_connector/service_upgrade.py tests/unit/test_bounded_service_supervisor.py tests/unit/test_user_service_lifecycle.py",
+  "benign_process_projections": [
+    {
+      "parent": {
+        "pid": 40088,
+        "birth_token": "filetime:134391584314846071"
+      },
+      "launcher": {
+        "pid": 50580,
+        "birth_token": "filetime:134391584503444245"
+      },
+      "child": {
+        "pid": 29792,
+        "birth_token": "filetime:134391584504466995"
+      },
+      "child_acknowledged": true,
+      "child_exit_confirmed": true,
+      "launcher_exit_confirmed": true,
+      "launcher_exit_code": 0,
+      "attempts_started": 1,
+      "phase": "stopped",
+      "last_exit_code": 0,
+      "test_directory": "test_real_venv_redirector_hand0",
+      "source_receipt_sha256": "c5e927cb01f43e6fffd94c4c23e1db69f3c11763612a2d4f304ab61907cdd1ad",
+      "benign_bootstrap_marker": true,
+      "no_service_or_provider_started": true
+    },
+    {
+      "parent": {
+        "pid": 40088,
+        "birth_token": "filetime:134391584314846071"
+      },
+      "launcher": {
+        "pid": 16540,
+        "birth_token": "filetime:134391584534316244"
+      },
+      "child": {
+        "pid": 46912,
+        "birth_token": "filetime:134391584535927685"
+      },
+      "child_acknowledged": true,
+      "child_exit_confirmed": true,
+      "launcher_exit_confirmed": true,
+      "launcher_exit_code": 0,
+      "attempts_started": 1,
+      "phase": "stopped",
+      "last_exit_code": 0,
+      "test_directory": "test_real_venv_redirector_hand1",
+      "source_receipt_sha256": "2a390f0d4aaa54a8c446df6c54895a30d0bc1a20d1b249a751c9af946bef6e5c",
+      "benign_bootstrap_marker": false,
+      "no_service_or_provider_started": true
+    }
+  ],
+  "scope": {
+    "new_windows_tasks_started": 0,
+    "real_connector_services_started": 0,
+    "provider_calls": 0,
+    "global_environment_or_personal_credentials_modified": false,
+    "shared_installed_payload_mutated": false,
+    "runtime_claim_or_model_settlement_asserted": false,
+    "SVC_T19_promoted": false,
+    "pending": "Native Scheduler/crash/backoff/limit service campaign with newly built matching wheels."
+  }
+}

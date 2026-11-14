@@ -13216,6 +13216,94 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
       ]
+    },
+    "r3_opening_capability_refresh": {
+      "date": "2026-11-14",
+      "status": "SOURCE_FIX_QUALIFIED_REAL_M1_NOT_ACCEPTED",
+      "commit": "27da0a75",
+      "problem": "Opening MCP materialization retained an initial monotonic deadline after the same canonical capability was extended by an applied lease.",
+      "change": "Internal opening-transport metadata uses the existing applied-lease/grant/scope gate; public metadata and domain actions still require READY. Recheck after materialization and selection/home checks. No secret issuance or TTL increase.",
+      "qualification": {
+        "distinct_passed": 13,
+        "initial_passed": 9,
+        "final_delta_regressions_passed": 6,
+        "overlap": 2,
+        "ruff": "PASS",
+        "initial_environment_failure": "9 fixtures refused Core0.0.12; corrected runner used installed Core0.0.14. No test-body failure is hidden.",
+        "test_evidence_kind": "Recorded tool results and source hashes; no XML was produced for these runs."
+      },
+      "source_files": {
+        "src/okto_nexus/application/execution_capabilities.py": "bb3d811f4db1899824cf670f288358600fe276626085336f21f936beea29c7ce",
+        "src/okto_nexus/application/execution_local_launch.py": "861057e6ca030eb282c1094493c3df61d2c58b171c178a8b2005e9b931b64ebb",
+        "src/okto_nexus/bootstrap/embedded_tools.py": "991e335fd7ef281686b57a35f6ef38baae72c024491521ad826fa149b26b1b3a",
+        "tests/execution_r4/test_opening_capability_refresh.py": "5b409b99dbfe06eac407bb2306c83630c038366e07194a29a1c3e51fb272ac70"
+      },
+      "acceptance_promoted": false,
+      "installed_into_live_M1": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-opening-capability-refresh/review.json"
+      ]
+    },
+    "r3_foreground_supervisor_source": {
+      "date": "2026-11-14",
+      "status": "SOURCE_AND_BENIGN_PROCESS_QUALIFIED_NATIVE_SERVICE_RETEST_PENDING",
+      "commits": {
+        "core": "341a1d12ec1e6db7fe202be14ce1d2ef4c4e1f07",
+        "nexus": "02a74d6d7e60cba25e1e0e2999d330c302f9e5d2",
+        "connector": "42b73ca3fc95e1bcf10fb91976931369dd5229ea"
+      },
+      "core": {
+        "source_cases_passed": 36,
+        "policy": "initial plus3 retries;60second monotonic backoff; durable attempt; revision2 omits Scheduler RestartOnFailure"
+      },
+      "nexus": {
+        "distinct_relevant_cases": 136,
+        "final_suite": {
+          "passed": 134,
+          "failed_fixture": 2
+        },
+        "affected_fixture_correction_passed": 2,
+        "fixture_lint_correction_passed": 1,
+        "benign_handshake_cases": 3,
+        "limitations": "Do not sum overlapping runs. Initial interrupted fixture/stop failure and direct-Popen-PID assumption are preserved."
+      },
+      "connector": {
+        "final_cases_passed": 112,
+        "deselected": 1,
+        "ruff": "PASS",
+        "benign_python_handshake_cases": 2,
+        "initial_regression": {
+          "passed": 94,
+          "failed_legacy_fixture": 5
+        }
+      },
+      "scope": "One persistent foreground supervisor with bounded restart policy and exact Windows redirector/runtime identity handshake. Source plus benign processes only; no new installed wheel/native registered-service crash acceptance.",
+      "SVC_T19_promoted": false,
+      "SVC_T20_promoted": false,
+      "M1_promoted": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-foreground-supervisor-source/qualification.json",
+        "plans/agent_ops/evidence/r3-foreground-supervisor-source/core/qualification.json",
+        "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/qualification.json"
+      ]
+    },
+    "r3_m1_request11_prelaunch_observation": {
+      "date": "2026-11-14",
+      "status": "PRELAUNCH_FAILED_REQUEST11_CLEANUP_PENDING_POINT_IN_TIME",
+      "known_observed_tokens": 272648,
+      "cumulative_reservations": 11,
+      "settled": false,
+      "closure_confirmed": false,
+      "faults_preserved": [
+        "DEADLINE600",
+        "MONITOR_CADENCE_EXCEEDED"
+      ],
+      "normal_containment": "UNCONFIRMED",
+      "force_used_at_observation": false,
+      "acceptance_promoted": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-opening-capability-refresh/request11-observation.json"
+      ]
     }
   },
   "history": [
@@ -14619,6 +14707,35 @@
       "summary": "Four OS-only cases observed one process exit each and no restart; all own tasks removed. No product or scenario acceptance promoted.",
       "evidence": [
         "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_opening_capability_refresh",
+      "status": "SOURCE_FIX_QUALIFIED_REAL_M1_NOT_ACCEPTED",
+      "summary": "Same-capability applied-lease metadata fixes stale opening deadline;13 distinct targeted PASS/Ruff; no live installation or M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-opening-capability-refresh/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_foreground_supervisor_source",
+      "status": "SOURCE_AND_BENIGN_PROCESS_QUALIFIED_NATIVE_SERVICE_RETEST_PENDING",
+      "summary": "Core36/Nexus136/Connector112 source cases and benign identity handshakes retained; real native service campaign still pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-foreground-supervisor-source/qualification.json",
+        "plans/agent_ops/evidence/r3-foreground-supervisor-source/core/qualification.json",
+        "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_request11_prelaunch_observation",
+      "status": "PRELAUNCH_FAILED_REQUEST11_CLEANUP_PENDING_POINT_IN_TIME",
+      "summary": "Request11 failed before native spawn:NEVER_CLAIMED/zero births/zero turns; original opening possible_effect=true preserved.272648tokens/11reservations;DEADLINE600/cadence faults and stopping pending, no closure or acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-opening-capability-refresh/request11-observation.json"
       ]
     }
   ]

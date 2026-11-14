@@ -1,0 +1,94 @@
+{
+  "files": {
+    "plans/agent_ops/evidence/r3-opening-capability-refresh/public-allowlist.json": {
+      "sha256": "3bb8afd8c49fb983e6823dd507549e74ba1358f051f49f6a9b8440bb07e22902",
+      "bytes": 615
+    },
+    "plans/agent_ops/evidence/r3-opening-capability-refresh/qualification.json": {
+      "sha256": "c3533bcb4fb67d46236c42cb9b0160e472cece462176a06e687ba4a61fea8216",
+      "bytes": 1345
+    },
+    "plans/agent_ops/evidence/r3-opening-capability-refresh/request11-observation.json": {
+      "sha256": "1a632cd98f89531c52463c201c61f988c2d445b94dae04ec14bbe115420f4f21",
+      "bytes": 3373
+    },
+    "plans/agent_ops/evidence/r3-opening-capability-refresh/review.json": {
+      "sha256": "3408faf90fed64c883cf00387ca503329465e2f14b4b32e1145aec4fd32bc050",
+      "bytes": 1512
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/core/core-initial.xml": {
+      "sha256": "2b9201e2014652f6d1d3e668816404796d3a07e0a554db0901c3cd0a7d5aa24e",
+      "bytes": 5038
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/core/public-allowlist.json": {
+      "sha256": "23d538dfc54df6e693620b2709c9f9f148f1a968cf616ddd0a72b62a8d9edef8",
+      "bytes": 338
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/core/qualification.json": {
+      "sha256": "5e4525581d7d2c6f09c4564aee16f4d73f248b43f383a230a7348765bba0928b",
+      "bytes": 1382
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/handshake-initial.xml": {
+      "sha256": "c5845af21fe6f85c6d880c978d9a21bddfeb6b1a907fc0b136b9f12e25b4d430",
+      "bytes": 956
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/public-allowlist.json": {
+      "sha256": "fec721301580f834dbe37dd3775efb08696f48c489c69caa1461371fed09a46e",
+      "bytes": 2334
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/qualification.json": {
+      "sha256": "ffc20ecddda5c01c5745e4d8bead370d0deab4162d5dac5e16942e87e641ad7a",
+      "bytes": 7313
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/retain.py": {
+      "sha256": "77b78b5323efb323122581e68d6fb11a2b88141c53f3801a90e624bb73b09263",
+      "bytes": 5921
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/run_final.py": {
+      "sha256": "be9181939c4d8fff53339e0cd3f5acde51f2b2141c2004660bf9e9dd62969468",
+      "bytes": 882
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/run_handshake.py": {
+      "sha256": "f49b9e2ccfc86a9eddd360c8ff4029846c7ce3d657949649526e88b959c4d8b9",
+      "bytes": 499
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/run_regressions.py": {
+      "sha256": "a1f46c81b8a374809ac9a9670923070ad03f037c0e3ba05f780eb539b621232c",
+      "bytes": 869
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/run_tests.py": {
+      "sha256": "00dd6155c1e1d43841ada8eebb33f752d4a52392e09308588b67235eab9130c3",
+      "bytes": 685
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/run_verified.py": {
+      "sha256": "14e76f1dc1123f431e7324dece5d11bd843a657d7c0af5d8e7e08cc2d7cd2462",
+      "bytes": 913
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/source-handshake-final.xml": {
+      "sha256": "9def22f77af05c6e3250bdbcf2d421b4a5459ed0db25eb6ea72e447607f549d6",
+      "bytes": 16417
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/source-initial.xml": {
+      "sha256": "31f68c193a9b24f476f99149900b95cbaf3236ebe0618894d303c5c1f022fa1e",
+      "bytes": 2089
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/source-regression-final.xml": {
+      "sha256": "57b4c558823ed4f1cedc856adb4f12fe5a36c3c64df39da35f1cedc1039528c9",
+      "bytes": 14589
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/source-regression-initial.xml": {
+      "sha256": "b700c3a2e53aa739053ec4f68be02aa6dd6e3f6b1a76830e45f09970d2414d88",
+      "bytes": 25018
+    },
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/joint-source-review.json": {
+      "sha256": "ee8a2226ce8dcffd25fc5ebe1dd6e2cceebd54514f107e9dada5ca0b8f933677",
+      "bytes": 1686
+    }
+  },
+  "acceptance_unchanged": true,
+  "scenarios": {
+    "VERIFIED": 122,
+    "IN_PROGRESS": 8,
+    "NOT_RUN": 2
+  }
+}

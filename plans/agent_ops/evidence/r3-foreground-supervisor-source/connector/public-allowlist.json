@@ -1,0 +1,73 @@
+{
+  "format": "connector-bounded-supervisor-public-evidence-v1",
+  "files": {
+    "source-initial.xml": {
+      "sha256": "31f68c193a9b24f476f99149900b95cbaf3236ebe0618894d303c5c1f022fa1e",
+      "bytes": 2089
+    },
+    "source-regression-initial.xml": {
+      "sha256": "b700c3a2e53aa739053ec4f68be02aa6dd6e3f6b1a76830e45f09970d2414d88",
+      "bytes": 25018
+    },
+    "source-regression-final.xml": {
+      "sha256": "57b4c558823ed4f1cedc856adb4f12fe5a36c3c64df39da35f1cedc1039528c9",
+      "bytes": 14589
+    },
+    "handshake-initial.xml": {
+      "sha256": "c5845af21fe6f85c6d880c978d9a21bddfeb6b1a907fc0b136b9f12e25b4d430",
+      "bytes": 956
+    },
+    "source-handshake-final.xml": {
+      "sha256": "9def22f77af05c6e3250bdbcf2d421b4a5459ed0db25eb6ea72e447607f549d6",
+      "bytes": 16417
+    },
+    "qualification.json": {
+      "sha256": "ffc20ecddda5c01c5745e4d8bead370d0deab4162d5dac5e16942e87e641ad7a",
+      "bytes": 7313
+    },
+    "run_tests.py": {
+      "sha256": "00dd6155c1e1d43841ada8eebb33f752d4a52392e09308588b67235eab9130c3",
+      "bytes": 685
+    },
+    "run_regressions.py": {
+      "sha256": "a1f46c81b8a374809ac9a9670923070ad03f037c0e3ba05f780eb539b621232c",
+      "bytes": 869
+    },
+    "run_final.py": {
+      "sha256": "be9181939c4d8fff53339e0cd3f5acde51f2b2141c2004660bf9e9dd62969468",
+      "bytes": 882
+    },
+    "run_handshake.py": {
+      "sha256": "f49b9e2ccfc86a9eddd360c8ff4029846c7ce3d657949649526e88b959c4d8b9",
+      "bytes": 499
+    },
+    "run_verified.py": {
+      "sha256": "14e76f1dc1123f431e7324dece5d11bd843a657d7c0af5d8e7e08cc2d7cd2462",
+      "bytes": 913
+    },
+    "retain.py": {
+      "sha256": "77b78b5323efb323122581e68d6fb11a2b88141c53f3801a90e624bb73b09263",
+      "bytes": 5921
+    }
+  },
+  "copiable_allowlist": [
+    "source-initial.xml",
+    "source-regression-initial.xml",
+    "source-regression-final.xml",
+    "handshake-initial.xml",
+    "source-handshake-final.xml",
+    "qualification.json",
+    "run_tests.py",
+    "run_regressions.py",
+    "run_final.py",
+    "run_handshake.py",
+    "run_verified.py",
+    "retain.py"
+  ],
+  "excluded": [
+    "pytest temporary trees",
+    "raw service/handshake receipts and tokens",
+    "private auth/vault/state",
+    "installed environments"
+  ]
+}

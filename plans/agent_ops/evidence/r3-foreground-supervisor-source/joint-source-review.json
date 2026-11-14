@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-14",
+  "status": "SOURCE_AND_BENIGN_PROCESS_QUALIFIED_NATIVE_SERVICE_RETEST_PENDING",
+  "commits": {
+    "core": "341a1d12ec1e6db7fe202be14ce1d2ef4c4e1f07",
+    "nexus": "02a74d6d7e60cba25e1e0e2999d330c302f9e5d2",
+    "connector": "42b73ca3fc95e1bcf10fb91976931369dd5229ea"
+  },
+  "core": {
+    "source_cases_passed": 36,
+    "policy": "initial plus3 retries;60second monotonic backoff; durable attempt; revision2 omits Scheduler RestartOnFailure"
+  },
+  "nexus": {
+    "distinct_relevant_cases": 136,
+    "final_suite": {
+      "passed": 134,
+      "failed_fixture": 2
+    },
+    "affected_fixture_correction_passed": 2,
+    "fixture_lint_correction_passed": 1,
+    "benign_handshake_cases": 3,
+    "limitations": "Do not sum overlapping runs. Initial interrupted fixture/stop failure and direct-Popen-PID assumption are preserved."
+  },
+  "connector": {
+    "final_cases_passed": 112,
+    "deselected": 1,
+    "ruff": "PASS",
+    "benign_python_handshake_cases": 2,
+    "initial_regression": {
+      "passed": 94,
+      "failed_legacy_fixture": 5
+    }
+  },
+  "scope": "One persistent foreground supervisor with bounded restart policy and exact Windows redirector/runtime identity handshake. Source plus benign processes only; no new installed wheel/native registered-service crash acceptance.",
+  "SVC_T19_promoted": false,
+  "SVC_T20_promoted": false,
+  "M1_promoted": false,
+  "evidence": [
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/qualification.json",
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/core/qualification.json",
+    "plans/agent_ops/evidence/r3-foreground-supervisor-source/connector/qualification.json"
+  ]
+}

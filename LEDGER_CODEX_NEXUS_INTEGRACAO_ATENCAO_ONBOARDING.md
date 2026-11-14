@@ -1698,3 +1698,33 @@ do executor foi 0. Há quatro casos XML distintos, executados antes e após a
 troca da ação para pythonw.exe. Nenhum serviço, credencial ou modelo foi usado.
 Permanecem 122/132 cenários VERIFIED, sem promoção de T19/T20 ou M1.
 Evidência: `plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json`.
+
+## 2026-11-14 — autoridade de abertura e supervisão de foreground
+
+Nexus `27da0a75` corrige o prazo local de MCP que permanecia antigo após uma
+lease aplicada renovar a mesma capability. A materialização consulta a autoridade
+canônica atual; não emite outro segredo nem aumenta TTL. Treze testes distintos
+passaram (9 iniciais e 6 finais, com 2 repetidos), além de Ruff. A primeira execução
+recusou nove fixtures porque o Python padrão continha Core 0.0.12; o runner
+corrigido usou Core 0.0.14. Nenhum wheel da execução M1 foi alterado.
+
+Core `341a1d12`, Nexus `02a74d6d` e Connector `42b73ca3` registram a política
+de supervisor foreground e identidade exata entre launcher Windows e runtime.
+São 36 casos Core, 136 casos distintos Nexus e 112 casos Connector, com uma
+deseleção explícita no Connector. Falhas intermediárias de fixtures e a hipótese
+inicial incorreta sobre PID do redirector permanecem registradas. Os processos
+benignos de handshake não substituem a campanha real SVC-T19/T20.
+
+No ponto observado, o pedido M1 11 falhou antes do spawn nativo: prova
+`NEVER_CLAIMED`, zero nascimentos e zero ações de turno. O recibo original de
+abertura mantém `possible_effect=true`; o filho não enviado mantém sua própria
+prova `INITIAL_OPEN_FAILED`. Não há reembolso de reserva nem autorização de replay.
+Permanecem 272.648 tokens observados e 11 reservas. O controlador ainda registra
+`DEADLINE600`, `MONITOR_CADENCE_EXCEEDED` e pedido não reconciliado; a contenção
+normal terminou `UNCONFIRMED`, com serviço em `stopping`. Este registro pontual
+não fecha a campanha nem afirma saída física ou aceite M1.
+
+A contagem permanece **122/132 cenários VERIFIED**, com 8 IN_PROGRESS e 2 NOT_RUN.
+Evidências: `plans/agent_ops/evidence/r3-opening-capability-refresh/review.json`,
+`plans/agent_ops/evidence/r3-opening-capability-refresh/request11-observation.json`
+e `plans/agent_ops/evidence/r3-foreground-supervisor-source/joint-source-review.json`.
