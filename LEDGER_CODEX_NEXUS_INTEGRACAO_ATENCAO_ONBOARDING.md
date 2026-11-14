@@ -1970,3 +1970,17 @@ seu recibo interrupt SUBMITTED em terminal. **124/132 VERIFIED, 6 IN_PROGRESS e
 2 NOT_RUN**, sem promoção de aceite.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision15-preparation/review.json)
 e [revisão root](plans/agent_ops/evidence/r3-m1-revision15-preparation/root-review.json).
+
+## 2026-11-14 — Revisão15: prepare e migração canônica executados
+
+Root executou prepare, upgrade-plan e upgrade-apply com retorno0. O plano canônico
+361f4b30… / revisão f31053b0… recebeu seleção técnica exata antes de apply; a projeção
+revisada pelo root observou apenas três chaves de ambiente alteradas e o mesmo
+candidato qualificado. Apply confirmou applied=true/contextSHA f0eacaa4… .
+
+Os recibos retidos abrangem somente essas etapas: nenhum install/start, grant ou
+modelo foi executado por elas. Não se infere estado posterior, readiness ou aceite
+de trabalho. Instalação/start/watcher continuam etapas separadas sob execução root.
+**295.262 tokens observados, 12 reservas cobradas e 124/132 VERIFIED** permanecem;
+6 cenários IN_PROGRESS e 2 NOT_RUN. Sem promoção de status.
+Evidência: [revisão da migração](plans/agent_ops/evidence/r3-m1-revision15-migration/review.json).

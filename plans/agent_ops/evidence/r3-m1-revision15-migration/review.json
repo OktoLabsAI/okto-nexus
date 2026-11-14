@@ -1,0 +1,35 @@
+{
+  "status": "ACTUAL_PREPARE_AND_CANONICAL_ENVIRONMENT_MIGRATION_CONFIRMED",
+  "scope": "Only completed prepare/upgrade-plan/technical plan selection/upgrade-apply. This is not installation/start/work evidence and does not assert a later runtime state.",
+  "execution_provenance": {
+    "prepare": "fc3f78 exit0",
+    "upgrade_plan": "435aa8/session98134 ->713b70 exit0",
+    "root_plan_projection": "262c91: root observed only3environment keys changed and candidate identical to qualified package",
+    "technical_selection": "c5833a",
+    "upgrade_apply": "4b686e/session69227 ->3bd143 exit0",
+    "apply_result": "c7b8e6"
+  },
+  "plan_sha256": "361f4b3017a9c863960200d1ff1718c6ef3db0e4ce707f2c3e0171b23c51ea01",
+  "plan_revision": "f31053b0a8c68ea1418d6fcd39fa5709e22a7fc1dd5281cc8cd9f55daf63be19",
+  "applied_context_sha256": "f0eacaa4b53b06ea19b8caca1506dcb64e7046e74e67f02e11935fdc49c28232",
+  "initial_derived_checkpoint_sha256": "084e9de4e9dde43ca9f41cb11444de4a8ce6440c46f676c87a7254f90ecd0576",
+  "raw_controller_or_context_or_private_plan_copied": false,
+  "services_started_by_retained_commands": 0,
+  "provider_calls": 0,
+  "model_admissions": 0,
+  "grant_changes": 0,
+  "carry_observed_tokens": 295262,
+  "charged_reservations": 12,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "status_changes": [],
+  "acceptance_promoted": false,
+  "all_copy_hashes_verified": true,
+  "secret_scan_matches": 0,
+  "frozen_package_edited": false,
+  "wrappers_rerun_by_curator": false,
+  "next_execution_owned_by_root": "Install/start/watch are separate future evidence; not inferred from this milestone."
+}

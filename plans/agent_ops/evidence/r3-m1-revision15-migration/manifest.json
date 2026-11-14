@@ -1,0 +1,55 @@
+{
+  "files": [
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/root-driver-preparation.json",
+      "sha256": "35805d337400d81b5fc6285065562e0a853556d34bf704e7552740fd5a9af006",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\root-driver-preparation.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-plan-reserved.json",
+      "sha256": "d225a097571516a1045bcc9d3f3e406385fcdbb3e153c79a06458a3c952222ed",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\environment-upgrade-plan-reserved.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-plan-result.json",
+      "sha256": "b71304094ead5e2c7e6a3c900495200de59277e5abe4b4ed18418a5b224d227d",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\environment-upgrade-plan-result.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-apply-reserved.json",
+      "sha256": "d225a097571516a1045bcc9d3f3e406385fcdbb3e153c79a06458a3c952222ed",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\environment-upgrade-apply-reserved.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-apply-result.json",
+      "sha256": "af706bd226fdfce36daf1f69d067e18acefdb68c5637b7b5d1ce3f0a2dd58db8",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\public\\environment-upgrade-apply-result.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/upgrade-plan.reserved.json",
+      "sha256": "ffbe8273ab85b31e09f2aa2541ee5cb4eaa4b45bf5b599c10761911632f4b21a",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\runtime-private\\upgrade-plan.reserved.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/upgrade-plan.returned.json",
+      "sha256": "cab73d78a8c8649fdfd4f71b28db62e47a6500de8d8fef46f7793eb7e309bbf2",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\runtime-private\\upgrade-plan.returned.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/upgrade-apply.reserved.json",
+      "sha256": "d9052b4bc7a4d795f82585404dac3ae3eb065dd04a45be7a6d6d93004d71a8e2",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\runtime-private\\upgrade-apply.reserved.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/upgrade-apply.returned.json",
+      "sha256": "0a8b3344b784b21fd9f6d26009f9ac38ed58f6425860b56650b538e576685965",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\runtime-private\\upgrade-apply.returned.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-m1-revision15-migration/selection/environment-upgrade-reviewed.json",
+      "sha256": "bee26b45b704dcf3d505b59c327a361b413a5e7046fce0cc30801fc6ace37f33",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\private\\environment-upgrade-reviewed.json"
+    }
+  ],
+  "allowlist_scope": "Public metadata plus exact technical selection/returned wrapper JSON only; no raw stdout, private plan token, environment, DB, controller, credentials or transcripts."
+}

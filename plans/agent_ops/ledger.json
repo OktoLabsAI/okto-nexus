@@ -13567,6 +13567,20 @@
       "services_started": 0,
       "models_called": 0,
       "acceptance_promoted": false
+    },
+    "r3_m1_revision15_actual_migration": {
+      "status": "ACTUAL_PREPARE_AND_CANONICAL_ENVIRONMENT_MIGRATION_CONFIRMED",
+      "summary": "Root completed revision15 prepare, canonical upgrade-plan and exact reviewed upgrade-apply, all exit0. Applied context SHA f0eacaa4 matches result; plan361f4b30/revisionf31053b0 retained. These commands did not install/start service, call provider, change grants or reserve model work.295262 observed tokens/12 charged reservations and124/132 verified remain unchanged; next lifecycle/work stages require separate evidence.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/root-driver-preparation.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-plan-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/selection/environment-upgrade-reviewed.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-apply-result.json"
+      ],
+      "observed_tokens": 295262,
+      "charged_reservations": 12,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15094,6 +15108,19 @@
         "plans/agent_ops/evidence/r3-m1-revision15-preparation/amendment.json",
         "plans/agent_ops/evidence/r3-m1-revision15-preparation/runtime-freeze.json",
         "plans/agent_ops/evidence/r3-m1-revision15-preparation/workflow.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision15_actual_migration",
+      "status": "ACTUAL_PREPARE_AND_CANONICAL_ENVIRONMENT_MIGRATION_CONFIRMED",
+      "summary": "Root completed revision15 prepare, canonical upgrade-plan and exact reviewed upgrade-apply, all exit0. Applied context SHA f0eacaa4 matches result; plan361f4b30/revisionf31053b0 retained. These commands did not install/start service, call provider, change grants or reserve model work.295262 observed tokens/12 charged reservations and124/132 verified remain unchanged; next lifecycle/work stages require separate evidence.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/root-driver-preparation.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-plan-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/selection/environment-upgrade-reviewed.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-migration/receipts/environment-upgrade-apply-result.json"
       ]
     }
   ],
