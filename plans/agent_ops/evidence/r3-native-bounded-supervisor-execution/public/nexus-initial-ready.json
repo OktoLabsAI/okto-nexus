@@ -1,0 +1,28 @@
+{
+  "ready": {
+    "state": "ready",
+    "reason": null,
+    "pid": 13948,
+    "generation": "aa59cd2915559fb05817426fad73728e",
+    "instance_id": "svc_55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": true,
+    "storage_initialized": true,
+    "next_action": null
+  },
+  "birth_filetime": 134391600424163133,
+  "image": "C:\\Python313\\pythonw.exe",
+  "native": {
+    "name": "OktoNexus-server-55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "digest": "77a00b1e662b02ec561c0820126c97557e3d6181c4eb3012c3fd29be84f51f8c",
+    "interval_seconds": 60,
+    "count": 3,
+    "native_restart_on_failure": false,
+    "last_run_time": "2026-11-14 17:00:39+00:00",
+    "cycle_id": "c65bea69b6d409d90a3bc5d54d827f93",
+    "parent": {
+      "pid": 19052,
+      "birth": 134391600394101199
+    }
+  }
+}

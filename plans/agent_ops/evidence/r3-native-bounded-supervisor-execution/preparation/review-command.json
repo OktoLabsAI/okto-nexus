@@ -1,0 +1,44 @@
+{
+  "status": "FROZEN_OFFLINE_ROOT_EXECUTION_REVIEW_PENDING",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\run.py",
+    "execute",
+    "--expected-plan-sha256",
+    "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5",
+    "--expected-runner-sha256",
+    "b72d525e09ae8e968eaf09481851c5582d9f25135c234f3ead7696d64746eff6"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv",
+  "environment": {
+    "COMSPEC": "C:/WINDOWS/System32/cmd.exe",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD",
+    "SYSTEMROOT": "C:/WINDOWS",
+    "WINDIR": "C:/WINDOWS",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONUNBUFFERED": "1",
+    "OKTO_NEXUS_NO_BANNER": "1",
+    "OKTO_NEXUS_CONNECTOR_VAULT": "file",
+    "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile",
+    "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile\\appdata",
+    "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile\\localappdata",
+    "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile\\tmp",
+    "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile\\tmp",
+    "PATH": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\venv\\Scripts;C:/Python313;C:/WINDOWS/System32",
+    "HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile",
+    "CODEX_HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile\\.codex",
+    "CLAUDE_CONFIG_DIR": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\profile\\.claude"
+  },
+  "plan_sha256": "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5",
+  "runner_sha256": "b72d525e09ae8e968eaf09481851c5582d9f25135c234f3ead7696d64746eff6",
+  "runtime_support_sha256": "150630b59f7ceba28add9e05d2ac76228482ee3087016e71023e39795008c52f",
+  "tasks": {
+    "nexus": "OktoNexus-server-55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "connector": "OktoNexus-connector-3e11da60781afa647750fb9414f5a038beda72245d0d54caa31004142d4e157c"
+  },
+  "port": 59083
+}

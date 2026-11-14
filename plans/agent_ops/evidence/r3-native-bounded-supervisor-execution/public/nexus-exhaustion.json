@@ -1,0 +1,34 @@
+{
+  "cycle": {
+    "cycle_id": "41904c7f283708256fd2b641814f001d",
+    "phase": "exhausted",
+    "attempts_started": 4,
+    "last_exit_code": 3,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 50060,
+      "birth": 134391602496883536
+    },
+    "launcher": {
+      "pid": 12836,
+      "birth": 134391604558896773
+    },
+    "child": {
+      "pid": 48244,
+      "birth": 134391604559107866
+    },
+    "child_exit_confirmed": true,
+    "launcher_exit_confirmed": true
+  },
+  "native_last_result": 3,
+  "canonical": {
+    "state": "failed",
+    "reason": "SUPERVISOR_RETRY_EXHAUSTED",
+    "generation": null,
+    "instance_id": "svc_55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "next_action": "The bounded four-attempt cycle is exhausted. Explicitly stop before another start."
+  },
+  "parent_exit_confirmed": true
+}

@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-14",
+  "status": "PASS_SCOPED",
+  "root_execution_report": {
+    "session": 16074,
+    "exit_code": 0,
+    "tool_chunk": "78cacc",
+    "qualification_tool_chunk": "e7c53b",
+    "provenance": "Root execution report; not a fabricated local process receipt."
+  },
+  "plan_sha256": "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5",
+  "actual_qualification_sha256": "c690fb7abcbf73773f42664864514aecf9c5bb1ccd52180fef0737dbcda6fc57",
+  "offline": {
+    "installed_passed": 81,
+    "installed_deselected": 2,
+    "runner_passed": 53
+  },
+  "hosts": {
+    "nexus": {
+      "crashes": 4,
+      "automatic_replacements": 3,
+      "backoff_seconds": [
+        60.08698892593384,
+        60.06672477722168,
+        60.06730890274048
+      ],
+      "same_parent_and_cycle": true,
+      "attempts": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "actionable_failure": "SUPERVISOR_RETRY_EXHAUSTED",
+      "native_parent_exit_code": 3,
+      "runtime_exit_code": 3,
+      "stop_quiet_seconds": 190.02949950000038,
+      "exhaustion_quiet_seconds": 190.0295261000283,
+      "normal_initial_stop_drained": true,
+      "post_exhaustion_stop_returncode": 3,
+      "post_exhaustion_stop_work_outcome": "unconfirmed",
+      "tasks_absent": true,
+      "data_fingerprints_equal": true
+    },
+    "connector": {
+      "crashes": 4,
+      "automatic_replacements": 3,
+      "backoff_seconds": [
+        60.23448610305786,
+        60.224759101867676,
+        60.183823108673096
+      ],
+      "same_parent_and_cycle": true,
+      "attempts": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "actionable_failure": "SUPERVISOR_RESTART_EXHAUSTED",
+      "native_parent_exit_code": 2,
+      "runtime_exit_code": 3,
+      "stop_quiet_seconds": 190.0339471999905,
+      "exhaustion_quiet_seconds": 190.0260998000158,
+      "normal_initial_stop_drained": true,
+      "post_exhaustion_stop_returncode": 0,
+      "post_exhaustion_stop_work_outcome": "unconfirmed",
+      "tasks_absent": true,
+      "data_fingerprints_equal": true
+    }
+  },
+  "decision": {
+    "SVC-T19": "VERIFIED",
+    "SVC-T20": "IN_PROGRESS",
+    "all_other_statuses": "UNCHANGED"
+  },
+  "limits": [
+    "Known injected runtime exit3 only, not arbitrary NTSTATUS.",
+    "Actual stop during backoff not exercised; pure source/installed tests cover it.",
+    "Nexus next-connect starts service then returns NOT_FOUND; configured setup success not claimed.",
+    "Connector next-connect without identity refuses without start; configured next-connect not exercised.",
+    "Endpoint wall/monotonic drift gate passed; cancelling clock adjustments are not detectable.",
+    "No provider/login/model turn, active work, M1 mutation or canonical force-stop.",
+    "After crash exhaustion supervisor-only stop does not assert runtime work drained."
+  ],
+  "preserved_history": [
+    "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json",
+    "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json",
+    "preparation/installed-supervisor-final.xml",
+    "preparation/qualification.json"
+  ],
+  "curation": "Explicit public JSON and pinned preparation allowlist only. No private stdout, runtime DB, service token/nonce, or credentials copied."
+}

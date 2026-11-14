@@ -1809,3 +1809,28 @@ Nova admissão exige recovery READY na geração atual de um novo owner e reques
 genuinamente nova. Nenhum aceite M1 foi promovido: **122/132** permanece.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-request11-force-closure/review.json`.
+
+
+## 2026-11-14 — SVC-T19: recuperação limitada real nos dois hosts
+
+A campanha instalada final concluiu com exit0/PASS_SCOPED. Nexus e Connector
+executaram, cada um, quatro crashes controlados de runtime READY e três reposições
+automáticas, com o mesmo supervisor/ciclo, backoff observado de aproximadamente
+60 segundos e contador sem reset. O esgotamento ficou visível e acionável;
+190 segundos adicionais não produziram uma quinta tentativa. Ambas as tarefas
+foram removidas e os fingerprints dos dados preservados. Não houve provedor,
+modelo, trabalho ativo, alteração M1 ou force-stop canônico.
+
+**SVC-T19 passa a VERIFIED**, limitado ao código de saída 3 injetado e à plataforma
+executada. **SVC-T20 permanece IN_PROGRESS**: os dois stops saudáveis drenaram e
+saíram fisicamente, seguidos de 190 segundos sem ressurreição; Nexus next-connect
+iniciou o serviço mas retornou NOT_FOUND no setup, e Connector sem identidade
+recusou sem iniciar. Connect configurado e parada real durante backoff não são
+reivindicados. A limpeza após esgotamento declarou supervisor_only/unconfirmed,
+sem afirmar drain do trabalho do runtime que sofreu crash.
+
+Qualificação: 81 testes instalados PASS (2 casos com processos benignos excluídos)
+e 53 fixtures finais do runner PASS. O erro inicial de coleta por fixture ausente,
+a campanha anterior sem recuperação e a matriz do Scheduler foram preservados.
+A contagem passa a **123/132 VERIFIED, 7 IN_PROGRESS e 2 NOT_RUN**; nenhum outro
+status foi alterado. [Evidências, hashes e limites](plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.md).

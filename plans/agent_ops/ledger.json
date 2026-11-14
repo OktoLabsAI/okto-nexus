@@ -7232,18 +7232,21 @@
     },
     "SVC-T19": {
       "requirement": "Crash supervisionado reinicia com backoff/limite; falha persistente fica visível e acionável.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json",
         "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json",
-        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/public/qualification.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/preparation/qualification.json"
       ],
-      "remaining": "Diagnose and correct actual crash recovery, then qualify bounded automatic replacements and persistent failure for both hosts.",
-      "remaining_kind": "real_supervisor_crash_campaign",
-      "result": "Actual installed Nexus READY owner was deliberately terminated with exit3. No READY replacement was confirmed within the 180-second harness observation; last-attempt failure was actionable. Normal cleanup completed. Native retry success and exhaustion remain unverified. Separate OS-only matrix: manual/timer actions each exited with DWORD3 or FFFFFFFF exactly once; no restart in the bounded observation, all four tasks removed. Native XML recovery is insufficient on this host for these process exits."
+      "remaining": "None for the executed fixed-plan crash/backoff/limit/actionable-diagnostic requirement; qualification limited to injected runtime exit3 on both Windows hosts.",
+      "remaining_kind": "none",
+      "result": "Actual installed bounded parent supervision passed on Nexus and Connector: initial attempt plus three automatic READY replacements in one parent/cycle, observed backoff60s within1s tolerance, four physical runtime exits3, actionable canonical exhaustion, and190s without a fifth attempt. Both tasks uninstalled and data hashes unchanged. Original failed native-restart campaign and OS matrix remain retained. No arbitrary NTSTATUS, actual stop-during-backoff, active-work or M1 acceptance inferred."
     },
     "SVC-T20": {
       "requirement": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
@@ -7256,16 +7259,24 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
         "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json",
-        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/public/qualification.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/preparation/qualification.json"
       ],
-      "remaining": "Complete equivalent actual Connector stop/next-connect policy observation; preserve distinction between service start and setup success.",
+      "remaining": "Configured next-connect policy campaign remains unexercised; current actual evidence qualifies both healthy stops/no resurrection, Nexus service start with NOT_FOUND setup, and Connector missing-identity refusal only.",
       "remaining_kind": "real_service_stop_reconnect_campaign",
       "subscopes": {
         "retained_injected_contract": "VERIFIED",
         "finite_empty_windows_campaign": "PARTIAL",
-        "actual_nexus_stop_and_explicit_connect_service_start": "VERIFIED_SCOPED"
+        "actual_nexus_stop_and_explicit_connect_service_start": "VERIFIED_SCOPED",
+        "actual_both_hosts_normal_stop_physical_exit": "VERIFIED",
+        "actual_both_hosts_190s_no_resurrection": "VERIFIED",
+        "actual_connector_missing_identity_connect_refusal": "VERIFIED_SCOPED",
+        "configured_next_connect": "NOT_RUN",
+        "actual_stop_during_backoff": "NOT_RUN"
       },
-      "result": "Actual Nexus stop drained and exited physically. 190.066 seconds/176 observations showed no automatic relaunch. Explicit connect started a new READY owner, while setup itself returned NOT_FOUND. Connector flow was not reached."
+      "result": "Both installed hosts normal-stopped with drained outcome and physical runtime/launcher/parent exits, then190s without resurrection. Nexus next-connect started a new READY owner but setup returned NOT_FOUND; Connector connect without identity refused without start. Configured next-connect not exercised. Exhausted supervisor cleanup preserves unconfirmed runtime work settlement and retained data."
     },
     "SVC-T21": {
       "requirement": "Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente.",
@@ -14906,5 +14917,98 @@
         "plans/agent_ops/evidence/r3-m1-request11-force-closure/review.json"
       ]
     }
-  ]
+  ],
+  "r3_native_bounded_supervisor_execution": {
+    "date": "2026-11-14",
+    "status": "PASS_SCOPED",
+    "root_execution_report": {
+      "session": 16074,
+      "exit_code": 0,
+      "tool_chunk": "78cacc",
+      "qualification_tool_chunk": "e7c53b",
+      "provenance": "Root execution report; not a fabricated local process receipt."
+    },
+    "plan_sha256": "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5",
+    "actual_qualification_sha256": "c690fb7abcbf73773f42664864514aecf9c5bb1ccd52180fef0737dbcda6fc57",
+    "offline": {
+      "installed_passed": 81,
+      "installed_deselected": 2,
+      "runner_passed": 53
+    },
+    "hosts": {
+      "nexus": {
+        "crashes": 4,
+        "automatic_replacements": 3,
+        "backoff_seconds": [
+          60.08698892593384,
+          60.06672477722168,
+          60.06730890274048
+        ],
+        "same_parent_and_cycle": true,
+        "attempts": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "actionable_failure": "SUPERVISOR_RETRY_EXHAUSTED",
+        "native_parent_exit_code": 3,
+        "runtime_exit_code": 3,
+        "stop_quiet_seconds": 190.02949950000038,
+        "exhaustion_quiet_seconds": 190.0295261000283,
+        "normal_initial_stop_drained": true,
+        "post_exhaustion_stop_returncode": 3,
+        "post_exhaustion_stop_work_outcome": "unconfirmed",
+        "tasks_absent": true,
+        "data_fingerprints_equal": true
+      },
+      "connector": {
+        "crashes": 4,
+        "automatic_replacements": 3,
+        "backoff_seconds": [
+          60.23448610305786,
+          60.224759101867676,
+          60.183823108673096
+        ],
+        "same_parent_and_cycle": true,
+        "attempts": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "actionable_failure": "SUPERVISOR_RESTART_EXHAUSTED",
+        "native_parent_exit_code": 2,
+        "runtime_exit_code": 3,
+        "stop_quiet_seconds": 190.0339471999905,
+        "exhaustion_quiet_seconds": 190.0260998000158,
+        "normal_initial_stop_drained": true,
+        "post_exhaustion_stop_returncode": 0,
+        "post_exhaustion_stop_work_outcome": "unconfirmed",
+        "tasks_absent": true,
+        "data_fingerprints_equal": true
+      }
+    },
+    "decision": {
+      "SVC-T19": "VERIFIED",
+      "SVC-T20": "IN_PROGRESS",
+      "all_other_statuses": "UNCHANGED"
+    },
+    "limits": [
+      "Known injected runtime exit3 only, not arbitrary NTSTATUS.",
+      "Actual stop during backoff not exercised; pure source/installed tests cover it.",
+      "Nexus next-connect starts service then returns NOT_FOUND; configured setup success not claimed.",
+      "Connector next-connect without identity refuses without start; configured next-connect not exercised.",
+      "Endpoint wall/monotonic drift gate passed; cancelling clock adjustments are not detectable.",
+      "No provider/login/model turn, active work, M1 mutation or canonical force-stop.",
+      "After crash exhaustion supervisor-only stop does not assert runtime work drained."
+    ],
+    "preserved_history": [
+      "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json",
+      "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json",
+      "preparation/installed-supervisor-final.xml",
+      "preparation/qualification.json"
+    ],
+    "curation": "Explicit public JSON and pinned preparation allowlist only. No private stdout, runtime DB, service token/nonce, or credentials copied."
+  }
 }

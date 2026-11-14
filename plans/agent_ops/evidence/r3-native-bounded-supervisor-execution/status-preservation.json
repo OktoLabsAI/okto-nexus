@@ -1,0 +1,21 @@
+{
+  "changed": [
+    [
+      "scenarios",
+      "SVC-T19",
+      "IN_PROGRESS",
+      "VERIFIED"
+    ]
+  ],
+  "counts_before": {
+    "VERIFIED": 122,
+    "IN_PROGRESS": 8,
+    "NOT_RUN": 2
+  },
+  "counts_after": {
+    "VERIFIED": 123,
+    "IN_PROGRESS": 7,
+    "NOT_RUN": 2
+  },
+  "all_other_statuses_unchanged": true
+}

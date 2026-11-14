@@ -1,0 +1,165 @@
+{
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv",
+  "files": [
+    {
+      "path": "run.py",
+      "sha256": "b72d525e09ae8e968eaf09481851c5582d9f25135c234f3ead7696d64746eff6",
+      "bytes": 19501
+    },
+    {
+      "path": "runtime_support.py",
+      "sha256": "150630b59f7ceba28add9e05d2ac76228482ee3087016e71023e39795008c52f",
+      "bytes": 10271
+    },
+    {
+      "path": "test_runner.py",
+      "sha256": "c230abb575f37619d2e620e625cf2942dcb6f09e919b6b9b3023ad74b1f1c64d",
+      "bytes": 23695
+    },
+    {
+      "path": "prepare_plan.py",
+      "sha256": "f8925d65c9e5409859e3247089873229392e599f70b386e76bbd8b36d9db778d",
+      "bytes": 5876
+    },
+    {
+      "path": "freeze.py",
+      "sha256": "ffc4e2f192b1040b149fa6338f3622f4f89faf25bda9ee866ab7165a14930ff8",
+      "bytes": 6101
+    },
+    {
+      "path": "qualify_runner.py",
+      "sha256": "4d84c6e35e0755d9c565ad58fa29f873fa121c20ea7e06305e77a75d985c6496",
+      "bytes": 718
+    },
+    {
+      "path": "qualify_installed.py",
+      "sha256": "7081008ac4beee7125a27163cff5702cf801970882ebc61f71395c7f79789be6",
+      "bytes": 967
+    },
+    {
+      "path": "prepare_installed_tests.py",
+      "sha256": "430b0633c72e5a174682aad43d9a4f1ee8c6c83d2f3d71fa428bb79d59524cb9",
+      "bytes": 1316
+    },
+    {
+      "path": "add_installed_fixture.py",
+      "sha256": "2c3e7bd8427b94840d9699092b142e90884863e53e4a355c6481d93d2710aa5b",
+      "bytes": 752
+    },
+    {
+      "path": "installed-test-pins.json",
+      "sha256": "8c18fdbd1ffc3c244be09018404e00d4231f06a9afe5766f616b44b91d4ce415",
+      "bytes": 1315
+    },
+    {
+      "path": "installed-fixture-added.json",
+      "sha256": "2b7a1814c2454ffb615d09209d7898e2f0f81272a10992264c69b9d9d0db5f7d",
+      "bytes": 315
+    },
+    {
+      "path": "runner-final.xml",
+      "sha256": "862c193a7a7714214e12797ce90b069c713dd8f5fb0f0d1f5a9d7295d0e7f5f3",
+      "bytes": 4521
+    },
+    {
+      "path": "runner-handoff-final.xml",
+      "sha256": "30c07bc24d3fc81436448012cd226bb74f995471a6146d18228cec94dba264c0",
+      "bytes": 5009
+    },
+    {
+      "path": "runner-final-reviewed.xml",
+      "sha256": "a3f3f86e1b4ff90e2d3197feafa844e2992e736fa8267df88be00bc5a3913b43",
+      "bytes": 5726
+    },
+    {
+      "path": "installed-supervisor-final.xml",
+      "sha256": "73a68dd0fe1edb293a8637e9ee0c7c8656ee51a6e48eb7880dad7ee66de2cf6e",
+      "bytes": 1217
+    },
+    {
+      "path": "installed-supervisor-fixture-fixed.xml",
+      "sha256": "1e05f677e089148e4a0d95a65f6358685266851051103cb21585880b754230f1",
+      "bytes": 8782
+    },
+    {
+      "path": "plan.json",
+      "sha256": "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5",
+      "bytes": 283064
+    },
+    {
+      "path": "plan-prepared-before-review.json",
+      "sha256": "ad143dad083d24a5820106eaae6376b971fef071d019d29fb8c8b9ddd0895f36",
+      "bytes": 286874
+    },
+    {
+      "path": "review-command.json",
+      "sha256": "b4e967a9d82e6b99ff29b9b0cad0def33f9a08b26db659a0b9735f17b1b6139a",
+      "bytes": 2396
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "a9106809dd18a6c7def6a37d05a7d14c269071920d82723029ba51a04be5591f",
+      "bytes": 3323
+    },
+    {
+      "path": "final-build/installation.json",
+      "sha256": "589a3345ee4dd194ab9f31f3d25e2debed252a48cf06fca6d6a2f35fff21e175",
+      "bytes": 205871
+    },
+    {
+      "path": "installation.json",
+      "sha256": "2964ec5032e848e1b55a13556d1a921a2550436f17eb6e99c6aadefd734d235b",
+      "bytes": 205871
+    },
+    {
+      "path": "build_install.py",
+      "sha256": "d602e52bb5a7393fb9e7f821118323621eda07762a2cc8ea03ea8b799b434821",
+      "bytes": 3587
+    },
+    {
+      "path": "build_final.py",
+      "sha256": "9de99534512bac625d4ee9e2a491c44c76d30ef1492e5fd243ee83b5cced3698",
+      "bytes": 3720
+    },
+    {
+      "path": "prepare_final_build.py",
+      "sha256": "1f3fc0b6c0d6a25f6baf51e4e5db3c79e85ab168d2938c77de282edb057212c8",
+      "bytes": 857
+    },
+    {
+      "path": "archive-core.stderr",
+      "sha256": "5012a3b4bb5acdd32282516c1aee6975e11cddd789d2cc3f1bfd16a18bfc56ec",
+      "bytes": 154
+    },
+    {
+      "path": "installed-tests/test_bounded_service_supervisor.py",
+      "sha256": "d23a081a9aefcc79e85ee11ad415d1374c6b5101e825352b3bfafb3f85a68550",
+      "bytes": 20421
+    },
+    {
+      "path": "installed-tests/test_service_start.py",
+      "sha256": "2cdee1300139bb815166c891ef31eb836fea6d35d4c28a1514cb2609852abfb9",
+      "bytes": 12604
+    },
+    {
+      "path": "installed-tests/test_service_supervisor.py",
+      "sha256": "4338968bf1b2d3a73a24889742d5f4cc0bf23d1e93c3e2638c6621bd9df22cfa",
+      "bytes": 17653
+    },
+    {
+      "path": "installed-tests/test_user_service_definition.py",
+      "sha256": "cc097574d53f412e912098b0517f3b4e637cdff47fec8cf716a072fa95449f01",
+      "bytes": 8644
+    },
+    {
+      "path": "installed-tests/test_user_service_installation.py",
+      "sha256": "8793c1407c26ce54199eddc50db2f3ef57c956f04cc011450fd2d797cb27d10d",
+      "bytes": 32203
+    },
+    {
+      "path": "installed-tests/test_user_service_supervision.py",
+      "sha256": "b39c304a15a04150b38eb1f06515b04a0534dbc28d3c50512d9447f5ba2a9b83",
+      "bytes": 2968
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "returncode": 3,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "ceb2b2a1bd8007c268a2bc9b76281616391d482d4b6fed57393e3e8bc14a0840",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_OUTCOME_UNCONFIRMED",
+    "generation": null,
+    "instance_id": "svc_55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "shutdown_outcome": "unconfirmed",
+    "next_action": "Inspect retained runtime recovery state before resuming work.",
+    "supervision_scope": "supervisor_only",
+    "runtime_work_settlement": "not_asserted"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "status": "OFFLINE_QUALIFIED_NOT_EXECUTED",
+  "product_commits": {
+    "core": "7810f3b9bd2576bca5ccc8286a4c661789bf73a4",
+    "nexus": "6714d69563f86e965b7551239a09367982eadbca",
+    "connector": "e612ff852cf22264c52cc9d083548d6100a60efa"
+  },
+  "wheels": {
+    "core": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9",
+    "nexus": "d67365a6a407b12671412f4501f156cbdb8c5d6d196cf5679352e6c4ffe8dbb0",
+    "connector": "06f711467fa43af5996b5e2bf5e2a01e410a431d9013ccac318200b8902e7275"
+  },
+  "installation_sha256": "589a3345ee4dd194ab9f31f3d25e2debed252a48cf06fca6d6a2f35fff21e175",
+  "installed_tests": {
+    "passed": 81,
+    "deselected": 2,
+    "xml": "installed-supervisor-fixture-fixed.xml",
+    "scope": "Pure policy, fake native tasks/Popen and readonly own-process identity. Two real benign redirector child-spawn cases excluded; source evidence already retained separately. No installed actual service/crash acceptance."
+  },
+  "runner_tests": {
+    "passed": 53,
+    "xml": "runner-final-reviewed.xml",
+    "scope": "All final runner cases with fake native/process/network interfaces, including partial-handle failure, unknown waits, wrapper timeout, drift, parent/counter/ACK changes and all three retained exits."
+  },
+  "history": [
+    {
+      "artifact": "runner-final.xml",
+      "outcome": "43PASS before review deltas"
+    },
+    {
+      "artifact": "runner-handoff-final.xml",
+      "outcome": "47PASS before partial-handle/drift delta"
+    },
+    {
+      "artifact": "installed-supervisor-final.xml",
+      "outcome": "CollectionERROR missing test_service_start helper; no test executed; corrected by exact committed fixture copy."
+    },
+    {
+      "artifact": "installation.json",
+      "outcome": "Provisional pins341a/02a/e612 build/install success; superseded by separate final-build after new Core/Nexus commits. Provisional wheel bytes preserved; own venv now final products."
+    },
+    {
+      "artifact": "archive-core.stderr",
+      "outcome": "Initial build attempt failed before archive because isolated PATH had no git. Fixed to resolved absolute git; no source or service effect."
+    },
+    {
+      "tool_chunk": "a12181",
+      "outcome": "Preparation command PowerShell parser error before any file write; replaced with exact Python preparation file."
+    }
+  ],
+  "live_calls": {
+    "services": 0,
+    "native_tasks": 0,
+    "crashes": 0,
+    "provider": 0
+  },
+  "limits": [
+    "Known injected runtime exit3 only, not arbitrary NTSTATUS",
+    "No active work/provider/login/model turn",
+    "No M1/shared installed environment mutation",
+    "No service or crash before root concrete review",
+    "Startup timeout preserved as failure, not retried or increased",
+    "FILETIME wall birth minus crash wall time, tolerance1s. Also compare endpoint wall vs monotonic elapsed with maximum1s drift; reject excess. Cancelling clock adjustments are not detected. Pure policy tests prove monotonic60s; actual stop during backoff is not exercised by this campaign."
+  ],
+  "plan_sha256": "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5",
+  "runner_sha256": "b72d525e09ae8e968eaf09481851c5582d9f25135c234f3ead7696d64746eff6",
+  "runtime_support_sha256": "150630b59f7ceba28add9e05d2ac76228482ee3087016e71023e39795008c52f",
+  "pins_verified": 1014
+}

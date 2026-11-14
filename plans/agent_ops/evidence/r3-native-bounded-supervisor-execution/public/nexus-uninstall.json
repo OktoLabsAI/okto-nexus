@@ -1,0 +1,15 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "e7b37938eef912ad9d7dc60755d5e7725792d35dc990d60423041324380a74c9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "USER_SERVICE_REMOVED",
+    "generation": null,
+    "instance_id": "svc_55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "ready_for_queries": false,
+    "installation_state": "absent",
+    "next_action": "Data and credentials are retained. Foreground or detached start remains available."
+  }
+}

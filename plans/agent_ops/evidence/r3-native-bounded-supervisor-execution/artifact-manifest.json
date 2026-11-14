@@ -1,0 +1,459 @@
+{
+  "files": [
+    {
+      "path": "preparation/add_installed_fixture.py",
+      "sha256": "2c3e7bd8427b94840d9699092b142e90884863e53e4a355c6481d93d2710aa5b",
+      "bytes": 752
+    },
+    {
+      "path": "preparation/archive-core.stderr",
+      "sha256": "5012a3b4bb5acdd32282516c1aee6975e11cddd789d2cc3f1bfd16a18bfc56ec",
+      "bytes": 154
+    },
+    {
+      "path": "preparation/build_final.py",
+      "sha256": "9de99534512bac625d4ee9e2a491c44c76d30ef1492e5fd243ee83b5cced3698",
+      "bytes": 3720
+    },
+    {
+      "path": "preparation/build_install.py",
+      "sha256": "d602e52bb5a7393fb9e7f821118323621eda07762a2cc8ea03ea8b799b434821",
+      "bytes": 3587
+    },
+    {
+      "path": "preparation/final-build/installation.json",
+      "sha256": "589a3345ee4dd194ab9f31f3d25e2debed252a48cf06fca6d6a2f35fff21e175",
+      "bytes": 205871
+    },
+    {
+      "path": "preparation/freeze.py",
+      "sha256": "ffc4e2f192b1040b149fa6338f3622f4f89faf25bda9ee866ab7165a14930ff8",
+      "bytes": 6101
+    },
+    {
+      "path": "preparation/installation.json",
+      "sha256": "2964ec5032e848e1b55a13556d1a921a2550436f17eb6e99c6aadefd734d235b",
+      "bytes": 205871
+    },
+    {
+      "path": "preparation/installed-fixture-added.json",
+      "sha256": "2b7a1814c2454ffb615d09209d7898e2f0f81272a10992264c69b9d9d0db5f7d",
+      "bytes": 315
+    },
+    {
+      "path": "preparation/installed-supervisor-final.xml",
+      "sha256": "73a68dd0fe1edb293a8637e9ee0c7c8656ee51a6e48eb7880dad7ee66de2cf6e",
+      "bytes": 1217
+    },
+    {
+      "path": "preparation/installed-supervisor-fixture-fixed.xml",
+      "sha256": "1e05f677e089148e4a0d95a65f6358685266851051103cb21585880b754230f1",
+      "bytes": 8782
+    },
+    {
+      "path": "preparation/installed-test-pins.json",
+      "sha256": "8c18fdbd1ffc3c244be09018404e00d4231f06a9afe5766f616b44b91d4ce415",
+      "bytes": 1315
+    },
+    {
+      "path": "preparation/installed-tests/test_bounded_service_supervisor.py",
+      "sha256": "d23a081a9aefcc79e85ee11ad415d1374c6b5101e825352b3bfafb3f85a68550",
+      "bytes": 20421
+    },
+    {
+      "path": "preparation/installed-tests/test_service_start.py",
+      "sha256": "2cdee1300139bb815166c891ef31eb836fea6d35d4c28a1514cb2609852abfb9",
+      "bytes": 12604
+    },
+    {
+      "path": "preparation/installed-tests/test_service_supervisor.py",
+      "sha256": "4338968bf1b2d3a73a24889742d5f4cc0bf23d1e93c3e2638c6621bd9df22cfa",
+      "bytes": 17653
+    },
+    {
+      "path": "preparation/installed-tests/test_user_service_definition.py",
+      "sha256": "cc097574d53f412e912098b0517f3b4e637cdff47fec8cf716a072fa95449f01",
+      "bytes": 8644
+    },
+    {
+      "path": "preparation/installed-tests/test_user_service_installation.py",
+      "sha256": "8793c1407c26ce54199eddc50db2f3ef57c956f04cc011450fd2d797cb27d10d",
+      "bytes": 32203
+    },
+    {
+      "path": "preparation/installed-tests/test_user_service_supervision.py",
+      "sha256": "b39c304a15a04150b38eb1f06515b04a0534dbc28d3c50512d9447f5ba2a9b83",
+      "bytes": 2968
+    },
+    {
+      "path": "preparation/plan-prepared-before-review.json",
+      "sha256": "ad143dad083d24a5820106eaae6376b971fef071d019d29fb8c8b9ddd0895f36",
+      "bytes": 286874
+    },
+    {
+      "path": "preparation/plan.json",
+      "sha256": "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5",
+      "bytes": 283064
+    },
+    {
+      "path": "preparation/prepare_final_build.py",
+      "sha256": "1f3fc0b6c0d6a25f6baf51e4e5db3c79e85ab168d2938c77de282edb057212c8",
+      "bytes": 857
+    },
+    {
+      "path": "preparation/prepare_installed_tests.py",
+      "sha256": "430b0633c72e5a174682aad43d9a4f1ee8c6c83d2f3d71fa428bb79d59524cb9",
+      "bytes": 1316
+    },
+    {
+      "path": "preparation/prepare_plan.py",
+      "sha256": "f8925d65c9e5409859e3247089873229392e599f70b386e76bbd8b36d9db778d",
+      "bytes": 5876
+    },
+    {
+      "path": "preparation/public-allowlist.json",
+      "sha256": "ce54d7a3ac923bff1ae1341de7053ddbf0ba8a8be00ba67829d81e3dc4fbccb7",
+      "bytes": 5241
+    },
+    {
+      "path": "preparation/qualification.json",
+      "sha256": "a9106809dd18a6c7def6a37d05a7d14c269071920d82723029ba51a04be5591f",
+      "bytes": 3323
+    },
+    {
+      "path": "preparation/qualify_installed.py",
+      "sha256": "7081008ac4beee7125a27163cff5702cf801970882ebc61f71395c7f79789be6",
+      "bytes": 967
+    },
+    {
+      "path": "preparation/qualify_runner.py",
+      "sha256": "4d84c6e35e0755d9c565ad58fa29f873fa121c20ea7e06305e77a75d985c6496",
+      "bytes": 718
+    },
+    {
+      "path": "preparation/review-command.json",
+      "sha256": "b4e967a9d82e6b99ff29b9b0cad0def33f9a08b26db659a0b9735f17b1b6139a",
+      "bytes": 2396
+    },
+    {
+      "path": "preparation/run.py",
+      "sha256": "b72d525e09ae8e968eaf09481851c5582d9f25135c234f3ead7696d64746eff6",
+      "bytes": 19501
+    },
+    {
+      "path": "preparation/runner-final-reviewed.xml",
+      "sha256": "a3f3f86e1b4ff90e2d3197feafa844e2992e736fa8267df88be00bc5a3913b43",
+      "bytes": 5726
+    },
+    {
+      "path": "preparation/runner-final.xml",
+      "sha256": "862c193a7a7714214e12797ce90b069c713dd8f5fb0f0d1f5a9d7295d0e7f5f3",
+      "bytes": 4521
+    },
+    {
+      "path": "preparation/runner-handoff-final.xml",
+      "sha256": "30c07bc24d3fc81436448012cd226bb74f995471a6146d18228cec94dba264c0",
+      "bytes": 5009
+    },
+    {
+      "path": "preparation/runtime_support.py",
+      "sha256": "150630b59f7ceba28add9e05d2ac76228482ee3087016e71023e39795008c52f",
+      "bytes": 10271
+    },
+    {
+      "path": "preparation/test_runner.py",
+      "sha256": "c230abb575f37619d2e620e625cf2942dcb6f09e919b6b9b3023ad74b1f1c64d",
+      "bytes": 23695
+    },
+    {
+      "path": "public/connector-automatic-replacement-1.json",
+      "sha256": "ee891eefb9403f08b0b109a05abfa7d5c641dbd86fdb9a315f5dd23137760859",
+      "bytes": 1437
+    },
+    {
+      "path": "public/connector-automatic-replacement-2.json",
+      "sha256": "a985376fbeee968aa839826785048516e93de1dbcc5e38eb69a9dcfe3ec3d4ff",
+      "bytes": 1440
+    },
+    {
+      "path": "public/connector-automatic-replacement-3.json",
+      "sha256": "b734abfc59a11acce8c11d7da6f79abeded4ed3648bc909d530174d55cc2d227",
+      "bytes": 1437
+    },
+    {
+      "path": "public/connector-crash-0-process-exits.json",
+      "sha256": "be25955a4f6ae66d83f86e3ed2a83fad5c09e7ab4d51a9d6a356ac285b996bde",
+      "bytes": 335
+    },
+    {
+      "path": "public/connector-crash-0.json",
+      "sha256": "ae6e533cb9a12bed17f4fe281014d16eb0328bd1730063a7a033a67d9b8eec72",
+      "bytes": 440
+    },
+    {
+      "path": "public/connector-crash-1-process-exits.json",
+      "sha256": "16b4d29d1a96fc3f7b727a079afa2bf8b41163e3ab9d57fe31b78a76b473244a",
+      "bytes": 335
+    },
+    {
+      "path": "public/connector-crash-1.json",
+      "sha256": "337f4698fe959d4bc2d7e5d924532b70c3f792fa81b04fa7abe60e806891baaa",
+      "bytes": 441
+    },
+    {
+      "path": "public/connector-crash-2-process-exits.json",
+      "sha256": "3cb0db74d9868175b5dcc0d642e9edf501fb4cf5620a2af8f84246cde40ff8a7",
+      "bytes": 335
+    },
+    {
+      "path": "public/connector-crash-2.json",
+      "sha256": "678e14d3862f400e63ec211b9f1c0b5ccecfa513467a896ec74f6c2bdbeccc0b",
+      "bytes": 441
+    },
+    {
+      "path": "public/connector-crash-3-process-exits.json",
+      "sha256": "ca38673a990b20c3b6f0fbb14cdfc81d4a207ad22d9035db70ac0bd05cc360fb",
+      "bytes": 335
+    },
+    {
+      "path": "public/connector-crash-3.json",
+      "sha256": "48e9422093244a1f91e149931eb5c14ed240a7d10642bc0727c5bafedb505ec7",
+      "bytes": 441
+    },
+    {
+      "path": "public/connector-data-retained.json",
+      "sha256": "4f3d1af3629eadfb36339f0203901c7a3aea0ecdf3a928580df0c352cfea82ed",
+      "bytes": 6739
+    },
+    {
+      "path": "public/connector-exhausted-parent-process-exits.json",
+      "sha256": "1aee7f284ef29c1abb52e46ff850f7fd990177d12f47e3ffd96fad934e024b76",
+      "bytes": 168
+    },
+    {
+      "path": "public/connector-exhaustion.json",
+      "sha256": "8f8b2ce1478fd396bc67de4dd13ad46f59aa7e2cba652d0fe54c1da6ea776708",
+      "bytes": 1034
+    },
+    {
+      "path": "public/connector-initial-ready.json",
+      "sha256": "f5f2f90d75e6d72d7f604684c510eb35064e6351380ef3cb51bc0d861aa353b9",
+      "bytes": 910
+    },
+    {
+      "path": "public/connector-install.json",
+      "sha256": "42b4795cf1198375465ffb8b28e1bbcf23a79dfb435c684944b9182589d03f2a",
+      "bytes": 370
+    },
+    {
+      "path": "public/connector-next-connect-scope.json",
+      "sha256": "c0bf92315faabb4bb113b7a866a9f79ea1fae151c53ff45b63b04c7a671107a0",
+      "bytes": 119
+    },
+    {
+      "path": "public/connector-next-connect.json",
+      "sha256": "a1c77a857bbccf35a63514a1e772b98347d4e36c40dcece338cfc0cb8f4a3e17",
+      "bytes": 312
+    },
+    {
+      "path": "public/connector-start-for-crash.json",
+      "sha256": "e99f57f0d517b28176a305bf8d3c0d4cccf12f03afdc35d0c6725c6ee5391cac",
+      "bytes": 594
+    },
+    {
+      "path": "public/connector-start-initial.json",
+      "sha256": "41c18ae8359fe5599cfa62c17020247c09153fdcb3254e5f703b29c8594066fa",
+      "bytes": 594
+    },
+    {
+      "path": "public/connector-stop-after-exhaustion.json",
+      "sha256": "3c5d016480af126f4117a31909821ec34472ef2dbd729ce6cdd0e1618658b104",
+      "bytes": 731
+    },
+    {
+      "path": "public/connector-stop-t20-physical-exit.json",
+      "sha256": "d85af9f0c54fe16ac63811cb0866cd30079bb3e085e6b65da63c54702d0b80af",
+      "bytes": 638
+    },
+    {
+      "path": "public/connector-stop-t20-process-exits.json",
+      "sha256": "a08beaae7c9b2a4ac26e07618bb7ce1f691d7a12be774aab5a39bb556e5b8a31",
+      "bytes": 500
+    },
+    {
+      "path": "public/connector-stop-t20.json",
+      "sha256": "1b3ce30fe785be329d457342c6ca563062e7675dca94876c6aa9a43aec8849e5",
+      "bytes": 636
+    },
+    {
+      "path": "public/connector-T19-no-fourth-retry.json",
+      "sha256": "854ad695d1a695e9ac7e483b6caa5796713ae85d094f03d9098a17d38878f904",
+      "bytes": 636
+    },
+    {
+      "path": "public/connector-T20-no-resurrection.json",
+      "sha256": "10fbfb158673de3de18dfb5b26632286f6bc501980515851fec69cc547dbdae3",
+      "bytes": 500
+    },
+    {
+      "path": "public/connector-uninstall.json",
+      "sha256": "c5ea80df573cdc67955b0607cd21fed8567c1ed3da37c1f259438d28bacf1b36",
+      "bytes": 246
+    },
+    {
+      "path": "public/nexus-automatic-replacement-1.json",
+      "sha256": "d49a4ae93c7fa6105c6e571d8a48ce6786fdd62ba3cf7d054c980393ea95eea3",
+      "bytes": 1426
+    },
+    {
+      "path": "public/nexus-automatic-replacement-2.json",
+      "sha256": "358b1a30f0ec6874ccc6721c7782adb908272cc076f222f9402bebe6e53e599a",
+      "bytes": 1429
+    },
+    {
+      "path": "public/nexus-automatic-replacement-3.json",
+      "sha256": "d0a0702c2eb41dd816704f2bfc376c07c3b567c6d5b1dddb8d6f0226b2a47490",
+      "bytes": 1429
+    },
+    {
+      "path": "public/nexus-crash-0-process-exits.json",
+      "sha256": "7b6c749dccbd2f33ab0873d6c8071dbe0dd2342b760de67d5d2963bff36c525b",
+      "bytes": 335
+    },
+    {
+      "path": "public/nexus-crash-0.json",
+      "sha256": "48197d031ff169305659081b71848e0b6688601b5d3b1a1212a19d3d19057811",
+      "bytes": 441
+    },
+    {
+      "path": "public/nexus-crash-1-process-exits.json",
+      "sha256": "f8e031e4ff2d7d28f16f4b54b1ef0e968eb1a2a6c1cdcf225d06d86c3e8e9279",
+      "bytes": 335
+    },
+    {
+      "path": "public/nexus-crash-1.json",
+      "sha256": "327fb18b380f1194356d7c71d4aadf615fcc2bc231187c3e74b04bab1fc874ab",
+      "bytes": 441
+    },
+    {
+      "path": "public/nexus-crash-2-process-exits.json",
+      "sha256": "f34f2fcb2207afface72e53095cfc6b92745d437b1437ca54c058a8d9f09b57c",
+      "bytes": 335
+    },
+    {
+      "path": "public/nexus-crash-2.json",
+      "sha256": "2a167acda7bf0ce6943c244b29997ed562a4b4003b2e0e78aa85de375b907b1e",
+      "bytes": 441
+    },
+    {
+      "path": "public/nexus-crash-3-process-exits.json",
+      "sha256": "11ef7cd5efdc1a3728ebf349b5a319eb7fef95ad558d7cb667967e6666ed5b5b",
+      "bytes": 335
+    },
+    {
+      "path": "public/nexus-crash-3.json",
+      "sha256": "29427233364f8b6812a0aeba9b10aba0e6fc90ea46748165ec136c19268ead45",
+      "bytes": 441
+    },
+    {
+      "path": "public/nexus-data-retained.json",
+      "sha256": "b773aad361f4ff0c33939ade8d60475e8d13327be9271c6afc4f3abaec12bc44",
+      "bytes": 6823
+    },
+    {
+      "path": "public/nexus-exhausted-parent-process-exits.json",
+      "sha256": "b9736b2f80892069991629c902902748ba16f6aa3b3df628f0d4586e4c8c4a8d",
+      "bytes": 168
+    },
+    {
+      "path": "public/nexus-exhaustion.json",
+      "sha256": "3ea8bec775692eb9604086f7b8f4b2aff4ff68213562e93943e8e947f8c0f742",
+      "bytes": 929
+    },
+    {
+      "path": "public/nexus-initial-ready.json",
+      "sha256": "d6cd2ab6cc5f4c788221d0e82f7b5474dd988791c934c542d7b30f1e2d7f8bd7",
+      "bytes": 899
+    },
+    {
+      "path": "public/nexus-install.json",
+      "sha256": "5bb1ae5c8577c59bcebcc2555cb833133da1bef53029d3a2409896e28b603e4c",
+      "bytes": 637
+    },
+    {
+      "path": "public/nexus-next-connect.json",
+      "sha256": "2ba81021556983090f2dd181a930be1b8657307755b4112e1e5ce91ed0fa68d0",
+      "bytes": 297
+    },
+    {
+      "path": "public/nexus-start-initial.json",
+      "sha256": "76ce66e6a85dcbe5c321c5a092724c913d057f9d60b58498bdc9cef904dc68be",
+      "bytes": 586
+    },
+    {
+      "path": "public/nexus-stop-after-exhaustion.json",
+      "sha256": "0d7fb4af52e2f4fd2d97ec6228043240b82f080cf5c60ab1ff4b2abcc05baee3",
+      "bytes": 723
+    },
+    {
+      "path": "public/nexus-stop-t20-physical-exit.json",
+      "sha256": "eafd9ba13b81a9c68fb09f4366f0881bc43a1b776f9514d7f474c23ec620f8fc",
+      "bytes": 692
+    },
+    {
+      "path": "public/nexus-stop-t20-process-exits.json",
+      "sha256": "57fd5ca7c6007819253a576c14783320e19a25b4bb4ade1c6b40c926b2d6290d",
+      "bytes": 500
+    },
+    {
+      "path": "public/nexus-stop-t20.json",
+      "sha256": "5be5b1c18f9777616f8b63c2542a3e993d53d2a5866cd102f5c90ca9e8485d9f",
+      "bytes": 558
+    },
+    {
+      "path": "public/nexus-T19-no-fourth-retry.json",
+      "sha256": "8abccfb83b1205d2cbebab7b134ad3fe3e12b5da38715c9be19e234190f00124",
+      "bytes": 531
+    },
+    {
+      "path": "public/nexus-T20-no-resurrection.json",
+      "sha256": "36f5111aa69e161c640a5d6c7f8fa0130a8492e56c32cb4a53b9bc4e44947d2e",
+      "bytes": 555
+    },
+    {
+      "path": "public/nexus-uninstall.json",
+      "sha256": "023de5371b9f741c51a5208f50236ecdf21fe565da22a6e73e9634a7598a15b5",
+      "bytes": 598
+    },
+    {
+      "path": "public/qualification.json",
+      "sha256": "c690fb7abcbf73773f42664864514aecf9c5bb1ccd52180fef0737dbcda6fc57",
+      "bytes": 798
+    },
+    {
+      "path": "public/started.json",
+      "sha256": "4e61640d78a1ab1bcf53c0d55aab167275bc07d2992897980274c59b7f2de1a7",
+      "bytes": 134
+    },
+    {
+      "path": "review.json",
+      "sha256": "301e4d5746c38943daddae475f4c678acc2507cee531b148b90a18aae00854c6",
+      "bytes": 3263
+    },
+    {
+      "path": "review.md",
+      "sha256": "2a3cdfd086f5474f9ce7f09f79d162bffdc194eb50b0dbbb9c8c953fa2716490",
+      "bytes": 2092
+    },
+    {
+      "path": "secret-pattern-scan.json",
+      "sha256": "141038a192bb074be306c9e9044939ead39dec1eaefdd0fc33a8e9425bb52e07",
+      "bytes": 228
+    },
+    {
+      "path": "status-preservation.json",
+      "sha256": "1d1934e91959d347b31291f2b8c2d153fe781daeeae0406e490bf2f83e72a736",
+      "bytes": 320
+    }
+  ]
+}

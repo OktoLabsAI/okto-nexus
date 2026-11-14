@@ -1,0 +1,32 @@
+[
+  {
+    "path": "test_user_service_supervision.py",
+    "sha256": "b39c304a15a04150b38eb1f06515b04a0534dbc28d3c50512d9447f5ba2a9b83",
+    "commit": "7810f3b9bd2576bca5ccc8286a4c661789bf73a4",
+    "source_path": "tests/test_user_service_supervision.py"
+  },
+  {
+    "path": "test_user_service_definition.py",
+    "sha256": "cc097574d53f412e912098b0517f3b4e637cdff47fec8cf716a072fa95449f01",
+    "commit": "7810f3b9bd2576bca5ccc8286a4c661789bf73a4",
+    "source_path": "tests/test_user_service_definition.py"
+  },
+  {
+    "path": "test_service_supervisor.py",
+    "sha256": "4338968bf1b2d3a73a24889742d5f4cc0bf23d1e93c3e2638c6621bd9df22cfa",
+    "commit": "6714d69563f86e965b7551239a09367982eadbca",
+    "source_path": "tests/test_service_supervisor.py"
+  },
+  {
+    "path": "test_user_service_installation.py",
+    "sha256": "8793c1407c26ce54199eddc50db2f3ef57c956f04cc011450fd2d797cb27d10d",
+    "commit": "6714d69563f86e965b7551239a09367982eadbca",
+    "source_path": "tests/test_user_service_installation.py"
+  },
+  {
+    "path": "test_bounded_service_supervisor.py",
+    "sha256": "d23a081a9aefcc79e85ee11ad415d1374c6b5101e825352b3bfafb3f85a68550",
+    "commit": "e612ff852cf22264c52cc9d083548d6100a60efa",
+    "source_path": "tests/unit/test_bounded_service_supervisor.py"
+  }
+]

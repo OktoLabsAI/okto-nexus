@@ -1,0 +1,15 @@
+{
+  "seconds": 190.0295261000283,
+  "samples": 184,
+  "last_run_time_unchanged": "2026-11-14 17:04:09+00:00",
+  "canonical": {
+    "state": "failed",
+    "reason": "SUPERVISOR_RETRY_EXHAUSTED",
+    "generation": null,
+    "instance_id": "svc_55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "next_action": "The bounded four-attempt cycle is exhausted. Explicitly stop before another start."
+  },
+  "automatic_launches_observed": 0
+}

@@ -1,0 +1,17 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "9b6c751a591024834daf512d50fc78bfe09938bac551cbd4553af4a460aea0b7",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "ready",
+    "reason": null,
+    "pid": 13948,
+    "generation": "aa59cd2915559fb05817426fad73728e",
+    "instance_id": "svc_55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": true,
+    "storage_initialized": true,
+    "next_action": null
+  }
+}

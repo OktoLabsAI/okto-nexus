@@ -1,0 +1,29 @@
+{
+  "status": "PASS_SCOPED",
+  "hosts": {
+    "nexus": {
+      "T19": "PASS_KNOWN_EXIT_3_BOUNDED_SEQUENCE",
+      "T20": "PASS_SCOPED",
+      "crashes": 4,
+      "automatic_replacements": 3,
+      "task_absent": true,
+      "data_home_retained": true
+    },
+    "connector": {
+      "T19": "PASS_KNOWN_EXIT_3_BOUNDED_SEQUENCE",
+      "T20": "STOP_PASS_CONNECT_WITHOUT_IDENTITY_REFUSED",
+      "crashes": 4,
+      "automatic_replacements": 3,
+      "task_absent": true,
+      "data_home_retained": true
+    }
+  },
+  "no_provider_or_active_work_created": true,
+  "M1_mutations": false,
+  "canonical_force_stop_used": false,
+  "limits": [
+    "Known injected code3, not arbitrary NTSTATUS",
+    "Connector successful configured next-connect not exercised",
+    "No model/M1 acceptance inferred"
+  ]
+}

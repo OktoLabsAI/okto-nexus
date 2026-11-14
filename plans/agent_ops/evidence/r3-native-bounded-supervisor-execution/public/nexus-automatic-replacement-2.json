@@ -1,0 +1,47 @@
+{
+  "ready": {
+    "state": "ready",
+    "reason": null,
+    "pid": 43352,
+    "generation": "0b0fab0929dcb80986889ccef28274d0",
+    "instance_id": "svc_55a3bd441d6ec2592bf6242cf32006c93cd7f73703e8af0beef1f1d5823a41ed",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": true,
+    "storage_initialized": true,
+    "next_action": null
+  },
+  "birth_filetime": 134391603894631380,
+  "backoff_seconds": 60.06672477722168,
+  "measurement_tolerance_seconds": 1,
+  "native_last_run_time": "2026-11-14 17:04:09+00:00",
+  "native_launch_unchanged": true,
+  "cycle": {
+    "cycle_id": "41904c7f283708256fd2b641814f001d",
+    "phase": "running",
+    "attempts_started": 3,
+    "last_exit_code": 3,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 50060,
+      "birth": 134391602496883536
+    },
+    "launcher": {
+      "pid": 45964,
+      "birth": 134391603894399747
+    },
+    "child": {
+      "pid": 43352,
+      "birth": 134391603894631380
+    },
+    "child_exit_confirmed": false,
+    "launcher_exit_confirmed": false
+  },
+  "clock_observation": {
+    "elapsed_wall_seconds": 66.33158683776855,
+    "elapsed_monotonic_seconds": 66.3315869999933,
+    "endpoint_drift_seconds": -1.6222475096583366e-07,
+    "maximum_endpoint_drift_seconds": 1,
+    "limitation": "Endpoint check does not detect cancelling clock adjustments; FILETIME birth remains wall-clock evidence."
+  },
+  "manual_start_issued": false
+}

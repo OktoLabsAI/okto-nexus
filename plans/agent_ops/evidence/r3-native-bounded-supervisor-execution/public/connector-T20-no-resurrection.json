@@ -1,0 +1,18 @@
+{
+  "seconds": 190.0339471999905,
+  "samples": 185,
+  "last_run_time_unchanged": "2026-11-14 17:10:59+00:00",
+  "canonical": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "pid": null,
+    "generation": "",
+    "instance_id": "svc_3e11da60781afa647750fb9414f5a038beda72245d0d54caa31004142d4e157c",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "running": false,
+    "ipc_ok": false,
+    "next_action": null
+  },
+  "automatic_launches_observed": 0
+}
