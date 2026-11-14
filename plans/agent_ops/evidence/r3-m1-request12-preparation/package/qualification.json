@@ -1,0 +1,73 @@
+{
+  "status": "OFFLINE_QUALIFIED_NOT_EXECUTED",
+  "new_package": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\installation.json",
+    "sha256": "0968afab75fd8d93ade81f87d1cba5b25fa802b682a8aa94de51d3b9cad5156a"
+  },
+  "amendment_sha256": "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+  "own_tests": {
+    "passed": 20,
+    "initial_passed": 18,
+    "initial_xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\qualification-initial.xml",
+      "sha256": "a333ae91abf9ceaea4feaba19c9bc15ddad0b36b444e3f6521a0d31b973e1a1b"
+    },
+    "final_xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\qualification-final.xml",
+      "sha256": "594bf85cfcbfa80b90094f793aca644858f008341fad2f1d25c0bcad40217d0c"
+    },
+    "command": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "-m",
+      "pytest",
+      "-q",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\test_preparation.py",
+      "--junitxml=C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\qualification-final.xml"
+    ],
+    "environment": "Own installed venv; -I/-B/-Xutf8; no editable/PYTHONPATH. Fixtures only, no live service or DB."
+  },
+  "independent_qualifications": {
+    "root_upgrade_tests": 10,
+    "controller_tests": 10,
+    "wrapper_delta_tests": 6
+  },
+  "copied_qualification_sources": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1_request12_upgrade_root_qualification.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\offline-evidence\\0-m1_request12_upgrade_root_qualification.json",
+      "sha256": "5587eee21286d4b51240015da01a847ed64c2f4898acd88d29e8a11f54be6354"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1_request12_upgrade_review_tests.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\offline-evidence\\1-m1_request12_upgrade_review_tests.py",
+      "sha256": "45babf9683714b3f70271257abb3f9df3f32e93cba74ec1825123c825d3ff67d"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-controller-875t5rwb\\wrapper-qualification.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\offline-evidence\\2-wrapper-qualification.json",
+      "sha256": "9fbd4dec1e81b03b155bbd9050fceb2af5dd0877545b7642aa10c507db810cbd"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-controller-875t5rwb\\test_wrapper_delta.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\offline-evidence\\3-test_wrapper_delta.py",
+      "sha256": "f511b6450f466bd2b0b38f2987c36c5299cfda312e4dcef59a38a36813e60b62"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-controller-875t5rwb\\qualification.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\offline-evidence\\4-qualification.json",
+      "sha256": "0a492c100efeef470d46dfb08049ad3dbc750063795bd8d1c20dbd66a9cff922"
+    },
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-controller-875t5rwb\\runtime-freeze.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\offline-evidence\\5-runtime-freeze.json",
+      "sha256": "704cab462343ed0773990917d1240d1fbe8aec95782f93a9183164c022fc1c56"
+    }
+  },
+  "syntax_sources": 28,
+  "product_source_or_wheel_mutated": false,
+  "services_started": 0,
+  "models_called": 0,
+  "grants_issued": 0,
+  "runtime_evidence_directories_created": false,
+  "historical_original_unsettled_preserved": true,
+  "acceptance_promoted": false,
+  "remote_DX40": "PENDING"
+}

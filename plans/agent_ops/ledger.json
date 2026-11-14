@@ -13455,6 +13455,18 @@
         "plans/agent_ops/evidence/r3-m1-request11-force-closure/accounting-derived.json",
         "plans/agent_ops/evidence/r3-m1-request11-force-closure/retirement-projection-and-recovery-map.json"
       ]
+    },
+    "r3_m1_request12_offline_preparation": {
+      "date": "2026-11-14",
+      "status": "OFFLINE_PREPARATION_QUALIFIED_NO_EXECUTION_ACCEPTANCE",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-request12-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-request12-preparation/package/qualification.json"
+      ],
+      "summary": "Own final-wheel environment and finite local12/13 amendment qualified offline;272648tokens/11reserved carry preserved. No live execution result or acceptance promotion.",
+      "amendment_sha256": "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+      "runtime_freeze_sha256": "860ee94619360eeeb797c7ccf2ab2c6f0d855667086c0d2147233fdf12f65038",
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -14915,6 +14927,16 @@
       "summary": "One canonical force selection, two retained exit observations and canonical uninstall. Request11 failed before native turn;272648tokens/11reservations, no refund/replay. Original checkpoint/faults and Core pending claim preserved; no acceptance promotion.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-request11-force-closure/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_request12_offline_preparation",
+      "status": "OFFLINE_PREPARATION_QUALIFIED_NO_EXECUTION_ACCEPTANCE",
+      "summary": "Own final-wheel environment and finite local12/13 amendment qualified offline;272648tokens/11reserved carry preserved. No live execution result or acceptance promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-request12-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-request12-preparation/package/qualification.json"
       ]
     }
   ],

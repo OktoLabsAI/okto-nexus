@@ -1,0 +1,296 @@
+{
+  "amendment_sha256": "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+  "steps": [
+    {
+      "label": "prepare",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "prepare"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "upgrade-plan",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "upgrade",
+        "plan"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "upgrade-apply",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "upgrade",
+        "apply"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "install",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "lifecycle",
+        "nexus",
+        "install"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "lifecycle",
+        "nexus",
+        "start"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "watch",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "observation",
+        "nexus",
+        "watch"
+      ],
+      "background_retained_observer": true,
+      "conditional": false
+    },
+    {
+      "label": "authorization-review",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "authorize_local",
+        "review"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "authorization-apply",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "authorize_local",
+        "apply"
+      ],
+      "background_retained_observer": false,
+      "conditional": true
+    },
+    {
+      "label": "useful12",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "work",
+        "local",
+        "useful"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "continuation13",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "work",
+        "local",
+        "continuation"
+      ],
+      "background_retained_observer": false,
+      "conditional": true
+    },
+    {
+      "label": "normal-stop",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "lifecycle",
+        "nexus",
+        "stop"
+      ],
+      "background_retained_observer": false,
+      "conditional": true
+    },
+    {
+      "label": "cleanup-proof",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "cleanup",
+        "nexus"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "uninstall",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "lifecycle",
+        "nexus",
+        "uninstall"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "final-presence",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "final_presence"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "closure",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\amendment.json",
+        "--expected-amendment-sha256",
+        "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+        "close"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    }
+  ],
+  "shell": false,
+  "scope": "Root executes serial selections; watcher runs concurrently. Commands are not executed by this artifact."
+}

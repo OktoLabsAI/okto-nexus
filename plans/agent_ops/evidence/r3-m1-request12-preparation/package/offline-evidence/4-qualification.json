@@ -1,0 +1,78 @@
+{
+  "status": "OFFLINE_DELTA_PASS_NO_EXECUTION_AUTHORITY",
+  "tests": {
+    "passed": 10,
+    "failed": 0,
+    "tool_chunk": "30d0f9",
+    "subcases_spawn_and_active_slot": 2
+  },
+  "history": [
+    {
+      "passed": 8,
+      "tool_chunk": "3f005c"
+    },
+    {
+      "passed": 10,
+      "tool_chunk": "ee9f93",
+      "note": "Before two unused test imports removed."
+    }
+  ],
+  "lint": {
+    "scope": [
+      "fresh_work_controller.py",
+      "history_observers.py",
+      "test_successor.py"
+    ],
+    "rule_selection": "F",
+    "passed": true,
+    "tool_chunk": "804e5a",
+    "prior_unused_test_imports": 2
+  },
+  "compile": {
+    "sources": 16,
+    "passed": true,
+    "tool_chunk": "d4acde"
+  },
+  "delta": [
+    "fresh_work_controller.py",
+    "history_observers.py",
+    "independent_controller.py",
+    "independent_journal.py",
+    "legacy_controller.py"
+  ],
+  "unchanged_modules": {
+    "api_worker.py": "b61b5a5262b9268d69835b1a6adf8672c82450ac0e606eb60d41565c1490f396",
+    "cli_flow.py": "fe2fc005f4186b2513a2e6a59bbbee0c2eecb18135fc56a9036ea0ebc1cbcd1b",
+    "containment_driver.py": "f7b67eecdf05c66d482c4803c1d370f6e6bba9bda13d89e8a80f30ae007952ac",
+    "controller.py": "cac213d1a5da5fe3eaf98ccecff5b5b4eb7975255f9df25f45debbfb91d6d6d0",
+    "normal_containment.py": "baf25b43f2b3b4b0353434b5cf70841ecaaddf56cb8161276414c22c4f81c572",
+    "observation_guard.py": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+    "observation_limits.py": "4f840bccfc843981617768eec362048bf2d5821b00c36c98256b3d0fc59fc525",
+    "serial_flow.py": "364ce1afbacb48672438ed4385546e95edc40da3b605fe39d55d07c2dd4e7624",
+    "setup_journal.py": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+    "token_collector.py": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2"
+  },
+  "baseline": {
+    "observed_tokens": 272648,
+    "reservations": 11,
+    "new_request_ids": [
+      "m1v14-local-work-12",
+      "m1v14-local-work-13"
+    ],
+    "maximum_cumulative_reservations": 13
+  },
+  "bounds": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "aggregate_poll_seconds": 11,
+    "freshness_seconds": 12,
+    "cadence_seconds": 16,
+    "target_seconds": 0.2,
+    "deadline_seconds": 600,
+    "preventive_tokens": 500000,
+    "tolerance_tokens": 700000
+  },
+  "original_checkpoint_mutated": false,
+  "service_or_provider_execution": false,
+  "acceptance_promoted": false
+}

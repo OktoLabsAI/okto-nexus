@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-14",
+  "status": "OFFLINE_PREPARATION_QUALIFIED_NO_EXECUTION_ACCEPTANCE",
+  "scope": "Finite local useful12 and conditional continuation13 under existing v14 ownership/control identity.",
+  "source_pins": {
+    "amendment.json": "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
+    "runtime-freeze.json": "860ee94619360eeeb797c7ccf2ab2c6f0d855667086c0d2147233fdf12f65038",
+    "qualification.json": "fb87ccc41ab163a23774875fdf15098ff14c4676e5502a91384df1af8f85cd7a",
+    "public-allowlist.json": "abcb58554d0cfac3ac0da0b5facefedbf08287a7b5a319b24e8048b41e9d1119"
+  },
+  "installation_sha256": "0968afab75fd8d93ade81f87d1cba5b25fa802b682a8aa94de51d3b9cad5156a",
+  "payloads": 1002,
+  "new_environment_isolated": true,
+  "qualification": {
+    "composition_final_passed": 20,
+    "composition_initial_passed": 18,
+    "initial_included_in_final": true,
+    "root_upgrade_passed": 10,
+    "controller_passed": 10,
+    "wrapper_delta_passed": 6,
+    "exact_cleanup_workflow_supplement_passed": 1,
+    "source_freeze_and_fixtures_only": true
+  },
+  "carry": {
+    "minimum_observed_tokens": 272648,
+    "cumulative_reservations": 11,
+    "historical_failed_request": "m1v14-local-work-11",
+    "historical_stream_settlement_synthesized": false
+  },
+  "selection": {
+    "useful": "m1v14-local-work-12",
+    "continuation": "m1v14-local-work-13",
+    "new_admissions_max": 2,
+    "cumulative_admissions_max": 13,
+    "preventive_tokens": 500000,
+    "tolerance_tokens": 700000,
+    "deadline_seconds": 600,
+    "future_force_authorized": false
+  },
+  "timing": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "aggregate_poll_seconds": 11,
+    "freshness_seconds": 12,
+    "cadence_seconds": 16,
+    "target_start_seconds": 0.2,
+    "cli_start_timeout_seconds": 45,
+    "passive_ready_observation_seconds": 180
+  },
+  "changes": [
+    "Own installed final wheels; old campaign/package evidence unchanged.",
+    "Canonical upgrade-plan/apply with DRAINED basis, exact source revision and environment-only target; no manual context rewrite.",
+    "READY/recovery current-generation gate; query/sync retained parent+launcher+runtime cohort, no termination rights.",
+    "Fresh request IDs after FAILED request11; current grant review and exact finite maintenance selection.",
+    "Historical RO monitor preserved; early opening failure without stream surfaced directly.",
+    "Closure separates physical service exit from work settlement and original unsettled collector history."
+  ],
+  "not_claimed": [
+    "Actual execution results, setup success, M1 acceptance, remote DX40, final billing, provider enforcement, new model default."
+  ],
+  "preparation_effects": {
+    "models": 0,
+    "services_started": 0,
+    "grants_issued": 0,
+    "runtime_evidence_directories_created": false
+  },
+  "execution_separation": "This milestone retains the offline freeze only. Root execution was separately selected later; no live public/private output is copied or classified here.",
+  "acceptance_promoted": false,
+  "scenario_counts_unchanged": {
+    "VERIFIED": 123,
+    "IN_PROGRESS": 7,
+    "NOT_RUN": 2
+  },
+  "curation": "Explicit pinned source/qualification allowlist only. No runtime database, stdout, provider auth, transcripts, command-line nonce or ownership token copied.",
+  "secret_review": {
+    "files_scanned": 52,
+    "suspected_secret_findings": [],
+    "scope": "Only curated text files; structural allowlist plus high-specificity key/JWT/bearer/private-key scan."
+  },
+  "retained_whitespace_diagnostic": {
+    "command": "git diff --cached --check",
+    "finding": "plans/agent_ops/evidence/r3-m1-request12-preparation/package/modules/api_worker.py:134: new blank line at EOF.",
+    "decision": "Pinned frozen source copied byte-for-byte; trailing blank line retained to preserve qualified hash. No other whitespace findings."
+  }
+}

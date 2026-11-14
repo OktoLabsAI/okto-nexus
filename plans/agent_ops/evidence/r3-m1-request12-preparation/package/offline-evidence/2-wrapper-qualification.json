@@ -1,0 +1,27 @@
+{
+  "status": "OFFLINE_WRAPPER_DELTA_PASS",
+  "tests": {
+    "passed": 6,
+    "failed": 0,
+    "tool_chunk": "425345",
+    "scope": "Real extracted wrapper guards and imported close functions; no full work entrypoint/service/provider execution",
+    "after_test_change": "Removed unused imports from test only; runtime bytes unchanged"
+  },
+  "runtime": {
+    "local_work.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\local_work.py",
+      "sha256": "9de7a1b18dc94ade3c3ca0533af2bf71161d0963c5b694cca3cd987808b0dbd0"
+    },
+    "close_campaign.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\close_campaign.py",
+      "sha256": "e02c9411e666257ca7ee8516be66092a6c091e315617a852262450694030d4ce"
+    }
+  },
+  "test": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-controller-875t5rwb\\test_wrapper_delta.py",
+    "sha256": "f511b6450f466bd2b0b38f2987c36c5299cfda312e4dcef59a38a36813e60b62"
+  },
+  "compile_tool": "11216e",
+  "test_ruff_f_tool": "cdb26a",
+  "effects": false
+}

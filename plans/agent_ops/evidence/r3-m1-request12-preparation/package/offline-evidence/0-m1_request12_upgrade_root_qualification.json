@@ -1,0 +1,17 @@
+{
+  "status": "PASS_OFFLINE",
+  "tool_execution_id": "d771d8",
+  "exit_code": 0,
+  "tests_passed": 10,
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12\\upgrade_environment.py",
+    "sha256": "127c19a0db23e8d4411d5d884f701b3e3a2eab4322426795393962188e6cdd8a"
+  },
+  "tests": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1_request12_upgrade_review_tests.py",
+    "sha256": "45babf9683714b3f70271257abb3f9df3f32e93cba74ec1825123c825d3ff67d"
+  },
+  "service_actions": 0,
+  "provider_calls": 0,
+  "scope": "Upgrade plan scope, frozen source, wrong generation/environment/native source rejection; drain preflight, exact review prerequisite, exclusive dispatch, private plan exclusion from public output. Product subprocess and service observer replaced."
+}

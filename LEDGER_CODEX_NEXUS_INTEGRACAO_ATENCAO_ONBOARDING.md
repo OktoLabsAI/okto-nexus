@@ -1834,3 +1834,26 @@ e 53 fixtures finais do runner PASS. O erro inicial de coleta por fixture ausent
 a campanha anterior sem recuperação e a matriz do Scheduler foram preservados.
 A contagem passa a **123/132 VERIFIED, 7 IN_PROGRESS e 2 NOT_RUN**; nenhum outro
 status foi alterado. [Evidências, hashes e limites](plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.md).
+
+
+## 2026-11-14 — preparação offline das requests12/13
+
+Pacote próprio com1002 payloads dos wheels finais congelado para nova solicitação
+útil local12 e continuação13 somente após sucesso canônico. O histórico FAILED da
+request11 permanece intacto:272648 tokens observados,11 reservas, sem refund,
+replay ou settlement sintético. Limites13/500000/700000 e600s preservados; remoto
+DX40 não selecionado. A migração usa upgrade-plan/apply canônicos com origem
+DRAINED e revisão técnica exata, sem reescrever contexto manualmente.
+
+O início conserva CLI45s e admite somente observação passiva READY180s após timeout
+transport/pending; erros positivos recusam. O observador retém parent, launcher e
+runtime com identidade física e direitos query/sync. Cleanup exige os três exits,
+tarefa inativa e ausência canônica; não afirma settlement ou autorização de force.
+
+Qualificação offline:20 focais finais da composição (18 iniciais incluídos),
+10 de upgrade pelo root,10 de controlador,6 de wrappers e1 suplemento do argv
+cleanup. Falha inicial do suplemento por fixture/parser foi preservada. Nenhum
+serviço, modelo ou grant foi executado nesses testes. A execução posterior pelo
+root será registrada separadamente; este marco não a classifica nem promove aceite.
+Contagem inalterada: **123/132 VERIFIED,7 IN_PROGRESS e2 NOT_RUN**.
+Evidência: `plans/agent_ops/evidence/r3-m1-request12-preparation/review.json`.

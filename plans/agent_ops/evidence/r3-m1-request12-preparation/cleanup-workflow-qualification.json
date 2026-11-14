@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "tests": 1,
+  "tool_result": "810742",
+  "exact_frozen_cleanup_argv": true,
+  "entry_translation": [
+    "nexus",
+    "cleanup"
+  ],
+  "actual_cleanup_called": false,
+  "frozen_sources_changed": false,
+  "preserved_initial_fixture_failure": {
+    "tool_result": "c87ad3",
+    "reason": "Fixture imported cohort before the real gate installs amendment parser; corrected fixture reproduces gate parser setup."
+  }
+}
