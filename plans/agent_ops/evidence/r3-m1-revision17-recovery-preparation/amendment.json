@@ -1,0 +1,580 @@
+{
+  "format": "okto.m1.v17.work-revision17-recovery",
+  "execution_status": "OFFLINE_PREPARATION_ROOT_REVIEW_REQUIRED",
+  "authority": "Technical amendment binding standing user authorization; no new human hash approval is claimed.",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery",
+  "original": {
+    "approval": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\execution-authorization.json",
+    "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+    "proposal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1-codex-campaign-proposal-v14.json",
+    "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e"
+  },
+  "source_authority": {
+    "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+    "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c"
+  },
+  "basis": {
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\controller.json",
+      "sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision16-execution\\closure-companion.json",
+      "sha256": "68df967826cd90436983678548664df1f0b384a2b78af8d22b6fa6acc6431c8b"
+    },
+    "accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+      "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+    },
+    "adoption": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-result.json",
+      "sha256": "ed18e1c5475b5b0b0f494265e894675c3522a4bb49dacb17c52a01272b2d29ed"
+    },
+    "controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\controller-qualification\\runtime-freeze.json",
+      "sha256": "1d8ed06a695a407d80647a9a922b9ac9f5261a52f85ea41354b495ce67f1932e"
+    },
+    "historical_grants": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\historical-grants.json",
+      "sha256": "bf2015d133599da66eaf96ba5b62c8ce84128b52138d25659925ee258681fbbe"
+    },
+    "technical_predecessor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\technical-predecessor.json",
+      "sha256": "f351fda06b7266ea28d52abaa3a4169a9bd2f789bcf9b8bfb4aca31a1d195e89"
+    },
+    "execution_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-technical-plan-pito7b7o\\execution-plan.json",
+      "sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31"
+    },
+    "predecessor_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-freeze.json",
+      "sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94"
+    },
+    "historical_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\controller-qualification\\runtime-freeze.json",
+      "sha256": "2605a4dd25b58e5f47d8927bfca7df3f3b71ee6389a125e1b43d87f58cc90798"
+    },
+    "predecessor_closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\closure.json",
+      "sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9"
+    },
+    "native_refusal_diagnosis": {
+      "path": "C:/Users/jpamb/AppData/Local/Temp/r3-w15-native-decision-diagnosis-w1hv7idf/diagnosis.json",
+      "sha256": "292277c6548bed3779ebc121ef722db9118fc80f70dc9dd25ca65c79ef66f692"
+    },
+    "command_failure_diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-useful-diagnosis-3tis1ae5\\projection.json",
+      "sha256": "96644c917326bb6461cce875fdd2fa97c742c04414e5f268c27ef7b6efaf3e89"
+    },
+    "path_diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-rtk-path-udc_bg1y\\projection.json",
+      "sha256": "a80ba1fd2eb71976faaf1dc9413ebc277e73f19625894c2c72ca2530ff8fe948"
+    },
+    "operational_preflight": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\closed-preflight.json",
+      "sha256": "30a9bff88a0ebe30b56955c1f3945235ec462dd201cbd71a7e2ecfa2eb1fd85a"
+    },
+    "recovery_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\recovery-plan.json",
+      "sha256": "9ea9b4fc4b69eeb0bdae8ccfba8a545aa2fbb95c2b0995c37c5204ae3c6153a7"
+    }
+  },
+  "sources": {
+    "context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\request_context.py",
+      "sha256": "42064e28d0fac0b5529b83338a69b6b65520c8189dbff46c65f9c2236f1d5408"
+    },
+    "entry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\request_entry.py",
+      "sha256": "a170045aff31a33056c0ac72690387dc21421ce31cf4c7d6299c16fc919c4d8c"
+    },
+    "invoke": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\invoke_request.py",
+      "sha256": "02aa98a4b7162c98db5584ddc7df4af66b747410d7f1e7b851d51579e54b4550"
+    },
+    "common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\driver_common.py",
+      "sha256": "4f1830ebf5f487b03b01a9335a7870fb8917245abf87c80526c080c71158d501"
+    },
+    "work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\local_work.py",
+      "sha256": "7d750aa395e7ded5cb6d2e6ddb37ae7140abcea6bf52d9a3284ec93ee37c8836"
+    },
+    "cohort": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\lifecycle.py",
+      "sha256": "4002efab28334483aa9831f3c8679ce6632e8f6f33f5485e480273c3cea55889"
+    },
+    "authorize": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\authorize_local.py",
+      "sha256": "d664f84ab47856919a01810136f7525142ad99b15363c94cb92d6d1db106dcd2"
+    },
+    "adopt": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c"
+    },
+    "observation_helpers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10"
+    },
+    "close": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\close_campaign.py",
+      "sha256": "3a0aa94f6739fd160d14bf4aed468c3de135a51ecf667056868a84c1d8ef3d8a"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\confirm_final_presence.py",
+      "sha256": "276679f9bc6f2585465339ace36df0e39c70fe32a52e1db28dcd12777fd4fb02"
+    },
+    "api_worker": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\api_worker.py",
+      "sha256": "a392880b070cfb2b2cab9fdfa1fb6b11832fefc3a1c8d26c44564cce191ea094"
+    },
+    "cli_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\cli_flow.py",
+      "sha256": "c55b9a050e1bc0be96ecbe71f72e2c3b49052533e4fd2adb52f145b4279e8676"
+    },
+    "containment_driver": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\containment_driver.py",
+      "sha256": "f7b67eecdf05c66d482c4803c1d370f6e6bba9bda13d89e8a80f30ae007952ac"
+    },
+    "controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\controller.py",
+      "sha256": "a8148d59dd14b434640f0289484a0b311f9bda8f81480e7acd99dba80e9d9ecb"
+    },
+    "fresh_work_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\fresh_work_controller.py",
+      "sha256": "3196bf38f5bcc864fccd4090414f7d1bd5ff12ca4163b9f97e406266bad3d25b"
+    },
+    "history_observers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\history_observers.py",
+      "sha256": "73f4e414b6ee89aff08eeae96fe9f9c6001c335aa24d85436c532ec3ef921472"
+    },
+    "independent_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\independent_controller.py",
+      "sha256": "5d1822208a723ffd984ba9fed8e89e3ce521769b6f798473b31d614e465f1d06"
+    },
+    "independent_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\independent_journal.py",
+      "sha256": "11b5c1fc44b397365efb9f7c029d89d999de9470a5e22b614f3215d5d6734b9d"
+    },
+    "legacy_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\legacy_controller.py",
+      "sha256": "8e53454886f464c5b052576593792a4f49aad031e420e8b7695d6c393156a201"
+    },
+    "normal_containment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\normal_containment.py",
+      "sha256": "baf25b43f2b3b4b0353434b5cf70841ecaaddf56cb8161276414c22c4f81c572"
+    },
+    "observation_guard": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10"
+    },
+    "observation_limits": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\observation_limits.py",
+      "sha256": "34d184af387e2a6aa2fd44b75fd23b7b988ac53f284ae777fbc355c950038b32"
+    },
+    "serial_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\serial_flow.py",
+      "sha256": "364ce1afbacb48672438ed4385546e95edc40da3b605fe39d55d07c2dd4e7624"
+    },
+    "setup_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\setup_journal.py",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889"
+    },
+    "token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\token_collector.py",
+      "sha256": "df5b9f7e79376dffc8def21f571c37f51a37bc35cd0b4df94cb464b39ff832d5"
+    }
+  },
+  "bundle_overrides": {
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\lifecycle.py",
+      "sha256": "4002efab28334483aa9831f3c8679ce6632e8f6f33f5485e480273c3cea55889"
+    },
+    "work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\local_work.py",
+      "sha256": "7d750aa395e7ded5cb6d2e6ddb37ae7140abcea6bf52d9a3284ec93ee37c8836"
+    },
+    "root_driver_authorize_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\authorize_local.py",
+      "sha256": "d664f84ab47856919a01810136f7525142ad99b15363c94cb92d6d1db106dcd2"
+    },
+    "root_driver_adopt_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c"
+    },
+    "root_driver_common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\driver_common.py",
+      "sha256": "4f1830ebf5f487b03b01a9335a7870fb8917245abf87c80526c080c71158d501"
+    },
+    "root_driver_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    "root_driver_confirm_cleanup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    "root_driver_confirm_final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\confirm_final_presence.py",
+      "sha256": "276679f9bc6f2585465339ace36df0e39c70fe32a52e1db28dcd12777fd4fb02"
+    },
+    "root_driver_close_campaign": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\close_campaign.py",
+      "sha256": "3a0aa94f6739fd160d14bf4aed468c3de135a51ecf667056868a84c1d8ef3d8a"
+    },
+    "controller_token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\token_collector.py",
+      "sha256": "df5b9f7e79376dffc8def21f571c37f51a37bc35cd0b4df94cb464b39ff832d5"
+    }
+  },
+  "commands": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\commands.json",
+    "sha256": "2bf8c621c21d9fb7e83465433473f8d0d668e7a1f79676e5d54665122126217a"
+  },
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+    "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+  },
+  "wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4"
+    },
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4"
+    },
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    }
+  },
+  "policy": {
+    "revision": 17,
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 18,
+    "preventive_cumulative_tokens": 600000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "controller_ancestry": {
+    "closure_companion_sha256": "68df967826cd90436983678548664df1f0b384a2b78af8d22b6fa6acc6431c8b",
+    "closure_sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9",
+    "checkpoint_sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712",
+    "accounting_reconciliation_sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11",
+    "predecessor_faults": [],
+    "prior_ancestry": {
+      "accounting_reconciliation_sha256": "fa987bf4eac144f9b0e1654f5d37a1d097682bf5460b9f1e06b8fcb3f5b7c5e9",
+      "checkpoint_sha256": "05c09e7168f6251523e1d75a4c523792e12967a2ef0474264a8c754fe6eaf0d3",
+      "closure_companion_sha256": "64d2259aa4097a56ca739dd5155eae41d8d0090efe04a8faac61e085e9702a55",
+      "closure_sha256": "e35d0e7c4cc6748df0282adf2018e5a15ead387d231108d7bcebd04dd47ac9b9",
+      "predecessor_faults": [
+        "WORK_TERMINAL_FAILED"
+      ],
+      "prior_ancestry": {
+        "accounting_reconciliation_sha256": "8e1a72942918eb69fd70a6481e78be14ec17b04172b25e9e499ebc8decbb16bc",
+        "checkpoint_sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37",
+        "closure_companion_sha256": "6fa9c07272248afe631d7231a378e95f21b95133684756a4f85979c71c112c56",
+        "predecessor_faults": [
+          "API_OBSERVATION_UNKNOWN",
+          "CAMPAIGN_RUNNER_EXCEPTION"
+        ],
+        "prior_ancestry": {
+          "checkpoint_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+          "closure_companion_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+          "closure_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+          "original_checkpoint_sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c",
+          "predecessor_faults": [
+            "DEADLINE120",
+            "WORK_TERMINAL_FAILED"
+          ],
+          "prior_ancestry": {
+            "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+            "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+            "predecessor_faults": [
+              "DEADLINE120"
+            ],
+            "prior_ancestry": {
+              "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+              "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+              "predecessor_faults": [
+                "OBSERVATION_UNKNOWN",
+                "DEADLINE120"
+              ],
+              "prior_ancestry": {
+                "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+                "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+                "predecessor_faults": [
+                  "CAMPAIGN_RUNNER_EXCEPTION"
+                ],
+                "prior_ancestry": {
+                  "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+                  "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+                  "predecessor_faults": [
+                    "OBSERVATION_UNKNOWN",
+                    "STOP_UNCONFIRMED",
+                    "CAMPAIGN_RUNNER_EXCEPTION"
+                  ],
+                  "prior_ancestry": {
+                    "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+                    "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+                    "predecessor_faults": [
+                      "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+                    ],
+                    "prior_ancestry": {
+                      "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+                      "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+                      "predecessor_faults": [
+                        "CAMPAIGN_RUNNER_EXCEPTION"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "request_ids": {
+    "useful": "m1v17-local-useful-15",
+    "continuation": "m1v17-local-continuation-16",
+    "remote_useful": "m1v17-remote-useful-17",
+    "remote_continuation": "m1v17-remote-continuation-18"
+  },
+  "initial_work_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json",
+    "sha256": "cadfc7bdc6aaaa4a16d385942749cc673f7e24b17332a8642037859267356c21"
+  },
+  "predecessor_session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+  "expected_historical_grants": [
+    {
+      "expires_at": "2026-11-14T18:42:36.153081Z",
+      "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+      "max_executions": 3,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T16:22:02.541642Z",
+      "grant_id": "grant_89bbed009c65458fab96ff9d0a3ffc72",
+      "max_executions": 20,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T17:26:23.088231Z",
+      "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+      "max_executions": 20,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+      "expires_at": "2026-11-14T20:08:18.408235Z",
+      "max_executions": 3,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+      "expires_at": "2026-11-14T22:10:10.862526Z",
+      "max_executions": 3,
+      "revision": 1,
+      "minimum_used_executions": 1
+    },
+    {
+      "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+      "expires_at": "2026-11-14T23:27:07.998684Z",
+      "max_executions": 3,
+      "revision": 1,
+      "minimum_used_executions": 2
+    }
+  ],
+  "future_force_authorized": false,
+  "scope": "Recovery of closed pre-review failure only; same local15/16 IDs and paid W16 basis, original W17 fault retained as mandatory operational history.",
+  "remote_DX40": "PENDING_SELECTORS_HELD_SEPARATE_QUALIFICATION",
+  "Claude_Sonnet": "NOT_SELECTED",
+  "initial_minimum_observed_tokens": 460793,
+  "initial_cumulative_reservations": 14,
+  "remaining_tolerance_tokens": 239207,
+  "observation_bounds": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "poll_seconds": 19,
+    "freshness_seconds": 20,
+    "cadence_seconds": 24,
+    "target_start_seconds": 0.2,
+    "max_observed_requests": 8
+  },
+  "startup": {
+    "cli_timeout_seconds": 45,
+    "passive_observation_seconds": 180,
+    "repeat_start": false,
+    "qualification": "CLI3 remains CLI3; only later exact READY identity can permit next stage. No SLA claim."
+  },
+  "cleanup": "All supervisor parent/launcher/runtime retained handle exits plus native inactive and canonical owner absence; no future force.",
+  "native_decision_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\private\\native-decision.json",
+  "no_effects_during_preparation": true,
+  "technical_predecessor": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\technical-predecessor.json",
+    "sha256": "f351fda06b7266ea28d52abaa3a4169a9bd2f789bcf9b8bfb4aca31a1d195e89"
+  },
+  "installed_probe": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\probe-qualification.json",
+    "sha256": "ac2d6291ce921b121c8d27a4d569cf7f5fbf2f537163d32951e858219a2a71d1"
+  },
+  "technical_supersession": {
+    "predecessor_amendment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\amendment.json",
+      "sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca"
+    },
+    "predecessor_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-freeze.json",
+      "sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94"
+    },
+    "package_reused_unchanged": true,
+    "migration_actions": 0,
+    "reservation_refunded": false,
+    "historical_stream_settlement_synthesized": false,
+    "technical_cap_change": {
+      "from": 17,
+      "to": 18,
+      "preventive_from": 500000,
+      "preventive_to": 600000,
+      "standing_authorized_tokens": 700000,
+      "new_user_hash_approval_claimed": false
+    },
+    "predecessor_uncertainty": "Request14 canonical SUCCEEDED but report absent/useful false; first native decision recovery SUBMITTED, no completion or replay inferred.",
+    "qualification_reuse": "W16 installed50/probe60/package provenance reused by exact hashes; only context, grant/history, prompt and finite controller deltas newly qualified.",
+    "failed_preflight": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\closed-preflight.json",
+      "sha256": "30a9bff88a0ebe30b56955c1f3945235ec462dd201cbd71a7e2ecfa2eb1fd85a"
+    },
+    "new_technical_paid_allocation": false,
+    "recovery_namespace_only": true,
+    "original_failure_erased": false
+  },
+  "execution_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-technical-plan-pito7b7o\\execution-plan.json",
+    "sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31"
+  },
+  "remote_execution_enabled": false,
+  "predecessor_connection_generation": 9,
+  "predecessor_productive_stage": "SUCCEEDED",
+  "predecessor_control_receipt_stage": "SUBMITTED_HISTORICAL_SNAPSHOT",
+  "readiness_timeout_seconds": 5,
+  "input_fixture_pin": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv",
+    "sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b"
+  },
+  "normal_fault_containment": {
+    "selected_only_on_faulted_admitted_native_turn": true,
+    "force_authorized": false,
+    "trigger": "Normal stop45 remains draining with exact active native turn",
+    "required_fresh_scope": [
+      "owner generation and all three process births/cycle",
+      "canonical session and productive operation",
+      "native turn and pending request metadata"
+    ],
+    "allowed_action": "One canonical intents:resolve plus one operations admission for turn.interrupt, using a fresh unique cleanup client intent and durable one-shot ledger; no native approve/deny replay, no new provider turn.",
+    "sequence": "Root reviews concrete current identities/argv, selects normal interrupt, observes target terminal and usage, then canonical runtime.close (TerminalWork action close) only if necessary and normal stop separately; retain physical cohort and native inactivity proofs.",
+    "reference_manifest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\manifest.json",
+      "sha256": "65b815ac2520041d539396403dbb5dcbc3ae6203ad1d6ef60d70add86d63618f"
+    },
+    "reference_is_not_reexecutable_authority": true,
+    "completion_receipt_not_inferred_from_target_exit": true
+  },
+  "reused_package": {
+    "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+    "qualification": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\qualification.json",
+      "sha256": "83c652061060cee6940c5cb79ec2361c9eed94eb40e8e600531afda30d93fab6"
+    },
+    "freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-freeze.json",
+      "sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94"
+    },
+    "rebuild": false,
+    "pip_run": false,
+    "new_probe_or_native_tests": false
+  },
+  "reused_service_context": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json",
+    "sha256": "c28a8d687a9415ac65f750586d18270754031edb9ea5ba094b1c65c554f38484"
+  },
+  "prompt_revision": {
+    "original_request_sha256": "e143ad464ec428302a292a53ff20797479edd84d41a0970d4d7c6fb4d7e5edff",
+    "request": "Read only <project>/numbers.csv. Calculate its data row count, sum and SHA-256. Write exactly one JSON object with keys row_count, sum and input_sha256 to <lane_deliverables>/report.json. The deliverables directory is a precreated disposable sibling outside this project writable root but inside the campaign Temp root. Do not change permissions, sandbox, writable roots or global policy to perform this task. If the actual native policy requires a command permission, request it through the native mechanism and wait for the human decision. Do not read or write other paths, use the network, install tools, spawn subagents or retry a denied command with another method. Use one noninteractive Python process through the explicitly selected absolute RTK and Python executables: & 'C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe' proxy 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe' -c '<single-line Python code computed by the model>' to read the CSV, compute the values and hash, and write the JSON. Avoid nested PowerShell shells or shell-expanded variables. Compute the result yourself from the file; do not assume supplied expected values. The placeholder denotes code you must write, not literal text to execute. Use a single-line Python argument and direct PowerShell invocation; do not nest another PowerShell process or use shell-expanded variables. The two named executables are approved execution dependencies, not additional data inputs; all data reads and writes remain limited to the CSV and report specified above. Do not discover or substitute another tool from PATH.",
+    "continuation": "Using only the existing canonical result, state the reported sum once. Do not run another command or write another file.",
+    "rtk_binary": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe",
+      "sha256": "941654cc74ced3e773fa0cef43b044a4717c6884a429bfb14db50093defa38fb"
+    },
+    "python_binary": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+    },
+    "installation_binding": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+      "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+    },
+    "data_input": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv",
+      "sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b"
+    },
+    "existing_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "existing_deliverables": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\local",
+    "expected_output_not_supplied": true,
+    "real_report_not_preexecuted": true,
+    "personal_config_or_path_change": false,
+    "future_offline_quote_test": "Only in a disposable isolated fixture with equivalent quoting and synthetic CSV. Never generate the campaign report or supply computed answers to the model."
+  },
+  "grant_plan": {
+    "observed_available_actions_remaining": 1,
+    "old_expiry_utc": "2026-11-14T23:27:07.998684Z",
+    "do_not_start_or_review_before_expiry": true,
+    "minutes": 60,
+    "new_grant_action_cap": 3,
+    "local_model_request_cap": 2,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ],
+    "canonical_constraints": [
+      "available grant with1 action blocks issue; insufficient-for-two is not expired/exhausted.",
+      "New grant does not migrate an existing session. Do not spend the last action then assume same-session continuation can use a replacement.",
+      "After natural expiry, obtain canonical review showing no available matching grant/can_issue true; root selects exact CAS request before recover/issue once.",
+      "Preserve all historical grants and consumed actions. No revoke, manual reset, forced exhaustion or setup:test.",
+      "Review/report insufficient balance distinctly, without substituting canonical state. If unexpectedly available, remain observation-only and require a later explicit canonical review; no POST replay."
+    ],
+    "minimum_helper_delta": "Refresh pinned grant history/current counts; retain existing balance>=2 and requestcap3. Recognize insufficient available balance as a reported blocked selection, never bypass can_issue; planned path waits for expiry and reuses canonical review/recover/issue.",
+    "source_references": [
+      "src/okto_nexus/application/connection_authorization.py:92",
+      "src/okto_nexus/application/connection_authorization.py:113",
+      "src/okto_nexus/application/connection_authorization.py:140"
+    ],
+    "renewal_executed": false
+  },
+  "recovery_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\recovery-plan.json",
+    "sha256": "9ea9b4fc4b69eeb0bdae8ccfba8a545aa2fbb95c2b0995c37c5204ae3c6153a7"
+  },
+  "closed_preflight": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\closed-preflight.json",
+    "sha256": "30a9bff88a0ebe30b56955c1f3945235ec462dd201cbd71a7e2ecfa2eb1fd85a"
+  }
+}

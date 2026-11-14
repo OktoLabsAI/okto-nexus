@@ -1,0 +1,42 @@
+{
+  "status": "ROOT_SELECTED_OFFLINE_RECOVERY_NOT_EXECUTED",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery",
+  "base_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-technical-plan-pito7b7o\\execution-plan.json",
+    "sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31"
+  },
+  "base_amendment": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+    "sha256": "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32"
+  },
+  "base_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\runtime-freeze.json",
+    "sha256": "5dba520a68d87cf71dd9135b0d73dba0e6b1283515ff96246369f3e558cfb9c4"
+  },
+  "closed_preflight": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\closed-preflight.json",
+    "sha256": "30a9bff88a0ebe30b56955c1f3945235ec462dd201cbd71a7e2ecfa2eb1fd85a"
+  },
+  "policy": {
+    "revision": 17,
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 18,
+    "preventive_cumulative_tokens": 600000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "request_ids": {
+    "useful": "m1v17-local-useful-15",
+    "continuation": "m1v17-local-continuation-16",
+    "remote_useful": "m1v17-remote-useful-17",
+    "remote_continuation": "m1v17-remote-continuation-18"
+  },
+  "remote_execution_enabled": false,
+  "scope": "Same unselected request15/16, budget/prompt/package. Fresh namespace for one canonical review after exact historical review guard; no paid restart/reset, no manual checkpoint edits.",
+  "pre_review_delta": "Permit only pinned historical state=review with valid document revision and expected scope; refuse submitted/unknown; installed authorization_review creates a fresh review request and saves it canonically.",
+  "effects_before_review": 0,
+  "new_human_hash_approval_claimed": false,
+  "future_force_authorized": false
+}

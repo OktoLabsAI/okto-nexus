@@ -1,0 +1,210 @@
+{
+  "modules/api_worker.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\api_worker.py",
+      "sha256": "a392880b070cfb2b2cab9fdfa1fb6b11832fefc3a1c8d26c44564cce191ea094",
+      "bytes": 5554
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\api_worker.py",
+      "sha256": "a392880b070cfb2b2cab9fdfa1fb6b11832fefc3a1c8d26c44564cce191ea094",
+      "bytes": 5554
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/cli_flow.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\cli_flow.py",
+      "sha256": "c55b9a050e1bc0be96ecbe71f72e2c3b49052533e4fd2adb52f145b4279e8676",
+      "bytes": 9711
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\cli_flow.py",
+      "sha256": "c55b9a050e1bc0be96ecbe71f72e2c3b49052533e4fd2adb52f145b4279e8676",
+      "bytes": 9711
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/containment_driver.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\containment_driver.py",
+      "sha256": "f7b67eecdf05c66d482c4803c1d370f6e6bba9bda13d89e8a80f30ae007952ac",
+      "bytes": 8399
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\containment_driver.py",
+      "sha256": "f7b67eecdf05c66d482c4803c1d370f6e6bba9bda13d89e8a80f30ae007952ac",
+      "bytes": 8399
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/controller.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\controller.py",
+      "sha256": "a8148d59dd14b434640f0289484a0b311f9bda8f81480e7acd99dba80e9d9ecb",
+      "bytes": 271
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\controller.py",
+      "sha256": "a8148d59dd14b434640f0289484a0b311f9bda8f81480e7acd99dba80e9d9ecb",
+      "bytes": 271
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/fresh_work_controller.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\fresh_work_controller.py",
+      "sha256": "26b596057a6a87e76e76985c629d8a8183ce6914803cfebfc33c495b01acced9",
+      "bytes": 13074
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\fresh_work_controller.py",
+      "sha256": "3196bf38f5bcc864fccd4090414f7d1bd5ff12ca4163b9f97e406266bad3d25b",
+      "bytes": 13083
+    },
+    "change": "Only mandatory controller path work-revision17 -> work-revision17-recovery"
+  },
+  "modules/history_observers.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\history_observers.py",
+      "sha256": "73f4e414b6ee89aff08eeae96fe9f9c6001c335aa24d85436c532ec3ef921472",
+      "bytes": 1790
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\history_observers.py",
+      "sha256": "73f4e414b6ee89aff08eeae96fe9f9c6001c335aa24d85436c532ec3ef921472",
+      "bytes": 1790
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/independent_controller.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\independent_controller.py",
+      "sha256": "5d1822208a723ffd984ba9fed8e89e3ce521769b6f798473b31d614e465f1d06",
+      "bytes": 20211
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\independent_controller.py",
+      "sha256": "5d1822208a723ffd984ba9fed8e89e3ce521769b6f798473b31d614e465f1d06",
+      "bytes": 20211
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/independent_journal.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\independent_journal.py",
+      "sha256": "11b5c1fc44b397365efb9f7c029d89d999de9470a5e22b614f3215d5d6734b9d",
+      "bytes": 22243
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\independent_journal.py",
+      "sha256": "11b5c1fc44b397365efb9f7c029d89d999de9470a5e22b614f3215d5d6734b9d",
+      "bytes": 22243
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/legacy_controller.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\legacy_controller.py",
+      "sha256": "8e53454886f464c5b052576593792a4f49aad031e420e8b7695d6c393156a201",
+      "bytes": 22632
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\legacy_controller.py",
+      "sha256": "8e53454886f464c5b052576593792a4f49aad031e420e8b7695d6c393156a201",
+      "bytes": 22632
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/normal_containment.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\normal_containment.py",
+      "sha256": "baf25b43f2b3b4b0353434b5cf70841ecaaddf56cb8161276414c22c4f81c572",
+      "bytes": 6977
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\normal_containment.py",
+      "sha256": "baf25b43f2b3b4b0353434b5cf70841ecaaddf56cb8161276414c22c4f81c572",
+      "bytes": 6977
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/observation_guard.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "bytes": 10253
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "bytes": 10253
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/observation_limits.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\observation_limits.py",
+      "sha256": "34d184af387e2a6aa2fd44b75fd23b7b988ac53f284ae777fbc355c950038b32",
+      "bytes": 1449
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\observation_limits.py",
+      "sha256": "34d184af387e2a6aa2fd44b75fd23b7b988ac53f284ae777fbc355c950038b32",
+      "bytes": 1449
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/serial_flow.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\serial_flow.py",
+      "sha256": "364ce1afbacb48672438ed4385546e95edc40da3b605fe39d55d07c2dd4e7624",
+      "bytes": 1982
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\serial_flow.py",
+      "sha256": "364ce1afbacb48672438ed4385546e95edc40da3b605fe39d55d07c2dd4e7624",
+      "bytes": 1982
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/setup_journal.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\setup_journal.py",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+      "bytes": 8357
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\setup_journal.py",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+      "bytes": 8357
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "modules/token_collector.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\modules\\token_collector.py",
+      "sha256": "df5b9f7e79376dffc8def21f571c37f51a37bc35cd0b4df94cb464b39ff832d5",
+      "bytes": 22286
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\modules\\token_collector.py",
+      "sha256": "df5b9f7e79376dffc8def21f571c37f51a37bc35cd0b4df94cb464b39ff832d5",
+      "bytes": 22286
+    },
+    "change": "BYTE_IDENTICAL"
+  },
+  "local_work.py": {
+    "original": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\local_work.py",
+      "sha256": "7d750aa395e7ded5cb6d2e6ddb37ae7140abcea6bf52d9a3284ec93ee37c8836",
+      "bytes": 23689
+    },
+    "recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\local_work.py",
+      "sha256": "7d750aa395e7ded5cb6d2e6ddb37ae7140abcea6bf52d9a3284ec93ee37c8836",
+      "bytes": 23689
+    },
+    "change": "BYTE_IDENTICAL"
+  }
+}

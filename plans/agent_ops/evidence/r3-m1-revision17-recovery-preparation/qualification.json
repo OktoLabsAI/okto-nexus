@@ -1,0 +1,130 @@
+{
+  "status": "OFFLINE_RECOVERY_QUALIFIED_NOT_EXECUTED",
+  "amendment_sha256": "2ba49c00992fe3dfcc5b286bb3d685c65b6927b5014474a1aacbf792d341d5ed",
+  "recovery_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\recovery-plan.json",
+    "sha256": "9ea9b4fc4b69eeb0bdae8ccfba8a545aa2fbb95c2b0995c37c5204ae3c6153a7"
+  },
+  "closed_preflight": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\closed-preflight.json",
+    "sha256": "30a9bff88a0ebe30b56955c1f3945235ec462dd201cbd71a7e2ecfa2eb1fd85a"
+  },
+  "base_qualified_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\runtime-freeze.json",
+    "sha256": "5dba520a68d87cf71dd9135b0d73dba0e6b1283515ff96246369f3e558cfb9c4"
+  },
+  "base_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\qualification.json",
+    "sha256": "3c53c1ac1ef132800f55920b8853b265d9ef1da23a4444b404290767b9c9b99c"
+  },
+  "reused_installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+    "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+  },
+  "delta": {
+    "passed": 6,
+    "elapsed_seconds": 7.32,
+    "tool": "1b05c1",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\checks\\recovery.xml",
+      "sha256": "6c46b3cef49b0eaf2e8405781350084fd7a35feb78098fd9905afbe3a2a5495c"
+    },
+    "test_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\checks\\test_recovery.py",
+      "sha256": "aa65416e8986fc3cd907520609dd15625933f51068a041105aa8f39635ba51c3"
+    },
+    "runner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\checks\\run_recovery.py",
+      "sha256": "25cd9f6d99474c877e5ed87a4e50f700839076b440bfe895c5ddc41d601614e3"
+    },
+    "scope": "Actual recovery gate/paid derivation/closure, actual installed TerminalAuthorization.authorization_review plus TerminalWork.api and bounded transport, submitted/unknown/tampered review refused, changed predecessor request refused."
+  },
+  "antecedent": {
+    "passed": 5,
+    "fixture_failures": 1,
+    "tool": "0fccd2",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\checks\\initial-5pass-1fixture-fail.xml",
+      "sha256": "428c3755a42f624ed8640d51ae2e45ba5ce661654319c04312035bcc8b299988"
+    },
+    "cause": "Fixture bypassed installed TerminalWork.api prefix; fence correctly refused path. Fixture now uses actual installed api method. No production change; overlapping runs not summed."
+  },
+  "gate": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\gate-qualification.json",
+    "sha256": "14e641b265e0dcd61434ba4e232f45909399abbdf17d841f1b4dacf951ce8a63"
+  },
+  "gate_tool": "eccc1a",
+  "controller_namespace_delta": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\controller-qualification\\qualification.json",
+    "sha256": "0e5af14c2024803e3985b12cf77355f7ac29bf1fa982c9a5a87cf466aa044fe5"
+  },
+  "controller_runtime_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\controller-qualification\\runtime-freeze.json",
+    "sha256": "1d8ed06a695a407d80647a9a922b9ac9f5261a52f85ea41354b495ce67f1932e"
+  },
+  "reused_without_rerun": {
+    "base_controller12": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\controller-qualification\\qualification.json",
+      "sha256": "89ddbd0c0f4d3d0cbcb007f04fb651a79e9fba727b01a6e3573b428560744327"
+    },
+    "base_composition10": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\qualification.json",
+      "sha256": "3c53c1ac1ef132800f55920b8853b265d9ef1da23a4444b404290767b9c9b99c"
+    },
+    "quote_fixture": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\checks\\quote-qualification.json",
+      "sha256": "ba8e9e8dc7520338818a9111098bd712f3d4278c2ced2dcc12f5d3654de364e6"
+    },
+    "installed50_and_probe60": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\qualification.json",
+      "sha256": "83c652061060cee6940c5cb79ec2361c9eed94eb40e8e600531afda30d93fab6"
+    }
+  },
+  "source_delta_keys": [
+    "context",
+    "authorize",
+    "fresh_work_controller"
+  ],
+  "unchanged_sources": 24,
+  "root_review": {
+    "context_guard": "5c971b PASS",
+    "controller_namespace": "f430e9/043dc9 PASS"
+  },
+  "policy_unchanged": {
+    "revision": 17,
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 18,
+    "preventive_cumulative_tokens": 600000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "paid_basis_unchanged": {
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\controller.json",
+      "sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision16-execution\\closure-companion.json",
+      "sha256": "68df967826cd90436983678548664df1f0b384a2b78af8d22b6fa6acc6431c8b"
+    },
+    "accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+      "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+    }
+  },
+  "original_failed_preflight_retained": true,
+  "old_fault_reset_or_mutated": false,
+  "new_paid_allocation": false,
+  "builds": 0,
+  "pip_runs": 0,
+  "probe_runs": 0,
+  "services_started": 0,
+  "provider_calls": 0,
+  "authorization_calls_real": 0,
+  "new_model_reservations": 0,
+  "remote_execution_enabled": false,
+  "acceptance_promoted": false,
+  "historical_fault_semantics": "Original W17 AUTHORIZATION_MAINTENANCE_UNCONFIRMED remains in immutable checkpoint/closure referenced by mandatory operational_preflight source pin. New controller derives same W16 paid basis; no fabricated settlement/refund or original fault edit."
+}

@@ -1,0 +1,35 @@
+{
+  "status": "NAMESPACE_DELTA_PASS_OFFLINE",
+  "runtime_files": 16,
+  "byte_identical_to_W17": 15,
+  "modified_runtime_files": [
+    "modules/fresh_work_controller.py"
+  ],
+  "tests": {
+    "tool": "9c4793",
+    "passed": 2,
+    "failures": 0,
+    "elapsed_seconds": 0.026,
+    "scope": "Actual FreshWorkController namespace check; parent constructor mocked to avoid IO. Correct namespace delegates, prior and unrelated namespaces refuse before parent."
+  },
+  "inherited_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\controller-qualification\\qualification.json",
+    "sha256": "89ddbd0c0f4d3d0cbcb007f04fb651a79e9fba727b01a6e3573b428560744327",
+    "bytes": 3630
+  },
+  "inherited_focused_cases": 12,
+  "inherited_cases_not_rerun": true,
+  "original_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\controller-qualification\\runtime-freeze.json",
+    "sha256": "3a5210602088af8419fde448afad8a2fc1dcd7bb8605627513f54eae39cffd76",
+    "bytes": 5689
+  },
+  "compile_files": 17,
+  "policy_history_threshold_prompt": "Byte-identical policy17/carry460793/res14/preventive600000/tolerance700000/max18/IDs; five historical records and original receipt ancestry unchanged. local_work byte-identical. Basis remains paid W16 checkpoint. New closed W17 preflight proof is separate composer gate.",
+  "effects": "No runtime/public/private creation, provider/service/model/credentials access or old artifact changes. Tests only disposable empty Temp namespaces.",
+  "equivalence": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\controller-qualification\\equivalence.json",
+    "sha256": "43ea38a892f8cfde19446b72181f0445fbe35c06e1e6df1ed85a06dd6ec214bd",
+    "bytes": 9901
+  }
+}

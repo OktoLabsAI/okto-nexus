@@ -13764,6 +13764,37 @@
       "new_model_reservations": 0,
       "authorization_api_calls": 0,
       "acceptance_promoted": false
+    },
+    "r3_m1_revision17_recovery_offline_preparation": {
+      "status": "OFFLINE_RECOVERY_QUALIFIED_ROOT_REVIEWED_NOT_EXECUTED",
+      "summary": "Finite operational recovery after closed W17 pre-review guard failure, not new paid cycle/allocation. Same policy17/carry460793/14/new4/max18/600k/700k and never-reserved local15/16; remote17/18 held. Only exact historical review may refresh canonically; submitted/unknown/tampered denied.6 focused final+2namespace passes, initial5pass/1prefixfixturefailure retained; old12/10/50/probe evidence reused.24sources byteequal; same W16 package/paid history, W17fault+closure+calls{}+requests{} mandatory proof preserved. No runtime/grant/model effects, manual checkpoint edit/refund or acceptance;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/recovery-plan.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/closed-preflight.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/runtime-freeze.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/workflow.json"
+      ],
+      "policy": {
+        "revision": 17,
+        "carry_in_admissions": 14,
+        "carry_in_tokens": 460793,
+        "max_new_admissions": 4,
+        "max_cumulative_admissions": 18,
+        "preventive_cumulative_tokens": 600000,
+        "operational_tolerance": 700000,
+        "deadline_seconds": 600
+      },
+      "observed_tokens": 460793,
+      "charged_reservations": 14,
+      "new_paid_allocation": false,
+      "remote_execution_enabled": false,
+      "new_model_reservations": 0,
+      "grant_changes": 0,
+      "service_actions": 0,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15397,6 +15428,21 @@
         "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/checkpoint-projection.json",
         "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/execution/closure.json",
         "plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/execution/final-presence.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision17_recovery_offline_preparation",
+      "status": "OFFLINE_RECOVERY_QUALIFIED_ROOT_REVIEWED_NOT_EXECUTED",
+      "summary": "Finite operational recovery after closed W17 pre-review guard failure, not new paid cycle/allocation. Same policy17/carry460793/14/new4/max18/600k/700k and never-reserved local15/16; remote17/18 held. Only exact historical review may refresh canonically; submitted/unknown/tampered denied.6 focused final+2namespace passes, initial5pass/1prefixfixturefailure retained; old12/10/50/probe evidence reused.24sources byteequal; same W16 package/paid history, W17fault+closure+calls{}+requests{} mandatory proof preserved. No runtime/grant/model effects, manual checkpoint edit/refund or acceptance;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/recovery-plan.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/closed-preflight.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/runtime-freeze.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/workflow.json"
       ]
     }
   ],

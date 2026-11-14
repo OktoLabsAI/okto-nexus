@@ -1,0 +1,88 @@
+{
+  "status": "OFFLINE_RECOVERY_QUALIFIED_ROOT_REVIEWED_NOT_EXECUTED",
+  "retained_source_artifacts": 48,
+  "source_copy_hashes_verified": true,
+  "high_specificity_secret_scan_matches": [],
+  "amendment_sha256": "2ba49c00992fe3dfcc5b286bb3d685c65b6927b5014474a1aacbf792d341d5ed",
+  "freeze_sha256": "138bbab052dae46310b53204a15e1ccc66260b9513587ce14951273198320dce",
+  "workflow_sha256": "4131a8cb2556bcde4fbdad4ca1e387c642ce3824c987c38e4621a8fc7680e7ad",
+  "recovery_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\recovery-plan.json",
+    "sha256": "9ea9b4fc4b69eeb0bdae8ccfba8a545aa2fbb95c2b0995c37c5204ae3c6153a7"
+  },
+  "base_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-technical-plan-pito7b7o\\execution-plan.json",
+    "sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31"
+  },
+  "closed_preflight": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\closed-preflight.json",
+    "sha256": "30a9bff88a0ebe30b56955c1f3945235ec462dd201cbd71a7e2ecfa2eb1fd85a"
+  },
+  "policy": {
+    "revision": 17,
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 18,
+    "preventive_cumulative_tokens": 600000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "same_paid_request_ids": {
+    "useful": "m1v17-local-useful-15",
+    "continuation": "m1v17-local-continuation-16",
+    "remote_useful": "m1v17-remote-useful-17",
+    "remote_continuation": "m1v17-remote-continuation-18"
+  },
+  "new_paid_cycle_or_allocation": false,
+  "paid_basis_unchanged": {
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\controller.json",
+      "sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision16-execution\\closure-companion.json",
+      "sha256": "68df967826cd90436983678548664df1f0b384a2b78af8d22b6fa6acc6431c8b"
+    },
+    "accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+      "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+    }
+  },
+  "delta": "Only context namespace/closed operational predecessor guard, pinned historical review guard and FreshWorkController path;24sources byte-identical.",
+  "tests": {
+    "final_recovery_passed": 6,
+    "tool": "1b05c1",
+    "seconds": 7.32,
+    "namespace_passed": 2,
+    "antecedent_passed": 5,
+    "antecedent_fixture_failed": 1,
+    "overlapping_not_summed": true,
+    "fixture_correction": "Use installed TerminalWork.api prefix together with installed TerminalAuthorization.authorization_review; fence correctly refused incomplete initial fixture path.",
+    "reused_not_rerun": [
+      "W17controller12",
+      "W17composition10/disposablequote",
+      "W16installed50/probe60"
+    ]
+  },
+  "canonical_refresh": "Exact pinned state review with valid review revision/scope may be refreshed by installed canonical review once. Submitted/unknown or tampered review refuses before API. No manual checkpoint mutation or issuance without exact new canonical review selection.",
+  "old_failure": "Original W17 calls{},requests{},AUTHORIZATION_MAINTENANCE_UNCONFIRMED/closure retained by mandatory immutable operational proof and finite invocation inventory. Same W16 paid histories derive new namespace; no old fault erased/refund/settlement synthesized.",
+  "runtime_effects": {
+    "services": 0,
+    "provider": 0,
+    "grants": 0,
+    "new_model_reservations": 0,
+    "builds": 0,
+    "pip": 0,
+    "migration": 0
+  },
+  "remote_execution_enabled": false,
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "root_review": "root-review.json",
+  "private_controller_or_runtime_copied": false
+}

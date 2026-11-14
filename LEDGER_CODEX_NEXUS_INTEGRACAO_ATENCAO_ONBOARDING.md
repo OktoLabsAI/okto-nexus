@@ -2137,3 +2137,24 @@ porta livre e dados retidos. Fault AUTHORIZATION_MAINTENANCE_UNCONFIRMED, checkp
 sem útil15/continuação16/remoto, refund ou aceite. **124/132 VERIFIED**,6 IN_PROGRESS
 e2 NOT_RUN. Recuperação será composição finita separada, não apagamento da falha.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-preflight-failure/review.json).
+
+## 2026-11-14 — Recuperação operacional17 preparada, sem novo ciclo pago
+
+Namespace separado work-revision17-recovery conserva a mesma policy17, carry
+**460.793/14**, preventiva600k/tolerância700k e teto18. IDs útil15/continuação16
+nunca reservados continuam os mesmos; remoto17/18 bloqueado. Não há revisão18,
+refund ou nova alocação paga. Base paga W16 e cinco históricos permanecem;
+W17fault/closure/calls{}/requests{} ficam como prova operacional obrigatória.
+
+Mudança mínima permite somente review histórico exato e íntegro passar ao método
+canônico de nova revisão. Submitted/unknown/adulterado recusam; nenhuma edição
+manual do checkpoint, emissão automática ou replay. Context/prova e path do
+controlador são os outros deltas;24 fontes byteiguais e pacote W16 sem mutação.
+
+**6 focais finais PASS** e **2 namespace PASS**, separados. Antecedente5 PASS/
+1 falha de fixture de prefixo retido; fixture corrigida usando TerminalWork.api
+instalado junto de TerminalAuthorization. Qualificações12/10/50/probe anteriores
+reutilizadas, sem repetir suítes/build/pip. Root revisou o candidato congelado.
+Nenhum serviço, grant ou modelo nesta preparação. **124/132 VERIFIED**,6 IN_PROGRESS
+e2 NOT_RUN, sem promoção de aceite.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-recovery-preparation/review.json).
