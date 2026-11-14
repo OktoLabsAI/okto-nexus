@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-14",
+  "status": "OFFLINE_SOURCE_AND_INSTALLED_QUALIFIED_REAL_DX_T34_PENDING",
+  "commits": {
+    "nexus": "c6d770ed59133beb455579e69817ebecc9331270",
+    "core": "6a5b982db00263daa0d330320e74125fbe082a59"
+  },
+  "versions": {
+    "nexus": "0.3.3",
+    "core": "0.0.14"
+  },
+  "source_qualifications": {
+    "core_final_selected": 61,
+    "nexus_receipt_cases": 14,
+    "nexus_final_guidance_cases": 3,
+    "limits": "Separate selected suites, not one joint whole-suite run. Nexus broader initial49PASS/1fixtureFAIL retained, with targeted followups."
+  },
+  "installed_qualifications": {
+    "nexus": 17,
+    "core": 62,
+    "combined_selected_passes": 79,
+    "scope": "Two independent suites against the same isolated installation of the new wheels; no source product imports."
+  },
+  "wheels": {
+    "nexus_sha256": "e5f67b0bcdb9d0fe7c1b1414bfb054be6e5ce936ff28f727c4aebbb74c3f882a",
+    "core_sha256": "a05e4255254f9e96241890db1ac448fd228f4bb6868a112753de8cd667989325"
+  },
+  "behavior": [
+    "Core reads account status without refresh before a default-context Codex thread; missing required login is typed only after contained child exit.",
+    "Provider/config/cwd overrides and resumed context do not inherit a possibly unrelated process-default auth conclusion. Protocol probing remains credential-free.",
+    "Nexus preserves PROVIDER_AUTH_REQUIRED from open/turn failure receipts and exceptions.",
+    "Terminal guidance names codex login and HOME/CODEX_HOME using the approved state-directory rules; no credential read, login or automatic replay.",
+    "Failed setup keeps its checkpoint, does not Finish, and requires explicit review under a new profile before another test."
+  ],
+  "antecedents_preserved": [
+    "Core registry fixture30PASS4FAIL report, broad194PASS1resume-fixtureFAIL1opt-in-realSKIP, resume6PASS, auth22PASS, build refusal and supersededV1 wheel.",
+    "Nexus broad49PASS1missing-home-fixtureFAIL, corrected16PASS then exact home-resolution guidance3PASS; installed first collection failed before any case due cross-volume pytest traversal.",
+    "Both Nexus intermediate wheels and all original XML/logs remain in Temp; public XML/metadata retain their causes without rewriting them as final passes."
+  ],
+  "real_codex_processes": 0,
+  "real_provider_turns": 0,
+  "personal_credentials_accessed": false,
+  "M1_changed": false,
+  "native_auth_scenario_promoted": false,
+  "scenario_status": "NOT_RUN",
+  "remaining": "Actual installed Codex without provider login, concrete terminal guidance, responsive daemon after refusal, and confirmed cleanup. Synthetic peers cannot replace that evidence.",
+  "evidence": [
+    "nexus/public/qualification.json",
+    "core/qualification.json"
+  ]
+}

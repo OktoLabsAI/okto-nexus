@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "unchanged_sections": [
+    "tasks",
+    "invariants",
+    "completion_criteria",
+    "milestones",
+    "repositories"
+  ],
+  "all_scenario_statuses_unchanged": true,
+  "only_scenario_narrative_changed": "DX-T34",
+  "existing_campaigns_and_history_unchanged": true,
+  "secret_pattern_scan_hits": 0,
+  "ledger_check": "59 tasks, 132 scenarios, 28 invariants, 17 completion criteria; exact fixed-plan text and evidence references valid",
+  "actual_native_auth_acceptance_promoted": false,
+  "standard_cached_diff_check_exit_code": 1,
+  "verbatim_xml_whitespace_exception": {
+    "path": "core/source.xml",
+    "trailing_whitespace_lines": [
+      8,
+      28,
+      38,
+      48
+    ],
+    "reason": "Exact historical failing pytest XML retained byte-for-byte from the Core public allowlist.",
+    "normal_check_all_other_files_exit_code": 0,
+    "xml_check_only_blank_at_eol_disabled_exit_code": 0
+  }
+}

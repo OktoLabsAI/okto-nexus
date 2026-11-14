@@ -1,0 +1,134 @@
+{
+  "format": "okto.dx-t34.public-evidence",
+  "files": {
+    "nexus/public/build-final.json": {
+      "sha256": "efd720be9ad05821a8ecc26ff1562fdac17b7e6448c25451e4c856c10f178802",
+      "bytes": 405
+    },
+    "nexus/public/dependency-preparation.json": {
+      "sha256": "ce79a61a50e43699771264378ab16c7cacc50dacfa9f3b61b91f269a68e32c2d",
+      "bytes": 1411
+    },
+    "nexus/public/install_final.py": {
+      "sha256": "79172cee22c3d4d87eb41ad2a9a71140a4d15eb8ee44860e80c7b7ac1232ce30",
+      "bytes": 1586
+    },
+    "nexus/public/installation-final.json": {
+      "sha256": "10dffb231a43e5b256c130f1b8ab71b36e289f2bce51315fd6e5de18cc4285b6",
+      "bytes": 813
+    },
+    "nexus/public/installed-fixture-manifest.json": {
+      "sha256": "7cffdf279567af06825bdb9baec3e2f89b84d02b1a3e1d79392c33886fc7364e",
+      "bytes": 83833
+    },
+    "nexus/public/installed-nexus-final-v2.xml": {
+      "sha256": "858d676304268f43c7973cf740e322e54c911ea44ba6d0f5d3c7fd14bee1e1d8",
+      "bytes": 3495
+    },
+    "nexus/public/installed-nexus-final.xml": {
+      "sha256": "380cec12a24173b443f0686384d2a1be9f098f663e052bd8168e7d16e65e81bf",
+      "bytes": 1269
+    },
+    "nexus/public/installed-nexus-origins-v2.json": {
+      "sha256": "10c506652f403dee398f2370944d54b1b53b88d13c072f359040fc55ab3e53f2",
+      "bytes": 141045
+    },
+    "nexus/public/installed_nexus_runner_v2.py": {
+      "sha256": "c9ea04810f200550e00e7b2687a42362656fc8a525e63e102dafce6b12e9a110",
+      "bytes": 1758
+    },
+    "nexus/public/launch_installed_tests_v2.py": {
+      "sha256": "e56070d76481a01b9a23c62de63462d1ec6cab7afea47de05fafcec5fc26ae29",
+      "bytes": 738
+    },
+    "nexus/public/pip-check-final.stdout.txt": {
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31
+    },
+    "nexus/public/prepare_installed_fixtures.py": {
+      "sha256": "f6097a0eb86d6f866349965576f122014a116208bb6f937fff14a3b805053ae3",
+      "bytes": 1576
+    },
+    "nexus/public/qualification.json": {
+      "sha256": "66e2b405b01916f918625a08741e852f610300b757ba7050fe7c753de3a03d0c",
+      "bytes": 3497
+    },
+    "nexus/public/review-source/src/okto_nexus/application/connection_test.py": {
+      "sha256": "8454fbe2659b32c0addf579fb700d5383d2826c9d582f8a9dab1d089893a172c",
+      "bytes": 15265
+    },
+    "nexus/public/review-source/src/okto_nexus/application/terminal_connection.py": {
+      "sha256": "82f9f29c5d6058255ef7074ffc9128e2cb708d05c320f2c946011ba8ca6f911d",
+      "bytes": 27777
+    },
+    "nexus/public/review-source/tests/execution_r4/test_connection_test.py": {
+      "sha256": "e1739baf5e99496f684fe1687242e4a624cd4fb096d9d1775d80dda3775daa91",
+      "bytes": 6509
+    },
+    "nexus/public/review-source/tests/execution_r4/test_terminal_connect.py": {
+      "sha256": "e2d6b4f112899773be363936437ca65de8fb1643c60ad9230f27f51beb9aad36",
+      "bytes": 26866
+    },
+    "nexus/public/source-auth-final.xml": {
+      "sha256": "0834c3cc41bf45804cbbf1b71f80cdbb2eead1bd966565370b07286b9b9967c4",
+      "bytes": 2993
+    },
+    "nexus/public/source-guidance-v2.xml": {
+      "sha256": "a283ae0680064914de9c7f59da4adbcab86c266d0ab0acc79f974f97f063fce8",
+      "bytes": 751
+    },
+    "nexus/public/source-initial.xml": {
+      "sha256": "0607c9a7ad53174eeb6260740518e6e5f42e53c1c70295b3ffd91136641328e7",
+      "bytes": 10691
+    },
+    "nexus/public/source-manifest-final.json": {
+      "sha256": "4a92e5c62bf7332b29bcc6a851dad2dc3c7a0994066f2904400e5b583ffa7be6",
+      "bytes": 88386
+    },
+    "nexus/public-allowlist.json": {
+      "sha256": "c96625a54b3c3461dab64edb7dc8302e1b53fb49f1163602cf6bd9185422ffbb",
+      "bytes": 3761
+    },
+    "core/qualification.json": {
+      "sha256": "19317f2e8056c2476c802eef84947ba8e7067981043c754711b32e0bb49f1f69",
+      "bytes": 7868
+    },
+    "core/source.xml": {
+      "sha256": "dc8a9f49124800cfc135dd05c875972a17616e30b5bb70d92c1c279cea1847f3",
+      "bytes": 36578
+    },
+    "core/source-resume-final.xml": {
+      "sha256": "934dc5940504463b372755a2f01ceb98b6fe1fab7bc9508e6db63e71efd56b3f",
+      "bytes": 1017
+    },
+    "core/source-auth-final.xml": {
+      "sha256": "3d6fc68a97edff02f26b5f4fca486b2217acdec71710a182efa8ef4d849ff504",
+      "bytes": 4175
+    },
+    "core/source-v2.xml": {
+      "sha256": "0a09031e48d4cb09fb8e598ed8f85fb18d7073c20d06bc1b29a4e7daabbc99b6",
+      "bytes": 10346
+    },
+    "core/installed.xml": {
+      "sha256": "74977f099adc3fca85613357c724a3efa062c9753fe4f63cca25fa9e18c94154",
+      "bytes": 10463
+    },
+    "core/installed-imports.json": {
+      "sha256": "423cf8a4e27d8d434b017fa4235682cf1bf6fe6fabf6923bb8c9aa0909fa646e",
+      "bytes": 1447
+    },
+    "core/public-allowlist.json": {
+      "sha256": "fbbb403d7bca528485b7ea519e14f4de99cc3c7bce9db72c981ad27aad660ed5",
+      "bytes": 1449
+    },
+    "review.json": {
+      "sha256": "ef534389d71b995183cbf9c2ae247ef256674a20acc8b707d7df7e8c42bf988b",
+      "bytes": 2745
+    },
+    "retention-validation.json": {
+      "sha256": "7c02872e5691c36928a375cc0fb18f88376f00cc491f1b20a8129b1121edaf74",
+      "bytes": 956
+    }
+  },
+  "contains_raw_provider_transcripts_or_credentials_or_databases": false
+}

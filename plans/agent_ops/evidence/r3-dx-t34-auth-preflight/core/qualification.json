@@ -1,0 +1,160 @@
+{
+  "format": "okto.dx-t34.codex-auth-preflight-qualification",
+  "status": "OFFLINE_SOURCE_AND_INSTALLED_WHEEL_PASS",
+  "generated_at": "2026-11-14T16:33:52.811979+00:00",
+  "branch": "feature/v0.0.14",
+  "base_commit": "7f69d866f19616fcdd1ee83984f3806b1eb85ff5",
+  "version": "0.0.14",
+  "sources": {
+    "src/nexus_connector_core/native/adapters/codex.py": "52cc2c24384843bac522f1e57a6247619f851e423600a3d89a99f568def65e12",
+    "src/nexus_connector_core/native/runtime_bridge.py": "e99cf08e6a8e17e9a457661ae0bd668374daf2518780d417566ddc3d5cc8b91a",
+    "src/nexus_connector_core/protocol_probe.py": "47eb42ad42e1b3635d1f09f27adde5cea8817318996502e03e07cb17a45ad7e8",
+    "tests/test_codex_auth_preflight.py": "f76449afb82fbd8aeea92d7533940160ba1eeb4c43f17e0f94928debbe9c71ad",
+    "tests/test_codex_handshake.py": "4521f4c666907574dc6b5e6ac897a46c6f05a6afc70e1244e8a2c462ea131eb2",
+    "tests/test_codex_resume.py": "a8432d5085680c572fbfc732bf970e645b8d4149eeaaad2b477dd4b10e8e17df",
+    "tests/test_protocol_probe.py": "df2d74871e78a3f05443b9d5233ae3239dcdc020bb145c9d9eff93e3fa036d4b",
+    "tests/test_real_native_auth_failure.py": "cc0352a2b5f7550f0d26f78fac2353bcec08be2013ffcc00aae37f63086290fb",
+    "tests/fixtures/codex_app_server_peer.py": "39f093507d3dfec19551f6dad94819141f70a95df5ede378c1af721851888540",
+    "tests/legacy/test_codex_legacy.py": "f6e1c0ca6165fb0b9a36d72d8b341b9e5df375dc0b68f1d6915d3eb9445874c4"
+  },
+  "artifacts": {
+    "source.xml": "dc8a9f49124800cfc135dd05c875972a17616e30b5bb70d92c1c279cea1847f3",
+    "source-resume-final.xml": "934dc5940504463b372755a2f01ceb98b6fe1fab7bc9508e6db63e71efd56b3f",
+    "source-auth-final.xml": "3d6fc68a97edff02f26b5f4fca486b2217acdec71710a182efa8ef4d849ff504",
+    "source-v2.xml": "0a09031e48d4cb09fb8e598ed8f85fb18d7073c20d06bc1b29a4e7daabbc99b6",
+    "installed.xml": "74977f099adc3fca85613357c724a3efa062c9753fe4f63cca25fa9e18c94154",
+    "installed-imports.json": "423cf8a4e27d8d434b017fa4235682cf1bf6fe6fabf6923bb8c9aa0909fa646e"
+  },
+  "wheel": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-core-qualification-uleocpu5\\wheels-v2\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+    "sha256": "a05e4255254f9e96241890db1ac448fd228f4bb6868a112753de8cd667989325",
+    "new_isolated_installation": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv",
+    "installed_origins_match_source": true,
+    "frozen_m1_installations_changed": false
+  },
+  "source_final": {
+    "counts": {
+      "tests": 61,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "python": "D:/Projetos/Techridy/okto_labs_okto_nexus/.venv/Scripts/python.exe",
+    "source_import": "sys.path.insert(0, Core/src) before pytest import; no environment PYTHONPATH mutation",
+    "command": [
+      "rtk",
+      "proxy",
+      "D:/Projetos/Techridy/okto_labs_okto_nexus/.venv/Scripts/python.exe",
+      "-c",
+      "import sys;sys.path.insert(0,r'D:/Projetos/Techridy/okto-nexus-connector-core/src');import pytest;raise SystemExit(pytest.main(['-q', '--junitxml=C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\dx-t34-core-qualification-uleocpu5\\\\source-v2.xml', 'tests/test_codex_auth_preflight.py', 'tests/test_codex_handshake.py', 'tests/test_codex_resume.py', 'tests/test_protocol_probe.py', 'tests/test_native_failure_receipts.py']))"
+    ]
+  },
+  "installed_final": {
+    "counts": {
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "command": [
+      "rtk",
+      "proxy",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-core-qualification-uleocpu5\\installed_runner.py"
+    ],
+    "runner_sha256": "53821641ce20cf993127ec338eb4cd4391126dc537871aa5f71cbd7657614682",
+    "imports": "Installed products only; runner asserts every origin below new venv Lib/site-packages; no source product path",
+    "selection": [
+      "tests/test_codex_auth_preflight.py",
+      "tests/test_codex_handshake.py",
+      "tests/test_codex_resume.py",
+      "tests/test_protocol_probe.py",
+      "tests/test_native_failure_receipts.py",
+      "tests/test_codex_extracted.py"
+    ]
+  },
+  "ruff": {
+    "command": [
+      "rtk",
+      "proxy",
+      "python",
+      "-m",
+      "ruff",
+      "check",
+      "--select",
+      "E9,F63,F7,F82",
+      "src/nexus_connector_core/native/adapters/codex.py",
+      "src/nexus_connector_core/native/runtime_bridge.py",
+      "src/nexus_connector_core/protocol_probe.py",
+      "tests/test_codex_auth_preflight.py",
+      "tests/test_codex_handshake.py",
+      "tests/test_codex_resume.py",
+      "tests/test_protocol_probe.py",
+      "tests/test_real_native_auth_failure.py",
+      "tests/fixtures/codex_app_server_peer.py",
+      "tests/legacy/test_codex_legacy.py"
+    ],
+    "exit_code": 0
+  },
+  "build": {
+    "command": [
+      "rtk",
+      "proxy",
+      "D:/Projetos/Techridy/okto_labs_okto_nexus/.venv/Scripts/python.exe",
+      "-m",
+      "build",
+      "--wheel",
+      "--outdir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-core-qualification-uleocpu5\\wheels-v2"
+    ],
+    "backend_versions": {
+      "setuptools": "84.2.1",
+      "wheel": "0.48.0"
+    }
+  },
+  "antecedents": [
+    {
+      "result": "30 passed, 4 failed",
+      "artifact": "Tool transcript; no XML generated",
+      "cause": "New integration fixture supplied function instead of registry-required adapter class; corrected to subclass."
+    },
+    {
+      "result": "194 passed, 1 failed, 1 skipped",
+      "xml": "source.xml",
+      "cause": "Legacy resume peer lacked account/read; corrected fixture and reran all six resume cases. Only opt-in real Codex LAN test skipped."
+    },
+    {
+      "result": "6 passed",
+      "xml": "source-resume-final.xml"
+    },
+    {
+      "result": "22 passed",
+      "xml": "source-auth-final.xml"
+    },
+    {
+      "result": "Build --no-isolation refused: setuptools absent in source test venv",
+      "resolution": "Built in separate standard isolated build environment; source test environment unchanged."
+    },
+    {
+      "result": "V1 superseded before execution",
+      "sha256": "1877542f9310acf00d5eb4c8c4f7ac94f2c12b2b5362e7d0cddab4a87a86d953",
+      "reason": "Root review identified process-default auth scope vs thread provider overrides and credential-free protocol probe."
+    }
+  ],
+  "behavior": [
+    "account/read refreshToken=false before thread/turn in a new Codex process; no login command",
+    "Explicit requiresOpenaiAuth=true/account=null becomes PROVIDER_AUTH_REQUIRED only for matching default auth context",
+    "Custom requiresOpenaiAuth=false and authenticated accounts remain usable; no account fields retained in metadata",
+    "Thread provider/config/cwd overrides and resumed saved context do not inherit a different provider missing-account conclusion",
+    "Credential-free Codex protocol probe validates protocol but does not require account or send a turn",
+    "Malformed/unsupported RPC is protocol failure; generic RPC/timeout is unknown startup observation, never guessed authentication",
+    "Typed failure receipt only after existing child containment confirms closure; possible_effect=true/retry_safe=false retained"
+  ],
+  "scope_limits": [
+    "No actual Codex account/read, provider request, personal auth access, or real service campaign was executed.",
+    "All spawned peers in tests are synthetic Python scripts; setup/work plan acceptance remains pending real evidence.",
+    "No new version bump, credential workflow, native capability qualification, or M1 frozen artifact modification."
+  ]
+}

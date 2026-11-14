@@ -1475,3 +1475,15 @@ foram conferidos em processo isolado. Isso não promove aceite real M1. O relóg
 BASE06 mantém o início da instalação v12 e inclui toda a espera posterior.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v13-preparation/review.json`.
+
+## 2026-11-14 — DX-T34: causa de autenticação e orientação qualificadas offline
+
+Core e Nexus preservam PROVIDER_AUTH_REQUIRED quando o Codex exige login ausente, sem iniciar turno automaticamente. O Core observa account/read sem refresh e só classifica a falta de conta quando o contexto corresponde ao provedor padrão; overrides e retomadas não recebem uma conclusão indevida. A falha durável depende da contenção do filho.
+
+O terminal orienta codex login com HOME e CODEX_HOME conforme o provider_home aprovado, distinguindo diretório de estado direto e subdiretório .codex. A orientação não lê credenciais, não executa login e não repete o setup. O checkpoint falho permanece; outro teste exige revisão explícita com novo perfil.
+
+As duas suítes selecionadas contra os wheels novos instalados passaram: 17 casos Nexus e 62 Core. A fonte final Core tem 61 casos; Nexus tem 14 casos de recibos e três de orientação. Não se somam rodadas sobrepostas como casos únicos. Permanecem os XMLs e relatos de falhas de fixtures, coleta pytest entre volumes, builds sem setuptools e wheels intermediários substituídos antes da qualificação final.
+
+DX-T34 permanece NOT_RUN. Ainda falta observar Codex real sem login, a instrução emitida, o daemon responsivo e cleanup. Não houve inferência real, leitura de credenciais pessoais, alteração M1 nem promoção de outros cenários ou critérios.
+
+Evidência: `plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json`.

@@ -8780,10 +8780,11 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+        "plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json"
       ],
-      "result": "Doctor já mantém login/qualificação desconhecidos e não inicia probes. Isso não observa o comportamento de um harness real sem login iniciado pelo serviço.",
-      "remaining": "Executar a campanha instalada com login do provedor ausente no host do serviço; reter instrução concreta emitida e prova de que o owner não fica bloqueado em prompt invisível, com cleanup. Nenhuma lacuna de produto específica foi demonstrada pela leitura.",
+      "result": "Classificação de ausência de login e instrução terminal corrigidas no Core/Nexus e qualificadas em fixtures de fonte e wheels instalados. Isso não observa ainda o harness real sem login iniciado pelo serviço.",
+      "remaining": "Executar campanha instalada com Codex real e provider_home vazio no host do serviço; reter instrução concreta, daemon responsivo sem prompt invisível e cleanup. A correção de produto tem qualificação offline; o cenário nativo permanece NOT_RUN.",
       "remaining_kind": "real_campaign_not_run",
       "qualification_limit": "Não usar missing MCP credential, variável sintética ou refusal de peer como ausência de login do provedor real.",
       "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
@@ -12879,6 +12880,29 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v13-preparation/review.json"
       ]
+    },
+    "r3_dx_t34_auth_preflight": {
+      "date": "2026-11-14",
+      "status": "OFFLINE_SOURCE_AND_INSTALLED_QUALIFIED_REAL_DX_T34_PENDING",
+      "scenario": "DX-T34",
+      "commits": {
+        "nexus": "c6d770ed59133beb455579e69817ebecc9331270",
+        "core": "6a5b982db00263daa0d330320e74125fbe082a59"
+      },
+      "installed_selected_passes": 79,
+      "source_scope": {
+        "core_final_selected": 61,
+        "nexus_receipt_cases": 14,
+        "nexus_final_guidance_cases": 3,
+        "limits": "Separate selected suites, not one joint whole-suite run. Nexus broader initial49PASS/1fixtureFAIL retained, with targeted followups."
+      },
+      "real_provider_turns": 0,
+      "native_auth_scenario_promoted": false,
+      "M1_changed": false,
+      "result": "Nexus preserves missing-provider-auth failures and gives approved-home login instructions; Core classifies default-context Codex missing login before a turn and contains its child. Installed selected suites: Nexus17PASS + Core62PASS. Source/collection fixture failures retained. No actual native auth or M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json"
+      ]
     }
   },
   "history": [
@@ -14173,6 +14197,15 @@
       "summary": "Closed v12 configured setup and983 installed payloads adopted without setup replay; separate control root, four work intents, carry8/111651, cumulative12. Preventive500k/tolerance700k uses existing user authorization. Offline212uniquePASS with explicit pre-delta/retest distinction; no actual acceptance promoted.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v13-preparation/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Provider authentication classification and terminal guidance",
+      "status": "OFFLINE_SOURCE_AND_INSTALLED_QUALIFIED_REAL_DX_T34_PENDING",
+      "summary": "Nexus preserves missing-provider-auth failures and gives approved-home login instructions; Core classifies default-context Codex missing login before a turn and contains its child. Installed selected suites: Nexus17PASS + Core62PASS. Source/collection fixture failures retained. No actual native auth or M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json"
       ]
     }
   ]

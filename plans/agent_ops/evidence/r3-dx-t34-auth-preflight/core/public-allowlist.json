@@ -1,0 +1,37 @@
+{
+  "format": "okto.dx-t34.core-public-allowlist",
+  "source_root": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\plans\\implementation\\evidence\\dx-t34-auth-preflight",
+  "commit": "6a5b982db00263daa0d330320e74125fbe082a59",
+  "files": [
+    {
+      "relative_path": "qualification.json",
+      "sha256": "19317f2e8056c2476c802eef84947ba8e7067981043c754711b32e0bb49f1f69"
+    },
+    {
+      "relative_path": "source.xml",
+      "sha256": "dc8a9f49124800cfc135dd05c875972a17616e30b5bb70d92c1c279cea1847f3"
+    },
+    {
+      "relative_path": "source-resume-final.xml",
+      "sha256": "934dc5940504463b372755a2f01ceb98b6fe1fab7bc9508e6db63e71efd56b3f"
+    },
+    {
+      "relative_path": "source-auth-final.xml",
+      "sha256": "3d6fc68a97edff02f26b5f4fca486b2217acdec71710a182efa8ef4d849ff504"
+    },
+    {
+      "relative_path": "source-v2.xml",
+      "sha256": "0a09031e48d4cb09fb8e598ed8f85fb18d7073c20d06bc1b29a4e7daabbc99b6"
+    },
+    {
+      "relative_path": "installed.xml",
+      "sha256": "74977f099adc3fca85613357c724a3efa062c9753fe4f63cca25fa9e18c94154"
+    },
+    {
+      "relative_path": "installed-imports.json",
+      "sha256": "423cf8a4e27d8d434b017fa4235682cf1bf6fe6fabf6923bb8c9aa0909fa646e"
+    }
+  ],
+  "scope": "Source and isolated installed-wheel fixtures only; no native-provider/service acceptance.",
+  "contains_real_auth_or_private_databases_or_provider_transcripts": false
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.565" timestamp="2026-11-14T13:31:24.911193-03:00" hostname="Alienware_m15"><testcase classname="" name="" time="0.000"><error message="collection failure">..\venv\Lib\site-packages\pluggy\_caller.py:197: in __call__
+    return self._hookexec(
+..\venv\Lib\site-packages\pluggy\_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\venv\Lib\site-packages\_pytest\python.py:206: in pytest_collect_directory
+    has_pkginit = pkginit.is_file()
+                  ^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:482: in is_file
+    return S_ISREG(self.stat(follow_symlinks=follow_symlinks).st_mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_local.py:515: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OSError: [WinError 1337] A estrutura da identificação de segurança é inválida: 'D:\\WpSystem\\__init__.py'</error></testcase></testsuite></testsuites>

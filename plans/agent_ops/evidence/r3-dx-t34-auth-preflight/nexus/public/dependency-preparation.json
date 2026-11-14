@@ -1,0 +1,28 @@
+{
+  "status": "DEPENDENCIES_ONLY_READY",
+  "products_installed": false,
+  "source_modified": false,
+  "source_manifest": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v10-bundle-pscf18t5\\draft\\installation\\dependency-manifest.json",
+  "source_manifest_sha256": "b5f9b58b99e4948e5bf53a152fa5ec8344b897cc4ec1d037f39945efdb668906",
+  "source_bytes_rechecked_after": true,
+  "probe": {
+    "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Scripts\\python.exe",
+    "products_find_spec": {
+      "okto_nexus": null,
+      "okto_nexus_connector": null,
+      "nexus_connector_core": null
+    },
+    "product_dist_info_absent": true,
+    "pip_origin": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\pip\\__init__.py",
+    "pip_version": "24.3.1",
+    "mcp_version": "1.30.0",
+    "system_site_packages": false
+  },
+  "dependency_files": 3209,
+  "dependency_bytes": 58227272,
+  "dependency_manifest_sha256": "ad3dc185b9aa40172597b92c48b5836af1129ba744be364a121e08dfc70ea2d6",
+  "environment_sha256": "a5fede9222ccf28ba3d472dc46a5b02893c678657acb81859e15e3dfa1b4e436",
+  "campaign_services_or_provider_used": false,
+  "limits": "Only pinned dependency bytes copied; product install remains absent and unauthorized."
+}

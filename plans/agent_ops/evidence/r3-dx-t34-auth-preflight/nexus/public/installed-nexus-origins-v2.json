@@ -1,0 +1,1807 @@
+{
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Scripts\\python.exe",
+  "isolated": true,
+  "origins": {
+    "okto_nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.application": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nexus_connector_core.discovery_control": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\discovery_control.py",
+      "sha256": "c2d728edadcf02bdf8f85f888262174af6184b063af157e0f555935c2d557840"
+    },
+    "nexus_connector_core.models": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\models.py",
+      "sha256": "8f4d23ee6eb1fa55b0e59fd7ba83b4cd4b1c70e2f58224b641d98d6685f10506"
+    },
+    "nexus_connector_core.journal_locations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\journal_locations.py",
+      "sha256": "033605ddf8687c72dac2034814f749062a2960586d6a47cb104d983024ad7e8e"
+    },
+    "nexus_connector_core.automation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\automation.py",
+      "sha256": "66eb0a3861f0085afb4cafd105d7d7916415b94237b03b391d65d25e91d5ecbf"
+    },
+    "nexus_connector_core.protocol": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\protocol.py",
+      "sha256": "610b4b0f925d6b01c8f1474790e749416d7410c4c1a3e5597c4522d8b23cdc61"
+    },
+    "nexus_connector_core.frame_codec": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\frame_codec.py",
+      "sha256": "db224fb5a1d506e17016a4363027e69ea1eedb053189602bb11cbace5941531c"
+    },
+    "nexus_connector_core.frame_codec_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\frame_codec_r4.py",
+      "sha256": "543fdd5f69d1ea1b7c5c78fdbd7ced3181bface4e37f45dbab322e8d2ef29fa0"
+    },
+    "nexus_connector_core.lease_reducer_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\lease_reducer_r4.py",
+      "sha256": "17e36344525a7748fef5efbf38b8dfbab5a16d789f160e4785423491f7d8b9fd"
+    },
+    "nexus_connector_core.receipt_reducer_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\receipt_reducer_r4.py",
+      "sha256": "d4b197ca7cb484d46ceccdbc0d908ae838eb256667ebe0b560f4f5458760b8c3"
+    },
+    "nexus_connector_core.harness_configuration": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\harness_configuration.py",
+      "sha256": "23c5fbdbf53b6782ffabcfebe4e062fd3cc34cf2d63f5be7305003974217c9eb"
+    },
+    "nexus_connector_core.installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\installation.py",
+      "sha256": "0be6684c1f51d67b981895f69b95f3bd65ec8ae3b6c8f3d2dbb0d919a1ed27fd"
+    },
+    "nexus_connector_core.close_operation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\close_operation.py",
+      "sha256": "42728427273fa620c4e1719bd9405ee10a0e8c71cb8614cbc6009ba051793444"
+    },
+    "nexus_connector_core.decision_bridge_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\decision_bridge_r4.py",
+      "sha256": "0727e44d060765d74525894a2178a40dc369c195d4dfe3eb4af9dbebda3ab0ba"
+    },
+    "nexus_connector_core.receipt_bridge_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\receipt_bridge_r4.py",
+      "sha256": "85c7e36baa48c13b1f248648bb9577e3fad7a1266a508b3c2e8a9b671b4bbae0"
+    },
+    "nexus_connector_core.receipt_binding_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\receipt_binding_r4.py",
+      "sha256": "11ffbb40a38a31a4228654fa705822b6db85e448a58b969db1e21191e80a5f16"
+    },
+    "nexus_connector_core.resource_release_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\resource_release_r4.py",
+      "sha256": "daaaeaec276fb86f01e18a553053690343d7b7f70134dce26dcf23959320d829"
+    },
+    "nexus_connector_core.lease_denial": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\lease_denial.py",
+      "sha256": "d3022957ded9b8778e4c6f3a7c26597eadbc6f18a528984e40efca3a3570f337"
+    },
+    "nexus_connector_core.process_launch": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\process_launch.py",
+      "sha256": "75e9b22b0f65fb7c529541da2017274e396f60a337267c08fad3faff77a724e9"
+    },
+    "nexus_connector_core.capacity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity.py",
+      "sha256": "cf3cabe78b45394d6026565f3ac461cfde882b640f735a013653d6e6a5aa4a3c"
+    },
+    "nexus_connector_core.ports": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\ports.py",
+      "sha256": "851ab534cd89b240d25703e42b495441e89403f14fe86610e09fad99665ff94e"
+    },
+    "nexus_connector_core.operation_refusal_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\operation_refusal_r4.py",
+      "sha256": "80e86b145db99cafafda30a471070e64c874b4e8eb1a4e4a67c65d03902d033f"
+    },
+    "nexus_connector_core.clock": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\clock.py",
+      "sha256": "788feb43947a8bf31ec856fb5744b341c4e7b27f83e4a435cc2587bdd0505165"
+    },
+    "nexus_connector_core.native_action_bridge": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native_action_bridge.py",
+      "sha256": "f355ea2f90716355a6a766d4e0d0484a8af638ee20f276aca9b6aac4f5a0f5f2"
+    },
+    "nexus_connector_core.startup_refusal_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\startup_refusal_r4.py",
+      "sha256": "9f71d96760987c807099ab3c26f59c93287c682b63debcb5b54bb98ab9adf056"
+    },
+    "nexus_connector_core.startup_refusal_link": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\startup_refusal_link.py",
+      "sha256": "ee8ae4cc775707e7350c97f34ec41d80b2506206544794130c6fcdcad39dbb97"
+    },
+    "nexus_connector_core.preopen_refusal_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\preopen_refusal_r4.py",
+      "sha256": "9abb1f5f8c8d9e0b15c42f6a039833a4bb0fac25f322f933b7d6b08cca526047"
+    },
+    "nexus_connector_core.control_reducer_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\control_reducer_r4.py",
+      "sha256": "71fa5768a9a5882cfc0f2b5fe600eb3b856c8d66820ce9c400e5ceeb7812732a"
+    },
+    "nexus_connector_core.event_reducer_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\event_reducer_r4.py",
+      "sha256": "0dbb7a2db3c406955314e04faac106a32b834704f7321be3a3b2065f70737c6e"
+    },
+    "nexus_connector_core.approval_reducer_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\approval_reducer_r4.py",
+      "sha256": "ac68880650ccfb2c7ca66b0dbbe47d7287297c308f425d09902cfb2a8aa42e4b"
+    },
+    "nexus_connector_core.capacity_runtime": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_runtime.py",
+      "sha256": "f1a37db205597e2c89ee9b0d98ebcae526fbe5e7f8a6e7bb954c562d9c588fc5"
+    },
+    "nexus_connector_core.capacity_publication": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_publication.py",
+      "sha256": "9d379e608cb906b52cb76d132a316b2d5eb2f0454aac0904bddccc5db0acb157"
+    },
+    "nexus_connector_core.capacity_waiter": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_waiter.py",
+      "sha256": "7041e1faef95f4216f21ac39b194466ba5fd5eb444dc10ecfaffa71ee93e0331"
+    },
+    "nexus_connector_core.capacity_codec": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_codec.py",
+      "sha256": "43539a1dcb2e59ff03236c87c836620a560b3bdb24d8ad17046e3abe9209327b"
+    },
+    "nexus_connector_core.session_release": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\session_release.py",
+      "sha256": "c58308409e756b6819dbf60b7c9da24c07ca248e19ba8c8f096e08814a967d6c"
+    },
+    "nexus_connector_core.event_artifacts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\event_artifacts.py",
+      "sha256": "bde30bc48b4037c3b0fd6f0394d29052daf00b99af84b4936a059b615d3c8923"
+    },
+    "nexus_connector_core.control_codec": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\control_codec.py",
+      "sha256": "dddb05a70e34ed802af1935db3dcd53cebff0cb21b694ad5f10eff51a3a82123"
+    },
+    "nexus_connector_core.capacity_control": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_control.py",
+      "sha256": "005e4a65b827c49621c485f25845eb33868134ebc973192dea2ce28c0deeaa59"
+    },
+    "nexus_connector_core.capacity_bundle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_bundle.py",
+      "sha256": "6c426e73a788a5e40b0298cf204e3a85248d787d080284326a0a9681feaf5d7a"
+    },
+    "nexus_connector_core.native": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\__init__.py",
+      "sha256": "ea6c141a4b0f933a8c226c1af8ba4f900e9a5fc1e0b36621c0e76708d952c04b"
+    },
+    "nexus_connector_core.native.adapter_types": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapter_types.py",
+      "sha256": "3ff8331d88348afdd0a89e0c5535a20b4a0d207e06f1445d89475c8c1a39eb67"
+    },
+    "nexus_connector_core.harness_config": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\harness_config.py",
+      "sha256": "653c2908e240d843eac33a6d0f9620519a4b3328528cd3e431b1d3d620ee5260"
+    },
+    "nexus_connector_core.pi_extension_resource": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\pi_extension_resource.py",
+      "sha256": "f34ce3b70bc4fbb72a450ad145e60e9525f65d7df98af009364d03c365e533c6"
+    },
+    "nexus_connector_core.native.adapters": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapters\\__init__.py",
+      "sha256": "0fa00e2ab4cbc5c7d30740ed46efa21b8c76b69c02899d363bfbe76c837beaf1"
+    },
+    "nexus_connector_core.native.process.birth": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\process\\birth.py",
+      "sha256": "f8680644f90c5428300e03ecff8e81356a129a38ccfea35678279c07cbac60f1"
+    },
+    "nexus_connector_core.native.process.preflight": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\process\\preflight.py",
+      "sha256": "a9be4b82bcd0720539b8e8efc68ff5a71f41ac2e8caf769f678e819a7d4f428a"
+    },
+    "nexus_connector_core.native.process": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\process\\__init__.py",
+      "sha256": "49427a7050e46eb48532d6d940d8e246a83adbcb40b6b843f18df6bcb0660f8e"
+    },
+    "nexus_connector_core.native.adapters.compatibility": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapters\\compatibility.py",
+      "sha256": "1b2adaf98a0dd2ebb7b04d348a9bdc79ee6b35680cdb97b1dcb0ad89694ec7ab"
+    },
+    "nexus_connector_core.offloop": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\offloop.py",
+      "sha256": "5330f25dfe2d1b0daed37de83a22d736979d124ecda5f8be559ec0801f9eb7b7"
+    },
+    "nexus_connector_core.process_launch_storage": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\process_launch_storage.py",
+      "sha256": "e74793eb74cd411e3f9ee785f3be38bcc26259eda11611b47877ee7ea2d18106"
+    },
+    "nexus_connector_core.journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\journal.py",
+      "sha256": "07b1f90ab12bd5b32f9046c23f6a692253eb7432124b62ed7047c82db93e3ab7"
+    },
+    "nexus_connector_core.native.redaction": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\redaction.py",
+      "sha256": "f2913754ee329b79f45162df35656429b60798779f978d4a7089e0ad25b613a1"
+    },
+    "nexus_connector_core.native.event_ingest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\event_ingest.py",
+      "sha256": "2cbf5281c165b7c5569dda5894f7da1e912247f1d193257830d10913ed2be916"
+    },
+    "nexus_connector_core.native.registry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\registry.py",
+      "sha256": "1da789d2cb82f6aec3a04206301b0ac1a1d6376f1cf9071df56b475b73ca121a"
+    },
+    "nexus_connector_core.native.runtime_bridge": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\runtime_bridge.py",
+      "sha256": "e99cf08e6a8e17e9a457661ae0bd668374daf2518780d417566ddc3d5cc8b91a"
+    },
+    "nexus_connector_core.validation_flights": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\validation_flights.py",
+      "sha256": "8686f503c1088f627f156925ab42584f1383da5dd9fe278568a322289c55e62e"
+    },
+    "nexus_connector_core.build_identity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\build_identity.py",
+      "sha256": "d88ed79ddb2b07204330610d6908f91f538013a794f0c5fe95b6a4685630b6ab"
+    },
+    "nexus_connector_core.discovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\discovery.py",
+      "sha256": "add88263115f95877127fc32a5e5de2ebf035fe847f4d578d153c24f9a0cbaa7"
+    },
+    "nexus_connector_core.kernel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\kernel.py",
+      "sha256": "d0ea79751775ccd4c5d1198022c23783be9aab883757c5cb2edf29ce07fa0713"
+    },
+    "nexus_connector_core.profiles": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\profiles.py",
+      "sha256": "51df88f683719611c1608e32028cb0f025a9d03c9f98dc7ed6dab497a53fc278"
+    },
+    "nexus_connector_core.targeting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\targeting.py",
+      "sha256": "cbc3d8bfcff03fd431963a194390772a2bbe338ca3618a7f77ee4832c6295516"
+    },
+    "nexus_connector_core.lease_runtime_r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\lease_runtime_r4.py",
+      "sha256": "144d54b2920db641239721ad9742148d31a40224b9cce25169c469927f01777f"
+    },
+    "nexus_connector_core.close_runtime": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\close_runtime.py",
+      "sha256": "63666f2d65d0012a039e64d91de0709dc40ccc9b802711344068340327ec7346"
+    },
+    "nexus_connector_core.drain": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\drain.py",
+      "sha256": "a957febb4df190659d5303612dd23f5f1201bfd7870c5343269e108fa392e83f"
+    },
+    "nexus_connector_core.runtime": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\runtime.py",
+      "sha256": "f60e8006f95906b14d8846182e8583a718e4444353cf04c5fc811ba1f03e7c5f"
+    },
+    "nexus_connector_core.composition": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\composition.py",
+      "sha256": "496e2c9c7a5afbef00edb8b703d0eb48150bcd4b20da6ef87fb092f82f2ffcee"
+    },
+    "nexus_connector_core.catalog": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\catalog.py",
+      "sha256": "85676c1ae91376623fafa3750f53f4746598856396ca7b3c15ee6e9505cc11f4"
+    },
+    "nexus_connector_core.availability": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\availability.py",
+      "sha256": "cbc8996ec91d871b4fb639e3137fe25edec7881d68720bd3961dc1104bdb6d8b"
+    },
+    "nexus_connector_core.capacity_storage": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\capacity_storage.py",
+      "sha256": "812effd47dd14fae98f9409dbf26f16947ad21946f334c588ee007a79108da1b"
+    },
+    "nexus_connector_core.journal_location_storage": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\journal_location_storage.py",
+      "sha256": "6dc7f89a289375498027ebf177c93769b1c564bcb6c0641d11ca9811e45004da"
+    },
+    "nexus_connector_core.slot_ledger": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\slot_ledger.py",
+      "sha256": "fd7b6c580b78221762a311c68a538d20b06d4b94144460e7722fce2aaa5aa1ca"
+    },
+    "nexus_connector_core.inventory_observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\inventory_observations.py",
+      "sha256": "9770d76f08a8fc3a1924f30ea4a95dc27deccfa82450a9a2310e62366b072018"
+    },
+    "nexus_connector_core.executor_inventory": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\executor_inventory.py",
+      "sha256": "383b71edaf87dcc80f406ebc4367a5218be395309562c61802b80e4f903fa38f"
+    },
+    "nexus_connector_core.inventory_observer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\inventory_observer.py",
+      "sha256": "7f593af1533b921477c6eb5c9db7e5f013cd2104f9aecfe4c0015d3e3211881e"
+    },
+    "nexus_connector_core.provider_discovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\provider_discovery.py",
+      "sha256": "b052aa544595687308c5dbc8ef9e58736394743bed5ee223a991408948f46dbe"
+    },
+    "nexus_connector_core.configuration_file": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\configuration_file.py",
+      "sha256": "0dbdb288a3332232e955381f8cb7f18b2270bde210a21605b5eab9097a178d4e"
+    },
+    "nexus_connector_core.configuration_probe": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\configuration_probe.py",
+      "sha256": "09d11882b8348735418def5390b2c5ba387a46a5306800870ee68d9b91376549"
+    },
+    "nexus_connector_core.native.native_inputs": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\native_inputs.py",
+      "sha256": "0a1a1128c74389f1dfcd009f9af0177960ac3c7c61b0699d466ac50678eba9ca"
+    },
+    "nexus_connector_core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\__init__.py",
+      "sha256": "2c4ca5d38bac7033748d5eea54aa5acb5d868566136c5a6d6782a5e65c507caf"
+    },
+    "nexus_connector_core.environment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\environment.py",
+      "sha256": "da181b92bb0fa8eaf7e68dafc274d9723be418deecf80503df824649ac9c9280"
+    },
+    "okto_nexus.adapters": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.adapters.outbound": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.adapters.outbound.execution": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\execution\\__init__.py",
+      "sha256": "f3f895013cb8a1e3a7bf2cd04a178c99ed7012594091b11e23d498119f983542"
+    },
+    "okto_nexus.adapters.outbound.execution.core_inventory": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\execution\\core_inventory.py",
+      "sha256": "98a13b75c6364ae92bc06a2b4d09ef97649072fdf47af95a6cbd6ed6bd13d394"
+    },
+    "okto_nexus.adapters.outbound.provider_vault": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\provider_vault.py",
+      "sha256": "5a4a005dc73863f0cf956e0c0e00293fef7c098c80212d3d3aa9aad82d5d8236"
+    },
+    "okto_nexus.bootstrap": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\__init__.py",
+      "sha256": "8230076e425d6178fa25a40d908d917f248d94438372a7aa537eb9f3e6d08029"
+    },
+    "okto_nexus.adapters.outbound.sqlite": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.domain": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.errors": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\errors.py",
+      "sha256": "d2b9fb5affef1b8bd55bd046c32593fb54fc89271298a80faafe047142c48447"
+    },
+    "okto_nexus.domain.base": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\base.py",
+      "sha256": "68ba486fcbf39cf456150bb4ebc82db50d113be5a4ca429c384f361168260a3c"
+    },
+    "okto_nexus.adapters.outbound.sqlite.endpoints_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\endpoints_repo.py",
+      "sha256": "acf719416d08eaf78683b2eec01328b3ca7166deee26a5fd3e3468f31e3b3b22"
+    },
+    "okto_nexus.adapters.outbound.sqlite.runtime_grants_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\runtime_grants_repo.py",
+      "sha256": "28e51a43d128af0e36369332e7858c41fa43efafcf37aebfc3362398b0dccf2d"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_tool_claims": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_tool_claims.py",
+      "sha256": "e3606aa80eecb9e56b3ec9d62db4e28b720052ac021220ddfafba0305f16fbce"
+    },
+    "okto_nexus.application.connection_policy": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\connection_policy.py",
+      "sha256": "7e24abef0723cf5a0f3ac76995aee42fd09b0ecb50b0e91b14b494ce8cb7c3f9"
+    },
+    "okto_nexus.application.runtime_access": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_access.py",
+      "sha256": "a362d7df03d648517dafa0d22309985837953ef991790bd03ce9d86a7504f957"
+    },
+    "okto_nexus.bootstrap.execution_authority": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\execution_authority.py",
+      "sha256": "d43889b19d5bda59908de428f28517338e61a1f96447e7e84ffaea0d6db1a8e1"
+    },
+    "okto_nexus.config": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\config.py",
+      "sha256": "e498a660a830f208ad87f5e9c2e0915ec4a1b994cf257b6c6726fd7504231cf4"
+    },
+    "okto_nexus.adapters.outbound.waiter": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\waiter.py",
+      "sha256": "3e769c79bc42aee4cc229d6b1f87d363095de913bcc52b9f5ada9e57292cf013"
+    },
+    "okto_nexus.adapters.outbound.sqlite.write_gate": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\write_gate.py",
+      "sha256": "1287bc3f6023178167fe4ae5eac7cee879f05e1877afbbf9492d98b88a52776f"
+    },
+    "okto_nexus.adapters.outbound.sqlite.connection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\connection.py",
+      "sha256": "b5225dca599c4028a7f89cce7e9d49086ce21a973d0c356d64b8e1f0362eb989"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_agent_revisions": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_agent_revisions.py",
+      "sha256": "bc701e3056122978ca79cc2f5f7200ebab4fb2cba7bcb2fb5c30386dc1d73e07"
+    },
+    "okto_nexus.domain.execution": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\execution\\__init__.py",
+      "sha256": "68db612a8cf2dd872b63ed5decc48c9f56560df7b8158d4bc37f375c418e97d9"
+    },
+    "okto_nexus.domain.execution.keys": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\execution\\keys.py",
+      "sha256": "bc00fc659c45c0f876e6d3acdbfc2f091d380619792fffff9471d244633ad5ae"
+    },
+    "okto_nexus.application.executor_inventory": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\executor_inventory.py",
+      "sha256": "f1b3a9a9f3d7cc0a526ee209bb93cceb17d74018b88115916c523352e58c9ad4"
+    },
+    "okto_nexus.application.execution_binding_proposals": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_binding_proposals.py",
+      "sha256": "af4dd8b579095e2d9a55d13e67f2c6e9fe92d629b77d86f4d78056562543ccab"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_tickets": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_tickets.py",
+      "sha256": "2bcc2ddd6ae934582f76fb54e7d1ec152c8ea19a46c0a6812e232e9f83bbab62"
+    },
+    "okto_nexus.application.execution_realizations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_realizations.py",
+      "sha256": "515593250cb35fb9945bc77d2c0eb48f0b05add447ede9a04b2f89869de06ab3"
+    },
+    "okto_nexus.application.execution_local_realizations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_local_realizations.py",
+      "sha256": "f3a7f1141a632a26396726d2edc0d2fc1a1bb554fb7e0e9bec10d563619a0667"
+    },
+    "okto_nexus.application.execution_local_launch": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_local_launch.py",
+      "sha256": "05ff346d467ada98f70b3175c6e12ec4fe31dae4fd0781fba53817a6a478c8d3"
+    },
+    "okto_nexus.application.agent_execution_policy": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\agent_execution_policy.py",
+      "sha256": "11a974b8b711e22638c0f82ce81bd9eee0fafb238fe314be8c7374a1883f4523"
+    },
+    "okto_nexus.application.runtime_policy": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_policy.py",
+      "sha256": "d02420380b1d0a46cc0a7676e2be59a93f71dd664f80991b866e020235b6d469"
+    },
+    "nexus_connector_core.mcp_presets": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\mcp_presets.py",
+      "sha256": "30e5d5c7acdfaae24f90a725f63061e53f8b1462db4177e8c6a20c435909d8fd"
+    },
+    "okto_nexus.application.runtime_mcp_presets": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_mcp_presets.py",
+      "sha256": "90e16f6d1a718f058441660c4e82b803a977505a94396dc826e5678c61706489"
+    },
+    "okto_nexus.application.connection_setup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\connection_setup.py",
+      "sha256": "ed43ab293fe8c8834897c98cc627399526c467f771982f74d91edff12f7ac287"
+    },
+    "okto_nexus.application.connection_test": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\connection_test.py",
+      "sha256": "8454fbe2659b32c0addf579fb700d5383d2826c9d582f8a9dab1d089893a172c"
+    },
+    "nexus_connector_core.connection_configuration": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\connection_configuration.py",
+      "sha256": "1017c9e482682aee10080d617faf465ce6efd3c75c276b7e95eb2601b817adcc"
+    },
+    "okto_nexus.domain.permissions": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\permissions.py",
+      "sha256": "9ec918b00ed58bd76f2aaf8ba43d402d3735687835e0d5d2cf11717fd578eac6"
+    },
+    "okto_nexus.application.project_preset": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\project_preset.py",
+      "sha256": "06e51f4d05774bee9300010782ac61cafe2172b387ee7b190059fe0493d9605f"
+    },
+    "okto_nexus.application.terminal_connection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py",
+      "sha256": "82f9f29c5d6058255ef7074ffc9128e2cb708d05c320f2c946011ba8ca6f911d"
+    },
+    "okto_nexus.adapters.outbound.sqlite.migrations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\migrations.py",
+      "sha256": "930a3c8c8f32216ab59bf266bd14263d39396aacc4a9515ddd78ec95c9e33ebe"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_identity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_identity.py",
+      "sha256": "2f268df5a03e4666e2d430ea339996316dee0c86bddda2a3f61497d79713eee5"
+    },
+    "okto_nexus.application.execution_inventory_refresh": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_inventory_refresh.py",
+      "sha256": "dcbb2a0932c0701f4f968f7cc1c546dc8c8997ff392f1b4602e1f72817fead6f"
+    },
+    "okto_nexus.bootstrap.embedded_inventory": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_inventory.py",
+      "sha256": "48076b23c09575858a8882a6d1821b78b1892a95eededa25b90d01eec179eee6"
+    },
+    "okto_nexus.adapters.inbound": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.adapters.inbound.http": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\__init__.py",
+      "sha256": "7570a2895986c26633c9daffc94709651b53de886162e9b06c7f4738f3c02479"
+    },
+    "okto_nexus.domain.keys": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\keys.py",
+      "sha256": "bfa92216586cbef347ef75255d4704104ecf35d5f295edaa24760e54dabd8790"
+    },
+    "okto_nexus.domain.models": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\models.py",
+      "sha256": "81a51831adb2172aa8bab8599223211cbf66208db61b702f53e5b784a98a5519"
+    },
+    "okto_nexus.application.remote_setup_ports": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\remote_setup_ports.py",
+      "sha256": "96b78eb76c478aca5aa4c87c76febc388720b095fbc2677f5e6475ae087cb9d8"
+    },
+    "okto_nexus.application.observation_ports": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\observation_ports.py",
+      "sha256": "b4da7bae1e0a3978f85007916dfcfb75baa5f0d5e1272ffadf7c6a1cafb9e228"
+    },
+    "okto_nexus.domain.approvals": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\approvals.py",
+      "sha256": "0f401707badd1ae0a18e20147c6ca999f5dda36c73c9edc203d845bfdaf9ced4"
+    },
+    "okto_nexus.domain.handoff_origin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\handoff_origin.py",
+      "sha256": "32432208ca94641793950334c260455e90922c04b0b61689622943de79bbd876"
+    },
+    "okto_nexus.domain.artifacts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\artifacts.py",
+      "sha256": "986d7a74711c66df8ea59703b9e3b348627232cfe69ef56cc5b24b7ba02d685a"
+    },
+    "okto_nexus.domain.comm_preset": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\comm_preset.py",
+      "sha256": "aa3a18461f5234d4d2d077ecef4d040b443f653a04fd82ed459d3ae110a302e1"
+    },
+    "okto_nexus.domain.coordination_requests": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\coordination_requests.py",
+      "sha256": "131647c679b12f2b835452a4e2ac6a2bd8457fec1211b5dea99b3910a9bfd3a3"
+    },
+    "okto_nexus.domain.governance": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\governance.py",
+      "sha256": "ecf7d4790dfaec5e912f2f2f8e6a76525ce8ed9e932032ee0b53c5e57ad0c5f1"
+    },
+    "okto_nexus.domain.harness": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\harness.py",
+      "sha256": "4d2f1a1518f2e2b61fc8c4fd4f63f60d7760cef5a48077fc42587d23fc02bb06"
+    },
+    "okto_nexus.domain.guardrails": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\guardrails.py",
+      "sha256": "184906bb278f4b33e52c8c2df14b4a3299eac105264c98d65b7cafafce3dd768"
+    },
+    "okto_nexus.domain.tag_selector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\tag_selector.py",
+      "sha256": "40ef7151f1e2dfba745fc29ae51670641d02ae759dbcfbd0518bc9a12d780c62"
+    },
+    "okto_nexus.domain.policy": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\policy.py",
+      "sha256": "7f5272ff2f91302a11b85084d1c8c37191c0b32981b59b3307e6714844305734"
+    },
+    "okto_nexus.application.ports": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\ports.py",
+      "sha256": "68c2343a70bf487b006fdaf67a426a4ebab3aabb3dbf692e72b0960226045010"
+    },
+    "okto_nexus.application.auth": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\auth.py",
+      "sha256": "c3d007a759a003019c04503837a884b24c268de636a02f1e2b102a93b907e652"
+    },
+    "okto_nexus.domain.targets": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\targets.py",
+      "sha256": "42508e897dee7e10ec05f7034b960d62145007088d922d089c750e354fdee1ba"
+    },
+    "okto_nexus.domain.handoff": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\handoff.py",
+      "sha256": "32a98f8dabf8436068b22fce5ceefd23f4e6dfdf0da1ccf79140d4994298b904"
+    },
+    "okto_nexus.domain.health": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\health.py",
+      "sha256": "346fe29c285853d47b4e31c67a36faef9ce3a5ab6db82defc5d5031192174228"
+    },
+    "okto_nexus.domain.execution_principal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\execution_principal.py",
+      "sha256": "0939c03e057b2b966b17278dc9a024b93ae120f2d5aecc5fee3f5723857cefbd"
+    },
+    "okto_nexus.domain.ids": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\ids.py",
+      "sha256": "39094e1e676054eee461c8d6e7117c34f6a21fdd2c4956fecb435dfce08a6ee7"
+    },
+    "okto_nexus.application.execution_tools": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_tools.py",
+      "sha256": "46887cd086ca2f0f0402b0aadf5b81eba55a5a1bc565f47ac96ffc0b8648e5af"
+    },
+    "okto_nexus.domain.trace": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\trace.py",
+      "sha256": "d440b57bce1dac1dd1a28122e19b53a3380f33d63700e26940f34e3416724a6e"
+    },
+    "okto_nexus.application.observability": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\observability.py",
+      "sha256": "ad044ff78378c4d5556cde4ab11f256075b0b52282cacf9e3b6c1402709250a0"
+    },
+    "okto_nexus.application.permissions": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\permissions.py",
+      "sha256": "f17cf672b501b1c3dc5fdbea49c5aee6e26bac7ad9221d78090d107d212a2751"
+    },
+    "okto_nexus.application.workspace_analytics": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\workspace_analytics.py",
+      "sha256": "794b6ee4c40a1e67801f8a2997349af023b7c38edbcf095c8a55d4f0a8d8447e"
+    },
+    "okto_nexus.application.health": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\health.py",
+      "sha256": "33512a43145ba516a3656b77f7960e55d1d81a2635573be88a6085265b7eef45"
+    },
+    "okto_nexus.application.search": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\search.py",
+      "sha256": "86ab840b96f81d9d4c910d9afef8ea38bd21bfb20a8ecddc474fa45db7a45707"
+    },
+    "okto_nexus.application.settings": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\settings.py",
+      "sha256": "b199972569bcf88f2f5c9b692215019cb9c22b0df696a83e37090c17ed594eef"
+    },
+    "okto_nexus.application.telemetry.ports": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\telemetry\\ports.py",
+      "sha256": "8b11e5db416464aae67c9da858985a8194bc379da0c3e6fb79859e9d1fdf1dac"
+    },
+    "okto_nexus.application.telemetry.schema": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\telemetry\\schema.py",
+      "sha256": "ca9346113c5776ed738b7b842a13d3c4b272d6e3fefb8828cc416276f405d3e1"
+    },
+    "okto_nexus.application.telemetry.service": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\telemetry\\service.py",
+      "sha256": "7475263c2a81e34a69f0b9870ed224d2b6d9d739d0ec84d69627ca0a1f935718"
+    },
+    "okto_nexus.application.telemetry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\telemetry\\__init__.py",
+      "sha256": "c9d7704f67f7d6be0319eee30d384bafb10a82332787055e289c04f8f765a1d0"
+    },
+    "okto_nexus.application.workspace_overview": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\workspace_overview.py",
+      "sha256": "e4fee42584cb796e52609742ee6fe3e9eb1fca60e8d27338ce989965098a4742"
+    },
+    "okto_nexus.domain.observation_tokens": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\observation_tokens.py",
+      "sha256": "0a5bbe9529c033a7dedda60cd5361777339e1795a47045dfbe78f042602b9832"
+    },
+    "okto_nexus.domain.poll_tokens": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\poll_tokens.py",
+      "sha256": "efd521275eda40e0fcb03e9c2dbb8e390a74006bed264e34d3189a9dc9a65766"
+    },
+    "okto_nexus.adapters.outbound.embedding": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\embedding\\__init__.py",
+      "sha256": "be76a8c8d6b3cee752ab2a60570f762eba6b879edd510bb2f6574bbffb411cda"
+    },
+    "okto_nexus.adapters.outbound.sqlite.embeddings_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\embeddings_repo.py",
+      "sha256": "080fb6078c8c70344304bbbc60ac814d66ffbe8d5d3f08ab5002447af6d0e67f"
+    },
+    "okto_nexus.domain.messages": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\messages.py",
+      "sha256": "c119652703733533c4734fce7492dfe86664140422d50375c29ac547e122808c"
+    },
+    "okto_nexus.adapters.outbound.sqlite.handoff_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\handoff_repo.py",
+      "sha256": "4498188272d21d7282fe99195977c773505c978be9b3b248514499f02a1d6cef"
+    },
+    "okto_nexus.adapters.outbound.sqlite.observability_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\observability_repo.py",
+      "sha256": "3eadb1e4a5c10861955d7778e46abe4b76a1d63537814ab42eece25a3e06a131"
+    },
+    "okto_nexus.adapters.outbound.tokenizer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\tokenizer\\__init__.py",
+      "sha256": "ff45afff404d95964a549f502224aeca2f718e85c640dacd9676c4e880f5bb27"
+    },
+    "okto_nexus.application.runtime_admission_fence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_admission_fence.py",
+      "sha256": "5d3e4bcc5bb69ec77c634d284213ffb44c37fae28bac609bd82633b72ec8081b"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_leases": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_leases.py",
+      "sha256": "b72434fa81e4f9e9156097e77c25a8fbf429e650dadd3c01a296ae8fe28fc82f"
+    },
+    "okto_nexus.domain.handoff_automation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\handoff_automation.py",
+      "sha256": "626f6f15c89171971531e9f407f0de25dcdd6c9a136a9fe85344dc0e2bec08c4"
+    },
+    "okto_nexus.domain.runtime_context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\runtime_context.py",
+      "sha256": "718dca82d2517ed572b4db2539e79bceeafeacd36a6c0612439284686a382158"
+    },
+    "okto_nexus.application.execution_leases": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_leases.py",
+      "sha256": "d0765bb4a3aab932eca9a39cd7ccd96c0a9243e7909f2cd458638abafa1235d0"
+    },
+    "okto_nexus.application.capacity_observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\capacity_observations.py",
+      "sha256": "fbb1db05ba2f3401d750edc21c0a962ca88b3b9240d30ca0ac9c3c2caded504d"
+    },
+    "okto_nexus.application.runtime_availability": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_availability.py",
+      "sha256": "94c8df33f1da91d6287c594d64730f02f553ba5561cca3c62fd54dcd5f531cf2"
+    },
+    "okto_nexus.application.approvals": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\approvals.py",
+      "sha256": "5ba4e3d7f0acda7839528c7fd4082209f99d0ad26e326534a76c12eba93f9480"
+    },
+    "okto_nexus.application.governance": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\governance.py",
+      "sha256": "ce28416321d8472391dcf94633571ddeeac073573f95b2ce1c7f76109e11e615"
+    },
+    "okto_nexus.application.guardrails": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\guardrails.py",
+      "sha256": "35ce8b1d8cb36310c3bdbffda0d43c1d8d074fd61b0d5adc66196aa04b1b4f42"
+    },
+    "okto_nexus.application.artifacts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\artifacts.py",
+      "sha256": "4d3848acff8796c6359d50f975348faa6219bfd26c77da7dd026bcc374e2d622"
+    },
+    "okto_nexus.domain.events": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\events.py",
+      "sha256": "d62b4643e5d3ebdbbe63f2aef52e3666da4f0981e15b0e424410ff43519953a1"
+    },
+    "okto_nexus.domain.routing": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\routing.py",
+      "sha256": "f4d9d6a10375003c720de004a7e25a440c9ae53c134d26d4d6124989bd0b6805"
+    },
+    "okto_nexus.application.capabilities": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\capabilities.py",
+      "sha256": "0d3992fdef2db8df1df18795f8f12ee20ced9cbb14edd4f7f9f2924464fdce58"
+    },
+    "okto_nexus.application.comm_preset_catalog": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\comm_preset_catalog.py",
+      "sha256": "8bbfb563c66496e11f88ac99d0cb5e2cd44e74ad787efb9e8e3b75a1275abbef"
+    },
+    "okto_nexus.adapters.outbound.clock": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\clock.py",
+      "sha256": "15a701c31c312305361e1d642352c4d0c9b7e9ae2de84f31cad6a4f4d1db5a2d"
+    },
+    "okto_nexus.adapters.outbound.file": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\file\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.adapters.outbound.file.artifacts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\file\\artifacts.py",
+      "sha256": "f3de5c48008b75400eb77a495f306f9bca61837c83039f6f1ee0f422fc8a7f08"
+    },
+    "okto_nexus.adapters.outbound.file.store": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\file\\store.py",
+      "sha256": "3ee8f180532d2d6640e88e017fe3bd966d972f01265dcb3ac4d2703fa0908e4b"
+    },
+    "okto_nexus.adapters.outbound.sqlite.approvals_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\approvals_repo.py",
+      "sha256": "6cb6dbf9408e8e46ef6a22fe5730e0e16f468ade65dac633e920e2532bb56eaf"
+    },
+    "okto_nexus.adapters.outbound.sqlite.artifacts_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\artifacts_repo.py",
+      "sha256": "30064de3bd65bc7babdba4e6aedd2d61128f8e5b40a7bbdf2e3a383e0b1641d7"
+    },
+    "okto_nexus.adapters.outbound.sqlite.capability_catalog_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\capability_catalog_repo.py",
+      "sha256": "91d2109f3ad3ada2e7b29a5ce3d7a75963e0ddcb8daacb7cfb40ebadfbf490d0"
+    },
+    "okto_nexus.adapters.outbound.sqlite.comm_preset_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\comm_preset_repo.py",
+      "sha256": "15b2dc782ebfd9dc9a4682d8fb3512ae74628d649a7795a61d629727d8684e4c"
+    },
+    "okto_nexus.adapters.outbound.sqlite.events_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\events_repo.py",
+      "sha256": "3f704d1e09fc372364dcdef47ffecec371427eb5bf002a859336e96e233cbade"
+    },
+    "okto_nexus.adapters.outbound.sqlite.governance_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\governance_repo.py",
+      "sha256": "cfe8a18c7a2414fe088abb40f2c4fd333e0ed1c3e8dd80154780fbfcb542ce1e"
+    },
+    "okto_nexus.adapters.outbound.sqlite.guardrails_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\guardrails_repo.py",
+      "sha256": "401d6e0a01b71246f6e49f02d274e7356c15404780029941ca10a7474fb77790"
+    },
+    "okto_nexus.adapters.outbound.sqlite.handoff_origins": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\handoff_origins.py",
+      "sha256": "5109152cb97def6758b0e8ee4da9c4135ec89e063b12e40d5badd5b83ecb2f89"
+    },
+    "okto_nexus.adapters.outbound.sqlite.identity_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\identity_repo.py",
+      "sha256": "b1395fb44aeaa502792532343c11ac98e6b953afee7c0bfdf01a880dcc6af742"
+    },
+    "okto_nexus.adapters.outbound.sqlite.memory_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\memory_repo.py",
+      "sha256": "2572658e2a5aaaad7d5077f047594aaf6e0de0a575d47ff27c41821aef2953d3"
+    },
+    "okto_nexus.domain.inbox": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\inbox.py",
+      "sha256": "37cbc55ce333ce5ce61fe39d3ea8af24f5a45402484712077c512c668b7399c6"
+    },
+    "okto_nexus.adapters.outbound.sqlite.messages_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\messages_repo.py",
+      "sha256": "f83503281ad6f6161c266506da93d846bfa3cc139eca9a1d9b4435a967250626"
+    },
+    "okto_nexus.adapters.outbound.sqlite.permissions_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\permissions_repo.py",
+      "sha256": "f35a489d06aabf70ea9d779ed1be78c216d437f1e6bf8c2ec66a196d741f0f17"
+    },
+    "okto_nexus.adapters.outbound.sqlite.policy_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\policy_repo.py",
+      "sha256": "b8b4d5bb90b65f34766ad5acd3125f93f1600b71b75ca0ebf6fa9d9a63d61140"
+    },
+    "okto_nexus.adapters.outbound.sqlite.poll_tokens_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\poll_tokens_repo.py",
+      "sha256": "6775b028088931496098cf6a6a802492bf466d44ab2dd3daee8dbcf8c4bd0201"
+    },
+    "okto_nexus.adapters.outbound.sqlite.observations_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\observations_repo.py",
+      "sha256": "c1bf5ed887d066b1a9712515598b3a77c988d4a77b8dd88d07b32a609fdfd1a8"
+    },
+    "okto_nexus.domain.observation_correlation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\observation_correlation.py",
+      "sha256": "2d6365cbcc3ae32fa034a83312930a204f5aeaafadd0113d0ecf5859c074f93a"
+    },
+    "okto_nexus.adapters.outbound.sqlite.observation_correlations_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\observation_correlations_repo.py",
+      "sha256": "376f34c5e7f23f662349778cd108be07a01630141d2f92e5aca681421b45e2e0"
+    },
+    "okto_nexus.adapters.outbound.sqlite.tag_catalog_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\tag_catalog_repo.py",
+      "sha256": "8875ac94068760b9a4767f9ccb011ff3800d71e7b959f5d6aa9e35ccb229509c"
+    },
+    "okto_nexus.adapters.outbound.telemetry.http_sender": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\telemetry\\http_sender.py",
+      "sha256": "bd6b7fd9674ab3cdd2db0e89acb82c5b8d74aaeae4b19bcfbc9abf40ecaf6f4c"
+    },
+    "okto_nexus.adapters.outbound.telemetry.local_store": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\telemetry\\local_store.py",
+      "sha256": "ce79f43958eef431f575f466d17ac2fa14c35f00965e038a58369dba083f776c"
+    },
+    "okto_nexus.adapters.outbound.telemetry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\telemetry\\__init__.py",
+      "sha256": "2f70f46d6c5108da876bd6219c1e04f277a087c8ae3fe58b9c447e2079be10b1"
+    },
+    "okto_nexus.adapters.outbound.telemetry.event_emitter": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\telemetry\\event_emitter.py",
+      "sha256": "169c51d1cc3c0837ed3c86f3d12c505a71d9facdf329e828de6b4a351b83d766"
+    },
+    "okto_nexus.bootstrap.dependencies": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\dependencies.py",
+      "sha256": "1c0b51db0c8a2b3889ce368559eae0e893a20dcb3a3414e389dc270fa3219297"
+    },
+    "okto_nexus.bootstrap.runtime_host": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\runtime_host.py",
+      "sha256": "8226a920259b7402adbb4222f1ef57741060f1ac338c822b398d8bc55985baa5"
+    },
+    "okto_nexus.adapters.inbound.mcp": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.envelope": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\envelope.py",
+      "sha256": "707f787095fadbea583fd0a0e86730b40b4deff61447d490ddfa1a60c3e402eb"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.application.inbox": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\inbox.py",
+      "sha256": "76cd52c3c77d29f798aa2c7dc387ab05341dfbb807a4a89ca07dfe4d31fc923c"
+    },
+    "okto_nexus.adapters.inbound.mcp.resources_docs": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\resources_docs.py",
+      "sha256": "4d875025bb787f3d4c6fc602a68c4d71ca948ac374696a0a1e43f1bc8300d75f"
+    },
+    "okto_nexus.adapters.inbound.mcp.resources": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\resources.py",
+      "sha256": "d255e558f0367cf153a74513ebc1b346b547f02521d23fbde785381670afb28d"
+    },
+    "okto_nexus.adapters.inbound.mcp.registration": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\registration.py",
+      "sha256": "b29bb3c2564f205816caac9765a4f82df52c5e138be208d14382afb8b1281b86"
+    },
+    "okto_nexus.application.guardrail_admin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\guardrail_admin.py",
+      "sha256": "4322215634046114475948d9f0fc401760bb4b9cc8e4b05ae3727db0ede797cc"
+    },
+    "okto_nexus.domain.memory": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\memory.py",
+      "sha256": "ff48460562fc0cae7046aaf88f14a10789b76601e051f0d1e771b2684f0c8875"
+    },
+    "okto_nexus.application.identity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\identity.py",
+      "sha256": "a27d1a9b2ed035772f1d74d58a724640d1b0967c0d35c3a84d22d7811ebc1de4"
+    },
+    "okto_nexus.application.memory": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\memory.py",
+      "sha256": "515a74873bab9f5aa9dc9e61de1b80f18605a6317bb7f4c50c200e4a2489ff33"
+    },
+    "okto_nexus.application.policy_catalog": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\policy_catalog.py",
+      "sha256": "bdf7fb6ff84410df49c60e022eb87891c2f93c17d1258de06e976dbc71de3ee7"
+    },
+    "okto_nexus.application.tags": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\tags.py",
+      "sha256": "333d9e6890f096bf511c28bd915d462668b26ae035eb28f70d932a06ed0467bc"
+    },
+    "okto_nexus.adapters.inbound.mcp.projection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\projection.py",
+      "sha256": "8b554417677ab9ab63ed6fc2dfab1498076b5983d7ea2c7b64a86ee9a83897c5"
+    },
+    "okto_nexus.adapters.inbound.http.identity_ctx": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\identity_ctx.py",
+      "sha256": "66a42819d2d0590b10ebb086bfb4bfdad7c05c0a48250b087aca1625092bf94f"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools._guardrails": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\_guardrails.py",
+      "sha256": "6c533c67d082db1bb2a025670234a863f8f6a812e4c0a8cf230165f40a4cf6cc"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.artifacts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\artifacts.py",
+      "sha256": "fc0bbec262aab0076b3164ec7cd20c7758b93f6f5430f19571790f990163bdaa"
+    },
+    "okto_nexus.application.handoff": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff.py",
+      "sha256": "ddd4512c4b381fa257941c79e1fdabedc7a069d00a785d910973f952b78b453e"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.handoff": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\handoff.py",
+      "sha256": "76d4ca5b13248420766f9caa7d9eb30c0da3cf76f6322c03a0b4f815693c1414"
+    },
+    "okto_nexus.application.runtime_authorization": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_authorization.py",
+      "sha256": "4b5b01b003833ad22094b5f6dfac6c8931a6db2f2780094afe656c031a9424d5"
+    },
+    "okto_nexus.adapters.outbound.inbox_notifier": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\inbox_notifier.py",
+      "sha256": "9a1d72f540477c9b18fa8891c1f25c59227ead5301c750c65557cf1c04181ccf"
+    },
+    "okto_nexus.application.messages": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\messages.py",
+      "sha256": "6248700d433aa5a26d3faebadc5b8ebfcf0e6b47ed13c274b59a97c59c040d31"
+    },
+    "okto_nexus.domain.delivery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\delivery.py",
+      "sha256": "0aa40c3b6d8423750ac34593d465031bc2a568e8c913f4ee92366375aceb0296"
+    },
+    "okto_nexus.application.runtime_bootstrap": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_bootstrap.py",
+      "sha256": "4afc890130a680b0929a1833411fcbefc0e5595387bb4f01e947e63ae7a5cc26"
+    },
+    "okto_nexus.domain.endpoints": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\endpoints.py",
+      "sha256": "982290c927635235272e5e8f2f5cb6498774cbdd5b710c77249e4bc90d65eb06"
+    },
+    "okto_nexus.application.runtime_requirements": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_requirements.py",
+      "sha256": "bad48d27d55145b4f4c7807018e92546f0da63865a421f709c2be0a125127d28"
+    },
+    "okto_nexus.application.runtime_actor_authority": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_actor_authority.py",
+      "sha256": "8b596d0cc3397264416820724d6cd83231c5c1d7c36cb870649b6833b50d2917"
+    },
+    "okto_nexus.application.runtime_causality": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_causality.py",
+      "sha256": "0d6927dacc9e10d3216ba8c31709a617d7cb24b9c2ecec020edf786561cdcaf0"
+    },
+    "okto_nexus.application.message_session_origin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\message_session_origin.py",
+      "sha256": "3ff86144e6f5ef401f589fb13fa9fd6f19880a023f414c82533f1c4c55625047"
+    },
+    "okto_nexus.application.runtime_endpoint_selection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_endpoint_selection.py",
+      "sha256": "2decdaeb8b5811a62d80e411bf2a55f1b27372071af81ca324d62eb4222f382d"
+    },
+    "okto_nexus.application.runtime_delivery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_delivery.py",
+      "sha256": "c46f301255d8e0a6ddd9101f60c2710a7756b05b4fa5ab53708c4b7c55db9783"
+    },
+    "okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\runtime_outbox_repo.py",
+      "sha256": "760a0bb067c35b0a90a22d1fa1b18b2edb37cfc7ee5a1a7403d5350dcfcc4f75"
+    },
+    "okto_nexus.adapters.outbound.sqlite.runtime_observations_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\runtime_observations_repo.py",
+      "sha256": "639ad67679d4d9b94db06b678c972e3d453bd74907a12f701bc01fb2891f5252"
+    },
+    "okto_nexus.application.execution_results": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_results.py",
+      "sha256": "a2a2682a21ee8a61b53a2693a8ec290abcf0db4f5e752fc9416bc27b6254412b"
+    },
+    "okto_nexus.application.runtime_results": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_results.py",
+      "sha256": "ec9742bcd725a90049b985118402d3f9ad631932abd5b570cac796734f803681"
+    },
+    "okto_nexus.adapters.outbound.runtime_wake": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\runtime_wake.py",
+      "sha256": "1188180ea742a46b3faaa93ed8cf09ab0ef8e8407e1ec0b9888f8b6f8eeccec9"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.messages": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\messages.py",
+      "sha256": "1ce719b1cb6d478803a22ea2aeec97a717f008490baa7f3b0085cf6f7d00b54e"
+    },
+    "okto_nexus.adapters.outbound.harness": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.adapters.outbound.harness.subscribers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\subscribers.py",
+      "sha256": "39f02124e5f5bf5fd37926b1574d15818b299a9978a3af29dadaff6f95e9e9a4"
+    },
+    "okto_nexus.adapters.outbound.sqlite.harness_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\harness_repo.py",
+      "sha256": "de2ef5f6072a815b436d3bb8bfecf35412aff744bc5860411fead73e518b45b9"
+    },
+    "okto_nexus.application.runtime_lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_lifecycle.py",
+      "sha256": "54bce918d32e86df3d0255db65a572628f127b955a5cda8ce5a01dd65481d165"
+    },
+    "okto_nexus.application.harness_supervisor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\harness_supervisor.py",
+      "sha256": "d903a712435168a476161baeba05a88f9cb3c10a95bae0fc93b0778e3466f001"
+    },
+    "okto_nexus.application.adapter_registry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\adapter_registry.py",
+      "sha256": "2118a23fab3ded0beee4ef79638790cf255436783d076fe0ee7a27d95c797763"
+    },
+    "okto_nexus.application.endpoints": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\endpoints.py",
+      "sha256": "aa7f8e388b81f33a6fc248ab185dd857d07b195e6bee48bbbe06f0cdac9d7b8e"
+    },
+    "okto_nexus.application.runtime_control": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_control.py",
+      "sha256": "8704928b25339d3ac9ad535114147c6515012bca1665363e759f99d265d8302a"
+    },
+    "okto_nexus.domain.runtime_commands": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\runtime_commands.py",
+      "sha256": "79d4266d025f06367f72565a91065eaf868a99a3df79f13adf9d2be33204c94a"
+    },
+    "okto_nexus.application.runtime_dispatcher": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_dispatcher.py",
+      "sha256": "b441befa3a2c4c6ebad9ad5eb1748650ad13660c271136a7c826374fe39c064c"
+    },
+    "okto_nexus.application.runtime_open": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_open.py",
+      "sha256": "127f8896dd51d25a3fe2ad2f5ea7351d8911a6af76d2fe0a4e857cbc38952f41"
+    },
+    "okto_nexus.adapters.outbound.sqlite.runtime_requests_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\runtime_requests_repo.py",
+      "sha256": "aca30009471a586580ef003dd1d61bfa2db18565c24e40617d2e6921223347d5"
+    },
+    "okto_nexus.adapters.outbound.runtime_owner_client": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\runtime_owner_client.py",
+      "sha256": "2e0f1234f02a276a1e0ab04c59abb34bc092d5030fe44b6a6434f1319520a582"
+    },
+    "okto_nexus.adapters.outbound.harness.environment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\environment.py",
+      "sha256": "b1454f491ae8a5a818a0543de1c0af952ca8609bd5c393c09acd0d5d06bda28a"
+    },
+    "okto_nexus.adapters.outbound.harness.envelope": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\envelope.py",
+      "sha256": "0b49e4f4ab77866e9d76cf0d150347fcf744394afdc5c120f6eee34c96596f39"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.harness": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\harness.py",
+      "sha256": "0cbad334d06fa852199db928221f086df39210e0f4ba5093e29c72dff34dc8e6"
+    },
+    "okto_nexus.application.events": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\events.py",
+      "sha256": "04ba1205785fdb5875e3b7d716118aadac1452bac38b3cb5c91f2a04451f7428"
+    },
+    "okto_nexus.application.poll_tokens": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\poll_tokens.py",
+      "sha256": "47349247c57b1bebba831fa8a312d8e85c40707e0e1e13c7e86786cde4b767c3"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.poll_tokens": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\poll_tokens.py",
+      "sha256": "22bacba9b3ed405229fa5eb5a587b3ed061eccea3de02a34e9f9785705aa1d8d"
+    },
+    "okto_nexus.adapters.inbound.runtime_admin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\runtime_admin.py",
+      "sha256": "b1efe790355247a4c711355fa0c9d1f3468c5f44e1061884595795bad5b4a530"
+    },
+    "okto_nexus.adapters.inbound.http.routes": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\routes.py",
+      "sha256": "d4cf9cc55c03914118d718ce9be3f87ba51f51186d4032943d955f49bcd9881e"
+    },
+    "okto_nexus.adapters.inbound.http.stream": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\stream.py",
+      "sha256": "3a4673d9de064e01d88006b9e82cf5bc0f8a85851294c849b5db6bec90e73279"
+    },
+    "okto_nexus.adapters.outbound.process_liveness": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\process_liveness.py",
+      "sha256": "749f744499198439839f3aad6ceccba18937f766a6872742c544aac03e722161"
+    },
+    "okto_nexus.adapters.outbound.service_manager": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\__init__.py",
+      "sha256": "cc7c37da74fae5590bf3ca87a4710a276868aae5a52da99b893873590da013f2"
+    },
+    "okto_nexus.adapters.outbound.service_manager.locking": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\locking.py",
+      "sha256": "4fd47c0c89cc220ca9301e6e927ef0098ed537592d5e5323fb5f2f07d662a425"
+    },
+    "okto_nexus.adapters.inbound.http.lock": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\lock.py",
+      "sha256": "0d4f71f6c30ab9eecc827fdb6cf5c6006c48a739391fd10df8118618f294bbc5"
+    },
+    "okto_nexus.adapters.inbound.http.app": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\app.py",
+      "sha256": "1eeaf932b22a676d3dca4f746c3c9c9fb32a430ae9ba4a582ddb511ded2e32a1"
+    },
+    "okto_nexus.application.execution_local_observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_local_observations.py",
+      "sha256": "72e22718866e72dabf1729017aa3b6c5d6bdd4cc17c867026da5643bdb8eef6c"
+    },
+    "okto_nexus.adapters.inbound.cli": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\__init__.py",
+      "sha256": "4784095a8c70937047c9fe1b5f8ce3728ad3c8cf90282e3b9f61f0a7ed18cbba"
+    },
+    "okto_nexus.adapters.outbound.service_manager.context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\context.py",
+      "sha256": "8f54e12b9c6d657a44ae3ed178e2efbc60782b4479e1b0f5f516d4bbee397e06"
+    },
+    "okto_nexus.domain.service_lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\service_lifecycle.py",
+      "sha256": "8f7c37a75548395c98840b96020fc2b00930755558e8685cf5555dbb8d57c7df"
+    },
+    "okto_nexus.adapters.outbound.service_manager.identity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\identity.py",
+      "sha256": "28a5d663c99c4cbf89739e57b4d3ce222ec374f3471126023a8ba048d38fa871"
+    },
+    "okto_nexus.adapters.outbound.service_manager.inspection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\inspection.py",
+      "sha256": "365bb1671c2e2eb2802345ebefb41afbb9879bd0aa203ae1f1e236c0d69fd123"
+    },
+    "okto_nexus.adapters.outbound.terminal_http": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\terminal_http.py",
+      "sha256": "5b6bf34ceec9feb00feca2f0d2c3a7e81429d69c5be1b2c34c3e1a61142c2cca"
+    },
+    "okto_nexus.application.service_lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\service_lifecycle.py",
+      "sha256": "2aa62d471e354c1539ce8ac21faacdd86be4bbe26a176069bbe44ad06978373c"
+    },
+    "okto_nexus.bootstrap.local_discovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\local_discovery.py",
+      "sha256": "c1e7753480e83aafc98c65aa85265cf3076074d2e4ed8779e2b1b77e6255360b"
+    },
+    "nexus_connector_core.user_service_definition": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\user_service_definition.py",
+      "sha256": "f17acb3edf7e4fc3ed671a92412b004610db30ba20f9f2499276d5e478a25788"
+    },
+    "okto_nexus.adapters.outbound.service_manager.windows_tasks": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\windows_tasks.py",
+      "sha256": "ba70980f4c072080ad78907a11dcab5e80c31342531748c921a5522b130f05ba"
+    },
+    "okto_nexus.adapters.outbound.service_manager.installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\installation.py",
+      "sha256": "4a3df9d200b1e4875c48aa4d9e874f93477c7f458f36f2c6b81a8950a451dcaa"
+    },
+    "okto_nexus.adapters.outbound.service_manager.local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\local.py",
+      "sha256": "3399c7600a90152c6b18f5ae7ab14cfdc50b8056e83f37cf69009d6414fab140"
+    },
+    "okto_nexus.adapters.inbound.cli.serve": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\serve.py",
+      "sha256": "e035f239181391c24e35038fda3b2b13ce44a34d87437d3d2d6130358eb5d512"
+    },
+    "okto_nexus.adapters.inbound.cli.service": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\service.py",
+      "sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63"
+    },
+    "okto_nexus.adapters.inbound.cli.native_input": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\native_input.py",
+      "sha256": "3b2c3e3891972d6071a2d20f51901a4d5ad3a99204668523f33b4ab9f1f49283"
+    },
+    "okto_nexus.adapters.inbound.cli.connect_login": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect_login.py",
+      "sha256": "356b09a1b4b7d1d7bb09ca0f7226fb5424fd08f2c3e94fd325b5e71e1867697a"
+    },
+    "okto_nexus.adapters.inbound.cli.connect": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\connect.py",
+      "sha256": "a6c6c360948fe0eb993ded52e9b3bb78b3d49181ce2f69a3f108049fe69c5bb3"
+    },
+    "okto_nexus.application.runtime_shutdown": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_shutdown.py",
+      "sha256": "66b29fbc97754105f40070cde55e4ad426df9eaddb1fe94303d42ac9ce99e7da"
+    },
+    "okto_nexus.bootstrap.server_shutdown": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\server_shutdown.py",
+      "sha256": "c521b76f6573a9503c4dde0064f190d4bc213dbc6dbb9ac901e8b5920b8a7013"
+    },
+    "okto_nexus.adapters.outbound.execution.embedded": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\execution\\embedded.py",
+      "sha256": "2b0cb06524d8c26374c7b881ca22a4aaeefe6e5b9bc908d2de1f5551e8b2e330"
+    },
+    "okto_nexus.domain.execution_diagnostics": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\execution_diagnostics.py",
+      "sha256": "14069b3a603ee86f1cfa270ec30d2690eb5b47db97bce4d60d8a1ddb34f430af"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_receipts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_receipts.py",
+      "sha256": "0933845e79142c1cde7bf9cc5301966e41e744252b03fe8691b08a763adf5c15"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_dispatch_ownership": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_dispatch_ownership.py",
+      "sha256": "8cd8c4806939f03410a838f83375a2fd58ebb98bfccffb25ce9318e4cbf4a32a"
+    },
+    "okto_nexus.application.execution_semantics": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_semantics.py",
+      "sha256": "f5f52e19cc3687289eab24e346c1cff411a7c8e8f051fa6696852467dc6ad570"
+    },
+    "okto_nexus.application.execution_dispatch": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_dispatch.py",
+      "sha256": "10a4a12a2cbac4c781d8d53fca9ff5d0f9e546688de9ab029d5d37031efb7add"
+    },
+    "okto_nexus.application.execution_dispatch_pump": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_dispatch_pump.py",
+      "sha256": "c56225e55f5bcd69702fee5d91a535b7c846b3fb2c1848a6de97ba2779432708"
+    },
+    "okto_nexus.adapters.outbound.harness.event_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\event_journal.py",
+      "sha256": "9262ee2742029bf4826d022fc2bd7fec54c2ff5234f193ef3261f1a306cdf274"
+    },
+    "okto_nexus.application.execution_native_requests": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_native_requests.py",
+      "sha256": "8d2d030ff2ae0f8000dfce565f7c8abf7e4829231b16a468fc5fd62194040138"
+    },
+    "okto_nexus.application.execution_event_artifacts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_event_artifacts.py",
+      "sha256": "88f8626fefc33baf74e03393904bd8da418b591441ff8090363d9cbab7850839"
+    },
+    "okto_nexus.application.execution_events": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_events.py",
+      "sha256": "4b93dd2d40a759743f8809ae21aad048e478bfd4b7c6eb7e205298456e80ec6d"
+    },
+    "okto_nexus.bootstrap.embedded_events": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_events.py",
+      "sha256": "4053fc0401e073f33821a2b33100f73637a0683a2b07e7af3636159b8c4280f6"
+    },
+    "okto_nexus.bootstrap.embedded_dispatch": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_dispatch.py",
+      "sha256": "4c19ee1ee1c7f75f0afdb4df19ec4ad3a3da289cb751fd647e3389327ab52fdd"
+    },
+    "okto_nexus.adapters.outbound.sqlite.coordination_requests": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\coordination_requests.py",
+      "sha256": "300e5b1a247c349287c6daa3d0282ab36bfedd1e1baa1f06bb5355acea4fc472"
+    },
+    "okto_nexus.adapters.outbound.sqlite.remote_setup_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\remote_setup_repo.py",
+      "sha256": "3acadde2c039c6df3c803a479a220fb42ad2cdc1c00482ada4a8b49879e87d51"
+    },
+    "okto_nexus.application.execution_binding_approvals": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_binding_approvals.py",
+      "sha256": "e44e13531592e1538a6f6c5a31848101b822790ec854e729e8208261707fff95"
+    },
+    "okto_nexus.application.execution_work_leases": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_work_leases.py",
+      "sha256": "842a8d067dcf3babfb639fc50b8b64e1a9b6f5fce42cdb373ce8f51dfc691ed2"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_work_leases": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_work_leases.py",
+      "sha256": "7eefe19a8ed9d09996daa01780688def2201a5ce307d94f254e6bfea83c4bbe2"
+    },
+    "okto_nexus.application.execution_session_containment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_session_containment.py",
+      "sha256": "fc25e564e5fe8d427adba1619577d8b35ba73ad5e76c93deacc90a5291185e92"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_session_containment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_session_containment.py",
+      "sha256": "0d29c0968d09ff4b2e81bcf01206749d3d0c8e316174d89cf3b2efa14b69b70b"
+    },
+    "okto_nexus.application.execution_session_release": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_session_release.py",
+      "sha256": "e0e1e50cd850576f07de932b88f81b90e1619138dd2c941ffd15371a10b81401"
+    },
+    "okto_nexus.application.execution_reconciliation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_reconciliation.py",
+      "sha256": "9e733e375b3a943d7322917de5b713cb7bdf11cb6f9cde0282122ec0224dc0f7"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_session_release": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_session_release.py",
+      "sha256": "edc922aa5dc27e37195a4f7bf3659be0f90d028087ff35d9ec5569132fc63d1c"
+    },
+    "okto_nexus.application.execution_capabilities": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_capabilities.py",
+      "sha256": "24b2731f9b1afc0f5b4d028a4b07dd1ffd23da7c6af8a8e0acfbd8fb691a87d6"
+    },
+    "okto_nexus.application.execution_native_recipient": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_native_recipient.py",
+      "sha256": "06839461da6394081de101c11ad0d60abbdec3c6a653825984b60dd82dc5b264"
+    },
+    "okto_nexus.application.execution_input_authority": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_input_authority.py",
+      "sha256": "1175330919514aa691bcee20b38b937eaf900722925bf902123231b62936857b"
+    },
+    "okto_nexus.application.execution_native_decisions": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_native_decisions.py",
+      "sha256": "615a1d98316803447c5739b1c63ffbd2f33dbb35245c959f3db95c764ca82793"
+    },
+    "okto_nexus.adapters.inbound.http.mcp_security": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\mcp_security.py",
+      "sha256": "ba9ede13540cc983a53a076f0a04ec039321980ebf639dffba9a2733ae483ba5"
+    },
+    "okto_nexus.adapters.inbound.mcp.connection_gate": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\connection_gate.py",
+      "sha256": "a1b682c4ed7e8984a443ca01e19b1dcb586297cca92f7f94eef1acf6fdc0c48a"
+    },
+    "okto_nexus.application.coordination_requests": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\coordination_requests.py",
+      "sha256": "b0546f311f9100615b4137df24b0d4d256a1365241fe9000e7a65957f01f7975"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.coordination_requests": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\coordination_requests.py",
+      "sha256": "e427cda029bcc190939ddb3e3c683dd180de99735e62b6863fd600a57de6df83"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.events": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\events.py",
+      "sha256": "ae2db8ab126881409367552958f548848759dcdd120294e5be0e72dd3ae6f6c9"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.guardrails": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\guardrails.py",
+      "sha256": "0c8da5fa5a1bcda676e1b63c1723db82c2b025795234ebe24b34d9b037932be0"
+    },
+    "okto_nexus.adapters.outbound.sqlite.handoff_notifications": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\handoff_notifications.py",
+      "sha256": "a285d20cd50239d567a74dcec051ed269dcfcd1beebf0eadc42068bb703820a8"
+    },
+    "okto_nexus.application.handoff_notice_retirement": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff_notice_retirement.py",
+      "sha256": "cd702c8a68ebd263080cacfe0a4b948ec2c2b6e2699c202d2646033223012011"
+    },
+    "okto_nexus.application.handoff_runtime_scheduler": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff_runtime_scheduler.py",
+      "sha256": "d9fc5a0d72c16d95902cceb1b41fe6280fcc68bdc5423f651682d372973be80d"
+    },
+    "okto_nexus.adapters.outbound.sqlite.handoff_runtime_schedule": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\handoff_runtime_schedule.py",
+      "sha256": "1afa73bda8b03f174a538ca8ca394f47fc50b6eb91f23cf35e8afc018ff584d9"
+    },
+    "okto_nexus.application.runtime_external_work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_external_work.py",
+      "sha256": "2dff5e4e01dec182cbd6bdc16ede0fd5925b3a92af2c5e9862c33d01cc1e266a"
+    },
+    "okto_nexus.application.runtime_work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_work.py",
+      "sha256": "e3505b2975d869ec10a1f59b111a3df39643af7723f8856572af0a81a613ac1a"
+    },
+    "okto_nexus.application.execution_admission": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_admission.py",
+      "sha256": "98449a4894789920c46eaf7936e88d85bfbcfa2fb79452532ed9169d7f61e7a2"
+    },
+    "okto_nexus.application.execution_intents": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_intents.py",
+      "sha256": "d5415772900530a379891401e3b82d5e8349c94d1f70506d53a0c20a5663dc42"
+    },
+    "okto_nexus.application.execution_session_views": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_session_views.py",
+      "sha256": "7d8b5415a45ba7261b8a35a091128772a7046fbdaf37684a15b33bb887ee6caf"
+    },
+    "okto_nexus.bootstrap.execution_compat": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\execution_compat.py",
+      "sha256": "e06c8d6eb441b1b6971ee762e5b53297a3123603eb0d0b444a6d098c1c52b63d"
+    },
+    "okto_nexus.application.capacity_admission": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\capacity_admission.py",
+      "sha256": "c90bb43ed16122ffa6aff7631e4e5c34e4210db9b8e2be27fae55832a259bb71"
+    },
+    "okto_nexus.application.execution_tool_claims": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_tool_claims.py",
+      "sha256": "af41cb9076606ffedb221bed2ae2c20cdc83a44c478bcb57e60a4d08af342aa3"
+    },
+    "okto_nexus.application.execution_domain_delivery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_domain_delivery.py",
+      "sha256": "c8e274ab0d418f6272d6b019912c8493792c2a034321f94f1831c9ba6f767030"
+    },
+    "okto_nexus.adapters.outbound.sqlite.capacity_admissions": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\capacity_admissions.py",
+      "sha256": "ca50c7cb852e0f59efc8cd0e477a265dae10af08dbdf396538ed66ffd56c7285"
+    },
+    "okto_nexus.adapters.outbound.harness.compatibility": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\harness\\compatibility.py",
+      "sha256": "dd600027c046c13162b67bd0a81e2a6fd2c16318fd0b21918c66072ceee632c4"
+    },
+    "okto_nexus.application.runtime_event_ingress": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_event_ingress.py",
+      "sha256": "219e9ba0ecb89149e18e38ac3f8c70e0c2ad9055efe5a9db5fb42fa2bbb91e36"
+    },
+    "okto_nexus.adapters.outbound.sqlite.runtime_journal_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\runtime_journal_repo.py",
+      "sha256": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.inbox": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\inbox.py",
+      "sha256": "43d8d2048a6914655ca143f1b54e52ab0a846be89a7083e7b986e91a7e8e515e"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.health": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\health.py",
+      "sha256": "980346546301931c370ff97b1ddf0b9eb550823ed03e8840716b7bc757d746ed"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.identity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\identity.py",
+      "sha256": "06378acc853e5c712fed83e3c336545b41653bbcfbd58470c9c00f5295c897d5"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.runtime_inputs": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\runtime_inputs.py",
+      "sha256": "87423f0868eaedaed67a667d6a36781d6d4b41df57d3764f713400b81fd35e13"
+    },
+    "okto_nexus.adapters.outbound.sharedmd": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sharedmd\\__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "okto_nexus.application.shared_md": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\shared_md.py",
+      "sha256": "02aa24f39fba8eb881eaa8ef9eecbedb989cd8c64a26a534b63494d84a74455c"
+    },
+    "okto_nexus.adapters.outbound.sharedmd.renderer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sharedmd\\renderer.py",
+      "sha256": "72d26a18fd62333c9feda28f0632144aa1a17e58f67add96f77e1cbba027a9ca"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.shared_md": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\shared_md.py",
+      "sha256": "2a008a71fb220ca9c4f49218dc0137ef507f69533aa4782b3ddd5a6e533578f2"
+    },
+    "okto_nexus.adapters.inbound.mcp.tools.tags": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\mcp\\tools\\tags.py",
+      "sha256": "dcead62cadd10485f01f59a3d1ee0ce5686f05ab5cccb80b1d6bc28d99f42559"
+    },
+    "okto_nexus.adapters.inbound.http.operator_auth": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\operator_auth.py",
+      "sha256": "2cccffe44ec27baacdc9b277cc808a22d205377c1bddced46dfbaf67d162dfcc"
+    },
+    "okto_nexus.domain.attention": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\attention.py",
+      "sha256": "301330c30662e16a5367a256122ab07b557b8244f78ceeb86b889dcb88f9df85"
+    },
+    "okto_nexus.application.attention": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\attention.py",
+      "sha256": "cf0b96fe7d568fcc04f50d99ce30c3eae3f42e826b40b905eb384c2cf3500553"
+    },
+    "okto_nexus.adapters.outbound.sqlite.attention": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\attention.py",
+      "sha256": "b2d9b879294c88519468447416ff2ac8daf37eb61514cb9fd0d62293e21001ce"
+    },
+    "okto_nexus.domain.observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\observations.py",
+      "sha256": "86314c9def2301034daf22b103d26a13abd3acf1da81ba70fccdcb8298fc8a81"
+    },
+    "okto_nexus.application.observation_validation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\observation_validation.py",
+      "sha256": "0010497ecf9c331d3e48d19522b045939d5a67bfa731e2df4999ad9a230120f6"
+    },
+    "okto_nexus.application.observation_ingress": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\observation_ingress.py",
+      "sha256": "4644d391b941dc6dbd612987efb17abc3b729838ab57e0f1cd239b3808838cd2"
+    },
+    "okto_nexus.application.observation_correlation_ports": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\observation_correlation_ports.py",
+      "sha256": "c0bf925a50820c2e9658d4e6d9a4ca03325092f1c9f778cd9567aba3ed47b506"
+    },
+    "okto_nexus.application.observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\observations.py",
+      "sha256": "b6c700014d023976f5adb0a384d5f6e10d3bb2e73029d9061a46b6a126bab893"
+    },
+    "okto_nexus.adapters.outbound.sqlite.observation_correlation_facts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\observation_correlation_facts.py",
+      "sha256": "50deb22503f6f03ec27a81e6012215a2452f1e0c222f0a898b694f7c33564f9b"
+    },
+    "okto_nexus.adapters.outbound.sqlite.observation_correlation_projection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\observation_correlation_projection.py",
+      "sha256": "5e3ac323c267dcdaefbb5360e0614d7bf6ec95e428f4d6958083fd4c5e44cbcd"
+    },
+    "okto_nexus.application.observation_correlation_service": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\observation_correlation_service.py",
+      "sha256": "c40973f1e59631009c9fef1ba3f0431b3074ba52ff8a261710f14e0c775b7a8b"
+    },
+    "okto_nexus.adapters.outbound.observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\observation\\__init__.py",
+      "sha256": "4451cda85ee57c49a0697e2952b22970c8f85d2688279f21f2cb6c054f302833"
+    },
+    "okto_nexus.domain.herdr_observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\herdr_observations.py",
+      "sha256": "58d17509c8eff4abc4191b7694c70b8e34dfedd374ec24506eac78e77ea5010b"
+    },
+    "okto_nexus.adapters.outbound.observation.windows_identity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\observation\\windows_identity.py",
+      "sha256": "b0a73f4daf76ecfc5a491f73e1296a45aa30e04d6af0c52ae232947995d6b5c4"
+    },
+    "okto_nexus.bootstrap.observation_correlation_proof": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\observation_correlation_proof.py",
+      "sha256": "6703e1f2061b8f9aad1278c971d8229819910d941ba7efe7017c51c22d98ad76"
+    },
+    "okto_nexus.adapters.inbound.http.service_lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\service_lifecycle.py",
+      "sha256": "63c1be3056176a59a3d195b51796824185f631595d7338f483d6dde97af304e7"
+    },
+    "okto_nexus.adapters.inbound.http.transport_security": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\transport_security.py",
+      "sha256": "4c0f0350cdf8995e70f322af6cbb94c29fb541ab422f1bb6cb428394cd082d9b"
+    },
+    "okto_nexus.adapters.inbound.http.connections": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\connections.py",
+      "sha256": "437e97d2a0d661a1ffbe7ccea6c7f8755631334ef31ff186a14a886fffd47c4c"
+    },
+    "okto_nexus.adapters.inbound.http.connections_v1": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\connections_v1.py",
+      "sha256": "a243bd002d7549d930722216bd04ed33216dcc16f3b387a2823bd77ea42523be"
+    },
+    "okto_nexus.application.execution_inventory_freshness": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_inventory_freshness.py",
+      "sha256": "47e618be7111db09d0297c67a57cce36ee8024321abd6144454ea83030f96247"
+    },
+    "okto_nexus.application.executor_inventory_views": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\executor_inventory_views.py",
+      "sha256": "fb640ce3448f05c780f10fb8cb176a96bb199a6b0c0f017686e0d84c6d1be376"
+    },
+    "okto_nexus.application.execution_inventory_revalidation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_inventory_revalidation.py",
+      "sha256": "40baabde699c2b669b198bb6914406073f504d1dffffb9ebc77d35ee23635bc0"
+    },
+    "okto_nexus.application.execution_binding_views": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_binding_views.py",
+      "sha256": "527b9b42f7dfc2e27d146fdb8c57c513f98c6c5a5513b259f25952bdfa87baec"
+    },
+    "okto_nexus.application.execution_runtime_options": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_runtime_options.py",
+      "sha256": "a29952398b450cc668b886bc3ab7d0d120794e7ca32ed2797c14feecf3c388ec"
+    },
+    "okto_nexus.adapters.inbound.http.runtime_v1": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\runtime_v1.py",
+      "sha256": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2"
+    },
+    "okto_nexus.adapters.inbound.http.executor_link": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\executor_link.py",
+      "sha256": "32b0878d6ce5d1663d46a265cd02b9287afc5a1e96379a671aa430e04f829b81"
+    },
+    "okto_nexus.application.agent_creation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\agent_creation.py",
+      "sha256": "0b6e8fa1b8d5673dfa26b466e9e88dbf956056980b7cc9c8ba84fed8321bf3b5"
+    },
+    "okto_nexus.domain.server_origin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\server_origin.py",
+      "sha256": "245378a9877617f6a53030fb632e63a11eebf52b17910203b547ebd599c37fd5"
+    },
+    "okto_nexus.application.remote_setup_contract": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\remote_setup_contract.py",
+      "sha256": "cf738c8fbf07c0f5ba153f8d88ad0b7ce602574abc5c9b1716aca57da4e7ceb7"
+    },
+    "okto_nexus.application.remote_setup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\remote_setup.py",
+      "sha256": "a7d081ab655b9e457b099b4a644afd04fee53525e780b124e644f45db2d8accd"
+    },
+    "okto_nexus.adapters.inbound.http.remote_setup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\remote_setup.py",
+      "sha256": "451f36c07c7a3051686b7d2105c14fb3a24a0d58879f353a26955dc2ba35a85f"
+    },
+    "okto_nexus.adapters.inbound.http.dashboard_runtime": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\dashboard_runtime.py",
+      "sha256": "298f7c280d9ebb5309b68534a2d1655b97f3fb088a3dcef14a1cff93785adb13"
+    },
+    "okto_nexus.application.execution_native_actions": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_native_actions.py",
+      "sha256": "481c88e9b31e9d65b80b4dea5487cfa77bacb59969394a55cd91da489617fe51"
+    },
+    "okto_nexus.adapters.inbound.http.native_actions_v1": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\native_actions_v1.py",
+      "sha256": "d9b25252ce34fe6185c99033b960c32c543597419f03065699c59bc25a105a19"
+    },
+    "okto_nexus.adapters.inbound.http.attention": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\attention.py",
+      "sha256": "012a8a711b759cf209cdd83119f6b9bd5d1a9b28bff03e60496f0dec74a6bd6f"
+    },
+    "okto_nexus.adapters.inbound.http.observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\observations.py",
+      "sha256": "43c6e5483a90573f165671cdae36a5b9543feae73d0f66c988f333f765a31e43"
+    },
+    "okto_nexus.application.execution_revocation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_revocation.py",
+      "sha256": "cede2ec2403193f67a5d366be2ebc941c01f3ff99739097a7f1acf90bf5bc4f8"
+    },
+    "okto_nexus.bootstrap.remote_connection_recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\remote_connection_recovery.py",
+      "sha256": "729c1519225be586de8338e8c6dd143867ca1d4654e3d9edc4716997595095ca"
+    },
+    "okto_nexus.bootstrap.server_runtime": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\server_runtime.py",
+      "sha256": "55c8531f099287e8d8ffe0dc49934673c4d431d9dd0d77de08436f88dfdb2a73"
+    },
+    "okto_nexus.bootstrap.runtime_boot_owner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\runtime_boot_owner.py",
+      "sha256": "26ea2441974aad2b3fea7d7253b59d2719e4e1526d7a8c437f02c6fe37d287db"
+    },
+    "okto_nexus.application.handoff_runtime_processor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff_runtime_processor.py",
+      "sha256": "c2425d5a45ef3a6a079b123f95fed5e82f3801634df57cc43fd2ba57223f4c17"
+    },
+    "okto_nexus.application.handoff_automation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff_automation.py",
+      "sha256": "e9d6fb685101d1d4fc3c85042abe9a21165b569d272af805bb80954717ef46fc"
+    },
+    "okto_nexus.application.handoff_runtime_attempts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff_runtime_attempts.py",
+      "sha256": "dfc81e8f83cbc0b088041ed1b629089111ede9d3a010f2d64b2e3fbdc31a683e"
+    },
+    "okto_nexus.adapters.outbound.sqlite.handoff_runtime_attempts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\handoff_runtime_attempts.py",
+      "sha256": "30b34af47fc6236fa9a16fa6aa36444832b9508fe1e8b61ffac5d029f780550a"
+    },
+    "okto_nexus.bootstrap.handoff_runtime_attempts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\handoff_runtime_attempts.py",
+      "sha256": "88b337a3f5c2894a70ab5c6652805adfca32eda7735a739ecacae9b677b1910e"
+    },
+    "okto_nexus.adapters.outbound.sqlite.capacity_compensation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\capacity_compensation.py",
+      "sha256": "8d9473607a31b384cd791d378043593d51c1c06691fcfbeab2ea5b2444e4fae0"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_pending_cancellation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_pending_cancellation.py",
+      "sha256": "53133ec645034cce13abd90e09cdbced771369f3702afd678327b835ceefec1b"
+    },
+    "okto_nexus.domain.resource_pool": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\resource_pool.py",
+      "sha256": "cbe6e7caf27509baff35217dce2848330c040fe27ae8987a718a04a80ee12098"
+    },
+    "okto_nexus.application.resource_pool_ports": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\resource_pool_ports.py",
+      "sha256": "bf9d5cf23a99e65c4db2d7d7d5f73feeffb31a74b5475bc7ec79dba1731c974d"
+    },
+    "okto_nexus.application.resource_pool": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\resource_pool.py",
+      "sha256": "a35f795d169d81d1acbe3d59f37f15115df5cf5e733198971c5527383af23440"
+    },
+    "okto_nexus.adapters.outbound.sqlite.resource_pool": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\resource_pool.py",
+      "sha256": "f2361ff548890e9391da342740ba7b9e3753eb63c8994b325c10bca071c789f7"
+    },
+    "okto_nexus.bootstrap.resource_pool": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\resource_pool.py",
+      "sha256": "cc65878e941e8ab45c4e76c3d0587f28539087bb6547ae60a5b45996d66806a9"
+    },
+    "okto_nexus.bootstrap.capacity_admission": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\capacity_admission.py",
+      "sha256": "e21fb1b4a358db90c9e4de242a311c724d20d43bc751dd2c0a06d2b1552ac3e1"
+    },
+    "okto_nexus.bootstrap.handoff_runtime_scheduler": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\handoff_runtime_scheduler.py",
+      "sha256": "ba529fa629e43badeead55d23faa335f36e35c9aface642fff966ac6c5a331bb"
+    },
+    "okto_nexus.application.handoff_runtime_service": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff_runtime_service.py",
+      "sha256": "d31ee72a92cb1489798d212c090aa6d58a04de39a903851c3548402d26b24940"
+    },
+    "okto_nexus.application.handoff_notice_maintenance": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\handoff_notice_maintenance.py",
+      "sha256": "703a71d176e88b70208ce543f0f54b69dd851b5d26a68e1fdf7bcb6df4001661"
+    },
+    "okto_nexus.adapters.outbound.sqlite.handoff_notice_retirement": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\handoff_notice_retirement.py",
+      "sha256": "c783ce109bef19110912faa18620d79d9cc68ecac73a1abc254b8eac05319a60"
+    },
+    "okto_nexus.adapters.outbound.sqlite.runtime_commands_repo": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\runtime_commands_repo.py",
+      "sha256": "fc48855b1f7009fe17a68b6cf4770f6a17af0f0b7b0d905f9625d16d8be66301"
+    },
+    "okto_nexus.application.runtime_command_dispatcher": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_command_dispatcher.py",
+      "sha256": "5c76450efc8f945dd9b457f3d4f3b4a922c8efdd2172e32504c7d5edc7533a3f"
+    },
+    "okto_nexus.application.runtime_observations": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_observations.py",
+      "sha256": "59a4244a2a950dea84ce75ecbbcb3cdd0142761aa0efb2ad68ee45f47075ec9e"
+    },
+    "okto_nexus.domain.native_inputs": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\domain\\native_inputs.py",
+      "sha256": "b8764c47735dc4e85b8ec2ad4398a792bd91deac619d45e167e29e307b9216db"
+    },
+    "okto_nexus.application.runtime_native_approvals": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_native_approvals.py",
+      "sha256": "608793b3775a2dd40a3a6a26b1cab5a3d652ba47057b63580987335d789500ac"
+    },
+    "okto_nexus.application.execution_agent_recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_agent_recovery.py",
+      "sha256": "1893f105d0686e9580376b00262650d0ef783f31894ebfd291da28a8245a1ff0"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_capacity_authority": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_capacity_authority.py",
+      "sha256": "0fed8ac1548f0ab82c4d981526faf5bb18be5676f5023b6f85e3468e8a8dfe00"
+    },
+    "okto_nexus.adapters.outbound.sqlite.diagnostics": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\diagnostics.py",
+      "sha256": "fb4cb8debbc18305894bb404a1375e8cffabd332da9e2ac48ec21e9b0b47b51d"
+    },
+    "okto_nexus.bootstrap.embedded_reconciliation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_reconciliation.py",
+      "sha256": "46133b92205305409ab0d82ec056b5fd600dfeef8caffb9e773c24717ac7de25"
+    },
+    "okto_nexus.bootstrap.embedded_agent_recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_agent_recovery.py",
+      "sha256": "32f5bbbb8147db9301b2b17ceab7b8b935c22af18033b89076d39e989913462c"
+    },
+    "okto_nexus.bootstrap.embedded_retirement": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_retirement.py",
+      "sha256": "749c89cdbda6d3d20fc4788b3bdc3653387f2a8124b559b493795b761c6223c3"
+    },
+    "okto_nexus.bootstrap.embedded_retirement_maintenance": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_retirement_maintenance.py",
+      "sha256": "312f7f03129dcc9d92c8edb2d78e8f3467530cc0d09b7b5ca13d99a69218c36f"
+    },
+    "okto_nexus.bootstrap.embedded_tools": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_tools.py",
+      "sha256": "b2a2c49569b2343e4744a287bd1c40915d2b5d439c5f007b4ec5508155a5261c"
+    },
+    "okto_nexus.bootstrap.embedded_capacity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_capacity.py",
+      "sha256": "93c669a579ec935a5a4c75f1a744faa899a13aa2321c92028434bc4720097c17"
+    },
+    "okto_nexus.bootstrap.embedded_context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_context.py",
+      "sha256": "48852003819d80d82a56e38ec48da82b22f9c26a7812346f109f2017af9a0eda"
+    },
+    "okto_nexus.application.one_shot_capacity": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\one_shot_capacity.py",
+      "sha256": "a1465a57aa4e4252f6a0e752f3c52d9fedb606e2fcab064d89218c35802602e6"
+    },
+    "okto_nexus.application.one_shot_runtime": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\one_shot_runtime.py",
+      "sha256": "6d21e66e267076b9d71f98eb8cdd1b37f137aec46f2e85763dad58aa87928dac"
+    },
+    "nexus_connector_core.contracts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\contracts\\__init__.py",
+      "sha256": "59f9c4ddb7ae3f16d13dd551367047d3045659296ac9e922ed18eec305d07a02"
+    },
+    "okto_nexus.application.one_shot_notifications": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\one_shot_notifications.py",
+      "sha256": "c369c4f006874eb49d6b0b96bcd0f43dff08fcdf9ae48abe186c177c68d6a8fb"
+    },
+    "nexus_connector_core.contracts.nxl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\contracts\\nxl\\__init__.py",
+      "sha256": "46681fec293039f1d733a3944bdfd30b824b98bc8fdc146440474db68d034f93"
+    },
+    "okto_nexus.application.execution_release_notifications": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_release_notifications.py",
+      "sha256": "2a5ce150c56f180da9297d5696347fc0bd55240d9bfdb3b7d699e79a3e0b2fca"
+    },
+    "okto_nexus.application.execution_delivery_retry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_delivery_retry.py",
+      "sha256": "c0237b479f9230cc44b0f391a487e577badf405c2cfd0b279d51ee4bc399c2a9"
+    },
+    "nexus_connector_core.contracts.nxl.r4": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\nexus_connector_core\\contracts\\nxl\\r4\\__init__.py",
+      "sha256": "f1c5c6790812c939da481de55619ff4cb0ba01283a346f7467f9e50814de2b3f"
+    },
+    "okto_nexus.application.execution_installation_succession": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_installation_succession.py",
+      "sha256": "7a580e23fa56377e47aecc38ecc523328e4a95fff03b4d6f68ce7a104b14c44a"
+    },
+    "okto_nexus.bootstrap.embedded_session_catalog": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_session_catalog.py",
+      "sha256": "b42e6fd6b6b0019c2c9f725fa69ab78c6a5c7d96f9950d254355be3e5e0d1404"
+    },
+    "okto_nexus.adapters.outbound.sqlite.execution_embedded_store_binding": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\sqlite\\execution_embedded_store_binding.py",
+      "sha256": "5a0c72e381010495449265b78922e1d9abb69dbe4f7a6a88557da51f4cfa3934"
+    },
+    "okto_nexus.application.runtime_recovery": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_recovery.py",
+      "sha256": "d53a51741e3ee18bf7862a89b5cfc839fa34901ddede5de373b364ba29bf04df"
+    },
+    "okto_nexus.bootstrap.embedded_supervisor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_supervisor.py",
+      "sha256": "3051db7f76becf81f27de3c81658589360352b22e637b7b0250c22ed93b53313"
+    },
+    "okto_nexus.application.runtime_boot": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\runtime_boot.py",
+      "sha256": "204c2204f4b2a663b5331f791404f9eedcaff4ca761e6a64457fe2b69899d6de"
+    },
+    "okto_nexus.application.execution_initial_turns": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_initial_turns.py",
+      "sha256": "8f19c17b85be335140878c47cb12d0d31d0d6d228d72263b7dcf388d555d872c"
+    },
+    "okto_nexus.application.execution_native_facts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_native_facts.py",
+      "sha256": "5223cec7a17ab2a8c63aa9e69dc383b52effc0d7efbd49839cae25076072c203"
+    },
+    "okto_nexus.application.connection_authorization": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\connection_authorization.py",
+      "sha256": "a5db6404ca2f26170c47c40a8840bcbf98b2f5fe97cc08128297ba7965f10dc1"
+    },
+    "okto_nexus.application.project_preset_update": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\project_preset_update.py",
+      "sha256": "2ac1c0f5bad6239bfd471ebc88a6aaccdf71d4c14c761ab1e0ce8413aa6bd252"
+    },
+    "okto_nexus.adapters.outbound.service_manager.stop_latch": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\stop_latch.py",
+      "sha256": "5a9e8c8144254269260f2c272863dc1f84e9376be7fa513aff97b784c3e2cf62"
+    },
+    "okto_nexus.bootstrap.embedded_initial_refusal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_initial_refusal.py",
+      "sha256": "21f65c5912a82b9992cf7c404bf088d4e3479d14074394c6bc0ef4be863bfb94"
+    },
+    "okto_nexus.application.executor_directory": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\executor_directory.py",
+      "sha256": "da346de7f7f8f4e42b9920c6e9aba0e1daaef69f49b126b5591a594baa5e7922"
+    },
+    "okto_nexus.application.execution_harness_configuration": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Lib\\site-packages\\okto_nexus\\application\\execution_harness_configuration.py",
+      "sha256": "42b0b544ec3eb82913a059f59bf6ffde16d87dde09b54d1060a266f43427029a"
+    }
+  },
+  "pytest_exit_code": 0
+}

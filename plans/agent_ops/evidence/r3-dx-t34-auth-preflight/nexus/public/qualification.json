@@ -1,0 +1,87 @@
+{
+  "status": "OFFLINE_FINAL_INSTALLED_PASS",
+  "scenario_scope": "Nexus DX-T34 authentication classification and terminal guidance",
+  "source_initial": {
+    "counts": {
+      "tests": 50,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "classification": "49 PASS; missing-home fixture still inherited a home suggestion. Product did not fail."
+  },
+  "source_auth_followup": {
+    "counts": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "classification": "14 ConnectionTests and two guidance cases passed; guidance later refined to exact Core home resolution."
+  },
+  "source_guidance_final": {
+    "counts": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "classification": "Missing home, user home with conditional state path, and direct .codex home passed."
+  },
+  "installed_initial": {
+    "counts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+    },
+    "classification": "Collection error only: pytest crossed C:/D: and encountered D:/WpSystem WinError1337. No case executed."
+  },
+  "installed_final": {
+    "counts": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "isolation": "-I -B, no PYTHONPATH, test-only fixture copies, all product origins asserted under site-packages before and after"
+  },
+  "build_initial": {
+    "classification": "Tool-reported build failed before wheel output: repository .venv lacked setuptools.build_meta. Preserved as report, not a reconstructed execution receipt."
+  },
+  "superseded_wheels": [
+    "2857bca207785eedccc3f2554393aad67a255751699e77bca200c6ebd10d9c2f",
+    "db78ce53483f4396a438ee8fb9a25d9fdca996d8fde66635a96d4fca50ff3db4"
+  ],
+  "final_installation": {
+    "status": "FINAL_CANDIDATES_INSTALLED_OFFLINE",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\venv\\Scripts\\python.exe",
+    "wheels": [
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-core-qualification-uleocpu5\\wheels-v2\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "sha256": "a05e4255254f9e96241890db1ac448fd228f4bb6868a112753de8cd667989325",
+        "bytes": 559216
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-nexus-qualification-i2obuu_g\\final-v2\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+        "sha256": "e5f67b0bcdb9d0fe7c1b1414bfb054be6e5ce936ff28f727c4aebbb74c3f882a",
+        "bytes": 3907325
+      }
+    ],
+    "provider_calls": 0,
+    "real_services": 0,
+    "M1_mutations": 0
+  },
+  "changed_sources": {
+    "src/okto_nexus/application/connection_test.py": "8454fbe2659b32c0addf579fb700d5383d2826c9d582f8a9dab1d089893a172c",
+    "src/okto_nexus/application/terminal_connection.py": "82f9f29c5d6058255ef7074ffc9128e2cb708d05c320f2c946011ba8ca6f911d",
+    "tests/execution_r4/test_connection_test.py": "e1739baf5e99496f684fe1687242e4a624cd4fb096d9d1775d80dda3775daa91",
+    "tests/execution_r4/test_terminal_connect.py": "e2d6b4f112899773be363936437ca65de8fb1643c60ad9230f27f51beb9aad36"
+  },
+  "limits": [
+    "Synthetic offline fixtures; no real authentication or provider inference.",
+    "No M1 receipt, wheel or service changed.",
+    "Stable auth code preserved; non-auth receipt errors retain prior generic classification.",
+    "Login instructions are prose only; no login, replay, Finish, or new model turn is automatically selected."
+  ]
+}
