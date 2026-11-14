@@ -260,12 +260,27 @@ def run_work(argv):
         if not target.exists():
             raise ConnectionError('CONNECTION_REQUIRED', 'Run connect for this project before using work.')
         status = service.inspect()
-        if status['state'] != 'ready':
+        # The inspected owner keeps its administrative channel during drain.
+        # Permit only observation and controls of already admitted work; never
+        # start a service, reopen admission or resume a productive submission.
+        drain_control = (action == 'resume' and args.control and
+            isinstance(checkpoint, dict) and isinstance(checkpoint.get('control'), dict) and
+            checkpoint['control'].get('intent') in {'turn.interrupt', 'runtime.close'})
+        drain_access = (status['state'] == 'stopping' and status.get('ready_for_queries') is True and
+            (action in {'status', 'watch', 'events', 'sessions', 'answer', 'interrupt', 'close'} or drain_control))
+        if status['state'] != 'ready' and not drain_access:
             display({'state': 'service_not_ready', 'service': status}, args.json)
             return 3
         guard = ExclusiveFileLock(target.with_suffix('.guard'))
         guard.acquire()
         flow = open_work(service, profile)
+        if status['state'] == 'stopping' and action == 'resume':
+            # Another CLI may replace the checkpoint before this lock is ours.
+            # Classify the document actually used by resume, not the early read.
+            control = flow.document.get('control')
+            if not isinstance(control, dict) or control.get('intent') not in {'turn.interrupt', 'runtime.close'}:
+                display({'state': 'service_not_ready', 'service': status}, args.json)
+                return 3
         if (args.project is not None or not args.profile) and flow.connection['selection']['project'] != project:
             raise ConnectionError('PROFILE_CONFLICT', 'This profile belongs to another project directory.')
         slot = 'control' if args.control else 'work'

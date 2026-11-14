@@ -19,6 +19,192 @@ wait_receipt = test_embedded_dispatch.wait_receipt
 
 
 @pytest.fixture
+def drain_cli(work, tmp_path, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import work as cli
+    from okto_nexus.adapters.outbound.service_manager.context import atomic_json
+    from okto_nexus.application.service_lifecycle import project_server_readiness
+    from dataclasses import asdict
+
+    t = work
+    home = tmp_path / 'terminal-home'
+    profile = home / 'terminal/profiles/project.json'
+    profile.parent.mkdir(parents=True)
+    atomic_json(profile, t.connection)
+    def inspect():
+        return asdict(project_server_readiness(identity='fixture-owner', generation='fixture-generation',
+            version='fixture', pid=1, owns_instance=True, startup_complete=True,
+            admission_closed=t.deps.runtime_admission_fence.closed,
+            shutdown_state=t.app.state.runtime_shutdown.status()['state']))
+    service = SimpleNamespace(adapter=SimpleNamespace(home=home, host='127.0.0.1', port=8202), inspect=inspect)
+    monkeypatch.setattr(cli, 'resolve_local_service', lambda args: service)
+    monkeypatch.setattr(cli, 'LocalOperatorHTTP', lambda **kwargs: t.call)
+    def run(*args):
+        code = cli.run_work([*args, '--home', str(home), '--profile', 'project', '--json'])
+        return code, json.loads(capsys.readouterr().out)
+    def stop():
+        response = t.setup[2].post('/v1/runtime/shutdown', headers=t.setup[3]['operator'],
+                                  json={'timeout_seconds': .02})
+        assert response.status_code == 202 and response.json()['phase'] == 'waiting'
+        assert inspect()['state'] == 'stopping' and inspect()['ready_for_queries'] is True
+    return SimpleNamespace(work=t, home=home, run=run, stop=stop)
+
+
+@pytest.mark.parametrize('action', ['interrupt', 'close'])
+def test_cli_drain_observes_and_recovers_one_containment_operation(drain_cli, action):
+    d, t = drain_cli, drain_cli.work
+    code, operation = d.run('send', '--message', 'Synthetic admitted task')
+    assert code == 0
+    turn = {'operation_id': operation['submission_turn_operation_id']}
+    wait_receipt(t.setup, turn)
+    d.stop()
+    t.calls.clear()
+    for command in [('status',), ('events',), ('sessions',), ('watch', '--timeout', '.01')]:
+        code, observed = d.run(*command)
+        assert code == (3 if command[0] == 'watch' else 0), observed
+        assert observed.get('state') != 'service_not_ready'
+    assert all(method == 'GET' for method, _ in t.calls)
+    t.fault.after = '/runtime/operations'
+    options = ['--target-turn-id', 'turn-from-native'] if action == 'interrupt' else []
+    code, failed = d.run(action, *options)
+    assert code == 3 and failed['state'] == 'unconfirmed'
+    code, recovered = d.run('resume', '--control')
+    assert code == 0
+    assert recovered['action'] == ('turn.interrupt' if action == 'interrupt' else 'runtime.close')
+    wait_receipt(t.setup, recovered)
+    assert sum(method == 'POST' and path.endswith('/runtime/operations') for method, path in t.calls) == 1
+    assert sum(verb == action for verb, _ in t.native.native.sent) == (1 if action == 'interrupt' else 0)
+    if action == 'close':
+        # This peer closes without publishing the turn's terminal fact. A close
+        # receipt must not manufacture completion or release that uncertainty.
+        report = t.app.state.runtime_shutdown.status()
+        assert report['state'] == 'DRAINING_PENDING' and not report['force_requested']
+        assert t.native.native.stopped and t.native.opens == 1
+        with t.deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute('SELECT admission_state FROM execution_operations WHERE operation_id=?',
+                (turn['operation_id'],)).fetchone()[0] != 'RESOLVED_TERMINAL'
+        return
+    complete(t, operation, 'Synthetic terminal after interrupt')
+    deadline = time.monotonic() + 15
+    while t.app.state.runtime_shutdown.status()['state'] != 'DRAINED':
+        assert time.monotonic() < deadline, json.dumps(t.app.state.runtime_shutdown.status(), sort_keys=True)
+        time.sleep(.03)
+    assert t.native.native.stopped and t.native.opens == 1
+    assert not t.app.state.runtime_shutdown.status()['force_requested']
+
+
+def test_cli_drain_keeps_reviewed_native_decision_available(drain_cli):
+    d, t = drain_cli, drain_cli.work
+    t.deps.config.feature_hitl = True
+    code, operation = d.run('send', '--message', 'Synthetic task needing approval')
+    assert code == 0
+    turn = {'operation_id': operation['submission_turn_operation_id']}
+    wait_receipt(t.setup, turn)
+    replies = []
+    async def reply(request, decision, response):
+        replies.append(decision)
+    t.native.native.reply_native_approval = reply
+    with t.deps.connection_factory.unit_of_work(write=False) as uow:
+        stream = dict(uow.connection.execute('SELECT * FROM execution_local_streams').fetchone())
+    request = dict(schema_version=1, request_id=7, request_hash='a' * 64,
+        method='item/commandExecution/requestApproval',
+        params={'threadId': 'native-thread', 'turnId': 'turn-from-native', 'itemId': 'item'})
+    t.setup[2].portal.call(t.native.native.queue.put, RuntimeEvent(stream['server_id'], stream['executor_id'],
+        stream['session_id'], stream['stream_epoch'], 0, 'approval_request', request['method'],
+        {'native_approval': request, 'native_approval_display': dict(request)}, turn['operation_id']))
+    deadline = time.monotonic() + 15
+    while True:
+        code, observed = d.run('status')
+        assert code == 0
+        if observed['requests']['items']:
+            break
+        assert time.monotonic() < deadline
+        time.sleep(.03)
+    approval_id = observed['requests']['items'][0]['approval_id']
+    d.stop()
+    code, review = d.run('answer', '--approval-id', approval_id)
+    assert code == 0 and review['state'] == 'decision_review' and not replies
+    code, decision = d.run('answer', '--approval-id', approval_id, '--decision', 'approve',
+                           '--review', review['review_revision'])
+    assert code == 0 and decision['canonical_state'] == 'CONFIRMED'
+    while not replies:
+        assert time.monotonic() < deadline
+        time.sleep(.03)
+    assert replies == ['accept']
+    complete(t, operation)
+
+
+@pytest.mark.parametrize('state,queries,command,control', [
+    ('stopping', True, ['send', '--message', 'No new work'], None),
+    ('stopping', True, ['steer', '--message', 'No steering'], None),
+    ('stopping', True, ['authorize'], None),
+    ('stopping', True, ['chat'], None),
+    ('stopping', True, ['resume'], None),
+    ('stopping', True, ['resume', '--control'], None),
+    ('stopping', True, ['resume', '--control'], {'intent': 'turn.submit'}),
+    ('stopping', False, ['status'], None),
+    ('stopping', None, ['interrupt'], None),
+    ('unknown', True, ['status'], None),
+    ('degraded', True, ['interrupt'], None),
+    ('failed', True, ['close'], None),
+])
+def test_cli_drain_refuses_productive_or_unverified_service_before_http(
+        tmp_path, monkeypatch, capsys, state, queries, command, control):
+    from okto_nexus.adapters.inbound.cli import work as cli
+    from okto_nexus.adapters.outbound.service_manager.context import atomic_json
+
+    home = tmp_path / 'terminal-home'
+    profile = home / 'terminal/profiles/project.json'
+    profile.parent.mkdir(parents=True)
+    atomic_json(profile, {})
+    if control is not None:
+        checkpoint = home / 'terminal/work/project.json'
+        checkpoint.parent.mkdir(parents=True)
+        atomic_json(checkpoint, {'control': control})
+    service = SimpleNamespace(adapter=SimpleNamespace(home=home),
+        inspect=lambda: dict(state=state, ready_for_queries=queries))
+    monkeypatch.setattr(cli, 'resolve_local_service', lambda args: service)
+    monkeypatch.setattr(cli, 'open_work', lambda *args: pytest.fail('Refused action opened the HTTP/work client'))
+    output_args = ['--json']
+    if command == ['chat']:
+        monkeypatch.setattr(cli.sys, 'stdin', SimpleNamespace(isatty=lambda: True))
+        output_args = []
+    assert cli.run_work([*command, '--home', str(home), '--profile', 'project', *output_args]) == 3
+    assert json.loads(capsys.readouterr().out)['state'] == 'service_not_ready'
+
+
+def test_cli_drain_rechecks_control_checkpoint_after_profile_lock(tmp_path, monkeypatch, capsys):
+    from okto_nexus.adapters.inbound.cli import work as cli
+    from okto_nexus.adapters.outbound.service_manager.context import atomic_json
+
+    home = tmp_path / 'terminal-home'
+    profile = home / 'terminal/profiles/project.json'
+    profile.parent.mkdir(parents=True)
+    atomic_json(profile, {})
+    checkpoint = home / 'terminal/work/project.json'
+    checkpoint.parent.mkdir(parents=True)
+    atomic_json(checkpoint, {'control': {'intent': 'turn.interrupt'}})
+    service = SimpleNamespace(adapter=SimpleNamespace(home=home),
+        inspect=lambda: dict(state='stopping', ready_for_queries=True))
+    monkeypatch.setattr(cli, 'resolve_local_service', lambda args: service)
+    lock = cli.ExclusiveFileLock
+    class ChangedCheckpointLock:
+        def __init__(self, path):
+            self.guard = lock(path)
+        def acquire(self):
+            atomic_json(checkpoint, {'control': {'intent': 'turn.submit'}})
+            self.guard.acquire()
+        def release(self):
+            self.guard.release()
+    monkeypatch.setattr(cli, 'ExclusiveFileLock', ChangedCheckpointLock)
+    def open_work(*args):
+        return SimpleNamespace(document=json.loads(checkpoint.read_text(encoding='utf8')),
+            resume=lambda *args: pytest.fail('Changed checkpoint attempted productive resume'))
+    monkeypatch.setattr(cli, 'open_work', open_work)
+    assert cli.run_work(['resume', '--control', '--home', str(home), '--profile', 'project', '--json']) == 3
+    assert json.loads(capsys.readouterr().out)['state'] == 'service_not_ready'
+
+
+@pytest.fixture
 def work(connected_local):
     setup, binding, native = connected_local
     deps, app, client, *_ = setup
