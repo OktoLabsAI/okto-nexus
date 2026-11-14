@@ -1,0 +1,71 @@
+{
+  "scope": "Read-only diagnosis of the exact owned v14 runtime PID5132; no restart, stop, provider, new wrapper execution or timeout relaxation",
+  "owner": {
+    "pid": 5132,
+    "birth_filetime": 134391500501368514,
+    "generation": "c9f085a3b8f3f61558fb5ad9cc302ee2"
+  },
+  "observations": {
+    "management_get": {
+      "path": "/api/v1/runtime-management/connections/me",
+      "timeout_seconds": 10,
+      "outcome": "TimeoutError",
+      "elapsed_seconds": 10.485170900006779
+    },
+    "host": {
+      "sample_seconds": 1,
+      "cpu_percent": 100.0,
+      "logical_cpus": 16,
+      "memory_percent": 74.9,
+      "memory_available_bytes": 8536154112,
+      "observed_epoch": 1794677334.3552558
+    },
+    "owned_runtime": {
+      "cpu_user_seconds": 94.46875,
+      "cpu_system_seconds": 24.875,
+      "read_bytes": 7842944013,
+      "write_bytes": 3122371,
+      "native_provider_children": 0,
+      "cpu_delta_seconds_over_approximately_73_wall_seconds": 16.890625
+    },
+    "sqlite_read_only": {
+      "connection_mode": "mode=ro; PRAGMA query_only=ON; busy_timeout250ms; BEGIN read snapshot; rollback; close",
+      "connect_ms": 16.097,
+      "catalog_select_ms": 191.24379998538643,
+      "operation_count_select_ms": 0.10910001583397388,
+      "execution_operations_count": 3,
+      "wal_bytes": 3291912,
+      "busy_or_lock_error": false,
+      "limitation": "Read transactions succeeding do not prove the writer queue is uncongested. No write-lock probe was executed."
+    },
+    "stack_sampling": {
+      "tool": "py-spy dump --pid5132 --nonblocking",
+      "locals_collected": false,
+      "raw_process_header_retained": false,
+      "samples": [
+        {"main": "asyncio.windows_events._poll", "other_threads": "predominantly idle"},
+        {"main": "heartbeat lock.py102 -> _beat app.py689 -> asyncio loop", "main_sampling_flag": "active+gil", "inventory_worker": "_file_digest -> executable_build_identity -> discover_installations", "other_threads": "predominantly idle"}
+      ],
+      "limitation": "Nonblocking samples can be approximate and do not establish exclusive time spent in a frame."
+    }
+  },
+  "source_findings": [
+    {
+      "path": "installed okto_nexus/adapters/inbound/http/app.py",
+      "line": 689,
+      "finding": "The heartbeat coroutine calls lock.heartbeat synchronously after each5s asyncio sleep. The heartbeat reads its diagnostic payload and calls os.utime on the event-loop thread."
+    },
+    {
+      "path": "installed okto_nexus/adapters/inbound/http/connections_v1.py",
+      "line": 142,
+      "finding": "GET connections/me invokes current_agent_revisions without persist=False. The default persist=True uses a write unit-of-work/BEGIN IMMEDIATE even though this is an observation route."
+    },
+    {
+      "path": "installed okto_nexus/bootstrap/embedded_inventory.py",
+      "line": 316,
+      "finding": "Inventory publication runs in asyncio.to_thread; discovery separately hashes native binaries in worker threads. It shares host CPU/I/O and the canonical SQLite writer queue."
+    }
+  ],
+  "conclusion": "Synchronous filesystem heartbeat on the event loop and writer participation of GET connections/me are concrete product risks. Host CPU saturation is independently observed. Current evidence does not prove a permanent SQLite deadlock or isolate one exclusive root cause. Preserve both adoption failures and investigate these paths without retrying the campaign or increasing timeouts.",
+  "sensitive_data": "No credentials, environment values, locals, native output, raw py-spy process header or auth/config contents retained."
+}

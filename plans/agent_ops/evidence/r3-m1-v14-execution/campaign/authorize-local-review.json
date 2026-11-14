@@ -1,0 +1,183 @@
+{
+  "status": "EXPIRED_GRANTS_REVIEWED",
+  "review": {
+    "state": "authorization_review",
+    "scope": {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "agent_id": "m1v12-local",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+      "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a"
+    },
+    "current_grants": [
+      {
+        "grant_id": "grant_89bbed009c65458fab96ff9d0a3ffc72",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T16:22:02.541642Z",
+        "max_executions": 20,
+        "used_executions": 0
+      },
+      {
+        "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+        "revision": 1,
+        "state": "expired",
+        "actions": [
+          "close",
+          "interrupt",
+          "open",
+          "send",
+          "steer"
+        ],
+        "expires_at": "2026-11-14T17:26:23.088231Z",
+        "max_executions": 20,
+        "used_executions": 1
+      }
+    ],
+    "total_grants": 2,
+    "has_more_grants": false,
+    "can_issue": true,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ],
+    "request": {
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "client_request_id": "authorize_e5fbe3367cc04fdab9e8d785e230a850",
+      "expected_revision": "sha256:5b1494a5f8db099140bb6c2aa060548dca544f33dfef63b1e7b0d01183298a3e",
+      "expires_at": "2026-11-14T18:42:36.153081Z",
+      "max_executions": 3
+    },
+    "effects": [
+      "Issue one new execution grant for this project identity and connection, with the displayed expiry and action budget.",
+      "Eligible authorized Nexus messages may execute within this grant; existing policy and native approvals still apply.",
+      "Keep existing grants, bindings and sessions unchanged. This does not resume work or move an old session to the new grant.",
+      "For an expired or exhausted session, explicitly close it when appropriate and use work send --new-session to start new work."
+    ],
+    "review_revision": "554c6b8d643bb32394b581ef21fbbceb29f4df2cd48842b53913cfcde2646452"
+  },
+  "observed_at_utc": "2026-11-14T17:42:36.661343+00:00",
+  "remaining_seconds_by_local_clock": 3599.491738,
+  "work_window_seconds": 630,
+  "work_window_available": false,
+  "expiry_state_source": "CANONICAL_REVIEW",
+  "repeat_review_allowed": false,
+  "model_admissions": 0,
+  "calls": {
+    "review": 1
+  },
+  "cli_execution": {
+    "command_count": 1,
+    "recent": [
+      {
+        "action": "authorize",
+        "exit_code": 0,
+        "handler_entered": true,
+        "error_type": null,
+        "possible_effect": false
+      }
+    ],
+    "entrypoint": "INSTALLED_RUN_WORK_PARSER_AND_HANDLERS",
+    "stdout": "OUTER_RUNNER_PRIVATE_CAPTURE",
+    "console_subprocess_proven": false
+  },
+  "work_checkpoint_sha256": "32c9ad13df804929542d50b984c90dfe45aee043875dd202a013d2f77b7afe61",
+  "checkpoint_summary": {
+    "known_observed_tokens": 134199,
+    "new_observed_tokens": 0,
+    "carry_in_tokens": 134199,
+    "reserved_requests": 9,
+    "new_reserved_requests": 0,
+    "policy": {
+      "revision": 14,
+      "carry_in_admissions": 9,
+      "carry_in_tokens": 134199,
+      "max_cumulative_admissions": 13,
+      "max_new_admissions": 4,
+      "preventive_cumulative_tokens": 500000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 600
+    },
+    "ancestry": {
+      "closure_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+      "checkpoint_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+      "closure_companion_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+      "original_checkpoint_sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c",
+      "predecessor_faults": [
+        "DEADLINE120",
+        "WORK_TERMINAL_FAILED"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+        "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+        "predecessor_faults": [
+          "DEADLINE120"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+          "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+          "predecessor_faults": [
+            "OBSERVATION_UNKNOWN",
+            "DEADLINE120"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+            "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+            "predecessor_faults": [
+              "CAMPAIGN_RUNNER_EXCEPTION"
+            ],
+            "prior_ancestry": {
+              "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+              "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+              "predecessor_faults": [
+                "OBSERVATION_UNKNOWN",
+                "STOP_UNCONFIRMED",
+                "CAMPAIGN_RUNNER_EXCEPTION"
+              ],
+              "prior_ancestry": {
+                "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+                "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+                "predecessor_faults": [
+                  "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+                ],
+                "prior_ancestry": {
+                  "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+                  "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+                  "predecessor_faults": [
+                    "CAMPAIGN_RUNNER_EXCEPTION"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "current": [],
+    "can_admit": true,
+    "reasons": [],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "publication_diagnostics": {
+    "attempts": 10,
+    "published_snapshots": 10
+  },
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14"
+}

@@ -1,0 +1,226 @@
+{
+  "status": "NORMAL_CLEANUP_CONFIRMED",
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "absent": true,
+      "owner_cleanup_evidence": {
+        "cleanup_sha256": "990b2fe253a8129bdb393b0048c9e0ca1c60f441b86dad4a03d6746f9c9abfc1",
+        "uninstall_result_sha256": "dbe92326d9f776ac69112cdce9f4edda3b9464464a22e8f4538a60c0b12dbb0e"
+      },
+      "canonical_absence": {
+        "state": "stopped",
+        "reason": "NO_SERVICE_OWNER",
+        "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "pid": null,
+        "generation": null
+      }
+    },
+    "connector": {
+      "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "absent": true,
+      "owner_cleanup_evidence": {},
+      "canonical_absence": {
+        "state": "stopped",
+        "reason": "NO_SERVICE_OWNER",
+        "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "pid": null,
+        "generation": "",
+        "running": false,
+        "ipc_ok": false
+      },
+      "unselected_scope_evidence": {
+        "basis": "CLOSED_PREDECESSOR_AND_COMPLETE_LOCAL_ONLY_SUCCESSOR",
+        "invocations": {
+          "adopt_local-once.reserved.json": {
+            "mode": "adopt_local",
+            "selection": [
+              "once"
+            ],
+            "reservation_sha256": "cd31fa4d5fd4a50a80b5d2fc080d8c28d9e0e0286a3d1764900666bdd2b235ce",
+            "returned_sha256": "7a4c412b2d356f9221cab899a51334d1fcd7669e35e167f7a79537cfa62040e0",
+            "returncode": 2
+          },
+          "authorize_local-apply.reserved.json": {
+            "mode": "authorize_local",
+            "selection": [
+              "apply"
+            ],
+            "reservation_sha256": "a155501ff824260621dcd678f9e9f7024e54085a779a40051ca8747bfc694e95",
+            "returned_sha256": "c5824c5030f5a05c25ac27cc042e6bf41a167da019f85aad3ecf688e3c8ef64d",
+            "returncode": 0
+          },
+          "authorize_local-review.reserved.json": {
+            "mode": "authorize_local",
+            "selection": [
+              "review"
+            ],
+            "reservation_sha256": "755f8ee374cf2b9c416e6346e71199676fe31ec2db2b30f984dd5f7a7849f4e8",
+            "returned_sha256": "fe04a2d11c802b866b14080b485b0cee162febfb70ef5c666454b1c8bdf932e6",
+            "returncode": 0
+          },
+          "lifecycle-initialize.reserved.json": {
+            "mode": "lifecycle",
+            "selection": [
+              "initialize"
+            ],
+            "reservation_sha256": "9b526c6ac9adde1daf7c1ddca9a4701f5e78abfa9be3110d263c8877312e66fe",
+            "returned_sha256": "c99490aa144c2dbb45f36ad0ec070b513f1a22e3da100890618226c939e60b53",
+            "returncode": 0
+          },
+          "lifecycle-nexus-install.reserved.json": {
+            "mode": "lifecycle",
+            "selection": [
+              "nexus",
+              "install"
+            ],
+            "reservation_sha256": "398d628831947d5cbfeaa7b0a89f500cf42be152ab2807e121ab1a19f9b86d0f",
+            "returned_sha256": "a08552c82317ebbe83e4ba4cbb28f941e669c76d1a3e24ff9d08fa142ddcc852",
+            "returncode": 0
+          },
+          "lifecycle-nexus-start.reserved.json": {
+            "mode": "lifecycle",
+            "selection": [
+              "nexus",
+              "start"
+            ],
+            "reservation_sha256": "f960af0bb33394d37d5e71f0a0b6f0341a44559af31daa52caadfa7bf6c6a470",
+            "returned_sha256": "3c166626add4ede52416cfc8b2a23d303c4a388555f0c842d4e4ddd6687488c3",
+            "returncode": 3
+          },
+          "lifecycle-nexus-uninstall.reserved.json": {
+            "mode": "lifecycle",
+            "selection": [
+              "nexus",
+              "uninstall"
+            ],
+            "reservation_sha256": "97292402877dca3f29f32558554ccecce6cd4669ada523ba2ac7d0c9116341f6",
+            "returned_sha256": "e556b8e41215bab21637fbbdf5b6ce97c7bfa0259bf68404c1917a9bf696d8bb",
+            "returncode": 0
+          },
+          "work-local-useful.reserved.json": {
+            "mode": "work",
+            "selection": [
+              "local",
+              "useful"
+            ],
+            "reservation_sha256": "49a949204ae00cc68a7a42740109581662d2fccd13709e8d51f2e3791228cb1a",
+            "returned_sha256": "1e42d68c159b9206caa80b23a6e2d39b0d33498315bf83d557aabc1863c61e7c",
+            "returncode": 0
+          }
+        },
+        "predecessor_closure_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+        "connector_state_empty": true,
+        "operator_pristine_required": false,
+        "controller_checkpoint_sha256": "f4aeeda654c3de7de28cc72498d57f312819f4f77726c879a51710f691220868",
+        "checkpoint_summary": {
+          "faults_preserved": [
+            "MONITOR_CADENCE_EXCEEDED",
+            "OBSERVATION_STALE",
+            "WORK_RESPONSE_UNKNOWN"
+          ],
+          "new_reserved_admissions": 1,
+          "cumulative_reserved_admissions": 10,
+          "prior_carry_in_tokens": 134199,
+          "new_observed_tokens": 0,
+          "cumulative_minimum_observed_tokens": 134199,
+          "billing_final": false,
+          "unsettled_requests": 1
+        }
+      }
+    }
+  },
+  "invocation_evidence": {
+    "adopt_local-once.reserved.json": {
+      "mode": "adopt_local",
+      "selection": [
+        "once"
+      ],
+      "reservation_sha256": "cd31fa4d5fd4a50a80b5d2fc080d8c28d9e0e0286a3d1764900666bdd2b235ce",
+      "returned_sha256": "7a4c412b2d356f9221cab899a51334d1fcd7669e35e167f7a79537cfa62040e0",
+      "returncode": 2
+    },
+    "authorize_local-apply.reserved.json": {
+      "mode": "authorize_local",
+      "selection": [
+        "apply"
+      ],
+      "reservation_sha256": "a155501ff824260621dcd678f9e9f7024e54085a779a40051ca8747bfc694e95",
+      "returned_sha256": "c5824c5030f5a05c25ac27cc042e6bf41a167da019f85aad3ecf688e3c8ef64d",
+      "returncode": 0
+    },
+    "authorize_local-review.reserved.json": {
+      "mode": "authorize_local",
+      "selection": [
+        "review"
+      ],
+      "reservation_sha256": "755f8ee374cf2b9c416e6346e71199676fe31ec2db2b30f984dd5f7a7849f4e8",
+      "returned_sha256": "fe04a2d11c802b866b14080b485b0cee162febfb70ef5c666454b1c8bdf932e6",
+      "returncode": 0
+    },
+    "lifecycle-initialize.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "initialize"
+      ],
+      "reservation_sha256": "9b526c6ac9adde1daf7c1ddca9a4701f5e78abfa9be3110d263c8877312e66fe",
+      "returned_sha256": "c99490aa144c2dbb45f36ad0ec070b513f1a22e3da100890618226c939e60b53",
+      "returncode": 0
+    },
+    "lifecycle-nexus-install.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "install"
+      ],
+      "reservation_sha256": "398d628831947d5cbfeaa7b0a89f500cf42be152ab2807e121ab1a19f9b86d0f",
+      "returned_sha256": "a08552c82317ebbe83e4ba4cbb28f941e669c76d1a3e24ff9d08fa142ddcc852",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "start"
+      ],
+      "reservation_sha256": "f960af0bb33394d37d5e71f0a0b6f0341a44559af31daa52caadfa7bf6c6a470",
+      "returned_sha256": "3c166626add4ede52416cfc8b2a23d303c4a388555f0c842d4e4ddd6687488c3",
+      "returncode": 3
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "mode": "lifecycle",
+      "selection": [
+        "nexus",
+        "uninstall"
+      ],
+      "reservation_sha256": "97292402877dca3f29f32558554ccecce6cd4669ada523ba2ac7d0c9116341f6",
+      "returned_sha256": "e556b8e41215bab21637fbbdf5b6ce97c7bfa0259bf68404c1917a9bf696d8bb",
+      "returncode": 0
+    },
+    "work-local-useful.reserved.json": {
+      "mode": "work",
+      "selection": [
+        "local",
+        "useful"
+      ],
+      "reservation_sha256": "49a949204ae00cc68a7a42740109581662d2fccd13709e8d51f2e3791228cb1a",
+      "returned_sha256": "1e42d68c159b9206caa80b23a6e2d39b0d33498315bf83d557aabc1863c61e7c",
+      "returncode": 0
+    }
+  },
+  "remote_helper_evidence": {
+    "selected": false,
+    "basis": "NO_REMOTE_SELECTION_OR_CANONICAL_RESERVATION"
+  },
+  "exclusive_port_probe_passed_not_reserved": 58631,
+  "observed_at": 1794678434.5462298,
+  "data_directories_retained": true,
+  "force_used": false,
+  "database_read": false,
+  "scope": "Exact temporary tasks, retained selected owners, normal removal and instantaneous port availability only; no work/accounting conclusion.",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14"
+}

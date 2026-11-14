@@ -1,0 +1,31 @@
+{
+  "status": "CHARACTERIZED_NO_PRODUCT_PATCH",
+  "tests": {
+    "passed": 3,
+    "xml": "characterization-final.xml"
+  },
+  "initial": {
+    "passed": 2,
+    "failed": 1,
+    "xml": "characterization.xml",
+    "cause": "Trace callback attached after first request missed the already cached per-thread connection; install tracing before first request fixes only the fixture."
+  },
+  "findings": [
+    "GET connections/me actually reaches BEGIN IMMEDIATE and waits while an independent sqlite connection owns BEGIN IMMEDIATE; after external commit GET returns current projected metadata and persisted revision2.",
+    "A readonly WAL snapshot remained available during that writer hold. This isolates potential contention at this route UoW; it does not establish the cause of actual M1 latency.",
+    "Without baseline persist=False reports1 across changes. With persisted baselineA, readonly B and C both report2; existing GET persisted B2 thenC3.",
+    "Boot ensures installation identity, not every agent revision baseline; issue_key changes key hash but does not persist these counters.",
+    "No compatible minimal persist=False substitution identified inside connections_v1.py alone. Preserve current contract; moving revision advancement to mutation writers would be separate broader work."
+  ],
+  "scope": "FastAPI route + own minimal SQLite schema, fake authenticated identity. No app lifespan/background runtime/service/provider, no live M1 DB or process inspection.",
+  "source_sha256": {
+    "src/okto_nexus/adapters/inbound/http/connections_v1.py": "a243bd002d7549d930722216bd04ed33216dcc16f3b387a2823bd77ea42523be",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_agent_revisions.py": "bc701e3056122978ca79cc2f5f7200ebab4fb2cba7bcb2fb5c30386dc1d73e07",
+    "src/okto_nexus/application/auth.py": "c3d007a759a003019c04503837a884b24c268de636a02f1e2b102a93b907e652",
+    "src/okto_nexus/bootstrap/dependencies.py": "1c0b51db0c8a2b3889ce368559eae0e893a20dcb3a3414e389dc270fa3219297"
+  },
+  "commands": [
+    "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -m pytest test_connections_me_writer_contract.py -q --tb=short --junitxml=characterization-final.xml"
+  ],
+  "repository_mutations": false
+}

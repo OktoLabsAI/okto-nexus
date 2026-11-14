@@ -1,0 +1,311 @@
+{
+  "format": "r3-m1-v14-execution-retention-v1",
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "entries": [
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\closure.json",
+      "path": "campaign/closure.json",
+      "sha256": "2283c89678697b1916a48a1b3573db9fe6ed30a4be6572d3fa06e7a3da6a7177",
+      "bytes": 3694,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\final-presence.json",
+      "path": "campaign/final-presence.json",
+      "sha256": "afd5cb8a2f2f52c575cb02dfc06781bb23a28f965b23acd56b7389dbf8ca1906",
+      "bytes": 8975,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\cleanup-nexus.json",
+      "path": "campaign/cleanup-nexus.json",
+      "sha256": "990b2fe253a8129bdb393b0048c9e0ca1c60f441b86dad4a03d6746f9c9abfc1",
+      "bytes": 1095,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\nexus-exit-proof.json",
+      "path": "campaign/nexus-exit-proof.json",
+      "sha256": "e06f652a3787f19708e49a2b7561e62c2bb650fddb019fd68126d781e285edaf",
+      "bytes": 767,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\nexus-owner-selection.json",
+      "path": "campaign/nexus-owner-selection.json",
+      "sha256": "126997a46d21896ab67c62f6902633b603247ba6299757ebf2c5b5d6b8d527a7",
+      "bytes": 858,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\nexus-exit-watch-started.json",
+      "path": "campaign/nexus-exit-watch-started.json",
+      "sha256": "d88494a4dbc77548da4319e64a14061b559510c7daf40cae606f4fc027933a95",
+      "bytes": 653,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\root-driver-preparation.json",
+      "path": "campaign/root-driver-preparation.json",
+      "sha256": "30a8911a09cc816d7e120b086499542668d345dd5b9953b92339ef1426a5e087",
+      "bytes": 559,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\authorization-reference.json",
+      "path": "campaign/authorization-reference.json",
+      "sha256": "b7e4f7cb585fa9611f33f23109bbd81823bfb672bcbe64672904b83bec701968",
+      "bytes": 483,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-reserved.json",
+      "path": "campaign/adopt-local-reserved.json",
+      "sha256": "9cd7f52425a242e86101c5540a5fc01d9c44adf5a61b2964f617c065d539125c",
+      "bytes": 457,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-result.json",
+      "path": "campaign/adopt-local-result.json",
+      "sha256": "ed18e1c5475b5b0b0f494265e894675c3522a4bb49dacb17c52a01272b2d29ed",
+      "bytes": 5082,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-continuation.json",
+      "path": "campaign/adopt-local-continuation.json",
+      "sha256": "b337bfc0ca4a75096b5ca59f23376e2779c53029adc77a60b5957508e3df7324",
+      "bytes": 1071,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\authorize-local-review.json",
+      "path": "campaign/authorize-local-review.json",
+      "sha256": "70caf7e6222089260c5e255d5035ee35fbfd915854a9eb9593e244a8f2310ce2",
+      "bytes": 6969,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\authorize-local-apply.json",
+      "path": "campaign/authorize-local-apply.json",
+      "sha256": "d6db1d378d800cb99b0f40fb3c002c39ca80736dea56a04c9814315ef6c86061",
+      "bytes": 4939,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\authorize-local-review-reserved.json",
+      "path": "campaign/authorize-local-review-reserved.json",
+      "sha256": "4b5125d2fb94d336cce1f9b7e5bcafb3c5c7c08bcbf80f42e3170c0f7e672ee2",
+      "bytes": 447,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\authorize-local-apply-reserved.json",
+      "path": "campaign/authorize-local-apply-reserved.json",
+      "sha256": "4b5125d2fb94d336cce1f9b7e5bcafb3c5c7c08bcbf80f42e3170c0f7e672ee2",
+      "bytes": 447,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\m1v14-local-work-01-dispatch-selection.json",
+      "path": "campaign/m1v14-local-work-01-dispatch-selection.json",
+      "sha256": "f2922058ef119c7e34ea5e8cc1a0ebabde87a031da307ffb76e006da3b78f101",
+      "bytes": 285587,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\m1v14-local-work-01-result.json",
+      "path": "campaign/m1v14-local-work-01-result.json",
+      "sha256": "7b78512ee2e283d60ebaecb4f581531a557f78f282f2d801af245017210a3a95",
+      "bytes": 7723,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\lifecycle-nexus-install-result.json",
+      "path": "campaign/lifecycle-nexus-install-result.json",
+      "sha256": "1823bb29df8e8f5463dd2102ee94cd23f83de9120472fca701cbe7533aa5148d",
+      "bytes": 463,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\lifecycle-nexus-start-result.json",
+      "path": "campaign/lifecycle-nexus-start-result.json",
+      "sha256": "522723e0cb651c72d3ef3f4c1988d92548d0b16822c0998f203a22846c8107e8",
+      "bytes": 462,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\lifecycle-nexus-stop-result.json",
+      "path": "campaign/lifecycle-nexus-stop-result.json",
+      "sha256": "f1f23fe2797aa4f6fa90531eb27ff86262ee1b345dff790f0d3f92263fd9dcec",
+      "bytes": 460,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\lifecycle-nexus-uninstall-result.json",
+      "path": "campaign/lifecycle-nexus-uninstall-result.json",
+      "sha256": "dbe92326d9f776ac69112cdce9f4edda3b9464464a22e8f4538a60c0b12dbb0e",
+      "bytes": 527,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\execution-authorization.json",
+      "path": "execution-authorization.json",
+      "sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+      "bytes": 4703,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-review-v14-final.json",
+      "path": "root-review-v14-final.json",
+      "sha256": "e1a58c15fd8979f801bd803f2c1ef7c0c84b75b07d2a82bd7c6a39148466e4f6",
+      "bytes": 1419,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation-9bka25ra\\manifest.json",
+      "path": "adoption-continuation1/manifest.json",
+      "sha256": "c3a2a9d88190c139b65fba3d3203211f87063d3d287118ed44a92301d1468df4",
+      "bytes": 3190,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation-9bka25ra\\continue_adoption.py",
+      "path": "adoption-continuation1/continue_adoption.py",
+      "sha256": "c8069ebe28b27792275f317472ba1c0ced1577598ddc36484a99b86d676ffc8a",
+      "bytes": 6161,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation-9bka25ra\\test_continuation.py",
+      "path": "adoption-continuation1/test_continuation.py",
+      "sha256": "29a333bef8e6f54fc59b34a62f4e1454ded8133094d4949ad7653f6b5dad227d",
+      "bytes": 2795,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation-9bka25ra\\runtime\\continuation-reserved.json",
+      "path": "adoption-continuation1/runtime/continuation-reserved.json",
+      "sha256": "b270602331c431e32cfecb7f80c4877ae5f0a81e3145f3e40af03c3ae71910fe",
+      "bytes": 706,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation-9bka25ra\\runtime\\continuation-unconfirmed.json",
+      "path": "adoption-continuation1/runtime/continuation-unconfirmed.json",
+      "sha256": "0b8e30f679400df25f04bb45f4c49b2f034de07b93f660521d5df435b604949a",
+      "bytes": 559,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation2-rc_rxdzj\\manifest.json",
+      "path": "adoption-continuation2/manifest.json",
+      "sha256": "1e8b685d487e0549580f027145ee45055c8f5801067f2a4f99eee4cbf86f37fd",
+      "bytes": 4834,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation2-rc_rxdzj\\continue_adoption2.py",
+      "path": "adoption-continuation2/continue_adoption2.py",
+      "sha256": "b7ff73f2c56edf2dbc2a3ef6b082a92f76174ef687f7756833b188646c7d662d",
+      "bytes": 2500,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation2-rc_rxdzj\\test_continuation2.py",
+      "path": "adoption-continuation2/test_continuation2.py",
+      "sha256": "68b48198e98adb09136a03dcf726dd00e6741dc865166c617ec79438670146aa",
+      "bytes": 2271,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation2-rc_rxdzj\\runtime\\continuation-reserved.json",
+      "path": "adoption-continuation2/runtime/continuation-reserved.json",
+      "sha256": "340d0f85520e1168b9c95da105c0efc3a563ff20f3bdb540b1185bbc3400f243",
+      "bytes": 708,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-adoption-continuation2-rc_rxdzj\\runtime\\continuation-result.json",
+      "path": "adoption-continuation2/runtime/continuation-result.json",
+      "sha256": "b337bfc0ca4a75096b5ca59f23376e2779c53029adc77a60b5957508e3df7324",
+      "bytes": 1071,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\invoke.py",
+      "path": "entrypoints/invoke.py",
+      "sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+      "bytes": 3529,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\adopt_local.py",
+      "path": "entrypoints/adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "bytes": 4994,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\authorize_local.py",
+      "path": "entrypoints/authorize_local.py",
+      "sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+      "bytes": 15094,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\close_campaign.py",
+      "path": "entrypoints/close_campaign.py",
+      "sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+      "bytes": 7364,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\prepare_observation.py",
+      "path": "entrypoints/prepare_observation.py",
+      "sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+      "bytes": 1367,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1_v14_work.py",
+      "path": "entrypoints/m1_v14_work.py",
+      "sha256": "972e2fe806caead167320d9cfea3f5aecf6c6b859e4dcd3702bdabc76c2d72b5",
+      "bytes": 21873,
+      "retention": "byte-identical"
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1_v14_lifecycle.py",
+      "path": "entrypoints/m1_v14_lifecycle.py",
+      "sha256": "ea2ae574e9bef42fee92a7c94929c0724562d08391e54ee4cc09a36c8a0640cd",
+      "bytes": 4822,
+      "retention": "byte-identical"
+    }
+  ],
+  "generated": [
+    {
+      "path": "review.json",
+      "sha256": "a77b31e7b0f7e30d960eb343f51ebcaf2f1d73ea985bdc32541b737d820ca570",
+      "bytes": 5054,
+      "retention": "curated metadata/review"
+    },
+    {
+      "path": "status-preservation.json",
+      "sha256": "0254820bb945f9dab9fc97582b0dce129ba8b3744a8db15163170c39e3393f54",
+      "bytes": 324,
+      "retention": "curated metadata/review"
+    },
+    {
+      "path": "invocations/wrapper-metadata.json",
+      "sha256": "c0dd3b23d2f7405462531794ccca2c2c8a0cecc2c04da7b703c2b7e9b980eb1c",
+      "bytes": 22914,
+      "retention": "curated metadata/review"
+    }
+  ],
+  "private_checksum_only": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\private\\controller.json",
+    "sha256": "f4aeeda654c3de7de28cc72498d57f312819f4f77726c879a51710f691220868"
+  },
+  "originals_unchanged": true
+}

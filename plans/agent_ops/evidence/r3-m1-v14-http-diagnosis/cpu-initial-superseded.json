@@ -1,0 +1,182 @@
+{
+  "status": "SUPERSEDED_INVALID_CPU_PERCENTAGES",
+  "superseded_by": "cpu-corrected.json",
+  "reason": "The initial per-process CPU deltas used a global elapsed denominator that did not cover each process sampling interval. Do not use its per-process percentages as measurements.",
+  "observed_at_utc": "2026-11-14T17:33:50.627700+00:00",
+  "invalid_cpu_calculation": {
+    "elapsed_seconds": 2.5550174999516457,
+    "logical_cpus": 16,
+    "processes": [
+      {
+        "pid": 5476,
+        "name": "WmiPrvSE.exe",
+        "cpu_delta_seconds": 13.4844,
+        "cpu_percent_one_logical_core": 527.76,
+        "percent_of_total_logical_capacity": 32.99
+      },
+      {
+        "pid": 4916,
+        "name": "svchost.exe",
+        "cpu_delta_seconds": 12.6562,
+        "cpu_percent_one_logical_core": 495.35,
+        "percent_of_total_logical_capacity": 30.96
+      },
+      {
+        "pid": 49508,
+        "name": "ffmpeg.exe",
+        "cpu_delta_seconds": 10.5156,
+        "cpu_percent_one_logical_core": 411.57,
+        "percent_of_total_logical_capacity": 25.72
+      },
+      {
+        "pid": 20408,
+        "name": "python.exe",
+        "cpu_delta_seconds": 8.4062,
+        "cpu_percent_one_logical_core": 329.01,
+        "percent_of_total_logical_capacity": 20.56
+      },
+      {
+        "pid": 6636,
+        "name": "MsMpEng.exe",
+        "cpu_delta_seconds": 8.1094,
+        "cpu_percent_one_logical_core": 317.39,
+        "percent_of_total_logical_capacity": 19.84
+      },
+      {
+        "pid": 35128,
+        "name": "python.exe",
+        "cpu_delta_seconds": 8.0938,
+        "cpu_percent_one_logical_core": 316.78,
+        "percent_of_total_logical_capacity": 19.8
+      },
+      {
+        "pid": 11896,
+        "name": "Godot_v4.5-stable_win64.exe",
+        "cpu_delta_seconds": 7.7812,
+        "cpu_percent_one_logical_core": 304.55,
+        "percent_of_total_logical_capacity": 19.03
+      },
+      {
+        "pid": 41060,
+        "name": "rtk.exe",
+        "cpu_delta_seconds": 7.5469,
+        "cpu_percent_one_logical_core": 295.37,
+        "percent_of_total_logical_capacity": 18.46
+      },
+      {
+        "pid": 27904,
+        "name": "python.exe",
+        "cpu_delta_seconds": 7.3281,
+        "cpu_percent_one_logical_core": 286.81,
+        "percent_of_total_logical_capacity": 17.93
+      },
+      {
+        "pid": 41996,
+        "name": "python.exe",
+        "cpu_delta_seconds": 5.3906,
+        "cpu_percent_one_logical_core": 210.98,
+        "percent_of_total_logical_capacity": 13.19
+      },
+      {
+        "pid": 51760,
+        "name": "python.exe",
+        "cpu_delta_seconds": 3.8906,
+        "cpu_percent_one_logical_core": 152.27,
+        "percent_of_total_logical_capacity": 9.52
+      },
+      {
+        "pid": 2684,
+        "name": "dwm.exe",
+        "cpu_delta_seconds": 3.3438,
+        "cpu_percent_one_logical_core": 130.87,
+        "percent_of_total_logical_capacity": 8.18
+      },
+      {
+        "pid": 24356,
+        "name": "python.exe",
+        "cpu_delta_seconds": 3.2344,
+        "cpu_percent_one_logical_core": 126.59,
+        "percent_of_total_logical_capacity": 7.91
+      },
+      {
+        "pid": 4,
+        "name": "System",
+        "cpu_delta_seconds": 3.2031,
+        "cpu_percent_one_logical_core": 125.37,
+        "percent_of_total_logical_capacity": 7.84
+      },
+      {
+        "pid": 5132,
+        "name": "pythonw.exe",
+        "cpu_delta_seconds": 3.2031,
+        "cpu_percent_one_logical_core": 125.37,
+        "percent_of_total_logical_capacity": 7.84
+      },
+      {
+        "pid": 18620,
+        "name": "WindowsTerminal.exe",
+        "cpu_delta_seconds": 2.6719,
+        "cpu_percent_one_logical_core": 104.57,
+        "percent_of_total_logical_capacity": 6.54
+      },
+      {
+        "pid": 42048,
+        "name": "codex.exe",
+        "cpu_delta_seconds": 2.2812,
+        "cpu_percent_one_logical_core": 89.29,
+        "percent_of_total_logical_capacity": 5.58
+      },
+      {
+        "pid": 15020,
+        "name": "claude.exe",
+        "cpu_delta_seconds": 1.9844,
+        "cpu_percent_one_logical_core": 77.67,
+        "percent_of_total_logical_capacity": 4.85
+      },
+      {
+        "pid": 48292,
+        "name": "Godot_v4.5-stable_win64.exe",
+        "cpu_delta_seconds": 1.9844,
+        "cpu_percent_one_logical_core": 77.67,
+        "percent_of_total_logical_capacity": 4.85
+      },
+      {
+        "pid": 51220,
+        "name": "Godot_v4.5-stable_win64.exe",
+        "cpu_delta_seconds": 1.9531,
+        "cpu_percent_one_logical_core": 76.44,
+        "percent_of_total_logical_capacity": 4.78
+      }
+    ]
+  },
+  "main_thread_samples": [
+    {
+      "sample": 1,
+      "observed_at_utc": "2026-11-14T17:33:41.674959+00:00",
+      "returncode": 0,
+      "locals": false,
+      "process_header_retained": false,
+      "top_frame": "asyncio.windows_events._poll"
+    },
+    {
+      "sample": 2,
+      "observed_at_utc": "2026-11-14T17:33:42.894779+00:00",
+      "returncode": 0,
+      "locals": false,
+      "process_header_retained": false,
+      "top_frame": "asyncio.windows_events._poll"
+    },
+    {
+      "sample": 3,
+      "observed_at_utc": "2026-11-14T17:33:44.014133+00:00",
+      "returncode": 0,
+      "locals": false,
+      "process_header_retained": false,
+      "top_frame": "asyncio.windows_events._poll"
+    }
+  ],
+  "projection_scope": "Original invalid CPU rows retained as explicitly invalid historical evidence. Stack samples reduced to top-frame labels; raw process/thread headers, argv and locals are not retained.",
+  "service_mutated": false,
+  "http_requests": 0,
+  "provider_invoked": false
+}

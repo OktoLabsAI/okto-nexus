@@ -1,0 +1,57 @@
+{
+  "owner_before": [
+    {
+      "pid": 5132,
+      "address": "127.0.0.1",
+      "port": 58631
+    }
+  ],
+  "owner_after": [
+    {
+      "pid": 5132,
+      "address": "127.0.0.1",
+      "port": 58631
+    }
+  ],
+  "requests": [
+    {
+      "route": "/api/v1/runtime-management/connections/protocol",
+      "observed_at_utc": "2026-11-14T17:39:15.389877+00:00",
+      "timeout_seconds": 10,
+      "auth_headers_sent": false,
+      "status": 404,
+      "response_bytes": 22,
+      "over_read_cap": false,
+      "elapsed_seconds": 0.699315
+    },
+    {
+      "route": "/api/v1/runtime-management/connections/me",
+      "observed_at_utc": "2026-11-14T17:39:16.089280+00:00",
+      "timeout_seconds": 10,
+      "auth_headers_sent": false,
+      "status": 200,
+      "response_bytes": 664,
+      "over_read_cap": false,
+      "elapsed_seconds": 0.050407
+    },
+    {
+      "route": "/api/v1/service",
+      "observed_at_utc": "2026-11-14T17:39:16.139746+00:00",
+      "timeout_seconds": 10,
+      "auth_headers_sent": false,
+      "status": 200,
+      "response_bytes": 417,
+      "over_read_cap": false,
+      "service_identity": {
+        "pid": 5132,
+        "generation": "c9f085a3b8f3f61558fb5ad9cc302ee2",
+        "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "ready_for_queries": true
+      },
+      "elapsed_seconds": 0.010779
+    }
+  ],
+  "service_mutated": false,
+  "provider_invoked": false,
+  "body_retained": false
+}

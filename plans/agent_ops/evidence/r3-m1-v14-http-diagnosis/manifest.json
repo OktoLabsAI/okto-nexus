@@ -1,0 +1,84 @@
+{
+  "format": "r3-m1-v14-http-diagnosis-v1",
+  "status": "DIAGNOSTIC_ONLY_NO_ACCEPTANCE_PROMOTION",
+  "files": [
+    {
+      "path": "unresponsive.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1_v14_unresponsive_diagnosis.json",
+      "source_sha256": "02f206d09178cbb19fb2d9a169db531d8fcd320fc9e0e1cae5d8e11a3859ba37",
+      "retained_sha256": "02f206d09178cbb19fb2d9a169db531d8fcd320fc9e0e1cae5d8e11a3859ba37",
+      "retention": "byte-identical",
+      "bytes": 3610
+    },
+    {
+      "path": "cpu-corrected.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-cpu-corrected-pqnqwcyh\\diagnostic.json",
+      "source_sha256": "2552a09daa51f258dd25136292c6388127e66d2c18b51124d9ccddff0b70f31e",
+      "retained_sha256": "2552a09daa51f258dd25136292c6388127e66d2c18b51124d9ccddff0b70f31e",
+      "retention": "byte-identical",
+      "bytes": 7134
+    },
+    {
+      "path": "three-get.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-three-get-diagnostic-lgnoesu6\\diagnostic.json",
+      "source_sha256": "43168abab3190e2182a717ed4ba674b1d0dab60b5d12f1d433fe6482704ed706",
+      "retained_sha256": "43168abab3190e2182a717ed4ba674b1d0dab60b5d12f1d433fe6482704ed706",
+      "retention": "byte-identical",
+      "bytes": 1474
+    },
+    {
+      "path": "cpu-initial-superseded.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-light-diagnostic-gap6lx2d\\diagnostic.json",
+      "source_sha256": "6f37c2cb8a75a4babc4943a7c67c7e0bfc5e6f8164099da3d8d8f90a92e4a088",
+      "retained_sha256": "d43b28f35c43150e305bb957fbfd84a753e3d515536fbf37f34f014db4a20526",
+      "retention": "explicit sanitized projection",
+      "bytes": 5607
+    },
+    {
+      "path": "get-writer/qualification.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\connections-me-writer-audit-7h0wkyxd\\qualification.json",
+      "source_sha256": "fadabf6011a0ed7750d9da86d0664d5f7d97afcca7e72e550b5863a498a53311",
+      "retained_sha256": "fadabf6011a0ed7750d9da86d0664d5f7d97afcca7e72e550b5863a498a53311",
+      "retention": "byte-identical",
+      "bytes": 2300
+    },
+    {
+      "path": "get-writer/test_connections_me_writer_contract.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\connections-me-writer-audit-7h0wkyxd\\test_connections_me_writer_contract.py",
+      "source_sha256": "40c8fa5adb3815255614eac5f3764e51c9a55991d26165a3d9e2e23813c649f4",
+      "retained_sha256": "40c8fa5adb3815255614eac5f3764e51c9a55991d26165a3d9e2e23813c649f4",
+      "retention": "byte-identical",
+      "bytes": 5710
+    },
+    {
+      "path": "get-writer/characterization.xml",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\connections-me-writer-audit-7h0wkyxd\\characterization.xml",
+      "source_sha256": "175b4309be2b5521c2cb3dd77cc98e4b4564cb461af6e860b789aaad57e14dd2",
+      "retained_sha256": "175b4309be2b5521c2cb3dd77cc98e4b4564cb461af6e860b789aaad57e14dd2",
+      "retention": "byte-identical",
+      "bytes": 1259
+    },
+    {
+      "path": "get-writer/characterization-final.xml",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\connections-me-writer-audit-7h0wkyxd\\characterization-final.xml",
+      "source_sha256": "0c7abff0b3a1cfd54e0b67b37a50b34f7af82a4b8c6751aee5080de12c8dd180",
+      "retained_sha256": "0c7abff0b3a1cfd54e0b67b37a50b34f7af82a4b8c6751aee5080de12c8dd180",
+      "retention": "byte-identical",
+      "bytes": 669
+    },
+    {
+      "path": "adoption-result-projection.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-result.json",
+      "source_sha256": "ed18e1c5475b5b0b0f494265e894675c3522a4bb49dacb17c52a01272b2d29ed",
+      "retained_sha256": "13306a326f9d84fbdb3aa68317b0845a8837a12822ba26da62ce23ae50d3ee8b",
+      "retention": "explicit sanitized projection",
+      "bytes": 682
+    }
+  ],
+  "generated_summary": {
+    "path": "README.md",
+    "sha256": "8d38575ed72a1d49931096a5d06c4dbfb2c0b548851d529b9a84da076f29e300"
+  },
+  "live_actions_during_curation": false,
+  "tests_rerun_during_curation": false
+}

@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-14",
+  "status": "V14_NO_PRODUCTIVE_POST_NORMAL_CLEANUP_NO_M1_ACCEPTANCE",
+  "original_closure_sha256": "2283c89678697b1916a48a1b3573db9fe6ed30a4be6572d3fa06e7a3da6a7177",
+  "original_checkpoint_sha256": "f4aeeda654c3de7de28cc72498d57f312819f4f77726c879a51710f691220868",
+  "checkpoint_retention": "Checksum only. Original controller remains unchanged outside repository; not parsed or copied during curation.",
+  "new_observed_tokens": 0,
+  "cumulative_minimum_observed_tokens": 134199,
+  "new_reservations": 1,
+  "cumulative_reservations": 10,
+  "unsettled_requests": 1,
+  "billing_final": false,
+  "faults_preserved": [
+    "MONITOR_CADENCE_EXCEEDED",
+    "OBSERVATION_STALE",
+    "WORK_RESPONSE_UNKNOWN"
+  ],
+  "work": {
+    "wrapper_returncode": 0,
+    "root_tool_session_id": 80505,
+    "root_session_evidence_basis": "Root reported tool-observed completion; wrapper returned metadata independently confirms exit0.",
+    "useful_result_confirmed": false,
+    "report": {
+      "exists": false
+    },
+    "calls": {
+      "GET": 15,
+      "POST": 0,
+      "productive_posts": 0,
+      "decision_posts": 0
+    },
+    "decision_count": 0,
+    "operation": null,
+    "session": null,
+    "canonical_receipt": null,
+    "maximum_poll_start_interval_seconds": 1.1034720000461675,
+    "cli_execution": {
+      "local": {
+        "command_count": 1,
+        "recent": [
+          {
+            "action": "send",
+            "exit_code": null,
+            "handler_entered": true,
+            "error_type": "Fenced",
+            "possible_effect": false
+          }
+        ],
+        "entrypoint": "INSTALLED_RUN_WORK_PARSER_AND_HANDLERS",
+        "stdout": "OUTER_RUNNER_PRIVATE_CAPTURE",
+        "console_subprocess_proven": false
+      }
+    },
+    "interpretation": "Wrapper completion is not useful-work success. Installed CLI handler was entered, then fenced before productive POST. No new native turn was submitted by this attempt; retained reservation remains unsettled and is not refunded/reset."
+  },
+  "adoption": {
+    "original_wrapper_returncode": 2,
+    "first_helper": "SERVER_UNREACHABLE before snapshot/controller/result; root tool session52632 exit1 retained in second manifest.",
+    "second_helper": "ADOPTION_CONTINUATION_COMPLETED, GET-only, setup not replayed, zero model admissions.",
+    "second_manifest_sha256": "1e8b685d487e0549580f027145ee45055c8f5801067f2a4f99eee4cbf86f37fd",
+    "root_observed_second_exit": {
+      "session_id": 40910,
+      "exit_code": 0,
+      "basis": "Root reported tool-observed process completion, not inferred from helper result."
+    },
+    "original_failure_preserved": true
+  },
+  "authorization": {
+    "review_root_tool_session_id": 32442,
+    "apply_root_tool_session_id": 87222,
+    "root_reported_exit_codes": [
+      0,
+      0
+    ],
+    "wrapper_exit_metadata_retained": true,
+    "status": "EXPIRED_GRANT_REPLACEMENT_CONFIRMED",
+    "grant": {
+      "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+      "expires_at": "2026-11-14T18:42:36.153081Z",
+      "max_executions": 3,
+      "actions": [
+        "open",
+        "send",
+        "steer",
+        "interrupt",
+        "close"
+      ]
+    },
+    "calls": {
+      "recover": 1,
+      "issue": 1
+    },
+    "model_admissions": 0,
+    "interpretation": "One replacement grant is an authorization result, not productive execution or provider usage."
+  },
+  "execution_antecedents": [
+    {
+      "event": "Root initially omitted preparation before installation. invoke install raised FileNotFoundError for public/root-driver-preparation.json; outer exit1 before dispatch/reservation/Popen.",
+      "basis": "Root execution report; no standalone retained error artifact identified."
+    },
+    {
+      "event": "Nexus start CLI returned3/degraded. First owner selection session44395 failed NEXUS_OWNER_NOT_READY, exit1 before public selection; later positive identity selection was retained.",
+      "basis": "CLI result metadata retained; initial selection failure is root-reported, not inferred from final owner receipt."
+    }
+  ],
+  "cleanup": "Normal stop and DRAINED; exact PID5132/birth/generation physical exit confirmed; uninstall0; both temporary tasks absent; data retained; no force.",
+  "http_diagnosis": "../r3-m1-v14-http-diagnosis/README.md",
+  "provider": "Codex CLI; no new productive POST in v14 attempt; Claude unused.",
+  "acceptance_promoted": false,
+  "limits": [
+    "No useful result, native decision, continuation, remote lane or configuration enforcement acceptance.",
+    "No settlement inferred from POST0 or owner absence; original unsettled checkpoint preserved.",
+    "Observed usage is not final billing; no request replay or counter reset.",
+    "No raw controller, database, native command line, credentials, transcript, environment or raw CLI outputs retained.",
+    "Standing user authorization was used; user was not represented as approving technical artifact hashes.",
+    "No live service/provider actions, new tests, ledger changes or commits during curation."
+  ]
+}

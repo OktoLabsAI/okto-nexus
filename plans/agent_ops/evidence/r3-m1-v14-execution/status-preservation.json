@@ -1,0 +1,12 @@
+{
+  "acceptance_promoted": false,
+  "ledger_modified": false,
+  "original_artifacts_modified": false,
+  "status": "V14_NO_PRODUCTIVE_POST_NORMAL_CLEANUP_NO_M1_ACCEPTANCE",
+  "unsettled_requests_preserved": 1,
+  "faults_preserved": [
+    "MONITOR_CADENCE_EXCEEDED",
+    "OBSERVATION_STALE",
+    "WORK_RESPONSE_UNKNOWN"
+  ]
+}

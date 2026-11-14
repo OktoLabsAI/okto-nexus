@@ -14356,6 +14356,16 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-http-heartbeat-isolation.md"
       ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "V14 adoption recovered, no productive POST and normal cleanup",
+      "status": "V14_NO_PRODUCTIVE_POST_NORMAL_CLEANUP_NO_M1_ACCEPTANCE",
+      "summary": "GET-only adoption recovered after retained HTTP failures; expired-grant replacement confirmed. Work handler fenced before any POST after1.103s monitor cadence. Zero new observed tokens,134199 cumulative/10reservations, original unsettled1 and faults preserved. Physical normal exit, tasks absent, data retained. No M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v14-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-v14-http-diagnosis/README.md"
+      ]
     }
   ]
 }

@@ -1,0 +1,75 @@
+{
+  "format": "okto.m1.closed_campaign",
+  "revision": 1,
+  "status": "CLOSED_NORMAL_CLEANUP_ACCEPTANCE_NOT_INFERRED",
+  "closed_at": "2026-11-14T17:47:47.389312+00:00",
+  "faults_preserved": [
+    "MONITOR_CADENCE_EXCEEDED",
+    "OBSERVATION_STALE",
+    "WORK_RESPONSE_UNKNOWN"
+  ],
+  "new_reserved_admissions": 1,
+  "cumulative_reserved_admissions": 10,
+  "prior_carry_in_tokens": 134199,
+  "new_observed_tokens": 0,
+  "cumulative_minimum_observed_tokens": 134199,
+  "billing_final": false,
+  "unsettled_requests": 1,
+  "controller_checkpoint_sha256": "f4aeeda654c3de7de28cc72498d57f312819f4f77726c879a51710f691220868",
+  "controller_mutated": false,
+  "final_presence_sha256": "afd5cb8a2f2f52c575cb02dfc06781bb23a28f965b23acd56b7389dbf8ca1906",
+  "wrapper_exit_evidence": {
+    "adopt_local-once.reserved.json": {
+      "reservation_sha256": "cd31fa4d5fd4a50a80b5d2fc080d8c28d9e0e0286a3d1764900666bdd2b235ce",
+      "returned_sha256": "7a4c412b2d356f9221cab899a51334d1fcd7669e35e167f7a79537cfa62040e0",
+      "returncode": 2
+    },
+    "authorize_local-apply.reserved.json": {
+      "reservation_sha256": "a155501ff824260621dcd678f9e9f7024e54085a779a40051ca8747bfc694e95",
+      "returned_sha256": "c5824c5030f5a05c25ac27cc042e6bf41a167da019f85aad3ecf688e3c8ef64d",
+      "returncode": 0
+    },
+    "authorize_local-review.reserved.json": {
+      "reservation_sha256": "755f8ee374cf2b9c416e6346e71199676fe31ec2db2b30f984dd5f7a7849f4e8",
+      "returned_sha256": "fe04a2d11c802b866b14080b485b0cee162febfb70ef5c666454b1c8bdf932e6",
+      "returncode": 0
+    },
+    "lifecycle-initialize.reserved.json": {
+      "reservation_sha256": "9b526c6ac9adde1daf7c1ddca9a4701f5e78abfa9be3110d263c8877312e66fe",
+      "returned_sha256": "c99490aa144c2dbb45f36ad0ec070b513f1a22e3da100890618226c939e60b53",
+      "returncode": 0
+    },
+    "lifecycle-nexus-install.reserved.json": {
+      "reservation_sha256": "398d628831947d5cbfeaa7b0a89f500cf42be152ab2807e121ab1a19f9b86d0f",
+      "returned_sha256": "a08552c82317ebbe83e4ba4cbb28f941e669c76d1a3e24ff9d08fa142ddcc852",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "reservation_sha256": "f960af0bb33394d37d5e71f0a0b6f0341a44559af31daa52caadfa7bf6c6a470",
+      "returned_sha256": "3c166626add4ede52416cfc8b2a23d303c4a388555f0c842d4e4ddd6687488c3",
+      "returncode": 3
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "reservation_sha256": "97292402877dca3f29f32558554ccecce6cd4669ada523ba2ac7d0c9116341f6",
+      "returned_sha256": "e556b8e41215bab21637fbbdf5b6ce97c7bfa0259bf68404c1917a9bf696d8bb",
+      "returncode": 0
+    },
+    "work-local-useful.reserved.json": {
+      "reservation_sha256": "49a949204ae00cc68a7a42740109581662d2fccd13709e8d51f2e3791228cb1a",
+      "returned_sha256": "1e42d68c159b9206caa80b23a6e2d39b0d33498315bf83d557aabc1863c61e7c",
+      "returncode": 0
+    }
+  },
+  "closed_without_force": true,
+  "replay_allowed": false,
+  "all_temporary_tasks_absent": true,
+  "data_retained": true,
+  "acceptance_promoted": false,
+  "first_useful_result": "requires separate canonical evidence review",
+  "limits": "Closure is not M1 acceptance, a work result, effective provider configuration or final billing. Faults/uncertainty remain. No historical failure cause or fixed token count is copied.",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14"
+}

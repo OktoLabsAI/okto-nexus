@@ -1,0 +1,449 @@
+{
+  "scope": "Exact allowlisted JSON wrapper metadata, no raw stdout/stderr or command lines.",
+  "entries": [
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\adopt_local-once.reserved.json",
+      "source_sha256": "cd31fa4d5fd4a50a80b5d2fc080d8c28d9e0e0286a3d1764900666bdd2b235ce",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "adopt_local",
+        "selection": [
+          "once"
+        ],
+        "selected_at": 1794676832.0879705,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\adopt_local-once.process.json",
+      "source_sha256": "8e195e98e70a9efaaa0f0323b42b36defa1b5d784a6a902011714d783ae2a9d4",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 5832,
+        "mode": "adopt_local",
+        "selection": [
+          "once"
+        ],
+        "created_at": 1794676832.1244543
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\adopt_local-once.returned.json",
+      "source_sha256": "7a4c412b2d356f9221cab899a51334d1fcd7669e35e167f7a79537cfa62040e0",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "adopt_local",
+        "selection": [
+          "once"
+        ],
+        "returncode": 2,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794676844.0294366,
+        "stdout_sha256": "ce11f8be98a1767064fcf0623ee0384934ba6dde315e7beab7f714778f5cd747",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\authorize_local-review.reserved.json",
+      "source_sha256": "755f8ee374cf2b9c416e6346e71199676fe31ec2db2b30f984dd5f7a7849f4e8",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "authorize_local",
+        "selection": [
+          "review"
+        ],
+        "selected_at": 1794678148.9993064,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\authorize_local-review.process.json",
+      "source_sha256": "477f6e40c02d04dc035fb3a069254fa90669031ca41048c6bcdd62f1b7b7455f",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 43816,
+        "mode": "authorize_local",
+        "selection": [
+          "review"
+        ],
+        "created_at": 1794678149.038179
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\authorize_local-review.returned.json",
+      "source_sha256": "fe04a2d11c802b866b14080b485b0cee162febfb70ef5c666454b1c8bdf932e6",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "authorize_local",
+        "selection": [
+          "review"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794678157.3101723,
+        "stdout_sha256": "6fbabf04067e3d5d21f44505d364f3bd8df5879c345e7183699c7c11fee7af41",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\authorize_local-apply.reserved.json",
+      "source_sha256": "a155501ff824260621dcd678f9e9f7024e54085a779a40051ca8747bfc694e95",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "authorize_local",
+        "selection": [
+          "apply"
+        ],
+        "selected_at": 1794678214.2798567,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\authorize_local-apply.process.json",
+      "source_sha256": "97802aff543fe904e7cade95ff6428e8476788224dd135f8123917b8ebf3b8c8",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 2920,
+        "mode": "authorize_local",
+        "selection": [
+          "apply"
+        ],
+        "created_at": 1794678214.3130374
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\authorize_local-apply.returned.json",
+      "source_sha256": "c5824c5030f5a05c25ac27cc042e6bf41a167da019f85aad3ecf688e3c8ef64d",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "authorize_local",
+        "selection": [
+          "apply"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794678224.7977529,
+        "stdout_sha256": "235eb78997996c5754e07b5039df234312e3668f4dd39e167b69d9f2788ebdbf",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-initialize.reserved.json",
+      "source_sha256": "9b526c6ac9adde1daf7c1ddca9a4701f5e78abfa9be3110d263c8877312e66fe",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "initialize"
+        ],
+        "selected_at": 1794676342.656078,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-initialize.process.json",
+      "source_sha256": "b5656b909a5dd9998703cd55ce091d28c34613ba943cde3904e008beeeb0eb5e",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 42224,
+        "mode": "lifecycle",
+        "selection": [
+          "initialize"
+        ],
+        "created_at": 1794676342.6789112
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-initialize.returned.json",
+      "source_sha256": "c99490aa144c2dbb45f36ad0ec070b513f1a22e3da100890618226c939e60b53",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "initialize"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794676344.2696748,
+        "stdout_sha256": "4333f0a4a027c69bed67db4cb285fee34f2d2227abd8fda0c46fef36309ee8b4",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-install.reserved.json",
+      "source_sha256": "398d628831947d5cbfeaa7b0a89f500cf42be152ab2807e121ab1a19f9b86d0f",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "install"
+        ],
+        "selected_at": 1794676419.9938946,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-install.process.json",
+      "source_sha256": "96d66ae5c19cfd2b8d59fcd7f1947ca82501fe542cc91c0a7cf3eba5edd29897",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 52816,
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "install"
+        ],
+        "created_at": 1794676420.0201244
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-install.returned.json",
+      "source_sha256": "a08552c82317ebbe83e4ba4cbb28f941e669c76d1a3e24ff9d08fa142ddcc852",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "install"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794676426.4918172,
+        "stdout_sha256": "557830d8595f0f83e455220218e869e61d12ef9d5b5d05cdcef64a1ffd9b38a5",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-start.reserved.json",
+      "source_sha256": "f960af0bb33394d37d5e71f0a0b6f0341a44559af31daa52caadfa7bf6c6a470",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "start"
+        ],
+        "selected_at": 1794676443.5243979,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-start.process.json",
+      "source_sha256": "85eff7d664799d5645dff1636f4e1539dedad435663b17eaebd3aa97fa858791",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 13356,
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "start"
+        ],
+        "created_at": 1794676443.5566154
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-start.returned.json",
+      "source_sha256": "3c166626add4ede52416cfc8b2a23d303c4a388555f0c842d4e4ddd6687488c3",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "start"
+        ],
+        "returncode": 3,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794676493.8307388,
+        "stdout_sha256": "18c6dc4c743d6343ccf558344b41b55839401c2b0929bfb08c6e10850041af7a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\work-local-useful.reserved.json",
+      "source_sha256": "49a949204ae00cc68a7a42740109581662d2fccd13709e8d51f2e3791228cb1a",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "work",
+        "selection": [
+          "local",
+          "useful"
+        ],
+        "selected_at": 1794678247.5168855,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\work-local-useful.process.json",
+      "source_sha256": "19d145352e5386f08fac5f1fc603e463d5e31e646fdc6a5721995de7525a7c37",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 52064,
+        "mode": "work",
+        "selection": [
+          "local",
+          "useful"
+        ],
+        "created_at": 1794678247.5585303
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\work-local-useful.returned.json",
+      "source_sha256": "1e42d68c159b9206caa80b23a6e2d39b0d33498315bf83d557aabc1863c61e7c",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "work",
+        "selection": [
+          "local",
+          "useful"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794678273.7089424,
+        "stdout_sha256": "5cb887e5f6e814ce95cc200f6342ea602a7d8d6e1b74a1b573de32790c4b31d0",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-uninstall.reserved.json",
+      "source_sha256": "97292402877dca3f29f32558554ccecce6cd4669ada523ba2ac7d0c9116341f6",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "uninstall"
+        ],
+        "selected_at": 1794678392.3933396,
+        "state": "DISPATCH_RESERVED"
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-uninstall.process.json",
+      "source_sha256": "48046f37dc80bfea2eecd17a90ed941c9785b9cd6c98d59bde6c6a23e6d86dd2",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "pid": 44644,
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "uninstall"
+        ],
+        "created_at": 1794678392.4334772
+      }
+    },
+    {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\lifecycle-nexus-uninstall.returned.json",
+      "source_sha256": "e556b8e41215bab21637fbbdf5b6ce97c7bfa0259bf68404c1917a9bf696d8bb",
+      "metadata": {
+        "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+        "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+        "campaign_revision": 14,
+        "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+        "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+        "mode": "lifecycle",
+        "selection": [
+          "nexus",
+          "uninstall"
+        ],
+        "returncode": 0,
+        "wrapper_exit_confirmed": true,
+        "completed_at": 1794678400.0352273,
+        "stdout_sha256": "f15293552512befc5f578f1a60c1b8888c53afed1dac54185da5132447320f9f",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

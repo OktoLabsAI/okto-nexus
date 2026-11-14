@@ -1,0 +1,237 @@
+{
+  "observed_at_utc": "2026-11-14T17:38:22.246703+00:00",
+  "logical_cpus": 16,
+  "host_cpu_percent": 97.9,
+  "processes": [
+    {
+      "pid": 5476,
+      "name": "WmiPrvSE.exe",
+      "cpu_delta_seconds": 12.3906,
+      "sample_elapsed_seconds": 8.3124,
+      "cpu_percent_one_logical_core": 149.06,
+      "percent_total_logical_capacity": 9.32,
+      "max_cpu_query_seconds": 0.0246
+    },
+    {
+      "pid": 4916,
+      "name": "svchost.exe",
+      "cpu_delta_seconds": 10.5938,
+      "sample_elapsed_seconds": 8.2954,
+      "cpu_percent_one_logical_core": 127.71,
+      "percent_total_logical_capacity": 7.98,
+      "max_cpu_query_seconds": 0.0385
+    },
+    {
+      "pid": 45744,
+      "name": "python.exe",
+      "cpu_delta_seconds": 7.7969,
+      "sample_elapsed_seconds": 7.4065,
+      "cpu_percent_one_logical_core": 105.27,
+      "percent_total_logical_capacity": 6.58,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 44812,
+      "name": "python.exe",
+      "cpu_delta_seconds": 6.8906,
+      "sample_elapsed_seconds": 7.4072,
+      "cpu_percent_one_logical_core": 93.03,
+      "percent_total_logical_capacity": 5.81,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 49708,
+      "name": "python.exe",
+      "cpu_delta_seconds": 6.7812,
+      "sample_elapsed_seconds": 7.4125,
+      "cpu_percent_one_logical_core": 91.48,
+      "percent_total_logical_capacity": 5.72,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 45240,
+      "name": "rtk.exe",
+      "cpu_delta_seconds": 6.6406,
+      "sample_elapsed_seconds": 7.407,
+      "cpu_percent_one_logical_core": 89.65,
+      "percent_total_logical_capacity": 5.6,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 48720,
+      "name": "Godot_v4.5-stable_win64.exe",
+      "cpu_delta_seconds": 5.5469,
+      "sample_elapsed_seconds": 7.4126,
+      "cpu_percent_one_logical_core": 74.83,
+      "percent_total_logical_capacity": 4.68,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 6636,
+      "name": "MsMpEng.exe",
+      "cpu_delta_seconds": 5.8125,
+      "sample_elapsed_seconds": 8.2172,
+      "cpu_percent_one_logical_core": 70.74,
+      "percent_total_logical_capacity": 4.42,
+      "max_cpu_query_seconds": 0.021
+    },
+    {
+      "pid": 41392,
+      "name": "python.exe",
+      "cpu_delta_seconds": 4.8125,
+      "sample_elapsed_seconds": 7.4185,
+      "cpu_percent_one_logical_core": 64.87,
+      "percent_total_logical_capacity": 4.05,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 51220,
+      "name": "Godot_v4.5-stable_win64.exe",
+      "cpu_delta_seconds": 4.0469,
+      "sample_elapsed_seconds": 7.4123,
+      "cpu_percent_one_logical_core": 54.6,
+      "percent_total_logical_capacity": 3.41,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 48292,
+      "name": "Godot_v4.5-stable_win64.exe",
+      "cpu_delta_seconds": 3.9219,
+      "sample_elapsed_seconds": 7.4127,
+      "cpu_percent_one_logical_core": 52.91,
+      "percent_total_logical_capacity": 3.31,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 31040,
+      "name": "Godot_v4.5-stable_win64.exe",
+      "cpu_delta_seconds": 3.7656,
+      "sample_elapsed_seconds": 7.6485,
+      "cpu_percent_one_logical_core": 49.23,
+      "percent_total_logical_capacity": 3.08,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 2684,
+      "name": "dwm.exe",
+      "cpu_delta_seconds": 3.0625,
+      "sample_elapsed_seconds": 8.1347,
+      "cpu_percent_one_logical_core": 37.65,
+      "percent_total_logical_capacity": 2.35,
+      "max_cpu_query_seconds": 0.0222
+    },
+    {
+      "pid": 0,
+      "name": "System Idle Process",
+      "cpu_delta_seconds": 2.7656,
+      "sample_elapsed_seconds": 7.8405,
+      "cpu_percent_one_logical_core": 35.27,
+      "percent_total_logical_capacity": 2.2,
+      "max_cpu_query_seconds": 0.0876
+    },
+    {
+      "pid": 4,
+      "name": "System",
+      "cpu_delta_seconds": 2.4531,
+      "sample_elapsed_seconds": 7.9104,
+      "cpu_percent_one_logical_core": 31.01,
+      "percent_total_logical_capacity": 1.94,
+      "max_cpu_query_seconds": 0.0925
+    },
+    {
+      "pid": 18620,
+      "name": "WindowsTerminal.exe",
+      "cpu_delta_seconds": 2.0625,
+      "sample_elapsed_seconds": 7.9221,
+      "cpu_percent_one_logical_core": 26.03,
+      "percent_total_logical_capacity": 1.63,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 2368,
+      "name": "svchost.exe",
+      "cpu_delta_seconds": 1.8125,
+      "sample_elapsed_seconds": 7.9743,
+      "cpu_percent_one_logical_core": 22.73,
+      "percent_total_logical_capacity": 1.42,
+      "max_cpu_query_seconds": 0.0209
+    },
+    {
+      "pid": 42048,
+      "name": "codex.exe",
+      "cpu_delta_seconds": 1.5938,
+      "sample_elapsed_seconds": 7.4161,
+      "cpu_percent_one_logical_core": 21.49,
+      "percent_total_logical_capacity": 1.34,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 43832,
+      "name": "codex.exe",
+      "cpu_delta_seconds": 1.3125,
+      "sample_elapsed_seconds": 7.4081,
+      "cpu_percent_one_logical_core": 17.72,
+      "percent_total_logical_capacity": 1.11,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 15020,
+      "name": "claude.exe",
+      "cpu_delta_seconds": 0.9688,
+      "sample_elapsed_seconds": 8.0227,
+      "cpu_percent_one_logical_core": 12.08,
+      "percent_total_logical_capacity": 0.75,
+      "max_cpu_query_seconds": 0.0001
+    },
+    {
+      "pid": 13608,
+      "name": "dptf_helper.exe",
+      "cpu_delta_seconds": 0.7188,
+      "sample_elapsed_seconds": 8.0221,
+      "cpu_percent_one_logical_core": 8.96,
+      "percent_total_logical_capacity": 0.56,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 5556,
+      "name": "explorer.exe",
+      "cpu_delta_seconds": 0.7188,
+      "sample_elapsed_seconds": 8.3213,
+      "cpu_percent_one_logical_core": 8.64,
+      "percent_total_logical_capacity": 0.54,
+      "max_cpu_query_seconds": 0.0001
+    },
+    {
+      "pid": 16976,
+      "name": "CrossDeviceService.exe",
+      "cpu_delta_seconds": 0.4531,
+      "sample_elapsed_seconds": 7.9654,
+      "cpu_percent_one_logical_core": 5.69,
+      "percent_total_logical_capacity": 0.36,
+      "max_cpu_query_seconds": 0.0
+    },
+    {
+      "pid": 5132,
+      "name": "pythonw.exe",
+      "cpu_delta_seconds": 0.4375,
+      "sample_elapsed_seconds": 8.299,
+      "cpu_percent_one_logical_core": 5.27,
+      "percent_total_logical_capacity": 0.33,
+      "max_cpu_query_seconds": 0.0001
+    },
+    {
+      "pid": 8788,
+      "name": "KillerNetworkService.exe",
+      "cpu_delta_seconds": 0.3594,
+      "sample_elapsed_seconds": 8.1978,
+      "cpu_percent_one_logical_core": 4.38,
+      "percent_total_logical_capacity": 0.27,
+      "max_cpu_query_seconds": 0.0342
+    }
+  ],
+  "limitation": "Per-PID midpoint windows differ slightly; transient processes excluded. PID/name/CPU only. Ownership of generic Python processes not inferred.",
+  "supersedes_invalid_percentages": "m1-v14-light-diagnostic-gap6lx2d/diagnostic.json",
+  "service_mutated": false,
+  "http_requests": 0,
+  "provider_invoked": false
+}

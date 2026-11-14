@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="9.774" timestamp="2026-11-14T14:38:34.590930-03:00" hostname="Alienware_m15"><testcase classname="test_connections_me_writer_contract" name="test_get_me_waits_on_actual_external_sqlite_writer" time="2.597"><failure message="AssertionError: GET did not reach its real BEGIN IMMEDIATE&#10;assert False&#10; +  where False = wait(2)&#10; +    where wait = &lt;threading.Event at 0x1e13cb2b820: unset&gt;.wait">test_connections_me_writer_contract.py:80: in test_get_me_waits_on_actual_external_sqlite_writer
+    assert attempting_writer.wait(2), 'GET did not reach its real BEGIN IMMEDIATE'
+E   AssertionError: GET did not reach its real BEGIN IMMEDIATE
+E   assert False
+E    +  where False = wait(2)
+E    +    where wait = &lt;threading.Event at 0x1e13cb2b820: unset&gt;.wait</failure></testcase><testcase classname="test_connections_me_writer_contract" name="test_readonly_projection_collapses_successive_changes_without_persisting" time="0.125" /><testcase classname="test_connections_me_writer_contract" name="test_no_baseline_readonly_projection_keeps_revision_one" time="0.146" /></testsuite></testsuites>

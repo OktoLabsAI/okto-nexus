@@ -1,0 +1,88 @@
+{
+  "status": "USER_APPROVED",
+  "proposal_revision": 14,
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "policy": {
+    "revision": 14,
+    "carry_in_admissions": 9,
+    "carry_in_tokens": 134199,
+    "max_cumulative_admissions": 13,
+    "max_new_admissions": 4,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "ancestry": {
+    "closure_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+    "checkpoint_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+    "closure_companion_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+    "original_checkpoint_sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c",
+    "predecessor_faults": [
+      "DEADLINE120",
+      "WORK_TERMINAL_FAILED"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+      "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+      "predecessor_faults": [
+        "DEADLINE120"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+        "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+        "predecessor_faults": [
+          "OBSERVATION_UNKNOWN",
+          "DEADLINE120"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+          "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+          "predecessor_faults": [
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+            "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+            "predecessor_faults": [
+              "OBSERVATION_UNKNOWN",
+              "STOP_UNCONFIRMED",
+              "CAMPAIGN_RUNNER_EXCEPTION"
+            ],
+            "prior_ancestry": {
+              "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+              "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+              "predecessor_faults": [
+                "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+              ],
+              "prior_ancestry": {
+                "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+                "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+                "predecessor_faults": [
+                  "CAMPAIGN_RUNNER_EXCEPTION"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "user_quote": "pode seguir e pode usar o claude se quiser testar com a conta autenticada atualmente com limite de 200k tokens do modelo sonnet",
+  "supporting_user_instructions": [
+    "conta já autenticada e limite de 200k tokens",
+    "pode exceder o limite em 500k tokens",
+    "sim pode executar",
+    "pode seguir",
+    "autorizo"
+  ],
+  "recorded_at_utc": "2026-11-14T17:10:36.816365+00:00",
+  "authorization_basis": "Technical binding of standing authorization after root review. The user did not separately approve this artifact SHA.",
+  "budget_interpretation": "Codex authorized total700000; preventive threshold500000 leaves200000 margin. Carry134199tokens/9reservations; at most4new/13cumulative. Claude optional200000 remains unused.",
+  "scope": "Same installed packages/homes/configured profile; no pip/local setup. New session and request after preserved cancelled predecessor. Reuse available grant even if partly consumed; any expired replacement remains an explicit canonical reviewed selection for the remaining finite work, preserving historical consumption. At most3 exact scoped native decisions per lane; no prefix/persistent policy. Own temporary services and normal cleanup only; no force, personal task change, logout/reboot or personal credential-file reading.",
+  "selected_provider": "Pinned Codex CLI; authenticated home accessed only by native client.",
+  "optional_claude_executed": false,
+  "optional_claude_limit_tokens": 200000,
+  "review_sha256": "e1a58c15fd8979f801bd803f2c1ef7c0c84b75b07d2a82bd7c6a39148466e4f6"
+}

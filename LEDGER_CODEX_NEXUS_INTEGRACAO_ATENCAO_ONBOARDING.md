@@ -1558,3 +1558,28 @@ ao modelo. O contrato de revisões impede remover simplesmente a escrita do GET
 de identidade. Nenhum cenário ou critério foi promovido por estes testes.
 
 Evidência: `plans/agent_ops/evidence/r3-http-heartbeat-isolation.md`.
+
+## 2026-11-14 — v14: adoção recuperada e interrupção antes do envio
+
+A adoção somente por GET terminou após duas tentativas preservadas que falharam
+por indisponibilidade HTTP. A mesma instância voltou a responder sem alteração
+da instalação. O diagnóstico registrou CPU global de 97,9%, Nexus usando 0,33%
+da capacidade total e amostras do event loop em espera. Não há prova de causa
+única. A escrita do GET de identidade mantém um contrato de revisões demonstrado
+por três testes; a troca simples por leitura foi descartada.
+
+A revisão canônica confirmou dois grants expirados e emitiu uma substituta com
+três execuções. O handler de trabalho foi iniciado, mas o monitor o bloqueou antes
+de qualquer POST quando o intervalo observado chegou a 1,103 s, acima de seu
+limite de 1 s. Não houve inferência nova, decisão nativa ou resultado útil.
+O wrapper retornou zero; isso não representa sucesso do trabalho.
+
+O checkpoint original preserva uma reserva pendente, os três códigos de falha e
+134.199 tokens observados/10 reservas cumulativas. A parada normal concluiu o
+drain, o handle confirmou a saída física, uninstall terminou com zero e as duas
+tarefas ficaram ausentes com dados preservados. Nenhum force foi utilizado.
+Uma eventual prova posterior de ausência de transmissão será um suplemento;
+não altera nem reescreve o checkpoint ou esta closure. Nenhum aceite foi promovido.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v14-execution/review.json` e
+`plans/agent_ops/evidence/r3-m1-v14-http-diagnosis/README.md`.

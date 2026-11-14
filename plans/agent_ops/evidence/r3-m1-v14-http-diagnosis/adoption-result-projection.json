@@ -1,0 +1,19 @@
+{
+  "status": "CONFIGURED_PREDECESSOR_ADOPTED",
+  "model_admissions": 0,
+  "setup_replayed": false,
+  "canonical_observation": "GET_ONLY",
+  "campaign_revision": 14,
+  "owner": {
+    "pid": 5132,
+    "generation": "c9f085a3b8f3f61558fb5ad9cc302ee2",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11"
+  },
+  "checkpoint_summary": {
+    "known_observed_tokens": 134199,
+    "new_observed_tokens": 0,
+    "reserved_requests": 9,
+    "new_reserved_requests": 0
+  },
+  "limitation": "Public result corroborates successful adoption only. No useful-work acceptance or HTTP root-cause inference. Wrapper PID/exit code are outside this projection."
+}

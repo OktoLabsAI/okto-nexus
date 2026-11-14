@@ -1,0 +1,56 @@
+{
+  "format": 1,
+  "helper_sha256": "c8069ebe28b27792275f317472ba1c0ced1577598ddc36484a99b86d676ffc8a",
+  "sources": {
+    "common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\driver_common.py",
+      "sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f"
+    },
+    "observer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10"
+    },
+    "adopt": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c"
+    }
+  },
+  "authority": {
+    "proposal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1-codex-campaign-proposal-v14.json",
+    "expected_proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+    "approval_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\execution-authorization.json",
+    "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c"
+  },
+  "before": {
+    "outer_reservation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\adopt_local-once.reserved.json",
+      "sha256": "cd31fa4d5fd4a50a80b5d2fc080d8c28d9e0e0286a3d1764900666bdd2b235ce"
+    },
+    "returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\adopt_local-once.returned.json",
+      "sha256": "7a4c412b2d356f9221cab899a51334d1fcd7669e35e167f7a79537cfa62040e0"
+    },
+    "stdout": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\adopt_local-once.stdout",
+      "sha256": "ce11f8be98a1767064fcf0623ee0384934ba6dde315e7beab7f714778f5cd747"
+    },
+    "stderr": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\runtime-private\\adopt_local-once.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "reservation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-reserved.json",
+      "sha256": "9cd7f52425a242e86101c5540a5fc01d9c44adf5a61b2964f617c065d539125c"
+    },
+    "owner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\nexus-owner-selection.json",
+      "sha256": "126997a46d21896ab67c62f6902633b603247ba6299757ebf2c5b5d6b8d527a7"
+    }
+  },
+  "scope": "Continuation of the exact first-read readiness refusal before snapshot/controller. One bounded positive same-owner adoption; only GET and original snapshot/controller/result writes. Original attempt and reservation remain immutable.",
+  "qualification": {
+    "focal_tests": 4,
+    "failed": 0,
+    "installed_python_isolated": true
+  }
+}
