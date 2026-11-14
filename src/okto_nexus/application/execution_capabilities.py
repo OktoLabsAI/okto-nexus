@@ -192,6 +192,20 @@ class ExecutionCapabilityService:
 
     def describe(self, *, context, session_id, binding_id, capability_id, request_id, mcp_url):
         """Read current applied authority; never return or replace secret material."""
+        return self._describe(context=context, session_id=session_id, binding_id=binding_id,
+            capability_id=capability_id, request_id=request_id, mcp_url=mcp_url)
+
+    def describe_opening_transport(self, *, context, session_id, binding_id, capability_id, request_id, mcp_url):
+        """Server-owned MCP materialization, before the open receipt is READY.
+
+        This is not domain-action authority or a public metadata endpoint. It
+        uses the same applied-lease gate as the opening MCP handshake.
+        """
+        return self._describe(context=context, session_id=session_id, binding_id=binding_id,
+            capability_id=capability_id, request_id=request_id, mcp_url=mcp_url, opening_transport=True)
+
+    def _describe(self, *, context, session_id, binding_id, capability_id, request_id, mcp_url,
+                  opening_transport=False):
         if any(type(v) is not str or not 1 <= len(v) <= 160
                for v in (session_id, binding_id, capability_id, request_id)):
             raise _error(ErrorCode.VALIDATION_ERROR, 'Invalid capability metadata request.')
@@ -205,14 +219,17 @@ class ExecutionCapabilityService:
                 (capability_id, server_id, target['executor_id'], session_id)).fetchone()
             if credential is None:
                 raise _error(ErrorCode.NOT_FOUND, 'The session capability was not found.')
+            if opening_transport and credential['audience'] != 'nexus-mcp-session':
+                raise _error(ErrorCode.PERMISSION_DENIED, 'Opening metadata requires MCP transport authority.')
             current = self._authorize_hash(uow, digest=credential['secret_hash'],
-                                           audience=credential['audience'])
+                                           audience=credential['audience'], transport_only=opening_transport)
             scope = current['scope']
             if scope['binding_id'] != binding_id:
                 raise _error(ErrorCode.NOT_FOUND, 'The session capability was not found.')
             lease = self.repo.effective(uow, scope)
-            # _authorize_hash requires READY, a matching ACTIVE applied lease,
-            # current grant/revisions, unrevoked material and domain admission.
+            # Public metadata requires READY; internal opening transport also
+            # permits OPEN_PENDING. Both require the same ACTIVE applied lease,
+            # current grant/revisions and unrevoked material.
             until = min(_stamp(credential['valid_until_server']),
                         _stamp(lease['valid_until_server']))
             ttl = min(120, int((until - _stamp(self.access.clock.now_iso())).total_seconds()))

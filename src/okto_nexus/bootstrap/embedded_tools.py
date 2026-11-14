@@ -135,6 +135,21 @@ class EmbeddedToolsOwner:
         await asyncio.to_thread(persisted)
         await asyncio.to_thread(launch.check)
         deadline=start+cap["expires_in"]-.5
+        def current_transport_deadline():
+            self.owner.verify()
+            sent_at=time.monotonic()
+            current=service.describe_opening_transport(context=context,session_id=frame["session_id"],
+                binding_id=frame["binding_id"],capability_id=cap["capability_id"],
+                request_id="capmeta_"+secrets.token_hex(16),mcp_url=self.origin.rstrip("/")+"/mcp")
+            self.owner.verify()
+            if (current["scope"]!=cap["scope"] or current["capability_ref"]!=cap["capability_ref"]
+                    or current["audience"]!=cap["audience"] or current["actions"]!=cap["actions"]):
+                raise CoreError("PROFILE_DRIFT","local_tool_configuration")
+            return sent_at+current["expires_in"]-.5
+        if not native and deadline<=time.monotonic():
+            # Lease renewal may have extended this very capability while local
+            # preparation ran. Read its authority; never issue new material.
+            deadline=await asyncio.to_thread(current_transport_deadline)
         if deadline<=time.monotonic():
             raise CoreError("AUTH_EXPIRED","local_tools")
         home,template,native_factory=None,None,None
@@ -169,7 +184,8 @@ class EmbeddedToolsOwner:
                 home=await asyncio.to_thread(session_mcp_home,self.owner.deps.config.home_dir/"session-mcp",
                     frame=frame,configuration_digest=launch._snapshot,template=template)
         self.configurations[frame["session_id"]]=dict(cap=cap,deadline=deadline,home=home,template=template,
-            request_id=request_id,native_factory=native_factory,snapshot=launch._snapshot,process_http=process_http)
+            request_id=request_id,native_factory=native_factory,snapshot=launch._snapshot,process_http=process_http,
+            current_transport_deadline=None if native else current_transport_deadline)
 
     def decorate(self, launch):
         config=self.configurations.get(launch.scope["session_id"])

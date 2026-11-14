@@ -12,7 +12,6 @@ from nexus_connector_core.environment import child_environment
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from .execution_binding_proposals import _agent_guard
 from .execution_local_realizations import _digest, directory_identity
-from ..adapters.outbound.execution.core_inventory import resolve_local_installation_selection
 from nexus_connector_core.discovery import selected_fingerprint
 
 
@@ -155,10 +154,13 @@ class ApprovedLocalLaunch:
         provider_home=home["path"] if home else None
         def tools_current():
             if self.tools is not None:
-                if time.monotonic()>=self.tools["deadline"]:
-                    raise CoreError("AUTH_EXPIRED","local_tool_configuration")
                 if self.tools["home"] is not None:
                     self.tools["home"].require_current()
+                refresh=self.tools.get("current_transport_deadline")
+                if refresh is not None:
+                    self.tools["deadline"]=refresh()
+                if time.monotonic()>=self.tools["deadline"]:
+                    raise CoreError("AUTH_EXPIRED","local_tool_configuration")
         if self.tools is not None:
             config=self.tools
             base=self.resolver
@@ -177,6 +179,6 @@ class ApprovedLocalLaunch:
             secret_bindings=self.record["configuration"]["secret_bindings"],
             provider_home=provider_home, trusted_home=provider_home is not None,http_templates=templates,
             process_http=bool(self.tools and self.tools.get("process_http")))
-        await asyncio.to_thread(tools_current)
         await asyncio.to_thread(self.check)
+        await asyncio.to_thread(tools_current)
         return value
