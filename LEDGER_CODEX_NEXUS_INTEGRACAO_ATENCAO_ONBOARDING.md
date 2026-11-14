@@ -1778,3 +1778,34 @@ positivamente inativa, preservando dados. Quatro focais passaram. Ruff passou
 nos dois deltas. Nenhum desses fixes foi instalado nas tentativas preservadas.
 A contagem permanece122/132 VERIFIED, sem alteração de tokens/reservas ou aceite.
 Evidência: `plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json`.
+
+## 2026-11-14 — request11 encerrada após force autorizado
+
+O usuário autorizou a parada forçada do owner M1 PID34276, birth
+134391567737609266, geração `e700420fc6a5c92a7b434749361d805f`.
+Uma seleção canônica `service stop --force --expected-generation` retornou0.
+Dois observadores com handles retidos confirmaram a saída. Após tarefa nativa
+inativa, o uninstall canônico retornou0: tarefa exata ausente, owner canônico
+ausente e porta58631 livre. Diretórios e stat do banco principal permaneceram;
+não se afirma comparação completa de bancos ou credenciais.
+
+O companion registra **force_used=True**. O campo False fixo do observador
+original descreve apenas sua própria observação e não é usado para negar a
+parada forçada; ambos os arquivos originais permanecem intactos. A contenção
+normal anterior com duas paradas e180s terminou UNCONFIRMED e foi preservada.
+
+A projeção RO após saída confirmou abertura FAILED/PROCESS_LAUNCH_FENCED,
+possible_effect=True/retry_safe=False; produtor fenced, NEVER_CLAIMED, spawn0,
+zero births/eventos/streams e zero ações de turno. A sessão canônica permanece
+FAILED com lease CLOSED e retirement failed_open existente. O claim pendente
+do Core permanece registrado separadamente; não foi apagado nem convertido
+em prova genérica de release. A operação inicial é RESOLVED_TERMINAL.
+
+Accounting reconciliado: **272648 tokens observados,11 reservas**, sem novo
+turno nativo nesta request, refund ou replay. O checkpoint original continua
+unsettled, com DEADLINE600 e MONITOR_CADENCE_EXCEEDED. O documento derivado é
+companion de accounting, não controller carregável nem stream/usage sintético.
+Nova admissão exige recovery READY na geração atual de um novo owner e request
+genuinamente nova. Nenhum aceite M1 foi promovido: **122/132** permanece.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-request11-force-closure/review.json`.

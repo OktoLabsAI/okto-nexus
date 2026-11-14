@@ -1,0 +1,59 @@
+{
+  "format": "okto.m1.post_exit_accounting_companion",
+  "revision": 1,
+  "status": "FAILED_PRELAUNCH_ACCOUNTING_RECONCILED",
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\private\\controller.json",
+    "sha256": "1b10144fb626b9ab4f855828f4fa2aa2c474f6228adf1c994cb7f0b756b5f7de"
+  },
+  "request_id": "m1v14-local-work-11",
+  "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+  "opening_operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+  "initial_turn_operation": {
+    "operation_id": "op_dcd0455d4820f9abd40a57fad32c8fa9",
+    "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+    "parent_operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+    "admission_state": "RESOLVED_TERMINAL",
+    "action": "turn.submit"
+  },
+  "terminal_opening_stage": "FAILED",
+  "opening_error": "PROCESS_LAUNCH_FENCED",
+  "opening_possible_effect": true,
+  "opening_retry_safe": false,
+  "canonical_session_state": "FAILED",
+  "canonical_lease_state": "CLOSED",
+  "canonical_stream_epoch": null,
+  "core_launch_stop_proof": "NEVER_CLAIMED",
+  "core_claim_reconciliation_pending": true,
+  "server_retirement_checkpoint_present": true,
+  "server_retirement_release_kind": "failed_open",
+  "new_native_turns": 0,
+  "new_observed_tokens": 0,
+  "cumulative_minimum_observed_tokens": 272648,
+  "cumulative_reserved_admissions": 11,
+  "reservation_refund": false,
+  "faults_preserved": [
+    "DEADLINE600",
+    "MONITOR_CADENCE_EXCEEDED"
+  ],
+  "collector_original_unchanged": true,
+  "original_request_settled": false,
+  "collector_settled_observed_synthesized": false,
+  "loadable_controller_checkpoint": false,
+  "accounting_reconciled": true,
+  "billing_final": false,
+  "next_admission_requires": "A genuinely new request and canonical agent recovery READY for the current replacement owner generation. No replay of request11.",
+  "acceptance_promoted": false,
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\reconcile.py",
+    "sha256": "8447668182992c2fa67abba9ed568bcbe1f73947fa4e3127815a3fef10d59bee"
+  },
+  "post_exit_projection": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\post-exit-accounting-observation.json",
+    "sha256": "f0c26886db3cf6720b3d758f4d02c92200fbf59ab2a34bd7fa4a3ff906d8ea6d"
+  },
+  "retirement_projection": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-retirement-rbqa3xf1\\projection-and-recovery-map.json",
+    "sha256": "f63e2b112911f3605865cbae695e1f25ebd5aff29f00868443531c7e9afba7c7"
+  }
+}

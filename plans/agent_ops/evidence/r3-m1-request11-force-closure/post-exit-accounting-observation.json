@@ -1,0 +1,68 @@
+{
+  "launch": [
+    {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+      "opening_operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+      "connection_generation": 6,
+      "owner_generation": 1,
+      "revision": 3,
+      "spawn_claimed": 0,
+      "producer_fenced": 1,
+      "stop_proof": "NEVER_CLAIMED"
+    }
+  ],
+  "counts": {
+    "process_births": 0,
+    "events": 0,
+    "event_streams": 0
+  },
+  "action_counts": [
+    {
+      "action": "runtime.open",
+      "count": 1
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+      "stage": "FAILED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "native_id": null,
+      "error_code": "PROCESS_LAUNCH_FENCED"
+    }
+  ],
+  "slots": [],
+  "claims": [
+    {
+      "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+      "reconciliation_pending": 1
+    }
+  ],
+  "canonical_session": {
+    "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+    "lifecycle_state": "FAILED",
+    "lease_state": "CLOSED",
+    "owner_generation": 1,
+    "stream_epoch": null
+  },
+  "canonical_receipts": [
+    {
+      "operation_id": "op_c43b1ade4ad6cd29dd60bf4eb1970fba",
+      "stage": "FAILED",
+      "error_code": "PROCESS_LAUNCH_FENCED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "receipt_revision": 1
+    }
+  ],
+  "observed_at": 1794687004.8495872,
+  "method": {
+    "mode": "ro",
+    "query_only": true,
+    "source_sha256": "be59e4c8c6e3a999c9a60aa131b8a1f66b7dccf61b73eb41ab8864fe6e19b668",
+    "scope": "Exact request11 Core session and two canonical receipt IDs; no payload/body/auth columns."
+  }
+}

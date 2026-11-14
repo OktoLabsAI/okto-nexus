@@ -1,0 +1,111 @@
+{
+  "format": "okto.m1.force_cleanup_closure_companion",
+  "revision": 1,
+  "status": "CLOSED_AFTER_AUTHORIZED_FORCE_ACCOUNTING_RECONCILED_ACCEPTANCE_NOT_INFERRED",
+  "files": {
+    "original_checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\private\\controller.json",
+      "sha256": "1b10144fb626b9ab4f855828f4fa2aa2c474f6228adf1c994cb7f0b756b5f7de"
+    },
+    "original_work_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\public\\m1v14-local-work-11-result.json",
+      "sha256": "56358aebca1f6c242b55d3f203f65e965ed49ab9c767477b9d01482eae32b6a2"
+    },
+    "original_work_returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\runtime-private\\work-local-useful.returned.json",
+      "sha256": "9941f8bc584ee3d976cdfbeb694f0491ffccd92f7b36557139277bc7ab6d7fea"
+    },
+    "original_normal_containment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\public\\normal-containment-result.json",
+      "sha256": "1f140ff375b01c7a79bba55464d3a1ebcd4d66a3bb5332c1ed9d430fd317ed0c"
+    },
+    "original_exit_observer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\public\\nexus-exit-proof.json",
+      "sha256": "344bc83748034b36addacb05b092b8ee4f320b1f0c46dd47b7610ce7a2002059"
+    },
+    "extended_exit_observer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-exit-observation-if2rw59l\\result.json",
+      "sha256": "96ebefad8644be698783683fb001b38afbcbf5fa06f93837442cc77d56a6b432"
+    },
+    "authorized_force_selected": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\force-selected.json",
+      "sha256": "c53ca9c1722dbc179f77701f654ba5c199055e5a4b5e95b88c12fe947966acfb"
+    },
+    "authorized_force_returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\force-returned.json",
+      "sha256": "a04009c5b566ec7ef32993adcb2f0339128ca7337949305c9f7c1624719c670f"
+    },
+    "uninstall_selected": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\uninstall-selected.json",
+      "sha256": "ff5cf2c3944970a1431d78461ef9c8a1a17d203418a4946e9ecdc3bd4db0b0dc"
+    },
+    "uninstall_returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\uninstall-returned.json",
+      "sha256": "1574f2beedfcbd07a1e24704fe1c91bd0011ac0f0c9473166fc539257c01c37f"
+    },
+    "post_exit_accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\post-exit-accounting-observation.json",
+      "sha256": "f0c26886db3cf6720b3d758f4d02c92200fbf59ab2a34bd7fa4a3ff906d8ea6d"
+    },
+    "derived_accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\accounting-derived.json",
+      "sha256": "18efe1b0e24a282d71e814f7681221cf53f84b53502991d8710c6515ca9efbc4"
+    },
+    "accounting_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\read_accounting.py",
+      "sha256": "be59e4c8c6e3a999c9a60aa131b8a1f66b7dccf61b73eb41ab8864fe6e19b668"
+    },
+    "derivation_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-authorized-force-vjlixwq8\\reconcile.py",
+      "sha256": "8447668182992c2fa67abba9ed568bcbe1f73947fa4e3127815a3fef10d59bee"
+    },
+    "prior_closure_companion": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-resume-interrupt-3_zkq__d\\closure-companion.json",
+      "sha256": "9ab292850914b45c2495a4b9d7f4291ec715b7b3707b5cfe13c59a9160e0b020"
+    },
+    "retirement_projection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-retirement-rbqa3xf1\\projection-and-recovery-map.json",
+      "sha256": "f63e2b112911f3605865cbae695e1f25ebd5aff29f00868443531c7e9afba7c7"
+    },
+    "retirement_manifest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request11-retirement-rbqa3xf1\\manifest.json",
+      "sha256": "05da3109a4a868c1013c84c13b2575ddd560be68040accd3a9c33d29d368a5d1"
+    }
+  },
+  "campaign_revision": 14,
+  "request_id": "m1v14-local-work-11",
+  "force_used": true,
+  "force_command_selections": 1,
+  "user_authorization": "Autorizar esta parada e remoção condicionada",
+  "observer_force_false_interpretation": "Original observer records observation only; its fixed force_used=False does not describe the selected cleanup. This companion binds the actual authorized force receipt and reports force_used=True.",
+  "physical_exit_confirmed": true,
+  "nexus_task_absent": true,
+  "canonical_owner_absent": true,
+  "port_available": 58631,
+  "data_retained_scope": "Exact M1 Nexus task only. Metadata/presence retained; no full database or credential byte comparison.",
+  "data_presence_unchanged": true,
+  "canonical_session_state": "FAILED",
+  "canonical_lease_state": "CLOSED",
+  "server_retirement_present": true,
+  "core_claim_reconciliation_pending": true,
+  "canonical_recovery_executed": false,
+  "cumulative_minimum_observed_tokens": 272648,
+  "cumulative_reserved_admissions": 11,
+  "request11_new_native_turns": 0,
+  "reservation_refund": false,
+  "original_checkpoint_unchanged": true,
+  "faults_preserved": [
+    "DEADLINE600",
+    "MONITOR_CADENCE_EXCEEDED"
+  ],
+  "original_unsettled_requests": 1,
+  "normal_cleanup_confirmed": false,
+  "acceptance_promoted": false,
+  "model_or_service_started_by_reconciliation": false,
+  "limits": [
+    "Canonical FAILED is not rewritten to CLOSED. Core pending claim is retained separately from Server retirement and physical absence.",
+    "No fabricated stream, terminal usage event, generic release proof, or loadable replacement controller is produced.",
+    "Only directory presence and primary database stat preservation were checked at uninstall; no credential or full database byte comparison.",
+    "Next admission requires current-generation agent recovery READY and a genuinely new request. Original request is never replayed."
+  ]
+}

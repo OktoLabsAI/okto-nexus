@@ -1,0 +1,83 @@
+{
+  "status": "READ_ONLY_POINT_IN_TIME_NOT_RECOVERY_EXECUTION",
+  "tool_chunk": "5fb64a",
+  "session_id": "ses_abdc7fd9ab15ccadc06fe7aec6b9f247",
+  "method": {
+    "sqlite_uri_mode": "ro",
+    "query_only": true,
+    "busy_timeout_ms": 500,
+    "scope": "One exact session; scalar lifecycle, lease, generation, checkpoint presence/version/release_kind and recovery status only.",
+    "raw_retirement_json_read_or_copied": false,
+    "database_hashed": false,
+    "database_hash_reason": "Live writer may exist; no stable whole-database hash is asserted.",
+    "query_script_sha256": "01eb2bd8aeea6ca8b74714a5b3b3a9fbde51b80f1b1bafdc3849c3a9aa8347d7"
+  },
+  "projection": {
+    "lifecycle_state": "FAILED",
+    "lease_state": "CLOSED",
+    "owner_generation": 1,
+    "session_stream_present": 0,
+    "retirement_present": 1,
+    "retirement_version": 1,
+    "retirement_release_kind": "failed_open",
+    "local_retirement_revision": 13,
+    "executor_connection_generation": 6,
+    "recovery_generation": 6,
+    "recovery_state": "READY",
+    "recovery_error": null,
+    "publication_binding_present": 1,
+    "local_stream_present": 1
+  },
+  "interpretation": [
+    "The canonical session stream field is null, but the local publication stream exists. They are distinct fields.",
+    "The absence-of-retirement-checkpoint hypothesis does not apply to this observation. No new retirement implementation or database repair is indicated.",
+    "This is an existing durable Server checkpoint, not inheritance of the new Core owner-local tombstone proof.",
+    "Exact released Core slot state was not queried here; historical core_release_pending=False is not substituted for durable slot proof."
+  ],
+  "next_owner_source_path": [
+    "EmbeddedAgentRecovery.initialize verifies store identity/audit anchor and active owned slots. Any actually occupied slot invalidates the matching retirement checkpoint; never override it.",
+    "EmbeddedSessionCatalog.pending_agents includes old-generation recovery rows, so generation6 READY will initially be revalidated by a later owner. It does not mean request11 is replayed.",
+    "EmbeddedReconciliation._records(pending_only=True) excludes sessions with local_retirement_json. Existing request11 failed_open checkpoint therefore excludes this session unless invalidated by a real obligation.",
+    "ExecutionReconciliation.request excludes FAILED/CLOSED sessions and RESOLVED_TERMINAL operations. Agent _recover writes READY for the new generation after applicable history checks, then productive gates may admit a genuinely new session.",
+    "New work remains blocked until canonical agent recovery is READY in the current generation; no use of the old row alone as authorization."
+  ],
+  "manual_recovery_apis": {
+    "plan": "GET /api/v1/runtime-management/runtime/recovery/plan?agent_id=m1v12-local",
+    "confirm": "POST /api/v1/runtime-management/runtime/recovery/confirm-stopped",
+    "body_shape": {
+      "plan": "exact fresh returned nonempty plan",
+      "confirmation": "PREVIOUS_RUNTIME_PROCESSES_STOPPED"
+    },
+    "retry": "POST /api/v1/runtime-management/runtime/recovery/retry?agent_id=m1v12-local",
+    "limits": [
+      "All use operator maintenance authority. Even plan GET records a maintenance audit through a write UoW; it was not called in this read-only task.",
+      "Plan refuses while owner._stopping or selected session is in owner.sessions. It describes outstanding owned slots only; it is not necessary for already retired history.",
+      "Plan validates exact scope/opening/binding/claim and requires opening connection generation lower than replacement owner. Confirm recomputes exact plan, rejects empty/stale and records operator attestation before slot release.",
+      "Confirm is not OS proof, not an override of old live owner and not replay authority. It cannot synthesize a missing stream or historical release proof."
+    ]
+  },
+  "unchanged": {
+    "request11_state": "FAILED",
+    "opening_possible_effect": true,
+    "opening_retry_safe": false,
+    "cumulative_reservations": 11,
+    "known_observed_tokens": 272648,
+    "authorized_token_ceiling": 700000,
+    "reservation_refund": false,
+    "replay_authorized": false,
+    "new_owner_started": false,
+    "recovery_executed": false,
+    "acceptance_promoted": false
+  },
+  "source_pins": {
+    "src/okto_nexus/bootstrap/embedded_agent_recovery.py": "32f5bbbb8147db9301b2b17ceab7b8b935c22af18033b89076d39e989913462c",
+    "src/okto_nexus/bootstrap/embedded_session_catalog.py": "b42e6fd6b6b0019c2c9f725fa69ab78c6a5c7d96f9950d254355be3e5e0d1404",
+    "src/okto_nexus/bootstrap/embedded_reconciliation.py": "46133b92205305409ab0d82ec056b5fd600dfeef8caffb9e773c24717ac7de25",
+    "src/okto_nexus/bootstrap/embedded_retirement.py": "749c89cdbda6d3d20fc4788b3bdc3653387f2a8124b559b493795b761c6223c3",
+    "src/okto_nexus/bootstrap/embedded_unopened_retirement.py": "845add85f0e51dedb1b66ce4123fe82abfc1191fd90f6d79971571a11859ea95",
+    "src/okto_nexus/application/execution_reconciliation.py": "9e733e375b3a943d7322917de5b713cb7bdf11cb6f9cde0282122ec0224dc0f7",
+    "src/okto_nexus/application/runtime_access.py": "a362d7df03d648517dafa0d22309985837953ef991790bd03ce9d86a7504f957",
+    "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "80774ebaf407d9381df80ec6936383f6f1f8771a234487b1f960b0897c109fc2",
+    "plans/agent_ops/evidence/r3-opening-capability-refresh/request11-observation.json": "1a632cd98f89531c52463c201c61f988c2d445b94dae04ec14bbe115420f4f21"
+  }
+}

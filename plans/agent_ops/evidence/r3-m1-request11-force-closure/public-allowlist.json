@@ -1,0 +1,92 @@
+{
+  "files": {
+    "accounting-derived.json": {
+      "sha256": "18efe1b0e24a282d71e814f7681221cf53f84b53502991d8710c6515ca9efbc4",
+      "bytes": 2637
+    },
+    "closure-companion.json": {
+      "sha256": "3f6e9e1f255287fc62afd0c78f26f83a53abded218779c1b112afae88ce9f5f6",
+      "bytes": 6297
+    },
+    "extended-exit-observer.json": {
+      "sha256": "96ebefad8644be698783683fb001b38afbcbf5fa06f93837442cc77d56a6b432",
+      "bytes": 402
+    },
+    "force-returned.json": {
+      "sha256": "a04009c5b566ec7ef32993adcb2f0339128ca7337949305c9f7c1624719c670f",
+      "bytes": 408
+    },
+    "force-selected.json": {
+      "sha256": "c53ca9c1722dbc179f77701f654ba5c199055e5a4b5e95b88c12fe947966acfb",
+      "bytes": 1727
+    },
+    "force-wrapper.json": {
+      "sha256": "47efb61bbf520b8c0c618d47647e40fb45b44611b28de91c9c0a429dec45a56f",
+      "bytes": 49
+    },
+    "original-exit-observer.json": {
+      "sha256": "344bc83748034b36addacb05b092b8ee4f320b1f0c46dd47b7610ce7a2002059",
+      "bytes": 768
+    },
+    "original-normal-containment.json": {
+      "sha256": "1f140ff375b01c7a79bba55464d3a1ebcd4d66a3bb5332c1ed9d430fd317ed0c",
+      "bytes": 884
+    },
+    "original-work-result.json": {
+      "sha256": "56358aebca1f6c242b55d3f203f65e965ed49ab9c767477b9d01482eae32b6a2",
+      "bytes": 8493
+    },
+    "original-work-returned.json": {
+      "sha256": "9941f8bc584ee3d976cdfbeb694f0491ffccd92f7b36557139277bc7ab6d7fea",
+      "bytes": 721
+    },
+    "post-exit-accounting-observation.json": {
+      "sha256": "f0c26886db3cf6720b3d758f4d02c92200fbf59ab2a34bd7fa4a3ff906d8ea6d",
+      "bytes": 1757
+    },
+    "read_accounting.py": {
+      "sha256": "be59e4c8c6e3a999c9a60aa131b8a1f66b7dccf61b73eb41ab8864fe6e19b668",
+      "bytes": 3303
+    },
+    "reconcile.py": {
+      "sha256": "8447668182992c2fa67abba9ed568bcbe1f73947fa4e3127815a3fef10d59bee",
+      "bytes": 10226
+    },
+    "retirement-manifest.json": {
+      "sha256": "05da3109a4a868c1013c84c13b2575ddd560be68040accd3a9c33d29d368a5d1",
+      "bytes": 431
+    },
+    "retirement-projection-and-recovery-map.json": {
+      "sha256": "f63e2b112911f3605865cbae695e1f25ebd5aff29f00868443531c7e9afba7c7",
+      "bytes": 5589
+    },
+    "retirement-query.py": {
+      "sha256": "01eb2bd8aeea6ca8b74714a5b3b3a9fbde51b80f1b1bafdc3849c3a9aa8347d7",
+      "bytes": 2123
+    },
+    "retirement-README.md": {
+      "sha256": "5f0868df2531bf5ba22d964b12e3f94946319a2de9c94e6bb342f4b28139fee5",
+      "bytes": 1211
+    },
+    "review.json": {
+      "sha256": "d52e8f64b1739ad7b5277fadbb294ac86c088809d5e89be4735e5b53af84a3f9",
+      "bytes": 3634
+    },
+    "uninstall-returned.json": {
+      "sha256": "1574f2beedfcbd07a1e24704fe1c91bd0011ac0f0c9473166fc539257c01c37f",
+      "bytes": 1149
+    },
+    "uninstall-selected.json": {
+      "sha256": "ff5cf2c3944970a1431d78461ef9c8a1a17d203418a4946e9ecdc3bd4db0b0dc",
+      "bytes": 2166
+    }
+  },
+  "excluded": [
+    "databases and journals",
+    "private controller payload",
+    "credentials and personal configuration",
+    "raw CLI stdout/stderr",
+    "process command lines containing capabilities"
+  ],
+  "source_files_are_retained_for_audit_not_execution_from_repository": true
+}

@@ -1,0 +1,27 @@
+{
+  "status": "REMOVED_AFTER_AUTHORIZED_FORCE",
+  "force_used": true,
+  "force_command_selected_once": true,
+  "physical_exit_confirmed": true,
+  "native_task_absent": true,
+  "canonical_owner_absent": true,
+  "port_available": 58631,
+  "data_presence_unchanged": true,
+  "data_evidence": {
+    "directories_retained": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\public",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request11\\private"
+    ],
+    "primary_database_metadata": {
+      "bytes": 2928640,
+      "mtime_ns": 1794686763617432400
+    },
+    "credential_contents_read": false,
+    "database_contents_read": false
+  },
+  "uninstall_exit_code": 0,
+  "scope": "Exact M1 Nexus task only. Metadata/presence retained; no full database or credential byte comparison.",
+  "original_observer_force_false_is_observer_only": true
+}

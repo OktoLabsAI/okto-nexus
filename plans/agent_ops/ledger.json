@@ -13370,6 +13370,80 @@
         "plans/agent_ops/evidence/r3-svc-t15-terminal-context/qualification.json",
         "plans/agent_ops/evidence/r3-svc-t15-terminal-context/artifact-manifest.json"
       ]
+    },
+    "r3_m1_request11_authorized_force_closure": {
+      "date": "2026-11-14",
+      "status": "CLOSED_AFTER_AUTHORIZED_FORCE_ACCOUNTING_RECONCILED_ACCEPTANCE_NOT_INFERRED",
+      "request_id": "m1v14-local-work-11",
+      "force_used": true,
+      "force_command_selections": 1,
+      "user_authorization": "Autorizar esta parada e remoção condicionada",
+      "physical_exit": {
+        "pid": 34276,
+        "birth_filetime": 134391567737609266,
+        "generation": "e700420fc6a5c92a7b434749361d805f",
+        "two_retained_observers": true
+      },
+      "cleanup": "Canonical force returned0; retained physical exit, native task inactive then canonical uninstall0; exact Nexus task absent, canonical owner absent and port58631 available.",
+      "data_preservation": "Directory presence and primary database size/mtime unchanged across uninstall; no full database or credential byte comparison.",
+      "request_outcome": "Opening FAILED/PROCESS_LAUNCH_FENCED possible_effect=True retry_safe=False; initial turn RESOLVED_TERMINAL. Core producer fenced/NEVER_CLAIMED, spawn_claimed=False, zero process births/events/event streams and zero turn actions. Session remains FAILED, lease CLOSED; existing Server failed_open retirement and Core pending claim are distinct.",
+      "accounting": {
+        "known_observed_tokens": 272648,
+        "cumulative_reservations": 11,
+        "request11_native_turns": 0,
+        "request11_new_observed_tokens": 0,
+        "refund": false,
+        "billing_final": false
+      },
+      "original_faults_preserved": [
+        "DEADLINE600",
+        "MONITOR_CADENCE_EXCEEDED"
+      ],
+      "original_checkpoint_unchanged": true,
+      "original_unsettled_requests": 1,
+      "derived_accounting_is_controller_checkpoint": false,
+      "collector_settled_state_synthesized": false,
+      "observation_note": "The original exit observer fixed force_used=False while observer_only=True. Actual cleanup authority is this force receipt/companion and force_used=True; neither original observer file was rewritten.",
+      "failed_attempts_preserved": [
+        {
+          "kind": "Original normal containment",
+          "result": "Two normal stops,180s bound,UNCONFIRMED. No normal-cleanup acceptance."
+        },
+        {
+          "kind": "Force preflight",
+          "path": "C:/Users/jpamb/AppData/Local/Temp/m1-request11-authorized-force-yy1g8da7",
+          "result": "Root observed task.name AttributeError before selection or CLI; no force effect. Actual force selected once in vjlixwq8.",
+          "basis": "Root execution observation; no fabricated result file."
+        },
+        {
+          "kind": "Accounting script invocation",
+          "tool_chunk": "5effd8",
+          "result": "Global Python lacked okto_nexus; import failed before artifact writes. Installed Python completed exact derivation guards (fed043)."
+        },
+        {
+          "kind": "Inline query preparation",
+          "tool_chunk": "d01d95",
+          "result": "Shell quoting SyntaxError before SQLite query; replaced with explicit source file."
+        }
+      ],
+      "verification": {
+        "post_exit_ro_projection_tool": "cbdc80",
+        "derived_accounting_guard_run": "fed043",
+        "database_writes": false,
+        "new_provider_or_service_effects_by_reconciliation": false
+      },
+      "next_admission": "Genuinely new request only after canonical recovery READY for current replacement generation; no replay/refund and no inference from old READY row.",
+      "acceptance_promoted": false,
+      "scenario_counts": {
+        "VERIFIED": 122,
+        "IN_PROGRESS": 8,
+        "NOT_RUN": 2
+      },
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-request11-force-closure/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-request11-force-closure/accounting-derived.json",
+        "plans/agent_ops/evidence/r3-m1-request11-force-closure/retirement-projection-and-recovery-map.json"
+      ]
     }
   },
   "history": [
@@ -14821,6 +14895,15 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-svc-t15-terminal-context/review.json",
         "plans/agent_ops/evidence/r3-svc-t15-terminal-context/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Request11 closed after explicitly authorized force",
+      "status": "CLOSED_AFTER_AUTHORIZED_FORCE_ACCOUNTING_RECONCILED_ACCEPTANCE_NOT_INFERRED",
+      "summary": "One canonical force selection, two retained exit observations and canonical uninstall. Request11 failed before native turn;272648tokens/11reservations, no refund/replay. Original checkpoint/faults and Core pending claim preserved; no acceptance promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-request11-force-closure/review.json"
       ]
     }
   ]

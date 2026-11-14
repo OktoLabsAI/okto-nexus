@@ -1,0 +1,52 @@
+{
+  "owner": {
+    "pid": 34276,
+    "birth_filetime": 134391567737609266,
+    "generation": "e700420fc6a5c92a7b434749361d805f",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "task": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "state": 4,
+      "digest": "a8c464304b121707627307fe6a7c066aaad740382e8ee4d5b4c81c37098a6a74"
+    }
+  },
+  "review_sha256": "e00fe5b73936fbd43bf162762d13171917ca0c505eec9db24289e94875140289",
+  "user_authorization": "Autorizar esta parada e remo\u00e7\u00e3o condicionada",
+  "question_item": "call_8fd3203f48804c36b818cb2486a96bb7:0",
+  "selected_at": 1794686760.1974342,
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-I",
+    "-B",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "service",
+    "stop",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "58631",
+    "--project-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "--embedding-mode",
+    "off",
+    "--feature-harness-integrations",
+    "true",
+    "--metrics-mode",
+    "disabled",
+    "--harness-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+    "--timeout",
+    "45",
+    "--json",
+    "--force",
+    "--expected-generation",
+    "e700420fc6a5c92a7b434749361d805f"
+  ],
+  "maximum_force_selections": 1,
+  "uninstall_selected": false
+}
