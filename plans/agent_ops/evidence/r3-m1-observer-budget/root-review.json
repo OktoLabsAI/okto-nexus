@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-14",
+  "classification": "FINAL_OFFLINE_SUITE_PASS_WITH_HISTORICAL_TIMING_LIMITATIONS",
+  "reviewed_freeze_sha256": "34bc645a74cc5c157b23f04cbd65149dcf60571d186b66ee9fbe8e02b85a744e",
+  "final_unique_cases": 49,
+  "limits": {
+    "schema_initialization_ms": 250,
+    "snapshot_ms": 100,
+    "aggregate_poll_ms": 600,
+    "effect_observation_freshness_ms": 1000,
+    "request_deadline_seconds": 120,
+    "preventive_tokens": 200000,
+    "tolerance_tokens": 700000
+  },
+  "review": "Root and preparation agent reviewed current-clock effect fences, first setup, cleanup failures, late usage and post-persist deadline. Source changes and final tests match frozen hashes.",
+  "scope": "Offline observer only. No actual service/provider effects or execution approval. Prior failures remain retained; no statistical tail-latency guarantee.",
+  "next": "Compose v11 with six carried reservations, 89473 observed token minimum and at most five new / eleven cumulative reservations, then verify the exact final entrypoints."
+}

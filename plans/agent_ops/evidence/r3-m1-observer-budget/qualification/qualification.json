@@ -1,0 +1,135 @@
+{
+  "classification": "FINAL_OFFLINE_SUITE_PASS_WITH_HISTORICAL_TIMING_LIMITATIONS",
+  "scope": "Offline harness candidate only; no product mutations, services, provider, credentials or frozen-v10 changes.",
+  "limits": {
+    "schema_initialization_ms": 250,
+    "snapshot_ms": 100,
+    "aggregate_poll_ms": 600,
+    "effect_observation_freshness_ms": 1000,
+    "request_deadline_seconds": 120,
+    "preventive_tokens": 200000,
+    "tolerance_tokens": 700000
+  },
+  "contract": [
+    "Canonical schema initialization precedes admission; Core and setup lazy initialization is separately bounded250ms and charged to the same600ms poll.",
+    "Public Canonical/Core observation and setup poll measure path and identity checks, projection, final identity validation, rollback and successful return. Only separately measured schema initialization time is deducted from the100ms observation budget.",
+    "ReadOnly.open cached validation/path/SQL/rollback is also checked at100ms. No persistent transaction between polls. Legitimate DDL can reprepare inside the read budget.",
+    "SQLite progress callbacks check aggregate600ms as well as local budgets; explicit clock checks follow IO. Windows IO and scheduler stalls cannot be preempted:600ms/100ms are fail-closed acceptance budgets, not physical wall-time guarantees.",
+    "A complete poll publishes freshness based on poll START plus1s, only after final persistence and fresh-clock deadline checks. A faulted or interrupted poll does not renew freshness.",
+    "Every real effect boundary in the serial API worker checks current clock for freshness, in-progress poll budget,120s deadline and token threshold. The first setup receives a successful empty poll before reservation and a fence check immediately before its dispatch callback.",
+    "Usage updates reach the shared effect fence before durable persistence can block. Every fault closes the fence before its persistence.",
+    "Aggregate-only exhaustion preserves a safely rolled-back reader for subsequent late observations. Any cleanup failure discards connections while preserving the original exception.",
+    "All settled requests remain observed for late usage. No stream deduplication or persistence redesign was introduced. Cadence faults concern unsettled work; idle history does not imply active execution.",
+    "Containment and failure persistence can outlast the observation budget after the fence is closed; selected normal-stop action is not proof of native exit."
+  ],
+  "attempts": [
+    {
+      "path": "budget.xml",
+      "sha256": "2979d90590c6d4883857caae78dc6ebe1784031b25bf2df8b86602395f337d17",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 2.872,
+      "failed_cases": []
+    },
+    {
+      "path": "deadline.xml",
+      "sha256": "000477e2d148a4ee55b09993912367ef61315e64efe16bfe1049ab3bcebc2e4e",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 2.036,
+      "failed_cases": []
+    },
+    {
+      "path": "final.xml",
+      "sha256": "19d5b110cbad0b239218d9a244c73e8cbe2cd81418259a2c5615dd36e385937f",
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 38.565,
+      "failed_cases": []
+    },
+    {
+      "path": "first.xml",
+      "sha256": "678324ffce58e6e4f16190aa2333379013549d57dec113777adf9d2cc57e6b0b",
+      "tests": 39,
+      "failures": 2,
+      "errors": 0,
+      "seconds": 59.754,
+      "failed_cases": [
+        "test_terminal_preopen_failure_preserves_reservation_no_usage_inference",
+        "test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation"
+      ]
+    },
+    {
+      "path": "profile.xml",
+      "sha256": "208700d20e391539d69ede952f61e4d6e5942232b95a5be70d4531a1643abd1b",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 11.058,
+      "failed_cases": []
+    },
+    {
+      "path": "usage.xml",
+      "sha256": "4025b004a291e2e42042b8a36b6a70594d84142d6406c35cdc22ad4250dbe516",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.915,
+      "failed_cases": []
+    }
+  ],
+  "final_run_sources_sha256": "2e0a6876570f9a9125b27cdd9ee88accc1ada8566638a3f7e81a0143980cd1ff",
+  "preserved_first_v2_failures": [
+    "WinError5 replacing controller.json; a synthetic worker reads the ledger concurrently, but the precise Windows handle blocker was not established. No retry added.",
+    "Four-work case observed poll1203.96ms and cadence1419.20ms, correctly fenced and denied successful final publication. This remains evidence of a possible latency tail."
+  ],
+  "profile": {
+    "path": "phase-profile.json",
+    "sha256": "6af1ff642ea10f4652a04872ac4cee8513ebf2968196bf3289a41eaeff0fa6c2",
+    "runs": 1,
+    "four_work_passed": true,
+    "polls": 37,
+    "maximum_poll_ms": 439.5770999835804,
+    "totals": {
+      "durable_persist": {
+        "calls": 137,
+        "total_ms": 4984.878100338392,
+        "max_ms": 106.71090002870187
+      },
+      "safe_path_nested": {
+        "calls": 788,
+        "total_ms": 2615.9137996146455,
+        "max_ms": 41.42520000459626
+      },
+      "prepare_including_nested_path": {
+        "calls": 171,
+        "total_ms": 1310.2284993510693,
+        "max_ms": 42.17189998598769
+      },
+      "canonical_read": {
+        "calls": 85,
+        "total_ms": 1227.8216996928677,
+        "max_ms": 24.565299972891808
+      },
+      "core_read": {
+        "calls": 80,
+        "total_ms": 1690.7304999185726,
+        "max_ms": 64.13770001381636
+      }
+    },
+    "note": "Nested phase timings overlap. Profile used loaded modules before the final post-persist deadline guard was added; the final complete suite separately covers frozen bytes. No tail-latency robustness claim."
+  },
+  "real_closed_database": {
+    "sha256": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+    "schema_initialization_ms": 47.083000012207776,
+    "warm_read_min_ms": 9.664100012741983,
+    "warm_read_max_ms": 16.10510004684329,
+    "cold_definition": "New connection/schema cache; OS cache not purged."
+  },
+  "independent_review": "v11_preparation reviewed cleanup, public observation timing, freshness, pre-fsync token fence, first setup and final deadline checks; no remaining blocker reported.",
+  "composition_requirement": "Policy and ancestry remain comparison-v10. Preparation owner must compose revision11, carry6 admissions/89473 tokens, maximum5 new/11 cumulative, and separately qualify installed composition.",
+  "conclusion": "Use the final suite result for functional status. Retain all failures and the explicit IO/preemption/tail-latency limitations; do not describe this as statistical availability qualification."
+}

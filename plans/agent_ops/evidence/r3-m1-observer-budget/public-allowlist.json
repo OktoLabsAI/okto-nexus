@@ -1,0 +1,172 @@
+{
+  "files": [
+    {
+      "path": "controller/api_worker.py",
+      "sha256": "268de25713f364ce2034c824b250030adf1f861147423f95514c1b2756fa42a8",
+      "bytes": 4212
+    },
+    {
+      "path": "controller/canonical_fixture.py",
+      "sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "bytes": 4280
+    },
+    {
+      "path": "controller/controller.py",
+      "sha256": "ffe3c1addbc5c1f9ed3b9998984436b4b1f75c83c5386f3ad111b8b82f12064e",
+      "bytes": 1305
+    },
+    {
+      "path": "controller/history_observers.py",
+      "sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "bytes": 1681
+    },
+    {
+      "path": "controller/independent_controller.py",
+      "sha256": "56fb14dc78a64d64e14c2c32a27300a61fe7a820588ece96725749b8263e13fd",
+      "bytes": 18429
+    },
+    {
+      "path": "controller/independent_journal.py",
+      "sha256": "f30daf7c2647e5017c5212752f2c794c3b747fafe0ecd5b02ad23b4952ae8dcf",
+      "bytes": 20264
+    },
+    {
+      "path": "controller/legacy_controller.py",
+      "sha256": "314cb81bc5ce1dcf47d257d04753bde6806774a51d284d2c894df882532761e2",
+      "bytes": 20007
+    },
+    {
+      "path": "controller/observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "bytes": 10253
+    },
+    {
+      "path": "controller/serial_flow.py",
+      "sha256": "0fef132b70ae936d54590b4c0e407b71e13962640a1064f26e20268e8e46f697",
+      "bytes": 1829
+    },
+    {
+      "path": "controller/setup_journal.py",
+      "sha256": "326497241dd3c94f1775b338e7b1b4e70689fc455d1e83db21fda6103b7305dc",
+      "bytes": 8629
+    },
+    {
+      "path": "controller/token_collector.py",
+      "sha256": "1b9ed078b4cedafe28f2b6574329a3d67deef85c983f28344ceec2ef264d3f3e",
+      "bytes": 22011
+    },
+    {
+      "path": "m1_v10_work.py",
+      "sha256": "3979e632c59965b9360ac954f848906daddaf0ee9ad0bfa930110e169e98d0bb",
+      "bytes": 19820
+    },
+    {
+      "path": "publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "bytes": 1676
+    },
+    {
+      "path": "response_loss.py",
+      "sha256": "90384048f66c4eded5c119d7380debf22a288ff3c03270d01714b685326b8d56",
+      "bytes": 8755
+    },
+    {
+      "path": "controller/test_cached_readonly.py",
+      "sha256": "eaa391d0238e3230a4cb6084582238f0671617024e91ce720bdeb536757dd7a6",
+      "bytes": 8660
+    },
+    {
+      "path": "controller/test_independent.py",
+      "sha256": "778e6e6c86800e8155716cb91b8f11d5d2601c1f8d57e586e933be502de0c7f4",
+      "bytes": 28786
+    },
+    {
+      "path": "controller/test_observation_budget.py",
+      "sha256": "e36b3c25527d3eedd47cbc00ad9c8df7c38d0f87f2eed26fb464918989fcc5a4",
+      "bytes": 6561
+    },
+    {
+      "path": "controller/test_work_wrapper.py",
+      "sha256": "275c23d37b7569daed7964c322b01829841d65a2125ed27eaf9806bfd5c8dbb4",
+      "bytes": 15341
+    },
+    {
+      "path": "predecessor-freeze.json",
+      "sha256": "a41f818035ce3ccbc77e6cae9bc6c96fb4cc08d1d2081001f8b0439f49b589ef",
+      "bytes": 2746
+    },
+    {
+      "path": "qualification/budget.xml",
+      "sha256": "2979d90590c6d4883857caae78dc6ebe1784031b25bf2df8b86602395f337d17",
+      "bytes": 1286
+    },
+    {
+      "path": "qualification/deadline.xml",
+      "sha256": "000477e2d148a4ee55b09993912367ef61315e64efe16bfe1049ab3bcebc2e4e",
+      "bytes": 385
+    },
+    {
+      "path": "qualification/final.xml",
+      "sha256": "19d5b110cbad0b239218d9a244c73e8cbe2cd81418259a2c5615dd36e385937f",
+      "bytes": 6467
+    },
+    {
+      "path": "qualification/first.xml",
+      "sha256": "678324ffce58e6e4f16190aa2333379013549d57dec113777adf9d2cc57e6b0b",
+      "bytes": 11801
+    },
+    {
+      "path": "qualification/profile.xml",
+      "sha256": "208700d20e391539d69ede952f61e4d6e5942232b95a5be70d4531a1643abd1b",
+      "bytes": 394
+    },
+    {
+      "path": "qualification/usage.xml",
+      "sha256": "4025b004a291e2e42042b8a36b6a70594d84142d6406c35cdc22ad4250dbe516",
+      "bytes": 361
+    },
+    {
+      "path": "qualification/qualification.json",
+      "sha256": "37366f8fa83350b16b21b1c8108b2869646898c3a8a94c6c5794c36573b99f63",
+      "bytes": 6819
+    },
+    {
+      "path": "qualification/runtime-freeze.json",
+      "sha256": "34bc645a74cc5c157b23f04cbd65149dcf60571d186b66ee9fbe8e02b85a744e",
+      "bytes": 2944
+    },
+    {
+      "path": "qualification/real-closed-db-evidence.json",
+      "sha256": "ebb56c1464e0fb6d6e2ab1191441be07fc476e3631fc04d2f7cc6b8255399f40",
+      "bytes": 803
+    },
+    {
+      "path": "qualification/phase-profile.json",
+      "sha256": "6af1ff642ea10f4652a04872ac4cee8513ebf2968196bf3289a41eaeff0fa6c2",
+      "bytes": 24553
+    },
+    {
+      "path": "qualification/final-run-sources.json",
+      "sha256": "2e0a6876570f9a9125b27cdd9ee88accc1ada8566638a3f7e81a0143980cd1ff",
+      "bytes": 1866
+    },
+    {
+      "path": "qualification/profile_four_work.py",
+      "sha256": "ac0e426c1a889fe7bfaa3a2a62873940a0e3943b4231b46376839072d823bea6",
+      "bytes": 2474
+    },
+    {
+      "path": "qualification/freeze.py",
+      "sha256": "6fcd7ae6383b14531879ca2b69bb45767e2777bf5d4635243fd3f0b962163c4e",
+      "bytes": 7826
+    }
+  ],
+  "excludes": [
+    "databases",
+    "private fixture ledgers",
+    "credentials",
+    "venv",
+    "test temp roots",
+    "pycache"
+  ]
+}

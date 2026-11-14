@@ -1,0 +1,1000 @@
+{
+  "exit_code": 0,
+  "totals": {
+    "durable_persist": {
+      "calls": 137,
+      "total_ms": 4984.878100338392,
+      "max_ms": 106.71090002870187
+    },
+    "safe_path_nested": {
+      "calls": 788,
+      "total_ms": 2615.9137996146455,
+      "max_ms": 41.42520000459626
+    },
+    "prepare_including_nested_path": {
+      "calls": 171,
+      "total_ms": 1310.2284993510693,
+      "max_ms": 42.17189998598769
+    },
+    "canonical_read": {
+      "calls": 85,
+      "total_ms": 1227.8216996928677,
+      "max_ms": 24.565299972891808
+    },
+    "core_read": {
+      "calls": 80,
+      "total_ms": 1690.7304999185726,
+      "max_ms": 64.13770001381636
+    }
+  },
+  "polls": [
+    {
+      "elapsed_ms": 10.412600007839501,
+      "requests": 0,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 1,
+          "total_ms": 7.992399972863495
+        },
+        "safe_path_nested": {
+          "calls": 0,
+          "total_ms": 0.0
+        }
+      }
+    },
+    {
+      "elapsed_ms": 27.28079998632893,
+      "requests": 0,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 1,
+          "total_ms": 24.755700025707483
+        },
+        "safe_path_nested": {
+          "calls": 0,
+          "total_ms": 0.0
+        }
+      }
+    },
+    {
+      "elapsed_ms": 27.713000017683953,
+      "requests": 0,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 1,
+          "total_ms": 25.6154999951832
+        },
+        "safe_path_nested": {
+          "calls": 0,
+          "total_ms": 0.0
+        },
+        "prepare_including_nested_path": {
+          "calls": 0,
+          "total_ms": 0.0
+        },
+        "canonical_read": {
+          "calls": 0,
+          "total_ms": 0.0
+        }
+      }
+    },
+    {
+      "elapsed_ms": 49.47269998956472,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 1,
+          "total_ms": 28.698100009933114
+        },
+        "safe_path_nested": {
+          "calls": 4,
+          "total_ms": 15.209799981676042
+        },
+        "prepare_including_nested_path": {
+          "calls": 1,
+          "total_ms": 8.355199999641627
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 17.07099995110184
+        }
+      }
+    },
+    {
+      "elapsed_ms": 171.651600045152,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 2,
+          "total_ms": 76.75410003867
+        },
+        "safe_path_nested": {
+          "calls": 10,
+          "total_ms": 47.84669994842261
+        },
+        "prepare_including_nested_path": {
+          "calls": 2,
+          "total_ms": 49.24439999740571
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 16.382400004658848
+        },
+        "core_read": {
+          "calls": 1,
+          "total_ms": 64.13770001381636
+        }
+      }
+    },
+    {
+      "elapsed_ms": 85.5957999592647,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 2,
+          "total_ms": 48.51559997769073
+        },
+        "safe_path_nested": {
+          "calls": 9,
+          "total_ms": 28.792699973564595
+        },
+        "prepare_including_nested_path": {
+          "calls": 2,
+          "total_ms": 13.124799937941134
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 13.519999978598207
+        },
+        "core_read": {
+          "calls": 1,
+          "total_ms": 18.959100008942187
+        }
+      }
+    },
+    {
+      "elapsed_ms": 66.80109997978434,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 2,
+          "total_ms": 35.167999973054975
+        },
+        "safe_path_nested": {
+          "calls": 9,
+          "total_ms": 23.97959999507293
+        },
+        "prepare_including_nested_path": {
+          "calls": 2,
+          "total_ms": 11.40379993012175
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 12.081599968951195
+        },
+        "core_read": {
+          "calls": 1,
+          "total_ms": 15.33159997779876
+        }
+      }
+    },
+    {
+      "elapsed_ms": 54.91420003818348,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 2,
+          "total_ms": 19.157700007781386
+        },
+        "safe_path_nested": {
+          "calls": 9,
+          "total_ms": 26.229400071315467
+        },
+        "prepare_including_nested_path": {
+          "calls": 2,
+          "total_ms": 11.711200000718236
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 12.708500027656555
+        },
+        "core_read": {
+          "calls": 1,
+          "total_ms": 17.16129999840632
+        }
+      }
+    },
+    {
+      "elapsed_ms": 51.404099969659,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 2,
+          "total_ms": 17.489799996837974
+        },
+        "safe_path_nested": {
+          "calls": 9,
+          "total_ms": 25.794200075324625
+        },
+        "prepare_including_nested_path": {
+          "calls": 2,
+          "total_ms": 12.692000018432736
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 12.477399955969304
+        },
+        "core_read": {
+          "calls": 1,
+          "total_ms": 16.839100047945976
+        }
+      }
+    },
+    {
+      "elapsed_ms": 76.34779997169971,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 2,
+          "total_ms": 31.999100057873875
+        },
+        "safe_path_nested": {
+          "calls": 10,
+          "total_ms": 30.895400035660714
+        },
+        "prepare_including_nested_path": {
+          "calls": 2,
+          "total_ms": 17.203299968969077
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 15.486999996937811
+        },
+        "core_read": {
+          "calls": 1,
+          "total_ms": 22.332700027618557
+        }
+      }
+    },
+    {
+      "elapsed_ms": 93.74820004450157,
+      "requests": 1,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 2,
+          "total_ms": 48.95040002884343
+        },
+        "safe_path_nested": {
+          "calls": 9,
+          "total_ms": 34.847699920646846
+        },
+        "prepare_including_nested_path": {
+          "calls": 2,
+          "total_ms": 15.024500025901943
+        },
+        "canonical_read": {
+          "calls": 1,
+          "total_ms": 17.11850002175197
+        },
+        "core_read": {
+          "calls": 1,
+          "total_ms": 22.368900012224913
+        }
+      }
+    },
+    {
+      "elapsed_ms": 168.11239998787642,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 82.37379998899996
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 67.54410004941747
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 32.03779994510114
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 39.12859997944906
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 39.08790001878515
+        }
+      }
+    },
+    {
+      "elapsed_ms": 201.16120000602677,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 130.7020999956876
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 56.275300041306764
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 24.934699991717935
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 27.601200039498508
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 36.273500008974224
+        }
+      }
+    },
+    {
+      "elapsed_ms": 162.73209999781102,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 101.02770006051287
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 48.34190005203709
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 23.18989991908893
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 24.522299994714558
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 30.71960003580898
+        }
+      }
+    },
+    {
+      "elapsed_ms": 200.1713000354357,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 125.99610001780093
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 57.974199939053506
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 26.808800001163036
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 27.59769995464012
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 38.86869997950271
+        }
+      }
+    },
+    {
+      "elapsed_ms": 194.24209999851882,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 112.25430003833026
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 65.55940001271665
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 28.893099981360137
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 31.265800003893673
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 43.03169995546341
+        }
+      }
+    },
+    {
+      "elapsed_ms": 207.04819995444268,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 135.69520000601187
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 52.92249994818121
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 24.83910002047196
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 25.487100007012486
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 34.984499972779304
+        }
+      }
+    },
+    {
+      "elapsed_ms": 190.66050002584234,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 96.57910000532866
+        },
+        "safe_path_nested": {
+          "calls": 19,
+          "total_ms": 57.78059997828677
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 48.90330007765442
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 29.121799976564944
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 56.64019996766001
+        }
+      }
+    },
+    {
+      "elapsed_ms": 259.8381999996491,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 139.33330005966127
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 103.28070010291412
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 30.384999990928918
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 30.38460004609078
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 82.0155999972485
+        }
+      }
+    },
+    {
+      "elapsed_ms": 182.418099953793,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 93.64909993018955
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 73.88389989500865
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 29.073699959553778
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 40.76069995062426
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 41.16890003206208
+        }
+      }
+    },
+    {
+      "elapsed_ms": 202.26970000658184,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 114.47230004705489
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 63.53059993125498
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 26.171700097620487
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 34.621099941432476
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 44.28319999715313
+        }
+      }
+    },
+    {
+      "elapsed_ms": 203.7261999794282,
+      "requests": 2,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 3,
+          "total_ms": 113.03539999062195
+        },
+        "safe_path_nested": {
+          "calls": 18,
+          "total_ms": 74.60350007750094
+        },
+        "prepare_including_nested_path": {
+          "calls": 4,
+          "total_ms": 29.834299930371344
+        },
+        "canonical_read": {
+          "calls": 2,
+          "total_ms": 29.5740999863483
+        },
+        "core_read": {
+          "calls": 2,
+          "total_ms": 54.2165000224486
+        }
+      }
+    },
+    {
+      "elapsed_ms": 250.42349996510893,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 109.52230001566932
+        },
+        "safe_path_nested": {
+          "calls": 30,
+          "total_ms": 105.10559979593381
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 71.54629996512085
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 42.50819998560473
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 88.60260003712028
+        }
+      }
+    },
+    {
+      "elapsed_ms": 439.5770999835804,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 5,
+          "total_ms": 290.52660008892417
+        },
+        "safe_path_nested": {
+          "calls": 27,
+          "total_ms": 118.34719992475584
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 39.89100008038804
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 43.12190000200644
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 88.72870000777766
+        }
+      }
+    },
+    {
+      "elapsed_ms": 248.21640003938228,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 133.58419999713078
+        },
+        "safe_path_nested": {
+          "calls": 27,
+          "total_ms": 91.75460017286241
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 37.009499908890575
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 38.818900065962225
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 64.235599944368
+        }
+      }
+    },
+    {
+      "elapsed_ms": 271.18320000590757,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 168.39690000051633
+        },
+        "safe_path_nested": {
+          "calls": 27,
+          "total_ms": 80.92200005194172
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 35.014000022783875
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 38.96639990853146
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 52.554699941538274
+        }
+      }
+    },
+    {
+      "elapsed_ms": 297.71339998114854,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 177.48019995633513
+        },
+        "safe_path_nested": {
+          "calls": 27,
+          "total_ms": 89.5738999824971
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 37.830299930647016
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 43.33390004467219
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 58.2126000081189
+        }
+      }
+    },
+    {
+      "elapsed_ms": 281.9907999946736,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 164.5761999534443
+        },
+        "safe_path_nested": {
+          "calls": 27,
+          "total_ms": 92.88180014118552
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 41.026099876035005
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 43.727999960538
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 61.49510003160685
+        }
+      }
+    },
+    {
+      "elapsed_ms": 270.4864999977872,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 154.70390004338697
+        },
+        "safe_path_nested": {
+          "calls": 29,
+          "total_ms": 85.411399777513
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 48.88110008323565
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 42.81660000560805
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 61.10290001379326
+        }
+      }
+    },
+    {
+      "elapsed_ms": 346.2514000129886,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 209.0645999996923
+        },
+        "safe_path_nested": {
+          "calls": 27,
+          "total_ms": 105.86329997749999
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 42.519699956756085
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 45.8688999642618
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 76.58920000540093
+        }
+      }
+    },
+    {
+      "elapsed_ms": 244.98019996099174,
+      "requests": 3,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 4,
+          "total_ms": 147.72389992140234
+        },
+        "safe_path_nested": {
+          "calls": 27,
+          "total_ms": 76.52300008339807
+        },
+        "prepare_including_nested_path": {
+          "calls": 6,
+          "total_ms": 35.576799942646176
+        },
+        "canonical_read": {
+          "calls": 3,
+          "total_ms": 37.21519996179268
+        },
+        "core_read": {
+          "calls": 3,
+          "total_ms": 49.60219998611137
+        }
+      }
+    },
+    {
+      "elapsed_ms": 381.18799997027963,
+      "requests": 4,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 5,
+          "total_ms": 239.97909994795918
+        },
+        "safe_path_nested": {
+          "calls": 36,
+          "total_ms": 108.26099989935756
+        },
+        "prepare_including_nested_path": {
+          "calls": 8,
+          "total_ms": 52.23119998117909
+        },
+        "canonical_read": {
+          "calls": 4,
+          "total_ms": 58.50229994393885
+        },
+        "core_read": {
+          "calls": 4,
+          "total_ms": 67.0238999882713
+        }
+      }
+    },
+    {
+      "elapsed_ms": 367.5986000453122,
+      "requests": 4,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 5,
+          "total_ms": 224.26909999921918
+        },
+        "safe_path_nested": {
+          "calls": 36,
+          "total_ms": 108.1163000781089
+        },
+        "prepare_including_nested_path": {
+          "calls": 8,
+          "total_ms": 56.16069998359308
+        },
+        "canonical_read": {
+          "calls": 4,
+          "total_ms": 60.38129999069497
+        },
+        "core_read": {
+          "calls": 4,
+          "total_ms": 68.03739996394143
+        }
+      }
+    },
+    {
+      "elapsed_ms": 336.1643999814987,
+      "requests": 4,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 5,
+          "total_ms": 190.41819998528808
+        },
+        "safe_path_nested": {
+          "calls": 36,
+          "total_ms": 114.78260008152574
+        },
+        "prepare_including_nested_path": {
+          "calls": 8,
+          "total_ms": 53.495800064411014
+        },
+        "canonical_read": {
+          "calls": 4,
+          "total_ms": 58.35740000475198
+        },
+        "core_read": {
+          "calls": 4,
+          "total_ms": 72.18219997594133
+        }
+      }
+    },
+    {
+      "elapsed_ms": 397.8897999622859,
+      "requests": 4,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 5,
+          "total_ms": 261.28330011852086
+        },
+        "safe_path_nested": {
+          "calls": 36,
+          "total_ms": 107.53340017981827
+        },
+        "prepare_including_nested_path": {
+          "calls": 8,
+          "total_ms": 46.99270008131862
+        },
+        "canonical_read": {
+          "calls": 4,
+          "total_ms": 55.38830003933981
+        },
+        "core_read": {
+          "calls": 4,
+          "total_ms": 67.13299994589761
+        }
+      }
+    },
+    {
+      "elapsed_ms": 349.49329996015877,
+      "requests": 4,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 5,
+          "total_ms": 217.4970000050962
+        },
+        "safe_path_nested": {
+          "calls": 36,
+          "total_ms": 99.05059967422858
+        },
+        "prepare_including_nested_path": {
+          "calls": 8,
+          "total_ms": 46.428299916442484
+        },
+        "canonical_read": {
+          "calls": 4,
+          "total_ms": 49.96269999537617
+        },
+        "core_read": {
+          "calls": 4,
+          "total_ms": 63.43779998132959
+        }
+      }
+    },
+    {
+      "elapsed_ms": 369.79530000826344,
+      "requests": 4,
+      "faults": [],
+      "phases": {
+        "durable_persist": {
+          "calls": 5,
+          "total_ms": 224.28300004685298
+        },
+        "safe_path_nested": {
+          "calls": 36,
+          "total_ms": 113.31289994996041
+        },
+        "prepare_including_nested_path": {
+          "calls": 8,
+          "total_ms": 51.82929983129725
+        },
+        "canonical_read": {
+          "calls": 4,
+          "total_ms": 56.43580004107207
+        },
+        "core_read": {
+          "calls": 4,
+          "total_ms": 73.37190001271665
+        }
+      }
+    }
+  ],
+  "note": "Nested timings overlap; do not sum nested safe_path/prepare into reads. One run, not a tail-latency guarantee."
+}

@@ -1278,3 +1278,22 @@ Scheduler foi injetado; nenhum serviço real, provedor ou credencial foi usado.
 SVC-T19 continua IN_PROGRESS, e a política do Core permanece intacta.
 
 Evidência: `plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json`.
+
+## 2026-11-14 — orçamento completo do observador qualificado offline
+
+O novo candidato passou em 49 casos finais. Preparação de esquema (250 ms) e
+observação (100 ms, incluindo caminho e rollback, descontando a preparação
+medida separadamente) participam do orçamento agregado de 600 ms por ciclo.
+Uma chamada com efeito exige observação concluída com freshness de 1 s e mantém
+o prazo de 120 s. Uso conhecido e falhas bloqueiam efeitos antes de gravar o
+checkpoint; nenhum ciclo interrompido renova freshness. O primeiro setup,
+fechamento com erro, uso tardio e prazo cruzado durante a gravação têm testes.
+
+Esses limites verificam aceitação; não preemptam uma chamada lenta do Windows.
+As falhas intermediárias de 1,204 s e compartilhamento de arquivo permanecem
+retidas. Não foi introduzido retry, deduplicação de streams nem alteração da
+persistência. A composição v11 ainda precisa verificar os próprios arquivos,
+cinco novas reservas e onze cumulativas. Nenhum status de aceite foi promovido
+e nenhum serviço ou provedor foi acionado neste marco.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-observer-budget/root-review.json`.

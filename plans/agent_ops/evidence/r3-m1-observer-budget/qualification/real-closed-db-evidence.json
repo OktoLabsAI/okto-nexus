@@ -1,0 +1,32 @@
+{
+  "source_db_sha256": "a1e7b0afee7aee41c00917ed5fa302b502324d70bc45c3e37e3220b9d2276a8b",
+  "schema_preparation": {
+    "closed": false,
+    "failed": false,
+    "open_connections": 1,
+    "close_error_types": [],
+    "schema_changes": [],
+    "read_budget_ms": 100.0,
+    "initialization_budget_ms": 250.0,
+    "initializations": [
+      {
+        "file_name": "nexus.db",
+        "elapsed_ms": 47.083000012207776,
+        "budget_ms": 250.0,
+        "status": "PREPARED"
+      }
+    ]
+  },
+  "warm_read_ms": [
+    16.10510004684329,
+    13.423600001260638,
+    11.042900034226477,
+    12.105400033760816,
+    10.134900046978146,
+    9.970600018277764,
+    9.957399975974113,
+    9.664100012741983
+  ],
+  "same_connection": true,
+  "fresh_transaction_each_read": true
+}

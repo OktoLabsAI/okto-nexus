@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="39" time="59.754" timestamp="2026-11-14T10:17:18.127640-03:00" hostname="Alienware_m15"><testcase classname="test_cached_readonly" name="test_real_closed_v10_full_schema_prepares_once_and_stays_readonly" time="0.648" /><testcase classname="test_cached_readonly" name="test_fresh_wal_snapshot_and_no_read_lock_between_polls" time="0.118" /><testcase classname="test_cached_readonly" name="test_none_and_error_paths_always_release_transaction" time="0.093" /><testcase classname="test_cached_readonly" name="test_unrelated_schema_evolution_is_observed_with_same_connection" time="0.108" /><testcase classname="test_cached_readonly" name="test_file_identity_drift_is_refused_and_cache_closed" time="0.104" /><testcase classname="test_cached_readonly" name="test_path_junction_revalidation_fails_closed" time="0.075" /><testcase classname="test_cached_readonly" name="test_warmed_query_still_interrupts_at40ms_and_never_retries" time="0.081" /><testcase classname="test_cached_readonly" name="test_initialization_budget_is_separate_explicit_and_fails_closed" time="0.093" /><testcase classname="test_cached_readonly" name="test_closed_or_other_owner_cannot_reuse_connections" time="0.071" /><testcase classname="test_cached_readonly" name="test_core_journal_can_initialize_after_reservation_and_controller_closes_all" time="0.833" /><testcase classname="test_cached_readonly" name="test_core_partial_schema_then_legitimate_ddl_and_required_schema_drop" time="0.419" /><testcase classname="test_independent" name="test_actual_core_journal_accounts_while_http_worker_is_blocked" time="1.266" /><testcase classname="test_independent" name="test_threshold_and_late_post_fence_share_one_normal_stop" time="1.778" /><testcase classname="test_independent" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="7.133" /><testcase classname="test_independent" name="test_terminal_preopen_failure_preserves_reservation_no_usage_inference" time="0.515"><failure message="PermissionError: [WinError 5] Acesso negado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-v2-bvlu12cs\\qualification\\first-tmp\\test_terminal_preopen_failure_0\\controller.json.pending' -&gt; 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-v2-bvlu12cs\\qualification\\first-tmp\\test_terminal_preopen_failure_0\\controller.json'">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-v2-bvlu12cs/qualification/first-tmp/test_terminal_preopen_failure_0')
+
+    def test_terminal_preopen_failure_preserves_reservation_no_usage_inference(tmp_path):
+        home=tmp_path/'nexus-home';home.mkdir();fixture=CanonicalFixture(home);control=create_control(tmp_path)
+        flow,reader,stops=attach(control,fixture,tmp_path,home)
+        try:
+&gt;           control.start_work('one','local','synthetic',binding=flow.selected,checkpoint={});consume(control)
+                                                                                              ^^^^^^^^^^^^^^^^
+
+test_independent.py:231: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_independent.py:160: in consume
+    control.poll();time.sleep(.01)
+    ^^^^^^^^^^^^^^
+independent_controller.py:222: in poll
+    result=self._poll_body()
+           ^^^^^^^^^^^^^^^^^
+independent_controller.py:326: in _poll_body
+    self.persist()
+independent_controller.py:42: in persist
+    return super().persist(accounting)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;independent_controller.Controller object at 0x000001EF86A72D70&gt;
+accounting = None
+
+    def persist(self, accounting=None):
+        if self._lock is None: raise Refused('CONTROLLER_NOT_OWNED')
+        if self.path.read_bytes() != self.raw:
+            raise Refused('CONTROLLER_CHANGED')
+        if accounting is not None:
+            self.data['collector'] = tokens.checkpoint(accounting)
+        previous = json.loads(self.raw)
+        if (digest(self.data.get('policy')) != digest(POLICY)
+                or digest(self.data.get('ancestry')) != digest(ANCESTRY)
+                or self.data.get('root') != str(self.root)
+                or not set(previous['requests']).issubset(self.data['requests'])
+                or not set(previous['faults']).issubset(self.data['faults'])
+                or (previous['authorization_sha256'] is not None
+                    and self.data['authorization_sha256'] != previous['authorization_sha256'])
+                or (previous['proposal_sha256'] is not None
+                    and self.data['proposal_sha256'] != previous['proposal_sha256'])
+                or tokens.summary(self.accounting)['known_observed_tokens'] &lt;
+                    tokens.summary(tokens.restore(previous['collector']))['known_observed_tokens']):
+            raise Refused('CONTROLLER_REGRESSION')
+        for key, request in previous['requests'].items():
+            current = self.data['requests'][key]
+            if (current['kind'] != request['kind'] or current['lane'] != request['lane']
+                    or (request['kind'] == 'setup'
+                        and current['monitor']['high_water'] &lt; request['monitor']['high_water'])):
+                raise Refused('CONTROLLER_REGRESSION')
+        self.data['state_sha256'] = seal(self.data)
+        self._validate()
+        raw = (json.dumps(self.data, sort_keys=True, indent=2)+'\n').encode()
+        pending = self.path.with_name(self.path.name+'.pending')
+        with pending.open('xb') as stream:
+            stream.write(raw); stream.flush(); os.fsync(stream.fileno())
+&gt;       os.replace(pending, self.path)
+E       PermissionError: [WinError 5] Acesso negado: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-v2-bvlu12cs\\qualification\\first-tmp\\test_terminal_preopen_failure_0\\controller.json.pending' -&gt; 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v11-reader-v2-bvlu12cs\\qualification\\first-tmp\\test_terminal_preopen_failure_0\\controller.json'
+
+legacy_controller.py:159: PermissionError</failure></testcase><testcase classname="test_independent" name="test_journal_privacy_scope_and_real_layout[local]" time="0.203" /><testcase classname="test_independent" name="test_journal_privacy_scope_and_real_layout[connector]" time="0.169" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[gap]" time="0.170" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[epoch]" time="0.248" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[watermark]" time="0.229" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[body_scope]" time="0.183" /><testcase classname="test_independent" name="test_corrupted_or_rolled_back_journal_fails_closed[counter_type]" time="0.172" /><testcase classname="test_independent" name="test_missing_journal_may_arrive_late_but_disappearance_is_not_fresh_start" time="0.221" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[intent]" time="0.166" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[scope]" time="0.141" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[rollback]" time="0.120" /><testcase classname="test_independent" name="test_canonical_intent_drift_never_binds_other_work[session]" time="0.215" /><testcase classname="test_independent" name="test_one_global_ledger_across_setup_local_continuation_reopen_remote_setup_and_work" time="10.845" /><testcase classname="test_independent" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.764" /><testcase classname="test_independent" name="test_fresh_worker_validation_failure_never_posts" time="0.627" /><testcase classname="test_independent" name="test_usage_counter_regression_latches_fault_without_reset" time="1.239" /><testcase classname="test_independent" name="test_api_queue_and_cross_thread_controller_writes_are_refused" time="0.262" /><testcase classname="test_independent" name="test_present_canonical_and_core_epoch_mismatch_blocks_usage" time="1.079" /><testcase classname="test_independent" name="test_drain_accounts_late_usage_after_stop_wrapper_return_while_http_pending" time="2.128" /><testcase classname="test_independent" name="test_historical_attachment_revalidates_owner_and_accounts_late_tokens" time="1.496" /><testcase classname="test_work_wrapper" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="15.037"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v11-reader-v2-bvlu12cs/qualification/first-tmp/test_whole_work_wrapper_local_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001EF86C0E0B0&gt;
+
+    def test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation(tmp_path,monkeypatch):
+        context=Context(tmp_path)
+        module=types.ModuleType('campaign_context')
+        module.load=lambda:context
+        def require(value,reason):
+            if not value:raise AssertionError(reason)
+        module.require=require
+        monkeypatch.setitem(sys.modules,'campaign_context',module)
+        supervisor=types.ModuleType('supervisor_check');supervisor.require_work_owner=lambda selected:None
+        monkeypatch.setitem(sys.modules,'supervisor_check',supervisor)
+        import okto_nexus.adapters.inbound.cli.work as product_work
+        import okto_nexus.adapters.inbound.cli.terminal_target as target
+        def service(args,name,operator,resolver):
+            lane='local' if name=='m1v10-local' else 'connector'
+            home=Path(context.P['paths']['server_home' if lane=='local' else 'operator_home'])
+            return types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane=lane)
+        monkeypatch.setattr(target,'resolve_terminal_target',service)
+        monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,selected.adapter.home,selected.lane))
+        results=[]
+        try:
+            for lane,phase in [('local','useful'),('local','continuation'),('connector','useful'),('connector','continuation')]:
+                context.remaining=[lane,phase]
+                runpy.run_path(str(Path(__file__).parent.parent/'m1_v10_work.py'),run_name='__main__')
+                profile=context.P['execution_bundle']['profiles'][lane]
+                suffix='01' if phase=='useful' else '02'
+                value=json.loads((tmp_path/'public'/(profile+'-work-'+suffix+'-result.json')).read_text())
+&gt;               assert value['record']['settled'] and value['canonical_receipt']['executor_stage']=='SUCCEEDED'
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               TypeError: 'NoneType' object is not subscriptable
+
+test_work_wrapper.py:132: TypeError</failure></testcase><testcase classname="test_work_wrapper" name="test_cadence_miss_fences_once_then_drains_late_usage_before_public_result" time="3.410" /><testcase classname="test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[snapshot_read]" time="0.996" /><testcase classname="test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[schema_initialization]" time="0.882" /></testsuite></testsuites>
