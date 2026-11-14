@@ -1,0 +1,86 @@
+{
+  "status": "FOCUSED_DELTA_PASS_OFFLINE",
+  "unique_delta_tests": 12,
+  "runs": [
+    {
+      "tool": "bf6621",
+      "cases": 12,
+      "failures": 0,
+      "elapsed_seconds": 4.314
+    }
+  ],
+  "prior_call_output_unavailable_after_compaction": true,
+  "test_command": "W16/package/venv/Scripts/python.exe -I -B -X utf8 W17/test_revision17_delta.py with the twelve selected test names in test-selection.json",
+  "unchanged_three_test_methods_not_rerun": [
+    "test_readiness5_reaches_real_cli_parser_and_handler_once",
+    "test_actual_wrapper_input_pin_refuses_changed_or_oversized_source",
+    "test_actual_cli_positive_failure_does_not_retry_or_enter_handler"
+  ],
+  "ruff_F": {
+    "tool": "cb8465",
+    "result": "PASS",
+    "scope": "four changed modules and delta test"
+  },
+  "additional_checks": [
+    {
+      "tool": "80902b",
+      "result": "W16 Python has no Ruff module; no installation performed"
+    },
+    {
+      "tool": "2f03bc",
+      "result": "one inherited F401 import okto_nexus in local_work.py; confirmed identical import in W16 and preserved"
+    }
+  ],
+  "in_memory_compile_files": 17,
+  "line_endings": "LF",
+  "own_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "runtime_source": "W17 modules imported from script directory; W16 installed dependencies reused unchanged.",
+  "changed_runtime_files": [
+    "modules/api_worker.py",
+    "modules/fresh_work_controller.py",
+    "modules/legacy_controller.py",
+    "modules/token_collector.py",
+    "local_work.py"
+  ],
+  "unchanged_runtime_files": 11,
+  "live_service_provider_actions": 0,
+  "model_dispatches": 0,
+  "actual_journal_access": "Read-only five exact closed historical records through existing bounded readers; synthetic API queue and temporary controller fixtures only.",
+  "authority": "Actual original receipt14 compared against its exact original ancestral policy/ancestry plus amendment17 binding. No invented human approval or changed historical receipt.",
+  "scope": "New local15/16 executable; remote17/18 held. Five historical plus two local = seven, within eight-record envelope; remote unlock requires separate nine-record qualification.",
+  "bounds": {
+    "snapshot": 1,
+    "initialization": 2,
+    "persistence_margin": 1,
+    "poll": 19,
+    "freshness": 20,
+    "cadence": 24,
+    "maximum_observed_records": 8,
+    "target_start": 0.2,
+    "deadline": 600,
+    "preventive": 600000,
+    "tolerance": 700000
+  },
+  "predecessor_accounting": {
+    "observed_tokens": 460793,
+    "charged_reservations": 14,
+    "refunded": false,
+    "historical_records": 5,
+    "original_settled_flags_preserved": true,
+    "request14_stage": "SUCCEEDED",
+    "request14_useful_result": false,
+    "request14_cursor": 78,
+    "control_completion_not_inferred": true
+  },
+  "threshold_migration": "Only explicitly pinned historical checkpoint may restore expected_stop_at=500000; active restore defaults to 600000 and rejects old threshold. POLICY, collector and EffectFence agree.",
+  "acceptance": "Technical operational envelope; not R3 criterion or billed-token guarantee. No new M1 acceptance.",
+  "selected_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-technical-plan-pito7b7o\\execution-plan.json",
+    "sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31",
+    "bytes": 13439
+  },
+  "reviews": {
+    "root": "421420 five-source delta PASS",
+    "independent_peer": "finish_reader_cache read-only final PASS; five histories, actual ancestry, 600k thresholds, local/remote envelope"
+  }
+}

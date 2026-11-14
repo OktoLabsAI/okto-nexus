@@ -1,0 +1,53 @@
+{
+  "status": "CLOSED_REVISION16_CANONICAL_SUCCESS_USEFUL_FALSE",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16",
+  "files": {
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\controller.json",
+      "sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision16-execution\\closure-companion.json",
+      "sha256": "68df967826cd90436983678548664df1f0b384a2b78af8d22b6fa6acc6431c8b"
+    },
+    "accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+      "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+    },
+    "freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-freeze.json",
+      "sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94"
+    },
+    "amendment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\amendment.json",
+      "sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\final-presence.json",
+      "sha256": "fdef82789d6c5e83ed3122cf35db72d7210331b110260beccf586f17b3b57f28"
+    },
+    "closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\closure.json",
+      "sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9"
+    },
+    "physical_exit": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\nexus-exit-proof.json",
+      "sha256": "209145dbb898d36433fc0ce219ec9faa96f697ec92b67be0bd7bfffa4854290b"
+    },
+    "cleanup_proof": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\cleanup-nexus.json",
+      "sha256": "01404fdacc20dff428ea2439b220f4ba05db11c34013ab1bfc28df13461ea073"
+    },
+    "uninstall": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\lifecycle-nexus-uninstall-result.json",
+      "sha256": "6a701b83669baf457427c6caa403fbf9fdba72b2634087db35a3a55641462d65"
+    }
+  },
+  "old_conditional15_selected": false,
+  "old_conditional15_eligible": false,
+  "refund": false,
+  "productive_turn_stage": "SUCCEEDED",
+  "useful_result_confirmed": false,
+  "native_decision_receipt_stage_historical_snapshot": "SUBMITTED",
+  "receipt_completion_asserted": false
+}

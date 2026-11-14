@@ -1,0 +1,115 @@
+{
+  "status": "OFFLINE_REVISION17_QUALIFIED_NOT_EXECUTED",
+  "amendment_sha256": "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+  "selected_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-technical-plan-pito7b7o\\execution-plan.json",
+    "sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31"
+  },
+  "installation_reused": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+    "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+  },
+  "package_qualification_reused": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\qualification.json",
+    "sha256": "83c652061060cee6940c5cb79ec2361c9eed94eb40e8e600531afda30d93fab6"
+  },
+  "package_freeze_reused": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-freeze.json",
+    "sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94"
+  },
+  "canonical_probe60_reused": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\probe-qualification.json",
+    "sha256": "ac2d6291ce921b121c8d27a4d569cf7f5fbf2f537163d32951e858219a2a71d1"
+  },
+  "installed_native50_reused": {
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\installed-native.xml",
+      "sha256": "765940aaaa18956c1bf15df51b68b1874705477428250188cb9df32f3c0a2714"
+    },
+    "passed": 50,
+    "elapsed_seconds": 186.63,
+    "executed_in_revision17": false
+  },
+  "connector_provenance": "Actual pip ZIP e1d1046d7bddfbaa116669e937430770ac1876278f192923614dc855d68e36aa remains recorded. Retained ZIP f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4 has 132 equal ZIP entries; 131 installed payloads exclude RECORD. No reinstall or origin rewrite.",
+  "composition_delta": {
+    "passed": 10,
+    "tool": "9c7076",
+    "elapsed_seconds": 13.35,
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\checks\\composition.xml",
+      "sha256": "243a15f5c25bb9a20d0887dfdaad380a82b5ce004cf6f0fdf4896986e9d2aa16"
+    },
+    "runner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\checks\\run_composition.py",
+      "sha256": "fecd92b95cd9777087a2f04514af7123a294efe6710d1db48c29d71fc40e42a2"
+    },
+    "tests": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\checks\\test_composition.py",
+      "sha256": "8fa4be9f501a8a84fb6632914e7ed8d3e07e37add84706a2bc4c38bf0b90d9db"
+    },
+    "scope": "Current facade/prompt/prefix, five historical records and honest closure, no upgrade/remote selection, expiry boundary, available-one-action vs expired review, receipt uncertainty, disposable real PowerShell RTK/Python quoting."
+  },
+  "quote_fixture": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\checks\\quote-qualification.json",
+    "sha256": "ba8e9e8dc7520338818a9111098bd712f3d4278c2ced2dcc12f5d3654de364e6"
+  },
+  "composed_gate": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\gate-qualification.json",
+    "sha256": "45398f7b1692b68f5be9e530147e105eabb612dbffccdae73cf64d5688b5eae9"
+  },
+  "controller_delta": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\controller-qualification\\qualification.json",
+    "sha256": "89ddbd0c0f4d3d0cbcb007f04fb651a79e9fba727b01a6e3573b428560744327"
+  },
+  "controller_runtime_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\controller-qualification\\runtime-freeze.json",
+    "sha256": "3a5210602088af8419fde448afad8a2fc1dcd7bb8605627513f54eae39cffd76"
+  },
+  "counts_separate": {
+    "controller_delta": 12,
+    "composition_delta": 10,
+    "prior_installed_reused": 50,
+    "new_installed_suite_runs": 0
+  },
+  "runtime_sources_parsed": 27,
+  "root_review": {
+    "context_lifecycle_grant_close": "65139f+c5a33b PASS",
+    "controller": "421420 PASS; finish_reader_cache peer PASS"
+  },
+  "policy": {
+    "revision": 17,
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 18,
+    "preventive_cumulative_tokens": 600000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "observation_bounds": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "poll_seconds": 19,
+    "freshness_seconds": 20,
+    "cadence_seconds": 24,
+    "target_start_seconds": 0.2,
+    "max_observed_requests": 8
+  },
+  "prompt_exact_selected_plan": true,
+  "service_context_reused": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json",
+    "sha256": "c28a8d687a9415ac65f750586d18270754031edb9ea5ba094b1c65c554f38484"
+  },
+  "new_builds": 0,
+  "new_venvs": 0,
+  "pip_runs": 0,
+  "probe_runs": 0,
+  "services_started": 0,
+  "provider_calls": 0,
+  "migration_actions": 0,
+  "grant_changes": 0,
+  "new_model_reservations": 0,
+  "acceptance_promoted": false,
+  "remote_execution_enabled": false,
+  "scope": "Technical finite local15/16 only; old useful14 SUCCEEDED but useful/report false. All uncertainty and original artifacts retained; no receipt completion synthesized."
+}

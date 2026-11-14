@@ -1,0 +1,286 @@
+{
+  "amendment_sha256": "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+  "steps": [
+    {
+      "label": "prepare",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "prepare"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "install",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "lifecycle",
+        "nexus",
+        "install"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "start",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "lifecycle",
+        "nexus",
+        "start"
+      ],
+      "background_retained_observer": false,
+      "conditional": false,
+      "not_before_utc": "2026-11-14T23:27:07.998684Z"
+    },
+    {
+      "label": "watch",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "observation",
+        "nexus",
+        "watch"
+      ],
+      "background_retained_observer": true,
+      "conditional": false
+    },
+    {
+      "label": "authorization-review",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "authorize_local",
+        "review"
+      ],
+      "background_retained_observer": false,
+      "conditional": false,
+      "not_before_utc": "2026-11-14T23:27:07.998684Z"
+    },
+    {
+      "label": "authorization-apply",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "authorize_local",
+        "apply"
+      ],
+      "background_retained_observer": false,
+      "conditional": "Only expired-grant canonical review plus exact root technical selection; never replace available grant."
+    },
+    {
+      "label": "useful15",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "work",
+        "local",
+        "useful"
+      ],
+      "background_retained_observer": false,
+      "conditional": "Only exact fresh canonical expired-grant review and selected issuance confirmed; no available old grant, no model replay."
+    },
+    {
+      "label": "continuation16",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "work",
+        "local",
+        "continuation"
+      ],
+      "background_retained_observer": false,
+      "conditional": "Only useful15 is canonical SUCCEEDED, settled, useful/report confirmed and same session; old continuation15 is ineligible."
+    },
+    {
+      "label": "normal-stop",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "lifecycle",
+        "nexus",
+        "stop"
+      ],
+      "background_retained_observer": false,
+      "conditional": true
+    },
+    {
+      "label": "cleanup-proof",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "cleanup",
+        "nexus"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "uninstall",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\invoke_request.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "lifecycle",
+        "nexus",
+        "uninstall"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "final-presence",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "final_presence"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    },
+    {
+      "label": "closure",
+      "argv": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-I",
+        "-B",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\request_entry.py",
+        "--amendment",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\amendment.json",
+        "--expected-amendment-sha256",
+        "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+        "close"
+      ],
+      "background_retained_observer": false,
+      "conditional": false
+    }
+  ],
+  "shell": false,
+  "scope": "Root executes serial selections; watcher runs concurrently. Commands are not executed by this artifact.",
+  "remote_selectors_enabled": false,
+  "normal_fault_containment": {
+    "selected_only_on_faulted_admitted_native_turn": true,
+    "force_authorized": false,
+    "trigger": "Normal stop45 remains draining with exact active native turn",
+    "required_fresh_scope": [
+      "owner generation and all three process births/cycle",
+      "canonical session and productive operation",
+      "native turn and pending request metadata"
+    ],
+    "allowed_action": "One canonical intents:resolve plus one operations admission for turn.interrupt, using a fresh unique cleanup client intent and durable one-shot ledger; no native approve/deny replay, no new provider turn.",
+    "sequence": "Root reviews concrete current identities/argv, selects normal interrupt, observes target terminal and usage, then canonical runtime.close (TerminalWork action close) only if necessary and normal stop separately; retain physical cohort and native inactivity proofs.",
+    "reference_manifest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\manifest.json",
+      "sha256": "65b815ac2520041d539396403dbb5dcbc3ae6203ad1d6ef60d70add86d63618f"
+    },
+    "reference_is_not_reexecutable_authority": true,
+    "completion_receipt_not_inferred_from_target_exit": true
+  },
+  "native_decision_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17\\private\\native-decision.json",
+  "technical_selections": {
+    "grant_apply": "private/authorize-local-reviewed.json binds exact canonical expired review SHA/revision; technical root selection under standing authority."
+  },
+  "package_reused_unchanged": true,
+  "migration_actions": 0,
+  "grant_review_semantics": "Clock gate permits observation only; canonical available remains blocked, never inferred expired. Exact selected CAS recover/issue once only after expired review."
+}

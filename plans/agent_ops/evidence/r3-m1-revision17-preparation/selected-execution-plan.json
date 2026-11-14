@@ -1,0 +1,221 @@
+{
+  "status": "TECHNICAL_PLAN_ONLY_ROOT_REVIEW_REQUIRED",
+  "revision": 17,
+  "scope": "Finite continuation of standing M1 objective; no runtime, grant, model or service effects performed by this plan.",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "proposed_work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17",
+  "authority": {
+    "standing_execution_authorized": true,
+    "new_user_hash_approval_claimed": false,
+    "codex_total_tokens": 700000,
+    "claude_sonnet_separate_tokens": 200000,
+    "claude_selected": false,
+    "force_authorized": false,
+    "automatic_native_decisions": false,
+    "explicit_root_revisions": [
+      "Technical cumulative allocation17 to18, no refunds.",
+      "Preventive threshold500000 to600000; total700000 unchanged,100000 observation margin."
+    ]
+  },
+  "basis": {
+    "closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\closure.json",
+      "sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9"
+    },
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\controller.json",
+      "sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712"
+    },
+    "closure_companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision16-execution\\closure-companion.json",
+      "sha256": "68df967826cd90436983678548664df1f0b384a2b78af8d22b6fa6acc6431c8b"
+    },
+    "accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+      "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\final-presence.json",
+      "sha256": "fdef82789d6c5e83ed3122cf35db72d7210331b110260beccf586f17b3b57f28"
+    },
+    "terminal_work_checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json",
+      "sha256": "cadfc7bdc6aaaa4a16d385942749cc673f7e24b17332a8642037859267356c21"
+    },
+    "predecessor_amendment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\amendment.json",
+      "sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca"
+    },
+    "command_failure_diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-useful-diagnosis-3tis1ae5\\projection.json",
+      "sha256": "96644c917326bb6461cce875fdd2fa97c742c04414e5f268c27ef7b6efaf3e89"
+    },
+    "path_diagnosis": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-rtk-path-udc_bg1y\\projection.json",
+      "sha256": "a80ba1fd2eb71976faaf1dc9413ebc277e73f19625894c2c72ca2530ff8fe948"
+    }
+  },
+  "package": {
+    "reuse_unchanged": true,
+    "installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+      "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+    },
+    "runtime_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-freeze.json",
+      "sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94"
+    },
+    "nexus_source_commit": "b90e68242a56e4b990565859bf0c0e7107ec185d",
+    "new_builds": 0,
+    "repeat_native_50_tests": false,
+    "new_venv": false
+  },
+  "policy": {
+    "revision": 17,
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 18,
+    "preventive_cumulative_tokens": 600000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "headroom": {
+    "to_preventive": 139207,
+    "to_user_total": 239207,
+    "completion_of_two_or_four_turns_guaranteed": false,
+    "hard_billing_fence_claimed": false
+  },
+  "request_ids": {
+    "local_useful": "m1v17-local-useful-15",
+    "local_continuation": "m1v17-local-continuation-16",
+    "remote_useful": "m1v17-remote-useful-17",
+    "remote_continuation": "m1v17-remote-continuation-18"
+  },
+  "selection": {
+    "local_model_requests_at_most": 2,
+    "remote_execution_enabled": false,
+    "continuation": "Requires the new useful request SUCCEEDED, settled, report present and correctly verified; same new session and current canonical authority.",
+    "remote_unlock": "Only after complete local pass, observed token-headroom review and separate qualified remote preparation. No remote selector executable now.",
+    "old_conditional_request": "m1v16-local-continuation-15 remains never selected and ineligible because useful_result_confirmed was false. Never reuse/replay."
+  },
+  "preserved_history": {
+    "records": [
+      "m1v14-local-work-01",
+      "m1v14-local-work-11",
+      "m1v14-local-work-12",
+      "m1v15-local-useful-13",
+      "m1v16-local-useful-14"
+    ],
+    "latest_canonical_stage": "SUCCEEDED",
+    "latest_useful_result_confirmed": false,
+    "report_present": false,
+    "latest_settled": true,
+    "latest_cursor": 78,
+    "latest_watermark": 78,
+    "session_state": "CLOSED",
+    "lease_state": "CLOSED",
+    "refunds": 0,
+    "rule": "Preserve all original checkpoints, faults, controls and receipts; retain exact terminal stages per record (newest SUCCEEDED is not useful success). Empty new collector plus carry460793/14; reobserve five histories, including request11 no-stream proof. Never invent final decision/control receipts."
+  },
+  "observation_envelope": {
+    "maximum_records": 8,
+    "actual_local_maximum": 7,
+    "retained": 5,
+    "local_new_maximum": 2,
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "persistence_margin_seconds": 1,
+    "target_start_seconds": 0.2,
+    "poll_seconds": 19,
+    "freshness_seconds": 20,
+    "cadence_seconds": 24,
+    "remote_future_requirement": "All four new requests would total9 observed records: explicitly requalify envelope9 (poll21/fresh22/cadence26) before remote unlock; no silent expansion.",
+    "classification": "Operational harness choice, not new R3 criterion or SLA."
+  },
+  "prompt_revision": {
+    "original_request_sha256": "e143ad464ec428302a292a53ff20797479edd84d41a0970d4d7c6fb4d7e5edff",
+    "request": "Read only <project>/numbers.csv. Calculate its data row count, sum and SHA-256. Write exactly one JSON object with keys row_count, sum and input_sha256 to <lane_deliverables>/report.json. The deliverables directory is a precreated disposable sibling outside this project writable root but inside the campaign Temp root. Do not change permissions, sandbox, writable roots or global policy to perform this task. If the actual native policy requires a command permission, request it through the native mechanism and wait for the human decision. Do not read or write other paths, use the network, install tools, spawn subagents or retry a denied command with another method. Use one noninteractive Python process through the explicitly selected absolute RTK and Python executables: & 'C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe' proxy 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe' -c '<single-line Python code computed by the model>' to read the CSV, compute the values and hash, and write the JSON. Avoid nested PowerShell shells or shell-expanded variables. Compute the result yourself from the file; do not assume supplied expected values. The placeholder denotes code you must write, not literal text to execute. Use a single-line Python argument and direct PowerShell invocation; do not nest another PowerShell process or use shell-expanded variables. The two named executables are approved execution dependencies, not additional data inputs; all data reads and writes remain limited to the CSV and report specified above. Do not discover or substitute another tool from PATH.",
+    "continuation": "Using only the existing canonical result, state the reported sum once. Do not run another command or write another file.",
+    "rtk_binary": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe",
+      "sha256": "941654cc74ced3e773fa0cef43b044a4717c6884a429bfb14db50093defa38fb"
+    },
+    "python_binary": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+      "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+    },
+    "installation_binding": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+      "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+    },
+    "data_input": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv",
+      "sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b"
+    },
+    "existing_project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "existing_deliverables": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\local",
+    "expected_output_not_supplied": true,
+    "real_report_not_preexecuted": true,
+    "personal_config_or_path_change": false,
+    "future_offline_quote_test": "Only in a disposable isolated fixture with equivalent quoting and synthetic CSV. Never generate the campaign report or supply computed answers to the model."
+  },
+  "grant_plan": {
+    "observed_available_actions_remaining": 1,
+    "old_expiry_utc": "2026-11-14T23:27:07.998684Z",
+    "do_not_start_or_review_before_expiry": true,
+    "minutes": 60,
+    "new_grant_action_cap": 3,
+    "local_model_request_cap": 2,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ],
+    "canonical_constraints": [
+      "available grant with1 action blocks issue; insufficient-for-two is not expired/exhausted.",
+      "New grant does not migrate an existing session. Do not spend the last action then assume same-session continuation can use a replacement.",
+      "After natural expiry, obtain canonical review showing no available matching grant/can_issue true; root selects exact CAS request before recover/issue once.",
+      "Preserve all historical grants and consumed actions. No revoke, manual reset, forced exhaustion or setup:test.",
+      "Review/report insufficient balance distinctly, without substituting canonical state. If unexpectedly available, remain observation-only and require a later explicit canonical review; no POST replay."
+    ],
+    "minimum_helper_delta": "Refresh pinned grant history/current counts; retain existing balance>=2 and requestcap3. Recognize insufficient available balance as a reported blocked selection, never bypass can_issue; planned path waits for expiry and reuses canonical review/recover/issue.",
+    "source_references": [
+      "src/okto_nexus/application/connection_authorization.py:92",
+      "src/okto_nexus/application/connection_authorization.py:113",
+      "src/okto_nexus/application/connection_authorization.py:140"
+    ],
+    "renewal_executed": false
+  },
+  "unchanged": {
+    "profile": "m1v12-local",
+    "model_and_provider_configuration": true,
+    "homes_and_project": true,
+    "native_approval_review": true,
+    "readiness_timeout_seconds": 5,
+    "start_timeout_seconds": 45,
+    "passive_start_observation_seconds": 180,
+    "normal_cleanup_physical_cohort_required": true,
+    "setup_test_selected": false
+  },
+  "minimal_implementation_if_root_approves": [
+    "Reuse W16 package without installation mutation/build/50-test repetition; bind actual existing executable/payload pins.",
+    "New work namespace and controller policy17/carry14/max18/600000 preventive. Update collector/fence thresholds consistently; retain700000 and600s.",
+    "Flatten5 histories and compare exact expected terminal stage for each; preserve request11 no-stream and all receipts.",
+    "Replace only prompt execution-dependency references with pinned absolute RTK/Python and qualify isolated quoting; preserve task/result checks.",
+    "Rebind context/ancestry/IDs and grant history; local selectors only. Focused delta checks for history/carry/thresholds/receipt origin, grant insufficient/expired behavior, paths and fixture quoting. Freeze/root review before effects."
+  ],
+  "DX43": "Demonstrate reviewed instructions/model/tools/limits pertinent to this finite task; no universal inventory/hash/precedence requirement invented. Unobserved personal references stay unknown.",
+  "effects_performed": {
+    "repo_edits": 0,
+    "runtimes_created": 0,
+    "builds": 0,
+    "services": 0,
+    "model_requests": 0,
+    "grant_changes": 0,
+    "credential_access": 0
+  }
+}

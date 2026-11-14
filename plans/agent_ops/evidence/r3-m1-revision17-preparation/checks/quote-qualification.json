@@ -1,0 +1,22 @@
+{
+  "status": "DISPOSABLE_POWERSHELL_ABSOLUTE_RTK_PYTHON_QUOTE_PASS",
+  "fixture_only": true,
+  "campaign_input_read": false,
+  "campaign_report_generated": false,
+  "provider_calls": 0,
+  "rtk": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe",
+    "sha256": "941654cc74ced3e773fa0cef43b044a4717c6884a429bfb14db50093defa38fb"
+  },
+  "python": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+    "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+  },
+  "invocation_form": "PowerShell direct &: pinned RTK proxy pinned Python -c single-line argument; no nested PowerShell or PATH lookup",
+  "returncode": 0,
+  "synthetic_source_sha256": "e2d9919d4d99f8cb6ab9ac06091e375694168d7b1c3d741157f418508bd6aeb4",
+  "synthetic_report_sha256": "e64ddb0f58895d8f309957fecce06e90681413e1fb1b090afc42a7d41d367772",
+  "script_sha256": "1666444264a67601f001142966676b2817d47b0029fb3dc60899f216e96f08af",
+  "script_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\pytest-of-jpamb\\pytest-10904\\test_selected_absolute_rtk_pyt0\\invoke-fixture.ps1",
+  "elapsed_limit_seconds": 30
+}

@@ -1,0 +1,72 @@
+{
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEWED_NOT_EXECUTED",
+  "retained_files": 50,
+  "all_source_copy_hashes_verified": true,
+  "high_specificity_secret_scan_matches": [],
+  "amendment_sha256": "352ac935fb968c96178d364e5c3c1a13a2329844eee3cbc8a1180450f9a6cc32",
+  "freeze_sha256": "5dba520a68d87cf71dd9135b0d73dba0e6b1283515ff96246369f3e558cfb9c4",
+  "workflow_sha256": "cad3c56beae52c8274040a60739af32432990cf8c2249828891fa4e102b9dcb7",
+  "selected_plan_sha256": "110c33923c99bbd0a2acd1f65ad042bb5e81fe790d11e629093aa8106b643f31",
+  "qualification": {
+    "composition_passed": 10,
+    "composition_tool": "9c7076",
+    "composition_seconds": 13.35,
+    "controller_delta_passed": 12,
+    "controller_tool": "bf6621",
+    "separate_counts_not_summed": true,
+    "installed_native50_reused_not_rerun": true,
+    "canonical_probe60_reused_not_rerun": true,
+    "actual_composed_gate": "4bcf78;1002payloads; real facade prefix, no handler/controller/runtime"
+  },
+  "package_reuse": {
+    "installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+      "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+    },
+    "prior_qualification": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\qualification.json",
+      "sha256": "83c652061060cee6940c5cb79ec2361c9eed94eb40e8e600531afda30d93fab6"
+    },
+    "new_builds": 0,
+    "pip_runs": 0,
+    "new_venvs": 0,
+    "migration_actions": 0,
+    "connector_actual_vs_retained_zip": "Original actual pip e1d104 and retained f986 provenance remains in referenced W16 qualification; no reinstall or rewritten origin."
+  },
+  "policy": {
+    "revision": 17,
+    "carry_in_admissions": 14,
+    "carry_in_tokens": 460793,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 18,
+    "preventive_cumulative_tokens": 600000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "historical_records": 5,
+  "local_selectable_new": 2,
+  "remote_selectors_enabled": false,
+  "active_observation_envelope": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "poll_seconds": 19,
+    "freshness_seconds": 20,
+    "cadence_seconds": 24,
+    "target_start_seconds": 0.2,
+    "max_observed_requests": 8
+  },
+  "remote_unlock_requires_separate_nine_record_qualification": true,
+  "prompt": "Exact selected plan uses pinned absolute RTK/Python, no global PATH/policy change. Only disposable synthetic quote fixture executed; campaign report absent and no model answer supplied.",
+  "grant": "Six historical grants; grant492ad minimumused2/max3. Start/review clock boundary only permits canonical observation. Unexpected available remains BLOCKED; no issue/work. Fresh expired canonical CAS selected once, no replay/revoke/reset.",
+  "history": "Original W16 canonical SUCCEEDED/usefulFalse, no old conditional15 eligibility. Native decision historical SUBMITTED snapshots not final receipts. All five histories and original unsettled flags retained, no refund.",
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "status_changes": [],
+  "no_live_service_provider_grant_or_migration_effects": true,
+  "runtime_namespaces_absent_at_curation": true,
+  "root_review": "root-review.json",
+  "private_or_environment_payloads_copied": false
+}

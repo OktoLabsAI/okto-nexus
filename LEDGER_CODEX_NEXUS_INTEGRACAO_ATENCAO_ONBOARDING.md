@@ -2092,3 +2092,33 @@ inalterado. Nenhum novo efeito de modelo/serviço nesta curadoria.
 **124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção de aceite M1.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision16-execution/review.json)
 e [companion](plans/agent_ops/evidence/r3-m1-revision16-execution/closure-companion.json).
+
+## 2026-11-14 — Revisão17 M1: composição offline com pacote reutilizado
+
+Pacote W16, seus1002 payloads, probe60 e50 testes instalados permanecem pinados e
+inalterados: nenhum build, pip, venv ou migração novo. Foram qualificados **10 testes
+da composição** (incluindo chamada RTK/Python absoluta em fixture sintética) e
+**12 deltas do controlador**, separadamente. Root e peer revisaram os cortes;
+root verificou47 pins finais e ausência de namespaces runtime.
+
+Carry **460.793 tokens/14 reservas**, quatro IDs novos e teto técnico **18**.
+Root selecionou preventiva **600k**, dentro da tolerância/autorização existente
+de **700k**:139207/239207 de margem, sem garantia de resultado ou billing final.
+Cinco históricos mais dois locais cabem no envelope de oito registros19/20/24;
+snapshot1/init2, alvo200ms/deadline600/readiness5 permanecem. Apenas útil15 e
+continuação16 local condicionada a resultado útil são selecionáveis; remoto17/18
+continua bloqueado e exigirá qualificação própria de nove registros.
+
+O prompt exato selecionado usa RTK e Python absolutos pinados. Não altera PATH,
+permissões ou política; não pré-executa o relatório real nem fornece a resposta
+ao modelo. Histórico de seis grants preservado, grant492ad mínimo used2/max3.
+Start/review só após23:27:07.998684Z; relógio não prova expiração. Revisão canônica
+deve permitir emissão exata; available inesperado é bloqueio reportado, sem
+forçar esgotamento, revogar, repetir POST ou começar trabalho com saldo insuficiente.
+
+W16 SUCCEEDED sem relatório útil e incerteza dos recibos permanecem intactos;
+continuação15 antiga inelegível. Nenhum efeito real nesta preparação, refund,
+replay, nova aprovação humana de hash ou promoção de aceite.
+**124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-preparation/review.json)
+e [qualificação](plans/agent_ops/evidence/r3-m1-revision17-preparation/qualification.json).

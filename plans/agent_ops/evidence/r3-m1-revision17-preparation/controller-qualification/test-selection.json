@@ -1,0 +1,14 @@
+[
+  "test_active600k_historical500k_and_effect_fence_agree",
+  "test_policy_facade_actual_import_single_origin_and_limits",
+  "test_derive_preserves_five_original_records_without_double_count",
+  "test_changed_accounting_document_refused_before_derivation",
+  "test_real_history_poll_then_one_new_reservation_without_dispatch",
+  "test_each_closed_history_new_event_closes_admission",
+  "test_no_stream_history_change_does_not_become_empty_safe_history",
+  "test_history_cannot_be_deleted_from_derived_checkpoint",
+  "test_continuation_and_remote_are_separate_gates",
+  "test_preventive_carry_and_max18_are_not_refunded",
+  "test_original_receipt_and_new_amendment_policy_both_required",
+  "test_local_wrapper_uses_new_ids_closed_predecessor_and_real_facade"
+]

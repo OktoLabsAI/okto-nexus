@@ -1,0 +1,84 @@
+{
+  "grants": [
+    {
+      "expires_at": "2026-11-14T18:42:36.153081Z",
+      "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+      "max_executions": 3,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T16:22:02.541642Z",
+      "grant_id": "grant_89bbed009c65458fab96ff9d0a3ffc72",
+      "max_executions": 20,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T17:26:23.088231Z",
+      "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+      "max_executions": 20,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+      "expires_at": "2026-11-14T20:08:18.408235Z",
+      "max_executions": 3,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+      "expires_at": "2026-11-14T22:10:10.862526Z",
+      "max_executions": 3,
+      "revision": 1,
+      "minimum_used_executions": 1
+    },
+    {
+      "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+      "expires_at": "2026-11-14T23:27:07.998684Z",
+      "max_executions": 3,
+      "revision": 1,
+      "minimum_used_executions": 2
+    }
+  ],
+  "predecessor_review": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\authorize-local-review.json",
+    "sha256": "eb84a7aa0c1f9929022c70419860be4adeaee11152234d2ad80cd11bdc9ec329"
+  },
+  "minimum_used_basis": "Two canonical session openings already charged on the same existing grant; current state/counts must be reviewed. No duplicate grant appended.",
+  "predecessor_accounting": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+    "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+  },
+  "grant_plan": {
+    "observed_available_actions_remaining": 1,
+    "old_expiry_utc": "2026-11-14T23:27:07.998684Z",
+    "do_not_start_or_review_before_expiry": true,
+    "minutes": 60,
+    "new_grant_action_cap": 3,
+    "local_model_request_cap": 2,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ],
+    "canonical_constraints": [
+      "available grant with1 action blocks issue; insufficient-for-two is not expired/exhausted.",
+      "New grant does not migrate an existing session. Do not spend the last action then assume same-session continuation can use a replacement.",
+      "After natural expiry, obtain canonical review showing no available matching grant/can_issue true; root selects exact CAS request before recover/issue once.",
+      "Preserve all historical grants and consumed actions. No revoke, manual reset, forced exhaustion or setup:test.",
+      "Review/report insufficient balance distinctly, without substituting canonical state. If unexpectedly available, remain observation-only and require a later explicit canonical review; no POST replay."
+    ],
+    "minimum_helper_delta": "Refresh pinned grant history/current counts; retain existing balance>=2 and requestcap3. Recognize insufficient available balance as a reported blocked selection, never bypass can_issue; planned path waits for expiry and reuses canonical review/recover/issue.",
+    "source_references": [
+      "src/okto_nexus/application/connection_authorization.py:92",
+      "src/okto_nexus/application/connection_authorization.py:113",
+      "src/okto_nexus/application/connection_authorization.py:140"
+    ],
+    "renewal_executed": false
+  }
+}
