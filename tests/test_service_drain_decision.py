@@ -241,7 +241,7 @@ async def test_authorized_reset_waits_for_unknown_resource_without_service_stop_
 def test_local_force_preserves_explicit_refusal_without_echoing_peer_text(tmp_path, monkeypatch, valid_refusal):
     from test_service_start import make_adapter
     adapter = make_adapter(tmp_path)
-    current = {'state': 'stopping', 'instance_id': 'selected-instance', 'generation': 'selected-generation'}
+    current = {'state': 'stopping', 'instance_id': 'selected-instance', 'generation': 'selected-generation', 'pid': 123}
     monkeypatch.setattr(adapter, '_inspect_process', lambda **_kwargs: current)
     body = (json.dumps({'error': {'code': 'CONFLICT', 'message': 'private-peer-text',
         'details': {'reason': 'DRAIN_DECISION_NOT_AVAILABLE'}}}).encode()
@@ -295,7 +295,7 @@ async def test_force_contains_while_sql_observer_is_blocked_but_retains_owner_un
 def test_normal_stop_keeps_old_wire_shape_while_force_is_explicit(tmp_path, monkeypatch, force):
     from test_service_start import make_adapter
     adapter = make_adapter(tmp_path)
-    current = {'state': 'stopping', 'instance_id': 'selected-instance', 'generation': 'selected-generation'}
+    current = {'state': 'stopping', 'instance_id': 'selected-instance', 'generation': 'selected-generation', 'pid': 123}
     monkeypatch.setattr(adapter, '_inspect_process', lambda **_kwargs: current)
     class Reply:
         def __enter__(self):
@@ -310,9 +310,10 @@ def test_normal_stop_keeps_old_wire_shape_while_force_is_explicit(tmp_path, monk
     monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.local.build_opener', lambda *_args: opener)
     adapter.request_stop(current, timeout=.01, force=force)
     body = json.loads(opener.open.call_args.args[0].data)
-    expected = {'instance_id': current['instance_id'], 'generation': current['generation'], 'timeout_seconds': .01}
+    expected = {'instance_id': current['instance_id'], 'generation': current['generation'], 'timeout_seconds': body['timeout_seconds']}
     if force:
         expected['force'] = True
+    assert 0 < body['timeout_seconds'] <= .01
     assert body == expected
 
 

@@ -341,8 +341,11 @@ def test_native_adapter_never_overwrites_and_checks_fingerprint_before_mutation(
 
 
 def test_stop_persists_recovery_latch_before_request_and_never_stops_os_task(host, monkeypatch):
+    from types import SimpleNamespace
+    monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.local.time',
+        SimpleNamespace(monotonic=lambda: 0.0, sleep=lambda _: None))
     adapter, tasks, receipt = install(host)
-    current = {'state': 'ready', 'instance_id': receipt['instance_id'], 'generation': 'current', 'supervisor': SUPERVISOR}
+    current = {'state': 'ready', 'instance_id': receipt['instance_id'], 'generation': 'current', 'pid': 123, 'supervisor': SUPERVISOR}
     monkeypatch.setattr(adapter, '_inspect_process', lambda **_: current)
     opener = Mock()
     def open_request(request, **kwargs):
@@ -362,6 +365,83 @@ def test_stale_stop_cannot_latch_new_generation(host, monkeypatch):
     monkeypatch.setattr(adapter, '_inspect_process', lambda **_: {'state': 'ready', 'generation': 'new'})
     assert adapter.request_stop({'state': 'ready', 'generation': 'old'}, timeout=1)['reason'] == 'INSTANCE_CHANGED'
     assert read_json(adapter.home / CONTROL_NAME)['desired'] == 'running'
+
+
+@pytest.mark.parametrize('field,value', [('generation', 'new'), ('instance_id', 'other'), ('pid', 456)])
+def test_stop_positive_identity_change_never_latches_or_posts(host, monkeypatch, field, value):
+    adapter, _, receipt = install(host)
+    current = {'state': 'ready', 'instance_id': receipt['instance_id'], 'generation': 'selected', 'pid': 123}
+    monkeypatch.setattr(adapter, '_inspect_process', lambda **_: {**current, field: value})
+    opener = Mock(side_effect=AssertionError('must not POST'))
+    monkeypatch.setattr('okto_nexus.adapters.outbound.service_manager.local.build_opener', opener)
+    result = adapter.request_stop(current, timeout=1)
+    assert result['reason'] == 'INSTANCE_CHANGED'
+    assert read_json(adapter.home / CONTROL_NAME)['desired'] == 'running'
+    opener.assert_not_called()
+
+
+@pytest.mark.parametrize('recover', [False, True])
+@pytest.mark.parametrize('force', [False, True])
+def test_stop_transport_loss_is_reobserved_within_original_budget(host, monkeypatch, recover, force):
+    from types import SimpleNamespace
+    from okto_nexus.adapters.outbound.service_manager import local
+    adapter, _, receipt = install(host)
+    current = {'state': 'ready', 'instance_id': receipt['instance_id'], 'generation': 'selected', 'pid': 123}
+    unknown = {**current, 'state': 'degraded', 'reason': 'SERVICE_UNREACHABLE', 'generation': None, 'pid': None}
+    now, calls = [0.0], []
+    monkeypatch.setattr(local, 'time', SimpleNamespace(monotonic=lambda: now[0], sleep=lambda seconds: now.__setitem__(0, now[0] + seconds)))
+    def inspect(*, timeout):
+        calls.append(timeout)
+        now[0] += timeout
+        return current if recover and len(calls) == 2 else unknown
+    monkeypatch.setattr(adapter, '_inspect_process', inspect)
+    opener = Mock()
+    opener.open.side_effect = TimeoutError('synthetic lost stop response')
+    monkeypatch.setattr(local, 'build_opener', lambda *_: opener)
+    result = adapter.request_stop(current, timeout=2, force=force)
+    assert len(calls) >= 2 and all(0 < value <= .5 for value in calls)
+    assert now[0] <= 2
+    if recover:
+        assert result['shutdown']['state'] == 'UNCONFIRMED'
+        assert read_json(adapter.home / CONTROL_NAME)['desired'] == 'draining'
+        opener.open.assert_called_once()
+        body = json.loads(opener.open.call_args.args[0].data)
+        assert body['generation'] == 'selected' and 0 < body['timeout_seconds'] < 2
+        assert body.get('force', False) is force
+    else:
+        assert result['reason'] == 'SERVICE_UNREACHABLE' and result['wait_timed_out']
+        assert read_json(adapter.home / CONTROL_NAME)['desired'] == 'running'
+        opener.open.assert_not_called()
+
+
+def test_stop_same_identity_ready_after_deadline_does_not_latch_or_post(host, monkeypatch):
+    from types import SimpleNamespace
+    from okto_nexus.adapters.outbound.service_manager import local
+    adapter, _, receipt = install(host)
+    current = {'state': 'ready', 'instance_id': receipt['instance_id'], 'generation': 'selected', 'pid': 123}
+    now = [0.0]
+    monkeypatch.setattr(local, 'time', SimpleNamespace(monotonic=lambda: now[0]))
+    def inspect(**_):
+        now[0] = 2.1
+        return current
+    monkeypatch.setattr(adapter, '_inspect_process', inspect)
+    opener = Mock(side_effect=AssertionError('must not POST'))
+    monkeypatch.setattr(local, 'build_opener', opener)
+    result = adapter.request_stop(current, timeout=2)
+    assert result['state'] == 'unknown' and result['wait_timed_out']
+    assert result['reason'] == 'STOP_IDENTITY_UNCONFIRMED'
+    assert read_json(adapter.home / CONTROL_NAME)['desired'] == 'running'
+    opener.assert_not_called()
+
+
+def test_stop_force_without_generation_cannot_use_pending_supervisor_branch(host, monkeypatch):
+    adapter, _, _ = install(host)
+    inspect = Mock(side_effect=AssertionError('no identity was selected'))
+    monkeypatch.setattr(adapter, '_inspect_process', inspect)
+    result = adapter.request_stop({'state': 'starting', 'reason': 'SUPERVISOR_PENDING', 'generation': None}, timeout=1, force=True)
+    assert result['reason'] == 'STOP_IDENTITY_UNCONFIRMED'
+    assert read_json(adapter.home / CONTROL_NAME)['desired'] == 'running'
+    inspect.assert_not_called()
 
 
 def test_different_home_cannot_install_another_supervisor_for_same_database(host, tmp_path):

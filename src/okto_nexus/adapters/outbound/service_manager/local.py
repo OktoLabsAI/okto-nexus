@@ -264,27 +264,56 @@ class LocalServerLifecycle:
             return {**self.inspect(timeout=.2), 'state': 'starting', 'reason': 'CONCURRENT_START',
                 'next_action': 'Wait for the initialization already being selected.'}
 
+    def _stop_identity_refusal(self, current, *, deadline, pending=False):
+        """Reobserve within the existing stop budget; transport loss is not replacement."""
+        actual = None
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                if actual is not None:
+                    return {**actual, 'wait_timed_out': True}
+                return {'state': 'unknown', 'reason': 'STOP_IDENTITY_UNCONFIRMED',
+                    'next_action': 'Observe the same owner before another explicit stop; no stop was submitted.'}
+            actual = self._inspect_process(timeout=min(.5, remaining))
+            fields = ('generation', 'instance_id', 'pid')
+            if any(actual.get(key) is not None and current.get(key) is not None
+                    and actual[key] != current[key] for key in fields):
+                return {**actual, 'state': 'failed', 'reason': 'INSTANCE_CHANGED',
+                    'next_action': 'Observe the current generation before requesting another stop.'}
+            if time.monotonic() >= deadline:
+                return {**actual, 'state': 'unknown' if actual['state'] in {'ready', 'stopping', 'stopped'} else actual['state'],
+                    'reason': actual.get('reason') or 'STOP_IDENTITY_UNCONFIRMED', 'wait_timed_out': True}
+            if pending and actual['state'] == 'stopped':
+                return None
+            if (not pending and actual['state'] in {'ready', 'stopping'}
+                    and all(current.get(key) is not None and actual.get(key) == current[key] for key in fields)):
+                return None
+            if actual.get('reason') not in {'SERVICE_UNREACHABLE', 'INSTANCE_OWNERSHIP_UNCONFIRMED',
+                    'INSTANCE_METADATA_UNAVAILABLE'}:
+                return {**actual, 'state': 'unknown', 'reason': 'STOP_IDENTITY_UNCONFIRMED',
+                    'next_action': 'Observe the same owner before another explicit stop; no stop was submitted.'}
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return {**actual, 'wait_timed_out': True}
+            time.sleep(min(.1, remaining))
+
     def request_stop(self, current, *, timeout, force=False):
         if type(force) is not bool:
             raise ValueError('Force must be a boolean.')
+        if force and not current.get('generation'):
+            return {**current, 'state': 'unknown', 'reason': 'STOP_IDENTITY_UNCONFIRMED',
+                'next_action': 'An observed generation is required before an explicit force decision; no stop was submitted.'}
+        deadline = time.monotonic() + timeout
         pending = current.get('reason') in {'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED',
             'SUPERVISOR_BACKOFF', 'SUPERVISOR_RETRY_EXHAUSTED'} and not current.get('generation')
-        if force:
-            actual = self._inspect_process(timeout=min(.5, timeout))
-            if (not current.get('generation') or actual.get('generation') != current['generation']
-                    or actual.get('instance_id') != current.get('instance_id')):
-                return {**actual, 'state': 'failed', 'reason': 'INSTANCE_CHANGED',
-                    'next_action': 'Inspect the current generation; no force was requested.'}
         if current['state'] not in {'ready', 'stopping'} and not pending:
             return current
         if (self.home / INSTALLATION_NAME).exists():
             try:
                 with launch_exclusion(self.home, self.database):
-                    actual = self._inspect_process(timeout=min(.5, timeout))
-                    if (actual.get('generation') != current.get('generation')
-                            or (pending and actual['state'] != 'stopped')):
-                        return {**actual, 'state': 'failed', 'reason': 'INSTANCE_CHANGED',
-                            'next_action': 'Observe the current generation before requesting another stop.'}
+                    refusal = self._stop_identity_refusal(current, deadline=deadline, pending=pending)
+                    if refusal is not None:
+                        return refusal
                     supervisor_only = (pending and
                         current.get('user_service', {}).get('supervision', {}).get('attempts_started', 0) > 0)
                     self.installation.begin_stop(current.get('generation'), supervisor_only=supervisor_only)
@@ -298,6 +327,14 @@ class LocalServerLifecycle:
                     'next_action': 'Repeat stop after the current lifecycle operation completes.'}
             except (OSError, ValueError, ImportError) as error:
                 return installation_failure(current, error)
+        elif force:
+            refusal = self._stop_identity_refusal(current, deadline=deadline)
+            if refusal is not None:
+                return refusal
+        timeout = deadline - time.monotonic()
+        if timeout <= 0:
+            return {**current, 'state': 'unknown', 'reason': 'STOP_IDENTITY_UNCONFIRMED',
+                'wait_timed_out': True, 'next_action': 'The stop budget expired before submission; observe the current owner.'}
         address = '[::1]' if self.host in {'::', '::1'} else '127.0.0.1'
         body = {'instance_id': current['instance_id'],
                 'generation': current['generation'], 'timeout_seconds': float(timeout)}
