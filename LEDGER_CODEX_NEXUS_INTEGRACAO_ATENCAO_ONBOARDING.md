@@ -2006,3 +2006,23 @@ final presumido. Limites16/500k/700k inalterados, sem nova admissão nesta curad
 **124/132 VERIFIED, 6 IN_PROGRESS e 2 NOT_RUN**, sem promoção de aceite.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision15-execution/review.json)
 e [companion](plans/agent_ops/evidence/r3-m1-revision15-execution/closure-companion.json).
+
+## 2026-11-14 — Proveniência de autenticação da decisão nativa
+
+Nexus `b90e6824` persiste a modalidade de autenticação validada na decisão e a
+reconstitui na entrega assíncrona e na avaliação de attention. Operator local/
+sessão e agent_key permanecem distintos, com revalidação do ator e guard atuais.
+Managed input preserva seu caminho; guard legado simples recusa, sem promoção
+retrospectiva de autoridade ou credenciais vindas do corpo da decisão.
+
+**50 PASS de fonte: 18 novos +32 regressões existentes.** O antecedente10 PASS/
+1 falha de SQL de fixture foi retido; a coluna foi corrigida para owner_generation.
+As rodadas se sobrepõem e não são somadas. Aliases de import no teste foram
+ajustados após coleta para Ruff F811, sem mudança da produção testada. Ruff e
+diff check passaram; root e peer revisaram. O runner carrega src do checkout,
+portanto não é qualificação de wheel instalado nem entrega nativa real.
+
+W15 e seu resultado anterior permanecem intactos. **341.276 tokens/13 reservas;
+124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção M1 ou novo efeito.
+Evidência: [revisão](plans/agent_ops/evidence/r3-native-decision-authentication-provenance/review.json)
+e [qualificação](plans/agent_ops/evidence/r3-native-decision-authentication-provenance/qualification.json).

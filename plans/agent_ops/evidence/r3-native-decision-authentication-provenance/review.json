@@ -1,0 +1,77 @@
+{
+  "status": "SOURCE_FIX_QUALIFIED_NO_INSTALLED_OR_LIVE_ACCEPTANCE",
+  "commit": "b90e68242a56e4b990565859bf0c0e7107ec185d",
+  "change": "Persist authenticated native-decision modality from validated request context; deferred dispatch and attention validation reconstruct that exact modality and revalidate current actor/guard. No credential supplied in decision body. Legacy plain guards refuse instead of inferring operator authority.",
+  "qualification_sha256": "f611e445d9d6729c3a3168e315f3d223cb2ebeb1cf5404c231be19c172549077",
+  "source_pins": [
+    {
+      "path": "src/okto_nexus/application/execution_native_decisions.py",
+      "qualified_worktree_sha256": "81110658b06514b867420cea7756f21e43648f5e8bcfbb6485d3b05aa35df644",
+      "commit_blob_sha256": "3acfb616ef4aa29b4da764e4348fe29c9d9f70bdca5b150fe5433748924f7820",
+      "byte_equal": false,
+      "LF_normalized_equal": true
+    },
+    {
+      "path": "src/okto_nexus/application/attention_authority.py",
+      "qualified_worktree_sha256": "5099a2f3c73678820ba88cf11ab13922546b65279e111af000df9c8abb528722",
+      "commit_blob_sha256": "5099a2f3c73678820ba88cf11ab13922546b65279e111af000df9c8abb528722",
+      "byte_equal": true,
+      "LF_normalized_equal": true
+    },
+    {
+      "path": "tests/execution_r4/test_native_decision_provenance.py",
+      "qualified_worktree_sha256": "f2da94da4140df8a629d703e26de945304f72392d9c6a747648049d694706f42",
+      "commit_blob_sha256": "f2da94da4140df8a629d703e26de945304f72392d9c6a747648049d694706f42",
+      "byte_equal": true,
+      "LF_normalized_equal": true
+    }
+  ],
+  "tests": {
+    "final_passed": 50,
+    "new_cases": 18,
+    "existing_regressions": 32,
+    "initial_passed": 10,
+    "initial_fixture_failures": 1,
+    "overlap_not_summed": true,
+    "initial_cause": "Fixture SQL used nonexistent session_owner_generation; corrected to owner_generation.",
+    "post_collection_test_change": "Module import aliases only to resolve Ruff F811; production source bytes unchanged."
+  },
+  "runner_provenance": "run_tests.py prepends repository src/tests to sys.path and disables pytest plugin autoload. Source imports, not installed-wheel qualification.",
+  "checks": {
+    "source_vs_commit_LF_normalized_equal": true,
+    "pinned_copy_hashes_verified": true,
+    "secret_pattern_matches": 0,
+    "ruff": "PASS 7e33de",
+    "diff_check": "PASS 99b751",
+    "root_review": "a489b5",
+    "peer_review": "finish_reader_cache"
+  },
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "live_M1_unchanged": true,
+  "observed_tokens_carried": 341276,
+  "charged_reservations_carried": 13,
+  "limits": [
+    "No new service, provider, model turn, grant, credential access or installed payload mutation.",
+    "Source fix does not change prior W15 refusal or prove native delivery in a real campaign.",
+    "50 final cases include the earlier focal cases; do not add counts."
+  ],
+  "test_command": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/work-revision15/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:/Users/jpamb/AppData/Local/Temp/r3-native-provenance-review/run_tests.py",
+    "test_native_decision_provenance.py",
+    "test_native_decisions.py",
+    "test_managed_native_decisions.py"
+  ],
+  "final_test_tool": "19f6fc"
+}

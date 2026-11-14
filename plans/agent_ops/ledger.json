@@ -13616,6 +13616,24 @@
         "preventive_tokens": 500000,
         "tolerance_tokens": 700000
       }
+    },
+    "r3_native_decision_authentication_provenance": {
+      "status": "SOURCE_FIX_QUALIFIED_NO_INSTALLED_OR_LIVE_ACCEPTANCE",
+      "source_commit": "b90e68242a56e4b990565859bf0c0e7107ec185d",
+      "summary": "Native decisions now persist validated authentication provenance for deferred dispatch and attention authority checks. Trusted local operator/session and agent-key modality remain distinct; current actor/guard revalidated, managed-input path preserved, legacy plain guards refuse.50 final source passes=18 new+32 existing; initial10pass/1fixture SQL failure retained, overlapping counts not summed. No installed or real M1 delivery acceptance.124/132 unchanged;341276 tokens/13 reservations carried.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/review.json",
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/qualification.json",
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/final.xml",
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/initial-10pass-1fixture-fail.xml"
+      ],
+      "tests_passed": 50,
+      "new_tests": 18,
+      "existing_tests": 32,
+      "installed_qualified": false,
+      "acceptance_promoted": false,
+      "observed_tokens": 341276,
+      "charged_reservations": 13
     }
   },
   "history": [
@@ -15170,6 +15188,18 @@
         "plans/agent_ops/evidence/r3-m1-revision15-execution/execution/work-result-projection.json",
         "plans/agent_ops/evidence/r3-m1-revision15-execution/normal-interrupt/accounting-reconciliation.json",
         "plans/agent_ops/evidence/r3-m1-revision15-execution/diagnosis/diagnosis.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_native_decision_authentication_provenance",
+      "status": "SOURCE_FIX_QUALIFIED_NO_INSTALLED_OR_LIVE_ACCEPTANCE",
+      "summary": "Native decisions now persist validated authentication provenance for deferred dispatch and attention authority checks. Trusted local operator/session and agent-key modality remain distinct; current actor/guard revalidated, managed-input path preserved, legacy plain guards refuse.50 final source passes=18 new+32 existing; initial10pass/1fixture SQL failure retained, overlapping counts not summed. No installed or real M1 delivery acceptance.124/132 unchanged;341276 tokens/13 reservations carried.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/review.json",
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/qualification.json",
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/final.xml",
+        "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/initial-10pass-1fixture-fail.xml"
       ]
     }
   ],

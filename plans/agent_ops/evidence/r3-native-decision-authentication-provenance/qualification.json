@@ -1,0 +1,60 @@
+{
+  "classification": "OFFLINE_SOURCE_REGRESSION_PASS_NO_LIVE_ACCEPTANCE",
+  "sources": {
+    "src/okto_nexus/application/execution_native_decisions.py": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\execution_native_decisions.py",
+      "sha256": "81110658b06514b867420cea7756f21e43648f5e8bcfbb6485d3b05aa35df644",
+      "bytes": 31031
+    },
+    "src/okto_nexus/application/attention_authority.py": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\application\\attention_authority.py",
+      "sha256": "5099a2f3c73678820ba88cf11ab13922546b65279e111af000df9c8abb528722",
+      "bytes": 51317
+    },
+    "tests/execution_r4/test_native_decision_provenance.py": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_native_decision_provenance.py",
+      "sha256": "f2da94da4140df8a629d703e26de945304f72392d9c6a747648049d694706f42",
+      "bytes": 7118
+    }
+  },
+  "evidence": {
+    "final.xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-provenance-review\\final.xml",
+      "sha256": "666513d1cf3122bbeae97dea9f5f822ff49ac95182369a2b97280e2b36bb911b",
+      "bytes": 8268
+    },
+    "initial-10pass-1fixture-fail.xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-provenance-review\\initial-10pass-1fixture-fail.xml",
+      "sha256": "d58ada712316d64d03ba3feea6ccc34a996179e7fdb463915af3670028802688",
+      "bytes": 4101
+    },
+    "run_tests.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-provenance-review\\run_tests.py",
+      "sha256": "b4415b7d4408c2cf10a3afe35121b4d2faaa4eb97dec0dca10ab4f4bf8ce6c81",
+      "bytes": 522
+    }
+  },
+  "tests": {
+    "passed": 50,
+    "failures": 0,
+    "errors": 0,
+    "suites": [
+      "test_native_decision_provenance.py",
+      "test_native_decisions.py",
+      "test_managed_native_decisions.py"
+    ],
+    "initial": "10 passed; one fixture SQL referenced nonexistent session_owner_generation; corrected to owner_generation.",
+    "final_test_import_delta": "After collection, fixture imports changed to module aliases for Ruff F811; behavior unchanged; production bytes unchanged."
+  },
+  "checks": {
+    "ruff": "PASS tool 7e33de",
+    "diff_check": "PASS tool 154593",
+    "peer": "finish_reader_cache reviewed both production sources and tests, no remaining blocker",
+    "root": "reviewed production diff and test design; commit authorized conditional on tests"
+  },
+  "limitations": [
+    "No live service, provider, model, credentials or installed wheel mutation.",
+    "Legacy plain native decision guards refuse deferred dispatch; no retrospective authority promotion.",
+    "No M1 or acceptance promotion; source fix only."
+  ]
+}

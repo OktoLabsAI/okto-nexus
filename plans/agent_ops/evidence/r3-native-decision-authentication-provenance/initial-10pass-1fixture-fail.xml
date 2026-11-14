@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="11" time="62.331" timestamp="2026-11-14T19:39:21.426620-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[None]" time="8.386" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[actor]" time="5.987" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[grant]" time="5.542" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[scope]" time="4.587"><failure message="sqlite3.OperationalError: no such column: session_owner_generation">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10900/test_key...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'PG7pqefapQZMyNJz4th0ZFgDfK7sPvTOHNVcAMNGsv8', ...})
+change = 'scope'
+
+    @pytest.mark.parametrize("change", [None, "actor", "grant", "scope", "legacy"])
+    def test_keyless_loopback_decision_revalidates_before_async_dispatch(decision_state, change):
+        deps, _, _ = decision_state
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE agents SET api_key_hash=NULL WHERE agent_id='operator'")
+        response = local_post(decision_state)
+        assert response.status_code == 202, response.text
+        assert "credential_binding" not in response.text and "native-actor-v1" not in response.text
+        view = response.json()
+        with deps.connection_factory.unit_of_work() as uow:
+            guard = uow.connection.execute("SELECT actor_guard_digest FROM execution_decisions").fetchone()[0]
+            proof = json.loads(guard.removeprefix("native-actor-v1:"))
+            assert proof["authentication_source"] == "http_loopback"
+            assert proof["trusted_local_operator"] is True and proof["credential_binding"] is None
+            if change == "actor":
+                uow.connection.execute("UPDATE agents SET is_active=0 WHERE agent_id='operator'")
+            elif change == "grant":
+                uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at='now'")
+            elif change == "scope":
+&gt;               uow.connection.execute("UPDATE execution_sessions SET session_owner_generation=session_owner_generation+1")
+E               sqlite3.OperationalError: no such column: session_owner_generation
+
+tests\execution_r4\test_native_decision_provenance.py:51: OperationalError</failure></testcase><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[legacy]" time="5.496" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_remote_key_uses_original_binding_and_never_local_authority[None]" time="4.260" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_remote_key_uses_original_binding_and_never_local_authority[rotate]" time="4.393" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_remote_key_uses_original_binding_and_never_local_authority[revoke]" time="4.400" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_nonlocal_or_forwarded_caller_cannot_claim_local_modality[203.0.113.8-headers0]" time="4.693" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_nonlocal_or_forwarded_caller_cannot_claim_local_modality[127.0.0.1-headers1]" time="5.359" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_decision_body_cannot_supply_authority_envelope" time="4.420" /></testsuite></testsuites>
