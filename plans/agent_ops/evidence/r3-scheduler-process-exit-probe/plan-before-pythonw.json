@@ -1,0 +1,90 @@
+{
+  "cases": [
+    {
+      "action_exit_dword": 3,
+      "case": "manual-3",
+      "task_name": "OktoT19-SchedulerProbe-7bg9yatu-manual-3",
+      "trigger": "Run(None)"
+    },
+    {
+      "action_exit_dword": 4294967295,
+      "case": "manual-ffffffff",
+      "task_name": "OktoT19-SchedulerProbe-7bg9yatu-manual-ffffffff",
+      "trigger": "Run(None)"
+    },
+    {
+      "action_exit_dword": 3,
+      "case": "timer-3",
+      "task_name": "OktoT19-SchedulerProbe-7bg9yatu-timer-3",
+      "trigger": "single TimeTrigger UTC boundary 30 seconds ahead"
+    },
+    {
+      "action_exit_dword": 4294967295,
+      "case": "timer-ffffffff",
+      "task_name": "OktoT19-SchedulerProbe-7bg9yatu-timer-ffffffff",
+      "trigger": "single TimeTrigger UTC boundary 30 seconds ahead"
+    }
+  ],
+  "caveats": [
+    "COM calls and OS I/O are not preemptible by the observation timer",
+    "Count=1 is an OS policy under test, not an assertion that Windows cannot launch an unexpected third guard action",
+    "matrix results describe this host; no general retry exhaustion claim"
+  ],
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\t19-scheduler-semantics-7bg9yatu\\run.py",
+    "--execute-reviewed",
+    "--plan-sha256",
+    "<SHA256_OF_THIS_PLAN>"
+  ],
+  "effects": [
+    "create four absent-only current-user interactive least-privilege own tasks",
+    "invoke Run(None) once for each manual task; timer tasks have one automatic boundary",
+    "actions write only owned PID/birth/time/intended-exit receipts; no subprocess, network or product import",
+    "retained query/synchronize handles verify exact birth and actual exit; no terminate right",
+    "delete unchanged inactive own tasks after observation; retain all files; no stop/force"
+  ],
+  "no_effects": [
+    "product services",
+    "provider calls",
+    "login or credentials",
+    "personal task enumeration or mutation",
+    "global TaskScheduler settings or event logging changes"
+  ],
+  "observation_seconds_after_latest_dispatch_or_boundary": 135,
+  "offline_qualification": {
+    "cases": 4,
+    "no_tasks_or_actions_executed": true,
+    "passed": 4,
+    "tool_chunk": "4ff3a6"
+  },
+  "pins": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\t19-scheduler-semantics-7bg9yatu\\run.py",
+      "sha256": "07eab7ffd14fb265797b21605a863e44b018b11bd21b4ffd1601c99adfb6094e"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\t19-scheduler-semantics-7bg9yatu\\action.py",
+      "sha256": "e5fad6e77cc46e9cb93ff1eeac8096b26e16edebaeb2d65fab6db643285d60cc"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+      "sha256": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+    },
+    {
+      "path": "C:\\Python313\\python.exe",
+      "sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9"
+    }
+  ],
+  "purpose": "Isolate Windows Scheduler process exit code and trigger semantics after inconclusive T19 crash recovery.",
+  "restart_count": 1,
+  "restart_interval": "PT1M",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\t19-scheduler-semantics-7bg9yatu",
+  "selected_failure_actions_max_per_case": 2,
+  "status": "PREPARED_NOT_EXECUTED_ROOT_REVIEW_REQUIRED",
+  "unexpected_extra_native_launch": "receipt is preserved; action exits 0 instead of inducing another failure; experiment reports ATTEMPT_COUNT_UNCONFIRMED"
+}

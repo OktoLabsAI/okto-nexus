@@ -1,0 +1,194 @@
+{
+  "attempts": [
+    {
+      "actual_exit_code": 3,
+      "birth_filetime": 134391559965081419,
+      "budget_guard": false,
+      "case": "manual-3",
+      "exit_observed_at": 1794682400.9986684,
+      "identity_confirmed": true,
+      "intended_exit_code": 3,
+      "ordinal": 1,
+      "physical_exit": true,
+      "pid": 47240,
+      "wall_time": 1794682397.6279562
+    },
+    {
+      "actual_exit_code": 4294967295,
+      "birth_filetime": 134391559966251746,
+      "budget_guard": false,
+      "case": "manual-ffffffff",
+      "exit_observed_at": 1794682401.2777565,
+      "identity_confirmed": true,
+      "intended_exit_code": 4294967295,
+      "ordinal": 1,
+      "physical_exit": true,
+      "pid": 46528,
+      "wall_time": 1794682397.765506
+    },
+    {
+      "actual_exit_code": 4294967295,
+      "birth_filetime": 134391560257192890,
+      "budget_guard": false,
+      "case": "timer-ffffffff",
+      "exit_observed_at": 1794682429.4570916,
+      "identity_confirmed": true,
+      "intended_exit_code": 4294967295,
+      "ordinal": 1,
+      "physical_exit": true,
+      "pid": 50996,
+      "wall_time": 1794682426.3400683
+    },
+    {
+      "actual_exit_code": 3,
+      "birth_filetime": 134391560261210711,
+      "budget_guard": false,
+      "case": "timer-3",
+      "exit_observed_at": 1794682430.3201678,
+      "identity_confirmed": true,
+      "intended_exit_code": 3,
+      "ordinal": 1,
+      "physical_exit": true,
+      "pid": 50328,
+      "wall_time": 1794682427.1747906
+    }
+  ],
+  "cleanup": {
+    "manual-3": {
+      "absent": true,
+      "final": {
+        "instances": 0,
+        "last_run_time_raw": "2026-11-14 15:53:16+00:00",
+        "last_task_result": 3,
+        "state": 3,
+        "xml_sha256": "2bd6212294843ff81e43d0380cdf6a022d71acea3a82aef7a632ef915d6befed"
+      }
+    },
+    "manual-ffffffff": {
+      "absent": true,
+      "final": {
+        "instances": 0,
+        "last_run_time_raw": "2026-11-14 15:53:16+00:00",
+        "last_task_result": 4294967295,
+        "state": 3,
+        "xml_sha256": "cec5dc4aba2473e69cfc0f20f053d62e3d563cd0a8ed5dd2e28b9bacf627e3de"
+      }
+    },
+    "timer-3": {
+      "absent": true,
+      "final": {
+        "instances": 0,
+        "last_run_time_raw": "2026-11-14 15:53:46+00:00",
+        "last_task_result": 3,
+        "state": 3,
+        "xml_sha256": "8922b57d972e1deb6e060329efefdfdb18378fa5b7e6d572335f69a9d2625471"
+      }
+    },
+    "timer-ffffffff": {
+      "absent": true,
+      "final": {
+        "instances": 0,
+        "last_run_time_raw": "2026-11-14 15:53:45+00:00",
+        "last_task_result": 4294967295,
+        "state": 3,
+        "xml_sha256": "f1eb9ef857b62db2c01e58891f37d81e42bae16bd8aeba1904cf42c7aff31e83"
+      }
+    }
+  },
+  "failure": null,
+  "force_used": false,
+  "limitations": "Observed matrix only; no general proof of all Scheduler restart causes.",
+  "native_changes": [
+    {
+      "case": "manual-3",
+      "instances": 1,
+      "last_run_time_raw": "2026-11-14 15:53:16+00:00",
+      "last_task_result": 267009,
+      "state": 4,
+      "time": 1794682396.1148357,
+      "xml_sha256": "2bd6212294843ff81e43d0380cdf6a022d71acea3a82aef7a632ef915d6befed"
+    },
+    {
+      "case": "manual-ffffffff",
+      "instances": 1,
+      "last_run_time_raw": "2026-11-14 15:53:16+00:00",
+      "last_task_result": 267009,
+      "state": 4,
+      "time": 1794682396.1234004,
+      "xml_sha256": "cec5dc4aba2473e69cfc0f20f053d62e3d563cd0a8ed5dd2e28b9bacf627e3de"
+    },
+    {
+      "case": "timer-3",
+      "instances": 0,
+      "last_run_time_raw": "1999-11-30 00:00:00+00:00",
+      "last_task_result": 267011,
+      "state": 3,
+      "time": 1794682396.136174,
+      "xml_sha256": "8922b57d972e1deb6e060329efefdfdb18378fa5b7e6d572335f69a9d2625471"
+    },
+    {
+      "case": "timer-ffffffff",
+      "instances": 0,
+      "last_run_time_raw": "1999-11-30 00:00:00+00:00",
+      "last_task_result": 267011,
+      "state": 3,
+      "time": 1794682396.1438053,
+      "xml_sha256": "f1eb9ef857b62db2c01e58891f37d81e42bae16bd8aeba1904cf42c7aff31e83"
+    },
+    {
+      "case": "manual-3",
+      "instances": 0,
+      "last_run_time_raw": "2026-11-14 15:53:16+00:00",
+      "last_task_result": 3,
+      "state": 3,
+      "time": 1794682401.2575722,
+      "xml_sha256": "2bd6212294843ff81e43d0380cdf6a022d71acea3a82aef7a632ef915d6befed"
+    },
+    {
+      "case": "manual-ffffffff",
+      "instances": 0,
+      "last_run_time_raw": "2026-11-14 15:53:16+00:00",
+      "last_task_result": 4294967295,
+      "state": 3,
+      "time": 1794682401.264328,
+      "xml_sha256": "cec5dc4aba2473e69cfc0f20f053d62e3d563cd0a8ed5dd2e28b9bacf627e3de"
+    },
+    {
+      "case": "timer-ffffffff",
+      "instances": 1,
+      "last_run_time_raw": "2026-11-14 15:53:45+00:00",
+      "last_task_result": 267009,
+      "state": 4,
+      "time": 1794682425.1235304,
+      "xml_sha256": "f1eb9ef857b62db2c01e58891f37d81e42bae16bd8aeba1904cf42c7aff31e83"
+    },
+    {
+      "case": "timer-3",
+      "instances": 1,
+      "last_run_time_raw": "2026-11-14 15:53:46+00:00",
+      "last_task_result": 267009,
+      "state": 4,
+      "time": 1794682426.2574239,
+      "xml_sha256": "8922b57d972e1deb6e060329efefdfdb18378fa5b7e6d572335f69a9d2625471"
+    },
+    {
+      "case": "timer-ffffffff",
+      "instances": 0,
+      "last_run_time_raw": "2026-11-14 15:53:45+00:00",
+      "last_task_result": 4294967295,
+      "state": 3,
+      "time": 1794682429.7454689,
+      "xml_sha256": "f1eb9ef857b62db2c01e58891f37d81e42bae16bd8aeba1904cf42c7aff31e83"
+    },
+    {
+      "case": "timer-3",
+      "instances": 0,
+      "last_run_time_raw": "2026-11-14 15:53:46+00:00",
+      "last_task_result": 3,
+      "state": 3,
+      "time": 1794682430.5899532,
+      "xml_sha256": "8922b57d972e1deb6e060329efefdfdb18378fa5b7e6d572335f69a9d2625471"
+    }
+  ],
+  "product_services_used": false
+}

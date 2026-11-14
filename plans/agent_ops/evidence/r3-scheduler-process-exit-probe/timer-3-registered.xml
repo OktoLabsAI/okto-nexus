@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>Disposable finite OS Scheduler semantics probe; no product runtime</Description>
+    <URI>\OktoT19-SchedulerProbe-7bg9yatu-timer-3</URI>
+  </RegistrationInfo>
+  <Principals>
+    <Principal id="owner">
+      <UserId>S-1-5-21-651877168-2641968709-4043845829-1001</UserId>
+      <LogonType>InteractiveToken</LogonType>
+    </Principal>
+  </Principals>
+  <Settings>
+    <AllowHardTerminate>false</AllowHardTerminate>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <RestartOnFailure>
+      <Count>1</Count>
+      <Interval>PT1M</Interval>
+    </RestartOnFailure>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <IdleSettings>
+      <StopOnIdleEnd>true</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+  </Settings>
+  <Triggers>
+    <TimeTrigger>
+      <StartBoundary>2026-11-14T15:53:45-03:00</StartBoundary>
+    </TimeTrigger>
+  </Triggers>
+  <Actions Context="owner">
+    <Exec>
+      <Command>C:\Users\jpamb\AppData\Local\Temp\r3-native-t19-t20-39ycaumc\venv\Scripts\pythonw.exe</Command>
+      <Arguments>-I -B -X utf8 C:\Users\jpamb\AppData\Local\Temp\t19-scheduler-semantics-7bg9yatu\action.py timer-3</Arguments>
+      <WorkingDirectory>C:\Users\jpamb\AppData\Local\Temp\t19-scheduler-semantics-7bg9yatu</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>

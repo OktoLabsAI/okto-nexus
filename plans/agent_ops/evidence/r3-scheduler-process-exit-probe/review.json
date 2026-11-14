@@ -1,0 +1,104 @@
+{
+  "date": "2026-11-14",
+  "status": "DIAGNOSTIC_MATRIX_COMPLETE_NO_SCENARIO_PROMOTION",
+  "execution": {
+    "root_session": 17360,
+    "exit_code": 0,
+    "source": "Root execution report and retained result.json",
+    "stderr_warning": {
+      "type": "releaseIUnknown",
+      "count": 3,
+      "source": "Root tool-output report; not a fabricated stderr receipt",
+      "interpretation": "Preserved warning; does not overturn recorded process exits or exact task absence."
+    }
+  },
+  "plan_sha256": "c78930ee4e53e4172ebb40bbd0dfd17cfbcaf9521cf4a5a1a90a14da6e58d687",
+  "result_sha256": "afc256945c319eed65f3668befac3a6058ee517cd123471865ba8369125f927e",
+  "offline_tests": {
+    "initial_xml": {
+      "passed": 4,
+      "tool_chunk": "4ff3a6"
+    },
+    "pythonw_delta_xml": {
+      "passed": 4,
+      "tool_chunk": "abe3f9"
+    },
+    "distinct_cases": 4,
+    "no_product_runtime": true
+  },
+  "matrix": [
+    {
+      "trigger": "Run(None)",
+      "exit_code": 3,
+      "attempts": 1,
+      "physical_exit_and_birth_confirmed": true,
+      "native_last_result_matches": true,
+      "second_attempt_observed": false,
+      "task_removed": true
+    },
+    {
+      "trigger": "Run(None)",
+      "exit_code": 4294967295,
+      "attempts": 1,
+      "physical_exit_and_birth_confirmed": true,
+      "native_last_result_matches": true,
+      "second_attempt_observed": false,
+      "task_removed": true
+    },
+    {
+      "trigger": "single TimeTrigger",
+      "exit_code": 3,
+      "attempts": 1,
+      "physical_exit_and_birth_confirmed": true,
+      "native_last_result_matches": true,
+      "second_attempt_observed": false,
+      "task_removed": true
+    },
+    {
+      "trigger": "single TimeTrigger",
+      "exit_code": 4294967295,
+      "attempts": 1,
+      "physical_exit_and_birth_confirmed": true,
+      "native_last_result_matches": true,
+      "second_attempt_observed": false,
+      "task_removed": true
+    }
+  ],
+  "observation": {
+    "restart_interval_seconds": 60,
+    "restart_count": 1,
+    "seconds_after_latest_dispatch_or_boundary": 135,
+    "native_xml_fingerprint_unchanged": true,
+    "native_task_state_before_delete": 3,
+    "native_instances_before_delete": 0,
+    "force_used": false,
+    "product_services": 0,
+    "model_turns": 0
+  },
+  "conclusion": "On this Windows host, these four normal action-process exits were not restarted despite native RestartOnFailure PT1M/Count1. Neither DWORD3 versus FFFFFFFF nor manual versus timer dispatch changed the observation. This is not proof of every possible Task Scheduler failure/retry behavior.",
+  "original_campaign_diagnosis": {
+    "evidence": "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json",
+    "launch_requested_false_blocks_entry": false,
+    "entry_source_fact": "supervised_service.py records launch_requested=False but does not reject entry on that flag; draining in the current logon session is a distinct stop latch.",
+    "native_start_source_fact": "WindowsTaskScheduler.start invokes matching_task.Run(None).",
+    "original_task_history": "Exact task already removed before read-only COM query (0x80070002); TaskScheduler Operational log disabled. No global log setting was changed.",
+    "limitation": "Original crash campaign has zero replacement READY observations, not a proven native attempt count. The separate OS matrix provides direct process-exit observations without rewriting that campaign."
+  },
+  "primary_references": [
+    {
+      "url": "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-tsch/2ff4aa5a-7bc4-449f-bbb1-27475645867f",
+      "reading": "Protocol text describes unmet start conditions or failure to start an action."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-restartonfailure-settingstype-element",
+      "reading": "Schema text uses broader failure wording; XML alone does not prove the process-exit recovery contract."
+    }
+  ],
+  "acceptance": {
+    "SVC_T19": "UNCHANGED_IN_PROGRESS",
+    "SVC_T20": "UNCHANGED_IN_PROGRESS",
+    "M1": "NOT_PROMOTED",
+    "verified_scenarios": 122,
+    "total_scenarios": 132
+  }
+}

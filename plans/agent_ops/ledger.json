@@ -739,7 +739,8 @@
         "tests/test_service_process.py",
         "tests/test_service_readiness.py",
         "tests/test_service_start.py",
-        "tests/test_user_service_installation.py"
+        "tests/test_user_service_installation.py",
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr01-detached-process.xml",
@@ -1561,7 +1562,8 @@
         "tests/test_service_launch_recovery.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
-        "tests/test_user_service_installation.py"
+        "tests/test_user_service_installation.py",
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
       ],
       "tests": [
         "plans/agent_ops/evidence/pr02-connector-user-service-packaging.xml",
@@ -7235,11 +7237,12 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json",
-        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
+        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json",
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
       ],
       "remaining": "Diagnose and correct actual crash recovery, then qualify bounded automatic replacements and persistent failure for both hosts.",
       "remaining_kind": "real_supervisor_crash_campaign",
-      "result": "Actual installed Nexus READY owner was deliberately terminated with exit3. No READY replacement was confirmed within the 180-second harness observation; last-attempt failure was actionable. Normal cleanup completed. Native retry success and exhaustion remain unverified."
+      "result": "Actual installed Nexus READY owner was deliberately terminated with exit3. No READY replacement was confirmed within the 180-second harness observation; last-attempt failure was actionable. Normal cleanup completed. Native retry success and exhaustion remain unverified. Separate OS-only matrix: manual/timer actions each exited with DWORD3 or FFFFFFFF exactly once; no restart in the bounded observation, all four tasks removed. Native XML recovery is insufficient on this host for these process exits."
     },
     "SVC-T20": {
       "requirement": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
@@ -7251,7 +7254,8 @@
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
-        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
+        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json",
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
       ],
       "remaining": "Complete equivalent actual Connector stop/next-connect policy observation; preserve distinction between service start and setup success.",
       "remaining_kind": "real_service_stop_reconnect_campaign",
@@ -13195,6 +13199,23 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
       ]
+    },
+    "r3_scheduler_process_exit_probe": {
+      "date": "2026-11-14",
+      "status": "DIAGNOSTIC_MATRIX_COMPLETE_NO_SCENARIO_PROMOTION",
+      "matrix_cases": 4,
+      "attempts": 4,
+      "native_restarts_observed": 0,
+      "cleanup_tasks_absent": 4,
+      "force_used": false,
+      "model_turns": 0,
+      "source_xml_distinct_tests": 4,
+      "source_xml_total_executions": 8,
+      "diagnostic_only": true,
+      "scenario_promotion": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
+      ]
     }
   },
   "history": [
@@ -14589,6 +14610,15 @@
       "summary": "Nexus stop/reconnect service behavior observed; one crash followed by 180-second readiness timeout. Normal cleanup retained data and removed temporary tasks. No scenario promoted.",
       "evidence": [
         "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Isolate Scheduler process-exit restart semantics",
+      "status": "DIAGNOSTIC_ONLY",
+      "summary": "Four OS-only cases observed one process exit each and no restart; all own tasks removed. No product or scenario acceptance promoted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json"
       ]
     }
   ]

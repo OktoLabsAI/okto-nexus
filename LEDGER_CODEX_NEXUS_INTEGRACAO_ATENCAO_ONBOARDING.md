@@ -1678,3 +1678,23 @@ Não houve uso de --force nem turno de modelo. Há 34 casos distintos de teste d
 executor aprovados; estes não substituem a falha nativa observada.
 Continuam 122/132 cenários VERIFIED, sem promoção de T19/T20 ou M1.
 Evidência: `plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json`.
+
+## 2026-11-14 — Diagnóstico isolado do restart do Task Scheduler
+
+A matriz nativa, sem serviços do produto, comparou Run(None) e TimeTrigger,
+com saída DWORD 3 e FFFFFFFF. Os quatro processos tiveram identidade e saída
+física confirmadas; cada tarefa executou uma única vez. RestartOnFailure PT1M,
+Count1 não gerou segunda tentativa na observação de 135 segundos após o último
+disparo/boundary. LastTaskResult correspondeu à saída física em todos os casos.
+As quatro definições permaneceram iguais e foram removidas já inativas, sem force.
+
+O experimento sustenta a insuficiência dessa política nativa para essas saídas
+neste host; não prova todos os modos de falha do Agendador. Não altera a falha
+original de T19 nem transforma ausência de READY em contagem de tentativas.
+O histórico Operational estava desabilitado e a tarefa original já havia sido
+removida quando consultada. launch_requested=False não bloqueia o launcher.
+Foram preservados os três avisos releaseIUnknown reportados pelo root; a saída
+do executor foi 0. Há quatro casos XML distintos, executados antes e após a
+troca da ação para pythonw.exe. Nenhum serviço, credencial ou modelo foi usado.
+Permanecem 122/132 cenários VERIFIED, sem promoção de T19/T20 ou M1.
+Evidência: `plans/agent_ops/evidence/r3-scheduler-process-exit-probe/review.json`.
