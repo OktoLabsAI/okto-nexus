@@ -1,0 +1,38 @@
+{
+  "status": "CANONICAL_PROBE60_PASS",
+  "elapsed_seconds": 0.7697272999794222,
+  "canonical_probe_timeout_seconds": 60,
+  "candidate": {
+    "protocol": 2,
+    "distribution": "okto-nexus",
+    "package": {
+      "version": "0.3.3",
+      "digest": "158de566c48f4f093f7cf9477309ffcab8ac7be3ea750e541a2ee28160ce0ef0"
+    },
+    "core": {
+      "version": "0.0.14",
+      "digest": "30e6095b4cdb8bd3ce2b5cd3eb822139beaeec3918ac07672416acf799f89aee"
+    },
+    "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+    "environment_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+    "python_version": "3.13.1",
+    "python_digest": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+  },
+  "source_installed_agreement": {
+    "nexus": {
+      "source_sha256": "d1419354d1a84ee459f8f4fa7b9c54900e2ace9ddd4ae0b74bb1a352e168fdb9",
+      "installed_sha256": "d1419354d1a84ee459f8f4fa7b9c54900e2ace9ddd4ae0b74bb1a352e168fdb9"
+    },
+    "connector": {
+      "source_sha256": "efaaf704c52d2499113cf07e41efcc8e8b02652a521e933bdb545d70ce910983",
+      "installed_sha256": "efaaf704c52d2499113cf07e41efcc8e8b02652a521e933bdb545d70ce910983"
+    }
+  },
+  "installation_sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+  "model_calls": 0,
+  "service_actions": 0,
+  "upgrade_actions": 0,
+  "scope": "Installed canonical service_environment.probe only; no runtime home, Scheduler or provider touched."
+}

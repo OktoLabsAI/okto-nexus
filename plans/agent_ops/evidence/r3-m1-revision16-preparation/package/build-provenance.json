@@ -1,0 +1,48 @@
+{
+  "sources": {
+    "nexus": {
+      "repository": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "commit": "b90e68242a56e4b990565859bf0c0e7107ec185d",
+      "archive_sha256": "d316fd6a0d1be5a30254fe8cbaf5093f104b930177deb330f50b840dc6ff6425"
+    },
+    "connector": {
+      "repository": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+      "commit": "645d7bd55957a42507d9d208871a30f91828f952",
+      "archive_sha256": "a841e05d6f8f8fac047ac357c08294e59ad0afe12d5f60a8dd2edddfa3fd9bf0"
+    }
+  },
+  "wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": "bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4",
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4",
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+  },
+  "dependencies": {
+    "returncode": 0,
+    "stdout_sha256": "524f83017f5f4974fb65258d0500d588fbd39fed9fa629d6db4111e9c97b8cdf",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build": {
+    "returncode": 0,
+    "stdout_sha256": "572f42b30d975d092dc68f6bf4b162dbb76fd62ff299fdd91c884cdf20fd4552",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "installation": {
+    "returncode": 0,
+    "stdout_sha256": "0677fd2c409f3f5086ed999e34d9d0a0f3b19c2b7d02b32844b782aa907dff5e",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "installation_sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155",
+  "services_started": 0,
+  "models_called": 0,
+  "initial_build_provenance_sha256": "05645364f6fb03856c8641635849204ce399e91cbee2f2aaa21c0e61ff416a05",
+  "unchanged_connector_reused": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+    "sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4",
+    "verified_payloads": 131,
+    "initial_installation_sha256": "3b2d09022db204dd05bf0a5b8d501da59e16a4ab893204ba0f75c4cce0b396f5",
+    "initial_build_provenance_sha256": "05645364f6fb03856c8641635849204ce399e91cbee2f2aaa21c0e61ff416a05",
+    "pip_reexecuted": false,
+    "installed_payloads_changed": false,
+    "zip_metadata_identity_not_assumed": true
+  }
+}

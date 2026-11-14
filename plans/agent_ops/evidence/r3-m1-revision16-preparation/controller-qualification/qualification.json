@@ -1,0 +1,66 @@
+{
+  "status": "FOCUSED_DELTA_PASS_OFFLINE",
+  "unique_delta_tests": 14,
+  "runs": [
+    {
+      "tool": "e2bb84",
+      "cases": 14,
+      "failures": 0,
+      "elapsed_seconds": 2.309
+    }
+  ],
+  "single_full_14_case_run_claimed": true,
+  "ruff_F": {
+    "tool": "53f8e9",
+    "result": "PASS"
+  },
+  "in_memory_compile_files": 17,
+  "own_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Scripts\\python.exe",
+  "python_flags": [
+    "-I",
+    "-B",
+    "-X",
+    "utf8"
+  ],
+  "runtime_source": "W16 modules imported from the test script directory; installed W15 dependencies reused without mutation. Composition/package qualification is separate.",
+  "changed_runtime_files": [
+    "modules/fresh_work_controller.py",
+    "modules/legacy_controller.py",
+    "modules/observation_limits.py",
+    "local_work.py"
+  ],
+  "unchanged_runtime_files": 12,
+  "live_service_provider_actions": 0,
+  "model_dispatches": 0,
+  "actual_journal_access": "Read-only four exact historical records through existing bounded readers; temporary fixture controller files and synthetic API queue only.",
+  "authority": "Actual original receipt14 checked against its original ancestral policy/ancestry plus exact new amendment16 bindings. No new user receipt invented.",
+  "scope": "New local14/15 executable; remote16/17 allocation held by controller until separate qualification.",
+  "bounds": {
+    "snapshot": 1,
+    "initialization": 2,
+    "persistence_margin": 1,
+    "poll": 19,
+    "freshness": 20,
+    "cadence": 24,
+    "maximum_observed_records": 8,
+    "target_start": 0.2,
+    "deadline": 600,
+    "preventive": 500000,
+    "tolerance": 700000
+  },
+  "predecessor_accounting": {
+    "observed_tokens": 341276,
+    "charged_reservations": 13,
+    "refunded": false,
+    "historical_records": 4,
+    "original_settled_flags_preserved": true,
+    "request13_Cancelled_stream_cursor": 51,
+    "interrupt_SUBMITTED_completion_not_inferred": true
+  },
+  "acceptance": "Operational envelope is not an R3 acceptance criterion or hard billed-token guarantee. No new M1 acceptance.",
+  "selected_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-selected-plan-a0xzgmki\\execution-plan.json",
+    "sha256": "1c7a64e3257c8b3ee0020528a1c0bfe4f080c04f94d392d0066b8ca5b473ecea",
+    "bytes": 6834
+  }
+}

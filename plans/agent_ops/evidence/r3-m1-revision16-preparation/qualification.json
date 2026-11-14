@@ -1,0 +1,146 @@
+{
+  "status": "OFFLINE_REVISION16_QUALIFIED_NOT_EXECUTED",
+  "amendment_sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca",
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+    "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+  },
+  "build": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\build-provenance.json",
+    "sha256": "0a5fe07acc5901c2520d9c976c870d9d8853b847a57a1e5783a4bbac34a6a366"
+  },
+  "canonical_probe60": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\probe-qualification.json",
+    "sha256": "ac2d6291ce921b121c8d27a4d569cf7f5fbf2f537163d32951e858219a2a71d1"
+  },
+  "composed_gate": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\gate-qualification.json",
+    "sha256": "0ba644e6868cbe1163300e74034a061253cb9c10029268437be145fc87536cb4"
+  },
+  "installed_native_provenance": {
+    "passed": 50,
+    "new_source_cases": 18,
+    "existing_source_cases": 32,
+    "tool": "bcab2b",
+    "elapsed_seconds": 186.63,
+    "warnings": [
+      "One StarletteDeprecationWarning for testclient httpx; no product or fixture failure."
+    ],
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\installed-native.xml",
+      "sha256": "765940aaaa18956c1bf15df51b68b1874705477428250188cb9df32f3c0a2714"
+    },
+    "runner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\run_installed_native.py",
+      "sha256": "8b9662f46bf987f35ff9f8de49fbbf920aff5c04b376d679cd5b60f67c986b8a"
+    },
+    "origins": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\installed-native-origins.json",
+      "sha256": "bbce88a80589ac5bf38f0d078091317705437a79348027de5aae195570fb4361"
+    },
+    "fixtures": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\fixture-pins.json",
+      "sha256": "e99547fcc58b6b8190f1d7bc22926ef2af02b3454d78e73ebf588bddcc91e245"
+    },
+    "repository_source_imports": false,
+    "scope": "Actual new installed Nexus/Core imports with copied fixture-only dependencies. No native/provider execution."
+  },
+  "composition_delta": {
+    "passed": 6,
+    "tool": "046f9a",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\composition.xml",
+      "sha256": "19a2e33b308aff4de8fa0d0acb0ac356fddb74c2e85d4a4a8255b0eedd194e08"
+    },
+    "runner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\run_composition.py",
+      "sha256": "eab54e0f21269969e52cc2e1760c32f1d74bcffba9a60ff986b4f7ba6f02e69f"
+    },
+    "test_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\checks\\test_composition.py",
+      "sha256": "5a334be699b65a139ab89f7c731d84c8472ec3e96eddb8032c7deafa64a9f43f"
+    }
+  },
+  "controller_delta": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\controller-qualification\\qualification.json",
+    "sha256": "0632e994f404acf02c40d8931d1f9b3eed5e023e1300b2da7e05c7e77e73f5a7"
+  },
+  "controller_runtime_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\controller-qualification\\runtime-freeze.json",
+    "sha256": "2605a4dd25b58e5f47d8927bfca7df3f3b71ee6389a125e1b43d87f58cc90798"
+  },
+  "suite_counts_not_summed_as_distinct": true,
+  "ruff_F": {
+    "tool": "016c9c",
+    "result": "PASS"
+  },
+  "root_review": {
+    "context_entry_close": "d82a2d PASS",
+    "connector_zip_equivalence": "5cdc4a,132 ZIP entries equal including RECORD"
+  },
+  "preparation_antecedent": {
+    "tool": "698e4f",
+    "failure": "Freeze helper accepted Path but received str during first source hash check; corrected Path conversion. No freeze emitted, runtime effect or test rerun."
+  },
+  "connector_artifact_reuse": {
+    "final_retained_sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4",
+    "actual_initial_pip_zip_sha256": "e1d1046d7bddfbaa116669e937430770ac1876278f192923614dc855d68e36aa",
+    "installed_payloads_verified_excluding_record": 131,
+    "installed_payloads_changed": false,
+    "pip_reexecuted": false,
+    "initial_installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\initial-installation.json",
+      "sha256": "3b2d09022db204dd05bf0a5b8d501da59e16a4ab893204ba0f75c4cce0b396f5"
+    },
+    "initial_build": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\initial-build-provenance.json",
+      "sha256": "05645364f6fb03856c8641635849204ce399e91cbee2f2aaa21c0e61ff416a05"
+    },
+    "actual_pip_origin_projection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\pip-origin-projection.json",
+      "sha256": "39135fec49344a8d074831b0147c6e2d3999d3778e48a0709f64c70e41007652"
+    },
+    "limitation": "Initial builder rebuilt unchanged Connector commit; final artifact reuses prior immutable ZIP after byte-equivalence proof. Initial actual pip wheel identity remains explicit; no claim pip installed the retained ZIP."
+  },
+  "reused_unchanged_qualification": {
+    "predecessor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\qualification.json",
+      "sha256": "8df192e97196ac50a25f7efa82ed014dfd2619858c3f6fb363a662139bda8e25"
+    },
+    "scope": "Lifecycle/upgrade/grant transport, CLI readiness5 and prior preflight tests unchanged; only current context/history/policy/provenance deltas qualified here."
+  },
+  "policy": {
+    "revision": 16,
+    "carry_in_admissions": 13,
+    "carry_in_tokens": 341276,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 17,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "observation_bounds": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "poll_seconds": 19,
+    "freshness_seconds": 20,
+    "cadence_seconds": 24,
+    "target_start_seconds": 0.2,
+    "max_observed_requests": 8
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "python_flags": [
+    "-B",
+    "-I",
+    "-X",
+    "utf8"
+  ],
+  "services_started": 0,
+  "provider_calls": 0,
+  "upgrade_actions": 0,
+  "grant_changes": 0,
+  "new_model_reservations": 0,
+  "acceptance_promoted": false,
+  "remote_execution_enabled": false,
+  "historical_control_receipt": "SUBMITTED snapshot retained; neither old decision nor control is replayed; target cancellation does not settle its control receipt."
+}

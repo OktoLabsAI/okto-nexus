@@ -1,0 +1,99 @@
+{
+  "status": "OFFLINE_QUALIFIED_ROOT_REVIEWED_NOT_EXECUTED",
+  "retained_files": 68,
+  "all_source_copy_hashes_verified": true,
+  "high_specificity_secret_scan_matches": [],
+  "amendment_sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca",
+  "freeze_sha256": "fdcfab39cf9445c70878dfaf8f1bec3964b2debbf2c2e1ea857ba8496ccc1e94",
+  "workflow_sha256": "853210c05a5629d0e03e265215ba253765b47ed23abe632d5e4338c594a1c45d",
+  "selected_plan_sha256": "1c7a64e3257c8b3ee0020528a1c0bfe4f080c04f94d392d0066b8ca5b473ecea",
+  "source_commits": {
+    "nexus": "b90e68242a56e4b990565859bf0c0e7107ec185d",
+    "connector": "645d7bd55957a42507d9d208871a30f91828f952",
+    "core": "7810f3b9bd2576bca5ccc8286a4c661789bf73a4"
+  },
+  "qualification": {
+    "payloads": 1002,
+    "canonical_probe60_seconds": 0.7697272999794222,
+    "installed_native_passes": 50,
+    "installed_native_seconds": 186.63,
+    "installed_native_warning": "One Starlette httpx deprecation warning.",
+    "composition_passes": 6,
+    "controller_delta_unique_passes": 14,
+    "controller_full_run": true,
+    "three_separate_suites_not_aggregated": true,
+    "source_50_and_installed_50_overlap_not_summed": true,
+    "real_work_prefix_facade_import": "PASS, no handler/controller/runtime effects"
+  },
+  "connector_wheel_provenance": {
+    "final_retained_sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4",
+    "actual_initial_pip_zip_sha256": "e1d1046d7bddfbaa116669e937430770ac1876278f192923614dc855d68e36aa",
+    "installed_payloads_verified_excluding_record": 131,
+    "installed_payloads_changed": false,
+    "pip_reexecuted": false,
+    "initial_installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\initial-installation.json",
+      "sha256": "3b2d09022db204dd05bf0a5b8d501da59e16a4ab893204ba0f75c4cce0b396f5"
+    },
+    "initial_build": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\initial-build-provenance.json",
+      "sha256": "05645364f6fb03856c8641635849204ce399e91cbee2f2aaa21c0e61ff416a05"
+    },
+    "actual_pip_origin_projection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\pip-origin-projection.json",
+      "sha256": "39135fec49344a8d074831b0147c6e2d3999d3778e48a0709f64c70e41007652"
+    },
+    "limitation": "Initial builder rebuilt unchanged Connector commit; final artifact reuses prior immutable ZIP after byte-equivalence proof. Initial actual pip wheel identity remains explicit; no claim pip installed the retained ZIP."
+  },
+  "connector_root_comparison": {
+    "all_zip_entries_equal": 132,
+    "tool": "5cdc4a",
+    "includes_RECORD": true,
+    "distinction": "131 installed payload entries exclude RECORD; initial actual pip ZIP and direct_url remain explicit."
+  },
+  "technical_allocation": {
+    "revision": 16,
+    "old_cap": 16,
+    "new_cap": 17,
+    "carry_charged_reservations": 13,
+    "max_new": 4,
+    "local_executable_new": 2,
+    "remote_selectors_enabled": false,
+    "old_v15_continuation14_eligible": false,
+    "refund": false
+  },
+  "tokens": {
+    "carry_observed": 341276,
+    "preventive": 500000,
+    "authorized_tolerance": 700000,
+    "remaining_until_preventive": 158724,
+    "remaining_until_tolerance": 358724,
+    "billing_final": false
+  },
+  "observations": {
+    "records": 8,
+    "historical": 4,
+    "new": 4,
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "margin_seconds": 1,
+    "poll_seconds": 19,
+    "freshness_seconds": 20,
+    "cadence_seconds": 24,
+    "target_seconds": 0.2,
+    "work_deadline_seconds": 600,
+    "fixed_acceptance_criterion_claimed": false
+  },
+  "original_history_preserved": "W15 request13 CANCELLED and settled; its interrupt SUBMITTED remains uncertain; older request11/12 unsettled flags and original faults preserved. Old decision not replayed.",
+  "status_changes": [],
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "no_live_service_provider_grant_or_migration_effects": true,
+  "runtime_namespaces_absent_at_curation": true,
+  "private_or_environment_payloads_copied": false,
+  "root_review": "root-review.json",
+  "scope": "65 frozen preparation files plus freeze/allowlist and separately pinned root helper; no wheel/venv/archive/raw private runtime copied. Fixture source hashes retained without broad fixture directory copy."
+}

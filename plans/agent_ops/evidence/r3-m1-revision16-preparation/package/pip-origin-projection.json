@@ -1,0 +1,50 @@
+{
+  "scope": "Actual pip-installed origins, not rewritten to retained artifact identity.",
+  "origins": [
+    {
+      "file": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus-0.3.3.dist-info\\direct_url.json",
+        "sha256": "31d37f1e0bdc2fd016681cf31aaaad395c3305e57105762206f8c26119e5ad90"
+      },
+      "pip_origin": {
+        "archive_info": {
+          "hash": "sha256=bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4",
+          "hashes": {
+            "sha256": "bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4"
+          }
+        },
+        "url": "file:///C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/work-revision16/package/wheels/okto_nexus-0.3.3-py3-none-any.whl"
+      }
+    },
+    {
+      "file": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector-0.0.12.dist-info\\direct_url.json",
+        "sha256": "52a2eaa6b11374ead9ed41fc963c3d82e2c81300bd279c8073b9eb55773ef84c"
+      },
+      "pip_origin": {
+        "archive_info": {
+          "hash": "sha256=e1d1046d7bddfbaa116669e937430770ac1876278f192923614dc855d68e36aa",
+          "hashes": {
+            "sha256": "e1d1046d7bddfbaa116669e937430770ac1876278f192923614dc855d68e36aa"
+          }
+        },
+        "url": "file:///C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/work-revision16/package/wheels/okto_nexus_connector-0.0.12-py3-none-any.whl"
+      }
+    },
+    {
+      "file": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector_core-0.0.14.dist-info\\direct_url.json",
+        "sha256": "8dc9aec683ae6405e29578d92e64b0a834d3fb8d51096d3bfdb70333bae2c067"
+      },
+      "pip_origin": {
+        "archive_info": {
+          "hash": "sha256=d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9",
+          "hashes": {
+            "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+          }
+        },
+        "url": "file:///C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/work-revision16/package/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl"
+      }
+    }
+  ]
+}

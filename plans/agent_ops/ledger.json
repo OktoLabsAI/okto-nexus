@@ -13634,6 +13634,36 @@
       "acceptance_promoted": false,
       "observed_tokens": 341276,
       "charged_reservations": 13
+    },
+    "r3_m1_revision16_offline_preparation": {
+      "status": "OFFLINE_QUALIFIED_ROOT_REVIEWED_NOT_EXECUTED",
+      "summary": "Revision16 offline successor from Nexusb90e6824 qualified:50 installed native authority cases in186.63s,6 composition and14 controller cases retained separately, no summed overlap.1002payloads/probe60 in0.770s. Initial Connector rebuiltZIPe1d104 actually installed; retained priorZIPf986 has identical131installedpayloads/132ZIPentries, with original pip/direct_url provenance preserved. Carry341276/13, new4/max17,500k/700k unchanged. Eight observed records keep four histories and19/20/24 envelope; local14/15 serial conditional, remote16/17held. No runtime service/provider/grant/migration effect, no replay/refund or acceptance promotion;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/amendment.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/runtime-freeze.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/workflow.json"
+      ],
+      "policy": {
+        "revision": 16,
+        "carry_in_admissions": 13,
+        "carry_in_tokens": 341276,
+        "max_new_admissions": 4,
+        "max_cumulative_admissions": 17,
+        "preventive_cumulative_tokens": 500000,
+        "operational_tolerance": 700000,
+        "deadline_seconds": 600
+      },
+      "remote_execution_enabled": false,
+      "services_started": 0,
+      "models_called": 0,
+      "grant_changes": 0,
+      "upgrade_actions": 0,
+      "acceptance_promoted": false,
+      "observed_tokens": 341276,
+      "charged_reservations": 13
     }
   },
   "history": [
@@ -15200,6 +15230,20 @@
         "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/qualification.json",
         "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/final.xml",
         "plans/agent_ops/evidence/r3-native-decision-authentication-provenance/initial-10pass-1fixture-fail.xml"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision16_offline_preparation",
+      "status": "OFFLINE_QUALIFIED_ROOT_REVIEWED_NOT_EXECUTED",
+      "summary": "Revision16 offline successor from Nexusb90e6824 qualified:50 installed native authority cases in186.63s,6 composition and14 controller cases retained separately, no summed overlap.1002payloads/probe60 in0.770s. Initial Connector rebuiltZIPe1d104 actually installed; retained priorZIPf986 has identical131installedpayloads/132ZIPentries, with original pip/direct_url provenance preserved. Carry341276/13, new4/max17,500k/700k unchanged. Eight observed records keep four histories and19/20/24 envelope; local14/15 serial conditional, remote16/17held. No runtime service/provider/grant/migration effect, no replay/refund or acceptance promotion;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/amendment.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/runtime-freeze.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-preparation/workflow.json"
       ]
     }
   ],

@@ -2026,3 +2026,32 @@ W15 e seu resultado anterior permanecem intactos. **341.276 tokens/13 reservas;
 124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção M1 ou novo efeito.
 Evidência: [revisão](plans/agent_ops/evidence/r3-native-decision-authentication-provenance/review.json)
 e [qualificação](plans/agent_ops/evidence/r3-native-decision-authentication-provenance/qualification.json).
+
+## 2026-11-14 — Revisão16 M1: preparação offline qualificada
+
+Pacote próprio com Nexus `b90e6824`, Connector `645d7bd5` e Core `7810f3b9`.
+**50 testes instalados PASS em186,63s** (uma advertência Starlette), **6 testes
+da composição PASS** e **14 deltas distintos do controlador PASS** são retidos
+separadamente; não se somam rodadas de fonte/instalado sobrepostas.1002 payloads
+verificados, probe canônico60 em0,770s e import real do gate/facade passaram.
+
+O builder reconstruiu inicialmente o ZIP Connector `e1d104…`, realmente instalado.
+O artefato retido volta ao ZIP imutável `f9864f…` após prova de131 payloads
+instalados iguais (excluindo RECORD); root comparou132 entradas ZIP incluindo
+RECORD. Manifestos iniciais e direct_url preservam a origem pip real. Não houve
+reinstalação ou mudança de payload, nem alegação de que pip instalou o ZIP retido.
+
+Carry **341.276 tokens/13 reservas**, quatro novos IDs e teto técnico **17**;
+preventiva500k/tolerância700k mantidas. Restam158724 até preventiva e358724 até
+tolerância, sem garantia de conclusão. Oito registros observados (4 históricos+
+4novos) mantêm snapshot1/init2/margem1 e derivam poll19/fresh20/cadence24/alvo200ms;
+deadline600 e readiness5 permanecem. Não são novos critérios de aceite R3.
+
+Local útil14 em nova sessão e continuação15 só após sucesso canônico na mesma
+sessão; remoto16/17 bloqueado. A continuação14 antiga da W15 é inelegível após
+CANCELLED. Decisão anterior não é reexecutada; interrupt SUBMITTED e histórico
+permanecem intactos. Root revisou o candidato,65 pins e namespaces runtime ausentes.
+Nenhum serviço, modelo, grant ou migração real foi executado nesta preparação.
+**124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção de aceite.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision16-preparation/review.json)
+e [qualificação](plans/agent_ops/evidence/r3-m1-revision16-preparation/qualification.json).
