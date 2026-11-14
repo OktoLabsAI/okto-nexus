@@ -1,0 +1,92 @@
+{
+  "format": "m1-v14-offline-successor-qualification",
+  "status": "PASS",
+  "generated_at_utc": "2026-11-14T17:09:53.982440+00:00",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "runtime_manifest_sha256": "70675ce59f71b8a95f1a0588b3eab56044c1bd973e57bbea3fa708942273d577",
+  "groups": {
+    "affected-first": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\affected-001\\results.xml",
+      "sha256": "b5c46b5706d866add17ad811ba9a8b5f868805636959a6c736e6ece4b9ddc2ec",
+      "tests": 34,
+      "failed_or_skipped": 2
+    },
+    "wrapper-fix": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\affected-wrapper-fix\\results.xml",
+      "sha256": "213771aa02140d84c0d0403d7c149cd383806540f2d1121aac421a839e438cdf",
+      "tests": 5,
+      "failed_or_skipped": 0
+    },
+    "drivers": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\final.xml",
+      "sha256": "87e86a9508151028e8b16c35be2c4bb557dd41f01642093859271c185ffdae80",
+      "tests": 63,
+      "failed_or_skipped": 0
+    },
+    "drivers-prior-done": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\prior-done-checkpoint.xml",
+      "sha256": "a4bdeee52f6fa372978606cc73e9fa81f6c2410c5e47302dd64a945cb1e33226",
+      "tests": 1,
+      "failed_or_skipped": 0
+    },
+    "entry-guards": {
+      "xml": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\final-entry-gates\\results.xml",
+      "sha256": "8120da4da4f8bb23e7d87f67fa42f183daa5445563da050bf17db19094a32ee3",
+      "tests": 21,
+      "failed_or_skipped": 0
+    }
+  },
+  "unique_passed": 119,
+  "deduplication": "Exact pytest classname and parametrized test name; latest affected rerun supersedes only the same cases. First failed attempt remains evidence.",
+  "coverage_basis": "V14 affected34 unique cases qualify carry9/134199,4new/max13,600s, explicit new local session,3 decisions/lane and individual decision recovery. Initial32PASS2FAIL found timestamp-variable shadowing; corrected wrapper/recovery5PASS. Peer final focuses changed drivers; v13 historical suites are not added to actual v14 counts. Final fresh installed origins/pins plus negative entry gates run against composed sources.",
+  "historical_reference": {
+    "v13_qualification_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\qualification.json",
+    "sha256": "97fc382e54541d438058bf70dfc24f5969a985c9b312b2d34347b253ac78b526",
+    "not_counted_as_v14_run": true
+  },
+  "post_gate_prose_amendment": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\final-prose-amendment.json",
+    "sha256": "c0d76faeb90d1beea2263c7cdbc8bd8ce9ee04af6b9d748f8a2dec1c1b924869",
+    "scope": "Root requested one counter-semantics sentence corrected after gates; all47 runtime/dependency pins unchanged. No new executable behavior."
+  },
+  "invariants": {
+    "carry_in_reservations": 9,
+    "carry_in_tokens": 134199,
+    "new_reservations": 4,
+    "maximum_cumulative": 13,
+    "preventive_tokens": 500000,
+    "tolerance_tokens": 700000,
+    "deadline_seconds": 600,
+    "native_decisions_per_lane": 3,
+    "init_ms": 250,
+    "read_ms": 250,
+    "poll_ms": 600,
+    "freshness_ms": 1000,
+    "prior_setup_replayed": false,
+    "prior_turn_replayed": false,
+    "old_tokens_counted_twice": false,
+    "predecessor_checkpoint_mutated": false,
+    "new_installation": false,
+    "actual_user_receipt_created": false,
+    "service_provider_credentials_effects": false
+  },
+  "adopted_installation": {
+    "revision": 12,
+    "payloads": 983,
+    "interpreter_plus_payload_pins": 984,
+    "original_install_timing_preserved": true
+  },
+  "acceptance": {
+    "M1": false,
+    "DX39_DX40_AC11": false,
+    "BASE06_first_useful_measured": false,
+    "billing_final": false
+  },
+  "limitations": [
+    "Offline qualification is not real campaign/billing acceptance.",
+    "SQL/poll/freshness bounds fail closed and do not guarantee Windows availability; earlier timing failures remain historical.",
+    "Adopted wheels predate later SVC-T19,DX-T34 and CLI-drain source fixes; no live wheel substitution.",
+    "Installed CLI parser/handler execution does not prove a literal console/window/dashboard close.",
+    "Grant reuse/expiry replacement remains canonical and explicitly selected; historical consumption is never reset."
+  ]
+}

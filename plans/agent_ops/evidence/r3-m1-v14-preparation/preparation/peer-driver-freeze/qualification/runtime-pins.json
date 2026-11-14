@@ -1,0 +1,56 @@
+{
+  "format": "m1-v14-root-driver-runtime-freeze",
+  "status": "FROZEN_QUALIFIED_OFFLINE",
+  "files": {
+    "root_driver_adopt_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "bytes": 4994
+    },
+    "root_driver_authorize_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\authorize_local.py",
+      "sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+      "bytes": 15094
+    },
+    "root_driver_operator_bootstrap": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\operator_bootstrap.py",
+      "sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6",
+      "bytes": 11256
+    },
+    "root_driver_common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\driver_common.py",
+      "sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f",
+      "bytes": 10515
+    },
+    "root_driver_invoke": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\invoke.py",
+      "sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+      "bytes": 3529
+    },
+    "root_driver_prepare_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\prepare_observation.py",
+      "sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+      "bytes": 1367
+    },
+    "root_driver_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+      "bytes": 8661
+    },
+    "root_driver_confirm_cleanup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\m1_v14_confirm_cleanup.py",
+      "sha256": "acd5228e7a37eafa69c310fcd3445c67211f868ec8eb3904eece2d4896006052",
+      "bytes": 8779
+    },
+    "root_driver_confirm_final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\confirm_final_presence.py",
+      "sha256": "58f47e317b8cda721806076dfde27c52f8c31efb8d0afdc22534c1fb32d66fc0",
+      "bytes": 11019
+    },
+    "root_driver_close_campaign": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\close_campaign.py",
+      "sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+      "bytes": 7364
+    }
+  }
+}

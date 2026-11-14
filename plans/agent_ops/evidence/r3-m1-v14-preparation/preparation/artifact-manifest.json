@@ -1,0 +1,611 @@
+{
+  "format": "m1-v14-curated-artifact-manifest",
+  "generated_at_utc": "2026-11-14T17:09:56.283964+00:00",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "qualification_sha256": "b53f9f3cf698ca0ef41b57fe70812734c3e960c575e13ea4fce3f8919a41e7f2",
+  "artifacts": [
+    {
+      "path": "draft/campaign_context.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\campaign_context.py",
+      "source_sha256": "e258b6cd7c7712fc58fc50b5c66b3487ef4dc04556a4911cf7c01c3c0f7fedb2",
+      "artifact_sha256": "e258b6cd7c7712fc58fc50b5c66b3487ef4dc04556a4911cf7c01c3c0f7fedb2",
+      "bytes": 10923
+    },
+    {
+      "path": "draft/m1_v14_lifecycle.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1_v14_lifecycle.py",
+      "source_sha256": "ea2ae574e9bef42fee92a7c94929c0724562d08391e54ee4cc09a36c8a0640cd",
+      "artifact_sha256": "ea2ae574e9bef42fee92a7c94929c0724562d08391e54ee4cc09a36c8a0640cd",
+      "bytes": 4822
+    },
+    {
+      "path": "draft/m1_v14_remote_setup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1_v14_remote_setup.py",
+      "source_sha256": "8b1e4f6401c53b02873e880f5a581583923db086595572f89ea3022937634538",
+      "artifact_sha256": "8b1e4f6401c53b02873e880f5a581583923db086595572f89ea3022937634538",
+      "bytes": 10137
+    },
+    {
+      "path": "draft/supervisor_check.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\supervisor_check.py",
+      "source_sha256": "36aab135f9bebf8ca05b7e13d5b21a37c91bb2b2190fc11ab8e1d5429dbcf010",
+      "artifact_sha256": "36aab135f9bebf8ca05b7e13d5b21a37c91bb2b2190fc11ab8e1d5429dbcf010",
+      "bytes": 2246
+    },
+    {
+      "path": "draft/publication.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\publication.py",
+      "source_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "artifact_sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "bytes": 1676
+    },
+    {
+      "path": "draft/response_loss.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\response_loss.py",
+      "source_sha256": "7e12d63ced453c214139d455685eabadf9b791e328ee52c4968c5d92ce48b441",
+      "artifact_sha256": "7e12d63ced453c214139d455685eabadf9b791e328ee52c4968c5d92ce48b441",
+      "bytes": 8906
+    },
+    {
+      "path": "draft/protected-transfer/protected_pty.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\protected-transfer\\protected_pty.py",
+      "source_sha256": "480262b72e805f1e3ec26336940135c81430534debe2962922f234f9fc8e090c",
+      "artifact_sha256": "480262b72e805f1e3ec26336940135c81430534debe2962922f234f9fc8e090c",
+      "bytes": 25769
+    },
+    {
+      "path": "draft/protected-transfer/owned_job.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\protected-transfer\\owned_job.py",
+      "source_sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+      "artifact_sha256": "1b6923d36a9ec047bc67b66d898eac017cd9f7930969e8f894330d0eca56570c",
+      "bytes": 3714
+    },
+    {
+      "path": "draft/remote_transfer_monitor.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\remote_transfer_monitor.py",
+      "source_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "artifact_sha256": "61108c57df55288d550faeb7fa7ad699258a0b0a170b07c98007ee834e896de6",
+      "bytes": 10998
+    },
+    {
+      "path": "draft/remote_stop_order.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\remote_stop_order.py",
+      "source_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "artifact_sha256": "9241181659539a150eb3b75a6a6e5a9c73b1533d177d85cdf3216fc81fcf5386",
+      "bytes": 3267
+    },
+    {
+      "path": "draft/planning-commands.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\planning-commands.json",
+      "source_sha256": "9a63eb944082f8ecdf599c98709fbc13ea9461727d6261f2c4b3e33782a351e6",
+      "artifact_sha256": "9a63eb944082f8ecdf599c98709fbc13ea9461727d6261f2c4b3e33782a351e6",
+      "bytes": 3768
+    },
+    {
+      "path": "draft/remote-canonical-recipe.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\remote-canonical-recipe.json",
+      "source_sha256": "fb0c36cf80231cf17691d589472fd4b91db09bb9a8019a06e31c80036a576c69",
+      "artifact_sha256": "fb0c36cf80231cf17691d589472fd4b91db09bb9a8019a06e31c80036a576c69",
+      "bytes": 23788
+    },
+    {
+      "path": "draft/m1_v14_work.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1_v14_work.py",
+      "source_sha256": "972e2fe806caead167320d9cfea3f5aecf6c6b859e4dcd3702bdabc76c2d72b5",
+      "artifact_sha256": "972e2fe806caead167320d9cfea3f5aecf6c6b859e4dcd3702bdabc76c2d72b5",
+      "bytes": 21873
+    },
+    {
+      "path": "draft/controller/api_worker.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\api_worker.py",
+      "source_sha256": "6ad0a2bb939418bf74b0ccf71b95acf4cd16dda0b3dd1f14bc6fe33872be2645",
+      "artifact_sha256": "6ad0a2bb939418bf74b0ccf71b95acf4cd16dda0b3dd1f14bc6fe33872be2645",
+      "bytes": 4212
+    },
+    {
+      "path": "draft/controller/controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\controller.py",
+      "source_sha256": "cac213d1a5da5fe3eaf98ccecff5b5b4eb7975255f9df25f45debbfb91d6d6d0",
+      "artifact_sha256": "cac213d1a5da5fe3eaf98ccecff5b5b4eb7975255f9df25f45debbfb91d6d6d0",
+      "bytes": 2497
+    },
+    {
+      "path": "draft/controller/history_observers.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\history_observers.py",
+      "source_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "artifact_sha256": "b84ef47b825893c4a81c28793ef3a1a390ec8f776c3cf37fa2aff94266c95f57",
+      "bytes": 1681
+    },
+    {
+      "path": "draft/controller/independent_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\independent_controller.py",
+      "source_sha256": "f93bca910235ce10c1b1cc75b40c9c5ad961f74ff578b2bff1e3d82b7cd2c15c",
+      "artifact_sha256": "f93bca910235ce10c1b1cc75b40c9c5ad961f74ff578b2bff1e3d82b7cd2c15c",
+      "bytes": 18498
+    },
+    {
+      "path": "draft/controller/independent_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\independent_journal.py",
+      "source_sha256": "8cf8a2862fd725e4901c4cb5c5f4263ba3144f69b076e1d6e603124204ee70b1",
+      "artifact_sha256": "8cf8a2862fd725e4901c4cb5c5f4263ba3144f69b076e1d6e603124204ee70b1",
+      "bytes": 20266
+    },
+    {
+      "path": "draft/controller/legacy_controller.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\legacy_controller.py",
+      "source_sha256": "e95d01275e89f5ebd27c448c37fe0b250ff9b34b3a472b09f7aa50f6296d63d9",
+      "artifact_sha256": "e95d01275e89f5ebd27c448c37fe0b250ff9b34b3a472b09f7aa50f6296d63d9",
+      "bytes": 21347
+    },
+    {
+      "path": "draft/controller/observation_guard.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\observation_guard.py",
+      "source_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "artifact_sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10",
+      "bytes": 10253
+    },
+    {
+      "path": "draft/controller/serial_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\serial_flow.py",
+      "source_sha256": "d074e1ee6155a251721528be3531724c0f5eb7fa89f9bb6b6ee752b779abdb9e",
+      "artifact_sha256": "d074e1ee6155a251721528be3531724c0f5eb7fa89f9bb6b6ee752b779abdb9e",
+      "bytes": 1838
+    },
+    {
+      "path": "draft/controller/setup_journal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\setup_journal.py",
+      "source_sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+      "artifact_sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889",
+      "bytes": 8357
+    },
+    {
+      "path": "draft/controller/token_collector.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\token_collector.py",
+      "source_sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2",
+      "artifact_sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2",
+      "bytes": 22011
+    },
+    {
+      "path": "root-drivers/driver_common.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\driver_common.py",
+      "source_sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f",
+      "artifact_sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f",
+      "bytes": 10515
+    },
+    {
+      "path": "root-drivers/invoke.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\invoke.py",
+      "source_sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+      "artifact_sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+      "bytes": 3529
+    },
+    {
+      "path": "root-drivers/prepare_observation.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\prepare_observation.py",
+      "source_sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+      "artifact_sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+      "bytes": 1367
+    },
+    {
+      "path": "root-drivers/m1_v14_observation.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\m1_v14_observation.py",
+      "source_sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+      "artifact_sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+      "bytes": 8661
+    },
+    {
+      "path": "root-drivers/m1_v14_confirm_cleanup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\m1_v14_confirm_cleanup.py",
+      "source_sha256": "acd5228e7a37eafa69c310fcd3445c67211f868ec8eb3904eece2d4896006052",
+      "artifact_sha256": "acd5228e7a37eafa69c310fcd3445c67211f868ec8eb3904eece2d4896006052",
+      "bytes": 8779
+    },
+    {
+      "path": "root-drivers/confirm_final_presence.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\confirm_final_presence.py",
+      "source_sha256": "58f47e317b8cda721806076dfde27c52f8c31efb8d0afdc22534c1fb32d66fc0",
+      "artifact_sha256": "58f47e317b8cda721806076dfde27c52f8c31efb8d0afdc22534c1fb32d66fc0",
+      "bytes": 11019
+    },
+    {
+      "path": "root-drivers/close_campaign.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\close_campaign.py",
+      "source_sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+      "artifact_sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+      "bytes": 7364
+    },
+    {
+      "path": "draft/controller/cli_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\cli_flow.py",
+      "source_sha256": "fe2fc005f4186b2513a2e6a59bbbee0c2eecb18135fc56a9036ea0ebc1cbcd1b",
+      "artifact_sha256": "fe2fc005f4186b2513a2e6a59bbbee0c2eecb18135fc56a9036ea0ebc1cbcd1b",
+      "bytes": 9493
+    },
+    {
+      "path": "root-drivers/operator_bootstrap.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\operator_bootstrap.py",
+      "source_sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6",
+      "artifact_sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6",
+      "bytes": 11256
+    },
+    {
+      "path": "root-drivers/adopt_local.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\adopt_local.py",
+      "source_sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "artifact_sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "bytes": 4994
+    },
+    {
+      "path": "root-drivers/authorize_local.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\root-drivers\\authorize_local.py",
+      "source_sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+      "artifact_sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+      "bytes": 15094
+    },
+    {
+      "path": "m1-codex-campaign-proposal-v14.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1-codex-campaign-proposal-v14.json",
+      "source_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+      "artifact_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+      "bytes": 364287
+    },
+    {
+      "path": "draft/proposed-commands.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\proposed-commands.json",
+      "source_sha256": "b44dbcef91f8809e108b4343d43da435d4b7a3b114eef0aee3c4b885fb742509",
+      "artifact_sha256": "b44dbcef91f8809e108b4343d43da435d4b7a3b114eef0aee3c4b885fb742509",
+      "bytes": 10953
+    },
+    {
+      "path": "runtime-freeze.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\runtime-freeze.json",
+      "source_sha256": "70675ce59f71b8a95f1a0588b3eab56044c1bd973e57bbea3fa708942273d577",
+      "artifact_sha256": "70675ce59f71b8a95f1a0588b3eab56044c1bd973e57bbea3fa708942273d577",
+      "bytes": 12069
+    },
+    {
+      "path": "qualification.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\qualification.json",
+      "source_sha256": "b53f9f3cf698ca0ef41b57fe70812734c3e960c575e13ea4fce3f8919a41e7f2",
+      "artifact_sha256": "b53f9f3cf698ca0ef41b57fe70812734c3e960c575e13ea4fce3f8919a41e7f2",
+      "bytes": 4554
+    },
+    {
+      "path": "test_control_adoption.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\test_control_adoption.py",
+      "source_sha256": "274788e4fe97b093a8415c6b499918657f4caa7d322e0beee69d2545fc848d39",
+      "artifact_sha256": "274788e4fe97b093a8415c6b499918657f4caa7d322e0beee69d2545fc848d39",
+      "bytes": 6386
+    },
+    {
+      "path": "test_successor_entries.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\test_successor_entries.py",
+      "source_sha256": "0bd036865769a82f9c695287c07ed5575828a83ff3472d41d19bd690a77c2e37",
+      "artifact_sha256": "0bd036865769a82f9c695287c07ed5575828a83ff3472d41d19bd690a77c2e37",
+      "bytes": 3064
+    },
+    {
+      "path": "qualify_affected.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\qualify_affected.py",
+      "source_sha256": "3cc086c8d7cfa2e0b265a9a4d3d943ad3a13c9f5d47bbd6e910fa29dd74fac18",
+      "artifact_sha256": "3cc086c8d7cfa2e0b265a9a4d3d943ad3a13c9f5d47bbd6e910fa29dd74fac18",
+      "bytes": 2318
+    },
+    {
+      "path": "qualify_wrapper_fix.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\qualify_wrapper_fix.py",
+      "source_sha256": "0bc44c11dcfbc927c7b1101d871a001e17419bcc2ec8e89fa1a85caf099bd4bc",
+      "artifact_sha256": "0bc44c11dcfbc927c7b1101d871a001e17419bcc2ec8e89fa1a85caf099bd4bc",
+      "bytes": 682
+    },
+    {
+      "path": "verify_final.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\verify_final.py",
+      "source_sha256": "f57c3a1506c50e024b8c8f5ee164541745b4b266f4fc52212f9db289808aa5e7",
+      "artifact_sha256": "f57c3a1506c50e024b8c8f5ee164541745b4b266f4fc52212f9db289808aa5e7",
+      "bytes": 5683
+    },
+    {
+      "path": "finalize_proposal.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\finalize_proposal.py",
+      "source_sha256": "6e9e00f977e415f0e5fbae8b2cd5b177553b310cdd5fdd6bfb4d318e4ef7066f",
+      "artifact_sha256": "6e9e00f977e415f0e5fbae8b2cd5b177553b310cdd5fdd6bfb4d318e4ef7066f",
+      "bytes": 4260
+    },
+    {
+      "path": "curate_final.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\curate_final.py",
+      "source_sha256": "a6dbe3e2050541a12783217b603f0cc6652d0aac1214e1500d5c7b66c65201a6",
+      "artifact_sha256": "a6dbe3e2050541a12783217b603f0cc6652d0aac1214e1500d5c7b66c65201a6",
+      "bytes": 7199
+    },
+    {
+      "path": "update_metadata.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\update_metadata.py",
+      "source_sha256": "9c6b32dbcbeeede24eb2645763d3f3bdefcb33f4d7ef6e76247bae0d8a9f0086",
+      "artifact_sha256": "9c6b32dbcbeeede24eb2645763d3f3bdefcb33f4d7ef6e76247bae0d8a9f0086",
+      "bytes": 8874
+    },
+    {
+      "path": "final-prose-amendment.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\final-prose-amendment.json",
+      "source_sha256": "c0d76faeb90d1beea2263c7cdbc8bd8ce9ee04af6b9d748f8a2dec1c1b924869",
+      "artifact_sha256": "c0d76faeb90d1beea2263c7cdbc8bd8ce9ee04af6b9d748f8a2dec1c1b924869",
+      "bytes": 450
+    },
+    {
+      "path": "tests/controller/test_independent.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\test_independent.py",
+      "source_sha256": "bbd77cabc414ad76c78d875e6cbbdcfe2214a19874d097502341e8f77b859e24",
+      "artifact_sha256": "bbd77cabc414ad76c78d875e6cbbdcfe2214a19874d097502341e8f77b859e24",
+      "bytes": 29134
+    },
+    {
+      "path": "tests/controller/test_v11_allocation.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\test_v11_allocation.py",
+      "source_sha256": "6e7c0ec81d2321733e63fc51073a336e9d3a41138d26d6e9a998e40775838046",
+      "artifact_sha256": "6e7c0ec81d2321733e63fc51073a336e9d3a41138d26d6e9a998e40775838046",
+      "bytes": 4124
+    },
+    {
+      "path": "tests/controller/test_v14_delta.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\test_v14_delta.py",
+      "source_sha256": "a3f8312b53cd49a6f3f1d517f946c1405723c4d13d69b613eb636ee9c3363ed2",
+      "artifact_sha256": "a3f8312b53cd49a6f3f1d517f946c1405723c4d13d69b613eb636ee9c3363ed2",
+      "bytes": 4858
+    },
+    {
+      "path": "tests/controller/test_cli_flow.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\test_cli_flow.py",
+      "source_sha256": "3863144caa6278569e18f78779019e9f88930e08a95373c7693d0dac3f1d0460",
+      "artifact_sha256": "3863144caa6278569e18f78779019e9f88930e08a95373c7693d0dac3f1d0460",
+      "bytes": 14350
+    },
+    {
+      "path": "tests/controller/test_work_wrapper.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\test_work_wrapper.py",
+      "source_sha256": "5ab032efeb018e306198d5f011918b1f312d8cd165fa96231425ba18ab6bf46c",
+      "artifact_sha256": "5ab032efeb018e306198d5f011918b1f312d8cd165fa96231425ba18ab6bf46c",
+      "bytes": 17379
+    },
+    {
+      "path": "tests/controller/canonical_fixture.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\canonical_fixture.py",
+      "source_sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "artifact_sha256": "a6c4f0219fe431ac7d1e8e2adb30a5b0740efed676168c4379284a050448acfa",
+      "bytes": 4280
+    },
+    {
+      "path": "evidence/affected-001/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\affected-001\\results.xml",
+      "source_sha256": "b5c46b5706d866add17ad811ba9a8b5f868805636959a6c736e6ece4b9ddc2ec",
+      "artifact_sha256": "b5c46b5706d866add17ad811ba9a8b5f868805636959a6c736e6ece4b9ddc2ec",
+      "bytes": 42512
+    },
+    {
+      "path": "evidence/affected-001/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\affected-001\\result.json",
+      "source_sha256": "27fbb1b2f9884a4576b946405060d42381d53a7a0ac9cc988797df1710ae5860",
+      "artifact_sha256": "27fbb1b2f9884a4576b946405060d42381d53a7a0ac9cc988797df1710ae5860",
+      "bytes": 6608
+    },
+    {
+      "path": "evidence/affected-wrapper-fix/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\affected-wrapper-fix\\results.xml",
+      "source_sha256": "213771aa02140d84c0d0403d7c149cd383806540f2d1121aac421a839e438cdf",
+      "artifact_sha256": "213771aa02140d84c0d0403d7c149cd383806540f2d1121aac421a839e438cdf",
+      "bytes": 1046
+    },
+    {
+      "path": "evidence/affected-wrapper-fix/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\affected-wrapper-fix\\result.json",
+      "source_sha256": "a8f77c81549cc4eef213a01597cbed3f2c78dda522b345e63ee8f83225fa795e",
+      "artifact_sha256": "a8f77c81549cc4eef213a01597cbed3f2c78dda522b345e63ee8f83225fa795e",
+      "bytes": 6774
+    },
+    {
+      "path": "evidence/final-entry-gates/results.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\final-entry-gates\\results.xml",
+      "source_sha256": "8120da4da4f8bb23e7d87f67fa42f183daa5445563da050bf17db19094a32ee3",
+      "artifact_sha256": "8120da4da4f8bb23e7d87f67fa42f183daa5445563da050bf17db19094a32ee3",
+      "bytes": 3791
+    },
+    {
+      "path": "evidence/final-entry-gates/result.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\final-entry-gates\\result.json",
+      "source_sha256": "5f1652959a3dcdf1f721ca7570adb176d3bc391c779beb0a36f742db36047209",
+      "artifact_sha256": "5f1652959a3dcdf1f721ca7570adb176d3bc391c779beb0a36f742db36047209",
+      "bytes": 9300
+    },
+    {
+      "path": "evidence/final-entry-gates/module-origins.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\final-entry-gates\\module-origins.json",
+      "source_sha256": "5ac0f583ef9fcb056a2ffcb1168126a743dc2f2c0ee02a4b8db1552f2e491608",
+      "artifact_sha256": "5ac0f583ef9fcb056a2ffcb1168126a743dc2f2c0ee02a4b8db1552f2e491608",
+      "bytes": 7709
+    },
+    {
+      "path": "peer-driver-freeze/adopt_local.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\adopt_local.py",
+      "source_sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "artifact_sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "bytes": 4994
+    },
+    {
+      "path": "peer-driver-freeze/authorize_local.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\authorize_local.py",
+      "source_sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+      "artifact_sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+      "bytes": 15094
+    },
+    {
+      "path": "peer-driver-freeze/operator_bootstrap.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\operator_bootstrap.py",
+      "source_sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6",
+      "artifact_sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6",
+      "bytes": 11256
+    },
+    {
+      "path": "peer-driver-freeze/driver_common.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\driver_common.py",
+      "source_sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f",
+      "artifact_sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f",
+      "bytes": 10515
+    },
+    {
+      "path": "peer-driver-freeze/invoke.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\invoke.py",
+      "source_sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+      "artifact_sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+      "bytes": 3529
+    },
+    {
+      "path": "peer-driver-freeze/prepare_observation.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\prepare_observation.py",
+      "source_sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+      "artifact_sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+      "bytes": 1367
+    },
+    {
+      "path": "peer-driver-freeze/m1_v14_observation.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\m1_v14_observation.py",
+      "source_sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+      "artifact_sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+      "bytes": 8661
+    },
+    {
+      "path": "peer-driver-freeze/m1_v14_confirm_cleanup.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\m1_v14_confirm_cleanup.py",
+      "source_sha256": "acd5228e7a37eafa69c310fcd3445c67211f868ec8eb3904eece2d4896006052",
+      "artifact_sha256": "acd5228e7a37eafa69c310fcd3445c67211f868ec8eb3904eece2d4896006052",
+      "bytes": 8779
+    },
+    {
+      "path": "peer-driver-freeze/confirm_final_presence.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\confirm_final_presence.py",
+      "source_sha256": "58f47e317b8cda721806076dfde27c52f8c31efb8d0afdc22534c1fb32d66fc0",
+      "artifact_sha256": "58f47e317b8cda721806076dfde27c52f8c31efb8d0afdc22534c1fb32d66fc0",
+      "bytes": 11019
+    },
+    {
+      "path": "peer-driver-freeze/close_campaign.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\close_campaign.py",
+      "source_sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+      "artifact_sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+      "bytes": 7364
+    },
+    {
+      "path": "peer-driver-freeze/test_drivers.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\test_drivers.py",
+      "source_sha256": "ccc9b2e24b836d5ead49ef8db74358e8bb0b2051bfd79915c9aae3aa422fb09f",
+      "artifact_sha256": "ccc9b2e24b836d5ead49ef8db74358e8bb0b2051bfd79915c9aae3aa422fb09f",
+      "bytes": 23514
+    },
+    {
+      "path": "peer-driver-freeze/test_local_only_presence.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\test_local_only_presence.py",
+      "source_sha256": "4e0284abcc0dfde43b32c6a09376871e20ce41d7c6ccc349892f5ac0c184ddaa",
+      "artifact_sha256": "4e0284abcc0dfde43b32c6a09376871e20ce41d7c6ccc349892f5ac0c184ddaa",
+      "bytes": 5813
+    },
+    {
+      "path": "peer-driver-freeze/test_operator_bootstrap.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\test_operator_bootstrap.py",
+      "source_sha256": "ae96550e86f7ea00b1d17d16cb37f6692d36232206a85eb239efbd7351c43a7a",
+      "artifact_sha256": "ae96550e86f7ea00b1d17d16cb37f6692d36232206a85eb239efbd7351c43a7a",
+      "bytes": 15409
+    },
+    {
+      "path": "peer-driver-freeze/test_successor_adoption_authorization.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\test_successor_adoption_authorization.py",
+      "source_sha256": "ec757a97cd9d38b0fb1cd126b8a724761c12d582cdc8ae0dc130aba2d10a0083",
+      "artifact_sha256": "ec757a97cd9d38b0fb1cd126b8a724761c12d582cdc8ae0dc130aba2d10a0083",
+      "bytes": 15693
+    },
+    {
+      "path": "peer-driver-freeze/qualify_delta.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualify_delta.py",
+      "source_sha256": "e0794f0d74b5468caad774da7cd866cfffd0acdc82d66ba3758094f2602b40c0",
+      "artifact_sha256": "e0794f0d74b5468caad774da7cd866cfffd0acdc82d66ba3758094f2602b40c0",
+      "bytes": 702
+    },
+    {
+      "path": "peer-driver-freeze/qualify_done_checkpoint.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualify_done_checkpoint.py",
+      "source_sha256": "9f7d91820cead71a339ce0af88398f645bce85f6f746a76adc341bfc938000ed",
+      "artifact_sha256": "9f7d91820cead71a339ce0af88398f645bce85f6f746a76adc341bfc938000ed",
+      "bytes": 572
+    },
+    {
+      "path": "peer-driver-freeze/freeze_offline.py",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\freeze_offline.py",
+      "source_sha256": "16d135e71f32233c3896476777b9ddd7186d4d4161ea69a2aeb00146b534edba",
+      "artifact_sha256": "16d135e71f32233c3896476777b9ddd7186d4d4161ea69a2aeb00146b534edba",
+      "bytes": 6454
+    },
+    {
+      "path": "peer-driver-freeze/qualification/runtime-pins.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\runtime-pins.json",
+      "source_sha256": "1ae8a3cf831e9396a334b406445b47ec58bc0e7df6e4cad43af66de78bdcedba",
+      "artifact_sha256": "1ae8a3cf831e9396a334b406445b47ec58bc0e7df6e4cad43af66de78bdcedba",
+      "bytes": 2754
+    },
+    {
+      "path": "peer-driver-freeze/qualification/qualification.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\qualification.json",
+      "source_sha256": "06eb8d6e06be103ceb389395aee2e0dcda78df1635fd7a2c64ec68e47d49c4c3",
+      "artifact_sha256": "06eb8d6e06be103ceb389395aee2e0dcda78df1635fd7a2c64ec68e47d49c4c3",
+      "bytes": 12242
+    },
+    {
+      "path": "peer-driver-freeze/qualification/final.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\final.xml",
+      "source_sha256": "87e86a9508151028e8b16c35be2c4bb557dd41f01642093859271c185ffdae80",
+      "artifact_sha256": "87e86a9508151028e8b16c35be2c4bb557dd41f01642093859271c185ffdae80",
+      "bytes": 7037
+    },
+    {
+      "path": "peer-driver-freeze/qualification/prior-done-checkpoint.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\prior-done-checkpoint.xml",
+      "source_sha256": "a4bdeee52f6fa372978606cc73e9fa81f6c2410c5e47302dd64a945cb1e33226",
+      "artifact_sha256": "a4bdeee52f6fa372978606cc73e9fa81f6c2410c5e47302dd64a945cb1e33226",
+      "bytes": 364
+    },
+    {
+      "path": "peer-driver-freeze/qualification/antecedent-61pass-2fixturefails.xml",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\antecedent-61pass-2fixturefails.xml",
+      "source_sha256": "8bad645cb06676a791cb61d0e4d20a75eea29e176ccd279b0f05517d870b54ea",
+      "artifact_sha256": "8bad645cb06676a791cb61d0e4d20a75eea29e176ccd279b0f05517d870b54ea",
+      "bytes": 11154
+    },
+    {
+      "path": "peer-driver-freeze/qualification/public-allowlist.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\public-allowlist.json",
+      "source_sha256": "4923170d964ee36b933a12ba2956065ab98f6a04b5a1a7a34295bfdcee908840",
+      "artifact_sha256": "4923170d964ee36b933a12ba2956065ab98f6a04b5a1a7a34295bfdcee908840",
+      "bytes": 3734
+    },
+    {
+      "path": "history-v13/closure.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\closure.json",
+      "source_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+      "artifact_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+      "bytes": 3367
+    },
+    {
+      "path": "history-v13/closure-companion.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\closure-companion.json",
+      "source_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+      "artifact_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+      "bytes": 6331
+    },
+    {
+      "path": "history-v13/controller-reconciled.json",
+      "source_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\controller-reconciled.json",
+      "source_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+      "artifact_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+      "bytes": 15022
+    }
+  ],
+  "excluded": "No binaries, product payloads, personal credentials/config/transcripts, runtime homes/databases/vaults, actual approval receipt or raw provider logs."
+}

@@ -1524,3 +1524,21 @@ importação e as falhas intermediárias de qualificação continuam preservadas
 Não houve promoção de aceite M1, resultado útil, decisão nativa concluída,
 continuação ou rota remota. Tokens observados não equivalem a cobrança final.
 Evidência: `plans/agent_ops/evidence/r3-m1-v13-execution/review.json`.
+
+## 2026-11-14 — preparação v14, retomada após cancelamento reconciliado
+
+A preparação preserva 134.199 tokens e nove reservas, permite até quatro novas
+reservas (13 cumulativas) e dá 600 segundos por trabalho para acomodar revisão
+da permissão nativa. Instalação e perfil existentes são adotados sem repetir
+setup; o pedido cancelado e seu checkpoint ficam preservados, e o trabalho novo
+usa novos identificadores de solicitação e sessão. Até três comandos exatos por
+rota podem receber decisão individual, sem política persistente ou prefixo amplo.
+
+O grant disponível pode ser reutilizado com consumo prévio e saldo suficiente.
+Uma eventual substituição após expiração exige revisão e seleção canônica
+explícitas e preserva o histórico. A autorização continuada do usuário foi
+vinculada à revisão técnica; não se afirma aprovação humana de um hash específico.
+Os deltas e entrypoints foram qualificados; falhas intermediárias permanecem
+nas evidências. Esta preparação não fez inferência nem promoveu aceite M1.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v14-preparation/review.json`.

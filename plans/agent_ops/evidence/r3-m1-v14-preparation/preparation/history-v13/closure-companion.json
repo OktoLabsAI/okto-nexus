@@ -1,0 +1,113 @@
+{
+  "format": "okto.m1.closed_campaign_reconciled_companion",
+  "revision": 1,
+  "status": "CLOSED_RECONCILED_SETTLED_ACCEPTANCE_NOT_INFERRED",
+  "campaign_revision": 13,
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13",
+  "files": {
+    "original_closure": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\closure.json",
+      "sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171"
+    },
+    "original_checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\private\\controller.json",
+      "sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c"
+    },
+    "derived_checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\controller-reconciled.json",
+      "sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981"
+    },
+    "accounting_reconciliation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\accounting-reconciliation.json",
+      "sha256": "39a8b9d9ce424b84be77656e74b3010979c1a700818708576198ecf81a31003f"
+    },
+    "reconciliation_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\reconcile_accounting.py",
+      "sha256": "9e69b463dea12e610565e8ba59ec876bcec0a18f6e9fa1b80d946eafa7e91e6b"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\final-presence.json",
+      "sha256": "b0a9eed8c0dab40626c6f88ba871160ec68462554eaf08b429cb918ce1a10e54"
+    },
+    "owner_exit": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\nexus-exit-proof.json",
+      "sha256": "25b67a6c2b7f36c71e569fdedb776ce33cf65b81df47ac16e8cf2120322d7c71"
+    },
+    "authorization_import_exits": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\authorize-import-supplement-exits.json",
+      "sha256": "a3f20352da9b8d0e899d221e2e31de8ded800fdab7e12de69dc685036eaa415d"
+    },
+    "authorization_expiry_exits": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\authorize-expired-review-extension-exits.json",
+      "sha256": "0d5bd4ba5d21f33677567193bd6d817e609d67cc31f84eec1a6dca02e29c68f3"
+    },
+    "work_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\m1v12-local-work-01-result.json",
+      "sha256": "15db313049200d2d083bf7de105b4e5c099ac19625390cfae688914020a9c27b"
+    },
+    "interrupt_manifest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\manifest.json",
+      "sha256": "26fa6a29f37aa16af3587993d4fe2742f7357e28aca6630515ba0adec91c9bd6"
+    },
+    "interrupt_admit-reserved": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\admit-reserved.json",
+      "sha256": "4041b5e4d8eda3a46bcf557b814e60548530fc0d620e9c4bab3db395881cd741"
+    },
+    "interrupt_admitted": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\admitted.json",
+      "sha256": "17bfcd4bcc74a571997e505d2a0dd1dc7760c81eb9c62ae5c5a75483ec84e75e"
+    },
+    "interrupt_containment-reconciliation-unconfirmed": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\containment-reconciliation-unconfirmed.json",
+      "sha256": "6e40fb01bb43ec7daf00a6d6ecd00525f05a4f429fe84ee0a21840cdf75380a6"
+    },
+    "interrupt_execute-reserved": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\execute-reserved.json",
+      "sha256": "58a26b7a24f3da2bb30c4141b50731b8c0f3214f434a3d6cbb1ed5bf000ea504"
+    },
+    "interrupt_execute-result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\execute-result.json",
+      "sha256": "ba3d2ecdf6e57501c39c5b7492a6d39abea293e9ea977c24358281ce50170dfa"
+    },
+    "interrupt_original-reconciliation-unconfirmed": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\original-reconciliation-unconfirmed.json",
+      "sha256": "6e40fb01bb43ec7daf00a6d6ecd00525f05a4f429fe84ee0a21840cdf75380a6"
+    },
+    "interrupt_resolve-reserved": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\resolve-reserved.json",
+      "sha256": "388665d1d563fc02461f3feffb0fae6d78bb1772b31a2f69ca2c03653b40acee"
+    },
+    "interrupt_resolved": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\runtime\\resolved.json",
+      "sha256": "43ca58dd7bd9485970ad3fc8a1ed8c44846aa5a89a7140af32dbedba0dcf3f34"
+    },
+    "unused_late_native_decision": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\private\\r4request_19c28d244f22a9dbc3da4f30501c711174285d72a0724b9f8a541dc0b5d8c5d8-reviewed-decision.json",
+      "sha256": "f0117f8a12e2587d8a7d2aea107daf34e6efe22a39a1c927cc595d7e11b6053b"
+    }
+  },
+  "original_closure_and_checkpoint_unchanged": true,
+  "original_unsettled_requests": 1,
+  "reconciled_unsettled_requests": 0,
+  "cumulative_reserved_admissions": 9,
+  "cumulative_minimum_observed_tokens": 134199,
+  "billing_final": false,
+  "faults_preserved": [
+    "DEADLINE120",
+    "WORK_TERMINAL_FAILED"
+  ],
+  "canonical_original_turn_stage": "CANCELLED",
+  "canonical_session_and_lease": "CLOSED",
+  "useful_result_confirmed": false,
+  "acceptance_promoted": false,
+  "late_native_decision_posts": 0,
+  "force_used": false,
+  "new_model_admissions": 0,
+  "interrupt_helper_process_exit": {
+    "execute": 0,
+    "reconcile": 0,
+    "provenance": "Root observed actual exec tool completion; JSON operation ACK alone does not prove process exit"
+  },
+  "http_reconciliation": "SERVER_UNREACHABLE after physical exit; settlement derives from retained canonical/Core journals",
+  "successor_accounting_basis": "derived_checkpoint plus original_closure and this companion; original historical fault remains"
+}

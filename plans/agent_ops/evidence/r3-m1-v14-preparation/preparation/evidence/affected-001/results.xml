@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="34" time="35.154" timestamp="2026-11-14T13:57:43.933833-03:00" hostname="Alienware_m15"><testcase classname="draft.controller.test_v11_allocation" name="test_actual_four_requests_roundtrip_fifth_refused" time="4.418" /><testcase classname="draft.controller.test_v11_allocation" name="test_collector_rejects_previous_five_request_policy_even_with_valid_hash" time="0.002" /><testcase classname="draft.controller.test_v11_allocation" name="test_actual_legacy_state_rejects_five_records_even_with_valid_seal" time="0.058" /><testcase classname="draft.controller.test_v14_delta" name="test_first_work_explicitly_opens_new_session_after_old_checkpoint" time="0.350" /><testcase classname="draft.controller.test_v14_delta" name="test_installed_cli_new_session_rebinds_expected_session_then_observes" time="0.157" /><testcase classname="draft.controller.test_v14_delta" name="test_three_exact_decisions_per_lane_and_fourth_denied_before_http" time="0.262" /><testcase classname="draft.controller.test_v14_delta" name="test_two_decisions_recover_each_exact_saved_checkpoint" time="0.055" /><testcase classname="draft.controller.test_cli_flow" name="test_real_parser_factory_guard_handlers_display_and_reopen_continuation" time="0.129" /><testcase classname="draft.controller.test_cli_flow" name="test_scope_changed_after_preflight_is_refused_under_cli_guard" time="0.037" /><testcase classname="draft.controller.test_cli_flow" name="test_cli_refusal_before_handler_does_not_post[readiness]" time="0.035" /><testcase classname="draft.controller.test_cli_flow" name="test_cli_refusal_before_handler_does_not_post[lock]" time="0.038" /><testcase classname="draft.controller.test_cli_flow" name="test_lost_admission_exit3_preserves_error_and_status_recovery_never_posts" time="0.095" /><testcase classname="draft.controller.test_cli_flow" name="test_answer_review_decision_and_lost_reply_recover_by_get_only" time="0.150" /><testcase classname="draft.controller.test_cli_flow" name="test_presentation_exit3_does_not_promote_completed_handler" time="0.060" /><testcase classname="draft.controller.test_cli_flow" name="test_parser_rejection_keeps_original_systemexit_and_zero_effect" time="0.032" /><testcase classname="draft.controller.test_cli_flow" name="test_remote_target_inspection_and_cli_decision_use_operator_client" time="0.183" /><testcase classname="draft.controller.test_cli_flow" name="test_events_exit_uses_displayed_page_while_status_keeps_failed_state" time="0.084" /><testcase classname="draft.controller.test_cli_flow" name="test_new_session_appearing_after_empty_preflight_is_refused" time="0.062" /><testcase classname="draft.controller.test_work_wrapper" name="test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation" time="0.607"><failure message="TypeError: unsupported operand type(s) for -: 'float' and 'dict'">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/affected-001/pytest-tmp/test_whole_work_wrapper_local_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000185FC386200&gt;
+
+    def test_whole_work_wrapper_local_continuation_remote_lost_response_and_continuation(tmp_path,monkeypatch):
+        context=Context(tmp_path)
+        module=types.ModuleType('campaign_context')
+        module.load=lambda:context
+        def require(value,reason):
+            if not value:raise AssertionError(reason)
+        module.require=require
+        monkeypatch.setitem(sys.modules,'campaign_context',module)
+        supervisor=types.ModuleType('supervisor_check');supervisor.require_work_owner=lambda selected:None
+        monkeypatch.setitem(sys.modules,'supervisor_check',supervisor)
+        import okto_nexus.adapters.inbound.cli.work as product_work
+        import okto_nexus.adapters.inbound.cli.terminal_target as target
+        def service(args,name,operator,resolver):
+            lane='local' if name=='m1v12-local' else 'connector'
+            home=Path(context.P['paths']['server_home' if lane=='local' else 'operator_home'])
+            return types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane=lane,inspect=lambda:{'state':'ready'})
+        monkeypatch.setattr(target,'resolve_terminal_target',service)
+        monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,selected.adapter.home,selected.lane))
+        results=[]
+        try:
+            for lane,phase in [('local','useful'),('local','continuation'),('connector','useful'),('connector','continuation')]:
+                context.remaining=[lane,phase]
+&gt;               runpy.run_path(str(Path(__file__).parent.parent/'m1_v14_work.py'),run_name='__main__')
+
+..\draft\controller\test_work_wrapper.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+&lt;frozen runpy&gt;:287: in run_path
+    ???
+&lt;frozen runpy&gt;:98: in _run_module_code
+    ???
+&lt;frozen runpy&gt;:88: in _run_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """One authorized finite successor work request through canonical actor APIs."""
+    from pathlib import Path
+    import hashlib,importlib.util,json,os,subprocess,sys,time
+    from urllib.parse import quote
+    sys.path.insert(0,str(Path(__file__).parent))
+    from campaign_context import load,require
+    X=load()  # approval and exact proposal gate precede product imports and effects
+    P,C,ROOT=X.P,X.C,X.ROOT
+    sys.path.insert(0,str(X.modules))
+    from controller import POLICY
+    from independent_journal import CanonicalIntentReader, CoreJournalReader, reader_error_metadata
+    from serial_flow import SerialFlow
+    from cli_flow import CLIFlow
+    from history_observers import attach_existing_work
+    sys.path.insert(0,str(Path(P['execution_bundle']['files']['response_loss']['path']).parent))
+    from response_loss import CampaignState,FiniteResponseLoss
+    from publication import poll_and_publish,publish_live
+    from okto_nexus.application.terminal_connection import ConnectionError,document_revision
+    from okto_nexus.adapters.inbound.cli.terminal_target import resolve_terminal_target
+    from okto_nexus.adapters.inbound.cli.service import resolve_local_service
+    import okto_nexus
+    
+    require(len(X.remaining)==2 and X.remaining[0] in ('local','connector') and X.remaining[1] in ('useful','continuation'),'WORK_SELECTION_INVALID')
+    LANE,PHASE=X.remaining
+    authorization_basis=None
+    if LANE=='local' and PHASE=='useful':
+        pin=P['execution_bundle']['files']['root_driver_authorize_local']
+        require(hashlib.sha256(Path(pin['path']).read_bytes()).hexdigest()==pin['sha256'],'AUTHORIZATION_VALIDATOR_CHANGED')
+        spec=importlib.util.spec_from_file_location('successor_authorization_validator',pin['path'])
+        validator=importlib.util.module_from_spec(spec);spec.loader.exec_module(validator)
+        authorization_basis=validator.require_local_work_authorization(X)
+    if LANE=='connector':
+        from supervisor_check import require_work_owner
+        require_work_owner(X)  # fresh read of exact post-setup PID/birth/generation before work
+    pin=P['package_pins']
+    profile=P['execution_bundle']['profiles'][LANE]
+    request='m1v14-'+('local' if LANE=='local' else 'remote')+'-work-'+('01' if PHASE=='useful' else '02')
+    require(request in P['request_ids']['work'],'INTENT_OUTSIDE_PROPOSAL')
+    assert not (X.PUBLIC/(request+'-result.json')).exists()
+    controller=X.controller()
+    driverpath=X.PRIVATE/'response-loss.json'
+    faults=CampaignState(driverpath,**({'campaign_id':'m1-v14'} if not driverpath.exists() else {}))
+    flows={}; raw_flows={}; bindings={}; observed={}; stops=[]; handles=[]; selected_decisions=set()
+    recovered_decisions={}
+    publication_diagnostics={}
+    final_publication_diagnostics={}
+    pending_publication_diagnostics={}
+    configuration_events={}
+    call_counts={'GET':0,'POST':0,'productive_posts':0,'decision_posts':0}
+    
+    def capture_configuration(page):
+        fields=('approvalPolicy','approvalsReviewer','cwd','instructionSources','model','modelProvider','sandbox','reasoningEffort')
+        for event in page.get('events',[]):
+            if event.get('native_type')!='core/codex_thread_configuration':continue
+            payload=event['payload']
+            record={key:event.get(key) for key in ('server_id','executor_id','session_id','stream_epoch','sequence','category','native_type','operation_id')}
+            record['observation']={key:payload.get(key) for key in ('schema_version','adapter_id','source','thread_id')}
+            record['observation']['fields']={field:{key:value for key,value in payload.get('fields',{}).get(field,{'status':'missing'}).items()
+                if key in ('status','value','reason')} for field in fields}
+            require(len(json.dumps(record).encode())&lt;=52000,'CONFIGURATION_OBSERVATION_UNBOUNDED')
+            key=(event['server_id'],event['executor_id'],event['session_id'],event['stream_epoch'],event['sequence'])
+            configuration_events[key]=record
+    
+    def replay_configuration(flow,session):
+        # Existing canonical read path only. Continuation may start after the opening
+        # metadata cursor; recover that event from0 without a new native operation.
+        after=0
+        for _ in range(100):
+            page=flow.events(session_id=session,after_sequence=after)['events']
+            require(not page['gap_pending'],'CONFIGURATION_REPLAY_GAP')
+            capture_configuration(page)
+            if any(item['session_id']==session for item in configuration_events.values()):return
+            if not page['has_more']:return
+            after=page['next_after_sequence']
+        raise RuntimeError('CONFIGURATION_REPLAY_LIMIT')
+    
+    def stop_owner(lane):
+        component='nexus' if lane=='local' else 'connector'
+        out=(X.PRIVATE/(component+'-stop-wrapper.stdout')).open('xb')
+        err=(X.PRIVATE/(component+'-stop-wrapper.stderr')).open('xb')
+        handles.extend((out,err))
+        child=subprocess.Popen(X.stop_argv(component),
+            cwd=ROOT,env=X.env(),stdout=out,stderr=err,creationflags=subprocess.CREATE_NO_WINDOW)
+        stops.append(child)
+        return {'pid':child.pid}
+    
+    def attach(lane):
+        name=P['execution_bundle']['profiles'][lane]
+        args=C['service_selection_args'] if lane=='local' else ['--home',P['paths']['operator_home']]
+        service=resolve_terminal_target(args,name,None if lane=='local' else P['execution_bundle']['operator_profile'],resolve_local_service)
+        expected_home=Path(P['paths']['server_home' if lane=='local' else 'operator_home']).resolve()
+        require(service.adapter.home.resolve()==expected_home,'ACTOR_HOME_MISMATCH')
+        require(expected_home.is_relative_to(ROOT.resolve()),'ACTOR_HOME_OUTSIDE_CAMPAIGN')
+        flow=CLIFlow(service,name,args,None if lane=='local' else P['execution_bundle']['operator_profile'])
+        transport=flow.call
+        # Bound individual requests; any unknown observation closes admissions.
+        flow.set_timeout(30)  # accounting and deadline ticks do not wait for this worker
+        checkpoint=service.adapter.home/'terminal/work'/(name+'.json')
+        def load():return json.loads(checkpoint.read_text())
+        def counted(method,path,body=None):
+            call_counts[method]=call_counts.get(method,0)+1
+            if method=='POST' and path.endswith('/runtime/operations'):
+                slot=load().get('work',{})
+                if slot.get('submission')==body:call_counts['productive_posts']+=1
+            if method=='POST' and path.endswith('/runtime/approval-decisions'):call_counts['decision_posts']+=1
+            return transport(method,path,body)
+        flow.call=FiniteResponseLoss(counted,load,faults,lane)
+        original=flow.observe
+        def observe(**kwargs):
+            value=original(**kwargs); observed[lane]=value
+            capture_configuration(value.get('events',{}))
+            return value
+        flow.observe=observe
+        raw_flows[lane]=flow
+        controller.attach_api_flow(lane,flow)
+        owner=P['paths']['server_home'] if lane=='local' else P['paths']['connector_state']
+        controller.attach_owner(lane,owner,lambda:stop_owner(lane))
+        facade=SerialFlow(controller,flow,lane,lambda:poll_and_publish(controller,
+            lambda value:public_write('live-accounting.json',value),publication_diagnostics,request))
+        flows[lane]=facade
+        return facade
+    
+    def public_write(name,value):
+        target=X.PUBLIC/name
+        pending=target.with_suffix('.pending')
+        with pending.open('w',encoding='utf-8') as stream:
+            json.dump(value,stream,indent=2);stream.flush();os.fsync(stream.fileno())
+        os.replace(pending,target)
+    
+    def publish_approval(flow,detail):
+        approval=detail['approval_id']; proposal=detail['request_payload']['kwargs']
+        key=proposal['approval_key']; revision=document_revision(proposal)
+        assert key['session_id']==controller.data['requests'][request]['session']
+        # Only current canonical request metadata, never response/output/auth headers.
+        published=publish_live(lambda value:public_write('pending-native-request.json',value),
+            {'request_id':request,'approval_id':approval,'review_revision':revision,
+             'approval_key':key,'display':proposal['display'],'policy':'No decision until the actual command is reviewed against the exact source/output and approved successor constraints.'},
+            pending_publication_diagnostics)
+        if not published:return  # no decision from an unavailable/stale public snapshot
+        decision_path=X.PRIVATE/(approval+'-reviewed-decision.json')
+        if not decision_path.exists() or approval in selected_decisions:return
+        current=controller.data['requests'][request]
+        if (current['stop_selected'] or controller.data['faults'] or
+                controller.summary()['known_observed_tokens']&gt;=POLICY['preventive_cumulative_tokens']):return
+        if sum(d['lane']==LANE for d in faults.data['decisions'])&gt;=3:return
+        # Three exact reviewed native decisions per lane, across work invocations too.
+        decision=json.loads(decision_path.read_text())
+        assert decision['approval_id']==approval and decision['review_revision']==revision
+        assert decision['decision'] in ('approve','deny')
+        selected_decisions.add(approval)
+        if LANE=='connector' and 'decision' not in faults.data['faults']:faults.arm('decision',LANE,approval)
+        public_write(approval+'-decision-selection.json',{'approval_id':approval,'review_revision':revision,'decision':decision['decision'],'selected_before_dispatch':True})
+        try:flow.decide(approval,decision['decision'],reviewed_revision=revision,session_id=key['session_id'])
+        except ConnectionError as error:
+            if error.stage!='m1_response_loss':raise
+            public_write(approval+'-response-lost.json',{'approval_id':approval,'possible_effect':True,'replay':False})
+        finally:
+            metadata=flow.document.get('decision',{})
+            if metadata.get('approval_key',{}).get('canonical_request_id')==approval:
+                target=X.PRIVATE/(approval+'-decision-checkpoint.json')
+                with target.open('x',encoding='utf-8') as stream:
+                    json.dump(metadata,stream,indent=2);stream.flush();os.fsync(stream.fileno())
+    
+    def recover_decisions(flow):
+        # Always GET, including after an answered request leaves the pending list.
+        for approval in selected_decisions-recovered_decisions.keys():
+            target=X.PRIVATE/(approval+'-decision-checkpoint.json')
+            if not target.exists():continue
+            metadata=json.loads(target.read_bytes())
+            assert metadata['approval_key']['canonical_request_id']==approval
+            detail=flow.decision_detail(approval,session_id=metadata['approval_key']['session_id'])
+            existing=detail.get('executed_result') or {}
+            if not existing.get('decision_id'):continue
+            receipt=flow.api('GET','/runtime/approval-decisions/'+quote(existing['decision_id'],safe=''))
+            assert receipt['decision_id']==existing['decision_id'] and receipt['canonical_state']=='CONFIRMED'
+            assert receipt['approval_key']==metadata['approval_key'] and receipt['request_hash']==metadata['request_hash']
+            assert receipt['client_intent_id']==metadata['client_intent_id']
+            recovered_decisions[approval]={k:receipt.get(k) for k in ('decision_id','client_intent_id','canonical_state','native_stage','actor_agent_id','request_hash','approval_key')}
+            public_write(approval+'-recovered-decision.json',dict(recovered_decisions[approval],recovery='GET_ONLY_NO_REPEAT_POST'))
+    
+    started=time.time();started_monotonic_ns=time.monotonic_ns();intervals=[];previous=None;submission_error=None
+    try:
+        active_lanes={r['lane'] for r in controller.data['requests'].values() if r['kind']=='work'}|{LANE}
+        # Retain the setup home callback even when observing remote work.
+        controller.attach_owner('local',P['paths']['server_home'],lambda:stop_owner('local'))
+        for lane in sorted(active_lanes):attach(lane)
+        # Restore all historical observers before the first API job can pump
+        # the global ledger. No binding, decision or final GET runs on owner.
+        attach_existing_work(controller,campaign_root=ROOT,server_home=P['paths']['server_home'],
+            connector_state=P['paths']['connector_state'],stop_for_lane=stop_owner)
+        for lane in sorted(active_lanes):
+            binding=flows[lane].binding();bindings[lane]=binding
+            if lane not in controller._readers:
+                me=flows[lane].api('GET','/connections/me')
+                require(me['server_id']==binding['server_id'],'ACTOR_SERVER_MISMATCH')
+                selected={k:binding[k] for k in ('server_id','executor_id','binding_id','agent_id','workspace_id','workspace_binding_id')}
+                controller.attach_observer(lane,CanonicalIntentReader(ROOT,P['paths']['server_home'],
+                    server_id=binding['server_id'],actor_id=me['agent_id'],pre_scope=selected),
+                    CoreJournalReader(ROOT,P['paths']['server_home' if lane=='local' else 'connector_state'],lane))
+            raw_flows[lane].expect(binding,controller._readers[lane].actor_id,raw_flows[lane].document.get('session_id'))
+        flow=flows[LANE]
+        if LANE=='connector' and PHASE=='useful':faults.arm('admission',LANE,request)
+        text=P['finite_work']['request'] if PHASE=='useful' else P['finite_work']['continuation']
+        project=P['paths']['local_project' if LANE=='local' else 'remote_project']
+        deliverables=P['paths']['local_deliverables' if LANE=='local' else 'remote_deliverables']
+        text=text.replace('&lt;project&gt;',project).replace('&lt;lane_deliverables&gt;',deliverables)
+        if PHASE=='useful':assert not (Path(deliverables)/'report.json').exists()
+        public_write(request+'-dispatch-selection.json',{'request_id':request,'lane':LANE,'phase':PHASE,'time':started,'prompt_sha256':hashlib.sha256(text.encode()).hexdigest(),'client_pin':pin})
+        new_local_session=LANE=='local' and PHASE=='useful'
+        if new_local_session:
+            previous=P['adoption']['predecessor_work_checkpoint_pin']
+            snapshot=X.PRIVATE/'predecessor-work-checkpoint.json'
+            require(snapshot.is_file() and hashlib.sha256(snapshot.read_bytes()).hexdigest()==previous['sha256'],
+                'PREDECESSOR_WORK_HISTORY_REQUIRED')
+            require(hashlib.sha256(Path(previous['path']).read_bytes()).hexdigest()==authorization_basis['work_checkpoint_sha256'],
+                'PREDECESSOR_WORK_CHANGED_BEFORE_NEW_SESSION')
+            old_session=P['adoption']['predecessor_session_id']
+            require(flow.document.get('session_id')==old_session,'PREDECESSOR_SESSION_CHANGED')
+            prior=flow.session(bindings[LANE],old_session)
+            require(prior['scope']['session_id']==old_session and prior.get('lifecycle_state')=='CLOSED'
+                and prior.get('lease_state')=='CLOSED','PREDECESSOR_SESSION_NOT_CLOSED')
+        controller.start_work(request,LANE,text,binding=bindings[LANE],checkpoint=flow.document,
+            stage='useful_work' if PHASE=='useful' else 'continuation',new_session=new_local_session)
+        while True:
+            now=time.monotonic()
+&gt;           if previous is not None:intervals.append(now-previous)
+                                                     ^^^^^^^^^^^^
+E           TypeError: unsupported operand type(s) for -: 'float' and 'dict'
+
+..\draft\m1_v14_work.py:226: TypeError</failure></testcase><testcase classname="draft.controller.test_work_wrapper" name="test_cadence_miss_fences_once_then_drains_late_usage_before_public_result" time="0.526"><failure message="TypeError: unsupported operand type(s) for -: 'float' and 'dict'">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/affected-001/pytest-tmp/test_cadence_miss_fences_once_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000185FC3B0410&gt;
+
+    def test_cadence_miss_fences_once_then_drains_late_usage_before_public_result(tmp_path,monkeypatch):
+        from controller import Refused
+        from api_worker import Fenced
+        import subprocess
+        context=Context(tmp_path);context.remaining=['local','useful']
+        entered=threading.Event();release=threading.Event();now=[1000.];ticks=[];controls=[];stops=[]
+        def before_events(flow,request):
+            entered.set();assert release.wait(15)
+        context.before_events=before_events
+        context.stop_argv=lambda component:['SYNTHETIC-NORMAL-STOP',component]
+        context.env=lambda:{}
+        def fake_stop(argv,**kwargs):
+            assert argv==['SYNTHETIC-NORMAL-STOP','nexus']
+            stops.append(argv)
+            return types.SimpleNamespace(pid=123456,returncode=1,poll=lambda:1)
+        monkeypatch.setattr(subprocess,'Popen',fake_stop)
+        base_controller=context.controller
+        def selected_controller():
+            control=base_controller();controls.append(control)
+            control._monotonic=lambda:now[0];control.fence.clock=lambda:now[0]
+            original=control.poll
+            def poll():
+                if entered.is_set():
+                    ticks.append(now[0])
+                    if len(ticks)==1:now[0]+=1.038
+                    if len(ticks)==4:release.set()
+                return original()
+            control.poll=poll
+            return control
+        context.controller=selected_controller
+        module=types.ModuleType('campaign_context');module.load=lambda:context
+        def require(value,reason):
+            if not value:raise AssertionError(reason)
+        module.require=require;monkeypatch.setitem(sys.modules,'campaign_context',module)
+        import okto_nexus.adapters.inbound.cli.work as product_work
+        import okto_nexus.adapters.inbound.cli.terminal_target as target
+        home=Path(context.P['paths']['server_home'])
+        monkeypatch.setattr(target,'resolve_terminal_target',lambda *args:
+            types.SimpleNamespace(adapter=types.SimpleNamespace(home=home),lane='local',inspect=lambda:{'state':'ready'}))
+        monkeypatch.setattr(product_work,'open_work',lambda selected,name:WrapperFlow(context,home,'local'))
+        try:
+&gt;           runpy.run_path(str(Path(__file__).parent.parent/'m1_v14_work.py'),run_name='__main__')
+
+..\draft\controller\test_work_wrapper.py:202: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+&lt;frozen runpy&gt;:287: in run_path
+    ???
+&lt;frozen runpy&gt;:98: in _run_module_code
+    ???
+&lt;frozen runpy&gt;:88: in _run_code
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """One authorized finite successor work request through canonical actor APIs."""
+    from pathlib import Path
+    import hashlib,importlib.util,json,os,subprocess,sys,time
+    from urllib.parse import quote
+    sys.path.insert(0,str(Path(__file__).parent))
+    from campaign_context import load,require
+    X=load()  # approval and exact proposal gate precede product imports and effects
+    P,C,ROOT=X.P,X.C,X.ROOT
+    sys.path.insert(0,str(X.modules))
+    from controller import POLICY
+    from independent_journal import CanonicalIntentReader, CoreJournalReader, reader_error_metadata
+    from serial_flow import SerialFlow
+    from cli_flow import CLIFlow
+    from history_observers import attach_existing_work
+    sys.path.insert(0,str(Path(P['execution_bundle']['files']['response_loss']['path']).parent))
+    from response_loss import CampaignState,FiniteResponseLoss
+    from publication import poll_and_publish,publish_live
+    from okto_nexus.application.terminal_connection import ConnectionError,document_revision
+    from okto_nexus.adapters.inbound.cli.terminal_target import resolve_terminal_target
+    from okto_nexus.adapters.inbound.cli.service import resolve_local_service
+    import okto_nexus
+    
+    require(len(X.remaining)==2 and X.remaining[0] in ('local','connector') and X.remaining[1] in ('useful','continuation'),'WORK_SELECTION_INVALID')
+    LANE,PHASE=X.remaining
+    authorization_basis=None
+    if LANE=='local' and PHASE=='useful':
+        pin=P['execution_bundle']['files']['root_driver_authorize_local']
+        require(hashlib.sha256(Path(pin['path']).read_bytes()).hexdigest()==pin['sha256'],'AUTHORIZATION_VALIDATOR_CHANGED')
+        spec=importlib.util.spec_from_file_location('successor_authorization_validator',pin['path'])
+        validator=importlib.util.module_from_spec(spec);spec.loader.exec_module(validator)
+        authorization_basis=validator.require_local_work_authorization(X)
+    if LANE=='connector':
+        from supervisor_check import require_work_owner
+        require_work_owner(X)  # fresh read of exact post-setup PID/birth/generation before work
+    pin=P['package_pins']
+    profile=P['execution_bundle']['profiles'][LANE]
+    request='m1v14-'+('local' if LANE=='local' else 'remote')+'-work-'+('01' if PHASE=='useful' else '02')
+    require(request in P['request_ids']['work'],'INTENT_OUTSIDE_PROPOSAL')
+    assert not (X.PUBLIC/(request+'-result.json')).exists()
+    controller=X.controller()
+    driverpath=X.PRIVATE/'response-loss.json'
+    faults=CampaignState(driverpath,**({'campaign_id':'m1-v14'} if not driverpath.exists() else {}))
+    flows={}; raw_flows={}; bindings={}; observed={}; stops=[]; handles=[]; selected_decisions=set()
+    recovered_decisions={}
+    publication_diagnostics={}
+    final_publication_diagnostics={}
+    pending_publication_diagnostics={}
+    configuration_events={}
+    call_counts={'GET':0,'POST':0,'productive_posts':0,'decision_posts':0}
+    
+    def capture_configuration(page):
+        fields=('approvalPolicy','approvalsReviewer','cwd','instructionSources','model','modelProvider','sandbox','reasoningEffort')
+        for event in page.get('events',[]):
+            if event.get('native_type')!='core/codex_thread_configuration':continue
+            payload=event['payload']
+            record={key:event.get(key) for key in ('server_id','executor_id','session_id','stream_epoch','sequence','category','native_type','operation_id')}
+            record['observation']={key:payload.get(key) for key in ('schema_version','adapter_id','source','thread_id')}
+            record['observation']['fields']={field:{key:value for key,value in payload.get('fields',{}).get(field,{'status':'missing'}).items()
+                if key in ('status','value','reason')} for field in fields}
+            require(len(json.dumps(record).encode())&lt;=52000,'CONFIGURATION_OBSERVATION_UNBOUNDED')
+            key=(event['server_id'],event['executor_id'],event['session_id'],event['stream_epoch'],event['sequence'])
+            configuration_events[key]=record
+    
+    def replay_configuration(flow,session):
+        # Existing canonical read path only. Continuation may start after the opening
+        # metadata cursor; recover that event from0 without a new native operation.
+        after=0
+        for _ in range(100):
+            page=flow.events(session_id=session,after_sequence=after)['events']
+            require(not page['gap_pending'],'CONFIGURATION_REPLAY_GAP')
+            capture_configuration(page)
+            if any(item['session_id']==session for item in configuration_events.values()):return
+            if not page['has_more']:return
+            after=page['next_after_sequence']
+        raise RuntimeError('CONFIGURATION_REPLAY_LIMIT')
+    
+    def stop_owner(lane):
+        component='nexus' if lane=='local' else 'connector'
+        out=(X.PRIVATE/(component+'-stop-wrapper.stdout')).open('xb')
+        err=(X.PRIVATE/(component+'-stop-wrapper.stderr')).open('xb')
+        handles.extend((out,err))
+        child=subprocess.Popen(X.stop_argv(component),
+            cwd=ROOT,env=X.env(),stdout=out,stderr=err,creationflags=subprocess.CREATE_NO_WINDOW)
+        stops.append(child)
+        return {'pid':child.pid}
+    
+    def attach(lane):
+        name=P['execution_bundle']['profiles'][lane]
+        args=C['service_selection_args'] if lane=='local' else ['--home',P['paths']['operator_home']]
+        service=resolve_terminal_target(args,name,None if lane=='local' else P['execution_bundle']['operator_profile'],resolve_local_service)
+        expected_home=Path(P['paths']['server_home' if lane=='local' else 'operator_home']).resolve()
+        require(service.adapter.home.resolve()==expected_home,'ACTOR_HOME_MISMATCH')
+        require(expected_home.is_relative_to(ROOT.resolve()),'ACTOR_HOME_OUTSIDE_CAMPAIGN')
+        flow=CLIFlow(service,name,args,None if lane=='local' else P['execution_bundle']['operator_profile'])
+        transport=flow.call
+        # Bound individual requests; any unknown observation closes admissions.
+        flow.set_timeout(30)  # accounting and deadline ticks do not wait for this worker
+        checkpoint=service.adapter.home/'terminal/work'/(name+'.json')
+        def load():return json.loads(checkpoint.read_text())
+        def counted(method,path,body=None):
+            call_counts[method]=call_counts.get(method,0)+1
+            if method=='POST' and path.endswith('/runtime/operations'):
+                slot=load().get('work',{})
+                if slot.get('submission')==body:call_counts['productive_posts']+=1
+            if method=='POST' and path.endswith('/runtime/approval-decisions'):call_counts['decision_posts']+=1
+            return transport(method,path,body)
+        flow.call=FiniteResponseLoss(counted,load,faults,lane)
+        original=flow.observe
+        def observe(**kwargs):
+            value=original(**kwargs); observed[lane]=value
+            capture_configuration(value.get('events',{}))
+            return value
+        flow.observe=observe
+        raw_flows[lane]=flow
+        controller.attach_api_flow(lane,flow)
+        owner=P['paths']['server_home'] if lane=='local' else P['paths']['connector_state']
+        controller.attach_owner(lane,owner,lambda:stop_owner(lane))
+        facade=SerialFlow(controller,flow,lane,lambda:poll_and_publish(controller,
+            lambda value:public_write('live-accounting.json',value),publication_diagnostics,request))
+        flows[lane]=facade
+        return facade
+    
+    def public_write(name,value):
+        target=X.PUBLIC/name
+        pending=target.with_suffix('.pending')
+        with pending.open('w',encoding='utf-8') as stream:
+            json.dump(value,stream,indent=2);stream.flush();os.fsync(stream.fileno())
+        os.replace(pending,target)
+    
+    def publish_approval(flow,detail):
+        approval=detail['approval_id']; proposal=detail['request_payload']['kwargs']
+        key=proposal['approval_key']; revision=document_revision(proposal)
+        assert key['session_id']==controller.data['requests'][request]['session']
+        # Only current canonical request metadata, never response/output/auth headers.
+        published=publish_live(lambda value:public_write('pending-native-request.json',value),
+            {'request_id':request,'approval_id':approval,'review_revision':revision,
+             'approval_key':key,'display':proposal['display'],'policy':'No decision until the actual command is reviewed against the exact source/output and approved successor constraints.'},
+            pending_publication_diagnostics)
+        if not published:return  # no decision from an unavailable/stale public snapshot
+        decision_path=X.PRIVATE/(approval+'-reviewed-decision.json')
+        if not decision_path.exists() or approval in selected_decisions:return
+        current=controller.data['requests'][request]
+        if (current['stop_selected'] or controller.data['faults'] or
+                controller.summary()['known_observed_tokens']&gt;=POLICY['preventive_cumulative_tokens']):return
+        if sum(d['lane']==LANE for d in faults.data['decisions'])&gt;=3:return
+        # Three exact reviewed native decisions per lane, across work invocations too.
+        decision=json.loads(decision_path.read_text())
+        assert decision['approval_id']==approval and decision['review_revision']==revision
+        assert decision['decision'] in ('approve','deny')
+        selected_decisions.add(approval)
+        if LANE=='connector' and 'decision' not in faults.data['faults']:faults.arm('decision',LANE,approval)
+        public_write(approval+'-decision-selection.json',{'approval_id':approval,'review_revision':revision,'decision':decision['decision'],'selected_before_dispatch':True})
+        try:flow.decide(approval,decision['decision'],reviewed_revision=revision,session_id=key['session_id'])
+        except ConnectionError as error:
+            if error.stage!='m1_response_loss':raise
+            public_write(approval+'-response-lost.json',{'approval_id':approval,'possible_effect':True,'replay':False})
+        finally:
+            metadata=flow.document.get('decision',{})
+            if metadata.get('approval_key',{}).get('canonical_request_id')==approval:
+                target=X.PRIVATE/(approval+'-decision-checkpoint.json')
+                with target.open('x',encoding='utf-8') as stream:
+                    json.dump(metadata,stream,indent=2);stream.flush();os.fsync(stream.fileno())
+    
+    def recover_decisions(flow):
+        # Always GET, including after an answered request leaves the pending list.
+        for approval in selected_decisions-recovered_decisions.keys():
+            target=X.PRIVATE/(approval+'-decision-checkpoint.json')
+            if not target.exists():continue
+            metadata=json.loads(target.read_bytes())
+            assert metadata['approval_key']['canonical_request_id']==approval
+            detail=flow.decision_detail(approval,session_id=metadata['approval_key']['session_id'])
+            existing=detail.get('executed_result') or {}
+            if not existing.get('decision_id'):continue
+            receipt=flow.api('GET','/runtime/approval-decisions/'+quote(existing['decision_id'],safe=''))
+            assert receipt['decision_id']==existing['decision_id'] and receipt['canonical_state']=='CONFIRMED'
+            assert receipt['approval_key']==metadata['approval_key'] and receipt['request_hash']==metadata['request_hash']
+            assert receipt['client_intent_id']==metadata['client_intent_id']
+            recovered_decisions[approval]={k:receipt.get(k) for k in ('decision_id','client_intent_id','canonical_state','native_stage','actor_agent_id','request_hash','approval_key')}
+            public_write(approval+'-recovered-decision.json',dict(recovered_decisions[approval],recovery='GET_ONLY_NO_REPEAT_POST'))
+    
+    started=time.time();started_monotonic_ns=time.monotonic_ns();intervals=[];previous=None;submission_error=None
+    try:
+        active_lanes={r['lane'] for r in controller.data['requests'].values() if r['kind']=='work'}|{LANE}
+        # Retain the setup home callback even when observing remote work.
+        controller.attach_owner('local',P['paths']['server_home'],lambda:stop_owner('local'))
+        for lane in sorted(active_lanes):attach(lane)
+        # Restore all historical observers before the first API job can pump
+        # the global ledger. No binding, decision or final GET runs on owner.
+        attach_existing_work(controller,campaign_root=ROOT,server_home=P['paths']['server_home'],
+            connector_state=P['paths']['connector_state'],stop_for_lane=stop_owner)
+        for lane in sorted(active_lanes):
+            binding=flows[lane].binding();bindings[lane]=binding
+            if lane not in controller._readers:
+                me=flows[lane].api('GET','/connections/me')
+                require(me['server_id']==binding['server_id'],'ACTOR_SERVER_MISMATCH')
+                selected={k:binding[k] for k in ('server_id','executor_id','binding_id','agent_id','workspace_id','workspace_binding_id')}
+                controller.attach_observer(lane,CanonicalIntentReader(ROOT,P['paths']['server_home'],
+                    server_id=binding['server_id'],actor_id=me['agent_id'],pre_scope=selected),
+                    CoreJournalReader(ROOT,P['paths']['server_home' if lane=='local' else 'connector_state'],lane))
+            raw_flows[lane].expect(binding,controller._readers[lane].actor_id,raw_flows[lane].document.get('session_id'))
+        flow=flows[LANE]
+        if LANE=='connector' and PHASE=='useful':faults.arm('admission',LANE,request)
+        text=P['finite_work']['request'] if PHASE=='useful' else P['finite_work']['continuation']
+        project=P['paths']['local_project' if LANE=='local' else 'remote_project']
+        deliverables=P['paths']['local_deliverables' if LANE=='local' else 'remote_deliverables']
+        text=text.replace('&lt;project&gt;',project).replace('&lt;lane_deliverables&gt;',deliverables)
+        if PHASE=='useful':assert not (Path(deliverables)/'report.json').exists()
+        public_write(request+'-dispatch-selection.json',{'request_id':request,'lane':LANE,'phase':PHASE,'time':started,'prompt_sha256':hashlib.sha256(text.encode()).hexdigest(),'client_pin':pin})
+        new_local_session=LANE=='local' and PHASE=='useful'
+        if new_local_session:
+            previous=P['adoption']['predecessor_work_checkpoint_pin']
+            snapshot=X.PRIVATE/'predecessor-work-checkpoint.json'
+            require(snapshot.is_file() and hashlib.sha256(snapshot.read_bytes()).hexdigest()==previous['sha256'],
+                'PREDECESSOR_WORK_HISTORY_REQUIRED')
+            require(hashlib.sha256(Path(previous['path']).read_bytes()).hexdigest()==authorization_basis['work_checkpoint_sha256'],
+                'PREDECESSOR_WORK_CHANGED_BEFORE_NEW_SESSION')
+            old_session=P['adoption']['predecessor_session_id']
+            require(flow.document.get('session_id')==old_session,'PREDECESSOR_SESSION_CHANGED')
+            prior=flow.session(bindings[LANE],old_session)
+            require(prior['scope']['session_id']==old_session and prior.get('lifecycle_state')=='CLOSED'
+                and prior.get('lease_state')=='CLOSED','PREDECESSOR_SESSION_NOT_CLOSED')
+        controller.start_work(request,LANE,text,binding=bindings[LANE],checkpoint=flow.document,
+            stage='useful_work' if PHASE=='useful' else 'continuation',new_session=new_local_session)
+        while True:
+            now=time.monotonic()
+&gt;           if previous is not None:intervals.append(now-previous)
+                                                     ^^^^^^^^^^^^
+E           TypeError: unsupported operand type(s) for -: 'float' and 'dict'
+
+..\draft\m1_v14_work.py:226: TypeError</failure></testcase><testcase classname="draft.controller.test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[snapshot_read]" time="0.413" /><testcase classname="draft.controller.test_work_wrapper" name="test_pre_admission_reader_error_publishes_final_blocked_snapshot_without_post[schema_initialization]" time="0.364" /><testcase classname="draft.controller.test_independent" name="test_deadline_tick_does_not_wait_for_blocked_http_and_cannot_replay" time="19.834" /><testcase classname="draft.controller.test_independent" name="test_effect_boundary_checks_deadline_without_owner_tick" time="0.487" /><testcase classname="draft.controller.test_independent" name="test_adopted_setup_ignored_across_local_continuation_reopen_remote_work" time="4.279" /><testcase classname="test_control_adoption" name="test_adoption_reads_exact_closed_predecessor_without_rewriting" time="0.192" /><testcase classname="test_control_adoption" name="test_adoption_rejects_reset_or_different_installation[checkpoint]" time="0.142" /><testcase classname="test_control_adoption" name="test_adoption_rejects_reset_or_different_installation[closure_tokens]" time="0.147" /><testcase classname="test_control_adoption" name="test_adoption_rejects_reset_or_different_installation[install_scope]" time="0.147" /><testcase classname="test_control_adoption" name="test_adoption_rejects_reset_or_different_installation[payload_count]" time="0.156" /><testcase classname="test_control_adoption" name="test_initialize_only_creates_successor_evidence[None]" time="0.074" /><testcase classname="test_control_adoption" name="test_initialize_only_creates_successor_evidence[fixture]" time="0.045" /><testcase classname="test_control_adoption" name="test_initialize_only_creates_successor_evidence[report]" time="0.041" /><testcase classname="test_control_adoption" name="test_initialize_only_creates_successor_evidence[existing_control]" time="0.031" /></testsuite></testsuites>

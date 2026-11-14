@@ -1,0 +1,115 @@
+{
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq",
+  "files": [
+    {
+      "path": "adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+      "bytes": 4994
+    },
+    {
+      "path": "authorize_local.py",
+      "sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+      "bytes": 15094
+    },
+    {
+      "path": "operator_bootstrap.py",
+      "sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6",
+      "bytes": 11256
+    },
+    {
+      "path": "driver_common.py",
+      "sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f",
+      "bytes": 10515
+    },
+    {
+      "path": "invoke.py",
+      "sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+      "bytes": 3529
+    },
+    {
+      "path": "prepare_observation.py",
+      "sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+      "bytes": 1367
+    },
+    {
+      "path": "m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+      "bytes": 8661
+    },
+    {
+      "path": "m1_v14_confirm_cleanup.py",
+      "sha256": "acd5228e7a37eafa69c310fcd3445c67211f868ec8eb3904eece2d4896006052",
+      "bytes": 8779
+    },
+    {
+      "path": "confirm_final_presence.py",
+      "sha256": "58f47e317b8cda721806076dfde27c52f8c31efb8d0afdc22534c1fb32d66fc0",
+      "bytes": 11019
+    },
+    {
+      "path": "close_campaign.py",
+      "sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+      "bytes": 7364
+    },
+    {
+      "path": "test_drivers.py",
+      "sha256": "ccc9b2e24b836d5ead49ef8db74358e8bb0b2051bfd79915c9aae3aa422fb09f",
+      "bytes": 23514
+    },
+    {
+      "path": "test_local_only_presence.py",
+      "sha256": "4e0284abcc0dfde43b32c6a09376871e20ce41d7c6ccc349892f5ac0c184ddaa",
+      "bytes": 5813
+    },
+    {
+      "path": "test_operator_bootstrap.py",
+      "sha256": "ae96550e86f7ea00b1d17d16cb37f6692d36232206a85eb239efbd7351c43a7a",
+      "bytes": 15409
+    },
+    {
+      "path": "test_successor_adoption_authorization.py",
+      "sha256": "ec757a97cd9d38b0fb1cd126b8a724761c12d582cdc8ae0dc130aba2d10a0083",
+      "bytes": 15693
+    },
+    {
+      "path": "qualify_delta.py",
+      "sha256": "e0794f0d74b5468caad774da7cd866cfffd0acdc82d66ba3758094f2602b40c0",
+      "bytes": 702
+    },
+    {
+      "path": "qualify_done_checkpoint.py",
+      "sha256": "9f7d91820cead71a339ce0af88398f645bce85f6f746a76adc341bfc938000ed",
+      "bytes": 572
+    },
+    {
+      "path": "freeze_offline.py",
+      "sha256": "16d135e71f32233c3896476777b9ddd7186d4d4161ea69a2aeb00146b534edba",
+      "bytes": 6454
+    },
+    {
+      "path": "qualification/runtime-pins.json",
+      "sha256": "1ae8a3cf831e9396a334b406445b47ec58bc0e7df6e4cad43af66de78bdcedba",
+      "bytes": 2754
+    },
+    {
+      "path": "qualification/qualification.json",
+      "sha256": "06eb8d6e06be103ceb389395aee2e0dcda78df1635fd7a2c64ec68e47d49c4c3",
+      "bytes": 12242
+    },
+    {
+      "path": "qualification/final.xml",
+      "sha256": "87e86a9508151028e8b16c35be2c4bb557dd41f01642093859271c185ffdae80",
+      "bytes": 7037
+    },
+    {
+      "path": "qualification/prior-done-checkpoint.xml",
+      "sha256": "a4bdeee52f6fa372978606cc73e9fa81f6c2410c5e47302dd64a945cb1e33226",
+      "bytes": 364
+    },
+    {
+      "path": "qualification/antecedent-61pass-2fixturefails.xml",
+      "sha256": "8bad645cb06676a791cb61d0e4d20a75eea29e176ccd279b0f05517d870b54ea",
+      "bytes": 11154
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "status": "ROOT_REVIEW_PINS_AND_PASSIVE_PREFLIGHT_PASS",
+  "observed_at_utc": "2026-11-14T17:10:36.812432+00:00",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "public_manifest_sha256": "f8c54d7d39be8c50c060dec2591275827ed5fbc0df11d28eddd660db97cdd147",
+  "qualification_sha256": "b53f9f3cf698ca0ef41b57fe70812734c3e960c575e13ea4fce3f8919a41e7f2",
+  "public_artifacts_verified": 86,
+  "runtime_pins_verified": 47,
+  "installed_pins_verified": 984,
+  "adoption": {
+    "predecessor_closed": true,
+    "installation_adopted": true,
+    "payload_count": 983
+  },
+  "control_evidence_absent": true,
+  "tasks": {
+    "nexus": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "absent": true
+    }
+  },
+  "exclusive_port_probe_not_reserved": 58631,
+  "provider_calls": 0,
+  "service_mutations": 0,
+  "personal_credentials_read": 0,
+  "reviewed_scope": "Closed v13 history and derived settlement; new session/request identities; preserved usage; grant reuse or separately reviewed expired replacement; up to three exact native command decisions per lane; 600-second work window.",
+  "limits": "Instantaneous absence; no productive execution or M1 acceptance inferred."
+}

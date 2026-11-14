@@ -12983,6 +12983,30 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-cli-drain-controls/qualification.json"
       ]
+    },
+    "r3_m1_v14_preparation": {
+      "date": "2026-11-14",
+      "status": "V14_PREPARED_ROOT_REVIEWED_NO_EXECUTION",
+      "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+      "qualification_sha256": "b53f9f3cf698ca0ef41b57fe70812734c3e960c575e13ea4fce3f8919a41e7f2",
+      "root_review_sha256": "e1a58c15fd8979f801bd803f2c1ef7c0c84b75b07d2a82bd7c6a39148466e4f6",
+      "carry_tokens": 134199,
+      "carry_reservations": 9,
+      "max_new_reservations": 4,
+      "max_cumulative_reservations": 13,
+      "work_deadline_seconds": 600,
+      "preventive_token_threshold": 500000,
+      "authorized_token_tolerance": 700000,
+      "scope": "Adopt existing installation/profile after cancelled closed v13; preserve original and derived accounting. Snapshot old work checkpoint; new local request/session; up to3 exact reviewed native decisions per lane. Reuse available partly-used grant; explicit expired replacement only for finite remaining work. No local setup replay.",
+      "qualification": "Affected final source and driver deltas plus isolated entrypoints; exact counts/antecedents in retained qualification. Historical unchanged evidence is not claimed as a new run.",
+      "authorization": "Standing user authorization bound by root technical review; no claim of separate user approval of artifact SHA.",
+      "provider_calls": 0,
+      "service_mutations": 0,
+      "acceptance_promoted": false,
+      "claude_used": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v14-preparation/review.json"
+      ]
     }
   },
   "history": [
@@ -14313,6 +14337,15 @@
       "summary": "Source16/installed16 qualify CLI controls while query-ready owner is stopping, without productive admission, new grant, restart or force. Retained stale-Core and fixture-expectation failures. Existing SVC/AC statuses unchanged.",
       "evidence": [
         "plans/agent_ops/evidence/r3-cli-drain-controls/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "V14 work-only successor after cancelled v13",
+      "status": "V14_PREPARED_ROOT_REVIEWED_NO_EXECUTION",
+      "summary": "Carry134199tokens/9reservations; at most4new/max13, deadline600, exact scoped native decisions3/lane. Closed predecessor and history retained; new session/request. Source/driver deltas qualified; no execution or acceptance inferred.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v14-preparation/review.json"
       ]
     }
   ]

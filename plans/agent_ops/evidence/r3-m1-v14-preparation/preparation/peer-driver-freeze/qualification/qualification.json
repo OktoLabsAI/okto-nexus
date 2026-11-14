@@ -1,0 +1,251 @@
+{
+  "format": "m1-v14-root-driver-offline-qualification",
+  "status": "PASS_DELTA",
+  "generated_at": "2026-11-14T17:06:26.519339+00:00",
+  "runtime_manifest_sha256": "1ae8a3cf831e9396a334b406445b47ec58bc0e7df6e4cad43af66de78bdcedba",
+  "pytest": {
+    "final": {
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "artifact": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\final.xml",
+        "sha256": "87e86a9508151028e8b16c35be2c4bb557dd41f01642093859271c185ffdae80",
+        "bytes": 7037
+      }
+    },
+    "additional_prior_done": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "artifact": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\prior-done-checkpoint.xml",
+        "sha256": "a4bdeee52f6fa372978606cc73e9fa81f6c2410c5e47302dd64a945cb1e33226",
+        "bytes": 364
+      }
+    },
+    "total_distinct_final_cases": 64,
+    "command_prefix": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/draft/installation/venv/Scripts/python.exe -I -B -X utf8",
+    "runners": [
+      "qualify_delta.py",
+      "qualify_done_checkpoint.py"
+    ],
+    "scope": "Installed parser/handlers against synthetic HTTP and topology; no effects. Delta only, not an assertion that all inherited119 were rerun."
+  },
+  "antecedents": [
+    {
+      "artifact": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\qualification\\antecedent-61pass-2fixturefails.xml",
+        "sha256": "8bad645cb06676a791cb61d0e4d20a75eea29e176ccd279b0f05517d870b54ea",
+        "bytes": 11154
+      },
+      "counts": "61PASS/2fixtureFAIL",
+      "cause": "The no-effects Popen replacement ran before Windows asyncio imported its Popen subclass; preimport asyncio before fixture fixes the two import failures. No product/CLI entered those failing cases."
+    }
+  ],
+  "prior_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public-artifacts\\peer-driver-freeze\\qualification\\qualification.json",
+    "sha256": "a977bcda088a3a542549ddcbbef788aaa15f18d54ab73653359754b9a9f81beb",
+    "bytes": 5072
+  },
+  "derivation": [
+    {
+      "module": "root_driver_adopt_local",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\adopt_local.py",
+        "sha256": "eb30968872bfc27abd929fe2743bb9259b7ef82f765f835e0db4c6ce8b43d060",
+        "bytes": 4181
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\adopt_local.py",
+        "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c",
+        "bytes": 4994
+      },
+      "semantic_delta_beyond_import_revision": true
+    },
+    {
+      "module": "root_driver_authorize_local",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\authorize_local.py",
+        "sha256": "defedf1cc86089c9913fad64e177018a2df7764853fe85ec23c8d8b6a44928f1",
+        "bytes": 13553
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\authorize_local.py",
+        "sha256": "0dd05a327e8d85254f02401e50b460a082e84ad4006e9d3efcfa4d5bcadfebc8",
+        "bytes": 15094
+      },
+      "semantic_delta_beyond_import_revision": true
+    },
+    {
+      "module": "root_driver_operator_bootstrap",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\operator_bootstrap.py",
+        "sha256": "4bb63b51f26ab584a5bd7e4e6194f92ef058ef95e9e86c687a195d09af3ec153",
+        "bytes": 11452
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\operator_bootstrap.py",
+        "sha256": "b6540c0b6e2cf473cadad87fda06b5849449e25a364c633ab003838824acc4c6",
+        "bytes": 11256
+      },
+      "semantic_delta_beyond_import_revision": true
+    },
+    {
+      "module": "root_driver_common",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\driver_common.py",
+        "sha256": "7dee1201558587217293917a0e0ec035d57b2de971ed23729f4d80bb38e813b5",
+        "bytes": 10744
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\driver_common.py",
+        "sha256": "5e83c1ae4e07e64b3c76211bbceb6187bc1637091206f60c488ef7a93a9a734f",
+        "bytes": 10515
+      },
+      "semantic_delta_beyond_import_revision": true
+    },
+    {
+      "module": "root_driver_invoke",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\invoke.py",
+        "sha256": "ae601c5e27c9dc4d7abf48d4f56f93cb6626f0e1fe200223eb6429b80c2490a7",
+        "bytes": 3596
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\invoke.py",
+        "sha256": "eb799fe88bdad9332c82d28f902ac8afd17c6ff6253d9311bf9197916c750d7f",
+        "bytes": 3529
+      },
+      "semantic_delta_beyond_import_revision": false
+    },
+    {
+      "module": "root_driver_prepare_observation",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\prepare_observation.py",
+        "sha256": "59a28f16083ce00ed49b46e1cc8d4f01b6551370c34460b217cfa22ec09eec2f",
+        "bytes": 1396
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\prepare_observation.py",
+        "sha256": "0b13c0cc19178f8a39a313ddc231352353a9f23790c44ea626bcc5810279c269",
+        "bytes": 1367
+      },
+      "semantic_delta_beyond_import_revision": false
+    },
+    {
+      "module": "root_driver_observation",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\m1_v13_observation.py",
+        "sha256": "806516c556709821f574937b16f3a0e0e73dc610d64f8c9a427a4ed1a3968f27",
+        "bytes": 8837
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\m1_v14_observation.py",
+        "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10",
+        "bytes": 8661
+      },
+      "semantic_delta_beyond_import_revision": false
+    },
+    {
+      "module": "root_driver_confirm_cleanup",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\m1_v13_confirm_cleanup.py",
+        "sha256": "440af651f430bde42eef568218e1b39d5b09a416bcb4588976d7e06cbeddaeed",
+        "bytes": 8919
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\m1_v14_confirm_cleanup.py",
+        "sha256": "acd5228e7a37eafa69c310fcd3445c67211f868ec8eb3904eece2d4896006052",
+        "bytes": 8779
+      },
+      "semantic_delta_beyond_import_revision": false
+    },
+    {
+      "module": "root_driver_confirm_final_presence",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\confirm_final_presence.py",
+        "sha256": "bf13310bfd14e8be450b377156cffdc74eafdeadbae0ba3e0ce125937173ae3b",
+        "bytes": 11095
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\confirm_final_presence.py",
+        "sha256": "58f47e317b8cda721806076dfde27c52f8c31efb8d0afdc22534c1fb32d66fc0",
+        "bytes": 11019
+      },
+      "semantic_delta_beyond_import_revision": true
+    },
+    {
+      "module": "root_driver_close_campaign",
+      "predecessor": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\close_campaign.py",
+        "sha256": "b1c0bfc3d29d8c6ee2a24a0cf321792487dc6dd43a8edfc3caa9544f9f1979e4",
+        "bytes": 7483
+      },
+      "current": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v14-drivers-candidate-rpojv5gq\\close_campaign.py",
+        "sha256": "76f49ee996d990463563cfed08f20a390f73beb7956923c681b14f7b2e849c02",
+        "bytes": 7364
+      },
+      "semantic_delta_beyond_import_revision": false
+    }
+  ],
+  "origins": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\cli\\work.py",
+      "sha256": "ab9a1e7077fb8a555e84f1bf7d91b5ab1403094b237936da899b12ef26f5c643",
+      "bytes": 19900
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_authorization.py",
+      "sha256": "b58507fd91ed398503fedc14ed82bbe6c0f28024526ba2df620ab78a63f03063",
+      "bytes": 5468
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_work.py",
+      "sha256": "8672e357b6a94484d8c68ab7ab94ef7cbbcb8eca4ae990ba9c172ffdbf6657ad",
+      "bytes": 21125
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Lib\\site-packages\\okto_nexus\\application\\terminal_connection.py",
+      "sha256": "614dd004363fc78295f3ff38241900fc352dad65beb4fb04a4278639a705222e",
+      "bytes": 25710
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\cli_flow.py",
+      "sha256": "fe2fc005f4186b2513a2e6a59bbbee0c2eecb18135fc56a9036ea0ebc1cbcd1b",
+      "bytes": 9493
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\controller\\token_collector.py",
+      "sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2",
+      "bytes": 22011
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\publication.py",
+      "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385",
+      "bytes": 1676
+    }
+  ],
+  "compile": "PASS: every candidate Python source compiled in memory; no pyc writes",
+  "ruff": "PASS: E9,F63,F7,F82 on candidate before final test-only prior-done parameter",
+  "scope": [
+    "Fresh revision14 receipt and carry9/134199/new4/cumulative13 identities",
+    "GET-only adoption with exact old checkpoint bytes snapshot before new controller",
+    "New local request IDs separate from reused m1v12-local profile",
+    "Complete two-grant history revision/expiry/max/actions and monotonic used counters",
+    "Unique available grant balance>=3 reused; expired history requires exact root review and max3 replacement",
+    "630s admission window for one600s turn plus30s margin; canonical server revalidates every admission",
+    "Declared publication parent included before hermetic import; no inherited sibling path required",
+    "Post-authorization checkpoint hash exported for first new-session scope validation"
+  ],
+  "limitations": [
+    "No real receipt, controller, service, provider, login or campaign was executed.",
+    "Prior119-case v13 qualification reused for unchanged inherited behavior, not repeated.",
+    "Work freshness1s/poll600ms/read250ms and model600s limits are composed by preparer, not changed by these drivers.",
+    "Authorization maintenance retains120s separate from600s work deadline.",
+    "Root source review and final campaign composition/authorization remain separate from offline qualification."
+  ]
+}
