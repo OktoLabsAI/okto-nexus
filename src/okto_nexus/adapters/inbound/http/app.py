@@ -674,7 +674,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
 
         # The mounted MCP sub-app's own lifespan never runs under a parent
         # FastAPI, so its session manager is driven from here (SDK-documented
-        # mounting pattern). The lock heartbeat keeps takeover honest (D4).
+        # mounting pattern). The heartbeat is diagnostic; OS locks govern ownership.
         heartbeat_task: asyncio.Task | None = None
         metrics_task: asyncio.Task | None = None
         embedded_core_host: EmbeddedRuntimeHost | None = None
@@ -686,7 +686,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             async def _beat() -> None:
                 while True:
                     await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
-                    lock.heartbeat()
+                    await lock.heartbeat_async()
 
             heartbeat_task = asyncio.create_task(_beat())
         telemetry = getattr(deps, "telemetry", None)

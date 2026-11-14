@@ -1542,3 +1542,19 @@ Os deltas e entrypoints foram qualificados; falhas intermediárias permanecem
 nas evidências. Esta preparação não fez inferência nem promoveu aceite M1.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v14-preparation/review.json`.
+
+## 2026-11-14 — heartbeat fora da thread HTTP
+
+O heartbeat do lock executava leitura e atualização de arquivo na thread HTTP.
+A operação agora usa um worker, com uma operação por vez; o shutdown aguarda
+sua conclusão antes de liberar os locks, inclusive sob cancelamento repetido.
+Os 16 testes de lock e 14 testes de lifespan passaram, assim como Ruff e revisão
+independente. A primeira invocação de Ruff pelo venv não encontrou o módulo;
+o executável instalado foi usado com sucesso.
+
+Esta correção elimina um ponto concreto de bloqueio, sem atribuir a ele todos
+os timeouts v14. A instalação da campanha permanece intacta e sem novas chamadas
+ao modelo. O contrato de revisões impede remover simplesmente a escrita do GET
+de identidade. Nenhum cenário ou critério foi promovido por estes testes.
+
+Evidência: `plans/agent_ops/evidence/r3-http-heartbeat-isolation.md`.

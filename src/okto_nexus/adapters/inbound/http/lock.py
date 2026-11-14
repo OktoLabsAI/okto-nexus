@@ -7,6 +7,7 @@ timestamp or a reused/unknown PID cannot authorize takeover of an older Server.
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 from pathlib import Path
@@ -102,6 +103,24 @@ class ServeLock:
                 os.utime(self.path, None)
             except OSError:
                 pass  # diagnostic only; never drops OS exclusion
+
+    async def heartbeat_async(self) -> None:
+        """Keep slow diagnostic filesystem I/O off the HTTP event loop.
+
+        Cancellation must join the in-flight touch before the lifecycle can
+        release ownership; cancelling a thread future does not stop its I/O.
+        """
+        pending = asyncio.create_task(asyncio.to_thread(self.heartbeat))
+        try:
+            await asyncio.shield(pending)
+        except asyncio.CancelledError:
+            while not pending.done():
+                try:
+                    await asyncio.shield(pending)
+                except asyncio.CancelledError:
+                    continue
+            pending.result()
+            raise
 
     def _release_guards(self) -> None:
         guards, self._guards = self._guards, []
