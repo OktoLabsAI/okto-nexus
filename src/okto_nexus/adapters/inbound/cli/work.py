@@ -194,6 +194,48 @@ def interactive_work(service, profile, *, timeout=300):
     return chat(open_work(service, profile), timeout=timeout)
 
 
+def inspect_work_service(service, *, timeout=None):
+    """Retry only identified local transport interruptions, without lifecycle effects."""
+    if timeout is None or hasattr(service, 'operator_http'):
+        # Without an explicit budget preserve the single canonical inspection:
+        # its default two seconds bound HTTP, not Scheduler/OS inspection.
+        # Remote verification retains its own transport/auth contract as well.
+        return service.inspect()
+    deadline = time.monotonic() + timeout
+    anchor = None
+    status = {'state': 'unknown', 'ready_for_queries': False}
+    while True:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return {**status, 'state': 'unknown', 'ready_for_queries': False,
+                    'reason': 'READINESS_DEADLINE_EXCEEDED'}
+        status = service.inspect(timeout=min(2.0, remaining))
+        transient = (status.get('reason') == 'SERVICE_UNREACHABLE'
+                     and status.get('observation_retryable') is True)
+        # OS I/O is not preemptible by this loop. A late successful response
+        # must not authorize a handler after the selected preflight budget.
+        if time.monotonic() >= deadline:
+            if not transient and status.get('state') not in {'ready', 'stopping'}:
+                return {**status, 'readiness_wait_expired': True}
+            return {**status, 'state': 'unknown', 'ready_for_queries': False,
+                    'reason': 'READINESS_DEADLINE_EXCEEDED'}
+        owner = status.get('observed_owner') if transient else status
+        identity = ({key: owner.get(key) for key in ('instance_id', 'pid', 'generation')}
+                    if isinstance(owner, dict) else None)
+        if (anchor is not None and (transient or status.get('state') in {'ready', 'stopping'})
+                and identity != anchor):
+            return {**status, 'state': 'unknown', 'ready_for_queries': False,
+                    'reason': 'INSTANCE_CHANGED'}
+        if not transient:
+            return status
+        if (identity is None or type(identity['pid']) is not int or identity['pid'] <= 0
+                or not isinstance(identity['instance_id'], str) or not identity['instance_id']
+                or not isinstance(identity['generation'], str) or not identity['generation']):
+            return status
+        anchor = identity
+        time.sleep(min(.1, max(0, deadline - time.monotonic())))
+
+
 def run_work(argv):
     from .connect import project_profile
     parser = argparse.ArgumentParser(prog='okto-nexus work',
@@ -218,11 +260,15 @@ def run_work(argv):
     parser.add_argument('--after-sequence', type=int, default=0)
     parser.add_argument('--stream-epoch')
     parser.add_argument('--timeout', type=float, default=300)
+    parser.add_argument('--readiness-timeout', type=float,
+                        help='opt in to local readiness retries within (0, 30] seconds; default: one inspection, no service start')
     parser.add_argument('--json', action='store_true')
     args, service_args = parser.parse_known_args(args_list)
     action = action or ('chat' if sys.stdin.isatty() and not args.json else 'status')
     if not 0 < args.timeout <= 300 or args.after_sequence < 0:
         parser.error('timeout must be in (0, 300]; after-sequence must be nonnegative')
+    if args.readiness_timeout is not None and not 0 < args.readiness_timeout <= 30:
+        parser.error('readiness-timeout must be in (0, 30]')
     if action in ('send', 'steer') and not args.message:
         parser.error('send and steer require --message')
     if args.message is not None and action not in ('send', 'steer', 'interrupt', 'close'):
@@ -259,7 +305,7 @@ def run_work(argv):
         target = service.adapter.home / 'terminal/profiles' / (profile + '.json')
         if not target.exists():
             raise ConnectionError('CONNECTION_REQUIRED', 'Run connect for this project before using work.')
-        status = service.inspect()
+        status = inspect_work_service(service, timeout=args.readiness_timeout)
         # The inspected owner keeps its administrative channel during drain.
         # Permit only observation and controls of already admitted work; never
         # start a service, reopen admission or resume a productive submission.

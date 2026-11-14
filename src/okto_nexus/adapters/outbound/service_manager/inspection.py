@@ -4,6 +4,7 @@ from __future__ import annotations
 from importlib.metadata import version
 import json
 from pathlib import Path
+import re
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, ProxyHandler, build_opener
 
@@ -15,6 +16,27 @@ from .locking import ExclusiveFileLock, LockBusy
 class NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
+
+
+def _observation_failure(error: Exception) -> tuple[str, bool]:
+    # HTTPError is also a URLError. An HTTP refusal, malformed document or
+    # unknown OS failure is not evidence of a transient transport interruption.
+    if isinstance(error, HTTPError):
+        return 'http_response', False
+    if isinstance(error, (ValueError, AttributeError)):
+        return 'invalid_response', False
+    cause = error.reason if isinstance(error, URLError) else error
+    if isinstance(cause, (TimeoutError, ConnectionError)):
+        return 'transient_transport', True
+    return 'unclassified_transport', False
+
+
+def _owner_hint(metadata: dict, identity: str) -> dict | None:
+    pid, generation = metadata.get('pid'), metadata.get('generation')
+    if (type(pid) is int and pid > 0 and isinstance(generation, str)
+            and re.fullmatch(r'[A-Za-z0-9_.:-]{1,128}', generation)):
+        return {'instance_id': identity, 'pid': pid, 'generation': generation}
+    return None
 
 
 def _held(path: Path) -> bool | None:
@@ -74,8 +96,13 @@ def inspect_local_server(*, home: Path, database: Path, host: str, port: int,
             data = document.get('data') if document.get('ok') is True else None
             if not isinstance(data, dict):
                 raise ValueError('Invalid readiness envelope')
-    except (HTTPError, URLError, TimeoutError, OSError, ValueError, AttributeError):
+    except (HTTPError, URLError, TimeoutError, OSError, ValueError, AttributeError) as error:
+        kind, retryable = _observation_failure(error)
         return {**result, 'state': 'degraded', 'reason': 'SERVICE_UNREACHABLE',
+                'observation_error': kind, 'observation_retryable': retryable,
+                # Guard metadata is only an anchor for a subsequent canonical
+                # inspection; it never proves readiness or permits dispatch.
+                'observed_owner': _owner_hint(metadata, result['instance_id']),
                 'next_action': 'Inspect startup/transport diagnostics for this instance; no process was started.'}
     # A child holds the guards before publishing metadata; startup may complete
     # while this HTTP request is in flight. Re-correlate after the response so
