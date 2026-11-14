@@ -1,0 +1,67 @@
+{
+  "status": "OFFLINE_QUALIFIED_AND_ROOT_REVIEWED_NOT_EXECUTED",
+  "retained_files": 61,
+  "all_source_copy_hashes_verified": true,
+  "high_specificity_secret_scan_matches": [],
+  "root_review": "root-review.json",
+  "amendment_sha256": "440bbd1a336f86dd4fbd9f74c22b2a7ea8342f28490162e2421a25236d00d554",
+  "freeze_sha256": "9e198d1c97f446e51eb9a642a568283e6f6046e01e3425cb2609f2ffc95b5e1c",
+  "source_commits": {
+    "nexus": "46ba5c31d4461d2af4e8d2d1534bfe1201a87857",
+    "connector": "645d7bd55957a42507d9d208871a30f91828f952",
+    "core": "7810f3b9bd2576bca5ccc8286a4c661789bf73a4"
+  },
+  "qualification": {
+    "payloads": 1002,
+    "canonical_probe60_seconds": 1.8816654999973252,
+    "installed_preflight_passes": 48,
+    "composition_passes": 6,
+    "controller_delta_unique_passes": 14,
+    "controller_runs": "12 then2 new deltas, not a single14-case run",
+    "suites_overlap_not_summed": true,
+    "real_work_prefix_facade_import": "PASS, no handler/controller/runtime effects"
+  },
+  "technical_allocation": {
+    "revision": 15,
+    "old_cap": 13,
+    "new_cap": 16,
+    "carry_charged_reservations": 12,
+    "max_new": 4,
+    "local_executable_new": 2,
+    "remote_selectors_enabled": false,
+    "old_conditional13_selected": false,
+    "refund": false
+  },
+  "tokens": {
+    "carry_observed": 295262,
+    "preventive": 500000,
+    "authorized_tolerance": 700000,
+    "remaining_until_preventive": 204738,
+    "remaining_until_tolerance": 404738,
+    "billing_final": false
+  },
+  "observations": {
+    "records": 7,
+    "historical": 3,
+    "new": 4,
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "margin_seconds": 1,
+    "poll_seconds": 17,
+    "freshness_seconds": 18,
+    "cadence_seconds": 22,
+    "target_seconds": 0.2,
+    "work_deadline_seconds": 600,
+    "fixed_acceptance_criterion_claimed": false
+  },
+  "original_history_preserved": "Request12 target CANCELLED; interrupt receipt SUBMITTED snapshot. Original faulted checkpoint intact; no invented settlement for request11 or12.",
+  "normal_containment": "Exact scoped canonical interrupt if faulted admitted turn remains during drain; runtime.close only if required, no force or replay.",
+  "status_changes": [],
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "no_live_service_provider_or_grant_effects": true,
+  "private_or_environment_bytes_copied": false
+}

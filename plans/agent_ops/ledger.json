@@ -13541,6 +13541,32 @@
       ],
       "installed_qualified": false,
       "m1_acceptance": false
+    },
+    "r3_m1_revision15_offline_preparation": {
+      "status": "OFFLINE_QUALIFIED_AND_ROOT_REVIEWED_NOT_EXECUTED",
+      "summary": "Revision15 offline composition and root review completed. Standing700k user authority binds explicit technical cap16: carry295262/12 charged plus4 new IDs. Local13/14 executable serially; remote15/16 held. Seven observed records preserve3 histories with1s snapshots/2s initialization, derived17/18/22 envelope; work600 unchanged.1002payloads, canonicalprobe60 in1.882s,48installed preflight/6composition/14controller deltas retained separately. No live execution, grant, model, historical replay/refund or acceptance promotion;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/amendment.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/runtime-freeze.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/workflow.json"
+      ],
+      "policy": {
+        "revision": 15,
+        "carry_in_admissions": 12,
+        "carry_in_tokens": 295262,
+        "max_new_admissions": 4,
+        "max_cumulative_admissions": 16,
+        "preventive_cumulative_tokens": 500000,
+        "operational_tolerance": 700000,
+        "deadline_seconds": 600
+      },
+      "remote_execution_enabled": false,
+      "services_started": 0,
+      "models_called": 0,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15054,6 +15080,20 @@
         "plans/agent_ops/evidence/r3-work-readiness-preflight/review.json",
         "plans/agent_ops/evidence/r3-work-readiness-preflight/qualification.json",
         "plans/agent_ops/evidence/r3-work-readiness-preflight/final-delta.xml"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision15_offline_preparation",
+      "status": "OFFLINE_QUALIFIED_AND_ROOT_REVIEWED_NOT_EXECUTED",
+      "summary": "Revision15 offline composition and root review completed. Standing700k user authority binds explicit technical cap16: carry295262/12 charged plus4 new IDs. Local13/14 executable serially; remote15/16 held. Seven observed records preserve3 histories with1s snapshots/2s initialization, derived17/18/22 envelope; work600 unchanged.1002payloads, canonicalprobe60 in1.882s,48installed preflight/6composition/14controller deltas retained separately. No live execution, grant, model, historical replay/refund or acceptance promotion;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/root-review.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/qualification.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/amendment.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/runtime-freeze.json",
+        "plans/agent_ops/evidence/r3-m1-revision15-preparation/workflow.json"
       ]
     }
   ],

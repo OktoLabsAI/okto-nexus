@@ -1,0 +1,44 @@
+{
+  "grants": [
+    {
+      "expires_at": "2026-11-14T18:42:36.153081Z",
+      "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+      "max_executions": 3,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T16:22:02.541642Z",
+      "grant_id": "grant_89bbed009c65458fab96ff9d0a3ffc72",
+      "max_executions": 20,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T17:26:23.088231Z",
+      "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+      "max_executions": 20,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+      "expires_at": "2026-11-14T20:08:18.408235Z",
+      "max_executions": 3,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+      "expires_at": "2026-11-14T22:10:10.862526Z",
+      "max_executions": 3,
+      "revision": 1,
+      "minimum_used_executions": 1
+    }
+  ],
+  "new_grant_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\authorize-local-apply.json",
+    "sha256": "7a914898256e1eea99f1a80cdf017306b7e6eac412bb445dd54ee139497a3972"
+  },
+  "minimum_used_basis": "One canonical opening for request12 observed; current actual usage/state must be reviewed before any grant selection."
+}

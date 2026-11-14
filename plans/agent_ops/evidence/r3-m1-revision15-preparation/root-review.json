@@ -1,0 +1,23 @@
+{
+  "status": "ROOT_REVIEW_APPROVED_OFFLINE_CANDIDATE_FOR_SERIAL_LOCAL_EXECUTION",
+  "provenance": "Root agent explicit review/selection message, retained by curator; not a new human approval receipt.",
+  "amendment_sha256": "440bbd1a336f86dd4fbd9f74c22b2a7ea8342f28490162e2421a25236d00d554",
+  "runtime_freeze_sha256": "9e198d1c97f446e51eb9a642a568283e6f6046e01e3425cb2609f2ffc95b5e1c",
+  "workflow_sha256": "7807e95b6c4d3f323416cd008538342c97f0579d9600b6c702a5bdd1feed1eaa",
+  "frozen_files_reviewed": 60,
+  "root_review_tool_references": [
+    "92fbbd workflow",
+    "2d07c9 frozen hashes",
+    "62d45e controller pins",
+    "aa5935 controller qualification",
+    "58fa95 gate origins"
+  ],
+  "peer_review": "finish_reader_cache approved controller/runtime delta; root reviewed context/entry/cohort/final-presence/closure.",
+  "standing_authority": "Original user execution approval and200k+500k Codex allowance, technical revision only; no new human hash approval claimed.",
+  "approved_scope": "Serial local useful13/new session then continuation14 only after success; remote15/16 selectors remain closed.",
+  "live_execution_performed_for_this_preparation": false,
+  "services_started": 0,
+  "model_calls": 0,
+  "grants_changed": 0,
+  "future_force_authorized": false
+}

@@ -1,0 +1,65 @@
+{
+  "status": "FOCUSED_DELTA_PASS_OFFLINE",
+  "unique_delta_tests": 14,
+  "runs": [
+    {
+      "tool": "ebe360",
+      "cases": 12,
+      "failures": 0,
+      "elapsed_seconds": 2.934,
+      "scope": "Policy/history/envelope/facade/actual CLI5 parser and changed-history refusal. Before the later fixture-pin guard addition."
+    },
+    {
+      "tool": "4a0248",
+      "cases": 2,
+      "failures": 0,
+      "elapsed_seconds": 0.167,
+      "scope": "Added input-fixture pin guard and actual installed CLI positive-failure boundary; unchanged12 cases not rerun."
+    }
+  ],
+  "single_full_14_case_run_claimed": false,
+  "ruff_F": {
+    "tool": "43cefd",
+    "result": "PASS",
+    "files": [
+      "modules/fresh_work_controller.py",
+      "modules/history_observers.py",
+      "test_revision15_delta.py"
+    ]
+  },
+  "in_memory_compile_files": 17,
+  "own_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Scripts\\python.exe",
+  "python_flags": [
+    "-I",
+    "-B",
+    "-X",
+    "utf8"
+  ],
+  "live_service_provider_actions": 0,
+  "model_dispatches": 0,
+  "actual_journal_access": "Read-only exact historical records through existing bounded reader; temporary controller fixture files and synthetic queued API jobs only.",
+  "authority": "Existing USER_APPROVED receipt14 remains historical standing authority; amendment15 changes technical policy/paths/IDs. No fabricated new user receipt.",
+  "scope": "New local13/14 executable; remote15/16 reserved allocation only and hard-refused until separate qualification.",
+  "bounds": {
+    "snapshot": 1,
+    "initialization": 2,
+    "poll": 17,
+    "freshness": 18,
+    "cadence": 22,
+    "maximum_observed_records": 7,
+    "target_start": 0.2,
+    "deadline": 600,
+    "preventive": 500000,
+    "tolerance": 700000
+  },
+  "predecessor_accounting": {
+    "observed_tokens": 295262,
+    "charged_reservations": 12,
+    "refunded": false,
+    "historical_records": 3,
+    "original_request11_and12_settled_flags_unchanged": true
+  },
+  "preflight_delta": "All revision15 installed CLI invocations explicitly carry --readiness-timeout5. Product retries only readinessGET before one handler; remote verification contract is unchanged.",
+  "prebuild_plan_antecedent_sha256": "7af863dd3176df050ffcdfd9cd44f75adbf4314274e77c2cdf7fdf6f035c040a",
+  "plan_refinement": "Root explicitly extended readiness5 from polling-only to all revision15 local CLI invocations, including authorization and send/control. No POST retry."
+}

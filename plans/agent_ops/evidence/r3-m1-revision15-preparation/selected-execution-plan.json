@@ -1,0 +1,132 @@
+{
+  "status": "CONCRETE_OFFLINE_PLAN_BEFORE_BUILD",
+  "scope": "Immutable technical revision of the existing authorized M1 objective, not a new user objective.",
+  "ownership_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "proposed_work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15",
+  "basis": {
+    "closure": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-request12-package2-closure\\normal-closure\\closure-companion.json",
+      "sha256": "6fa9c07272248afe631d7231a378e95f21b95133684756a4f85979c71c112c56"
+    },
+    "accounting": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-request12-package2-closure\\normal-closure\\accounting-reconciliation.json",
+      "sha256": "8e1a72942918eb69fd70a6481e78be14ec17b04172b25e9e499ebc8decbb16bc"
+    }
+  },
+  "authorization_judgment": {
+    "standing_execution_authorized": true,
+    "new_user_hash_consent_required": false,
+    "codex_total_authorized_tokens": 700000,
+    "claude_sonnet_separately_authorized_tokens": 200000,
+    "claude_selected": false,
+    "technical_cap_changed_explicitly_from": 13,
+    "technical_cap_changed_explicitly_to": 16,
+    "basis": "User authorized execution, original200k plus500k excess, and optional Sonnet200k. Max13 was harness allocation, not user ceiling. Technical binding must not claim textual user approval of a new SHA.",
+    "exclusions": [
+      "No new force authorization",
+      "No reboot/logout",
+      "No personal configuration edits",
+      "No replay or refund of prior requests",
+      "No automatic native decisions"
+    ]
+  },
+  "policy": {
+    "revision": 15,
+    "carry_in_admissions": 12,
+    "carry_in_tokens": 295262,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 16,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "remaining_token_headroom": {
+    "until_preventive": 204738,
+    "until_authorized_total": 404738,
+    "completion_guaranteed": false,
+    "limitation": "Observation is delayed and cumulative counters are minimum observed usage, not a hard billing fence. Admission closes at preventive threshold; do not increase it silently to complete four turns."
+  },
+  "request_ids": {
+    "local_useful": "m1v15-local-useful-13",
+    "local_continuation": "m1v15-local-continuation-14",
+    "remote_useful": "m1v15-remote-useful-15",
+    "remote_continuation": "m1v15-remote-continuation-16"
+  },
+  "old_conditional_13": {
+    "request_id": "m1v14-local-work-13",
+    "selected": false,
+    "charged": false,
+    "eligible": false,
+    "reason": "Its frozen prerequisite is successful request12; request12 was CANCELLED. New IDs do not alter this selection."
+  },
+  "observed_records": {
+    "historical": [
+      "m1v14-local-work-01 (reservation10)",
+      "m1v14-local-work-11",
+      "m1v14-local-work-12"
+    ],
+    "new": 4,
+    "maximum_total": 7,
+    "all_history_reobserved": true,
+    "closed_implies_immutable": false
+  },
+  "observation_envelope": {
+    "maximum_records": 7,
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "persistence_margin_seconds": 1,
+    "poll_seconds": 17,
+    "freshness_seconds": 18,
+    "cadence_seconds": 22,
+    "target_start_seconds": 0.2,
+    "formula": "7*2*1 + 2 + 1 =17; freshness=poll+1; cadence=poll+5",
+    "classification": "Explicit operational envelope revision, not an R3 acceptance criterion or performance/SLA claim. No batch-reader redesign, caching or dropping history."
+  },
+  "readiness": {
+    "source_commit": "46ba5c31",
+    "poll_cli_readiness_timeout_seconds": 5,
+    "default_product_behavior_unchanged": true,
+    "retry": "Only classified local transient GET preflight, exact owner anchor and one total deadline; positive failures refuse. Remote verification contract stays unchanged.",
+    "productive_POST_retry": false,
+    "service_start_timeout_seconds": 45,
+    "passive_start_observation_seconds": 180,
+    "global_work_deadline_seconds": 600,
+    "old_underlying_failure": "SERVICE_UNREACHABLE; exact transport/protocol cause not retained, not proven timeout."
+  },
+  "minimal_deltas": [
+    "Build a new own package from immutable Nexus46ba5c31 and existing qualified Connector/Core pins; canonicalprobe60 and installed origins/payload verification. Do not modify previous venv.",
+    "Make controller facade re-export POLICY/ANCESTRY from legacy_controller; assert facade/independent/legacy identity against the new amendment in a fresh -I process. No stale duplicated literal policy.",
+    "Derive a new checkpoint from closure/accounting while retaining original faulted checkpoint and all12 charged reservations; observe three historical records without invented stream or settled state for request11.",
+    "Change only explicit policy/IDs/path bindings and finite observation maximum4\u21927; preserve per-read, initialization and persistence budgets and derive17/18/22.",
+    "Local useful13 requires fresh canonical READY and explicit new session after closed12; continuation14 requires useful13 success and same session. Validate scope/grants near dispatch.",
+    "Pass --readiness-timeout5 through the actual installed CLI invocation for polling/status/events/native-review; preserve canonical parser, locks and transport fence. No wrapper mutation while running.",
+    "Keep operator ready to review up to3 exact native permission decisions per lane and publish pending metadata promptly; no prompt-based approval substitution.",
+    "Keep remote selectors closed in the first executable revision until localDX39 passes and remote context/bootstrap/operator/Connector cleanup qualify on the new immutable composition. Reserve IDs15/16 only on actual later dispatch."
+  ],
+  "serial_execution_plan": [
+    "Offline source/import/limit/history/wrapper tests, package probe and frozen root review.",
+    "Prepare new evidence namespace; canonical upgrade-plan/review/apply for the new package; reuse configured local home/profile/project, no setup:test or new local setup.",
+    "Install/start once45s with only allowed passive180s observation; retain exact supervisor/launcher/runtime handles and recovery READY for current generation.",
+    "Review grant near work; reuse if scope/budget/window valid or explicitly issue canonical same-scope replacement after required review. Preserve all grants/history.",
+    "Submit local useful13, observe native question, root reviews exact command, submit one canonical decision, correlate result; stop on fault or preventive budget.",
+    "Only after canonical useful success, continue14 in same session and demonstrate terminal reconnect/result retrieval; qualify DX39 only on complete literal evidence.",
+    "Reassess observed token headroom. Qualify remote composition separately, authenticated human operator on its own home, participant credential only on Connector; bootstrap has no model turn in existing nominal source.",
+    "Only after remote qualification and local pass, useful15 and same-session continuation16 with same CLI decision/result sequence, then bounded normal cleanup and physical/native absence proofs."
+  ],
+  "targeted_validation": [
+    "Fresh -I import of real work/controller facade with policy equality and package origins; no handler/provider executed.",
+    "ObservationLimits accepts7/rejects8 and computes17/18/22; retains1/2/1/.2 and600/500k/700k.",
+    "Historical request10/11/12 mutation closes admission; baseline295262/12 is not summed again; request11 no-stream proof remains distinct.",
+    "New useful13 distinct from cancelled12 and old conditional13; continuation14 refused before success; remote15/16 refused before separate local/remote gates.",
+    "Actual installed CLI preflight transient\u2192sameownerREADY\u2192one handler, positivefailure\u2192no retry/handler, readiness5 explicitly visible; reuse existing source76 where bytes unchanged.",
+    "No full broad suite rerun solely for unchanged imported modules; run focused deltas and exact composed entry/import guards."
+  ],
+  "effects_performed_by_this_plan": {
+    "builds": 0,
+    "services": 0,
+    "models": 0,
+    "credential_access": 0,
+    "shared_repo_edits": 0
+  }
+}

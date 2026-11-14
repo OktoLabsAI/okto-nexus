@@ -1,0 +1,481 @@
+{
+  "format": "okto.m1.v15.work-revision15",
+  "execution_status": "OFFLINE_PREPARATION_ROOT_REVIEW_REQUIRED",
+  "authority": "Technical amendment binding standing user authorization; no new human hash approval is claimed.",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15",
+  "original": {
+    "approval": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\execution-authorization.json",
+    "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+    "proposal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\draft\\m1-codex-campaign-proposal-v14.json",
+    "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e"
+  },
+  "source_authority": {
+    "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+    "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c"
+  },
+  "basis": {
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\private\\controller.json",
+      "sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-request12-package2-closure\\normal-closure\\closure-companion.json",
+      "sha256": "6fa9c07272248afe631d7231a378e95f21b95133684756a4f85979c71c112c56"
+    },
+    "accounting": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-request12-package2-closure\\normal-closure\\accounting-reconciliation.json",
+      "sha256": "8e1a72942918eb69fd70a6481e78be14ec17b04172b25e9e499ebc8decbb16bc"
+    },
+    "adoption": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-result.json",
+      "sha256": "ed18e1c5475b5b0b0f494265e894675c3522a4bb49dacb17c52a01272b2d29ed"
+    },
+    "controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\controller-qualification\\runtime-freeze.json",
+      "sha256": "15d79a38eb9f823ee87e6a2644919bf606142475aa68e806961459bdedb050a2"
+    },
+    "historical_grants": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\historical-grants.json",
+      "sha256": "0f9a68a2e3cf5b6e29b9af4ec7c549f938fec0a7bd4a6b04842f4e98c9dd1b21"
+    },
+    "technical_predecessor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\technical-predecessor.json",
+      "sha256": "acc521000ea9ff9c2d352ba9cfaba521e6765ea47acbbe9b454e442dba3553d4"
+    },
+    "execution_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-next-work-plan-83_ksszr\\execution-plan.json",
+      "sha256": "7af863dd3176df050ffcdfd9cd44f75adbf4314274e77c2cdf7fdf6f035c040a"
+    },
+    "predecessor_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-freeze.json",
+      "sha256": "9706592bce4b58cf7b95bcf5fb60e682c28f1542c12b68f731a7e9f501e8e96b"
+    },
+    "historical_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-controller-875t5rwb\\runtime-freeze.json",
+      "sha256": "704cab462343ed0773990917d1240d1fbe8aec95782f93a9183164c022fc1c56"
+    }
+  },
+  "sources": {
+    "context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\request_context.py",
+      "sha256": "f1ac586cc6fcf42140b6379ab220e94dfa26dfcfe76eb08a42b8230a9a971fce"
+    },
+    "entry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\request_entry.py",
+      "sha256": "5baaa985da697de086373faf8c6dea0f375d78cfe3a432b13cab65ea7de1a7d7"
+    },
+    "invoke": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\invoke_request.py",
+      "sha256": "0e8e4f39b81bc84ed0ead70393092a45eeead486defbc8a79cc440d7a4e9f2fe"
+    },
+    "common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\driver_common.py",
+      "sha256": "a6156573724964085153e9337d9f8b7155035ac7dc68a8a3ecbc585dd099e0c2"
+    },
+    "work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\local_work.py",
+      "sha256": "4c02d96640f93dc48002e70e3d602f7e8584bb716cf6e953b1f86d2024e832b5"
+    },
+    "cohort": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\lifecycle.py",
+      "sha256": "a2def5d00aa97756305a4d053849bdbfeb74f5be629da69815a005c3261fb437"
+    },
+    "authorize": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\authorize_local.py",
+      "sha256": "90dfae30a370421002e5bb3c7cf546c5c2da4187670b3016c35d6eaa88a27e2e"
+    },
+    "upgrade": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\upgrade_environment.py",
+      "sha256": "127c19a0db23e8d4411d5d884f701b3e3a2eab4322426795393962188e6cdd8a"
+    },
+    "adopt": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c"
+    },
+    "observation_helpers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\m1_v14_observation.py",
+      "sha256": "c395b843838e27c1fcefa38e92dea2528f9b1c3664aa5ca029c76cffe0792e10"
+    },
+    "close": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\close_campaign.py",
+      "sha256": "ca51c7d34e446e15f38a05e1a6d7b64674c5d2bac84faa20f3b359ff16dc888e"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\confirm_final_presence.py",
+      "sha256": "276679f9bc6f2585465339ace36df0e39c70fe32a52e1db28dcd12777fd4fb02"
+    },
+    "api_worker": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\api_worker.py",
+      "sha256": "b61b5a5262b9268d69835b1a6adf8672c82450ac0e606eb60d41565c1490f396"
+    },
+    "cli_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\cli_flow.py",
+      "sha256": "c55b9a050e1bc0be96ecbe71f72e2c3b49052533e4fd2adb52f145b4279e8676"
+    },
+    "containment_driver": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\containment_driver.py",
+      "sha256": "f7b67eecdf05c66d482c4803c1d370f6e6bba9bda13d89e8a80f30ae007952ac"
+    },
+    "controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\controller.py",
+      "sha256": "a8148d59dd14b434640f0289484a0b311f9bda8f81480e7acd99dba80e9d9ecb"
+    },
+    "fresh_work_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\fresh_work_controller.py",
+      "sha256": "d9ccea116a305ef326d7d4a2bf90646ea199ecabfb9b680da15ac9f696fe40dc"
+    },
+    "history_observers": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\history_observers.py",
+      "sha256": "73f4e414b6ee89aff08eeae96fe9f9c6001c335aa24d85436c532ec3ef921472"
+    },
+    "independent_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\independent_controller.py",
+      "sha256": "5d1822208a723ffd984ba9fed8e89e3ce521769b6f798473b31d614e465f1d06"
+    },
+    "independent_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\independent_journal.py",
+      "sha256": "11b5c1fc44b397365efb9f7c029d89d999de9470a5e22b614f3215d5d6734b9d"
+    },
+    "legacy_controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\legacy_controller.py",
+      "sha256": "196951aa40fb3763ccce1b64420d785bc8e807e222e68fcfab5b8a0cf3b1d58d"
+    },
+    "normal_containment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\normal_containment.py",
+      "sha256": "baf25b43f2b3b4b0353434b5cf70841ecaaddf56cb8161276414c22c4f81c572"
+    },
+    "observation_guard": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\observation_guard.py",
+      "sha256": "2aee8267d66a3f5bac64e5b9753277d152afcf558bfb08ef68cba616d4b90e10"
+    },
+    "observation_limits": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\observation_limits.py",
+      "sha256": "e76cf6a1d0b7b77f6cedf00d921491a0b29a371f7da1f8cb971ac8508510cadf"
+    },
+    "serial_flow": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\serial_flow.py",
+      "sha256": "364ce1afbacb48672438ed4385546e95edc40da3b605fe39d55d07c2dd4e7624"
+    },
+    "setup_journal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\setup_journal.py",
+      "sha256": "65c994d69c03d347e6be295f2e0055bcd8dd32b39305b4b54c88a8a171262889"
+    },
+    "token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\token_collector.py",
+      "sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2"
+    }
+  },
+  "bundle_overrides": {
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\lifecycle.py",
+      "sha256": "a2def5d00aa97756305a4d053849bdbfeb74f5be629da69815a005c3261fb437"
+    },
+    "work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\local_work.py",
+      "sha256": "4c02d96640f93dc48002e70e3d602f7e8584bb716cf6e953b1f86d2024e832b5"
+    },
+    "root_driver_authorize_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\authorize_local.py",
+      "sha256": "90dfae30a370421002e5bb3c7cf546c5c2da4187670b3016c35d6eaa88a27e2e"
+    },
+    "root_driver_adopt_local": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\adopt_local.py",
+      "sha256": "b10aff876b0d034b0b390e27d52b70e616ab9df02de711e71c6a64f5f444e30c"
+    },
+    "root_driver_common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\driver_common.py",
+      "sha256": "a6156573724964085153e9337d9f8b7155035ac7dc68a8a3ecbc585dd099e0c2"
+    },
+    "root_driver_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    "root_driver_confirm_cleanup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\cohort.py",
+      "sha256": "5e5322fe8a1568b23790f5ad02f99ad915a8a882cc913443d543e24c3057771c"
+    },
+    "root_driver_confirm_final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\confirm_final_presence.py",
+      "sha256": "276679f9bc6f2585465339ace36df0e39c70fe32a52e1db28dcd12777fd4fb02"
+    },
+    "root_driver_close_campaign": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\close_campaign.py",
+      "sha256": "ca51c7d34e446e15f38a05e1a6d7b64674c5d2bac84faa20f3b359ff16dc888e"
+    },
+    "root_driver_upgrade_environment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\upgrade_environment.py",
+      "sha256": "127c19a0db23e8d4411d5d884f701b3e3a2eab4322426795393962188e6cdd8a"
+    },
+    "controller_token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\modules\\token_collector.py",
+      "sha256": "75b1f5480d79e839f1e6736d54a38beeeb6363fb46816f734b8bd667457642f2"
+    }
+  },
+  "commands": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\commands.json",
+    "sha256": "b51afd464aed806dd9d9ffc5e2fd7a05fa53b4e957744a7bef6111c1834da3f3"
+  },
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\installation.json",
+    "sha256": "8e18b9d9627a7839ad74f9beebf4f484ea25378d0c05524456f87a812705218e"
+  },
+  "wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "9804124472277f92c69b0a4b0840a62e8cf3c3baa185509f3cf58ba62e856437"
+    },
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4"
+    },
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    }
+  },
+  "policy": {
+    "revision": 15,
+    "carry_in_admissions": 12,
+    "carry_in_tokens": 295262,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 16,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "controller_ancestry": {
+    "closure_companion_sha256": "6fa9c07272248afe631d7231a378e95f21b95133684756a4f85979c71c112c56",
+    "checkpoint_sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37",
+    "accounting_reconciliation_sha256": "8e1a72942918eb69fd70a6481e78be14ec17b04172b25e9e499ebc8decbb16bc",
+    "predecessor_faults": [
+      "API_OBSERVATION_UNKNOWN",
+      "CAMPAIGN_RUNNER_EXCEPTION"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+      "checkpoint_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+      "closure_companion_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+      "original_checkpoint_sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c",
+      "predecessor_faults": [
+        "DEADLINE120",
+        "WORK_TERMINAL_FAILED"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+        "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+        "predecessor_faults": [
+          "DEADLINE120"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+          "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+          "predecessor_faults": [
+            "OBSERVATION_UNKNOWN",
+            "DEADLINE120"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+            "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+            "predecessor_faults": [
+              "CAMPAIGN_RUNNER_EXCEPTION"
+            ],
+            "prior_ancestry": {
+              "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+              "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+              "predecessor_faults": [
+                "OBSERVATION_UNKNOWN",
+                "STOP_UNCONFIRMED",
+                "CAMPAIGN_RUNNER_EXCEPTION"
+              ],
+              "prior_ancestry": {
+                "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+                "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+                "predecessor_faults": [
+                  "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+                ],
+                "prior_ancestry": {
+                  "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+                  "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+                  "predecessor_faults": [
+                    "CAMPAIGN_RUNNER_EXCEPTION"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "request_ids": {
+    "useful": "m1v15-local-useful-13",
+    "continuation": "m1v15-local-continuation-14",
+    "remote_useful": "m1v15-remote-useful-15",
+    "remote_continuation": "m1v15-remote-continuation-16"
+  },
+  "initial_work_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json",
+    "sha256": "79b69699d0613577bd406623e634123d358e0c2e6d59b830583076ebf684e022"
+  },
+  "predecessor_session_id": "ses_7c8b77c2988e1645a0c9b6aefd6d80bc",
+  "expected_historical_grants": [
+    {
+      "expires_at": "2026-11-14T18:42:36.153081Z",
+      "grant_id": "grant_018010778d21487c9d5b3e8d084e221a",
+      "max_executions": 3,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T16:22:02.541642Z",
+      "grant_id": "grant_89bbed009c65458fab96ff9d0a3ffc72",
+      "max_executions": 20,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "expires_at": "2026-11-14T17:26:23.088231Z",
+      "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+      "max_executions": 20,
+      "minimum_used_executions": 1,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_167e8f055e0f4444b9a429ca5a4ce686",
+      "expires_at": "2026-11-14T20:08:18.408235Z",
+      "max_executions": 3,
+      "minimum_used_executions": 0,
+      "revision": 1
+    },
+    {
+      "grant_id": "grant_13f7cd1c994340cc977e592b67ac22e6",
+      "expires_at": "2026-11-14T22:10:10.862526Z",
+      "max_executions": 3,
+      "revision": 1,
+      "minimum_used_executions": 1
+    }
+  ],
+  "future_force_authorized": false,
+  "scope": "Local useful13/new session then same-session continuation14 after success. Remote15/16 IDs allocated but selectors closed.",
+  "remote_DX40": "PENDING_SELECTORS_HELD_SEPARATE_QUALIFICATION",
+  "Claude_Sonnet": "NOT_SELECTED",
+  "initial_minimum_observed_tokens": 295262,
+  "initial_cumulative_reservations": 12,
+  "remaining_tolerance_tokens": 404738,
+  "observation_bounds": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "poll_seconds": 17,
+    "freshness_seconds": 18,
+    "cadence_seconds": 22,
+    "target_start_seconds": 0.2,
+    "max_observed_requests": 7
+  },
+  "startup": {
+    "cli_timeout_seconds": 45,
+    "passive_observation_seconds": 180,
+    "repeat_start": false,
+    "qualification": "CLI3 remains CLI3; only later exact READY identity can permit next stage. No SLA claim."
+  },
+  "cleanup": "All supervisor parent/launcher/runtime retained handle exits plus native inactive and canonical owner absence; no future force.",
+  "native_decision_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\private\\native-decision.json",
+  "no_effects_during_preparation": true,
+  "migration": {
+    "run": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-run.json",
+      "sha256": "929db0e1589f4d3fa725298a4492b918f83118ac81cb2745905cdb2519e5478c"
+    },
+    "shutdown": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-shutdown.json",
+      "sha256": "f59be8880be40880fa6fd5344e177e8009d9a06b0560597d9f5de8e57a33873d"
+    },
+    "source_context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\service-context.json",
+      "sha256": "f8b6e37654ef7115a2c67cf9b298197b661f63ec6cfb98f90c42e7b209720e57"
+    },
+    "source_context_revision": "96ab67316b40a54b9a9571490d1994493718235ebf552be0cdf29005cd2b846b",
+    "generation": "3f322a5e7874bdca13a6c4d2cd4f6435",
+    "target_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Scripts\\python.exe",
+    "source_drain_observed": true,
+    "scope": "New canonical upgrade-plan and exact reviewed apply from context schema revision2, with current absent owner/task. No start or model."
+  },
+  "technical_predecessor": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\technical-predecessor.json",
+    "sha256": "acc521000ea9ff9c2d352ba9cfaba521e6765ea47acbbe9b454e442dba3553d4"
+  },
+  "installed_probe": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\probe-qualification.json",
+    "sha256": "2c5c68714d3e30761f108aa2ed47b7f42adc792626d93f26df0a436461695019"
+  },
+  "technical_supersession": {
+    "predecessor_amendment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\amendment.json",
+      "sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d"
+    },
+    "predecessor_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-freeze.json",
+      "sha256": "9706592bce4b58cf7b95bcf5fb60e682c28f1542c12b68f731a7e9f501e8e96b"
+    },
+    "source_commits": {
+      "nexus": {
+        "repository": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+        "commit": "46ba5c31d4461d2af4e8d2d1534bfe1201a87857",
+        "archive_sha256": "3f3916d1fd178d78c79f5f91543e5a7bde8c65f37fac830e29eb3df4428e0a4e"
+      },
+      "connector": {
+        "repository": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+        "commit": "645d7bd55957a42507d9d208871a30f91828f952",
+        "archive_sha256": "a841e05d6f8f8fac047ac357c08294e59ad0afe12d5f60a8dd2edddfa3fd9bf0"
+      }
+    },
+    "new_candidate_requires_new_upgrade_plan": true,
+    "old_plan_reused": false,
+    "reservation_refunded": false,
+    "historical_stream_settlement_synthesized": false,
+    "technical_cap_change": {
+      "from": 13,
+      "to": 16,
+      "standing_authorized_tokens": 700000,
+      "new_user_hash_approval_claimed": false
+    },
+    "predecessor_uncertainty": "Request12 target CANCELLED but interrupt receipt SUBMITTED; original checkpoint/faults retained, no replay.",
+    "qualification_reuse": "Unchanged lifecycle/upgrade semantics retain prior qualification; revision15 explicit paths/policy/history/limits/CLI preflight deltas qualify separately."
+  },
+  "execution_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-next-work-plan-83_ksszr\\execution-plan.json",
+    "sha256": "7af863dd3176df050ffcdfd9cd44f75adbf4314274e77c2cdf7fdf6f035c040a"
+  },
+  "remote_execution_enabled": false,
+  "predecessor_connection_generation": 7,
+  "predecessor_productive_stage": "CANCELLED",
+  "predecessor_control_receipt_stage": "SUBMITTED",
+  "readiness_timeout_seconds": 5,
+  "input_fixture_pin": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv",
+    "sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b"
+  },
+  "normal_fault_containment": {
+    "selected_only_on_faulted_admitted_native_turn": true,
+    "force_authorized": false,
+    "trigger": "Normal stop45 remains draining with exact active native turn",
+    "required_fresh_scope": [
+      "owner generation and all three process births/cycle",
+      "canonical session and productive operation",
+      "native turn and pending request metadata"
+    ],
+    "allowed_action": "One canonical intents:resolve plus one operations admission for turn.interrupt, using a fresh unique cleanup client intent and durable one-shot ledger; no native approve/deny replay, no new provider turn.",
+    "sequence": "Root reviews concrete current identities/argv, selects normal interrupt, observes target terminal and usage, then canonical runtime.close (TerminalWork action close) only if necessary and normal stop separately; retain physical cohort and native inactivity proofs.",
+    "reference_manifest": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-request12-normal-containment-h4c6sw5t\\manifest.json",
+      "sha256": "416e4a0f45125b69b59b228e3bf36a198561d5c5d1257ddc4944089e510b351f"
+    },
+    "reference_is_not_reexecutable_authority": true,
+    "completion_receipt_not_inferred_from_target_exit": true
+  }
+}

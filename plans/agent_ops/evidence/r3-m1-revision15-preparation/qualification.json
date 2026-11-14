@@ -1,0 +1,114 @@
+{
+  "status": "OFFLINE_REVISION15_QUALIFIED_NOT_EXECUTED",
+  "amendment_sha256": "440bbd1a336f86dd4fbd9f74c22b2a7ea8342f28490162e2421a25236d00d554",
+  "installation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\installation.json",
+    "sha256": "8e18b9d9627a7839ad74f9beebf4f484ea25378d0c05524456f87a812705218e"
+  },
+  "build": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\build-provenance.json",
+    "sha256": "2d35cbf8ca4a136ccecff1bd3dde29b7e792d97383213f2f2ebbf714f815b7d7"
+  },
+  "canonical_probe60": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\probe-qualification.json",
+    "sha256": "2c5c68714d3e30761f108aa2ed47b7f42adc792626d93f26df0a436461695019"
+  },
+  "composed_gate": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\gate-qualification.json",
+    "sha256": "6ff5465b49a4db5784c8ef319686e51042a1c6e61b63076fcda53b94b1d5f219"
+  },
+  "installed_preflight": {
+    "passed": 48,
+    "tool": "40f99b",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\checks\\installed-preflight.xml",
+      "sha256": "c5166f1b9bf7c00afb1f6ea8393326897657a855902b83dfa85e66c6cffb1fdf"
+    },
+    "runner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\checks\\run_installed.py",
+      "sha256": "dc52e26ba6caedb7800c0649ffeff0a22b25c6808f354928b52ebd03c88e4568"
+    },
+    "origins": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\checks\\installed-origins.json",
+      "sha256": "3d92b7620552648db7c3af1addcac82e7b481c262608c74618eea72d06fdb09a"
+    },
+    "repository_source_imports": false
+  },
+  "composition_delta": {
+    "passed": 6,
+    "tool": "3d42be",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\checks\\composition.xml",
+      "sha256": "bb2b4119a8b82dd094a23ab6c7587d4f113e6898e7a68be89e3625f7b07e5a05"
+    },
+    "runner": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\checks\\run_composition.py",
+      "sha256": "eab54e0f21269969e52cc2e1760c32f1d74bcffba9a60ff986b4f7ba6f02e69f"
+    },
+    "test_source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\checks\\test_composition.py",
+      "sha256": "fc90f8b36c64244492fdd0d63d00e369b1fc6897ffb1be01784028d3c3f6227d"
+    },
+    "subsequent_test_edit": "Removed unused imports only; tests not rerun for that nonbehavioral edit."
+  },
+  "controller_delta": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\controller-qualification\\qualification.json",
+    "sha256": "dbfff437c5b70f52448469294dbbfa38cdfa513aa1808449e8ae78ddc8e6ce0b"
+  },
+  "controller_runtime_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\controller-qualification\\runtime-freeze.json",
+    "sha256": "15d79a38eb9f823ee87e6a2644919bf606142475aa68e806961459bdedb050a2"
+  },
+  "suite_counts_not_summed_as_distinct": true,
+  "ruff_F": {
+    "tool": "6ada7c",
+    "result": "PASS"
+  },
+  "real_work_import_prefix": {
+    "tool": "adffbf",
+    "result": "PASS",
+    "handler_called": false,
+    "editorial_rebind": "Canonical close intent name corrected to runtime.close; same gate revalidated against final amendment, no behavior or test change."
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Scripts\\python.exe",
+  "python_flags": [
+    "-B",
+    "-I",
+    "-X",
+    "utf8"
+  ],
+  "reused_unchanged_qualification": {
+    "predecessor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\qualification.json",
+      "sha256": "a5f36e5ddcb77e697433ab094e92568311d26c73f5f012e7fda2e471d9796dfa"
+    },
+    "scope": "Unchanged lifecycle/upgrade/authorization transport semantics; changes to context/history/policy/limits/facade/CLI preflight qualified separately. Prior totals not added."
+  },
+  "policy": {
+    "revision": 15,
+    "carry_in_admissions": 12,
+    "carry_in_tokens": 295262,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 16,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "observation_bounds": {
+    "snapshot_seconds": 1,
+    "initialization_seconds": 2,
+    "poll_seconds": 17,
+    "freshness_seconds": 18,
+    "cadence_seconds": 22,
+    "target_start_seconds": 0.2,
+    "max_observed_requests": 7
+  },
+  "new_model_reservations": 0,
+  "services_started": 0,
+  "provider_calls": 0,
+  "upgrade_actions": 0,
+  "grant_changes": 0,
+  "acceptance_promoted": false,
+  "remote_execution_enabled": false,
+  "historical_control_receipt": "SUBMITTED snapshot retained; no completion inferred from cancelled target or physical exit."
+}

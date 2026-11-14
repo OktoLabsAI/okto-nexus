@@ -1940,3 +1940,33 @@ Não houve qualificação instalada, campanha real ou promoção de aceite M1.
 Limites de inferência e monitor M1 não mudaram. **124/132 VERIFIED, 6 IN_PROGRESS
 e 2 NOT_RUN**, com todos os status preservados.
 Evidência: [revisão](plans/agent_ops/evidence/r3-work-readiness-preflight/review.json).
+
+## 2026-11-14 — Revisão15 M1: preparação offline aprovada
+
+A autorização humana existente de 700k tokens sustenta a revisão técnica explícita
+do teto de 13 para **16 reservas**: 12 históricas cobradas + 4 novos IDs. Carry de
+295.262 tokens observados, preventiva de 500k e tolerância de 700k permanecem.
+O ID13 condicional antigo nunca foi selecionado nem reabilitado. Local útil13 em
+nova sessão e continuação14 somente após sucesso estão preparados; remoto15/16
+continua bloqueado até qualificação separada. Não há nova aprovação humana de hash,
+refund, replay histórico ou autorização de force.
+
+Sete registros observados (3 históricos + 4 novos) preservam snapshot1s,
+inicialização2s e margem1s; os limites derivados são poll17s/fresh18s/cadence22s,
+alvo200ms e deadline600s. Essa mudança é operacional, não um novo critério R3.
+A flag explícita readiness5s passa pelo CLI instalado, sem retry de POST.
+
+O pacote próprio Nexus46ba5c31/Connector645d7bd5/Core7810 passou verificação de
+1002 payloads e probe canônico60 em 1,882s. Foram retidos separadamente 48 testes
+de preflight instalado, 6 da composição e 14 deltas do controlador (12+2 rodadas),
+sem somar suítes sobrepostas. Gate e import real do prefixo work/facade passaram.
+Root e peer revisaram o candidato. O roteiro inclui migração canônica com revisão
+exata, grant review e cleanup normal por três processos; contenção interrupt exata
+durante drain usa a autorização existente, sem inferir conclusão do recibo de controle.
+
+Somente preparação: nenhum serviço, grant, modelo ou migração real foi executado.
+Checkpoint e falhas anteriores continuam intactos; target12 CANCELLED não transforma
+seu recibo interrupt SUBMITTED em terminal. **124/132 VERIFIED, 6 IN_PROGRESS e
+2 NOT_RUN**, sem promoção de aceite.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision15-preparation/review.json)
+e [revisão root](plans/agent_ops/evidence/r3-m1-revision15-preparation/root-review.json).

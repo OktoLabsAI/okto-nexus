@@ -1,0 +1,36 @@
+{
+  "status": "CLOSED_PACKAGE2_WITH_CONTROL_RECEIPT_UNCONFIRMED",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2",
+  "files": {
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\private\\controller.json",
+      "sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-request12-package2-closure\\normal-closure\\closure-companion.json",
+      "sha256": "6fa9c07272248afe631d7231a378e95f21b95133684756a4f85979c71c112c56"
+    },
+    "accounting": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-request12-package2-closure\\normal-closure\\accounting-reconciliation.json",
+      "sha256": "8e1a72942918eb69fd70a6481e78be14ec17b04172b25e9e499ebc8decbb16bc"
+    },
+    "freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\runtime-freeze.json",
+      "sha256": "9706592bce4b58cf7b95bcf5fb60e682c28f1542c12b68f731a7e9f501e8e96b"
+    },
+    "amendment": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\amendment.json",
+      "sha256": "e96f0e9339c76c64560ecb0343c1a411d1d59ce17f01864a298a7b7b126e0f5d"
+    },
+    "final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-request12-package2\\public\\final-presence.json",
+      "sha256": "8e5f17c35870866f8f9d17a4d1220873ca939585bcf13c8cbecf8dc01856acf5"
+    }
+  },
+  "old_conditional13_selected": false,
+  "old_conditional13_eligible": false,
+  "refund": false,
+  "productive_turn_stage": "CANCELLED",
+  "control_receipt_stage": "SUBMITTED",
+  "control_receipt_completion_asserted": false
+}

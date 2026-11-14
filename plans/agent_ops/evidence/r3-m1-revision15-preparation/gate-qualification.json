@@ -1,0 +1,25 @@
+{
+  "status": "COMPOSED_GATE_AND_REAL_WORK_FACADE_IMPORT_PASS",
+  "amendment_sha256": "440bbd1a336f86dd4fbd9f74c22b2a7ea8342f28490162e2421a25236d00d554",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\package\\venv",
+  "payloads": 1002,
+  "policy": {
+    "revision": 15,
+    "carry_in_admissions": 12,
+    "carry_in_tokens": 295262,
+    "max_new_admissions": 4,
+    "max_cumulative_admissions": 16,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "work_import_prefix_executed": true,
+  "handler_executed": false,
+  "runtime_controller_created": false,
+  "service_actions": 0,
+  "provider_calls": 0,
+  "grant_changes": 0,
+  "runtime_namespace_created": false,
+  "remote_selectors_enabled": false
+}
