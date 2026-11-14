@@ -1,0 +1,15 @@
+{
+  "returncode": 3,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "aa7faf4ebcd7113006158f33707d9cb226b97c9d1c424f9718b036dcbee4b4ae",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "degraded",
+    "reason": "SERVICE_UNREACHABLE",
+    "generation": null,
+    "instance_id": "svc_311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "next_action": "Query status again. This timeout did not stop or restart the service."
+  }
+}

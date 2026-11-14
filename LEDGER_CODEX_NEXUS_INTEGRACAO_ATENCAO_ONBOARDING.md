@@ -1657,3 +1657,24 @@ de outra decisão de execução. Claude não foi usado.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v14-resume/review.json` e
 `plans/agent_ops/evidence/r3-m1-v14-resume/containment/closure-companion.json`.
+
+## 2026-11-14 — Teste nativo de crash e parada: falha de recuperação preservada
+
+O Nexus instalado iniciou pelo Scheduler. O primeiro start retornou timeout,
+mas a mesma seleção ficou READY; depois a parada normal confirmou saída física.
+Durante 190,066 segundos e 176 observações não houve autorressurreição.
+Um novo connect iniciou outro owner READY, embora seu setup tenha retornado
+NOT_FOUND. São resultados distintos, sem alegação de setup concluído.
+
+Uma única falha foi injetada com TerminateProcess no handle retido e identificado
+desse owner descartável, exit code 3. Nenhum replacement READY foi confirmado
+nos 180 segundos seguintes. O diagnóstico SUPERVISOR_LAST_ATTEMPT_FAILED apareceu,
+mas não prova reinício nem esgotamento de retries. O limite de observação pertence
+ao executor de teste; não altera o plano. O Connector ainda não foi exercitado.
+
+A limpeza normal concluiu drain, removeu somente a tarefa temporária e preservou
+os dados por comparação de hashes; ambas as tarefas estão ausentes e a porta livre.
+Não houve uso de --force nem turno de modelo. Há 34 casos distintos de teste do
+executor aprovados; estes não substituem a falha nativa observada.
+Continuam 122/132 cenários VERIFIED, sem promoção de T19/T20 ou M1.
+Evidência: `plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json`.

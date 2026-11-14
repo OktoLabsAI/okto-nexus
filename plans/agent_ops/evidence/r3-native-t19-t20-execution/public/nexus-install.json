@@ -1,0 +1,16 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "2a140b3bcfe9f3c9f6cc7e0dd7673b44979f4815fbdbf2183b62f3570ea30a17",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "USER_SERVICE_INSTALLED",
+    "generation": null,
+    "instance_id": "svc_311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "installation_state": "installed",
+    "next_action": "Start this instance with service start, or wait for the next user login."
+  }
+}

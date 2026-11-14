@@ -1,0 +1,16 @@
+{
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "stdout_sha256": "b9a53f797608f0d03b6723d1126071d412927e694b6d1afc420183a1b4d4bbcc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "generation": null,
+    "instance_id": "svc_311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "shutdown_outcome": "drained",
+    "next_action": null
+  }
+}

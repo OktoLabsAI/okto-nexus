@@ -1,0 +1,19 @@
+{
+  "pid": 12632,
+  "generation": "5706935165fa4964e78c384c1f132c32",
+  "instance_id": "svc_311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+  "birth_filetime": 134391548775262606,
+  "retained_handle": true,
+  "physical_exit_confirmed": true,
+  "force_used": false,
+  "canonical": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "generation": null,
+    "instance_id": "svc_311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "shutdown_outcome": "drained",
+    "next_action": "Start the configured instance explicitly. Runtime work has not been inspected."
+  }
+}

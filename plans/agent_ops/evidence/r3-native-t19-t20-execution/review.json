@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-14",
+  "status": "FAILED_NATIVE_REPLACEMENT_NOT_READY_NORMAL_CLEANUP",
+  "plan_sha256": "a0029067431029c8caa7b28632b2c77f8bb564efb41cfe63332e126912478d50",
+  "model_turns": 0,
+  "source_runner_distinct_tests_passed": 34,
+  "nexus": {
+    "initial_start_cli": 3,
+    "initial_start_reason": "SERVICE_UNREACHABLE",
+    "later_same_launch_ready": true,
+    "normal_stop_physical_exit": true,
+    "post_stop_quiet_seconds": 190.06630290002795,
+    "post_stop_samples": 176,
+    "post_stop_automatic_launches_observed": 0,
+    "next_connect": {
+      "returncode": 3,
+      "state": "refused",
+      "code": "NOT_FOUND",
+      "stdout_sha256": "58259fe83b349c6a49fffab1c6a1741c8f1e307db020283af1e2dc70fc411b80",
+      "configured_setup_success": false,
+      "new_service_owner_ready_before_injection": true
+    },
+    "crashes_injected": 1,
+    "injected_exit_code": 3,
+    "ready_automatic_replacements_confirmed": 0,
+    "observation_timeout_seconds": 180,
+    "last_diagnostic": "SUPERVISOR_LAST_ATTEMPT_FAILED",
+    "native_attempt_count": "UNCONFIRMED"
+  },
+  "connector": {
+    "service_installed": false,
+    "crashes_injected": 0
+  },
+  "cleanup": {
+    "normal_stop_drained": true,
+    "tasks_absent": true,
+    "port_available": true,
+    "data_fingerprints_equal": true,
+    "canonical_force_stop_used": false
+  },
+  "scope": [
+    "One deliberate TerminateProcess on the retained, identity-checked disposable READY owner handle.",
+    "No crash/retry success or retry exhaustion inferred from XML or actionable last-attempt diagnostic.",
+    "Initial CLI timeout retained; later READY does not erase it.",
+    "Nexus connect service startup is separate from refused NOT_FOUND setup.",
+    "Connector not reached; no full SVC-T19 or SVC-T20 promotion; no M1 acceptance.",
+    "180-second observation is a harness limit, not a new fixed-plan acceptance target.",
+    "No raw service capability, private stdout, provider transcript or personal credential copied."
+  ]
+}

@@ -7234,11 +7234,12 @@
         "plans/agent_ops/evidence/pr01-start-stop.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json"
+        "plans/agent_ops/evidence/r3-supervisor-failure-diagnostic/qualification.json",
+        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
       ],
-      "remaining": "Real supervised crash/backoff/limit exhaustion and actionable persistent failure not executed.",
+      "remaining": "Diagnose and correct actual crash recovery, then qualify bounded automatic replacements and persistent failure for both hosts.",
       "remaining_kind": "real_supervisor_crash_campaign",
-      "result": "Supervised entrypoint failures now produce an actionable historical last-attempt diagnostic when no owner exists and the selected task is idle. Source tests preserve stop suppression, bounded readiness wait and possible-effect reporting. Injected Scheduler states do not prove actual crash recovery or retry exhaustion; the real campaign remains pending."
+      "result": "Actual installed Nexus READY owner was deliberately terminated with exit3. No READY replacement was confirmed within the 180-second harness observation; last-attempt failure was actionable. Normal cleanup completed. Native retry success and exhaustion remain unverified."
     },
     "SVC-T20": {
       "requirement": "Stop explícito não aciona autorressurreição; próximo connect segue a política documentada.",
@@ -7249,15 +7250,17 @@
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
         "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
       ],
-      "remaining": "Observe suppression after an explicit stop in the actual Scheduler context, then exercise the next canonical connect; the completed empty-service campaign did not include that connect.",
+      "remaining": "Complete equivalent actual Connector stop/next-connect policy observation; preserve distinction between service start and setup success.",
       "remaining_kind": "real_service_stop_reconnect_campaign",
       "subscopes": {
         "retained_injected_contract": "VERIFIED",
-        "finite_empty_windows_campaign": "PARTIAL"
+        "finite_empty_windows_campaign": "PARTIAL",
+        "actual_nexus_stop_and_explicit_connect_service_start": "VERIFIED_SCOPED"
       },
-      "result": "Explicit stop reaches stopped and no detached auto-resurrection; generation/token fences and injected same-login recovery suppression. Scope/remaining: Do not call injected OS suppression actual scheduler crash qualification."
+      "result": "Actual Nexus stop drained and exited physically. 190.066 seconds/176 observations showed no automatic relaunch. Explicit connect started a new READY owner, while setup itself returned NOT_FOUND. Connector flow was not reached."
     },
     "SVC-T21": {
       "requirement": "Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente.",
@@ -13139,6 +13142,59 @@
         "plans/agent_ops/evidence/r3-m1-v14-resume/containment/closure-companion.json",
         "plans/agent_ops/evidence/r3-m1-v14-resume/containment/accounting-reconciliation.json"
       ]
+    },
+    "r3_native_t19_t20_execution": {
+      "date": "2026-11-14",
+      "status": "FAILED_NATIVE_REPLACEMENT_NOT_READY_NORMAL_CLEANUP",
+      "plan_sha256": "a0029067431029c8caa7b28632b2c77f8bb564efb41cfe63332e126912478d50",
+      "model_turns": 0,
+      "source_runner_distinct_tests_passed": 34,
+      "nexus": {
+        "initial_start_cli": 3,
+        "initial_start_reason": "SERVICE_UNREACHABLE",
+        "later_same_launch_ready": true,
+        "normal_stop_physical_exit": true,
+        "post_stop_quiet_seconds": 190.06630290002795,
+        "post_stop_samples": 176,
+        "post_stop_automatic_launches_observed": 0,
+        "next_connect": {
+          "returncode": 3,
+          "state": "refused",
+          "code": "NOT_FOUND",
+          "stdout_sha256": "58259fe83b349c6a49fffab1c6a1741c8f1e307db020283af1e2dc70fc411b80",
+          "configured_setup_success": false,
+          "new_service_owner_ready_before_injection": true
+        },
+        "crashes_injected": 1,
+        "injected_exit_code": 3,
+        "ready_automatic_replacements_confirmed": 0,
+        "observation_timeout_seconds": 180,
+        "last_diagnostic": "SUPERVISOR_LAST_ATTEMPT_FAILED",
+        "native_attempt_count": "UNCONFIRMED"
+      },
+      "connector": {
+        "service_installed": false,
+        "crashes_injected": 0
+      },
+      "cleanup": {
+        "normal_stop_drained": true,
+        "tasks_absent": true,
+        "port_available": true,
+        "data_fingerprints_equal": true,
+        "canonical_force_stop_used": false
+      },
+      "scope": [
+        "One deliberate TerminateProcess on the retained, identity-checked disposable READY owner handle.",
+        "No crash/retry success or retry exhaustion inferred from XML or actionable last-attempt diagnostic.",
+        "Initial CLI timeout retained; later READY does not erase it.",
+        "Nexus connect service startup is separate from refused NOT_FOUND setup.",
+        "Connector not reached; no full SVC-T19 or SVC-T20 promotion; no M1 acceptance.",
+        "180-second observation is a harness limit, not a new fixed-plan acceptance target.",
+        "No raw service capability, private stdout, provider transcript or personal credential copied."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
+      ]
     }
   },
   "history": [
@@ -14524,6 +14580,15 @@
       "summary": "Reservation10 reused after NEVER_DISPATCHED proof; native admission occurred, then snapshot317.885ms>250ms selected OBSERVATION_UNKNOWN. Normal containment and read-only journals prove CANCELLED/CLOSED.272648 cumulative observed tokens (+138449),10reservations, derivedsettled; original134199/unsettled1 untouched. Config reported only.122/132 scenarios unchanged; no M1 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v14-resume/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Actual supervised crash exposed missing READY replacement",
+      "status": "PARTIAL_WITH_PRESERVED_FAILURE",
+      "summary": "Nexus stop/reconnect service behavior observed; one crash followed by 180-second readiness timeout. Normal cleanup retained data and removed temporary tasks. No scenario promoted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-t19-t20-execution/review.json"
       ]
     }
   ]

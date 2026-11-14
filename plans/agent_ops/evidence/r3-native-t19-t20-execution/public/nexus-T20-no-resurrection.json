@@ -1,0 +1,16 @@
+{
+  "seconds": 190.06630290002795,
+  "samples": 176,
+  "last_run_time_unchanged": "2026-11-14 15:34:37+00:00",
+  "canonical": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "generation": null,
+    "instance_id": "svc_311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "shutdown_outcome": "drained",
+    "next_action": "Start the configured instance explicitly. Runtime work has not been inspected."
+  },
+  "automatic_launches_observed": 0
+}

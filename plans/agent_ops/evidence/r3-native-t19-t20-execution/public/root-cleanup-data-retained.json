@@ -1,0 +1,127 @@
+{
+  "before": {
+    "logs/service.jsonl": {
+      "sha256": "c5a4a122483fbfca63ae46133b762f3fb96f62e5edc23f0c90bcf7793ae8e5b5",
+      "bytes": 1253
+    },
+    "nexus.db": {
+      "sha256": "c54429694faf3a53e48063f314a81f44d8c1b433f24a9c862cee18fe742e7d41",
+      "bytes": 2478080
+    },
+    "nexus.db-shm": {
+      "sha256": "f568b0a75a518edfbe1f35068ef6461c67079d74e3ce2787123d5a878c6f3167",
+      "bytes": 32768
+    },
+    "nexus.db-wal": {
+      "sha256": "e4ecf580afd0d96a8ca229afc532e44566859b673250ea9c857c67455235211f",
+      "bytes": 16512
+    },
+    "nexus.db.launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.db.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.serve.lock": {
+      "sha256": "da8e3926c30b4088a67ff0591601f37974d5fbc0ee187269e8778b58264671fa",
+      "bytes": 147
+    },
+    "operator-auth.db": {
+      "sha256": "ed787745aea399db630d8c4546a4fc4b643e03a130159bd710f3a07f7f357a2b",
+      "bytes": 20480
+    },
+    "service-context.json": {
+      "sha256": "6bae5bc40c6b55ba7c87c36662a13a3325b54a0943370240eaea661ae6812ea3",
+      "bytes": 5155
+    },
+    "service-launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "service-run.json": {
+      "sha256": "fdb38eec4bc159754d5c835c9184778272d987e648a446f8fa79551058a2e5ba",
+      "bytes": 188
+    },
+    "service-shutdown.json": {
+      "sha256": "6ef0146d49ce2878c4307a804c9e665f6101d0096160cd2d81fb65bbc7316bf6",
+      "bytes": 97
+    },
+    "service-supervisor-exit.json": {
+      "sha256": "4864970fdab30b5264b37141b3261138bb194aadb43916904bdec8308e9d8389",
+      "bytes": 93
+    },
+    "terminal/profiles/t20-disposable-local.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "after": {
+    "logs/service.jsonl": {
+      "sha256": "c5a4a122483fbfca63ae46133b762f3fb96f62e5edc23f0c90bcf7793ae8e5b5",
+      "bytes": 1253
+    },
+    "nexus.db": {
+      "sha256": "c54429694faf3a53e48063f314a81f44d8c1b433f24a9c862cee18fe742e7d41",
+      "bytes": 2478080
+    },
+    "nexus.db-shm": {
+      "sha256": "f568b0a75a518edfbe1f35068ef6461c67079d74e3ce2787123d5a878c6f3167",
+      "bytes": 32768
+    },
+    "nexus.db-wal": {
+      "sha256": "e4ecf580afd0d96a8ca229afc532e44566859b673250ea9c857c67455235211f",
+      "bytes": 16512
+    },
+    "nexus.db.launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.db.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.serve.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "nexus.serve.lock": {
+      "sha256": "da8e3926c30b4088a67ff0591601f37974d5fbc0ee187269e8778b58264671fa",
+      "bytes": 147
+    },
+    "operator-auth.db": {
+      "sha256": "ed787745aea399db630d8c4546a4fc4b643e03a130159bd710f3a07f7f357a2b",
+      "bytes": 20480
+    },
+    "service-context.json": {
+      "sha256": "6bae5bc40c6b55ba7c87c36662a13a3325b54a0943370240eaea661ae6812ea3",
+      "bytes": 5155
+    },
+    "service-launch.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "service-run.json": {
+      "sha256": "fdb38eec4bc159754d5c835c9184778272d987e648a446f8fa79551058a2e5ba",
+      "bytes": 188
+    },
+    "service-shutdown.json": {
+      "sha256": "6ef0146d49ce2878c4307a804c9e665f6101d0096160cd2d81fb65bbc7316bf6",
+      "bytes": 97
+    },
+    "service-supervisor-exit.json": {
+      "sha256": "4864970fdab30b5264b37141b3261138bb194aadb43916904bdec8308e9d8389",
+      "bytes": 93
+    },
+    "terminal/profiles/t20-disposable-local.guard": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "identical": true
+}

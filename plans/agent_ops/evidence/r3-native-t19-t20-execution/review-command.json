@@ -1,0 +1,26 @@
+{
+  "status": "OFFLINE_QUALIFIED_AWAITING_ROOT_COMMAND_REVIEW",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\run.py",
+    "execute",
+    "--expected-plan-sha256",
+    "a0029067431029c8caa7b28632b2c77f8bb564efb41cfe63332e126912478d50",
+    "--expected-runner-sha256",
+    "73f80f77248532e8778694450c4798ed79cc5916bf77be7cfa858e7d5a65bb5c"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc",
+  "plan_sha256": "a0029067431029c8caa7b28632b2c77f8bb564efb41cfe63332e126912478d50",
+  "runner_sha256": "73f80f77248532e8778694450c4798ed79cc5916bf77be7cfa858e7d5a65bb5c",
+  "support_sha256": "c34649a296bb72645e06be0fcb5146feaf58972eb3d7fc784361a2ab214e0123",
+  "pins": 1037,
+  "expected_tasks": {
+    "nexus": "OktoNexus-server-311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+    "connector": "OktoNexus-connector-78dd39d38dd85e5df63c59eb986fd8eb8a20d2f1cb2761427c9f672cdc2d3df0"
+  },
+  "actual_execution_selected": false
+}

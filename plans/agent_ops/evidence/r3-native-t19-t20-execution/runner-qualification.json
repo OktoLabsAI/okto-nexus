@@ -1,0 +1,118 @@
+{
+  "status": "PASS_OFFLINE_ONLY",
+  "at": "2026-11-14T18:09:13.168483+00:00",
+  "plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\plan.json",
+    "sha256": "a0029067431029c8caa7b28632b2c77f8bb564efb41cfe63332e126912478d50",
+    "bytes": 292612
+  },
+  "runtime": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\run.py",
+      "sha256": "73f80f77248532e8778694450c4798ed79cc5916bf77be7cfa858e7d5a65bb5c",
+      "bytes": 11682
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\runtime_support.py",
+      "sha256": "c34649a296bb72645e06be0fcb5146feaf58972eb3d7fc784361a2ab214e0123",
+      "bytes": 9252
+    }
+  ],
+  "pytest": [
+    {
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\runner-initial.xml",
+      "sha256": "eefc23ef97edc504711eb0caccb36c87f34f80f7de3dc4f2e4c2af9a2590ae46",
+      "bytes": 2894
+    },
+    {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\runner-exit-edges.xml",
+      "sha256": "0d3d959de68ba24134c69b770cece36860af283505b7b0373984ff671973d9f3",
+      "bytes": 458
+    },
+    {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\encoding-final.xml",
+      "sha256": "0888062c4e21cad4e6836677dc955dfae74d5f69ed120b0934762ffd20766d9c",
+      "bytes": 631
+    },
+    {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\task-wait-final.xml",
+      "sha256": "1d9cf8b2a3ac846a9350f93aa2e3584c3b2c9aa7cb28956fd875e26cac31cc71",
+      "bytes": 906
+    }
+  ],
+  "total_final_cases": 34,
+  "failures_observed": 0,
+  "ruff": "E9,F63,F7,F82 PASS",
+  "compile": "PASS, in-memory only",
+  "product_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\qualification.json",
+    "sha256": "0e0a353b744616bd93f204da1d2c86b4c1fcc2cce7c994ed168f39a903bd5628",
+    "bytes": 7593
+  },
+  "source_commits": {
+    "nexus": "d70f15cbe05c71c298d69ecae079bace422743aa",
+    "connector": "8400512601328e03191b03e0b6fba8943a09772c"
+  },
+  "prior_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\plan-initial.json",
+    "sha256": "9ed95765d51d5f69cd605238c94fde75d53cd820fd64a5af6f902019c8efbb28",
+    "bytes": 291233
+  },
+  "pre_test_fix": "Clamp quiet-loop sleep to >=0 when the deadline passes between two monotonic reads. No limits changed.",
+  "covered": [
+    "Owner READY/PID/generation/instance/supervisor and retained handle, image hash, birth and native task identity.",
+    "Exclusive reservation before revalidation/termination; race refusal and consumed selection on native failure.",
+    "Four injections maximum per host, exact PT1M/count3/IgnoreNew native policy.",
+    "Original CLI start exit3 retained while the same launch later becomes READY.",
+    "Additional attempt detected via task state, native LastRunTime or canonical owner.",
+    "Normal stop requires code0/drained plus actual retained-handle physical exit; no force or false exit proof.",
+    "Whole fixture flow13CLIs/8crashes/6automatic replacements with early-backoff refusal and no intervening manual retry."
+  ],
+  "limitations": [
+    "Task/service/network/termination interfaces use fixtures. Two actual isolated Python stdlib-only subprocesses probe encoding; no product/service/provider subprocess or TerminateProcess runs.",
+    "No actual retry timing, crash cleanup or successful configured Connector reconnect is qualified yet.",
+    "Offline fixtures do not promote SVC-T19/SVC-T20 or M1. Root review remains pending."
+  ],
+  "post_test_metadata_correction": {
+    "reason": "Inherited environment A PATH referenced old M1 venv Scripts. Replaced with this preparation own venv Scripts before execution/root review.",
+    "prior_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\plan-before-path-correction.json",
+      "sha256": "4a59bf889c30bc4dfb9e98214d2f2fd16faffa0f7c62a264d7545cd8a0b11df1",
+      "bytes": 291830
+    },
+    "runtime_bytes_unchanged": true,
+    "tests_repeated": false,
+    "service_or_provider_effects": false
+  },
+  "final_delta": {
+    "encoding": "-I ignored PYTHONUTF8=1 and produced cp1252; explicit -X utf8 produced utf-8 and lossless non-ASCII JSON. All13childargv and reviewentrypoint now explicit.",
+    "scheduler_exit": "Bounded30s passive wait after physical exit, same exact task, unchanged inactive acceptance; transition4\u21923 and timeout failure tested.",
+    "qualification": "Prior29 plus3 new encoding and2 new task-exit cases =34 distinct. Delta4 and6 executions include5 selected regression reruns; no broad rerun.",
+    "previous_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\plan-before-utf8.json",
+      "sha256": "15970a0395373c79dbbf2b7f894a8b0af0e6c0e184916abeb7d8293b24d8b7e1",
+      "bytes": 291840
+    },
+    "previous_support": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\runtime_support-before-task-wait.py",
+      "sha256": "4fc858c8da9acaa1b63e0f089ef588ab2df295d807c81f7342126e3b6ca48824",
+      "bytes": 9087
+    }
+  }
+}

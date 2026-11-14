@@ -1,0 +1,12 @@
+{
+  "last": {
+    "state": "unknown",
+    "reason": "SUPERVISOR_LAST_ATTEMPT_FAILED",
+    "generation": null,
+    "instance_id": "svc_311dad05375898834d8894a4625cc4c5ec9e78fcca4a944952a414d128aa4080",
+    "supervisor": "windows-task-scheduler",
+    "ready_for_queries": false,
+    "next_action": "The last observed scheduled attempt failed; the current launch and retry outcome are unconfirmed. Inspect the selected task and startup diagnostics. Use service stop before an explicit retry; no launch was repeated."
+  },
+  "no_restart": true
+}
