@@ -1,0 +1,46 @@
+{
+  "status": "ACTUAL_MIGRATION_INSTALL_START_AND_EXISTING_GRANT_REVIEW_CONFIRMED",
+  "scope": "Completed prepare/upgrade/technical selection/install/start/authorization review only. Live useful14 and watcher owned by root, not inspected or polled by curator.",
+  "execution_provenance": {
+    "prepare": "09e60a",
+    "upgrade_plan": "d7865a",
+    "plan_review": [
+      "309b3a",
+      "2cece9"
+    ],
+    "technical_selection": "d98614",
+    "upgrade_apply": "a54256",
+    "install": "aa6c39",
+    "start": "ee55cf ->feec18 exit0",
+    "authorization_review": "3acd7b ->34025f EXISTING_GRANT_AVAILABLE",
+    "provenance_type": "Root execution report plus authentic completed receipts, not synthetic process evidence."
+  },
+  "plan_sha256": "f78a542d7c269546683737a92ba03da912d883403b58ad473bd8dd06261d197f",
+  "plan_revision": "95597a2a6379b8747176a90a246abf5a066ca357c09e388cc5a23a63a24e9caf",
+  "applied_context_sha256": "c28a8d687a9415ac65f750586d18270754031edb9ea5ba094b1c65c554f38484",
+  "initial_derived_checkpoint_sha256": "307d4ef17f84a953e4647dbabeb996ceddc53b19e454f128a0ba430487dbf143",
+  "grant_apply_executed": false,
+  "services_started_by_retained_commands": 1,
+  "provider_calls_by_retained_commands": 0,
+  "model_admissions_by_retained_commands": 0,
+  "grant_changes_by_retained_commands": 0,
+  "carry_before_productive_work": {
+    "observed_tokens": 341276,
+    "charged_reservations": 13
+  },
+  "current_live_work_tokens_or_reservations_not_asserted": true,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "status_changes": [],
+  "acceptance_promoted": false,
+  "all_copy_hashes_verified": true,
+  "secret_scan_matches": 0,
+  "raw_controller_context_private_plan_logs_or_live_work_copied": false,
+  "wrappers_rerun_by_curator": false,
+  "live_handles_polled_by_curator": false,
+  "frozen_package_edited": false,
+  "limits": "Start returned ready at its own observation time. This milestone proves neither useful output nor current owner state, cleanup, native delivery or M1 acceptance."
+}

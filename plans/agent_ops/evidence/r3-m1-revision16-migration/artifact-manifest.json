@@ -1,0 +1,80 @@
+{
+  "files": [
+    {
+      "path": "receipts/root-driver-preparation.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\root-driver-preparation.json",
+      "sha256": "921cddbf124f1727f2ae60b8bfbc2ee098d98844204e4af2edddc646b0434b79",
+      "bytes": 963
+    },
+    {
+      "path": "receipts/environment-upgrade-plan-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\environment-upgrade-plan-result.json",
+      "sha256": "36d02279b114243ffa211b92144acad5ef5a6c78507385150bfc9dbeb5394cc9",
+      "bytes": 1039
+    },
+    {
+      "path": "receipts/environment-upgrade-apply-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\environment-upgrade-apply-result.json",
+      "sha256": "e871fc0a1189ca9143c79891aabbdea815efd80150a1dc8a6fe524d7707debed",
+      "bytes": 1146
+    },
+    {
+      "path": "receipts/lifecycle-nexus-install-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\lifecycle-nexus-install-result.json",
+      "sha256": "dbcef65ddfcd85cdf05e36d511057d6757725f9aad7df3bb41909473b8196be3",
+      "bytes": 526
+    },
+    {
+      "path": "receipts/lifecycle-nexus-start-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\lifecycle-nexus-start-result.json",
+      "sha256": "441467216b83414231c3c8e15e4c8d43dc33331c341a49a6963970778c71b3a6",
+      "bytes": 502
+    },
+    {
+      "path": "wrappers/upgrade-plan.returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-private\\upgrade-plan.returned.json",
+      "sha256": "7b4152d2407cec2a1a72112217dfd7f2879fa200bc8e486ec4ee1a27c84c50f0",
+      "bytes": 910
+    },
+    {
+      "path": "wrappers/upgrade-apply.returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-private\\upgrade-apply.returned.json",
+      "sha256": "982d797eb9335e8f9b6a49cc83516bc30554f0753a0a58cd1486731d591be682",
+      "bytes": 910
+    },
+    {
+      "path": "wrappers/lifecycle-nexus-install.returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-private\\lifecycle-nexus-install.returned.json",
+      "sha256": "136227e57702bdeb7b7134d1622820d90799ee5fcc20f92f03e8e48f0e35e8c6",
+      "bytes": 928
+    },
+    {
+      "path": "wrappers/lifecycle-nexus-start.returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-private\\lifecycle-nexus-start.returned.json",
+      "sha256": "ef2f621e2c045887c636f0d8a69f86b38a1f2cc887f3a4a72ae5eb15a918e13d",
+      "bytes": 926
+    },
+    {
+      "path": "wrappers/authorize_local-review.returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\runtime-private\\authorize_local-review.returned.json",
+      "sha256": "4c3171b085fa50d36f73ab55fe509243881f3b6cd15e42bc1eadf5212ff64ad9",
+      "bytes": 920
+    },
+    {
+      "path": "selection/environment-upgrade-reviewed.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\environment-upgrade-reviewed.json",
+      "sha256": "def64a76581013b43f72c050bb10cbc7e290777f267c738ad7a4fdd84caff40e",
+      "bytes": 1200
+    },
+    {
+      "path": "authorization-review-projection.json",
+      "sha256": "8c9cebb064e35a92182f702149a5e93d0a9e73b5bbb98f41354bd125b57e888d",
+      "source": "ALLOWLIST_PROJECTION"
+    },
+    {
+      "path": "review.json",
+      "sha256": "814d2af132c29ab719b2ef753bfd84abe9812e85ee1d90ecc3b8ed4595948cc5",
+      "source": "CURATED_REVIEW"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\authorize-local-review.json",
+    "sha256": "eb84a7aa0c1f9929022c70419860be4adeaee11152234d2ad80cd11bdc9ec329"
+  },
+  "status": "EXISTING_GRANT_AVAILABLE",
+  "observed_at_utc": "2026-11-14T23:07:37.824547+00:00",
+  "remaining_seconds_by_local_clock": 1170.174137,
+  "work_window_seconds": 630,
+  "work_window_available": true,
+  "expiry_state_source": "CANONICAL_REVIEW",
+  "repeat_review_allowed": false,
+  "model_admissions": 0,
+  "calls": {
+    "review": 1
+  },
+  "recovery_ready": {
+    "generation": 9,
+    "control_state": "CONTROL_READY",
+    "recovery_generation": 9,
+    "recovery_state": "READY"
+  },
+  "amendment_sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca",
+  "review": {
+    "state": "authorization_review",
+    "scope": {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "agent_id": "m1v12-local",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+      "endpoint_id": "ep_663e906815128b840a7e13bda21eb79a"
+    },
+    "can_issue": false,
+    "review_revision": "7d1f585640cc2d02b69fea7aebb8f11ecd7c3dd5f9505114f5e96f20c7685445"
+  },
+  "available_grant_at_review": {
+    "grant_id": "grant_492ad6ea66f54663948cbd7438d1bcd8",
+    "revision": 1,
+    "state": "available",
+    "actions": [
+      "close",
+      "interrupt",
+      "open",
+      "send",
+      "steer"
+    ],
+    "expires_at": "2026-11-14T23:27:07.998684Z",
+    "max_executions": 3,
+    "used_executions": 1
+  },
+  "grant_apply_executed_in_this_milestone": false,
+  "projection_scope": "Historical completed review only; does not infer present grant state or current work accounting."
+}

@@ -2055,3 +2055,19 @@ Nenhum serviço, modelo, grant ou migração real foi executado nesta preparaç�
 **124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção de aceite.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision16-preparation/review.json)
 e [qualificação](plans/agent_ops/evidence/r3-m1-revision16-preparation/qualification.json).
+
+## 2026-11-14 — Revisão16: migração, instalação e início confirmados
+
+Root executou prepare, upgrade-plan e apply do plano exato `f78a542d…`/revisão
+`95597a2a…`, seguido de install e start, todos com sucesso. Start retornou0/ready.
+A revisão canônica de autorização encontrou grant existente disponível, sem apply
+de grant. Os recibos retidos correspondem somente a essas etapas concluídas.
+
+Esses comandos não admitiram modelo nem fizeram chamadas ao provedor. O útil14
+e o watcher foram iniciados posteriormente pelo root e estão fora desta curadoria:
+não foram inspecionados, nem seus handles consultados; nenhum resultado, cleanup
+ou estado atual é inferido. O carry341276/13 é o valor **anterior ao trabalho
+produtivo**, não uma contabilidade atual afirmada enquanto há execução.
+**124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção de aceite.
+Evidência: [revisão do milestone](plans/agent_ops/evidence/r3-m1-revision16-migration/review.json)
+e [revisão de autorização](plans/agent_ops/evidence/r3-m1-revision16-migration/authorization-review-projection.json).

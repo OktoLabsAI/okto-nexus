@@ -13664,6 +13664,25 @@
       "acceptance_promoted": false,
       "observed_tokens": 341276,
       "charged_reservations": 13
+    },
+    "r3_m1_revision16_actual_migration_start": {
+      "status": "ACTUAL_MIGRATION_INSTALL_START_AND_EXISTING_GRANT_REVIEW_CONFIRMED",
+      "summary": "Root completed W16 prepare, exact reviewed canonical upgrade-plan/apply, install and start, all successful; start returned0/ready. Completed authorization review found existing grant available, without grant apply. Evidence is limited to those commands: no provider/model admission by them and no conclusion about concurrently root-owned useful14/watcher, present owner state, work result or cleanup. Pre-work carry341276/13 is historical, not current live accounting.124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/receipts/environment-upgrade-apply-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/receipts/lifecycle-nexus-start-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/authorization-review-projection.json"
+      ],
+      "carry_before_productive_work": {
+        "observed_tokens": 341276,
+        "charged_reservations": 13
+      },
+      "current_live_accounting_asserted": false,
+      "services_started_by_retained_commands": 1,
+      "model_admissions_by_retained_commands": 0,
+      "grant_changes_by_retained_commands": 0,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15244,6 +15263,18 @@
         "plans/agent_ops/evidence/r3-m1-revision16-preparation/amendment.json",
         "plans/agent_ops/evidence/r3-m1-revision16-preparation/runtime-freeze.json",
         "plans/agent_ops/evidence/r3-m1-revision16-preparation/workflow.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision16_actual_migration_start",
+      "status": "ACTUAL_MIGRATION_INSTALL_START_AND_EXISTING_GRANT_REVIEW_CONFIRMED",
+      "summary": "Root completed W16 prepare, exact reviewed canonical upgrade-plan/apply, install and start, all successful; start returned0/ready. Completed authorization review found existing grant available, without grant apply. Evidence is limited to those commands: no provider/model admission by them and no conclusion about concurrently root-owned useful14/watcher, present owner state, work result or cleanup. Pre-work carry341276/13 is historical, not current live accounting.124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/receipts/environment-upgrade-apply-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/receipts/lifecycle-nexus-start-result.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-migration/authorization-review-projection.json"
       ]
     }
   ],
