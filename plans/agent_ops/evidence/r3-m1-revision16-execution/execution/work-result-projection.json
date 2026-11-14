@@ -1,0 +1,256 @@
+{
+  "request_id": "m1v16-local-useful-14",
+  "started": 1794697680.4946263,
+  "finished": 1794697826.9832985,
+  "useful_result_confirmed": false,
+  "record": {
+    "kind": "work",
+    "lane": "local",
+    "stage": "useful_work",
+    "operation": "op_8dd7095fbd5e23defbb95a7f0c22ec7e",
+    "session": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+    "stream": "[\"srv_a3f134b449dbffa20c126dae6f9a8aa9\",\"exe_429348b4147e50ab63d19caa4cd2255c\",\"ses_7d4fc7d6c37508b2d0a6b479458da531\",\"stream_326601b801c404504ac6f81607cff95e\"]",
+    "recover": false,
+    "scope": {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "agent_id": "m1v12-local",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c"
+    },
+    "actor_agent_id": "operator",
+    "started": 1794697682.1913867,
+    "settled": true,
+    "stop_selected": null,
+    "started_monotonic": 326178.1500705,
+    "api_returned": true,
+    "canonical_stage": "SUCCEEDED"
+  },
+  "report": {
+    "exists": false
+  },
+  "submission_error": null,
+  "maximum_poll_start_interval_seconds": 1.1259962999611162,
+  "outer_loop_interval_seconds": 4.57600130001083,
+  "calls": {
+    "GET": 1805,
+    "POST": 4,
+    "productive_posts": 1,
+    "decision_posts": 2
+  },
+  "independent_observation": {
+    "maximum_poll_start_interval_seconds": 1.1259962999611162,
+    "transport_failures": {
+      "primary": null,
+      "later": [],
+      "discarded": 0
+    },
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "reader_initialization": {
+      "local": {
+        "canonical": {
+          "closed": false,
+          "failed": false,
+          "open_connections": 1,
+          "close_error_types": [],
+          "schema_changes": [],
+          "read_budget_ms": 1000.0,
+          "initialization_budget_ms": 2000.0,
+          "initializations": [
+            {
+              "file_name": "nexus.db",
+              "elapsed_ms": 38.48639997886494,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            }
+          ]
+        },
+        "core": {
+          "closed": false,
+          "failed": false,
+          "open_connections": 5,
+          "close_error_types": [],
+          "schema_changes": [
+            {
+              "file_name": "session-24428a6136a8920a7e2619a2f5f88f3816d7eb2ca41af85bfcc5a0ab719be659.db",
+              "previous": 20,
+              "current": 21
+            }
+          ],
+          "read_budget_ms": 1000.0,
+          "initialization_budget_ms": 2000.0,
+          "initializations": [
+            {
+              "file_name": "session-79e39c08cdf347b203d653fb096fff5bbce258e61ffad19011d782145e67d1b1.db",
+              "elapsed_ms": 24.467499984893948,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            },
+            {
+              "file_name": "session-8a199d6a40061025c42fc87fe000fb631aec1a46dc14f1bcc3011341ea3518b4.db",
+              "elapsed_ms": 18.071900005452335,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            },
+            {
+              "file_name": "session-b80ecba1683c4e0a09120573b02d9bd38cee5e43aee2b47679044240e69e77b7.db",
+              "elapsed_ms": 20.445099973585457,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            },
+            {
+              "file_name": "session-cfe3844e139863e5955ef3c328ec953d2a14c38677bfd3c44e1ff0170ad87b22.db",
+              "elapsed_ms": 18.8577999942936,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            },
+            {
+              "file_name": "session-24428a6136a8920a7e2619a2f5f88f3816d7eb2ca41af85bfcc5a0ab719be659.db",
+              "elapsed_ms": 29.510300024412572,
+              "budget_ms": 2000.0,
+              "status": "PREPARED"
+            }
+          ]
+        }
+      }
+    },
+    "worker_in_flight": false,
+    "budgets": {
+      "initialization_ms": 2000.0,
+      "snapshot_ms": 1000.0,
+      "poll_ms": 19000.0,
+      "freshness_ms": 20000.0,
+      "cadence_limit_ms": 24000.0,
+      "target_poll_start_ms": 200.0,
+      "maximum_previous_poll_ms": 1119.8367000324652
+    }
+  },
+  "decision_count": 2,
+  "recovered_decisions": {
+    "r4request_ba9164db68e8fafd77d3cec7af7c7ec1b042ea6341d67ca12a3baa8adcb8cb81": {
+      "decision_id": "r4decision_bc7d41353a0d459d1c7e471d004d1425",
+      "client_intent_id": "terminal_decision_b805653f73d546978bcf3d6ebc464a5c",
+      "canonical_state": "CONFIRMED",
+      "native_stage": "SUBMITTED",
+      "actor_agent_id": "operator",
+      "request_hash": "sha256:d6f2d39b05bf4907f4882e10d0a7d673130ecda436ef095523040225708b78f2",
+      "approval_key": {
+        "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+        "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+        "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+        "agent_id": "m1v12-local",
+        "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+        "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+        "session_owner_generation": 1,
+        "canonical_request_id": "r4request_ba9164db68e8fafd77d3cec7af7c7ec1b042ea6341d67ca12a3baa8adcb8cb81",
+        "kind": "native_approval"
+      }
+    },
+    "r4request_ba619c4c4b053dd8750ca0fc3280d43c956f62aedb97383c1d81dc5145e1e0f4": {
+      "decision_id": "r4decision_f211830a2100ed07ae88fa1afcd64839",
+      "client_intent_id": "terminal_decision_cd18e2f14e454f628275ee77c39f0fce",
+      "canonical_state": "CONFIRMED",
+      "native_stage": "SUBMITTED",
+      "actor_agent_id": "operator",
+      "request_hash": "sha256:0f8bf8b15aecf1129cc56710a8c732b1bdccd08edf2ab739782f41678cbe3b05",
+      "approval_key": {
+        "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+        "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+        "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+        "agent_id": "m1v12-local",
+        "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+        "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+        "session_owner_generation": 1,
+        "canonical_request_id": "r4request_ba619c4c4b053dd8750ca0fc3280d43c956f62aedb97383c1d81dc5145e1e0f4",
+        "kind": "native_approval"
+      }
+    }
+  },
+  "stop_wrapper_exits": [],
+  "configuration_observation_limit": "Canonical Core metadata only: missing/invalid stays unknown; instructionSources are references, not file contents or enforcement proof; no complete tool inventory is inferred.",
+  "native_policy_fields": "Only fields actually reported in canonical evidence are attributable; unknown inherited settings remain unknown.",
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\m1v16-local-useful-14-result.json",
+    "sha256": "f6a4b562cf4115c49cc8860bf2c3025465d522a3a90d6bf192a9d67f36a03f4c"
+  },
+  "summary": {
+    "known_observed_tokens": 460793,
+    "new_observed_tokens": 119517,
+    "carry_in_tokens": 341276,
+    "reserved_requests": 14,
+    "new_reserved_requests": 1,
+    "policy": {
+      "carry_in_admissions": 13,
+      "carry_in_tokens": 341276,
+      "deadline_seconds": 600,
+      "max_cumulative_admissions": 17,
+      "max_new_admissions": 4,
+      "operational_tolerance": 700000,
+      "preventive_cumulative_tokens": 500000,
+      "revision": 16
+    },
+    "current": [],
+    "can_admit": true,
+    "reasons": [],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "configuration_reported_only": [
+    {
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "session_id": "ses_7d4fc7d6c37508b2d0a6b479458da531",
+      "stream_epoch": "stream_326601b801c404504ac6f81607cff95e",
+      "sequence": 1,
+      "category": "lifecycle",
+      "native_type": "core/codex_thread_configuration",
+      "operation_id": null,
+      "observation": {
+        "schema_version": 1,
+        "adapter_id": "codex_app_server",
+        "source": "thread/start/response",
+        "thread_id": "01a1dc51-8afe-7113-9850-97903b926426",
+        "fields": {
+          "approvalPolicy": {
+            "status": "reported",
+            "value": "on-request"
+          },
+          "approvalsReviewer": {
+            "status": "reported",
+            "value": "user"
+          },
+          "cwd": {
+            "status": "reported",
+            "value": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project"
+          },
+          "instructionSources": {
+            "status": "reported",
+            "value": [
+              "C:\\Users\\jpamb\\.codex\\AGENTS.md"
+            ]
+          },
+          "model": {
+            "status": "reported",
+            "value": "gpt-5.6-terra"
+          },
+          "modelProvider": {
+            "status": "reported",
+            "value": "openai"
+          },
+          "sandbox": {
+            "status": "reported",
+            "value": {
+              "networkAccess": false,
+              "type": "readOnly"
+            }
+          },
+          "reasoningEffort": {
+            "status": "reported",
+            "value": "medium"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "format": "okto.m1.closed_campaign",
+  "revision": 1,
+  "status": "CLOSED_NORMAL_CLEANUP_ACCEPTANCE_NOT_INFERRED",
+  "closed_at": "2026-11-14T23:12:11.792433+00:00",
+  "faults_preserved": [],
+  "closed_predecessor_faults": [
+    "WORK_TERMINAL_FAILED"
+  ],
+  "closed_predecessor_evidence": {
+    "accounting": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v15-normal-interrupt-evdv8vdv\\accounting-reconciliation.json",
+      "sha256": "fa987bf4eac144f9b0e1654f5d37a1d097682bf5460b9f1e06b8fcb3f5b7c5e9"
+    },
+    "adoption": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\public\\adopt-local-result.json",
+      "sha256": "ed18e1c5475b5b0b0f494265e894675c3522a4bb49dacb17c52a01272b2d29ed"
+    },
+    "checkpoint": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\private\\controller.json",
+      "sha256": "05c09e7168f6251523e1d75a4c523792e12967a2ef0474264a8c754fe6eaf0d3"
+    },
+    "companion": {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision15-execution\\closure-companion.json",
+      "sha256": "64d2259aa4097a56ca739dd5155eae41d8d0090efe04a8faac61e085e9702a55"
+    },
+    "controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\controller-qualification\\runtime-freeze.json",
+      "sha256": "2605a4dd25b58e5f47d8927bfca7df3f3b71ee6389a125e1b43d87f58cc90798"
+    },
+    "execution_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-selected-plan-a0xzgmki\\execution-plan.json",
+      "sha256": "1c7a64e3257c8b3ee0020528a1c0bfe4f080c04f94d392d0066b8ca5b473ecea"
+    },
+    "historical_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\controller-qualification\\runtime-freeze.json",
+      "sha256": "15d79a38eb9f823ee87e6a2644919bf606142475aa68e806961459bdedb050a2"
+    },
+    "historical_grants": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\historical-grants.json",
+      "sha256": "fcccbce8ddd9fa5f4fa41b10ea8fed28a713dd1ec07373df4b2f4937342ff98f"
+    },
+    "native_refusal_diagnosis": {
+      "path": "C:/Users/jpamb/AppData/Local/Temp/r3-w15-native-decision-diagnosis-w1hv7idf/diagnosis.json",
+      "sha256": "292277c6548bed3779ebc121ef722db9118fc80f70dc9dd25ca65c79ef66f692"
+    },
+    "predecessor_closure": {
+      "path": "C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/work-revision15/public/closure.json",
+      "sha256": "e35d0e7c4cc6748df0282adf2018e5a15ead387d231108d7bcebd04dd47ac9b9"
+    },
+    "predecessor_controller_freeze": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision15\\runtime-freeze.json",
+      "sha256": "9e198d1c97f446e51eb9a642a568283e6f6046e01e3425cb2609f2ffc95b5e1c"
+    },
+    "technical_predecessor": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\technical-predecessor.json",
+      "sha256": "69d9838c84f46e8b5cc1298b4557c4cd075d14b68f25c8d6c76443c75685f70e"
+    }
+  },
+  "historical_original_unsettled_requests": 2,
+  "historical_control_receipt_stage_snapshot": "SUBMITTED",
+  "historical_control_receipt_completion_asserted": false,
+  "historical_stream_settlement_synthesized": false,
+  "new_reserved_admissions": 1,
+  "cumulative_reserved_admissions": 14,
+  "prior_carry_in_tokens": 341276,
+  "new_observed_tokens": 119517,
+  "cumulative_minimum_observed_tokens": 460793,
+  "billing_final": false,
+  "unsettled_requests": 0,
+  "controller_checkpoint_sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712",
+  "controller_mutated": false,
+  "final_presence_sha256": "fdef82789d6c5e83ed3122cf35db72d7210331b110260beccf586f17b3b57f28",
+  "wrapper_exit_evidence": {
+    "authorize_local-review.reserved.json": {
+      "reservation_sha256": "1df9d2c209a9807558c3558cc4e52fe8e78e55010759e6e789241904545c4ec6",
+      "returned_sha256": "4c3171b085fa50d36f73ab55fe509243881f3b6cd15e42bc1eadf5212ff64ad9",
+      "returncode": 0
+    },
+    "lifecycle-nexus-install.reserved.json": {
+      "reservation_sha256": "6f121bdb0c3f31e5163ded81963b9a2af554dfdc4dea5307dd6418d27aed5858",
+      "returned_sha256": "136227e57702bdeb7b7134d1622820d90799ee5fcc20f92f03e8e48f0e35e8c6",
+      "returncode": 0
+    },
+    "lifecycle-nexus-start.reserved.json": {
+      "reservation_sha256": "b53c83c11a4e2ef504ff9955c7a6cfa5d32f9e5ab3985f488ca0de9f0be7cfd0",
+      "returned_sha256": "ef2f621e2c045887c636f0d8a69f86b38a1f2cc887f3a4a72ae5eb15a918e13d",
+      "returncode": 0
+    },
+    "lifecycle-nexus-stop.reserved.json": {
+      "reservation_sha256": "d6065f72d764cac933b98c5877567ed671e0a0be36d4a91905c29a278474e478",
+      "returned_sha256": "37d7c6d78662d232b42912c24c678b5ac04c4d093df43a82ad429916fc02f5cd",
+      "returncode": 0
+    },
+    "lifecycle-nexus-uninstall.reserved.json": {
+      "reservation_sha256": "49d8fbae15a59b4641fce589d600974f550551794ab4506266a3320fea778b2c",
+      "returned_sha256": "ea84ecb272fc047c9a5e5cc82e7737965c1cc9a518afb94735d2b67ff1c0d165",
+      "returncode": 0
+    },
+    "upgrade-apply.reserved.json": {
+      "reservation_sha256": "82964a5cfe7227e06d813498bff6e1b2276a188dee8aa877a659cffa887a0f18",
+      "returned_sha256": "982d797eb9335e8f9b6a49cc83516bc30554f0753a0a58cd1486731d591be682",
+      "returncode": 0
+    },
+    "upgrade-plan.reserved.json": {
+      "reservation_sha256": "f0632d001b3eedfcffc0363216f09bb11968975a6eba84bdfb129f8b9f0edaa0",
+      "returned_sha256": "7b4152d2407cec2a1a72112217dfd7f2879fa200bc8e486ec4ee1a27c84c50f0",
+      "returncode": 0
+    },
+    "work-local-useful.reserved.json": {
+      "reservation_sha256": "cfb1bb0bcf11b49f48cd012e980e595be926f549ba089a811ea5eadfbe49285a",
+      "returned_sha256": "7bde32cb542f3f24e2ee09f3de65948bde67d369ec207ebe23de52be111c26d0",
+      "returncode": 0
+    }
+  },
+  "closed_without_force": true,
+  "replay_allowed": false,
+  "all_temporary_tasks_absent": true,
+  "data_retained": true,
+  "acceptance_promoted": false,
+  "first_useful_result": "requires separate canonical evidence review",
+  "limits": "Closure is not M1 acceptance, a work result, effective provider configuration or final billing. Faults/uncertainty remain. No historical failure cause or fixed token count is copied.",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16",
+  "amendment_sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca"
+}

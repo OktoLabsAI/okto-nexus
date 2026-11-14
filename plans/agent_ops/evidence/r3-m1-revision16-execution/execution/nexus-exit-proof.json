@@ -1,0 +1,65 @@
+{
+  "pid": 49312,
+  "generation": "a3b0b2982df347bd2eee1071a80ec68b",
+  "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "task": {
+    "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "state": 4,
+    "digest": "1e465f71f32c4f1d2ac3f911be4e26dd5c85ee0a362249b32b94a834e977958e"
+  },
+  "component": "nexus",
+  "cohort": {
+    "cycle_id": "1209f4668f8b86ed7af4f2ddf87ed7f0",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 3580,
+      "birth": 134391712074321788
+    },
+    "launcher": {
+      "pid": 45752,
+      "birth": 134391712108155698
+    },
+    "child": {
+      "pid": 49312,
+      "birth": 134391712108503297
+    }
+  },
+  "selected_at": 1794697637.439269,
+  "retained_handle": true,
+  "exit_confirmed": true,
+  "force_used": false,
+  "processes": {
+    "parent": {
+      "pid": 3580,
+      "birth_filetime": 134391712074321788,
+      "exit_code": 0,
+      "physical_exit_confirmed": true,
+      "terminate_right": false
+    },
+    "launcher": {
+      "pid": 45752,
+      "birth_filetime": 134391712108155698,
+      "exit_code": 0,
+      "physical_exit_confirmed": true,
+      "terminate_right": false
+    },
+    "child": {
+      "pid": 49312,
+      "birth_filetime": 134391712108503297,
+      "exit_code": 0,
+      "physical_exit_confirmed": true,
+      "terminate_right": false
+    }
+  },
+  "observed_at": 1794697864.3987699,
+  "runtime_work_settlement": "NOT_ASSERTED",
+  "proposal_sha256": "9238a96c01bdf5ebb65264cf4a9c4b0dd7d27caf155fafbcc136dba5e976368e",
+  "approval_sha256": "d8f026cfa06a1570611c51c84d6da8665730e48161e3ff2598df3a57003caf5c",
+  "campaign_revision": 14,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14",
+  "work_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16",
+  "amendment_sha256": "6aa32cbc9c917bc58573f6bf89113e373a6afea4f28594eab8cf658e8c70e4ca"
+}

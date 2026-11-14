@@ -1,0 +1,27 @@
+{
+  "method": "Own retained service context: PATH only; existing RTK executable metadata/hash. No process/provider/config writes.",
+  "service_context_sha256": "c28a8d687a9415ac65f750586d18270754031edb9ea5ba094b1c65c554f38484",
+  "selected_parent_path": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+    "C:/Windows/System32",
+    "C:/Program Files/Git/cmd"
+  ],
+  "service_path_directories": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+    "C:\\Windows\\System32",
+    "C:\\Program Files\\Git\\cmd"
+  ],
+  "rtk_link": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Links\\rtk.exe",
+  "rtk_canonical_binary": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Microsoft\\WinGet\\Packages\\rtk-ai.rtk_Microsoft.Winget.Source_8wekyb3d8bbwe\\rtk.exe",
+    "bytes": 9638912,
+    "sha256": "941654cc74ced3e773fa0cef43b044a4717c6884a429bfb14db50093defa38fb"
+  },
+  "rtk_link_parent_in_service_path": false,
+  "rtk_binary_parent_in_service_path": false,
+  "rtk_resolution_under_service_path": null,
+  "python_resolution_under_service_path": null,
+  "own_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "cause_scope": "Captured service PATH excludes RTK and resolver cannot find it. Actual nested shell environment was not dumped; the failed native command independently reported RTK not found.",
+  "proposal": "Use explicitly pinned absolute RTK binary and absolute own Python in the reviewed finite prompt; preserve file IO scope and native approval. No personal PATH/config or installed artifacts mutation."
+}

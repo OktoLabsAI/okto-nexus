@@ -1,0 +1,14 @@
+{
+  "state": "RETURNED",
+  "component": "nexus",
+  "action": "stop",
+  "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "returncode": 0,
+  "reported_state": "stopped",
+  "reported_code": null,
+  "reported_reason": "SHUTDOWN_COMPLETE",
+  "wait_timed_out": null,
+  "cleanup_proof_sha256": null,
+  "output_sha256": "0bdfff8ef9d790f42f0cf0ca25332136c4d3d57f169a4e6f5cfea0a491a0cb4e",
+  "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

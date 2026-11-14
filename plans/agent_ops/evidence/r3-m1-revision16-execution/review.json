@@ -1,0 +1,60 @@
+{
+  "status": "CLOSED_CANONICAL_SUCCESS_USEFUL_RESULT_NOT_CONFIRMED",
+  "scope": "Canonical successful completion is distinct from useful artifact acceptance. Required report absent; no continuation15 or remote work.",
+  "original_checkpoint_sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712",
+  "original_closure_sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9",
+  "all_copy_hashes_verified": true,
+  "secret_scan_matches": 0,
+  "observed_tokens": 460793,
+  "charged_reservations": 14,
+  "request14_tokens": 119517,
+  "usage_components": {
+    "cacheWriteInputTokens": 0,
+    "cachedInputTokens": 98048,
+    "inputTokens": 117592,
+    "outputTokens": 1925,
+    "reasoningOutputTokens": 968,
+    "totalTokens": 119517
+  },
+  "billing_final": false,
+  "refunds": 0,
+  "decision_receipt_completion_asserted": false,
+  "originals_untouched": true,
+  "diagnosis": "Bounded projection: first command completed exit0; second failed with shell quoting/parsing error; third failed because rtk was not found in approved command environment. Native turn completed but report was not produced. No new command reproduction by curator.",
+  "diagnosis_scope": "Retained sibling projection authorized for bounded command failure/output metadata. No raw transcript, reasoning body, credential, private DB or native command-line copied.",
+  "reconciliation": {
+    "tool": "f19433",
+    "exit_code": 0,
+    "elapsed_seconds": 0.14811790001112968,
+    "method": "mode=ro/query_only; exact session/operation and token counters; no bodies, transcript, auth or credentials"
+  },
+  "root_execution_refs": {
+    "work": "60993 ->5aaa28 exit0;81af1b SUCCEEDED/usefulFalse",
+    "approval1": "86de07 ->9ae155",
+    "approval2": "de1762 revised native command reviewed ->679401 one-time approval",
+    "approval_scope": "Both original recovered GET snapshots SUBMITTED; no final receipt inferred.",
+    "normal_stop": "a769f3 ->29a4c2 exit0",
+    "watch": "ed89a2 all3physicalexit0 noforce",
+    "cleanup": "fe906c",
+    "uninstall": "def56f ->aa4cf3",
+    "final_presence": "331192",
+    "closure": "287d0d"
+  },
+  "root_refs_are_reported_not_synthetic_receipts": true,
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "status_changes": [],
+  "acceptance_promoted": false,
+  "live_effects_by_curator": false,
+  "service_path_diagnosis": {
+    "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-rtk-path-udc_bg1y\\projection.json",
+    "sha256": "a80ba1fd2eb71976faaf1dc9413ebc277e73f19625894c2c72ca2530ff8fe948",
+    "retained": "diagnosis/service-path-projection.json",
+    "finding": "Retained own service PATH excludes RTK and resolves neither RTK nor Python. Canonical RTK binary pinned. Actual nested shell environment was not dumped; native command separately reported RTK unavailable.",
+    "source_bug_asserted": false,
+    "environment_modified": false
+  }
+}

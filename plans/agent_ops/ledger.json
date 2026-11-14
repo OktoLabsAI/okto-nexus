@@ -13683,6 +13683,41 @@
       "model_admissions_by_retained_commands": 0,
       "grant_changes_by_retained_commands": 0,
       "acceptance_promoted": false
+    },
+    "r3_m1_revision16_normal_closure_no_useful_result": {
+      "status": "CLOSED_CANONICAL_SUCCESS_USEFUL_RESULT_NOT_CONFIRMED",
+      "summary": "W16 request14 canonical SUCCEEDED/settled and wrapper exit0, but required report absent/usefulFalse. Two exact approval decisions selected; first recovered native receipts SUBMITTED, terminal receipt completion not inferred. Bounded diagnosis: firstcommand exit0, second quoting/parsing failure, third rtk unavailable in approved command environment. Normal stop0 and three retained physical exits0 without force; tasks absent/port free/data retained. Exact post-exit RO accounting460793 tokens/14charged, cursor78/watermark78, sessionleaseCLOSED/slots0/nativepending0. Original checkpoint/closure preserved. No continuation15, remote, refund, billing finality or acceptance promotion;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/execution/work-result-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/post-exit/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/diagnosis/projection.json"
+      ],
+      "observed_tokens": 460793,
+      "charged_reservations": 14,
+      "request14_tokens": 119517,
+      "usage_components": {
+        "input": 117592,
+        "cached_input_subset": 98048,
+        "output": 1925,
+        "reasoning_output_subset": 968,
+        "cache_write": 0
+      },
+      "original_checkpoint_sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712",
+      "original_closure_sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9",
+      "decision_receipt_completion_asserted": false,
+      "request15_selected": false,
+      "remote_execution_enabled": false,
+      "billing_final": false,
+      "acceptance_promoted": false,
+      "new_model_admissions_during_curation": 0,
+      "technical_limits": {
+        "maximum_cumulative_requests": 17,
+        "preventive_tokens": 500000,
+        "tolerance_tokens": 700000
+      }
     }
   },
   "history": [
@@ -15275,6 +15310,20 @@
         "plans/agent_ops/evidence/r3-m1-revision16-migration/receipts/environment-upgrade-apply-result.json",
         "plans/agent_ops/evidence/r3-m1-revision16-migration/receipts/lifecycle-nexus-start-result.json",
         "plans/agent_ops/evidence/r3-m1-revision16-migration/authorization-review-projection.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_m1_revision16_normal_closure_no_useful_result",
+      "status": "CLOSED_CANONICAL_SUCCESS_USEFUL_RESULT_NOT_CONFIRMED",
+      "summary": "W16 request14 canonical SUCCEEDED/settled and wrapper exit0, but required report absent/usefulFalse. Two exact approval decisions selected; first recovered native receipts SUBMITTED, terminal receipt completion not inferred. Bounded diagnosis: firstcommand exit0, second quoting/parsing failure, third rtk unavailable in approved command environment. Normal stop0 and three retained physical exits0 without force; tasks absent/port free/data retained. Exact post-exit RO accounting460793 tokens/14charged, cursor78/watermark78, sessionleaseCLOSED/slots0/nativepending0. Original checkpoint/closure preserved. No continuation15, remote, refund, billing finality or acceptance promotion;124/132 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/execution/work-result-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/post-exit/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-revision16-execution/diagnosis/projection.json"
       ]
     }
   ],

@@ -1,0 +1,66 @@
+{
+  "status": "CLOSED_CANONICAL_SUCCESS_USEFUL_RESULT_NOT_CONFIRMED",
+  "original_closure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\public\\closure.json",
+    "sha256": "eb881221c9516701a49c41ee4b9ad45445001050579eb8096a4c3dcb8ce4a1b9"
+  },
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\private\\controller.json",
+    "sha256": "eb57757c34300804383b37717e65acc2ce3492c95d9f243e5e9e154c7430b712"
+  },
+  "original_checkpoint_and_closure_untouched": true,
+  "original_faults": [],
+  "request_id": "m1v16-local-useful-14",
+  "canonical_stage": "SUCCEEDED",
+  "session_state": "CLOSED",
+  "lease_state": "CLOSED",
+  "collector_request_settled": true,
+  "native_pending_count": 0,
+  "active_owned_slots": 0,
+  "cursor": 78,
+  "watermark": 78,
+  "decision_receipts": {
+    "count": 2,
+    "canonical_state_snapshot": "CONFIRMED",
+    "native_stage_first_recovery_snapshot": "SUBMITTED",
+    "final_receipt_completion_asserted": false,
+    "decision_replay": false,
+    "scope": "Two exact decisions selected; snapshots are first GET observations, not terminal delivery receipts. Native request rows are not substituted for receipt completion."
+  },
+  "accounting": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w16-postexit-wk_kkog3\\accounting-reconciliation.json",
+    "sha256": "54d07cb39254fc08d1cf4a4013e62afd023a6b0d757c9de69912f68a177a2e11"
+  },
+  "carry_in_tokens": 341276,
+  "increment_tokens": 119517,
+  "cumulative_observed_tokens": 460793,
+  "charged_reservations": 14,
+  "refunds": 0,
+  "billing_final": false,
+  "normal_cleanup": {
+    "all_three_retained_handles_exited": true,
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "force_used": false,
+    "tasks_absent": true,
+    "port_free": true,
+    "data_directories_retained": true
+  },
+  "request15_selected": false,
+  "remote_execution": "HELD",
+  "report_exists": false,
+  "useful_result_confirmed": false,
+  "m1_acceptance": false,
+  "no_new_admission_authorized_by_companion": true,
+  "configuration_fields": "Reported metadata only, not proof of enforcement.",
+  "technical_limits_unchanged": {
+    "maximum_cumulative_requests": 17,
+    "preventive_tokens": 500000,
+    "tolerance_tokens": 700000
+  },
+  "remaining_until_preventive": 39207,
+  "remaining_until_tolerance": 239207
+}

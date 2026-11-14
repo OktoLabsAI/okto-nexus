@@ -2071,3 +2071,24 @@ produtivo**, não uma contabilidade atual afirmada enquanto há execução.
 **124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção de aceite.
 Evidência: [revisão do milestone](plans/agent_ops/evidence/r3-m1-revision16-migration/review.json)
 e [revisão de autorização](plans/agent_ops/evidence/r3-m1-revision16-migration/authorization-review-projection.json).
+
+## 2026-11-14 — Revisão16: SUCCEEDED sem relatório útil; encerramento normal
+
+Pedido14 canônico SUCCEEDED/settled, wrapper exit0, porém useful=false e relatório
+ausente. O diagnóstico limitado registra primeiro comando exit0, segundo erro de
+quoting/parsing e terceiro rtk indisponível no ambiente aprovado. Não houve
+continuação15 nem remoto. Duas decisões exatas foram selecionadas; primeiros GETs
+CONFIRMED/SUBMITTED não são recibos de conclusão final presumida.
+
+Stop normal retornou0; três handles retidos provaram saída física0 sem force.
+Tarefas ausentes, porta livre e diretórios mantidos; sessão/lease CLOSED, slots0,
+nativepending0 e cursor/watermark78/78 observados em releitura RO após a saída.
+Checkpoint `eb57757c…` e closure `eb881221…` originais permanecem intactos.
+
+**460.793 tokens observados/14 reservas**: carry341276 +119517, input117592 e
+output1925; cached98048 integra input, reasoning968 integra output. Sem refund ou
+billing final. Restam39207 até preventiva500k/239207 até tolerância700k; teto17
+inalterado. Nenhum novo efeito de modelo/serviço nesta curadoria.
+**124/132 VERIFIED, 6 IN_PROGRESS e2 NOT_RUN**, sem promoção de aceite M1.
+Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision16-execution/review.json)
+e [companion](plans/agent_ops/evidence/r3-m1-revision16-execution/closure-companion.json).
