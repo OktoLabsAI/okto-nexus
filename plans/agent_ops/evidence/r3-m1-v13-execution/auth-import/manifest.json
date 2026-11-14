@@ -1,0 +1,56 @@
+{
+  "scope": "V13_AUTHORIZE_IMPORT_RECONCILIATION_ONLY",
+  "revision": 1,
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+  "controller_modules": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller",
+  "shim": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-authorize-import-supplement-6flddft5\\authorize_import_shim.py",
+    "sha256": "5a766aa65424d305a2019eb335998fbbfba8cecb62b3c0d101eab77d8795ccd7"
+  },
+  "supplement": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-authorize-import-supplement-6flddft5\\supplement.py",
+    "sha256": "680db1f059b8696f57be7b73dbe6c114770ab714c2c3d536a986b9cd14b8588c"
+  },
+  "test": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-authorize-import-supplement-6flddft5\\test_supplement.py",
+    "sha256": "f27abd5b40440162dc5e76a4bbadf3fc1d9196996afa4fb2f1a181ce9854123f"
+  },
+  "original_authorize": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\authorize_local.py",
+    "sha256": "defedf1cc86089c9913fad64e177018a2df7764853fe85ec23c8d8b6a44928f1"
+  },
+  "publication": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\publication.py",
+    "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+  },
+  "failed_attempt": {
+    "reserved": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.reserved.json",
+      "sha256": "ea62eed8c2a20c2cc305813c26f8737448aa265c597e3b2c305d978464f58bf7"
+    },
+    "returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.returned.json",
+      "sha256": "fd66b9b151ca66ed944175b087fc0278091d8541d6da786618893f7f658ad921"
+    },
+    "stdout": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.stderr",
+      "sha256": "463eb9a080dcc830ec1c0767105dc2b06fbd819806e0ef5ab6f7662bc7ebba21"
+    },
+    "process": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.process.json",
+      "sha256": "589925e17f6d347227e81b2f4e3b801b3419c2f776f70349cdc971aa0b0820c1"
+    }
+  },
+  "before_controller_sha256": "f118048f5b6f2b29acfd853f042f81e5f27a42cb4f0522f7700196abb77897d5",
+  "adoption_sha256": "be525b84ed08c892ccc109064a5ce4c6322bde7ca75c4ab37dc9c4d6319426f3",
+  "authority": "Standing v13 technical binding unchanged; root explicitly selects this one import reconciliation after proving original attempt stopped before controller/HTTP. No assertion that original failure succeeded.",
+  "cleanup": "Run verify-exits after supplement phases return and before original final-presence/closure; retain supplement ledger and sidecar alongside original failure.",
+  "modification": "Only child entry environment preloads exact publication by pinned file; original authorize source, scope/CAS/fence/deadline/token policy and receipts remain unchanged."
+}

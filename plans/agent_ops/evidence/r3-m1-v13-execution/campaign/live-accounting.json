@@ -1,0 +1,77 @@
+{
+  "time": 1794673839.9174955,
+  "summary": {
+    "known_observed_tokens": 134199,
+    "new_observed_tokens": 22548,
+    "carry_in_tokens": 111651,
+    "reserved_requests": 9,
+    "new_reserved_requests": 1,
+    "policy": {
+      "revision": 13,
+      "carry_in_admissions": 8,
+      "carry_in_tokens": 111651,
+      "max_cumulative_admissions": 12,
+      "max_new_admissions": 4,
+      "preventive_cumulative_tokens": 500000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+      "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+      "predecessor_faults": [
+        "DEADLINE120"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+        "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+        "predecessor_faults": [
+          "OBSERVATION_UNKNOWN",
+          "DEADLINE120"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+          "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+          "predecessor_faults": [
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+            "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+            "predecessor_faults": [
+              "OBSERVATION_UNKNOWN",
+              "STOP_UNCONFIRMED",
+              "CAMPAIGN_RUNNER_EXCEPTION"
+            ],
+            "prior_ancestry": {
+              "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+              "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+              "predecessor_faults": [
+                "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+              ],
+              "prior_ancestry": {
+                "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+                "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+                "predecessor_faults": [
+                  "CAMPAIGN_RUNNER_EXCEPTION"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "current": [
+      "m1v12-local-work-01"
+    ],
+    "can_admit": false,
+    "reasons": [
+      "DEADLINE120",
+      "SERIAL_REQUEST_UNSETTLED",
+      "TURN_TERMINAL_MISSING"
+    ],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "active_request": "m1v12-local-work-01"
+}

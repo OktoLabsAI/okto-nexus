@@ -1,0 +1,49 @@
+{
+  "status": "SUPPLEMENT_WRAPPERS_EXIT_CONFIRMED",
+  "supplement_manifest_sha256": "aa10c527348ccaf61ee144dbe4e185b240c43d2ac51aba3fea3a640680d80c8d",
+  "original_failed_attempt": {
+    "reserved": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.reserved.json",
+      "sha256": "ea62eed8c2a20c2cc305813c26f8737448aa265c597e3b2c305d978464f58bf7"
+    },
+    "returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.returned.json",
+      "sha256": "fd66b9b151ca66ed944175b087fc0278091d8541d6da786618893f7f658ad921"
+    },
+    "stdout": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.stderr",
+      "sha256": "463eb9a080dcc830ec1c0767105dc2b06fbd819806e0ef5ab6f7662bc7ebba21"
+    },
+    "process": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\runtime-private\\authorize_local-review.process.json",
+      "sha256": "589925e17f6d347227e81b2f4e3b801b3419c2f776f70349cdc971aa0b0820c1"
+    }
+  },
+  "original_failure_preserved": true,
+  "original_review_returncode": 1,
+  "supplemental_authorization_selections": {
+    "review": {
+      "reservation_sha256": "8aec69c49087f2b7a818fde32c81f188c1d5587e442e30a5e9b31f1e22c9c86d",
+      "returned_sha256": "99edd11cd9ad741b810b2b2fadb665a46a58eede18822c86a861ae8f0da595b6",
+      "returncode": 0,
+      "wrapper_exit_confirmed": true
+    },
+    "apply": {
+      "reservation_sha256": "03c425081250cb7662e942f9385678209953960b5dfcde7d2ae99c452e6fcfc3",
+      "returned_sha256": "9853c23a05b4430f88ec1368d3978640909517f41eca9c6d34c5bc39cc9b15d9",
+      "returncode": 0,
+      "wrapper_exit_confirmed": true
+    }
+  },
+  "scope": "Only original authorize review/apply with explicitly preloaded pinned publication; no model reservation or setup replay. Returned error remains error; exit proof is not authorization success.",
+  "cleanup_requirement": "Retain and bind this proof alongside original final-presence and closure; neither original failed selection nor supplemental failure is relabeled.",
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc",
+  "campaign_revision": 13,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13"
+}

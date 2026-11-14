@@ -1499,3 +1499,28 @@ As 12 seleções canônicas não fizeram login, inferência ou force. Os 984 pin
 SVC-T14 e SVC-T27 passam a VERIFIED no escopo descrito: 121 de 132 cenários verificados. Tasks, invariantes, critérios e milestones mantêm seus estados. Nenhum aceite M1 ou trabalho remoto/produtivo foi inferido.
 
 Evidência: `plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json`.
+
+## 2026-11-14 — v13: turno cancelado, contabilidade reconciliada e parada normal
+
+A primeira solicitação produtiva local chegou à permissão nativa. O prazo de
+120 segundos venceu antes da decisão do root; a intenção tardia não foi enviada
+ao modelo (zero decision POSTs) e nenhum report.json foi produzido. O prazo
+insuficiente foi uma limitação do executor de campanha, não uma conclusão sobre
+o atendimento ao plano. Foram observados 22.548 tokens novos, 134.199 cumulativos
+e nove reservas cumulativas. Claude permaneceu sem uso.
+
+A parada normal esperou o turno pendente. Uma única interrupção canônica desse
+turno, com resolução e admissão explícitas, permitiu concluir o drain sem force.
+O handle confirmou a saída física do owner; uninstall terminou com código zero,
+as duas tarefas ficaram ausentes e os dados foram preservados. GETs posteriores
+à saída ficaram indisponíveis; a reconciliação usou os journals Core/canônico.
+
+O recibo do turno é CANCELLED e sessão/lease estão CLOSED. O checkpoint original
+permanece intacto; um derivado selado assenta a solicitação e mantém DEADLINE120
+e WORK_TERMINAL_FAILED. O companion liga essa reconciliação à closure original,
+aos recibos de limpeza e aos suplementos de autorização. A falha original de
+importação e as falhas intermediárias de qualificação continuam preservadas.
+
+Não houve promoção de aceite M1, resultado útil, decisão nativa concluída,
+continuação ou rota remota. Tokens observados não equivalem a cobrança final.
+Evidência: `plans/agent_ops/evidence/r3-m1-v13-execution/review.json`.

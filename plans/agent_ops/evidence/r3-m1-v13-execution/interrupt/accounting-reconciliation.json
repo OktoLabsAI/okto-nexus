@@ -1,0 +1,88 @@
+{
+  "canonical": {
+    "billed_tokens": null,
+    "opening_operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+    "opening_receipt": {
+      "error_code": null,
+      "possible_effect": 1,
+      "receipt_revision": 1,
+      "retry_safe": 0,
+      "stage": "SUBMITTED"
+    },
+    "operation_admitted": true,
+    "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+    "operation_receipt": {
+      "error_code": null,
+      "possible_effect": 1,
+      "receipt_revision": 2,
+      "retry_safe": 0,
+      "stage": "CANCELLED"
+    },
+    "preopen_failed": false,
+    "scope": {
+      "agent_id": "m1v12-local",
+      "authorization_revision": 2,
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 1,
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "session_state": {
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "lease_state": "CLOSED",
+      "lifecycle_state": "CLOSED",
+      "open_operation_id": "op_fa93f7c82a6cb43583ad51992c248024",
+      "owner_generation": 1,
+      "stream_epoch": "stream_1e462c1008551ea070b3c090bc5f73be",
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "source": "OWN_CANONICAL_DB_READ_ONLY"
+  },
+  "closure_required_separately": true,
+  "derived": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-interrupt-cleanup-5i325bj5\\controller-reconciled.json",
+    "sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981"
+  },
+  "faults": [
+    "DEADLINE120",
+    "WORK_TERMINAL_FAILED"
+  ],
+  "kind": "READONLY_POST_EXIT_DERIVED_CHECKPOINT",
+  "known_observed_tokens": 134199,
+  "new_model_admissions": 0,
+  "observed_at": 1794674808.0401,
+  "original": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\private\\controller.json",
+    "sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c"
+  },
+  "original_untouched": true,
+  "pages": [
+    {
+      "after_sequence": 41,
+      "cursor_after": 59,
+      "event_count": 18,
+      "page_keys": [
+        "committed_contiguous",
+        "count",
+        "events",
+        "gap_pending",
+        "has_more",
+        "next_after_sequence",
+        "scope",
+        "stream_epoch"
+      ],
+      "page_sha256": "ca9d987853ce7d88e1b8765431850b6308bf9c0b61b00c747d5ae6ec834d4b80"
+    }
+  ],
+  "reserved_requests": 9,
+  "settled": true,
+  "source_sha256": "9e69b463dea12e610565e8ba59ec876bcec0a18f6e9fa1b80d946eafa7e91e6b",
+  "useful_result_acceptance_inferred": false
+}

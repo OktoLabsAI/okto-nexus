@@ -1,0 +1,115 @@
+{
+  "status": "EXPIRED_UNUSED_GRANT_REPLACEMENT_CONFIRMED",
+  "client_request_id": "authorize_988fc34009c04d978b36e9fee587d399",
+  "request_hash": "sha256:c0e19eeb78f1ca21320ae2095c73fadfb866b2d1408db4b6b05494848b0f73c4",
+  "grant": {
+    "grant_id": "grant_ac06e31629304e1fb2b34161918a73ef",
+    "expires_at": "2026-11-14T17:26:23.088231Z",
+    "max_executions": 20,
+    "actions": [
+      "open",
+      "send",
+      "steer",
+      "interrupt",
+      "close"
+    ]
+  },
+  "review_revision": "5619a70bc8cfe6b17727f5dda01893886c2ee14306e4a9e112bade40d531f496",
+  "review_sha256": "9003a28cb6eb4a03ce0eac24cd784eee849ef294577f8d5f0de8cbd052261ba4",
+  "model_admissions": 0,
+  "calls": {
+    "recover": 1,
+    "issue": 1
+  },
+  "cli_execution": {
+    "command_count": 1,
+    "recent": [
+      {
+        "action": "authorize",
+        "exit_code": 0,
+        "handler_entered": true,
+        "error_type": null,
+        "possible_effect": false
+      }
+    ],
+    "entrypoint": "INSTALLED_RUN_WORK_PARSER_AND_HANDLERS",
+    "stdout": "OUTER_RUNNER_PRIVATE_CAPTURE",
+    "console_subprocess_proven": false
+  },
+  "checkpoint_summary": {
+    "known_observed_tokens": 111651,
+    "new_observed_tokens": 0,
+    "carry_in_tokens": 111651,
+    "reserved_requests": 8,
+    "new_reserved_requests": 0,
+    "policy": {
+      "revision": 13,
+      "carry_in_admissions": 8,
+      "carry_in_tokens": 111651,
+      "max_cumulative_admissions": 12,
+      "max_new_admissions": 4,
+      "preventive_cumulative_tokens": 500000,
+      "operational_tolerance": 700000,
+      "deadline_seconds": 120
+    },
+    "ancestry": {
+      "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+      "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+      "predecessor_faults": [
+        "DEADLINE120"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+        "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+        "predecessor_faults": [
+          "OBSERVATION_UNKNOWN",
+          "DEADLINE120"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+          "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+          "predecessor_faults": [
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+            "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+            "predecessor_faults": [
+              "OBSERVATION_UNKNOWN",
+              "STOP_UNCONFIRMED",
+              "CAMPAIGN_RUNNER_EXCEPTION"
+            ],
+            "prior_ancestry": {
+              "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+              "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+              "predecessor_faults": [
+                "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+              ],
+              "prior_ancestry": {
+                "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+                "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+                "predecessor_faults": [
+                  "CAMPAIGN_RUNNER_EXCEPTION"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "current": [],
+    "can_admit": true,
+    "reasons": [],
+    "final_or_billed_usage": false,
+    "operational_tolerance": 700000
+  },
+  "publication_diagnostics": {
+    "attempts": 8,
+    "published_snapshots": 8
+  },
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc",
+  "campaign_revision": 13,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13"
+}

@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-14",
+  "status": "V13_CANCELLED_RECONCILED_CLEANUP_NO_M1_ACCEPTANCE",
+  "closure_companion_sha256": "262810dce3bca1390575f5952d21405abf2a158a6a558e7ce3f885e028621e53",
+  "original_closure_sha256": "1170704cfe50b1d96e11bb560f042473dd12d7c827c51f0ae447078d3ba35171",
+  "original_checkpoint_sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c",
+  "reconciled_checkpoint_sha256": "b237e0a87d945a49bf95295268565c888d56f3fec6a82ae52da72bf59c7ec981",
+  "new_observed_tokens": 22548,
+  "cumulative_minimum_observed_tokens": 134199,
+  "new_reservations": 1,
+  "cumulative_reservations": 9,
+  "unsettled_requests": 0,
+  "billing_final": false,
+  "faults_preserved": [
+    "DEADLINE120",
+    "WORK_TERMINAL_FAILED"
+  ],
+  "original_work_result": "Native permission appeared; root decision file was written after the 120-second deadline. No decision POST and no output report.",
+  "authorization_recovery": "Original review failed on missing publication import before effects. Separate pinned import shim completed review; expired existing grant was re-reviewed and one canonical replacement issued. All original and supplemental exits retained.",
+  "cleanup": "Normal stop waited for pending work. One explicitly selected canonical turn.interrupt (resolve plus admit) cancelled the existing turn. Exact physical owner exited, canonical drain DRAINED, uninstall0 and both temporary tasks absent; no force.",
+  "accounting": "Original closure/checkpoint stay unchanged and unsettled. Separate read-only Core/canonical journal reconciliation proves CANCELLED and CLOSED session/lease, derives a sealed settled checkpoint and preserves all faults.",
+  "interrupt_execution": "Actual root tool exit0 for execute and reconcile; later HTTP GETs were unavailable after service exit. Settlement comes from retained journals, not process absence.",
+  "provider": "Codex CLI; Claude unused",
+  "acceptance_promoted": false,
+  "limits": [
+    "No useful result, completed native decision, continuation or remote lane acceptance.",
+    "Observed tokens are not final billing; no refunds or request replay.",
+    "Raw checkpoints, databases, provider credentials and raw CLI outputs remain outside the repository.",
+    "Standing user authorization was used; the user was not represented as approving technical artifact hashes."
+  ]
+}

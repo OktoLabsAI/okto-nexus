@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="17" time="4.077" timestamp="2026-11-14T13:15:52.376654-03:00" hostname="Alienware_m15"><testcase classname="" name="test_real_fresh_isolated_import_reaches_controller_only_with_pinned_preload[False]" time="0.765"><failure message="AssertionError: assert (1 == 0)&#10; +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scr...&gt;...\r\n                    os.close(stderr_wfd)\r\nTypeError: function() argument \'code\' must be code, not str\r\n').returncode">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v13-authorize-import-supplement-6flddft5/test-tmp/test_real_fresh_isolated_impor0')
+preload = False
+
+    @pytest.mark.parametrize('preload',[False,True])
+    def test_real_fresh_isolated_import_reaches_controller_only_with_pinned_preload(tmp_path,preload):
+        # Independent process starts with neither draft nor pytest's sys.path.
+        # Stop at controller construction; no database, HTTP or service is touched.
+        code=r'''
+    import sys,json,importlib.util,socket,subprocess
+    from pathlib import Path
+    manifest=json.loads(Path(sys.argv[1]).read_bytes())
+    def denied(*a,**k):raise AssertionError('EXTERNAL_EFFECT_FORBIDDEN')
+    socket.socket.connect=denied;subprocess.Popen=denied
+    sys.path.insert(0,str(Path(manifest['original_authorize']['path']).parent))
+    assert 'publication' not in sys.modules
+    if sys.argv[2]=='yes':
+        spec=importlib.util.spec_from_file_location('tested_shim',manifest['shim']['path'])
+        shim=importlib.util.module_from_spec(spec);spec.loader.exec_module(shim);driver=shim.prepare(manifest)
+    else:
+        import authorize_local as driver
+    driver.read_json=lambda p:{};driver.require_tags=lambda *a:None;driver.status=lambda *a:{}
+    class Marker(Exception):pass
+    class Context:
+        PUBLIC=Path('synthetic-public')
+        modules=Path(manifest['controller_modules'])
+        def controller(self,**kwargs):raise Marker()
+    try:driver.execute(Context(),'review')
+    except Marker:print('CONTROLLER_BOUNDARY_REACHED_NO_EFFECT')
+    except ModuleNotFoundError as error:print('IMPORT_REFUSED:'+error.name)
+    '''
+        result=subprocess.run([PY,'-I','-B','-c',code,str(HERE/'manifest.json'),'yes' if preload else 'no'],cwd=tmp_path,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False,creationflags=subprocess.CREATE_NO_WINDOW)
+&gt;       assert result.returncode==0 and not result.stderr
+E       AssertionError: assert (1 == 0)
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scr...&gt;...\r\n                    os.close(stderr_wfd)\r\nTypeError: function() argument \'code\' must be code, not str\r\n').returncode
+
+C:\Users\jpamb\AppData\Local\Temp\m1-v13-authorize-import-supplement-6flddft5\test_supplement.py:38: AssertionError</failure></testcase><testcase classname="" name="test_real_fresh_isolated_import_reaches_controller_only_with_pinned_preload[True]" time="0.686"><failure message="AssertionError: assert (1 == 0)&#10; +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scr...&gt;...\r\n                    os.close(stderr_wfd)\r\nTypeError: function() argument \'code\' must be code, not str\r\n').returncode">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/m1-v13-authorize-import-supplement-6flddft5/test-tmp/test_real_fresh_isolated_impor1')
+preload = True
+
+    @pytest.mark.parametrize('preload',[False,True])
+    def test_real_fresh_isolated_import_reaches_controller_only_with_pinned_preload(tmp_path,preload):
+        # Independent process starts with neither draft nor pytest's sys.path.
+        # Stop at controller construction; no database, HTTP or service is touched.
+        code=r'''
+    import sys,json,importlib.util,socket,subprocess
+    from pathlib import Path
+    manifest=json.loads(Path(sys.argv[1]).read_bytes())
+    def denied(*a,**k):raise AssertionError('EXTERNAL_EFFECT_FORBIDDEN')
+    socket.socket.connect=denied;subprocess.Popen=denied
+    sys.path.insert(0,str(Path(manifest['original_authorize']['path']).parent))
+    assert 'publication' not in sys.modules
+    if sys.argv[2]=='yes':
+        spec=importlib.util.spec_from_file_location('tested_shim',manifest['shim']['path'])
+        shim=importlib.util.module_from_spec(spec);spec.loader.exec_module(shim);driver=shim.prepare(manifest)
+    else:
+        import authorize_local as driver
+    driver.read_json=lambda p:{};driver.require_tags=lambda *a:None;driver.status=lambda *a:{}
+    class Marker(Exception):pass
+    class Context:
+        PUBLIC=Path('synthetic-public')
+        modules=Path(manifest['controller_modules'])
+        def controller(self,**kwargs):raise Marker()
+    try:driver.execute(Context(),'review')
+    except Marker:print('CONTROLLER_BOUNDARY_REACHED_NO_EFFECT')
+    except ModuleNotFoundError as error:print('IMPORT_REFUSED:'+error.name)
+    '''
+        result=subprocess.run([PY,'-I','-B','-c',code,str(HERE/'manifest.json'),'yes' if preload else 'no'],cwd=tmp_path,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False,creationflags=subprocess.CREATE_NO_WINDOW)
+&gt;       assert result.returncode==0 and not result.stderr
+E       AssertionError: assert (1 == 0)
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scr...&gt;...\r\n                    os.close(stderr_wfd)\r\nTypeError: function() argument \'code\' must be code, not str\r\n').returncode
+
+C:\Users\jpamb\AppData\Local\Temp\m1-v13-authorize-import-supplement-6flddft5\test_supplement.py:38: AssertionError</failure></testcase><testcase classname="" name="test_supplement_cannot_select_work_or_extra_phase[work-selection0]" time="0.002" /><testcase classname="" name="test_supplement_cannot_select_work_or_extra_phase[authorize_local-selection1]" time="0.001" /><testcase classname="" name="test_supplement_cannot_select_work_or_extra_phase[authorize_local-selection2]" time="0.001" /><testcase classname="" name="test_shim_preserves_exact_original_cli_and_only_adds_import_bootstrap[review]" time="0.001" /><testcase classname="" name="test_shim_preserves_exact_original_cli_and_only_adds_import_bootstrap[apply]" time="0.001" /><testcase classname="" name="test_zero_effect_review_proof_accepts_only_unchanged_failed_import" time="0.085" /><testcase classname="" name="test_review_refuses_any_prior_effect_or_modified_evidence[request]" time="0.059" /><testcase classname="" name="test_review_refuses_any_prior_effect_or_modified_evidence[fault]" time="0.056" /><testcase classname="" name="test_review_refuses_any_prior_effect_or_modified_evidence[reservation]" time="0.051" /><testcase classname="" name="test_review_refuses_any_prior_effect_or_modified_evidence[result]" time="0.045" /><testcase classname="" name="test_review_refuses_any_prior_effect_or_modified_evidence[profile]" time="0.066" /><testcase classname="" name="test_review_refuses_any_prior_effect_or_modified_evidence[original_failure]" time="0.025" /><testcase classname="" name="test_changed_shim_pin_is_refused_before_import" time="0.031" /><testcase classname="" name="test_existing_or_unconfirmed_apply_never_dispatches" time="0.029" /><testcase classname="" name="test_exit_proof_requires_retained_supplement_wrapper_exit" time="0.033" /></testsuite></testsuites>

@@ -1,0 +1,22 @@
+{
+  "kind": "PHYSICAL_OWNER_EXIT",
+  "component": "nexus",
+  "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "owned_pid_birth_exit_confirmed": true,
+  "task_stopped_confirmed": true,
+  "force_used": false,
+  "task_state": 3,
+  "task_digest": "4b0e574fafc69f9bedfd25ee56fdfc012047dfd34697483713b3b38d76916d8a",
+  "drain_sha256": "296c8df2ced121b751dde597c6b6ee489613d21369f5e1d49063f9a4fcb721f9",
+  "drain_state": "DRAINED",
+  "generation": "6397df3a52b4780c6380f733f4ff5223",
+  "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "pid": 15244,
+  "birth_filetime": 134391461038622963,
+  "observed_at": 1794674760.763823,
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc",
+  "campaign_revision": 13,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13"
+}

@@ -1,0 +1,78 @@
+{
+  "status": "USER_APPROVED",
+  "proposal_revision": 13,
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13",
+  "policy": {
+    "revision": 13,
+    "carry_in_admissions": 8,
+    "carry_in_tokens": 111651,
+    "max_cumulative_admissions": 12,
+    "max_new_admissions": 4,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 120
+  },
+  "ancestry": {
+    "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+    "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+    "predecessor_faults": [
+      "DEADLINE120"
+    ],
+    "prior_ancestry": {
+      "closure_sha256": "849f63e4d4710588a10db379e63f2401a4fb2789db978addb06ecd22a23f2883",
+      "checkpoint_sha256": "5031daa866e98e35ea4172bac8f90e09db3bf6be6db0b68727a7fbf6e2d8e78c",
+      "predecessor_faults": [
+        "OBSERVATION_UNKNOWN",
+        "DEADLINE120"
+      ],
+      "prior_ancestry": {
+        "closure_sha256": "c3d3e5f5b5b8fbec2c86ea711350ba1a7de44022e568b1c6cfc4fe2e93ff6db0",
+        "checkpoint_sha256": "8edf98687a374e607a662f00a21cc05e6461e87e4fd8118bf6fc6ecb52948f3e",
+        "predecessor_faults": [
+          "CAMPAIGN_RUNNER_EXCEPTION"
+        ],
+        "prior_ancestry": {
+          "closure_sha256": "fd568cf79300b85fc9f9ad4944869dae7fa2bd54845a109e0e79915d610f8936",
+          "checkpoint_sha256": "02d025ef1d09d8158573f553f58813e96b810d992110007c05971ba1cc44e588",
+          "predecessor_faults": [
+            "OBSERVATION_UNKNOWN",
+            "STOP_UNCONFIRMED",
+            "CAMPAIGN_RUNNER_EXCEPTION"
+          ],
+          "prior_ancestry": {
+            "closure_sha256": "678dd44b316496fc847fe3b3686a233a2fd40d7afe89fd6e5d1d3132ca04f03d",
+            "checkpoint_sha256": "6e4ea14fe5a2e4317962ec329409b428c4845e0ed7627dd4c74879bb1904c361",
+            "predecessor_faults": [
+              "SETUP_CLI_RETURNED_WITHOUT_SETTLED_USAGE"
+            ],
+            "prior_ancestry": {
+              "closure_sha256": "8193dc80dba36296666223a1e29e4170ee233e319b46021037854b8f1dfbf67b",
+              "checkpoint_sha256": "78026c0b5c6c21524a7d3f41c1e3183c9ec685da313365b6faeaa2f4e0c3db9e",
+              "predecessor_faults": [
+                "CAMPAIGN_RUNNER_EXCEPTION"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "user_quote": "pode seguir e pode usar o claude se quiser testar com a conta autenticada atualmente com limite de 200k tokens do modelo sonnet",
+  "supporting_user_instructions": [
+    "conta já autenticada e limite de 200k tokens",
+    "pode exceder o limite em 500k tokens",
+    "sim pode executar",
+    "pode seguir",
+    "autorizo"
+  ],
+  "recorded_at_utc": "2026-11-14T16:07:14.958047+00:00",
+  "authorization_basis": "Technical binding of standing user authorization after concrete source and artifact review; the user did not supply or separately approve this proposal SHA.",
+  "budget_interpretation": "Codex total authorized200000+500000=700000. Preventive observation threshold500000 leaves200000 margin; four new reservations and120s work deadline remain. Claude optional separate200000 is unused.",
+  "scope": "Adopt983 installed payloads, configured profile and same homes after closed predecessor. No pip or local setup replay. One canonical review of grant; reuse available, issue at most one new60min/20action grant only for unique expired prior grant with used0/20 and identical scope/CAS. Four new work reservations,12cumulative. Own temporary services only; normal cleanup, no force, personal task mutation, logout/reboot or personal credential-file reading.",
+  "selected_provider": "Pinned Codex CLI; authenticated home read only by native client.",
+  "optional_claude_executed": false,
+  "optional_claude_limit_tokens": 200000,
+  "review_sha256": "9511f84d04ce6c48cd8d723c94345dcd7c22c29e7248d802c5b60cbaf9dc7460"
+}

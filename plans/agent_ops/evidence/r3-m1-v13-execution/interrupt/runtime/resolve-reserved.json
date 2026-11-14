@@ -1,0 +1,20 @@
+{
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc",
+  "campaign_revision": 13,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13",
+  "request": {
+    "agent_id": "m1v12-local",
+    "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+    "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+    "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+    "client_intent_id": "m1v13-cleanup-interrupt-01",
+    "intent": "turn.interrupt",
+    "target": {
+      "kind": "native_turn_id",
+      "expected_turn_id": "01a1dae3-7e69-7183-8eff-29aa5a951752"
+    }
+  },
+  "at": 1794674708.5554852
+}

@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "purpose": "one exact canonical turn.interrupt containment after original deadline; no new native work",
+  "helper_sha256": "9fa6a429279f71cfa78fbbde63659eb0627bd461e75bb935cf37f4677de21bb2",
+  "common": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\driver_common.py",
+    "sha256": "7dee1201558587217293917a0e0ec035d57b2de971ed23729f4d80bb38e813b5"
+  },
+  "observer": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\m1_v13_observation.py",
+    "sha256": "806516c556709821f574937b16f3a0e0e73dc610d64f8c9a427a4ed1a3968f27"
+  },
+  "authority": {
+    "proposal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\m1-codex-campaign-proposal-v13.json",
+    "expected_proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+    "approval_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\execution-authorization.json",
+    "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc"
+  },
+  "before_pins": {
+    "controller": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\private\\controller.json",
+      "sha256": "86eeda7af8851a9a39c377180a68a5e45d05f84ed349e102fac68a295be7c84c"
+    },
+    "product_work": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json",
+      "sha256": "2f55d526bc3d8dada835644a0a234aa6721ee781ea693f4862b7a96b827669ce"
+    },
+    "normal_stop_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\lifecycle-nexus-stop-result.json",
+      "sha256": "3e88837961e1f60e67f1fdca1ecf8ba007af84dc1fb9200362bb0fff64335449"
+    }
+  },
+  "bounds": {
+    "resolve_posts": 1,
+    "admit_posts": 1,
+    "model_admissions": 0,
+    "force": false,
+    "new_grants": 0
+  },
+  "qualification": {
+    "focal_tests": 5,
+    "failures": 0,
+    "installed_interpreter_isolated": true
+  }
+}

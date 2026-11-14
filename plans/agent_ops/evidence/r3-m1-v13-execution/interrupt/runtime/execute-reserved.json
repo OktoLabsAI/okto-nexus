@@ -1,0 +1,38 @@
+{
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc",
+  "campaign_revision": 13,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13",
+  "manifest_sha256": "26fa6a29f37aa16af3587993d4fe2742f7357e28aca6630515ba0adec91c9bd6",
+  "operation_before": {
+    "scope": {
+      "agent_id": "m1v12-local",
+      "authorization_revision": 2,
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "binding_revision": 1,
+      "configuration_revision": 2,
+      "credential_epoch": 1,
+      "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+      "session_owner_generation": 1,
+      "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+      "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314"
+    },
+    "operation_id": "op_92b7ca515e9efa6b38b48a5dce51d560",
+    "client_intent_id": "initial_331db940ec995f5bc4a6483ae14e2932",
+    "action": "turn.submit",
+    "intent_hash": "sha256:52e084edd21b3cef7ba89433f5d42066b7c0a1cbc18543074461f2bba73a5684",
+    "admission_state": "DISPATCHED",
+    "receipt_revision": 1,
+    "possible_effect": true,
+    "retry_safe": false,
+    "executor_stage": "SUBMITTED",
+    "error": null
+  },
+  "force_used": false,
+  "model_admissions": 0,
+  "maximum_resolve_posts": 1,
+  "maximum_operation_posts": 1
+}

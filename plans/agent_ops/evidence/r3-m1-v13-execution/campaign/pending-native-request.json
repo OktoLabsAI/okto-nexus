@@ -1,0 +1,58 @@
+{
+  "request_id": "m1v12-local-work-01",
+  "approval_id": "r4request_19c28d244f22a9dbc3da4f30501c711174285d72a0724b9f8a541dc0b5d8c5d8",
+  "review_revision": "1905ebec9f1fe4cf356060488130b68dafe1794b461213c238f13c0cfff2a354",
+  "approval_key": {
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+    "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+    "agent_id": "m1v12-local",
+    "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+    "session_id": "ses_8605c3af6fc1ce021f4a6375b94e1e69",
+    "session_owner_generation": 1,
+    "canonical_request_id": "r4request_19c28d244f22a9dbc3da4f30501c711174285d72a0724b9f8a541dc0b5d8c5d8",
+    "kind": "native_approval"
+  },
+  "display": {
+    "method": "item/commandExecution/requestApproval",
+    "params": {
+      "availableDecisions": [
+        "accept",
+        {
+          "acceptWithExecpolicyAmendment": {
+            "execpolicy_amendment": [
+              "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+              "-Command",
+              "rtk proxy powershell -NoProfile -Command \"$in='C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv'; $out='C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\local\\report.json'; $bytes=[System.IO.File]::ReadAllBytes($in); $sha=([System.Security.Cryptography.SHA256]::HashData($bytes)|ForEach-Object ToString x2)-join ''; $rows=([System.Text.Encoding]::UTF8.GetString($bytes)|ConvertFrom-Csv); [decimal]$total=0; foreach($row in $rows){foreach($p in $row.PSObject.Properties){[decimal]$n=0; if([decimal]::TryParse([string]$p.Value,[Globalization.NumberStyles]::Number,[Globalization.CultureInfo]::InvariantCulture,[ref]$n)){$total+=$n}}}; $report=[ordered]@{row_count=@($rows).Count;sum=$total;input_sha256=$sha}|ConvertTo-Json -Compress; [System.IO.File]::WriteAllText($out,$report,[System.Text.UTF8Encoding]::new($false))\""
+            ]
+          }
+        },
+        "cancel"
+      ],
+      "command": "\"C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe\" -Command 'rtk proxy powershell -NoProfile -Command \"$in='\"'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\m1-v12-bundle-bldo9qy7\\\\campaign\\\\local-project\\\\numbers.csv'; \"'$out='\"'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\m1-v12-bundle-bldo9qy7\\\\campaign\\\\deliverables\\\\local\\\\report.json'; \"'$bytes=[System.IO.File]::ReadAllBytes($in); $sha=([System.Security.Cryptography.SHA256]::HashData($bytes)|ForEach-Object ToString x2)-join '\"''; \"'$rows=([System.Text.Encoding]::UTF8.GetString($bytes)|ConvertFrom-Csv); [decimal]$total=0; foreach($row in $rows){foreach($p in $row.PSObject.Properties){[decimal]$n=0; if([decimal]::TryParse([string]$p.Value,[Globalization.NumberStyles]::Number,[Globalization.CultureInfo]::InvariantCulture,[ref]$n)){$total+=$n}}}; $report=[ordered]@{row_count=@($rows).Count;sum=$total;input_sha256=$sha}|ConvertTo-Json -Compress; [System.IO.File]::WriteAllText($out,$report,[System.Text.UTF8Encoding]::new($false))\"'",
+      "commandActions": [
+        {
+          "command": "rtk proxy powershell -NoProfile -Command \"$in='C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv'; $out='C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\local\\report.json'; $bytes=[System.IO.File]::ReadAllBytes($in); $sha=([System.Security.Cryptography.SHA256]::HashData($bytes)|ForEach-Object ToString x2)-join ''; $rows=([System.Text.Encoding]::UTF8.GetString($bytes)|ConvertFrom-Csv); [decimal]$total=0; foreach($row in $rows){foreach($p in $row.PSObject.Properties){[decimal]$n=0; if([decimal]::TryParse([string]$p.Value,[Globalization.NumberStyles]::Number,[Globalization.CultureInfo]::InvariantCulture,[ref]$n)){$total+=$n}}}; $report=[ordered]@{row_count=@($rows).Count;sum=$total;input_sha256=$sha}|ConvertTo-Json -Compress; [System.IO.File]::WriteAllText($out,$report,[System.Text.UTF8Encoding]::new($false))\"",
+          "type": "unknown"
+        }
+      ],
+      "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+      "environmentId": "local",
+      "itemId": "exec-b4b67263-2d02-4acc-a3ce-d9b5bc3ac83b",
+      "kind": "command",
+      "proposedExecpolicyAmendment": [
+        "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+        "-Command",
+        "rtk proxy powershell -NoProfile -Command \"$in='C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project\\numbers.csv'; $out='C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\local\\report.json'; $bytes=[System.IO.File]::ReadAllBytes($in); $sha=([System.Security.Cryptography.SHA256]::HashData($bytes)|ForEach-Object ToString x2)-join ''; $rows=([System.Text.Encoding]::UTF8.GetString($bytes)|ConvertFrom-Csv); [decimal]$total=0; foreach($row in $rows){foreach($p in $row.PSObject.Properties){[decimal]$n=0; if([decimal]::TryParse([string]$p.Value,[Globalization.NumberStyles]::Number,[Globalization.CultureInfo]::InvariantCulture,[ref]$n)){$total+=$n}}}; $report=[ordered]@{row_count=@($rows).Count;sum=$total;input_sha256=$sha}|ConvertTo-Json -Compress; [System.IO.File]::WriteAllText($out,$report,[System.Text.UTF8Encoding]::new($false))\""
+      ],
+      "reason": "Do you want to allow reading the specified CSV and writing the requested JSON report to the precreated disposable deliverables directory outside the project root?",
+      "startedAtMs": 1794673759758,
+      "threadId": "01a1dae3-6eea-7132-933c-13958a87e65e",
+      "turnId": "01a1dae3-7e69-7183-8eff-29aa5a951752"
+    },
+    "request_hash": "b2391a6a3641b1f51de0d58638a6104c1d72dd0f3265262268b95aa81093ce57",
+    "request_id": 0,
+    "schema_version": 1
+  },
+  "policy": "No decision until the actual command is reviewed against the exact source/output and approved successor constraints."
+}

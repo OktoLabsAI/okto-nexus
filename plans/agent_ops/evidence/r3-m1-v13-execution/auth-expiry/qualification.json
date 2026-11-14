@@ -1,0 +1,11 @@
+{
+  "status": "OFFLINE_PASS",
+  "tests": 17,
+  "manifest_sha256": "76deee00bf30ff90901d232b28dbde28b544033486f9455d7bb890503b6ff461",
+  "xml_sha256": "1603eacf20bd77d125b627b33db9c46540d50d124be10ca1cc22e2a2022fa77b",
+  "source_delta": "One-line pending guard in unchanged original execute copy plus explicit injected versioned-publication callback; no original source changed.",
+  "scope": "Synthetic guard/publication tests and installed TerminalAuthorization prior-review one-POST-only behavior; no real effects.",
+  "ruff": "extension.py/test_extension.py E9,F63,F7,F82 PASS; execute copy compiles with explicit injected validator symbol.",
+  "original_sources_unchanged": true,
+  "real_http_provider_service_grant_calls": 0
+}

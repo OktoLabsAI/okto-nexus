@@ -1,0 +1,60 @@
+{
+  "scope": "ONE_EXPLICIT_READONLY_REVIEW_AFTER_EXPIRY",
+  "proposal_sha256": "34740bded94e3ab04a5714cfdbcf5d48d83be8d0f3999cccfe99b5864947f2f2",
+  "approval_sha256": "dbf59e02ff58d498fac7a5fb49bf4e212a3ffac48efb06c5eddeb18cd98490fc",
+  "control_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+  "controller_modules": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\controller",
+  "extension": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-expired-review-extension-aaha0pna\\extension.py",
+    "sha256": "8d4a10f33452314a93341062fa892f40afdeb02daad8bb3e334cfb9b6654cb60"
+  },
+  "execute_copy": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-expired-review-extension-aaha0pna\\authorize_execute_copy.py",
+    "sha256": "5d3fd05fcc1d9be0aaba6db7c97d47be1bc4d86d31fd0846d3b7638268415e64"
+  },
+  "original_authorize": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\root-drivers\\authorize_local.py",
+    "sha256": "defedf1cc86089c9913fad64e177018a2df7764853fe85ec23c8d8b6a44928f1"
+  },
+  "publication": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\draft\\publication.py",
+    "sha256": "e1b604a40dda2742e8a9029cd523b37ea68ea4c39135df5b51792ae337264385"
+  },
+  "original_import_review_returned": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-authorize-import-supplement-6flddft5\\runtime-private\\authorize_local-review.returned.json",
+    "sha256": "99edd11cd9ad741b810b2b2fadb665a46a58eede18822c86a861ae8f0da595b6"
+  },
+  "old_public_review": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\public\\authorize-local-review.json",
+    "sha256": "82367e2cdc53011249f45ebf6abb1c9945d1a091b7f4d555a0e2ba50462bda3a"
+  },
+  "old_work_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\terminal\\work\\m1v12-local.json",
+    "sha256": "133d9791a2702500f06053dc8bdcfe3e45bc7356718054df64e52f9c5d0235fd"
+  },
+  "old_controller": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor13\\private\\controller.json",
+    "sha256": "bf3bb4aea19034cc0d5fe67963a63e494a5812295c9faabc2274eb294ab10fd0"
+  },
+  "old_expiry": "2026-11-14T16:22:02.541642Z",
+  "limits": {
+    "additional_readonly_review": 1,
+    "grant_issues_by_extension": 0,
+    "new_model_reservations": 0,
+    "unchanged_original_issue_maximum": 1,
+    "grant_minutes": 60,
+    "grant_actions": 20
+  },
+  "authority": "Root explicitly extends our finite review count after original available review had239.485913s instead of240; existing user authorization/budget unchanged. Wait for retained expiry then require new canonical EXPIRED0/20 result. No inference from local time authorizes issuance.",
+  "source_delta": "One line pendingNone guard becomes exact retained prior-review guard. execute otherwise original bytes. public_save is explicitly replaced only for versioned reservation/current-review publication and normal-stop record names. Installed CLI replaces its review checkpoint itself; extension never edits checkpoint.",
+  "cleanup": "Run extension verify-exits and original import supplement verify-exits before original presence/closure. Retain both sidecars and immutable first review.",
+  "test": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-expired-review-extension-aaha0pna\\test_extension.py",
+    "sha256": "4b47725db3b32f6e3caad5fe3d01473e98a872a348682a986ff80ef6f63b8f86"
+  },
+  "results": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v13-expired-review-extension-aaha0pna\\results.xml",
+    "sha256": "1603eacf20bd77d125b627b33db9c46540d50d124be10ca1cc22e2a2022fa77b"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "files": [
+    {
+      "path": "authorize_import_shim.py",
+      "sha256": "5a766aa65424d305a2019eb335998fbbfba8cecb62b3c0d101eab77d8795ccd7",
+      "bytes": 1966
+    },
+    {
+      "path": "supplement.py",
+      "sha256": "680db1f059b8696f57be7b73dbe6c114770ab714c2c3d536a986b9cd14b8588c",
+      "bytes": 8250
+    },
+    {
+      "path": "test_supplement.py",
+      "sha256": "f27abd5b40440162dc5e76a4bbadf3fc1d9196996afa4fb2f1a181ce9854123f",
+      "bytes": 6485
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "aa10c527348ccaf61ee144dbe4e185b240c43d2ac51aba3fea3a640680d80c8d",
+      "bytes": 3841
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "baa16d4d9f9bbee50a14cafeedfb0b4a67cf1ffaaf0f5b9410a080ab7d939ae2",
+      "bytes": 2159
+    },
+    {
+      "path": "README.md",
+      "sha256": "0295d91c04d1c13cc53482323cd95c61f5c2345acd9a137e429d345a552e713a",
+      "bytes": 2418
+    },
+    {
+      "path": "results-final.xml",
+      "sha256": "f74895119eea8b78bd89cbc029460dfb9fc672f46d0e7358344ec219da603f52",
+      "bytes": 2194
+    },
+    {
+      "path": "attempt-001-15pass2fail.xml",
+      "sha256": "6e807485b8073af6d0068bcdd1ce615f43353fd8c85e295899b9629cc13b57b8",
+      "bytes": 7745
+    },
+    {
+      "path": "manifest-attempt-001.json",
+      "sha256": "87e83c3f3c29522b502ccd43741261e27544e8c82a8ba76cb7381b854ef5581f",
+      "bytes": 3841
+    }
+  ],
+  "excluded": "runtime-private, actual failed stdout/stderr contents, personal/provider files"
+}
