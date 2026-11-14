@@ -1,0 +1,27 @@
+{
+  "status": "SOURCE_QUALIFICATION_RETAINED_NO_INSTALLED_OR_M1_ACCEPTANCE",
+  "source_commit": "46ba5c31d4461d2af4e8d2d1534bfe1201a87857",
+  "source_hashes_match_current_committed_files": true,
+  "initial_122_pass": "Intermediate default2 total-budget implementation; rejected in review. Antecedent only, not proof of final default semantics.",
+  "final_76_pass": "Final explicit-only retries/defaultNone; local inspection classification, CLI single dispatch/drain/lock, remote authorization uncertainty.",
+  "suite_overlap": true,
+  "distinct_case_total_claimed": false,
+  "tests_rerun_for_curation": false,
+  "runner_source_imports": "run_source.py/run_final_delta.py explicitly prepend repository src/tests/execution_r4 and disable pytest plugin autoload.",
+  "default_contract": "One canonical inspect; original two-second HTTP bound unchanged. No added total deadline without explicit flag.",
+  "explicit_contract": "work --readiness-timeout in (0,30] retries only positively classified transient local transport and matching owner identity before handler; no start or productive retry.",
+  "limits": [
+    "Scheduler/OS I/O is not preemptible; late readiness is rejected.",
+    "Remote behavior remains one existing inspect.",
+    "No installed wheel qualification or real M1 validation.",
+    "M1 inference600 and observation bounds unchanged."
+  ],
+  "status_changes": [],
+  "scenario_counts": {
+    "VERIFIED": 124,
+    "IN_PROGRESS": 6,
+    "NOT_RUN": 2
+  },
+  "all_retained_hashes_verified": true,
+  "high_specificity_secret_matches": 0
+}

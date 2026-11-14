@@ -13529,6 +13529,18 @@
       },
       "original_checkpoint_sha256": "70826adc11d41aba2ed84b56e8b673e0f8153d5a550c1d34ec7abfce515c5c37",
       "m1_acceptance": false
+    },
+    "r3_work_readiness_preflight_source": {
+      "status": "SOURCE_QUALIFICATION_RETAINED_NO_INSTALLED_OR_M1_ACCEPTANCE",
+      "source_commit": "46ba5c31d4461d2af4e8d2d1534bfe1201a87857",
+      "summary": "Nexus46ba5c31 preserves default single inspect and adds explicit bounded local preflight retries for classified transient transport with stable identity.122 initial passes belong to rejected intermediate default2 semantics;76 final delta passes overlap and are not summed. Source only; no installed qualification, live campaign, budget change or acceptance promotion.124/132 scenarios remain VERIFIED.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-work-readiness-preflight/review.json",
+        "plans/agent_ops/evidence/r3-work-readiness-preflight/qualification.json",
+        "plans/agent_ops/evidence/r3-work-readiness-preflight/final-delta.xml"
+      ],
+      "installed_qualified": false,
+      "m1_acceptance": false
     }
   },
   "history": [
@@ -15031,6 +15043,17 @@
         "plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/closure-companion.json",
         "plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/accounting-reconciliation.json",
         "plans/agent_ops/evidence/r3-m1-request12-package2-closure/execution/final-presence.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_work_readiness_preflight_source",
+      "status": "SOURCE_QUALIFICATION_RETAINED_NO_INSTALLED_OR_M1_ACCEPTANCE",
+      "summary": "Nexus46ba5c31 preserves default single inspect and adds explicit bounded local preflight retries for classified transient transport with stable identity.122 initial passes belong to rejected intermediate default2 semantics;76 final delta passes overlap and are not summed. Source only; no installed qualification, live campaign, budget change or acceptance promotion.124/132 scenarios remain VERIFIED.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-work-readiness-preflight/review.json",
+        "plans/agent_ops/evidence/r3-work-readiness-preflight/qualification.json",
+        "plans/agent_ops/evidence/r3-work-readiness-preflight/final-delta.xml"
       ]
     }
   ],

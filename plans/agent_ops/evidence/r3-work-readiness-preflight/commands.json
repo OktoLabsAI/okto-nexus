@@ -1,0 +1,16 @@
+{
+  "kind": "RETAINED_EXECUTION_COMMANDS_NOT_RERUN",
+  "python": "C:/Users/jpamb/AppData/Local/Temp/r3-svc-t15-package2-6ly1wurp/venv/Scripts/python.exe",
+  "initial": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/r3-svc-t15-package2-6ly1wurp/venv/Scripts/python.exe -I -B -X utf8 C:/Users/jpamb/AppData/Local/Temp/r3-work-preflight-9dz18eod/run_source.py",
+  "final": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/r3-svc-t15-package2-6ly1wurp/venv/Scripts/python.exe -I -B -X utf8 C:/Users/jpamb/AppData/Local/Temp/r3-work-preflight-9dz18eod/run_final_delta.py",
+  "ruff": "rtk proxy ruff check src/okto_nexus/adapters/inbound/cli/work.py src/okto_nexus/adapters/outbound/service_manager/inspection.py tests/test_work_readiness_preflight.py",
+  "diff_check": "rtk proxy git diff --check",
+  "pytest_selection": "Exact file sets retained in run_source.py and run_final_delta.py; no -k selector.",
+  "imports": "Scripts explicitly prepend repository src, tests and tests/execution_r4 to sys.path; PYTEST_DISABLE_PLUGIN_AUTOLOAD=1. This is source qualification using the existing isolated interpreter, not installed-product qualification.",
+  "environment_mutated": false,
+  "initial_elapsed_seconds": 646.18,
+  "initial_warnings": "One existing Starlette/httpx deprecation warning.",
+  "final_elapsed_seconds": 17.56,
+  "final_warnings": 0,
+  "suites_overlap": true
+}

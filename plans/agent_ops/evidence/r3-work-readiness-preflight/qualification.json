@@ -1,0 +1,60 @@
+{
+  "status": "SOURCE_QUALIFIED_NOT_INSTALLED_OR_ACTUAL",
+  "source": {
+    "src/okto_nexus/adapters/inbound/cli/work.py": {
+      "sha256": "b0fb94683b0352cb6371e16fb9d5d8b89828430da4eeeaefe9fb442f8af838a9",
+      "bytes": 23935
+    },
+    "src/okto_nexus/adapters/outbound/service_manager/inspection.py": {
+      "sha256": "5ce47c788fffb8055f23bf91900ad74b75ddae97aeef3f9758b555f061a7bec9",
+      "bytes": 7919
+    },
+    "tests/test_work_readiness_preflight.py": {
+      "sha256": "5da96911f88e5c3ec4c742add2a83dba8f5e93a81c4bb8f02af9bbe0a1f7b6e5",
+      "bytes": 9231
+    }
+  },
+  "initial_regression": {
+    "results": {
+      "tests": 122,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pins": "initial-pins.json",
+    "limitation": "Loaded intermediate default=2 total-budget implementation; rejected in review because original two seconds bound HTTP only. Preserved as antecedent, not final-default proof."
+  },
+  "final_delta": {
+    "results": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "scope": "Final explicit-only retry/defaultNone compatibility, inspection classification, CLI single-dispatch/drain/lock and remote authorization uncertainty."
+  },
+  "inherited_regressions": "Initial source suite also exercised terminal work, authorization and remote operator behavior; fixtures reverted byte-for-byte once final default restored the original single inspect() contract.",
+  "checks": {
+    "ruff": "PASS",
+    "git_diff_check": "PASS",
+    "root_review": "Initial diff reviewed; required defaultNone compatibility delta implemented.",
+    "peer_review": "v11_preparation read-only approved final defaultNone delta"
+  },
+  "contract": {
+    "default": "one canonical inspect(), existing HTTP timeout 2; no added total deadline",
+    "explicit_readiness_seconds": "0 < selection <= 30",
+    "per_http_seconds": 2,
+    "remote": "single existing inspect() verification; no local lifecycle effects",
+    "watch_chat_timeout": "unchanged",
+    "dispatch_retry": false,
+    "start": false,
+    "effect_before_ready": false,
+    "owner_hint_is_readiness_proof": false
+  },
+  "limitations": [
+    "No historical root-cause inference from SERVICE_UNREACHABLE.",
+    "Initial regression: 122 passed in 646.18 seconds; one existing Starlette/httpx deprecation warning. Final delta: 76 passed in 17.56 seconds. Suites overlap and are not summed as distinct cases.",
+    "Explicit monotonic budget rejects late readiness but cannot preempt Scheduler or OS I/O.",
+    "No installed wheel or actual campaign claim; no change to M1 600-second or monitor bounds."
+  ]
+}

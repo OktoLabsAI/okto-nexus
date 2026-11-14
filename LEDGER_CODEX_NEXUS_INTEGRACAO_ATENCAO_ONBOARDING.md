@@ -1922,3 +1922,21 @@ falhas e unsettled; o companion separado não o reescreve. Sem refund, request13
 faturamento final presumido ou promoção de M1; DX40 remoto continua pendente.
 Evidência: [companion normal](plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/closure-companion.json)
 e [contabilidade RO](plans/agent_ops/evidence/r3-m1-request12-package2-closure/normal-closure/accounting-reconciliation.json).
+
+## 2026-11-14 — Preflight de readiness: qualificação de fonte
+
+Nexus `46ba5c31` mantém uma única inspeção canônica por padrão (timeout HTTP
+original de 2s). A flag explícita `work --readiness-timeout` em (0,30] permite
+repetir somente observações locais com falha transitória classificada e identidade
+constante, antes do handler. Não inicia serviço nem repete dispatch produtivo;
+o comportamento remoto conserva sua inspeção existente. I/O do sistema não pode
+ser preemptado pelo loop, mas readiness que chega após o prazo não libera efeito.
+
+**122 PASS antecedentes** pertencem à versão intermediária com default de 2s como
+prazo total, rejeitada em revisão. **76 PASS finais** qualificam defaultNone e
+retry opt-in; as suítes se sobrepõem e não são somadas como casos distintos.
+Fontes intermediárias, relatórios e comandos de teste permanecem retidos.
+Não houve qualificação instalada, campanha real ou promoção de aceite M1.
+Limites de inferência e monitor M1 não mudaram. **124/132 VERIFIED, 6 IN_PROGRESS
+e 2 NOT_RUN**, com todos os status preservados.
+Evidência: [revisão](plans/agent_ops/evidence/r3-work-readiness-preflight/review.json).

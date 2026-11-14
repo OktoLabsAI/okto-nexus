@@ -1,0 +1,81 @@
+{
+  "source_allowlist_sha256": "e7e626220b261b77ee629bacf43a53c4221bc7984fca9f1f4aac40adc08a339c",
+  "files": [
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/final-delta.xml",
+      "sha256": "251ca14b77534a0523e27d1c14f3b8a8987ede08e0aa870b753905bf82aa92e7",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\final-delta.xml"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/final/src/okto_nexus/adapters/inbound/cli/work.py",
+      "sha256": "b0fb94683b0352cb6371e16fb9d5d8b89828430da4eeeaefe9fb442f8af838a9",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\final\\src\\okto_nexus\\adapters\\inbound\\cli\\work.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/final/src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+      "sha256": "5ce47c788fffb8055f23bf91900ad74b75ddae97aeef3f9758b555f061a7bec9",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\final\\src\\okto_nexus\\adapters\\outbound\\service_manager\\inspection.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/final/tests/test_work_readiness_preflight.py",
+      "sha256": "5da96911f88e5c3ec4c742add2a83dba8f5e93a81c4bb8f02af9bbe0a1f7b6e5",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\final\\tests\\test_work_readiness_preflight.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/initial-pins.json",
+      "sha256": "29eb7bd72658521cbdc3c69b82c55369e486a84a85293ed2b95f44cfe41a99fe",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\initial-pins.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/initial/src/okto_nexus/adapters/inbound/cli/work.py",
+      "sha256": "a5d0a57ceb7a35f4aeaef5daeec0524d1022e831992bc378c905cf2c1c29e523",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\initial\\src\\okto_nexus\\adapters\\inbound\\cli\\work.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/initial/src/okto_nexus/adapters/outbound/service_manager/inspection.py",
+      "sha256": "5ce47c788fffb8055f23bf91900ad74b75ddae97aeef3f9758b555f061a7bec9",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\initial\\src\\okto_nexus\\adapters\\outbound\\service_manager\\inspection.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/initial/tests/execution_r4/test_terminal_authorization.py",
+      "sha256": "46bbdb83f447c3e4b46ce2fea2794e57c98c3c5654c74f88df8905d38a024fe1",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\initial\\tests\\execution_r4\\test_terminal_authorization.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/initial/tests/execution_r4/test_terminal_work.py",
+      "sha256": "73c4954b1b88bd062ab1a32c93785bc6983c737d44e4590f96b9256d4044aba0",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\initial\\tests\\execution_r4\\test_terminal_work.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/initial/tests/test_work_readiness_preflight.py",
+      "sha256": "d98375becb210627bfc0b308af5c4c2dd3645ce126e7272bdf261a68dea4ad5f",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\initial\\tests\\test_work_readiness_preflight.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/qualification.json",
+      "sha256": "8a94369bc263df39dc0840c0e93e17388e757d1986c666e2fcc6a057ca3fa174",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\qualification.json"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/qualify.py",
+      "sha256": "1c03ba6f04241f4154e0ed2c2a041d3641dd4f1d3793361a73a682e2be4718cd",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\qualify.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/run_final_delta.py",
+      "sha256": "dfe3e193f592097f4774a79e5ac67e15943661c21c8ea4604f1ed119ff62e6f7",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\run_final_delta.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/run_source.py",
+      "sha256": "bd27140cb193aab20556a507d8665894a88e989c9bfd90c2db8fa22353629017",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\run_source.py"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-work-readiness-preflight/source.xml",
+      "sha256": "9cc174d839bf19334b56b98aae84eb1e2edb516e1d5278c6ec57032cfa1a89bc",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-work-preflight-9dz18eod\\source.xml"
+    }
+  ],
+  "original_bytes_preserved": true
+}
