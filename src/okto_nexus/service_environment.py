@@ -11,6 +11,10 @@ import subprocess
 import sys
 
 UPGRADE_PROTOCOL = 2
+_READ_CHUNK_BYTES = 64 * 1024
+_MAX_FILE_BYTES = 64 * 1024 * 1024
+_MAX_DISTRIBUTION_BYTES = 256 * 1024 * 1024
+_MAX_FILES = 10000
 
 
 class EnvironmentInspectionError(ValueError):
@@ -27,7 +31,7 @@ def _distribution(name, package):
     if direct and json.loads(direct).get('dir_info', {}).get('editable'):
         raise ValueError('Upgrade requires an installed wheel, not an editable checkout')
     paths = sorted(distribution.files or (), key=str)
-    if len(paths) > 10000 or not any(str(path).replace('\\', '/').startswith(package + '/') and str(path).endswith('.py') for path in paths):
+    if len(paths) > _MAX_FILES or not any(str(path).replace('\\', '/').startswith(package + '/') and str(path).endswith('.py') for path in paths):
         raise ValueError('Installed package payload could not be verified')
     digest, total = hashlib.sha256(), 0
     for item in paths:
@@ -35,12 +39,22 @@ def _distribution(name, package):
         if '__pycache__/' in name or name.endswith(('.pyc', '.pyo')):
             continue
         path = Path(distribution.locate_file(item))
+        file_digest, file_bytes = hashlib.sha256(), 0
         with path.open('rb') as stream:
-            blob = stream.read(64 * 1024 * 1024 + 1)
-        total += len(blob)
-        if len(blob) > 64 * 1024 * 1024 or total > 256 * 1024 * 1024:
-            raise ValueError('Installed package inspection exceeded its byte budget')
-        digest.update(name.encode('utf-8') + b'\0' + hashlib.sha256(blob).digest())
+            while True:
+                # Read one extra byte at either boundary to distinguish EOF
+                # from an oversized payload without allocating its full limit.
+                size = min(_READ_CHUNK_BYTES, _MAX_FILE_BYTES - file_bytes + 1,
+                    _MAX_DISTRIBUTION_BYTES - total + 1)
+                blob = stream.read(size)
+                if not blob:
+                    break
+                file_bytes += len(blob)
+                total += len(blob)
+                if file_bytes > _MAX_FILE_BYTES or total > _MAX_DISTRIBUTION_BYTES:
+                    raise ValueError('Installed package inspection exceeded its byte budget')
+                file_digest.update(blob)
+        digest.update(name.encode('utf-8') + b'\0' + file_digest.digest())
     return {'version': distribution.version, 'digest': digest.hexdigest()}
 
 
