@@ -1,0 +1,11 @@
+{
+  "format": "okto.m1.cleanup_supplement",
+  "revision": 1,
+  "campaign_revision": 12,
+  "runtime": {
+    "supplement_common.py": "5b658aa33aad858dff2aa94b7a1b4d6482d3e358cd73bc37cf87e67b7ffebe92",
+    "stop_once.py": "3d9bbc34af2b014e2251c647a59344b8b611d518a964d6b64cbae883348928c8",
+    "reconcile_final.py": "6abd27736e560b9054a28ed8ae6d4ca32cb05cc30abcb3ee4025c783297892eb"
+  },
+  "scope": "One explicit normal stop after proven prior zero effect, followed by root-reviewed physical cleanup and read-only neutral closure."
+}

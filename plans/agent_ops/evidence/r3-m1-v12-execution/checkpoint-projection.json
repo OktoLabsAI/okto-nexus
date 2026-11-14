@@ -1,0 +1,73 @@
+{
+  "controller_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+  "policy": {
+    "carry_in_admissions": 7,
+    "carry_in_tokens": 89473,
+    "deadline_seconds": 120,
+    "max_cumulative_admissions": 12,
+    "max_new_admissions": 5,
+    "operational_tolerance": 700000,
+    "preventive_cumulative_tokens": 200000,
+    "revision": 12
+  },
+  "faults": [
+    "DEADLINE120"
+  ],
+  "setup_monitor": {
+    "caught_up": true,
+    "close_stage": "SUBMITTED",
+    "cursor": 32,
+    "high_water": 22178,
+    "home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "home_identity": [
+      14764524303808498864,
+      10414574140830620
+    ],
+    "journal": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\connection-tests\\ed79098b86064d12bccaa8f4f8cb24a9\\journal.db",
+    "journal_identity": [
+      14764524303808498864,
+      9007199257334419
+    ],
+    "owned_slot_released": true,
+    "prior_journals": [],
+    "result_stage": "SUCCEEDED",
+    "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home\\connection-tests",
+    "started": true,
+    "terminal": true,
+    "thread": "01a1daa6-3fbc-7062-b7ff-96e04d5745ef",
+    "turn": "01a1daa6-5bc7-7271-a6f5-7bba369513c5",
+    "usage_seen": true
+  },
+  "stop_selected": {
+    "action": "stop_owner",
+    "reason": "DEADLINE120"
+  },
+  "settled": true,
+  "independent_observation": {
+    "budgets": {
+      "freshness_ms": 1000,
+      "initialization_ms": 250,
+      "maximum_previous_poll_ms": 298.76699997112155,
+      "poll_ms": 600,
+      "snapshot_ms": 250
+    },
+    "maximum_poll_start_interval_seconds": 0.5030746999545954,
+    "reader_initialization": {},
+    "source": "CORE_LOCAL_PROJECTION_NOT_SERVER_PUBLICATION",
+    "transport_failures": {
+      "discarded": 0,
+      "later": [],
+      "primary": null
+    },
+    "worker_in_flight": false
+  },
+  "profile": {
+    "state": "done",
+    "version_check_confirmed": true,
+    "sha256": "1e9ff97e70281703e042e4f1861d42c9bb0d1145a1efa5d3f60ce1b67776a7a2",
+    "contents_exported": false
+  },
+  "raw_checkpoint_exported": false,
+  "checkpoint_mutated": false,
+  "raw_profile_exported": false
+}

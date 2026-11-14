@@ -1,0 +1,29 @@
+{
+  "kind": "READ_ONLY_CAUSAL_REVIEW",
+  "original_cli_exit": 3,
+  "reported_state": "degraded",
+  "reason": "SERVICE_UNREACHABLE",
+  "output_sha256": "c8a64c9c92d64f9b53560575aabebff8a269ae733f0a2c73c2b3121d207183a1",
+  "output_hash_matches_original_lifecycle_receipt": true,
+  "shutdown_field_present": false,
+  "wait_timed_out_field_present": false,
+  "shutdown_outcome_field_present": false,
+  "source_branch": "Pinned application/service_lifecycle.py lines61-69 returns before adapter.request_stop at line74 for degraded/non-SUPERVISOR_PENDING inspection.",
+  "source_pins": "../supplement/source-pins.json",
+  "observed_control_before_supplement": {
+    "desired": "running",
+    "generation": null,
+    "launch_requested": false,
+    "sha256": "f8315c107381ed0e24b19427f0855329eaed4ecb95f2135ed21bd27c626f21c6"
+  },
+  "read_only_status_after_refusal": {
+    "state": "ready",
+    "pid": 35400,
+    "generation": "d8122008262b10e75ec4d1124dd91417",
+    "native_task_state": 4,
+    "native_task_active": true,
+    "task_digest": "427bf6ff7308e6d2a04962d367db2ee39c6fd7db45b9613a804350c1b05cd1bf"
+  },
+  "scope": "The failed original stop selected no shutdown effect. This did not itself authorize replay; root explicitly selected one supplemental normal stop, with fresh identity/control checks.",
+  "diagnosis_source": "Read-only tool chunks 660fb8,5fa5c9,c3cad2 in preparation conversation; no raw stdout retained here."
+}

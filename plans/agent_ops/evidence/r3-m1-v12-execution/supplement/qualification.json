@@ -1,0 +1,44 @@
+{
+  "status": "OFFLINE_QUALIFIED_AWAITING_ROOT_EXECUTION",
+  "tests": 31,
+  "passed": 31,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "duration_seconds": 7.76,
+  "prior_runs": [
+    {
+      "tests": 25,
+      "passed": 25,
+      "xml": "results-initial.xml",
+      "reason_for_next_run": "Root requested malformed-output receipt preservation."
+    },
+    {
+      "tests": 27,
+      "passed": 27,
+      "xml": "results-parse-fix.xml",
+      "reason_for_next_run": "Root requested positive directory/profile retention proof."
+    },
+    {
+      "tests": 29,
+      "passed": 29,
+      "xml": "results-retention-fix.xml",
+      "reason_for_next_run": "Isolated script entrypoint imports needed explicit own directory; added two help-only isolated process tests before live execution."
+    }
+  ],
+  "real_stop_executed": false,
+  "real_snapshot_executed": false,
+  "real_observe_executed": false,
+  "real_close_executed": false,
+  "provider_calls": 0,
+  "original_campaign_modified": false,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+  "options": [
+    "-I",
+    "-B",
+    "-X",
+    "utf8"
+  ],
+  "execution_manifest_sha256": "c8b6b5c91dd8e0ba9ce3e7e0e6727b3364633f5090bcd840e5c0b7fd624f796a",
+  "final_results_sha256": "6eb21a9e8d363c357f0eefeed8d962c57a359ce3bdb8b06aa523c7e602f479e2"
+}

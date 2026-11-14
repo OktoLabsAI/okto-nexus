@@ -12762,6 +12762,49 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v12-preparation/review.json"
       ]
+    },
+    "r3_m1_v12_execution": {
+      "date": "2026-11-14",
+      "status": "V12_CLOSED_CONFIGURED_SETUP_DEADLINE_RETAINED_NO_M1_ACCEPTANCE",
+      "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040",
+      "closure_sha256": "44efd863f34cd56d1b6c7f43ef9dddefa478bdb7a83759ee5d86c225664e79c8",
+      "final_presence_sha256": "dd99361c224ed61171a4dfc5658410f678fd1cb6e5a1b91cf23d84123ae7a2cd",
+      "proof_snapshot_sha256": "16317fd3e481f7e3b186d733ec6b43a238298be1cee772f12ef00493d2e93d83",
+      "checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+      "provider": "Codex CLI selected; Claude not used",
+      "setup_cli_exit": 0,
+      "setup_state": "configured",
+      "setup_profile_state": "done",
+      "setup_settled": true,
+      "setup_total_elapsed_seconds": 132.71365761756897,
+      "version_observation_delay_seconds_approx": 66.55,
+      "version_delay_provenance": "Root-reported review of setup-dispatch/version-observation timestamps; not independently reconstructed from retained profile/checkpoint, which do not expose that timestamp.",
+      "timing_scope": "132.714s total setup includes discovery/version observation and wrapper work. No inference of actual model execution duration.",
+      "new_observed_tokens": 22178,
+      "cumulative_minimum_observed_tokens": 111651,
+      "new_reservations": 1,
+      "cumulative_reservations": 8,
+      "unsettled_requests": 0,
+      "billing_final": false,
+      "faults_preserved": [
+        "DEADLINE120"
+      ],
+      "packages_installed_verified": 983,
+      "original_normal_stop": "CLI3/degraded SERVICE_UNREACHABLE; pinned code and control evidence prove return before shutdown effect.",
+      "supplemental_normal_stop": "Separately authorized once-only normal selection; CLI0/DRAINED. No force, restart or resubmission of the original wrapper reservation.",
+      "cleanup": "Retained PID/birth/generation handle proved physical exit, original cleanup/uninstall succeeded, both exact tasks/owners absent and port available. Connector never installed/selected.",
+      "configured_profile_retained": true,
+      "original_final_presence_passed": false,
+      "acceptance_promoted": false,
+      "limits": [
+        "No useful-work, native decision, continuation or remote lane acceptance.",
+        "Configured setup does not satisfy complete M1 or authorize another productive run.",
+        "Minimum observed tokens are not final billing. DEADLINE120 and failed original stop remain.",
+        "Any future handoff must preserve the canonical configured profile and checkpoint; setup was not repeated."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v12-execution/review.json"
+      ]
     }
   },
   "history": [
@@ -14029,6 +14072,15 @@
       "summary": "Reviewed corrected discovery, strict local-only cleanup and actual Connector absence representation. Closed-v11 ancestry and all7 reservations retained;5 nominal new admissions imply internal cap12, with original token budget unchanged. No actual acceptance promoted.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v12-preparation/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "V12 configured local setup and reconciled normal cleanup",
+      "status": "V12_CLOSED_CONFIGURED_SETUP_DEADLINE_RETAINED_NO_M1_ACCEPTANCE",
+      "summary": "Setup CLI 0/configured and settled, 22178 new observed tokens, 111651 cumulative and 8 reservations. DEADLINE120 retained. Original stop refused before effect; separately selected normal stop and physical cleanup/uninstall completed. No useful-work/remote/M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v12-execution/review.json"
       ]
     }
   ]

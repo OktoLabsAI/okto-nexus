@@ -1402,3 +1402,33 @@ Claude permanece opcional, não selecionado, com teto próprio de 200 mil tokens
 Qualificação offline e preflight não promovem nenhum aceite real M1.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v12-preparation/review.json`.
+
+## 2026-11-14 — execução v12: setup configurado, prazo excedido e cleanup reconciliado
+
+O setup local terminou com CLI 0 e estado configured; o perfil canônico ficou
+done e a solicitação foi assentada. Foram observados 22.178 tokens novos,
+111.651 cumulativos e oito reservas cumulativas. DEADLINE120 permanece no
+checkpoint. Os 132,714 s medem todo o setup, incluindo descoberta e trabalho do
+wrapper. O intervalo aproximado de 66,55 s até a observação da versão foi
+reportado na revisão do root; não se atribui essa duração ao modelo.
+
+A parada normal original retornou CLI 3/SERVICE_UNREACHABLE antes de alterar
+desired ou enviar o pedido de shutdown, conforme fonte fixada e controle
+observado. Uma seleção normal suplementar, exclusiva e explicitamente
+autorizada, retornou CLI 0/DRAINED. A tentativa prévia com manifest intermediário
+foi recusada antes de reserva ou efeito e permanece registrada como relato do
+tool, sem recibo retroativo. O handle retido confirmou a saída física do mesmo
+PID/birth/generation; cleanup e uninstall originais concluíram sem force.
+
+Connector nunca foi instalado ou selecionado. A reconciliação suplementar
+confirmou ausência dos dois owners/tarefas e disponibilidade instantânea da
+porta. O helper original para setup falho não foi apresentado como aprovado:
+esta execução tinha setup configurado. O perfil, checkpoint, dados e falha
+DEADLINE120 permanecem para um possível handoff explicitamente delimitado,
+sem repetir setup. Claude não foi usado.
+
+Não houve promoção de aceite M1, trabalho útil, decisão nativa, continuação ou
+rota remota. Tokens observados não representam cobrança final. Os estados de
+tasks, cenários, invariantes, critérios e milestones permanecem iguais.
+
+Evidência: `plans/agent_ops/evidence/r3-m1-v12-execution/review.json`.

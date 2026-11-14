@@ -1,0 +1,98 @@
+{
+  "observed_at": 1794669445.5309381,
+  "read_only": true,
+  "task_name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "home_files": [
+    "logs\\service.jsonl",
+    "nexus.db",
+    "nexus.db-shm",
+    "nexus.db-wal",
+    "nexus.db.launch.guard",
+    "nexus.db.serve.guard",
+    "nexus.db.service-installation.json",
+    "nexus.serve.guard",
+    "nexus.serve.lock",
+    "operator-auth.db",
+    "service-context.json",
+    "service-control.json",
+    "service-installation.json",
+    "service-launch.guard",
+    "service-run.json"
+  ],
+  "source_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv",
+  "installation": {
+    "observe_ok": true,
+    "state": "installed",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "context_digest": "ccc65536e2672dbeada0b8130677977c4a53c14ffa3941322bfd25a96af714f4",
+    "native_digest": "427bf6ff7308e6d2a04962d367db2ee39c6fd7db45b9613a804350c1b05cd1bf"
+  },
+  "task": {
+    "exists": true,
+    "state": 4,
+    "enabled": true,
+    "active": true,
+    "last_result": 267009,
+    "last_result_hex": "0x41301",
+    "digest": "427bf6ff7308e6d2a04962d367db2ee39c6fd7db45b9613a804350c1b05cd1bf",
+    "restart_interval": "PT1M",
+    "restart_count": "3",
+    "multiple_instances_policy": "IgnoreNew",
+    "action_command": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\pythonw.exe",
+    "action_arguments_sha256": "1d50ab414ce8736b33566d43f3b1a4dcc089401eddcff904a2735f795ce6bf63",
+    "working_directory": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "last_run_time": "2026-11-14 12:11:19+00:00",
+    "next_run_time": "1899-12-30 00:00:00+00:00",
+    "missed_runs": 0
+  },
+  "context": {
+    "valid": true,
+    "digest": "ccc65536e2672dbeada0b8130677977c4a53c14ffa3941322bfd25a96af714f4",
+    "executable_matches_proposal": true,
+    "executable_exists": true,
+    "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "cwd_exists": true,
+    "context_keys": [
+      "arguments",
+      "component",
+      "cwd",
+      "environment",
+      "environment_prefix",
+      "executable",
+      "revision",
+      "settings_pinned_fields"
+    ],
+    "environment_keys": [
+      "APPDATA",
+      "HOMEDRIVE",
+      "HOMEPATH",
+      "LOCALAPPDATA",
+      "OKTO_NEXUS_NO_BANNER",
+      "PATH",
+      "PROGRAMDATA",
+      "PYTHONUNBUFFERED",
+      "SystemRoot",
+      "TEMP",
+      "TMP",
+      "USERPROFILE",
+      "WINDIR"
+    ]
+  },
+  "control": {
+    "revision": 1,
+    "desired": "running",
+    "launch_requested": false,
+    "instance_id": null
+  },
+  "canonical": {
+    "state": "degraded",
+    "reason": "SERVICE_UNREACHABLE",
+    "pid": null,
+    "generation": null,
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "supervisor": null,
+    "ready_for_queries": false
+  },
+  "file_metadata_unchanged": true,
+  "controller_absent": true
+}

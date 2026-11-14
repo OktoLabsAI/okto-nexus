@@ -1,0 +1,13 @@
+{
+  "kind": "ROOT_TOOL_EVENT_TRANSCRIPTION_NOT_EXECUTION_RECEIPT",
+  "source": "Root conversation: one attempted stop_once invocation and subsequent reservation existence check.",
+  "used_manifest_sha256": "119b855f94ea5530f66bc2be767bc6386679fd7cea7539fa179e3cb8e559adfd",
+  "rtk_reported_exit_code": 1,
+  "reported_code": "SUPPLEMENT_SOURCE_CHANGED",
+  "refused_before_runtime_and_reservation": true,
+  "subsequent_reservation_exists": false,
+  "cause": "Manifest was intermediate while the isolated-entrypoint import correction was being finalized. Source guard refused.",
+  "later_final_manifest_sha256": "c8b6b5c91dd8e0ba9ce3e7e0e6727b3364633f5090bcd840e5c0b7fd624f796a",
+  "not_a_retroactive_receipt": true,
+  "provider_call_or_stop_effect_from_refused_attempt": false
+}

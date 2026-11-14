@@ -1,0 +1,29 @@
+{
+  "status": "CURATION_VALIDATED_NO_ACCEPTANCE_PROMOTION",
+  "retained_payloads_before_validation": 70,
+  "all_source_hashes_and_sizes_matched": true,
+  "exact_manifest_inventory": true,
+  "ledger_checker": {
+    "tasks": 59,
+    "scenarios": 132,
+    "invariants": 28,
+    "completion_criteria": 17,
+    "literal_scope_valid": true
+  },
+  "acceptance_sections_unchanged_against_HEAD": [
+    "tasks",
+    "scenarios",
+    "invariants",
+    "completion_criteria",
+    "milestones"
+  ],
+  "prior_campaigns_and_history_unchanged": true,
+  "secret_pattern_scan_hits": 0,
+  "sensitive_json_value_hits": 0,
+  "raw_stdout_exported": false,
+  "raw_database_exported": false,
+  "raw_profile_exported": false,
+  "raw_checkpoint_exported": false,
+  "diff_check_passed": true,
+  "scope": "Explicit public curation and ledger history only; not product or M1 acceptance."
+}

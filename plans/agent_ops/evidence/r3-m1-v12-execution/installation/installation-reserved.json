@@ -1,0 +1,19 @@
+{
+  "format": "okto.base06.installation-reservation",
+  "revision": 1,
+  "status": "RESERVED_INCOMPLETE",
+  "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040",
+  "approval_sha256": "9a8824d2de05aa4202672912ac7f752a9f95d3b51726288d6fcb7a0b45130cc9",
+  "proposal_revision": 12,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign",
+  "artifact_pins": {
+    "script_sha256": "3c60f20d66e0226f7a8317dad8d76ab2d66d274f6c8b9d26bcd7fb839f93f5fd",
+    "requirements_sha256": "3485a853530891edfd52a32ce6db5b3c4005de9bacf2b4fb0ee811cefcc8f982",
+    "dependency_manifest_sha256": "3bc10aca9e1022533479f697feff6f160384c0855205e39bc7abb2c18eac02a1"
+  },
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv",
+  "reserved_at_utc": "2026-11-14T15:09:01.163725+00:00",
+  "possible_effect": true,
+  "retry_allowed": false
+}

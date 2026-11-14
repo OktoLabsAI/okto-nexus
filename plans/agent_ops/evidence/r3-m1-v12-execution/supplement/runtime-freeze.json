@@ -1,0 +1,70 @@
+{
+  "status": "FROZEN_OFFLINE_QUALIFIED",
+  "files": [
+    {
+      "path": "supplement_common.py",
+      "sha256": "5b658aa33aad858dff2aa94b7a1b4d6482d3e358cd73bc37cf87e67b7ffebe92",
+      "bytes": 4495
+    },
+    {
+      "path": "stop_once.py",
+      "sha256": "3d9bbc34af2b014e2251c647a59344b8b611d518a964d6b64cbae883348928c8",
+      "bytes": 5913
+    },
+    {
+      "path": "reconcile_final.py",
+      "sha256": "6abd27736e560b9054a28ed8ae6d4ca32cb05cc30abcb3ee4025c783297892eb",
+      "bytes": 11183
+    },
+    {
+      "path": "test_supplement.py",
+      "sha256": "1e9c64ea3d20321be249d0b199c72325ab51a8c90612c28e2de99e35a62e73a1",
+      "bytes": 15597
+    },
+    {
+      "path": "qualify.py",
+      "sha256": "53dcee8dfb0d8c1df55238445099132b9d4d835aefbd332b87c6171d877ab43f",
+      "bytes": 385
+    },
+    {
+      "path": "README.md",
+      "sha256": "a8bff2f03ddead3631ff78b7899285ca4116ba0eaa295db1480276dcbd50be69",
+      "bytes": 4697
+    },
+    {
+      "path": "results.xml",
+      "sha256": "6eb21a9e8d363c357f0eefeed8d962c57a359ce3bdb8b06aa523c7e602f479e2",
+      "bytes": 3587
+    },
+    {
+      "path": "results-initial.xml",
+      "sha256": "933cc3ca4340b194f319cdfbe599809821f31eb57215f5e098d3bf41bd37c1eb",
+      "bytes": 2898
+    },
+    {
+      "path": "results-parse-fix.xml",
+      "sha256": "4fd9616fbc91e497e3e69ad4124265a9ea20593e8bc99d272f7b1acc4e641ef8",
+      "bytes": 3152
+    },
+    {
+      "path": "results-retention-fix.xml",
+      "sha256": "eb196209503fef05ea496744c1c301458f9f1b94a89639592bd8021f0959a51c",
+      "bytes": 3343
+    },
+    {
+      "path": "source-pins.json",
+      "sha256": "75280ded3c2cab1b936d91bcf01c721f9fd1b2e4f505e0f70273bf078ba3fc5d",
+      "bytes": 3639
+    },
+    {
+      "path": "execution-manifest.json",
+      "sha256": "c8b6b5c91dd8e0ba9ce3e7e0e6727b3364633f5090bcd840e5c0b7fd624f796a",
+      "bytes": 542
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "159f7c95b8ce1be1e88b348556225921dcc204210b242bcaedd17a6699846317",
+      "bytes": 1415
+    }
+  ]
+}

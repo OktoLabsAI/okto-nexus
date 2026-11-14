@@ -1,0 +1,23 @@
+{
+  "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040",
+  "approval_sha256": "9a8824d2de05aa4202672912ac7f752a9f95d3b51726288d6fcb7a0b45130cc9",
+  "campaign_revision": 12,
+  "status": "SUPPLEMENTAL_NORMAL_STOP_CLI_RETURNED",
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "force_used": false,
+  "reservation_sha256": "4c1b3f6ac1150a8a030c6b95d3a488dc9e6fc466d01ad71f92801a22e55e3820",
+  "stdout_sha256": "c77d86135b9b4c30252ed87be21d58a5ac6ddaeeba3fa3b87af29ee84a9398b7",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "reported": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "pid": null,
+    "generation": null,
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "shutdown_outcome": "drained"
+  },
+  "output_parse_error": null,
+  "physical_owner_exit_inferred": false,
+  "completed_at": 1794670978.6132832
+}

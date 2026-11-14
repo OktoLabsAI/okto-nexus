@@ -1,0 +1,55 @@
+{
+  "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040",
+  "approval_sha256": "9a8824d2de05aa4202672912ac7f752a9f95d3b51726288d6fcb7a0b45130cc9",
+  "original_drivers": {
+    "controller_token_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\controller\\token_collector.py",
+      "sha256": "498cde0a6cc114c45998bc7c7292264b808277e15ab715c24d676b8887bc55f6"
+    },
+    "root_driver_common": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\driver_common.py",
+      "sha256": "4f686889002bb24e8119aba0ed15cc06599909823ff2e10a3537fc55d1b7626c"
+    },
+    "root_driver_invoke": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\invoke.py",
+      "sha256": "430a19fac382751406314e4001231148ee69792491c4f633d28d9217a26926ad"
+    },
+    "root_driver_prepare_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\prepare_observation.py",
+      "sha256": "47baab56262aab511a9fd2401efc7561359beb3d83de1daf546a6698e50b7516"
+    },
+    "root_driver_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\m1_v12_observation.py",
+      "sha256": "68b462f85dcb1b1a9ffd014ebfa74979e80e5cfa1aafbffd1ecc728a1da04cc0"
+    },
+    "root_driver_confirm_cleanup": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\m1_v12_confirm_cleanup.py",
+      "sha256": "e2d780069fc7f539b22b246ad64289845917573f82c40a20e99cb11224b1b6c2"
+    },
+    "root_driver_confirm_final_presence": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\confirm_final_presence.py",
+      "sha256": "3f78e578a1b55a408a7f3930f225e1952ee15ed53a5c3839d2ab561f65eae174"
+    },
+    "root_driver_close_campaign": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\close_campaign.py",
+      "sha256": "2565971cc85c38b28cfcb89ce2ed1631956624ef902969aebf0854203993c5e1"
+    },
+    "root_driver_operator_bootstrap": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\root-drivers\\operator_bootstrap.py",
+      "sha256": "b64ed6270ffcb5cb27147d2ad4fa7b8cad702ba66fe2a0fcb4f74487f7e8861d"
+    }
+  },
+  "zero_effect_sources": {
+    "application/service_lifecycle.py": "a4170283a120733f8e8f1cf43c3f04698ae6e9063068594e65d53da2bb769dfb",
+    "adapters/outbound/service_manager/local.py": "8d388f54ca56da886a7b2675316b5aef4b854a87e0219f696aea4b69a44b2989",
+    "adapters/outbound/service_manager/inspection.py": "365bb1671c2e2eb2802345ebefb41afbb9879bd0aa203ae1f1e236c0d69fd123",
+    "adapters/outbound/service_manager/installation.py": "4a3df9d200b1e4875c48aa4d9e874f93477c7f458f36f2c6b81a8950a451dcaa",
+    "adapters/inbound/cli/service.py": "a89e234ef77df029c86c67e917583c78ef4ee70d5db691b6be7e2e66881a0496"
+  },
+  "retained_checkpoint_sha256": "89e40312cef86b38fc089857ba9dc5bc85ea29796f7003e8b96147dc12e13951",
+  "old_stop_output_sha256": "c8a64c9c92d64f9b53560575aabebff8a269ae733f0a2c73c2b3121d207183a1",
+  "original_control_sha256": "f8315c107381ed0e24b19427f0855329eaed4ecb95f2135ed21bd27c626f21c6",
+  "profile_at_preparation_sha256": "1e9ff97e70281703e042e4f1861d42c9bb0d1145a1efa5d3f60ce1b67776a7a2",
+  "future_cleanup_snapshot": null,
+  "snapshot_note": "Not yet created. Root must compute actual completed cleanup proof snapshot after stop and uninstall; null is not execution authority."
+}
