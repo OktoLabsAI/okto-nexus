@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="35.331" timestamp="2026-11-14T13:50:22.884891-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_terminal_work" name="test_cli_drain_observes_and_recovers_one_containment_operation[interrupt]" time="28.841"><failure message="AssertionError: {'state': 'DRAINING_PENDING', 'deadline_monotonic': 303535.2987257, 'phase': 'waiting', 'force_requested': False, ...}&#10;assert 303552.3242568 &lt; 303552.3102367&#10; +  where 303552.3242568 = &lt;built-in function monotonic&gt;()&#10; +    where &lt;built-in function monotonic&gt; = time.monotonic">tests\execution_r4\test_terminal_work.py:80: in test_cli_drain_observes_and_recovers_one_containment_operation
+    assert time.monotonic() &lt; deadline, t.app.state.runtime_shutdown.status()
+E   AssertionError: {'state': 'DRAINING_PENDING', 'deadline_monotonic': 303535.2987257, 'phase': 'waiting', 'force_requested': False, ...}
+E   assert 303552.3242568 &lt; 303552.3102367
+E    +  where 303552.3242568 = &lt;built-in function monotonic&gt;()
+E    +    where &lt;built-in function monotonic&gt; = time.monotonic</failure></testcase></testsuite></testsuites>

@@ -1456,7 +1456,9 @@
         "tests/test_service_inspection.py",
         "tests/test_service_process.py",
         "tests/test_service_start.py",
-        "tests/test_user_service_installation.py"
+        "tests/test_user_service_installation.py",
+        "src/okto_nexus/adapters/inbound/cli/work.py",
+        "tests/execution_r4/test_terminal_work.py"
       ],
       "tests": [
         "../okto-nexus-connector-core/docs/evidence/cooperative-drain/milestone.md",
@@ -1478,7 +1480,8 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
         "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
-        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-cli-drain-controls/qualification.json"
       ],
       "result": "Drain/força explícita/autoridade atual/timeout pendente e retenção de recursos estão comprovados. O novo T22 prova filho real e parada cooperativa, não logout/shutdown externo.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
@@ -1497,7 +1500,8 @@
         "explicit_generation_force": "VERIFIED",
         "admitted_authority_continuation": "VERIFIED",
         "finite_empty_windows_user_task_lifecycle": "VERIFIED",
-        "released_session_drain_installed_contract": "VERIFIED"
+        "released_session_drain_installed_contract": "VERIFIED",
+        "cli_admitted_work_controls_during_drain": "SOURCE_AND_INSTALLED_QUALIFIED"
       },
       "reconciliation": {
         "current_implementation": "Cooperative drain delivered in Core and both hosts. 217 Core,194 Connector and247 Nexus installed unique contract cases pass; Nexus also passes45 isolation/recovery cases. New productive work is fenced, admitted authority/results/ACKs continue, timeout stays pending, explicit force checks current generation and expired drain, and unknown resources retain ownership. Real external shutdown/service/provider campaigns remain open.",
@@ -1509,7 +1513,7 @@
       "remaining_evidence": "Qualificar a cláusula de encerramento externo da linha327 no contexto de gerenciador escolhido, com persistência/estado incerto e reconciliação honestos. O alcance real SVC-T21 permanece aberto.",
       "contract_reconciliation": {
         "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
-        "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+        "product_gap": "CLI stopping-state gate gap found during v13 cleanup was corrected by 1edfd8ac. Source16 and installed16 focused cases qualify observation/authorized decisions/containment with fail-closed productive admission; external shutdown remains pending.",
         "previous_overbroad_limit": "Não descrever force como ausente. Não promover encerramento externo usando T22 ou signal.raise_signal no processo controlado."
       }
     },
@@ -7267,7 +7271,8 @@
         "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
-        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-cli-drain-controls/qualification.json"
       ],
       "remaining": "Actual external logout/shutdown bounded persistence remains unqualified.",
       "remaining_kind": "real_external_shutdown",
@@ -12966,6 +12971,18 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v13-execution/review.json"
       ]
+    },
+    "r3_cli_drain_controls": {
+      "date": "2026-11-14",
+      "status": "SOURCE_AND_INSTALLED_SCOPED_PASS_NO_NEW_SCENARIO_ACCEPTANCE",
+      "commit": "1edfd8acc21ae4fb61303625b1561b4baa0d348d",
+      "source_selected_passes": 16,
+      "installed_selected_passes": 16,
+      "real_provider_turns": 0,
+      "M1_changed": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-cli-drain-controls/qualification.json"
+      ]
     }
   },
   "history": [
@@ -14287,6 +14304,15 @@
       "summary": "134199 cumulative observed tokens,9 reservations; late native decision not submitted. Canonical interrupt cancelled existing turn, normal physical cleanup completed. Separate settled checkpoint preserves DEADLINE120 and WORK_TERMINAL_FAILED. No M1 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v13-execution/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "CLI observation and containment during cooperative drain",
+      "status": "SOURCE_AND_INSTALLED_SCOPED_PASS",
+      "summary": "Source16/installed16 qualify CLI controls while query-ready owner is stopping, without productive admission, new grant, restart or force. Retained stale-Core and fixture-expectation failures. Existing SVC/AC statuses unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-cli-drain-controls/qualification.json"
       ]
     }
   ]

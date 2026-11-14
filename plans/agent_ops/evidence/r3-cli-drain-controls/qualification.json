@@ -1,0 +1,85 @@
+{
+  "format": "r3-cli-drain-controls-qualification-v1",
+  "date": "2026-11-14",
+  "status": "SOURCE_AND_INSTALLED_SCOPED_PASS",
+  "commit": "1edfd8acc21ae4fb61303625b1561b4baa0d348d",
+  "branch": "feature/v0.3.3",
+  "version": "0.3.3",
+  "source_sha256": {
+    "src/okto_nexus/adapters/inbound/cli/work.py": "4b6512b4062f09f14ef833e68fab23ddc155b854f69472b46b63b5bbc01354ad",
+    "tests/execution_r4/test_terminal_work.py": "670d73037de3c963721329c246a63eafd235b18e2d422a04a0eb62a6f3cb2ea3"
+  },
+  "wheel_sha256": "f8bd429121c3ee0bb640459961ce2a4d072ba1fcfa1846af60c63e23f5195362",
+  "core_wheel_sha256": "a05e4255254f9e96241890db1ac448fd228f4bb6868a112753de8cd667989325",
+  "source_snapshot_and_installed_equal": true,
+  "source_final_selected": {
+    "passed": 16,
+    "failed": 0,
+    "xml": "source-focused-final.xml"
+  },
+  "installed_final_selected": {
+    "passed": 16,
+    "failed": 0,
+    "xml": "installed.xml"
+  },
+  "antecedents": [
+    {
+      "xml": "source-initial.xml",
+      "passed": 12,
+      "failed": 2,
+      "cause": "Fixture incorrectly expected watch timeout exit0; existing contract is exit3 while still awaiting completion."
+    },
+    {
+      "xml": "source-focal.xml",
+      "passed": 12,
+      "failed": 2,
+      "cause": "Nexus repository venv loaded stale installed Core without drain.py; retained drain correctly reported DRAIN_PROTOCOL_UNAVAILABLE."
+    },
+    {
+      "xml": "source-drain-diagnostic.xml",
+      "passed": 0,
+      "failed": 1,
+      "cause": "Read-only diagnostic of the stale-Core failure; pytest initially truncated resource detail."
+    },
+    {
+      "xml": "source-drain-resources.xml",
+      "passed": 0,
+      "failed": 1,
+      "cause": "Expanded diagnostic confirms DRAIN_PROTOCOL_UNAVAILABLE, not a CLI regression."
+    },
+    {
+      "xml": "source-final.xml",
+      "passed": 41,
+      "failed": 1,
+      "cause": "With current Core, fake close had no terminal turn event; drain retained JOURNAL_OPERATION_PENDING/SESSION_RECONCILIATION_PENDING. Fixture now explicitly asserts DRAINING_PENDING and unresolved original turn rather than inventing completion."
+    }
+  ],
+  "commands": {
+    "source_focused_final": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -m pytest tests/execution_r4/test_terminal_work.py -k cli_drain -q --tb=short --junitxml=C:/Users/jpamb/AppData/Local/Temp/cli-drain-qualification-uh6qf3g9/source-focused-final.xml",
+    "source_related_antecedent": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -m pytest tests/execution_r4/test_terminal_work.py tests/execution_r4/test_service_cooperative_drain.py tests/execution_r4/test_shutdown_admission.py -q --tb=short --junitxml=C:/Users/jpamb/AppData/Local/Temp/cli-drain-qualification-uh6qf3g9/source-final.xml",
+    "installed_final": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -I -B C:/Users/jpamb/AppData/Local/Temp/cli-drain-qualification-uh6qf3g9/installed_runner.py",
+    "build": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -m pip wheel --no-index --no-deps --no-build-isolation --wheel-dir C:/Users/jpamb/AppData/Local/Temp/cli-drain-qualification-uh6qf3g9/wheels C:/Users/jpamb/AppData/Local/Temp/cli-drain-qualification-uh6qf3g9/source-snapshot",
+    "install": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -m pip install --no-index --no-deps --target C:/Users/jpamb/AppData/Local/Temp/cli-drain-qualification-uh6qf3g9/installed-product C:/Users/jpamb/AppData/Local/Temp/cli-drain-qualification-uh6qf3g9/wheels/okto_nexus-0.3.3-py3-none-any.whl",
+    "ruff": "rtk proxy ruff check --select E9,F63,F7,F82 src/okto_nexus/adapters/inbound/cli/work.py tests/execution_r4/test_terminal_work.py",
+    "diff": "rtk git diff --check"
+  },
+  "runner_provenance": {
+    "source": "Current Nexus checkout selected by pyproject pytest pythonpath=src; CoreV2 installed in separate DX-T34 qualification venv. Repository venv is not the final runner.",
+    "installed": "Python -I -B; explicit fresh pip --target wheel installation precedes dependency venv on sys.path. Copied Python test fixtures in own Temp; no product source checkout path, PYTHONPATH absent. Imports asserted before pytest.",
+    "early_ruff_attempt": "python -m ruff in dependency venv refused (module absent); global ruff command then passed. No dependency installed for this check."
+  },
+  "coverage": [
+    "Inspected stopping owner with query readiness permits status/watch/events/sessions, reviewed native decision, interrupt/close and saved control recovery.",
+    "Productive send/steer/chat/authorize/resume and malformed control checkpoint refused before HTTP.",
+    "Unverified/nonqueryready states refused; control checkpoint revalidated after lock acquisition.",
+    "Lost control admission response recovers same operation, single POST admission/native effect; interrupt plus terminal drains without force.",
+    "Synthetic close without terminal fact remains pending, never claimed completed."
+  ],
+  "limits": [
+    "ASGI HTTP, canonical SQLite/Core and synthetic native peers; no real provider, task, credential or service campaign executed by this qualification.",
+    "Current M1 installed wheels, controllers, token ledgers and campaign data were not changed.",
+    "No new SVC-07/SVC-T21/AC or M1 acceptance promotion; external shutdown remains pending."
+  ],
+  "ruff": "PASS",
+  "diff_check": "PASS"
+}
