@@ -1,0 +1,148 @@
+{
+  "status": "PASS_SOURCE_AND_INSTALLED_ONLY",
+  "sources": {
+    "nexus": [
+      {
+        "repository_path": "src/okto_nexus/adapters/outbound/service_manager/local.py",
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\nexus\\local.py",
+        "sha256": "1aab0af907e50715d879156de33ff8cffeae2c7ddbb418797d70ba58d3750fcd",
+        "bytes": 25468
+      },
+      {
+        "repository_path": "tests/test_user_service_installation.py",
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\nexus\\test_user_service_installation.py",
+        "sha256": "ad9aec81bcac1bf95833dd0b905ebd8879b0c4b79460b767e62fb32547341a55",
+        "bytes": 27756
+      }
+    ],
+    "connector": [
+      {
+        "repository_path": "src/okto_nexus_connector/daemon/lifecycle.py",
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\connector\\lifecycle.py",
+        "sha256": "98f82f99e34d75dfe2d4ad6c6ac126f8810505f12f7cb90e2c2530c95548772b",
+        "bytes": 18621
+      },
+      {
+        "repository_path": "tests/unit/test_user_service_lifecycle.py",
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\connector\\test_user_service_lifecycle.py",
+        "sha256": "8e8f09d83e81d6f6200208838b56cb20c6a7b634d79bfcf7e2c98015fbedd60c",
+        "bytes": 27467
+      }
+    ]
+  },
+  "results": {
+    "nexus-source.xml": {
+      "tests": 69,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\nexus-source.xml",
+      "sha256": "000022562f16144bc49cdd4b2f2068a9c0e19e2908785ba8a03876ea72646ef9",
+      "bytes": 10199
+    },
+    "connector-source.xml": {
+      "tests": 44,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\connector-source.xml",
+      "sha256": "6037fb7ce82bc5e761b0c2141bedf4413de7744f00098c70c26c137a1b507a3f",
+      "bytes": 9432
+    },
+    "connector-delta-final.xml": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\connector-delta-final.xml",
+      "sha256": "751a75dfd88d89f23e5e489787239bfa05b66fe712707f47691cf550145aa56f",
+      "bytes": 735
+    },
+    "installed-final.xml": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\qualification\\installed-final.xml",
+      "sha256": "9558efea08434fd6901baeca6adcf28a4143e7321921dba0363284dbda9cbef3",
+      "bytes": 3296
+    }
+  },
+  "installation": {
+    "status": "OFFLINE_INSTALLED",
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Scripts\\python.exe",
+    "payloads": {
+      "okto_nexus/adapters/outbound/service_manager/local.py": {
+        "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\outbound\\service_manager\\local.py",
+        "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\local.py",
+        "sha256": "1aab0af907e50715d879156de33ff8cffeae2c7ddbb418797d70ba58d3750fcd"
+      },
+      "okto_nexus/adapters/inbound/http/lock.py": {
+        "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\http\\lock.py",
+        "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\lock.py",
+        "sha256": "f743f82c04971e5f1f46215ff508f291675ddba32237389a352de2341f14adf6"
+      },
+      "okto_nexus/adapters/inbound/http/app.py": {
+        "source": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\adapters\\inbound\\http\\app.py",
+        "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\app.py",
+        "sha256": "05f8491b573d3c884bffa9cd8d9f1b3095500176bafe076926350fe8351e43ca"
+      },
+      "okto_nexus_connector/daemon/lifecycle.py": {
+        "source": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\lifecycle.py",
+        "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\venv\\Lib\\site-packages\\okto_nexus_connector\\daemon\\lifecycle.py",
+        "sha256": "98f82f99e34d75dfe2d4ad6c6ac126f8810505f12f7cb90e2c2530c95548772b"
+      }
+    },
+    "nexus_baseline_commit": "9379d207",
+    "source_snapshot_copied": false,
+    "wheels": [
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-core-qualification-uleocpu5\\wheels-v2\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+        "sha256": "a05e4255254f9e96241890db1ac448fd228f4bb6868a112753de8cd667989325",
+        "bytes": 559216
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+        "sha256": "3b81d80664a9744097bf89165f42f0977eb5194e65a9ef011455ab6ab6e9b3a6",
+        "bytes": 11176885
+      },
+      {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-39ycaumc\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+        "sha256": "87aad763ac4b35b973bfe2e63a76715f0ed6eb4196fbaad04a0a280997bb2bfd",
+        "bytes": 390068
+      }
+    ],
+    "dependency_manifest_sha256": "1031ce0330dc47690110e1f14e272d500e56991753d928438bffd0a621beebb8",
+    "service_calls": 0,
+    "provider_calls": 0
+  },
+  "antecedents": [
+    {
+      "tool_chunk": "ee17c1",
+      "counts": "3 new Nexus cases failed before product fix",
+      "cause": "With launch_requested False, last exit1/2/3 was projected stopped rather than actionable unknown. No initial XML was generated; this is a transcript reference, not a retroactive execution receipt."
+    },
+    {
+      "artifact": "connector-source.xml",
+      "counts": "41PASS/3fixtureFAIL",
+      "cause": "New regression assertions passed, but the fake monotonic iterator was exhausted by subsequent stop-latch write. Scoped monkeypatch.context restores clock before stop. Focal3 subsequently pass; product bytes unchanged."
+    }
+  ],
+  "checks": {
+    "ruff_E9_F63_F7_F82": "PASS",
+    "git_diff_check_both_repos": "PASS",
+    "secret_pattern_scan_four_files": "PASS"
+  },
+  "root_review": "Root approved two production/test diffs before installed qualification; commits limited to these2files perrepo.",
+  "scope": [
+    "Known supervised exit1/2/3 after runtime clears launch_requested remain actionable and unknown.",
+    "No automatic extra launch; explicit stop latch retains precedence.",
+    "No retry-budget exhaustion inferred from historical LastTaskResult alone.",
+    "Nexus wheel includes committed heartbeat9379d207; its separate qualification is not counted here."
+  ],
+  "limits": [
+    "No real task installation/crash/retry/stop or provider call executed by this qualification.",
+    "SVC-T19/T20 actual acceptance remains unqualified; planned runner remains separate and not selected.",
+    "Arbitrary NTSTATUS crash codes outside1/2/3 are not generalized."
+  ]
+}

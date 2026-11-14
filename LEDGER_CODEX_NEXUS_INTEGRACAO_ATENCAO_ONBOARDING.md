@@ -1583,3 +1583,20 @@ não altera nem reescreve o checkpoint ou esta closure. Nenhum aceite foi promov
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v14-execution/review.json` e
 `plans/agent_ops/evidence/r3-m1-v14-http-diagnosis/README.md`.
+
+## 2026-11-14 — diagnóstico da última falha do supervisor
+
+Nexus e Connector agora identificam falhas nativas conhecidas (códigos 1/2/3)
+mesmo quando o runtime já limpou launch_requested. O estado fica unknown com
+SUPERVISOR_LAST_ATTEMPT_FAILED e orientação explícita; não se infere esgotamento
+dos retries nem se inicia outra instância. Estados queued/running/unknown e
+códigos nativos de sucesso/status continuam distintos.
+
+Commits d70f15cb (Nexus) e 84005126 (Connector) enviados. Os 18 testes instalados
+passaram. Na fonte, Nexus teve 69 PASS e Connector 41 PASS; três falhas da fixture
+de relógio foram preservadas e os três casos passaram após sua correção.
+Os novos pacotes têm proveniência conferida; o pacote Nexus inclui o heartbeat,
+mas estes 18 testes não constituem teste instalado desse heartbeat.
+SVC-T19/T20 continuam pendentes da campanha real de falha/retry/parada.
+
+Evidência: `plans/agent_ops/evidence/r3-supervisor-last-attempt-diagnostic/review.md`.
