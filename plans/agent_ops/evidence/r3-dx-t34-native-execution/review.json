@@ -1,0 +1,45 @@
+{
+  "format": "dx-t34-native-execution-review-v1",
+  "scenario": "DX-T34",
+  "scenario_result": "VERIFIED",
+  "requirement": "Login de provedor ausente produz instru\u00e7\u00e3o concreta e n\u00e3o deixa daemon bloqueado em prompt invis\u00edvel.",
+  "requirement_source": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md:895",
+  "observed_status": "DX_T34_AUTH_ABSENT_DIAGNOSED_ZERO_TURN",
+  "result_sha256": "38068107ad0176220270cf4f5d90c1f1b91c7093fb39500373b22dcecf7f7fcf",
+  "actual_driver_sha256": "02a3f0a02f3c38ce22bd5593e58fd162d61d489540d9e10c0f66f1618c58cb1b",
+  "authority": "Existing standing user authorization and root-reviewed continuation; no fabricated human approval of a hash.",
+  "execution_counts": {
+    "native_preflights": 1,
+    "service_starts": 2,
+    "setup_plans": 1,
+    "setup_applies": 1,
+    "turn_actions": 0,
+    "turn_receipts": 0
+  },
+  "scope_delta": "Initial proposal service_start_limit=1 is retained unchanged. Root explicitly selected one normal restart after the original service exited, to finish the same reviewed, unapplied setup. The intermediate failed continuation stopped before start. No plan or native preflight was repeated.",
+  "qualification": {
+    "original_offline_cases": 20,
+    "initial_and_final_are_same_suite_not_40_unique": true,
+    "final_numeric_bound_delta_compiled_not_full_suite_rerun": true,
+    "root_reported_utf8_focal": 1,
+    "root_reported_absence_focals": 3,
+    "actual_execution_exit": 0,
+    "curator_reran_tests": false
+  },
+  "acceptance_basis": [
+    "Native account/read confirmed no account and requiresOpenaiAuth=true in an owned empty provider home.",
+    "Canonical installed CLI returned PROVIDER_AUTH_REQUIRED with the approved provider_home and explicit codex login guidance.",
+    "Same PID/generation remained ready after the refused connection test.",
+    "Normal stop returned zero and retained process handle proved owner exit.",
+    "Post-exit journal projection shows runtime.open FAILED/PROVIDER_AUTH_REQUIRED with zero turn actions and receipts."
+  ],
+  "limits": [
+    "Only DX-T34 is verified by this evidence.",
+    "No SVC-T15, M1, paid-work, Scheduler, logon or reboot acceptance.",
+    "Open receipt possible_effect=true/retry_safe=false is preserved; zero turns does not rewrite that receipt.",
+    "Raw private CLI, database bodies, auth/config files and installed packages are excluded.",
+    "Preparation status remains historical OFFLINE_SCOPED_QUALIFIED_NOT_EXECUTED; this review records subsequent actual execution."
+  ],
+  "ledger_changed_by_curator": false,
+  "commit_created_by_curator": false
+}

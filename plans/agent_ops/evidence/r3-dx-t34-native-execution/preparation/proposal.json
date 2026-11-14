@@ -1,0 +1,65 @@
+{
+  "format": "dx-t34-auth-absent-proposal-v1",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno",
+  "status": "OFFLINE_QUALIFIED_PENDING_ROOT_EXECUTION",
+  "scope": "DX-T34 only; detached own service, missing provider login; no SVC-T15 or M1 acceptance",
+  "native_version": "0.157.0",
+  "candidate_ref": "nexus-install-v1:6a282eb54fdc80326d11b27b48cf8ca1ba5a193e71d26183968e970db2b922a0",
+  "port": 59437,
+  "profile": "dx-t34-empty-login",
+  "agent": "dx-t34-empty-login",
+  "model_turn_limit": 0,
+  "service_start_limit": 1,
+  "setup_apply_limit": 1,
+  "native_preflight_limit": 1,
+  "pins": {
+    "native": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0\\codex.exe",
+      "sha256": "ed1c7b36e44536809c868864c833af8a857f56599a7a7fe23b908a1ba1093b1f"
+    },
+    "nexus_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\cli-drain-qualification-uh6qf3g9\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "f8bd429121c3ee0bb640459961ce2a4d072ba1fcfa1846af60c63e23f5195362"
+    },
+    "core_wheel": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-core-qualification-uleocpu5\\wheels-v2\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "a05e4255254f9e96241890db1ac448fd228f4bb6868a112753de8cd667989325"
+    },
+    "schema": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\src\\nexus_connector_core\\native\\codex_app_server_0_157_0.schemas.json",
+      "sha256": "2719fccd25a97a7ce355497ca5e9123a63f6dce7f9f83724a5b73fd927811f59"
+    },
+    "dependencies": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\installation\\prepare_dependencies.py",
+      "sha256": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359"
+    },
+    "driver": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\run_case.py",
+      "sha256": "ac7722ffa752eb6266dcc6609ae89ea8828af017e29e7b44b6d954ec3919cf72"
+    },
+    "base_python": {
+      "path": "C:/Python313/python.exe",
+      "sha256": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9"
+    }
+  },
+  "authority": "Standing user authorization; root review of finite preparation before any native/service effect. Reviewed proposal SHA is a technical binding, not a new human approval request.",
+  "excluded": [
+    "personal credentials/config/transcripts",
+    "provider login/refresh",
+    "turn submission when preflight is unknown/authenticated",
+    "Scheduler registration",
+    "force/kill",
+    "M1 mutation or token-ledger reset"
+  ],
+  "observation_limits": {
+    "native_rpc_seconds": 30,
+    "native_eof_seconds": 30,
+    "cli_setup_phase_seconds": 120,
+    "cli_setup_overall_seconds": 270,
+    "service_start_seconds": 120,
+    "normal_stop_seconds": 45,
+    "physical_exit_seconds": 15,
+    "service_start_wrapper_seconds": 150
+  },
+  "no_paid_model_turn_policy": "No turn RPC in preflight; explicit null account with requiresOpenaiAuth true required before one canonical setup test. Pinned Core preflight must reject runtime.open before its turn; final post-exit journal proves no turn admitted. Unknown/authenticated state aborts."
+}

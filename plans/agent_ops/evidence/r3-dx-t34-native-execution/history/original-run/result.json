@@ -1,0 +1,43 @@
+{
+  "status": "UNCONFIRMED",
+  "proposal_sha256": "fda199aae01b33f9580d7c0152a43522e3330b70099350cce89684f0e3936927",
+  "model_turn_limit": 0,
+  "installed_payload": {
+    "files_equal_to_pinned_wheels": 859
+  },
+  "preflight": {
+    "config": {
+      "credential_store": "file",
+      "provider": "openai"
+    },
+    "account": {
+      "account_present": false,
+      "requires_openai_auth": true,
+      "refresh_token": false
+    },
+    "methods": [
+      "initialize",
+      "config/read",
+      "account/read"
+    ],
+    "model_turns": 0,
+    "pid": 43900,
+    "exit_code": 0,
+    "physical_exit_observed": true
+  },
+  "owner": {
+    "pid": 48068,
+    "generation": "440d61ec5835acf160a9cf48be45128a",
+    "instance_id": "svc_f00c23606d5b3e7368d2ca33a6a8faad41834b8dd6b4d014cccc5eb7fd9e55f1",
+    "active_version": "0.3.3",
+    "birth_100ns": 134391524656150945
+  },
+  "stop": {
+    "cli_exit": 0,
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE"
+  },
+  "physical_owner_exit": true,
+  "wrapper_processes_exited": true,
+  "failure": "CLI_JSON_UNCONFIRMED_plan"
+}

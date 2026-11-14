@@ -1,0 +1,12 @@
+{
+  "status": "UNCONFIRMED",
+  "scope": "Same reviewed setup, first apply; no repeated plan or native preflight",
+  "previous_result_sha256": "d660fe35cdc502013110f380b1f6fa89ab6a4b2cc0def5b793a371b825a1a93f",
+  "profile_before_sha256": "6b03803f6567c31012f4f533153b61d99bdb8895a033526deb25908521c9862b",
+  "review_revision": "96d1661b79dd5d6050b62bf08252332c1e764b15ee96bf6ee0c290b26a46a33d",
+  "driver_sha256": "ee69757b938f509af905ab3f0c1135a8512a243e035742fa40a1b27f935135df",
+  "model_turn_limit": 0,
+  "change": "Explicit Python -X utf8 because -I ignores PYTHONUTF8; one normal restart of the same own stopped service.",
+  "wrapper_processes_exited": true,
+  "failure": "KeyError"
+}

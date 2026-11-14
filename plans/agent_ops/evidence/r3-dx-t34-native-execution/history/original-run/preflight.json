@@ -1,0 +1,20 @@
+{
+  "config": {
+    "credential_store": "file",
+    "provider": "openai"
+  },
+  "account": {
+    "account_present": false,
+    "requires_openai_auth": true,
+    "refresh_token": false
+  },
+  "methods": [
+    "initialize",
+    "config/read",
+    "account/read"
+  ],
+  "model_turns": 0,
+  "pid": 43900,
+  "exit_code": 0,
+  "physical_exit_observed": true
+}

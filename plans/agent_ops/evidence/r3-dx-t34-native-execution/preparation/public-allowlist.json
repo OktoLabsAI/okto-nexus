@@ -1,0 +1,37 @@
+{
+  "format": "dx-t34-preparation-public-allowlist-v1",
+  "files": [
+    {
+      "path": "run_case.py",
+      "sha256": "ac7722ffa752eb6266dcc6609ae89ea8828af017e29e7b44b6d954ec3919cf72"
+    },
+    {
+      "path": "test_run_case.py",
+      "sha256": "f8c7560747799079a7f5285dce5f1dec2d1f6baa72d4facef746725a69c96faa"
+    },
+    {
+      "path": "proposal.json",
+      "sha256": "fda199aae01b33f9580d7c0152a43522e3330b70099350cce89684f0e3936927"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8e71c1be64b67f94e5fd63a688057ba452a2a262f245bc838ab9e81599c93a52"
+    },
+    {
+      "path": "installation/prepare_dependencies.py",
+      "sha256": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359"
+    },
+    {
+      "path": "offline-initial.xml",
+      "sha256": "88affdfd1101a5e5a50258f77ee3c11c1a0aae169f9d73f84efd3cb841dac8f2"
+    },
+    {
+      "path": "offline-final.xml",
+      "sha256": "4e476dc8b389d8635164d829a4ba88a9fde695693f0b4340bbf1ca4fd79a7343"
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "105fd709e425274439300e869bdf53ddcc5d38dc7a64330bfa0102ae50864a30"
+    }
+  ]
+}

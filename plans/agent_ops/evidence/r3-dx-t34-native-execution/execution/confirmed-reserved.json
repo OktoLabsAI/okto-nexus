@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\installation\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "service",
+    "status",
+    "--json",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\campaign\\nexus-home",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "59437",
+    "--project-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\campaign\\project",
+    "--embedding-mode",
+    "off",
+    "--feature-harness-integrations",
+    "true",
+    "--metrics-mode",
+    "disabled",
+    "--harness-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0"
+  ],
+  "time": 1794679268.7677183
+}

@@ -8787,20 +8787,22 @@
     },
     "DX-T34": {
       "requirement": "Login de provedor ausente produz instrução concreta e não deixa daemon bloqueado em prompt invisível.",
-      "status": "NOT_RUN",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
-        "plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json"
+        "plans/agent_ops/evidence/r3-dx-t34-auth-preflight/review.json",
+        "plans/agent_ops/evidence/r3-dx-t34-native-execution/review.json"
       ],
-      "result": "Classificação de ausência de login e instrução terminal corrigidas no Core/Nexus e qualificadas em fixtures de fonte e wheels instalados. Isso não observa ainda o harness real sem login iniciado pelo serviço.",
-      "remaining": "Executar campanha instalada com Codex real e provider_home vazio no host do serviço; reter instrução concreta, daemon responsivo sem prompt invisível e cleanup. A correção de produto tem qualificação offline; o cenário nativo permanece NOT_RUN.",
-      "remaining_kind": "real_campaign_not_run",
-      "qualification_limit": "Não usar missing MCP credential, variável sintética ou refusal de peer como ausência de login do provedor real.",
-      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "result": "Real Codex0.157.0 in an empty own file-backed provider home returned missing account; installed canonical setup diagnosed PROVIDER_AUTH_REQUIRED with concrete codex login/home guidance. Same daemon stayed ready, then stopped normally with physical exit. Post-exit journal confirms zero turn actions/receipts.",
+      "remaining": null,
+      "remaining_kind": null,
+      "qualification_limit": "Windows local detached service and exact pinned Codex0.157.0, isolated empty provider home. Does not prove terminal-only credentials, locked vault, Scheduler, M1 work or any paid inference.",
+      "common_qualification_limit": "Actual native provider-authentication observation and installed setup path, with no model turn. Earlier source/fixture evidence remains historical.",
       "verified_contract_subscopes": [
-        "diagnostic_proof_levels_and_passivity"
+        "diagnostic_proof_levels_and_passivity",
+        "real_native_missing_login_actionable_without_daemon_prompt"
       ]
     },
     "DX-T35": {
@@ -13007,6 +13009,61 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v14-preparation/review.json"
       ]
+    },
+    "r3_dx_t34_native_execution": {
+      "date": "2026-11-14",
+      "status": "DX_T34_AUTH_ABSENT_DIAGNOSED_ZERO_TURN",
+      "scenario": "DX-T34",
+      "native_preflights": 1,
+      "service_starts": 2,
+      "setup_plans": 1,
+      "setup_applies": 1,
+      "model_turns": 0,
+      "same_owner_ready_after_failure": true,
+      "normal_physical_cleanup": true,
+      "historical_failures": [
+        "CLI_JSON_UNCONFIRMED_plan: isolated Python emitted CP1252",
+        "KeyError: stopped diagnostic omits pid; before restart"
+      ],
+      "result_sha256": "38068107ad0176220270cf4f5d90c1f1b91c7093fb39500373b22dcecf7f7fcf",
+      "limits": "Only DX-T34; SVC-T15 and M1 remain pending.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-t34-native-execution/review.json"
+      ]
+    },
+    "r3_m1_v14_execution": {
+      "date": "2026-11-14",
+      "status": "V14_NO_PRODUCTIVE_POST_NORMAL_CLEANUP_NO_M1_ACCEPTANCE",
+      "observed_tokens": 134199,
+      "new_observed_tokens": 0,
+      "cumulative_reservations": 10,
+      "original_unsettled_requests": 1,
+      "normal_physical_cleanup": true,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-v14-execution/review.json"
+      ]
+    },
+    "r3_http_heartbeat_isolation": {
+      "status": "SOURCE_QUALIFIED",
+      "source_tests_passed": 30,
+      "commit": "9379d207",
+      "installed_payload_in_later_wheel_confirmed": true,
+      "installed_tests_claimed": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-http-heartbeat-isolation.md"
+      ]
+    },
+    "r3_supervisor_last_attempt_diagnostic": {
+      "status": "SOURCE_AND_INSTALLED_DIAGNOSTIC_QUALIFIED_NATIVE_RETRY_PENDING",
+      "commits": {
+        "nexus": "d70f15cb",
+        "connector": "84005126"
+      },
+      "installed_tests_passed": 18,
+      "native_crash_campaign_executed": false,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-supervisor-last-attempt-diagnostic/review.md"
+      ]
     }
   },
   "history": [
@@ -14374,6 +14431,15 @@
       "summary": "Nexus d70f15cb and Connector84005126 report known native failures1/2/3 even after launch_requested clears; queued/running/native success states remain distinct. Installed18PASS, sourceN69PASS/C41PASS plus3fixture-correctedPASS. No T19/T20 acceptance promotion.",
       "evidence": [
         "plans/agent_ops/evidence/r3-supervisor-last-attempt-diagnostic/review.md"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "DX-T34 real native missing login diagnosed without model turn",
+      "status": "VERIFIED_SCOPED",
+      "summary": "Same reviewed setup applied once after retained harness encoding/absent-pid corrections. Real auth absence, concrete CLI guidance, query-ready daemon, normal physical cleanup and zero turns proved. Only DX-T34 promoted.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-dx-t34-native-execution/review.json"
       ]
     }
   ]

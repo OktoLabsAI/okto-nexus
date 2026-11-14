@@ -1600,3 +1600,23 @@ mas estes 18 testes não constituem teste instalado desse heartbeat.
 SVC-T19/T20 continuam pendentes da campanha real de falha/retry/parada.
 
 Evidência: `plans/agent_ops/evidence/r3-supervisor-last-attempt-diagnostic/review.md`.
+
+## 2026-11-14 — DX-T34 verificado com Codex real sem login
+
+O Codex 0.157.0 confirmou account=null/requiresOpenaiAuth=true usando armazenamento
+em arquivo e diretório próprio vazio. O setup canônico instalado retornou
+PROVIDER_AUTH_REQUIRED e instrução concreta de codex login no provider_home
+aprovado. O mesmo daemon permaneceu pronto e responsivo, sem prompt invisível.
+A parada normal terminou com saída física confirmada; o journal, lido depois
+da saída, registra open FAILED e zero ações/recibos de turno.
+
+O plano foi criado uma vez e aplicado uma vez. A tentativa inicial falhou ao ler
+JSON CP1252: -I ignorou PYTHONUTF8. A retomada usa -X utf8; sua primeira observação
+também expôs uma expectativa errada de pid obrigatório no estado stopped. Essas
+duas falhas, a fonte anterior e as correções ficam preservadas. Houve dois starts
+normais, com saída comprovada entre eles, sem repetir preflight ou plano e sem
+force. O recibo open mantém possible_effect=true/retry_safe=false.
+
+Somente DX-T34 passa a VERIFIED: 122 de 132 cenários. SVC-T15 (credencial apenas
+no terminal/cofre bloqueado), trabalho pago e demais aceites M1 não são inferidos.
+Evidência: `plans/agent_ops/evidence/r3-dx-t34-native-execution/review.json`.

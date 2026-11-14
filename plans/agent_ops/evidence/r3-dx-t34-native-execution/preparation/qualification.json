@@ -1,0 +1,44 @@
+{
+  "format": "dx-t34-native-preparation-qualification-v1",
+  "status": "OFFLINE_SCOPED_QUALIFIED_NOT_EXECUTED",
+  "root_source_review": "Approved direction and final timing bounds by root; no real execution selected",
+  "pure_tests": {
+    "initial": {
+      "passed": 20,
+      "xml": "offline-initial.xml"
+    },
+    "final_functional": {
+      "passed": 20,
+      "xml": "offline-final.xml"
+    }
+  },
+  "final_delta": "Only root-reviewed numeric waits changed after final functional tests: nativeRPC/EOF15to30 and serviceCLI45to120/wrapper150. Final three Python sources compiled; no further runner/package-copy launched while M1 is active, per root load constraint.",
+  "compile": {
+    "sources": 3,
+    "status": "PASS"
+  },
+  "ruff": "E9,F63,F7,F82 PASS before final numeric-bound-only delta",
+  "source_pins": {
+    "run_case.py": "ac7722ffa752eb6266dcc6609ae89ea8828af017e29e7b44b6d954ec3919cf72",
+    "test_run_case.py": "f8c7560747799079a7f5285dce5f1dec2d1f6baa72d4facef746725a69c96faa",
+    "installation\\prepare_dependencies.py": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359"
+  },
+  "proposal_sha256": "fda199aae01b33f9580d7c0152a43522e3330b70099350cce89684f0e3936927",
+  "commands": {
+    "pure_tests": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/dx-t34-nexus-qualification-i2obuu_g/venv/Scripts/python.exe -m pytest test_run_case.py -q --tb=short --junitxml=offline-final.xml",
+    "ruff": "rtk proxy ruff check --select E9,F63,F7,F82 run_case.py test_run_case.py installation/prepare_dependencies.py"
+  },
+  "effects": {
+    "native_processes": 0,
+    "campaign_services": 0,
+    "model_turns": 0,
+    "installation_created": false,
+    "campaign_directory_created": false,
+    "receipt_created": false
+  },
+  "limits": [
+    "Fixtures prove gates only; no DX-T34 acceptance before actual native/service outputs.",
+    "No SVC-T15, M1, Scheduler, logon or crash/backoff claim.",
+    "Actual execution must be selected by root after active M1 workload; no automatic run."
+  ]
+}

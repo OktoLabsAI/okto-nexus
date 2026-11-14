@@ -1,0 +1,217 @@
+{
+  "format": "dx-t34-native-execution-public-manifest-v1",
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno",
+  "allowlisted_files": 34,
+  "files": [
+    {
+      "path": "execution/after-reserved.json",
+      "sha256": "f9f1d24fb1adc6048ec65cb2369b5330b693fd288457b22e6628e17118a20a99",
+      "bytes": 877,
+      "original_relative_path": "campaign/resume-encoding-checked/after-reserved.json"
+    },
+    {
+      "path": "execution/apply-reserved.json",
+      "sha256": "795600b93c885979d9f248826c033cb767e4982a1536f4615c88e2d4671734e7",
+      "bytes": 1046,
+      "original_relative_path": "campaign/resume-encoding-checked/apply-reserved.json"
+    },
+    {
+      "path": "execution/before-reserved.json",
+      "sha256": "172317acccce29c2a57d47a108b77a2661371bd1c26cff405637c5f12a7efb9f",
+      "bytes": 876,
+      "original_relative_path": "campaign/resume-encoding-checked/before-reserved.json"
+    },
+    {
+      "path": "execution/confirmed-reserved.json",
+      "sha256": "37ae1ae7e466a9f94eb9ecf8f791a36606bc9b88d8b32b9f5665a230dc9b9102",
+      "bytes": 877,
+      "original_relative_path": "campaign/resume-encoding-checked/confirmed-reserved.json"
+    },
+    {
+      "path": "execution/reserved.json",
+      "sha256": "6d1a8bebb146e2328690262cf201b87936022fca2ca3c829e6b00decd53b9635",
+      "bytes": 639,
+      "original_relative_path": "campaign/resume-encoding-checked/reserved.json"
+    },
+    {
+      "path": "execution/result.json",
+      "sha256": "38068107ad0176220270cf4f5d90c1f1b91c7093fb39500373b22dcecf7f7fcf",
+      "bytes": 2389,
+      "original_relative_path": "campaign/resume-encoding-checked/result.json"
+    },
+    {
+      "path": "execution/start-reserved.json",
+      "sha256": "6099148e0227bfd86f207b30af6e62d3519fa1fb15c14362326fe347fb3ca91e",
+      "bytes": 905,
+      "original_relative_path": "campaign/resume-encoding-checked/start-reserved.json"
+    },
+    {
+      "path": "execution/stop-reserved.json",
+      "sha256": "74a15c899839d2fe0dce6954ff013e1a7a9c549e2200f491118a1d69ea5f8504",
+      "bytes": 903,
+      "original_relative_path": "campaign/resume-encoding-checked/stop-reserved.json"
+    },
+    {
+      "path": "history/first-resume/before-reserved.json",
+      "sha256": "a3f15ed0f1fa1bf26b834d6ea6e6894756fba2931e977cdfb21646bca49b8141",
+      "bytes": 877,
+      "original_relative_path": "campaign/resume-encoding/before-reserved.json"
+    },
+    {
+      "path": "history/first-resume/driver-before-absence-fix.py",
+      "sha256": "ee69757b938f509af905ab3f0c1135a8512a243e035742fa40a1b27f935135df",
+      "bytes": 7376,
+      "original_relative_path": "campaign/resume-encoding/driver-before-absence-fix.py"
+    },
+    {
+      "path": "history/first-resume/reserved.json",
+      "sha256": "3ad729c37f4daf49778f170dc2fc793184602acb6dba5683eebf1a42428a707b",
+      "bytes": 639,
+      "original_relative_path": "campaign/resume-encoding/reserved.json"
+    },
+    {
+      "path": "history/first-resume/result.json",
+      "sha256": "986c472bbdb85c36dc4a12fbaf767ca9dad2330524cbbd7f8e29b6f1946c2b3e",
+      "bytes": 702,
+      "original_relative_path": "campaign/resume-encoding/result.json"
+    },
+    {
+      "path": "history/original-run/owner-confirmed-reserved.json",
+      "sha256": "e7259447d322ffc3b1ef0b51b06a6043309d3d5b2d5f1135507030926734150a",
+      "bytes": 852,
+      "original_relative_path": "campaign/public/owner-confirmed-reserved.json"
+    },
+    {
+      "path": "history/original-run/plan-reserved.json",
+      "sha256": "430c49e793fe6eafa517a16c777ab83617fc55567b4e3286313b8f2c067a2ba1",
+      "bytes": 1389,
+      "original_relative_path": "campaign/public/plan-reserved.json"
+    },
+    {
+      "path": "history/original-run/preflight-reserved.json",
+      "sha256": "a8a0cae481bedc63b9aa74d647e3bd027da520f6b4b377c739ce5e963c59fb33",
+      "bytes": 86,
+      "original_relative_path": "campaign/public/preflight-reserved.json"
+    },
+    {
+      "path": "history/original-run/preflight.json",
+      "sha256": "1e5d4a6f3abafa787ed08242ef718dba028530cb3a30d34045fef1f76695ec8a",
+      "bytes": 374,
+      "original_relative_path": "campaign/public/preflight.json"
+    },
+    {
+      "path": "history/original-run/result.json",
+      "sha256": "d660fe35cdc502013110f380b1f6fa89ab6a4b2cc0def5b793a371b825a1a93f",
+      "bytes": 1118,
+      "original_relative_path": "campaign/public/result.json"
+    },
+    {
+      "path": "history/original-run/start-reserved.json",
+      "sha256": "34644c1f1959da0178c1145a9e0a94bf24213e31332301c3a4f6c8499f48463d",
+      "bytes": 882,
+      "original_relative_path": "campaign/public/start-reserved.json"
+    },
+    {
+      "path": "history/original-run/stop-reserved.json",
+      "sha256": "148c5200b1cb8dc4783219acbfe54e67cdde40d69848c9dac8709019dc9e1d7f",
+      "bytes": 880,
+      "original_relative_path": "campaign/public/stop-reserved.json"
+    },
+    {
+      "path": "preparation/installation/prepare_dependencies.py",
+      "sha256": "516cb28092c12a67733a9c6a0e73333aa724a7fc7d936c99203d27c2f9132359",
+      "bytes": 4740,
+      "original_relative_path": "installation/prepare_dependencies.py"
+    },
+    {
+      "path": "preparation/installation-complete.json",
+      "sha256": "80412fc4add3a69cadb2490406c8dca20ee27d0bc116a614b26bea5120057eb3",
+      "bytes": 239,
+      "original_relative_path": "installation-complete.json"
+    },
+    {
+      "path": "preparation/installation-reserved.json",
+      "sha256": "091bff968c105cf7a16819b0c16cf6bccc4f2528f6a6f02511986b25914bffdc",
+      "bytes": 139,
+      "original_relative_path": "installation-reserved.json"
+    },
+    {
+      "path": "preparation/offline-final.xml",
+      "sha256": "4e476dc8b389d8635164d829a4ba88a9fde695693f0b4340bbf1ca4fd79a7343",
+      "bytes": 2691,
+      "original_relative_path": "offline-final.xml"
+    },
+    {
+      "path": "preparation/offline-initial.xml",
+      "sha256": "88affdfd1101a5e5a50258f77ee3c11c1a0aae169f9d73f84efd3cb841dac8f2",
+      "bytes": 2691,
+      "original_relative_path": "offline-initial.xml"
+    },
+    {
+      "path": "preparation/proposal.json",
+      "sha256": "fda199aae01b33f9580d7c0152a43522e3330b70099350cce89684f0e3936927",
+      "bytes": 3334,
+      "original_relative_path": "proposal.json"
+    },
+    {
+      "path": "preparation/public-allowlist.json",
+      "sha256": "471bc491e031dd61ac4dd54f46ed50c3abbe1ef212bea42f60b4aba117d40dd4",
+      "bytes": 1162,
+      "original_relative_path": "public-allowlist.json"
+    },
+    {
+      "path": "preparation/qualification.json",
+      "sha256": "105fd709e425274439300e869bdf53ddcc5d38dc7a64330bfa0102ae50864a30",
+      "bytes": 2062,
+      "original_relative_path": "qualification.json"
+    },
+    {
+      "path": "preparation/README.md",
+      "sha256": "8e71c1be64b67f94e5fd63a688057ba452a2a262f245bc838ab9e81599c93a52",
+      "bytes": 5887,
+      "original_relative_path": "README.md"
+    },
+    {
+      "path": "preparation/run_case.py",
+      "sha256": "ac7722ffa752eb6266dcc6609ae89ea8828af017e29e7b44b6d954ec3919cf72",
+      "bytes": 20733,
+      "original_relative_path": "run_case.py"
+    },
+    {
+      "path": "preparation/test_run_case.py",
+      "sha256": "f8c7560747799079a7f5285dce5f1dec2d1f6baa72d4facef746725a69c96faa",
+      "bytes": 9413,
+      "original_relative_path": "test_run_case.py"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e0accc1edf285c8b4dd19f0e27bf12e5480da1a51e388cb13db56d857435728e",
+      "bytes": 2066,
+      "provenance": "Curated review or root-observation projection; not an actual campaign output."
+    },
+    {
+      "path": "review.json",
+      "sha256": "6847519cb1cb578b2b9bb1ee70e358c4c64032d86d96380200991eceb420c22e",
+      "bytes": 2619,
+      "provenance": "Curated review or root-observation projection; not an actual campaign output."
+    },
+    {
+      "path": "root-observations.json",
+      "sha256": "00dbdc470965f5751897135c98806aefdeadaae5ef63a8933cf3cdada392aeeb",
+      "bytes": 1774,
+      "provenance": "Curated review or root-observation projection; not an actual campaign output."
+    },
+    {
+      "path": "sources/resume_case.py",
+      "sha256": "02a3f0a02f3c38ce22bd5593e58fd162d61d489540d9e10c0f66f1618c58cb1b",
+      "bytes": 7878,
+      "original_relative_path": "resume_case.py"
+    }
+  ],
+  "excluded": [
+    "private CLI raw output",
+    "database files and rows",
+    "auth/config files",
+    "venv and wheels"
+  ]
+}

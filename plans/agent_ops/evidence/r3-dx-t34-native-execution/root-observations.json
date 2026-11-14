@@ -1,0 +1,57 @@
+{
+  "provenance": "Root-agent tool observations supplied to curator; curator did not rerun campaign or inspect private CLI output.",
+  "actual_success": {
+    "session_id": 74635,
+    "exit_code": 0,
+    "argv": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\installation\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\resume_case.py"
+    ],
+    "script_arguments": []
+  },
+  "historical_attempts": [
+    {
+      "session_id": 82173,
+      "outcome": "CLI_JSON_UNCONFIRMED_plan",
+      "root_diagnosis": "Windows CP1252 byte 0x97 in CLI JSON; Python -I ignores PYTHONUTF8. Private bytes not copied.",
+      "owner_pid": 48068,
+      "normal_stop_exit_code": 0,
+      "physical_owner_exit_observed": true
+    },
+    {
+      "session_id": 43363,
+      "outcome": "KeyError",
+      "root_diagnosis": "Missing before.pid in NO_SERVICE_OWNER representation; failure before start.",
+      "start_reservation_present": false
+    }
+  ],
+  "additional_offline_checks_reported_by_root": [
+    {
+      "tool_chunk_id": "dde322",
+      "test": "Explicit UTF-8 CLI JSON roundtrip",
+      "passed": 1
+    },
+    {
+      "tool_chunk_id": "00f155",
+      "test": "Canonical absent-owner representations",
+      "passed": 3
+    }
+  ],
+  "ruff": "PASS before the final absence correction; not represented as a rerun of final bytes.",
+  "native_preflight": {
+    "pid": 43900,
+    "eof_exit_code": 0,
+    "physical_exit_observed": true
+  },
+  "final_owner": {
+    "pid": 49628,
+    "generation": "650885c72f28c00b1970f116001553c0",
+    "normal_stop_exit_code": 0,
+    "physical_exit_observed": true
+  },
+  "reexecution_by_curator": false
+}

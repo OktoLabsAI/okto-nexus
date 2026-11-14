@@ -1,0 +1,44 @@
+{
+  "status": "DX_T34_AUTH_ABSENT_DIAGNOSED_ZERO_TURN",
+  "scope": "Same reviewed setup, first apply; no repeated plan or native preflight",
+  "previous_result_sha256": "d660fe35cdc502013110f380b1f6fa89ab6a4b2cc0def5b793a371b825a1a93f",
+  "profile_before_sha256": "6b03803f6567c31012f4f533153b61d99bdb8895a033526deb25908521c9862b",
+  "review_revision": "96d1661b79dd5d6050b62bf08252332c1e764b15ee96bf6ee0c290b26a46a33d",
+  "driver_sha256": "02a3f0a02f3c38ce22bd5593e58fd162d61d489540d9e10c0f66f1618c58cb1b",
+  "model_turn_limit": 0,
+  "change": "Explicit Python -X utf8 because -I ignores PYTHONUTF8; one normal restart of the same own stopped service.",
+  "owner": {
+    "pid": 49628,
+    "generation": "650885c72f28c00b1970f116001553c0",
+    "instance_id": "svc_f00c23606d5b3e7368d2ca33a6a8faad41834b8dd6b4d014cccc5eb7fd9e55f1",
+    "active_version": "0.3.3",
+    "birth_100ns": 134391528189370812
+  },
+  "cli": {
+    "state": "test_failed",
+    "error_code": "PROVIDER_AUTH_REQUIRED",
+    "work_state": "not_submitted",
+    "next_action": "On the Server host, use the approved provider_home: C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\campaign\\profile\\.codex. Set HOME to C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\campaign\\profile\\.codex. Set CODEX_HOME to C:\\Users\\jpamb\\AppData\\Local\\Temp\\dx-t34-native-preparation-z6_sttno\\campaign\\profile\\.codex. Then run codex login in your terminal. Then explicitly review setup with a new --profile before approving another connection test. No login or new test was started; this saved request will not be replayed.",
+    "setup_run_id": "connect_1dc7b6601a514d86bfb8085263ff4374"
+  },
+  "owner_still_ready_after_failure": true,
+  "stop": {
+    "cli_exit": 0,
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE"
+  },
+  "physical_owner_exit": true,
+  "wrapper_processes_exited": true,
+  "journal": {
+    "journal_relative": "nexus-home\\connection-tests\\89f5c92d6e8744f6b4c8689a706a3fc1\\journal.db",
+    "open_stage": "FAILED",
+    "error_code": "PROVIDER_AUTH_REQUIRED",
+    "possible_effect": true,
+    "retry_safe": false,
+    "turn_actions": 0,
+    "turn_receipts": 0,
+    "read_after_owner_exit": true,
+    "sha256": "9ee1bf9c99d819eb448a0dfe49703e6e7d371c8ff08e97b79a3f553b9ae83eb7"
+  },
+  "failure": null
+}
