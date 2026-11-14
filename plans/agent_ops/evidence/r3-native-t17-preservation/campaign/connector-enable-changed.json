@@ -1,0 +1,13 @@
+{
+  "label": "connector-enable-changed",
+  "returncode": 1,
+  "wrapper_exit_confirmed": true,
+  "result": {
+    "error": {
+      "code": "SERVICE_DEFINITION_CHANGED",
+      "stage": "user_service"
+    }
+  },
+  "stdout_sha256": "1863ed0aa692caa990c012ae96edfb1fe747a328a222ab2a4e48553713e91fa8",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

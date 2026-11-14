@@ -1,0 +1,14 @@
+{
+  "label": "nexus-uninstall",
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "result": {
+    "instance_id": "svc_8ea4f3f5be97b4db17d41add1480ce4a39a0767b97f5b0e4ceba0b299473c823",
+    "generation": null,
+    "state": "stopped",
+    "reason": "USER_SERVICE_REMOVED",
+    "installation_state": "absent"
+  },
+  "stdout_sha256": "61639302bba61e3a8fdd75b0f66f93c89d5d0a7f367b3704ed43c8796792fd91",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

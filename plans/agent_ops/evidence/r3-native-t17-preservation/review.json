@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scenario": "SVC-T17",
+  "platform": "Windows Task Scheduler, current user",
+  "native_commands": 14,
+  "native_definition_changes": 4,
+  "provider_calls": 0,
+  "service_starts": 0,
+  "result": "Both actual installed hosts preserve the same task digest and installation receipt across repeated install/enable. A Description-only external change makes enable/uninstall refuse SERVICE_DEFINITION_CHANGED while retaining the edited task and receipt. Exact original XML restored with compare-and-replace, then canonical uninstall confirms absence.",
+  "qualification_sha256": "cca69d87f14f32a080f331772cf4ea8fd8a0a8f40374b7613355e2de64a5ef07",
+  "limits": [
+    "Temporary task definitions only; no personal task changed.",
+    "No login, crash, start, foreground, provider or broader service acceptance inferred.",
+    "XML ownership tokens and raw CLI output remain outside the repository in protected task-owned storage."
+  ]
+}

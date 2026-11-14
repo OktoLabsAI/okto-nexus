@@ -1,0 +1,20 @@
+{
+  "before": {
+    "name": "OktoNexus-connector-1abf3162087c4b322a3cd75ab6772b9e2b454f78dc6ca3936ef3f3ed693ccc4a",
+    "absent": false,
+    "digest": "2e9a1f198afdf3948ec78d4e53bc440e4623a1a614fd1fa2a7e039ac72294212",
+    "state": 3,
+    "enabled": true,
+    "last_result": 267011
+  },
+  "after": {
+    "name": "OktoNexus-connector-1abf3162087c4b322a3cd75ab6772b9e2b454f78dc6ca3936ef3f3ed693ccc4a",
+    "absent": false,
+    "digest": "0907c9bc9783c54c90710a35603b5033fb2fe37f4f0c6c54a3e73ad16ad03fe7",
+    "state": 3,
+    "enabled": true,
+    "last_result": 267011
+  },
+  "changed_field": "RegistrationInfo/Description",
+  "service_not_started": true
+}

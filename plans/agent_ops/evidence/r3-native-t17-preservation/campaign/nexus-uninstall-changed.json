@@ -1,0 +1,13 @@
+{
+  "label": "nexus-uninstall-changed",
+  "returncode": 3,
+  "wrapper_exit_confirmed": true,
+  "result": {
+    "instance_id": "svc_8ea4f3f5be97b4db17d41add1480ce4a39a0767b97f5b0e4ceba0b299473c823",
+    "generation": null,
+    "state": "failed",
+    "reason": "SERVICE_DEFINITION_CHANGED"
+  },
+  "stdout_sha256": "7930588c36a30d3f2d2eb8b14d8a45e2ea363ec7e89472986f475880398ed0fc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

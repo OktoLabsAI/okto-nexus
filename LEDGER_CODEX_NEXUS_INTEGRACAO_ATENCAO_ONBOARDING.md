@@ -1432,3 +1432,18 @@ rota remota. Tokens observados não representam cobrança final. Os estados de
 tasks, cenários, invariantes, critérios e milestones permanecem iguais.
 
 Evidência: `plans/agent_ops/evidence/r3-m1-v12-execution/review.json`.
+
+## 2026-11-14 — SVC-T17 comprovado no Task Scheduler real
+
+Nexus e Connector instalados passaram por instalação e habilitação repetidas,
+mantendo o mesmo digest da tarefa e recibo de instalação. Uma edição externa
+apenas na descrição fez enable/uninstall recusarem SERVICE_DEFINITION_CHANGED,
+preservando a tarefa editada. As definições originais foram restauradas com
+comparação do digest, e a remoção canônica confirmou ausência das duas tarefas.
+
+Foram 14 comandos CLI e quatro alterações/restaurações nativas, sem partida de
+serviço nem chamada de provedor. SVC-T17 passa a VERIFIED; os demais cenários e
+critérios mantêm seu estado. XML com token temporário e saídas brutas permanecem
+na área protegida, fora do repositório.
+
+Evidência: `plans/agent_ops/evidence/r3-native-t17-preservation/review.json`.

@@ -1,0 +1,14 @@
+{
+  "label": "nexus-install1",
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "result": {
+    "instance_id": "svc_8ea4f3f5be97b4db17d41add1480ce4a39a0767b97f5b0e4ceba0b299473c823",
+    "generation": null,
+    "state": "stopped",
+    "reason": "USER_SERVICE_INSTALLED",
+    "installation_state": "installed"
+  },
+  "stdout_sha256": "a5512dec7d858cda7b6a6cf83aa20293932bda53cf198d3a44700dc01a493cfc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

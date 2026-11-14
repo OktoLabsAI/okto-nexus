@@ -1,0 +1,38 @@
+{
+  "packages": {
+    "proposal_sha256": "d6b1340956fe5ed83cb16f56dd8af13c16c65341d9d517280ac2f6109d561040",
+    "verified_files": 984,
+    "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\draft\\installation\\venv\\Scripts\\python.exe",
+    "packages": {
+      "okto_nexus": {
+        "sha256": "07b7ed53c0fcd9b1c77099a8af52d6d5404d10aca988abaee15a7f51ca132ae4",
+        "files": 692,
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-recovery-diagnostics-installed-xtfm5o4x\\wheels\\okto_nexus-0.3.3-py3-none-any.whl"
+      },
+      "okto_nexus_connector": {
+        "sha256": "73f1a3ba6daf1a4db6f98a9eaf7badaed0d32b151a30b4c0c6a0cf66c2eae1b5",
+        "files": 124,
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-campaign-refresh-0ssbo8pb\\native\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl"
+      },
+      "nexus_connector_core": {
+        "sha256": "609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd",
+        "files": 167,
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\core-dx43-observation-du1arc40\\wheel\\okto_nexus_connector_core-0.0.14-py3-none-any.whl"
+      }
+    }
+  },
+  "source_sha256": "1f76094dad10abaaa597b4a6c503a9cc39edb7a416d4f0854c3e34b6d614839e",
+  "before": {
+    "nexus": {
+      "name": "OktoNexus-server-8ea4f3f5be97b4db17d41add1480ce4a39a0767b97f5b0e4ceba0b299473c823",
+      "absent": true
+    },
+    "connector": {
+      "name": "OktoNexus-connector-1abf3162087c4b322a3cd75ab6772b9e2b454f78dc6ca3936ef3f3ed693ccc4a",
+      "absent": true
+    }
+  },
+  "provider_calls": 0,
+  "service_starts": 0,
+  "at": 1794671289.3961298
+}

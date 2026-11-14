@@ -1,0 +1,20 @@
+{
+  "before": {
+    "name": "OktoNexus-server-8ea4f3f5be97b4db17d41add1480ce4a39a0767b97f5b0e4ceba0b299473c823",
+    "absent": false,
+    "digest": "4bbb504d1b21e20bb4b2093ea61a9493b7a7f2370cd6ca295ea7956ac0fd76cd",
+    "state": 3,
+    "enabled": true,
+    "last_result": 267011
+  },
+  "after": {
+    "name": "OktoNexus-server-8ea4f3f5be97b4db17d41add1480ce4a39a0767b97f5b0e4ceba0b299473c823",
+    "absent": false,
+    "digest": "3ffcc4a1b0d1212a2c5fbbbc46b5096891d4b21937b71a534a322936b5aaa70e",
+    "state": 3,
+    "enabled": true,
+    "last_result": 267011
+  },
+  "changed_field": "RegistrationInfo/Description",
+  "service_not_started": true
+}

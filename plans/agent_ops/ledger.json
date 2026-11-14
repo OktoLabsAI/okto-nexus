@@ -7177,7 +7177,7 @@
     },
     "SVC-T17": {
       "requirement": "Instalar/habilitar serviço repetidamente não duplica recursos; alteração externa de definição é preservada.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr02-enablement-connector.xml",
         "plans/agent_ops/evidence/pr02-enablement-core.xml",
@@ -7193,17 +7193,20 @@
         "plans/agent_ops/evidence/pr03-connector-login-start-wheels.json",
         "plans/agent_ops/evidence/pr03-connector-login-start.md",
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
+        "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+        "plans/agent_ops/evidence/r3-native-t17-preservation/review.json",
+        "plans/agent_ops/evidence/r3-native-t17-preservation/campaign/qualification.json"
       ],
       "subscopes": {
         "enablement_idempotence_and_external_edits_isolated": "VERIFIED",
-        "native_mutation_campaign": "NOT_RUN",
+        "native_mutation_campaign": "VERIFIED",
         "retained_injected_contract": "VERIFIED",
         "finite_empty_windows_campaign": "PARTIAL"
       },
-      "result": "Repeated scoped install/enable is no-op; native fingerprint edits and foreign definitions refuse, preserving them. Scope/remaining: Scheduler effects injected; real native integration remains separately pending.",
-      "remaining": "Complete the real Windows campaign with repeated enable and an externally changed temporary task definition, demonstrating preservation/refusal without duplicating resources.",
-      "remaining_kind": "real_service_mutation_campaign"
+      "result": "Both actual installed hosts preserve the same task digest and installation receipt across repeated install/enable. A Description-only external change makes enable/uninstall refuse SERVICE_DEFINITION_CHANGED while retaining the edited task and receipt. Exact original XML restored with compare-and-replace, then canonical uninstall confirms absence.",
+      "remaining": "None for the SVC-T17 repeated-install/enable and external-definition preservation contract on Windows.",
+      "remaining_kind": "none",
+      "qualification_limit": "Exact installed packages and native registration scope are retained; this does not qualify other service scenarios."
     },
     "SVC-T18": {
       "requirement": "Início no login é comprovado em SO real; resultado não é apresentado como prova de boot sem login.",
@@ -12805,6 +12808,25 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v12-execution/review.json"
       ]
+    },
+    "r3_native_t17_preservation": {
+      "status": "PASS",
+      "scenario": "SVC-T17",
+      "platform": "Windows Task Scheduler, current user",
+      "native_commands": 14,
+      "native_definition_changes": 4,
+      "provider_calls": 0,
+      "service_starts": 0,
+      "result": "Both actual installed hosts preserve the same task digest and installation receipt across repeated install/enable. A Description-only external change makes enable/uninstall refuse SERVICE_DEFINITION_CHANGED while retaining the edited task and receipt. Exact original XML restored with compare-and-replace, then canonical uninstall confirms absence.",
+      "qualification_sha256": "cca69d87f14f32a080f331772cf4ea8fd8a0a8f40374b7613355e2de64a5ef07",
+      "limits": [
+        "Temporary task definitions only; no personal task changed.",
+        "No login, crash, start, foreground, provider or broader service acceptance inferred.",
+        "XML ownership tokens and raw CLI output remain outside the repository in protected task-owned storage."
+      ],
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-t17-preservation/review.json"
+      ]
     }
   },
   "history": [
@@ -14081,6 +14103,15 @@
       "summary": "Setup CLI 0/configured and settled, 22178 new observed tokens, 111651 cumulative and 8 reservations. DEADLINE120 retained. Original stop refused before effect; separately selected normal stop and physical cleanup/uninstall completed. No useful-work/remote/M1 acceptance.",
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-v12-execution/review.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "Native SVC-T17 preservation on both hosts",
+      "status": "VERIFIED",
+      "summary": "Both actual installed hosts preserve the same task digest and installation receipt across repeated install/enable. A Description-only external change makes enable/uninstall refuse SERVICE_DEFINITION_CHANGED while retaining the edited task and receipt. Exact original XML restored with compare-and-replace, then canonical uninstall confirms absence.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-native-t17-preservation/review.json"
       ]
     }
   ]

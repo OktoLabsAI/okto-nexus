@@ -1,0 +1,16 @@
+{
+  "label": "nexus-enable2",
+  "returncode": 0,
+  "wrapper_exit_confirmed": true,
+  "result": {
+    "instance_id": "svc_8ea4f3f5be97b4db17d41add1480ce4a39a0767b97f5b0e4ceba0b299473c823",
+    "generation": null,
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "enabled": true,
+    "changed": false,
+    "installation_state": "installed"
+  },
+  "stdout_sha256": "4a97310a5f664dc2d3a0f7af2dc5a641604a871006e600f045477f6a26157482",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
