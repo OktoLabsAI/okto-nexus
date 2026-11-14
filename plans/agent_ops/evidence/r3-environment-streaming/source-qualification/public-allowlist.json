@@ -1,0 +1,50 @@
+{
+  "source_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-environment-streaming-3pkblrvj",
+  "files": [
+    {
+      "path": "run_source.py",
+      "sha256": "4955fd58f57d380bb6e9379516d57ff0f4821fe8c0cc525bf7e73f224e850bc0",
+      "bytes": 756
+    },
+    {
+      "path": "qualify.json.py",
+      "sha256": "0625388edbcc59a149698ad04c5e85e8f4c73de2474b354d37b196598a516d21",
+      "bytes": 3489
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "cf2a998689136886a3c0bc24a7db9e35ac474b98035d3979d7804c6fd3d63ffc",
+      "bytes": 2950
+    },
+    {
+      "path": "nexus-source.xml",
+      "sha256": "399e92106a9323dfe3708a2ca719b5eccb1e492aa328aec0d584aa156755abfb",
+      "bytes": 2820
+    },
+    {
+      "path": "connector-source.xml",
+      "sha256": "5050e4a0ce50aa3361986e53958cd168b7563c011f94443eab9dc18018786faa",
+      "bytes": 2910
+    },
+    {
+      "path": "nexus/service_environment.py",
+      "sha256": "6392265c7053b89f4d186444e11cdcea539ec3c03cfd3f4230628a26e545e375",
+      "bytes": 7345
+    },
+    {
+      "path": "nexus/test_service_environment_streaming.py",
+      "sha256": "3a1126cc93488bd5633957ab2052243a1cdea69e83406a2f981d64a756e1fc3a",
+      "bytes": 7242
+    },
+    {
+      "path": "connector/service_environment.py",
+      "sha256": "6a820c4239ad27b23704b8c843b19a2a7f96c10164337af5626aa3de68d90624",
+      "bytes": 7365
+    },
+    {
+      "path": "connector/test_service_environment_streaming.py",
+      "sha256": "6ac88ad0aa52169249ac87a2ff2d2b35192d299eb7d9f7fa30595895f7e2dba7",
+      "bytes": 7419
+    }
+  ]
+}

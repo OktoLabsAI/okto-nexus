@@ -1857,3 +1857,37 @@ serviço, modelo ou grant foi executado nesses testes. A execução posterior pe
 root será registrada separadamente; este marco não a classifica nem promove aceite.
 Contagem inalterada: **123/132 VERIFIED,7 IN_PROGRESS e2 NOT_RUN**.
 Evidência: `plans/agent_ops/evidence/r3-m1-request12-preparation/review.json`.
+
+
+## 2026-11-14 — diagnóstico do upgrade W12 e leitura incremental
+
+W12 foi preparado sem nova admissão: 272648 tokens observados e 11 reservas
+históricas permanecem intactos. Upgrade-plan retornou 0 e recebeu revisão
+técnica; o primeiro upgrade-apply retornou 2, UPGRADE_ENVIRONMENT_UNAVAILABLE,
+antes de iniciar serviço ou provedor. O checkpoint continua byte-idêntico à
+preparação, com requests vazias; a label local configurada não foi tratada como
+prova de processo ativo. A tentativa original e sua revisão foram preservadas.
+
+O snapshot do pacote original produziu o fingerprint revisado, mas levou
+77,016 s; uma execução instrumentada levou 62,014 s, com 57,755 s nas leituras.
+O probe canônico possui timeout de 60 s. Timeout é a causa compatível com fonte
+e duração, não uma exceção histórica comprovada. O algoritmo equivalente com
+blocos de 64 KiB produziu o mesmo snapshot em 1,697 s, sem alterar a instalação.
+
+Nexus `2f626483d37f576c25932573e6d281c3111e598a` e Connector
+`645d7bd55957a42507d9d208871a30f91828f952` preservam o fingerprint ordenado,
+limites de arquivo/distribuição/manifesto e timeout60, substituindo apenas a
+leitura monolítica por leitura incremental limitada. Cada host passou 18 testes
+(16 novos e 2 regressões), Ruff e diff-check. A observação não mede o alocador
+diretamente e não atribui uma falha ao filesystem.
+
+O novo pacote próprio, construído dos commits exatos, passou o probe canônico
+instalado em 1,812 s com timeout60 inalterado e zero ações de serviço, upgrade
+ou modelo. O payload mudou conforme esperado com a correção; não se afirma
+igualdade do fingerprint entre versões nem sucesso da migração original.
+Fontes de qualificação e arquivos instalados diferem somente por LF/CRLF;
+os hashes exatos e essa distinção estão retidos no review.
+
+Nenhum aceite M1 ou cenário foi promovido. Contagem preservada:
+**123/132 VERIFIED, 7 IN_PROGRESS e 2 NOT_RUN**.
+Evidência: `plans/agent_ops/evidence/r3-environment-streaming/review.json`.

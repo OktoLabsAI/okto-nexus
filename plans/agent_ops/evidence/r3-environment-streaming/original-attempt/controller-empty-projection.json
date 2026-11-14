@@ -1,0 +1,34 @@
+{
+  "source_sha256": "6642b57487cd9ace4d18ad86901a6f182ab7b8c80680921f2f803fe2ec55ec2b",
+  "matches_preparation_sha256": true,
+  "active_requests_count": 0,
+  "registered_owner_labels": [
+    "local"
+  ],
+  "current_faults": [],
+  "policy": {
+    "revision": 14,
+    "carry_in_admissions": 11,
+    "carry_in_tokens": 272648,
+    "max_cumulative_admissions": 13,
+    "max_new_admissions": 2,
+    "preventive_cumulative_tokens": 500000,
+    "operational_tolerance": 700000,
+    "deadline_seconds": 600
+  },
+  "new_model_reservations": 0,
+  "runtime_private_filenames": [
+    "upgrade-apply.process.json",
+    "upgrade-apply.reserved.json",
+    "upgrade-apply.returned.json",
+    "upgrade-apply.stderr",
+    "upgrade-apply.stdout",
+    "upgrade-plan.process.json",
+    "upgrade-plan.reserved.json",
+    "upgrade-plan.returned.json",
+    "upgrade-plan.stderr",
+    "upgrade-plan.stdout"
+  ],
+  "service_start_selection_present": false,
+  "limitation": "Own controller and invocation inventory only; not a global machine observation. Historical nested checkpoints remain intact and are not copied."
+}

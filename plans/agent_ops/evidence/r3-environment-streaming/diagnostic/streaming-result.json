@@ -1,0 +1,44 @@
+{
+  "mode": "READONLY_EQUIVALENT_STREAMING_SNAPSHOT",
+  "installed_sources_changed": false,
+  "matches_reviewed_candidate": true,
+  "elapsed_wall_seconds": 1.696513100003358,
+  "elapsed_cpu_seconds": 1.171875,
+  "chunk_bytes": 65536,
+  "per_file_limit_bytes": 67108864,
+  "oversize_detection_limit_bytes": 67108865,
+  "aggregate_limit_bytes": 268435456,
+  "file_count_limit": 10000,
+  "digest_algorithm": "sorted relative name + NUL + SHA256(full file bytes), aggregate SHA256",
+  "snapshot_sha256": "f6f2693d9948bfb1f06095ab7e6828be218463291ef88a2393d8c10042df3674",
+  "stages": [
+    {
+      "distribution": "okto-nexus",
+      "files": 704,
+      "payload_bytes": 11672798,
+      "read_calls": 1485,
+      "maximum_returned_chunk_bytes": 65536,
+      "open_wall_seconds": 0.3825505991699174,
+      "read_wall_seconds": 0.12341100029880181,
+      "hash_wall_seconds": 0.10583089949795976,
+      "elapsed_wall_seconds": 1.391596200002823,
+      "elapsed_cpu_seconds": 0.90625
+    },
+    {
+      "distribution": "okto-nexus-connector-core",
+      "files": 176,
+      "payload_bytes": 2549538,
+      "read_calls": 365,
+      "maximum_returned_chunk_bytes": 65536,
+      "open_wall_seconds": 0.0558454996207729,
+      "read_wall_seconds": 0.023995800060220063,
+      "hash_wall_seconds": 0.021759599971119314,
+      "elapsed_wall_seconds": 0.22398559999419376,
+      "elapsed_cpu_seconds": 0.203125
+    }
+  ],
+  "source_sha256": "93b7b39836681c562ee0f238c681fb54b79d6b9285f914f9e44bf1d25ac89bb3",
+  "service_or_provider_started": false,
+  "canonical_probe60_success_claimed": false,
+  "limitation": "In-memory diagnostic algorithm substitution only; no installed source change, no upgrade retry authority."
+}

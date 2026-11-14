@@ -1,0 +1,71 @@
+{
+  "status": "SOURCE_QUALIFIED_INSTALLED_PROBE_PENDING",
+  "hosts": {
+    "nexus": {
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\src\\okto_nexus\\service_environment.py",
+        "sha256": "6392265c7053b89f4d186444e11cdcea539ec3c03cfd3f4230628a26e545e375"
+      },
+      "test": {
+        "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_service_environment_streaming.py",
+        "sha256": "3a1126cc93488bd5633957ab2052243a1cdea69e83406a2f981d64a756e1fc3a"
+      },
+      "passed": 18,
+      "new_cases": 16,
+      "existing_regressions": 2,
+      "xml": "nexus-source.xml"
+    },
+    "connector": {
+      "source": {
+        "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\service_environment.py",
+        "sha256": "6a820c4239ad27b23704b8c843b19a2a7f96c10164337af5626aa3de68d90624"
+      },
+      "test": {
+        "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_service_environment_streaming.py",
+        "sha256": "6ac88ad0aa52169249ac87a2ff2d2b35192d299eb7d9f7fa30595895f7e2dba7"
+      },
+      "passed": 18,
+      "new_cases": 16,
+      "existing_regressions": 2,
+      "xml": "connector-source.xml"
+    }
+  },
+  "contract": {
+    "chunk_bytes": 65536,
+    "file_bytes": 67108864,
+    "distribution_bytes": 268435456,
+    "manifest_entries": 10000,
+    "probe_timeout_seconds": 60,
+    "ordered_fingerprint_unchanged": true,
+    "core_exact_pin_unchanged": true,
+    "caching": false,
+    "concurrency": false
+  },
+  "readonly_comparison": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\streaming-result.json",
+    "sha256": "c22bed9a5d621ec17ced69b5819c785a4567b4dcb3c8661ea2e4bd9203be337f",
+    "algorithm_same_installed_payload_snapshot_equal": true,
+    "original_wall_seconds": 62.014,
+    "streaming_wall_seconds": 1.6965,
+    "limitation": "Comparison used unchanged old installed bytes and an in-memory alternative inspector. New wheel probe60 not yet run."
+  },
+  "validation": {
+    "nexus_ruff_tool": "9c5329",
+    "connector_ruff_tool": "a960f0",
+    "nexus_diffcheck_tool": "75cc38",
+    "connector_diffcheck_tool": "d241b4",
+    "source_tests_first_run_passed": true,
+    "connector_warnings": "Two pytest config warnings because asyncio plugin autoload disabled; selected tests are synchronous."
+  },
+  "effects": {
+    "service_calls": 0,
+    "provider_calls": 0,
+    "venv_installs": 0,
+    "Core_changes": 0
+  },
+  "risks": [
+    "Streaming still observes the filesystem over time; no new atomic snapshot guarantee.",
+    "Original and streaming paths reject excess bytes; streaming refuses earlier instead of reading the rest of an oversized distribution.",
+    "The implementation file changes the installed payload hash on new wheels as expected; equality is algorithmic on the same bytes."
+  ]
+}

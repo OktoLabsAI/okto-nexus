@@ -1,0 +1,153 @@
+{
+  "files": [
+    {
+      "path": "diagnostic/compare_streaming.py",
+      "sha256": "93b7b39836681c562ee0f238c681fb54b79d6b9285f914f9e44bf1d25ac89bb3",
+      "bytes": 4181
+    },
+    {
+      "path": "diagnostic/diagnose.py",
+      "sha256": "cab9822f64153bdda3fa06d6d7865157cf131a1441ce92303dc4635c0085489a",
+      "bytes": 2824
+    },
+    {
+      "path": "diagnostic/DIAGNOSIS.md",
+      "sha256": "fc47c9ca1c2fb04a594539ef61f1bd34c379177e5f2fd571f83a0ef51284ee73",
+      "bytes": 2754
+    },
+    {
+      "path": "diagnostic/diagnostic-manifest.json",
+      "sha256": "f0db2b2ac89bb52624fcf2d882dcca0313f51b1c285801e7fc8fcd358167b9b3",
+      "bytes": 1936
+    },
+    {
+      "path": "diagnostic/profile-result.json",
+      "sha256": "7783054145a4ddd63d62c9ae9ead9920f78a9fbf91b29022fca16f421b75041c",
+      "bytes": 4606
+    },
+    {
+      "path": "diagnostic/profile_snapshot.py",
+      "sha256": "403b338967f7d7db462f0ab31306c1e6c02a61fd3c3011a47e6b228f7c17eede",
+      "bytes": 4682
+    },
+    {
+      "path": "diagnostic/snapshot-result.json",
+      "sha256": "1f89770e14ab622448e14bfac25a94005329a174ab5d8d2746a9c54410fdd1f2",
+      "bytes": 1021
+    },
+    {
+      "path": "diagnostic/streaming-result.json",
+      "sha256": "c22bed9a5d621ec17ced69b5819c785a4567b4dcb3c8661ea2e4bd9203be337f",
+      "bytes": 1707
+    },
+    {
+      "path": "installed/build-provenance.json",
+      "sha256": "56942f0d1c1f0466eecfa82eaa4b314ad294bb811b1f4bcb73542738ef1ac3f1",
+      "bytes": 1719
+    },
+    {
+      "path": "installed/installation-projection.json",
+      "sha256": "81a47bc367ba265f6a5ac132308f948951e8662ddd41c430e04654beec499618",
+      "bytes": 562
+    },
+    {
+      "path": "installed/probe-projection.json",
+      "sha256": "b45496ecff64bbfa35cfa20a3c470b49ba64fff10fe124e18557ec913929ff24",
+      "bytes": 2162
+    },
+    {
+      "path": "original-attempt/controller-empty-projection.json",
+      "sha256": "1896025296e9e88beb606ec1957f1978c942dcc86ede81bf75263e451eca8bd0",
+      "bytes": 1096
+    },
+    {
+      "path": "original-attempt/environment-upgrade-apply-result.json",
+      "sha256": "0edb8478f77f0004c95fe5e953502bbb06ee26df5497e8a9d7b7932cfc299df5",
+      "bytes": 895
+    },
+    {
+      "path": "original-attempt/environment-upgrade-plan-result.json",
+      "sha256": "c9f4bc1101c7b7138abb8642aacac2e19d221e0e55ed6206c49341576faf9b20",
+      "bytes": 1038
+    },
+    {
+      "path": "original-attempt/root-driver-preparation.json",
+      "sha256": "823547ece36b0f88ab19360f440454cb4ddc83a6a2406c473b6722e981fd8363",
+      "bytes": 962
+    },
+    {
+      "path": "original-attempt/upgrade-review-projection.json",
+      "sha256": "59ba52664d92ba44933b0c8a650d331e96d63b651a9b0a7fa2d0991921d7a63c",
+      "bytes": 946
+    },
+    {
+      "path": "review.json",
+      "sha256": "36b9aad7fea9d266dc41b1f92ac356914330836fdfb1cc09bbcd780b44e6c781",
+      "bytes": 2392
+    },
+    {
+      "path": "source-qualification/connector/service_environment.py",
+      "sha256": "6a820c4239ad27b23704b8c843b19a2a7f96c10164337af5626aa3de68d90624",
+      "bytes": 7365
+    },
+    {
+      "path": "source-qualification/connector/test_service_environment_streaming.py",
+      "sha256": "6ac88ad0aa52169249ac87a2ff2d2b35192d299eb7d9f7fa30595895f7e2dba7",
+      "bytes": 7419
+    },
+    {
+      "path": "source-qualification/connector-source.xml",
+      "sha256": "5050e4a0ce50aa3361986e53958cd168b7563c011f94443eab9dc18018786faa",
+      "bytes": 2910
+    },
+    {
+      "path": "source-qualification/nexus/service_environment.py",
+      "sha256": "6392265c7053b89f4d186444e11cdcea539ec3c03cfd3f4230628a26e545e375",
+      "bytes": 7345
+    },
+    {
+      "path": "source-qualification/nexus/test_service_environment_streaming.py",
+      "sha256": "3a1126cc93488bd5633957ab2052243a1cdea69e83406a2f981d64a756e1fc3a",
+      "bytes": 7242
+    },
+    {
+      "path": "source-qualification/nexus-source.xml",
+      "sha256": "399e92106a9323dfe3708a2ca719b5eccb1e492aa328aec0d584aa156755abfb",
+      "bytes": 2820
+    },
+    {
+      "path": "source-qualification/public-allowlist.json",
+      "sha256": "683f4666e90a83a7302cce65bc50950a791c2cfcebf581f8188291b005b4bae6",
+      "bytes": 1608
+    },
+    {
+      "path": "source-qualification/qualification.json",
+      "sha256": "cf2a998689136886a3c0bc24a7db9e35ac474b98035d3979d7804c6fd3d63ffc",
+      "bytes": 2950
+    },
+    {
+      "path": "source-qualification/qualify.json.py",
+      "sha256": "0625388edbcc59a149698ad04c5e85e8f4c73de2474b354d37b196598a516d21",
+      "bytes": 3489
+    },
+    {
+      "path": "source-qualification/run_source.py",
+      "sha256": "4955fd58f57d380bb6e9379516d57ff0f4821fe8c0cc525bf7e73f224e850bc0",
+      "bytes": 756
+    },
+    {
+      "path": "status-preservation.json",
+      "sha256": "afe101800d8da476fecc98f5f35fa13e7ce33970897ff1215ef90bae6640fd94",
+      "bytes": 239
+    }
+  ],
+  "exclusions": [
+    "private plan and token",
+    "raw CLI stdout/stderr",
+    "supervisor argv",
+    "credentials",
+    "controller contents",
+    "full installation manifest"
+  ],
+  "repo_evidence_root": "plans/agent_ops/evidence/r3-environment-streaming"
+}

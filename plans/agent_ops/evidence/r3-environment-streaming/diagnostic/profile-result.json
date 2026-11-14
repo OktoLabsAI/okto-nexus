@@ -1,0 +1,142 @@
+{
+  "mode": "ORIGINAL_SNAPSHOT_INSTRUMENTED",
+  "algorithm_changed": false,
+  "matches_reviewed_candidate": true,
+  "elapsed_wall_seconds": 62.013997500005644,
+  "elapsed_cpu_seconds": 54.375,
+  "file_reads": 881,
+  "totals": {
+    "open_wall_seconds": 0.7610592998098582,
+    "open_cpu_seconds": 0.65625,
+    "read_wall_seconds": 57.75504049967276,
+    "read_cpu_seconds": 50.625,
+    "returned_bytes": 14477168
+  },
+  "hash_wall_seconds": 0.17398610030068085,
+  "hash_cpu_seconds": 0.21875,
+  "hash_bytes": 14477168,
+  "read_size_limit_64MiB_calls": 880,
+  "memory_before": {
+    "available": false
+  },
+  "memory_after": {
+    "available": false
+  },
+  "stages": [
+    {
+      "distribution": "okto-nexus",
+      "elapsed_wall_seconds": 49.02827760000946,
+      "elapsed_cpu_seconds": 42.625,
+      "files": 704,
+      "payload_bytes": 11672798,
+      "memory": {
+        "available": false
+      }
+    },
+    {
+      "distribution": "okto-nexus-connector-core",
+      "elapsed_wall_seconds": 12.96235109999543,
+      "elapsed_cpu_seconds": 11.75,
+      "files": 176,
+      "payload_bytes": 2549538,
+      "memory": {
+        "available": false
+      }
+    }
+  ],
+  "slowest_ten_reads": [
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\adapters\\outbound\\telemetry\\__init__.py",
+      "open_wall_seconds": 0.010564500000327826,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.2797102000331506,
+      "read_cpu_seconds": 0.046875,
+      "returned_bytes": 269,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\application\\terminal_cooperation.py",
+      "open_wall_seconds": 0.0007650000043213367,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.27726419997634366,
+      "read_cpu_seconds": 0.0625,
+      "returned_bytes": 27662,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\adapters\\inbound\\http\\startup_refusal_owner.py",
+      "open_wall_seconds": 0.0008773999870754778,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.21393289999105036,
+      "read_cpu_seconds": 0.078125,
+      "returned_bytes": 2089,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\bootstrap\\embedded_events.py",
+      "open_wall_seconds": 0.0008302000351250172,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.19740400003502145,
+      "read_cpu_seconds": 0.0625,
+      "returned_bytes": 9280,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\domain\\inbox.py",
+      "open_wall_seconds": 0.0008122999570332468,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.1943440000177361,
+      "read_cpu_seconds": 0.046875,
+      "returned_bytes": 9199,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\migrations\\084_execution_local_publications.sql",
+      "open_wall_seconds": 0.0009519000304862857,
+      "open_cpu_seconds": 0.015625,
+      "read_wall_seconds": 0.190584099967964,
+      "read_cpu_seconds": 0.0625,
+      "returned_bytes": 534,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\migrations\\119_retire_claude_attach.sql",
+      "open_wall_seconds": 0.0008356000180356205,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.18176389997825027,
+      "read_cpu_seconds": 0.078125,
+      "returned_bytes": 293,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\application\\execution_runtime_options.py",
+      "open_wall_seconds": 0.0009136000298894942,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.1716313999495469,
+      "read_cpu_seconds": 0.0625,
+      "returned_bytes": 12508,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\migrations\\075_execution_control_lanes.sql",
+      "open_wall_seconds": 0.0010350999655202031,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.13323499995749444,
+      "read_cpu_seconds": 0.0625,
+      "returned_bytes": 1865,
+      "requested_bytes": 67108865
+    },
+    {
+      "file": "Lib\\site-packages\\okto_nexus\\domain\\ids.py",
+      "open_wall_seconds": 0.0006383000290952623,
+      "open_cpu_seconds": 0.0,
+      "read_wall_seconds": 0.1335263000219129,
+      "read_cpu_seconds": 0.0625,
+      "returned_bytes": 1833,
+      "requested_bytes": 67108865
+    }
+  ],
+  "services_started": false,
+  "provider_accessed": false,
+  "source_sha256": "403b338967f7d7db462f0ab31306c1e6c02a61fd3c3011a47e6b228f7c17eede"
+}

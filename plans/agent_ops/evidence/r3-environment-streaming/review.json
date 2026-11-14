@@ -1,0 +1,57 @@
+{
+  "status": "SOURCE_QUALIFIED_AND_NEW_INSTALLED_CANONICAL_PROBE_PASS",
+  "source_commits": {
+    "nexus": "2f626483d37f576c25932573e6d281c3111e598a",
+    "connector": "645d7bd55957a42507d9d208871a30f91828f952"
+  },
+  "source_tests": {
+    "nexus_passed": 18,
+    "connector_passed": 18,
+    "new_cases_per_host": 16,
+    "existing_regressions_per_host": 2
+  },
+  "original_apply": {
+    "returncode": 2,
+    "code": "UPGRADE_ENVIRONMENT_UNAVAILABLE",
+    "timeout_cause": "INFERRED_FROM_TIMING_AND_SOURCE_NOT_ORIGINAL_EXCEPTION_TRACE",
+    "service_started": false,
+    "provider_accessed": false
+  },
+  "original_direct_snapshot_seconds": 77.01590389997,
+  "original_instrumented_snapshot_seconds": 62.013997500005644,
+  "equivalent_streaming_snapshot_seconds": 1.696513100003358,
+  "same_original_payload_snapshot_sha256": "f6f2693d9948bfb1f06095ab7e6828be218463291ef88a2393d8c10042df3674",
+  "new_installed_probe": {
+    "status": "CANONICAL_PROBE60_PASS",
+    "elapsed_seconds": 1.8115265000378713,
+    "timeout_seconds": 60,
+    "source_sha256": "5eceab6033fe7970881a0fa98369af82cdc93f9e9b36424d1dd9d5f3cb385a79",
+    "installation_sha256": "841d9564071170e3a68e2f7e5b318f8e73193a2c659d4f99827c9a786fb89543",
+    "service_actions": 0,
+    "upgrade_actions": 0,
+    "model_calls": 0
+  },
+  "acceptance_promoted": false,
+  "retained_verified_count": 123,
+  "total_scenarios": 132,
+  "private_plan_tokens_supervisor_argv_credentials_copied": false,
+  "qualification_source_comparison": {
+    "nexus": {
+      "source_qualification_sha256": "6392265c7053b89f4d186444e11cdcea539ec3c03cfd3f4230628a26e545e375",
+      "installed_sha256": "d1419354d1a84ee459f8f4fa7b9c54900e2ace9ddd4ae0b74bb1a352e168fdb9",
+      "byte_identical": false,
+      "equal_after_CRLF_to_LF": true,
+      "source_crlf_count": 0,
+      "installed_crlf_count": 155
+    },
+    "connector": {
+      "source_qualification_sha256": "6a820c4239ad27b23704b8c843b19a2a7f96c10164337af5626aa3de68d90624",
+      "installed_sha256": "efaaf704c52d2499113cf07e41efcc8e8b02652a521e933bdb545d70ce910983",
+      "byte_identical": false,
+      "equal_after_CRLF_to_LF": true,
+      "source_crlf_count": 0,
+      "installed_crlf_count": 155
+    }
+  },
+  "limitation": "New payload naturally has a new fingerprint. The original apply remains failed; this probe does not claim service migration, restart, model work, or M1 acceptance."
+}

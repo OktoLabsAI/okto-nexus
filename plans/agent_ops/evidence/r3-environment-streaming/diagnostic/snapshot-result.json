@@ -1,0 +1,30 @@
+{
+  "mode": "DIRECT_SNAPSHOT_NO_UPGRADE",
+  "plan_sha256": "aadb1ff4f8157381b2e55f7ff64b1be9e27941753ec80067c50752666896ebee",
+  "source_sha256": "58bda54a52eb4ab67470173530430865b35f81d7ad5ac16bb645934a4ec7d0db",
+  "isolated": true,
+  "dont_write_bytecode": true,
+  "utf8_mode": true,
+  "services_started": false,
+  "providers_accessed": false,
+  "status": "SNAPSHOT_OK",
+  "matches_reviewed_candidate": true,
+  "snapshot_sha256": "f6f2693d9948bfb1f06095ab7e6828be218463291ef88a2393d8c10042df3674",
+  "elapsed_seconds": 77.01590389997,
+  "stages": [
+    {
+      "distribution": "okto-nexus",
+      "elapsed_seconds": 62.46213639999041,
+      "status": "OK",
+      "version": "0.3.3",
+      "digest": "748d667fb1f7098fed3cb12fbf2d5a85c95f49a5d5162c535f802315ef3e6ab0"
+    },
+    {
+      "distribution": "okto-nexus-connector-core",
+      "elapsed_seconds": 14.541856500029098,
+      "status": "OK",
+      "version": "0.0.14",
+      "digest": "1fb00114cf58ac3e1dea8e11b94235a446975b7cc96a2fea2f106b6c2d426579"
+    }
+  ]
+}

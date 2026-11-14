@@ -1,0 +1,53 @@
+{
+  "source_sha256": "5eceab6033fe7970881a0fa98369af82cdc93f9e9b36424d1dd9d5f3cb385a79",
+  "status": "CANONICAL_PROBE60_PASS",
+  "elapsed_seconds": 1.8115265000378713,
+  "canonical_probe_timeout_seconds": 60,
+  "source_installed_agreement": {
+    "nexus": {
+      "source_sha256": "d1419354d1a84ee459f8f4fa7b9c54900e2ace9ddd4ae0b74bb1a352e168fdb9",
+      "installed_sha256": "d1419354d1a84ee459f8f4fa7b9c54900e2ace9ddd4ae0b74bb1a352e168fdb9"
+    },
+    "connector": {
+      "source_sha256": "efaaf704c52d2499113cf07e41efcc8e8b02652a521e933bdb545d70ce910983",
+      "installed_sha256": "efaaf704c52d2499113cf07e41efcc8e8b02652a521e933bdb545d70ce910983"
+    }
+  },
+  "installation_sha256": "841d9564071170e3a68e2f7e5b318f8e73193a2c659d4f99827c9a786fb89543",
+  "model_calls": 0,
+  "service_actions": 0,
+  "upgrade_actions": 0,
+  "scope": "Installed canonical service_environment.probe only; no runtime home, Scheduler or provider touched.",
+  "candidate_metadata": {
+    "protocol": 2,
+    "distribution": "okto-nexus",
+    "package": {
+      "version": "0.3.3",
+      "digest": "81469df2f64bc54876a8d86cf965e702848f53ad03a4f50bcd7ac9ab9edbb595"
+    },
+    "core": {
+      "version": "0.0.14",
+      "digest": "ffe5fbd87d18c3e046a5386aafdf1a14db7a3df75e955b55e5243ca33fb05605"
+    },
+    "python_version": "3.13.1",
+    "python_digest": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79"
+  },
+  "qualification_source_comparison": {
+    "nexus": {
+      "source_qualification_sha256": "6392265c7053b89f4d186444e11cdcea539ec3c03cfd3f4230628a26e545e375",
+      "installed_sha256": "d1419354d1a84ee459f8f4fa7b9c54900e2ace9ddd4ae0b74bb1a352e168fdb9",
+      "byte_identical": false,
+      "equal_after_CRLF_to_LF": true,
+      "source_crlf_count": 0,
+      "installed_crlf_count": 155
+    },
+    "connector": {
+      "source_qualification_sha256": "6a820c4239ad27b23704b8c843b19a2a7f96c10164337af5626aa3de68d90624",
+      "installed_sha256": "efaaf704c52d2499113cf07e41efcc8e8b02652a521e933bdb545d70ce910983",
+      "byte_identical": false,
+      "equal_after_CRLF_to_LF": true,
+      "source_crlf_count": 0,
+      "installed_crlf_count": 155
+    }
+  }
+}

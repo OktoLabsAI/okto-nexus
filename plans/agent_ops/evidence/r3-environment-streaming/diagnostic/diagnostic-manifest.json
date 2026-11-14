@@ -1,0 +1,44 @@
+{
+  "status": "READONLY_DIAGNOSIS_COMPLETE",
+  "installed_package_changed": false,
+  "upgrade_retry_executed": false,
+  "service_or_provider_started": false,
+  "canonical_probe60_success_claimed": false,
+  "files": {
+    "diagnose.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\diagnose.py",
+      "sha256": "cab9822f64153bdda3fa06d6d7865157cf131a1441ce92303dc4635c0085489a",
+      "bytes": 2824
+    },
+    "snapshot-result.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\snapshot-result.json",
+      "sha256": "1f89770e14ab622448e14bfac25a94005329a174ab5d8d2746a9c54410fdd1f2",
+      "bytes": 1021
+    },
+    "profile_snapshot.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\profile_snapshot.py",
+      "sha256": "403b338967f7d7db462f0ab31306c1e6c02a61fd3c3011a47e6b228f7c17eede",
+      "bytes": 4682
+    },
+    "profile-result.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\profile-result.json",
+      "sha256": "7783054145a4ddd63d62c9ae9ead9920f78a9fbf91b29022fca16f421b75041c",
+      "bytes": 4606
+    },
+    "compare_streaming.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\compare_streaming.py",
+      "sha256": "93b7b39836681c562ee0f238c681fb54b79d6b9285f914f9e44bf1d25ac89bb3",
+      "bytes": 4181
+    },
+    "streaming-result.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\streaming-result.json",
+      "sha256": "c22bed9a5d621ec17ced69b5819c785a4567b4dcb3c8661ea2e4bd9203be337f",
+      "bytes": 1707
+    },
+    "DIAGNOSIS.md": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w12-upgrade-probe-e8597493\\DIAGNOSIS.md",
+      "sha256": "fc47c9ca1c2fb04a594539ef61f1bd34c379177e5f2fd571f83a0ef51284ee73",
+      "bytes": 2754
+    }
+  }
+}

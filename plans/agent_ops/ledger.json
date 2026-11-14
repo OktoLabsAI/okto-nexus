@@ -13467,6 +13467,30 @@
       "amendment_sha256": "249c52325655e2d6c7030e8fe37c1eb6d43726e06954db544970446800da0117",
       "runtime_freeze_sha256": "860ee94619360eeeb797c7ccf2ab2c6f0d855667086c0d2147233fdf12f65038",
       "acceptance_promoted": false
+    },
+    "r3_environment_streaming_upgrade_diagnosis": {
+      "status": "SOURCE_QUALIFIED_AND_NEW_INSTALLED_CANONICAL_PROBE_PASS",
+      "source_commits": {
+        "nexus": "2f626483d37f576c25932573e6d281c3111e598a",
+        "connector": "645d7bd55957a42507d9d208871a30f91828f952"
+      },
+      "observed_tokens_carried": 272648,
+      "reservations_carried": 11,
+      "new_model_reservations": 0,
+      "original_upgrade_apply_code": "UPGRADE_ENVIRONMENT_UNAVAILABLE",
+      "historical_timeout_only_inferred": true,
+      "original_snapshot_seconds": 77.01590389997,
+      "instrumented_snapshot_seconds": 62.013997500005644,
+      "equivalent_streaming_snapshot_seconds": 1.696513100003358,
+      "new_installed_probe_seconds": 1.8115265000378713,
+      "source_tests_passed_per_host": 18,
+      "probe_timeout_seconds": 60,
+      "no_new_acceptance": true,
+      "evidence": [
+        "plans/agent_ops/evidence/r3-environment-streaming/review.json",
+        "plans/agent_ops/evidence/r3-environment-streaming/public-allowlist.json",
+        "plans/agent_ops/evidence/r3-environment-streaming/installed/probe-projection.json"
+      ]
     }
   },
   "history": [
@@ -14937,6 +14961,15 @@
       "evidence": [
         "plans/agent_ops/evidence/r3-m1-request12-preparation/review.json",
         "plans/agent_ops/evidence/r3-m1-request12-preparation/package/qualification.json"
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "milestone": "r3_environment_streaming_upgrade_diagnosis",
+      "status": "SOURCE_QUALIFIED_AND_NEW_INSTALLED_CANONICAL_PROBE_PASS",
+      "summary": "Preserved W12 upgrade-apply failure before service start or model access. The original snapshot exceeded the canonical 60-second bound; equivalent streaming retained its fingerprint in 1.697 seconds. Nexus 2f626483 and Connector 645d7bd5 each passed 18 source cases. The new isolated package passed the canonical installed probe in 1.812 seconds without service, upgrade or model actions. Carry remains 272648 tokens and 11 reservations; 123 of 132 scenarios remain verified, with no status changes.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-environment-streaming/review.json"
       ]
     }
   ],

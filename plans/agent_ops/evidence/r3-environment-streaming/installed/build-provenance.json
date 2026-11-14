@@ -1,0 +1,37 @@
+{
+  "sources": {
+    "nexus": {
+      "repository": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "commit": "2f626483d37f576c25932573e6d281c3111e598a",
+      "archive_sha256": "14a4fb8ab84b03a60c49befb10b03474fdf2e5e80c9889eadbd6a24ba38e11ca"
+    },
+    "connector": {
+      "repository": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+      "commit": "645d7bd55957a42507d9d208871a30f91828f952",
+      "archive_sha256": "a841e05d6f8f8fac047ac357c08294e59ad0afe12d5f60a8dd2edddfa3fd9bf0"
+    }
+  },
+  "wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": "b04cd10d75bed958e69501921f503a4b39178737b0c22ccf19ce88a9978ec6e4",
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": "b070262bc7670c9a3367c454a921191d061471ca0277275a71f942d940180f6e",
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+  },
+  "dependencies": {
+    "returncode": 0,
+    "stdout_sha256": "f82ebbd0853612f4dabc058de6d2ca7ca6323bb607ca7257c4a118ee21ace10a",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "build": {
+    "returncode": 0,
+    "stdout_sha256": "c5c5895e7d1be676ddc99ba789e736c678396d020af6c57b59d748502dd750be",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "installation": {
+    "returncode": 0,
+    "stdout_sha256": "9630c1d1810ff1c8fceea166dfef3f803c88679f455c49d83e911bd9a4895d95",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "installation_sha256": "841d9564071170e3a68e2f7e5b318f8e73193a2c659d4f99827c9a786fb89543",
+  "services_started": 0,
+  "models_called": 0
+}
