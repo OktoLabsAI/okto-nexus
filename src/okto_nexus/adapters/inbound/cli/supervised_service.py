@@ -18,9 +18,17 @@ from ...outbound.service_manager.local import launch_exclusion
 from ...outbound.service_manager.locking import LockBusy
 
 
-def run(home: Path, database: Path, token: str, *, installation=None) -> int:
+def run(home: Path, database: Path, token: str, *, installation=None, supervisor_cycle=None,
+        supervisor_nonce=None) -> int:
     from ..http.lock import ServeLock
     installation = installation or ServerInstallation(home, database)
+    if supervisor_cycle is not None:
+        from ...outbound.service_manager.supervision import join_parent
+        try:
+            if not join_parent(home, database, installation, token, supervisor_cycle, supervisor_nonce):
+                return 0  # stop acknowledged identities, without runtime bootstrap
+        except (OSError, ValueError):
+            return 2
     lock = ServeLock(home, db_path=database)
     deadline = time.monotonic() + 30
     while True:
@@ -30,6 +38,12 @@ def run(home: Path, database: Path, token: str, *, installation=None) -> int:
                 if not receipt or receipt['token'] != token or receipt['state'] != 'installed':
                     return 2
                 control = installation.control(receipt)
+                if supervisor_cycle is not None:
+                    from ...outbound.service_manager.supervision import validate_child, own_birth
+                    validate_child(home, receipt, installation.instance_id,
+                                   supervisor_cycle, os.getpid(), own_birth(), supervisor_nonce)
+                    if control.get('cycle_id') != supervisor_cycle:
+                        return 2
                 logon = windows_logon_session()
                 if control['desired'] == 'draining' and control.get('logon_session') == logon:
                     return 0  # intentional stop, never a failed runtime attempt
@@ -41,7 +55,7 @@ def run(home: Path, database: Path, token: str, *, installation=None) -> int:
                 if context_digest(context) != receipt['context_digest']:
                     return 2
                 lock.acquire()
-                atomic_json(home / CONTROL_NAME, {'revision': 1, 'token': token,
+                atomic_json(home / CONTROL_NAME, {**control, 'revision': 1, 'token': token,
                     'desired': 'running', 'launch_requested': False, 'logon_session': logon})
                 break
         except LockBusy:
@@ -95,4 +109,10 @@ def run(home: Path, database: Path, token: str, *, installation=None) -> int:
 
 
 if __name__ == '__main__':
-    raise SystemExit(run(Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3]))
+    cycle = nonce = None
+    if len(sys.argv) == 8 and sys.argv[4] == '--supervisor-cycle' and sys.argv[6] == '--supervisor-nonce':
+        cycle, nonce = sys.argv[5], sys.argv[7]
+    if len(sys.argv) not in {4, 8} or (len(sys.argv) == 8 and cycle is None):
+        raise SystemExit(2)
+    raise SystemExit(run(Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3],
+                        supervisor_cycle=cycle, supervisor_nonce=nonce))

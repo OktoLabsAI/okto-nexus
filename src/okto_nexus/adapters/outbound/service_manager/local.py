@@ -92,6 +92,21 @@ class LocalServerLifecycle:
             'last_result': task.last_result, 'start_at_login': task.enabled,
             'available_before_login': False, 'available_after_logout': False,
             'definition_digest': receipt['native_digest']}}
+        if control.get('supervisor_only_stop') is True:
+            result.update(supervision_scope='supervisor_only', runtime_work_settlement='not_asserted')
+        try:
+            from .supervision import status as supervisor_status
+            supervision = supervisor_status(self.home, receipt, self.installation.instance_id, control)
+        except (OSError, ValueError) as error:
+            return installation_failure(result, error)
+        if supervision is not None:
+            summary, state, reason = supervision
+            result['user_service']['supervision'] = summary
+            if state:
+                return {**result, 'state': state, 'reason': reason,
+                    'next_action': ('The bounded four-attempt cycle is exhausted. Explicitly stop before another start.'
+                        if reason == 'SUPERVISOR_RETRY_EXHAUSTED' else
+                        'Observe the retained supervisor and child. Do not reset the cycle or infer work/child death.')}
         if result['state'] in {'ready', 'stopping'} and result.get('generation'):
             if actual_supervisor != SUPERVISOR:
                 return {**result, 'state': 'failed', 'reason': 'SUPERVISOR_MISMATCH',
@@ -111,7 +126,8 @@ class LocalServerLifecycle:
             result = {**result, 'state': 'stopping' if control['desired'] == 'draining' else 'starting',
                 'reason': 'SUPERVISOR_PENDING', 'next_action': 'Observe the same scheduled task; no detached process was launched.'}
         elif result['state'] == 'stopped' and control['desired'] == 'draining':
-            drained = control.get('generation') is None or self.shutdown_receipt(control.get('generation')) == 'DRAINED'
+            drained = (control.get('supervisor_only_stop') is not True
+                       and (control.get('generation') is None or self.shutdown_receipt(control.get('generation')) == 'DRAINED'))
             result = {**result, 'shutdown_outcome': 'drained' if drained else 'unconfirmed',
                 'reason': 'SHUTDOWN_COMPLETE' if drained else 'SHUTDOWN_OUTCOME_UNCONFIRMED'}
         return result
@@ -251,7 +267,8 @@ class LocalServerLifecycle:
     def request_stop(self, current, *, timeout, force=False):
         if type(force) is not bool:
             raise ValueError('Force must be a boolean.')
-        pending = current.get('reason') in {'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED'} and not current.get('generation')
+        pending = current.get('reason') in {'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED',
+            'SUPERVISOR_BACKOFF', 'SUPERVISOR_RETRY_EXHAUSTED'} and not current.get('generation')
         if force:
             actual = self._inspect_process(timeout=min(.5, timeout))
             if (not current.get('generation') or actual.get('generation') != current['generation']
@@ -268,9 +285,13 @@ class LocalServerLifecycle:
                             or (pending and actual['state'] != 'stopped')):
                         return {**actual, 'state': 'failed', 'reason': 'INSTANCE_CHANGED',
                             'next_action': 'Observe the current generation before requesting another stop.'}
-                    self.installation.begin_stop(current.get('generation'))
+                    supervisor_only = (pending and
+                        current.get('user_service', {}).get('supervision', {}).get('attempts_started', 0) > 0)
+                    self.installation.begin_stop(current.get('generation'), supervisor_only=supervisor_only)
                     if pending:
-                        return {**current, 'state': 'stopping', 'shutdown': {'state': 'DRAINED', 'resources': []},
+                        scope = {'supervision_scope': 'supervisor_only', 'runtime_work_settlement': 'not_asserted'} if supervisor_only else {}
+                        return {**current, **scope, 'state': 'stopping',
+                            'shutdown': {'state': 'UNCONFIRMED' if supervisor_only else 'DRAINED', 'resources': []},
                             'reason': 'STARTUP_SUPPRESSED', 'next_action': 'Wait for the scheduled entry to observe the stop latch and exit.'}
             except LockBusy:
                 return {**current, 'reason': 'CONCURRENT_LIFECYCLE',

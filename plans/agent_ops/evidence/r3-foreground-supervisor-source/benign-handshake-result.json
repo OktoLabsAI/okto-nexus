@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "cases": [
+    {
+      "mode": "normal",
+      "launcher": {
+        "pid": 45356,
+        "birth": 134391580714258581,
+        "physical_exit": false
+      },
+      "runtime": {
+        "pid": 39628,
+        "birth": 134391580714698358
+      },
+      "launcher_exit_code": 0,
+      "runtime_exit_code": 0,
+      "both_physical_exits_confirmed": true,
+      "bootstrap_marker": true,
+      "child_result": {
+        "allowed": true,
+        "code": 0
+      }
+    },
+    {
+      "mode": "stop-during-handshake",
+      "launcher": {
+        "pid": 45656,
+        "birth": 134391580746592319,
+        "physical_exit": false
+      },
+      "runtime": {
+        "pid": 48792,
+        "birth": 134391580747104867
+      },
+      "launcher_exit_code": 0,
+      "runtime_exit_code": 0,
+      "both_physical_exits_confirmed": true,
+      "bootstrap_marker": false,
+      "child_result": {
+        "allowed": false,
+        "code": 0
+      }
+    },
+    {
+      "mode": "previous-parent-exited",
+      "launcher": {
+        "pid": 47980,
+        "birth": 134391580774375691,
+        "physical_exit": false
+      },
+      "runtime": {
+        "pid": 38392,
+        "birth": 134391580775890618
+      },
+      "launcher_exit_code": 2,
+      "runtime_exit_code": 2,
+      "both_physical_exits_confirmed": true,
+      "bootstrap_marker": false,
+      "child_result": {
+        "allowed": false,
+        "code": 2,
+        "reason": "SUPERVISOR_CHILD_UNCONFIRMED"
+      }
+    }
+  ],
+  "service_calls": 0,
+  "tasks_created": 0,
+  "model_turns": 0,
+  "force_used": false,
+  "scope": "Source handshake and Windows redirector ownership only; no runtime bootstrap occurred (marker is a probe file)."
+}

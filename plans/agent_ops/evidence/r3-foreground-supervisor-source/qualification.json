@@ -1,0 +1,146 @@
+{
+  "status": "SOURCE_AND_BENIGN_PROCESS_QUALIFIED_NOT_INSTALLED",
+  "source_files": [
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/service_supervisor.py",
+      "sha256": "e44b3fa35a850652008da7a85a64a4e6df4e3bcaeebe07ccfdf2c250b15acaac",
+      "bytes": 11385
+    },
+    {
+      "path": "src/okto_nexus/adapters/inbound/cli/supervised_service.py",
+      "sha256": "660b340b002ea6f0bb0e4f117a3a776965b6c9832a18387bfa25bad5af580183",
+      "bytes": 5670
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/service_manager/supervision.py",
+      "sha256": "cb52f07025a5329533fb3bf335fe70842413d91f8c0f2b10f7cb380f9cd9402b",
+      "bytes": 16810
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/service_manager/installation.py",
+      "sha256": "16732afbf2cec8adea0c830af97df6882389d6df4f935b0832b781907bc75a61",
+      "bytes": 18739
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/service_manager/local.py",
+      "sha256": "f96a8204fd71fef4a66ebf1b8f0e2787f556a382a7723cf6ea74615c84622966",
+      "bytes": 27015
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/service_manager/upgrade.py",
+      "sha256": "57eddcb9c17f0f4028c790f606f1280e6cb70f43873de6925916a34dcd2610d7",
+      "bytes": 4508
+    },
+    {
+      "path": "src/okto_nexus/application/service_lifecycle.py",
+      "sha256": "63edf4e30b30ec08908a3a3e52761fec11b52a57d1804b9dc341b96fab50f972",
+      "bytes": 8645
+    },
+    {
+      "path": "docs/service-lifecycle.md",
+      "sha256": "ffa12a1a15ae6a0515a941d25835c3d32c47daede4dffebf2b465f416169134b",
+      "bytes": 22804
+    },
+    {
+      "path": "tests/test_service_supervisor.py",
+      "sha256": "4338968bf1b2d3a73a24889742d5f4cc0bf23d1e93c3e2638c6621bd9df22cfa",
+      "bytes": 17653
+    }
+  ],
+  "core_source_files": [
+    {
+      "path": "src/nexus_connector_core/user_service_definition.py",
+      "sha256": "4efee7d04699ae297def8932e9898546b6f5362ae524c6ecd5473592b4ae2689",
+      "bytes": 9998
+    },
+    {
+      "path": "src/nexus_connector_core/user_service_supervision.py",
+      "sha256": "392db0cbf98a3bd85d2085333d2e803bea3625c43c3a08b1f111fb343b98de21",
+      "bytes": 4216
+    },
+    {
+      "path": "tests/test_user_service_definition.py",
+      "sha256": "cc097574d53f412e912098b0517f3b4e637cdff47fec8cf716a072fa95449f01",
+      "bytes": 8644
+    },
+    {
+      "path": "tests/test_user_service_supervision.py",
+      "sha256": "b39c304a15a04150b38eb1f06515b04a0534dbc28d3c50512d9447f5ba2a9b83",
+      "bytes": 2968
+    }
+  ],
+  "root_review": "Root read Core policy, complete Nexus supervisor/identity helpers, integration and docs; no remaining blocker reported before source commit.",
+  "source_tests": {
+    "initial": "Session20585 interrupted after one visible failure and constant-clock test hang caused by retained launch_requested=True on stop. No XML produced; exact matching test process absent afterward. See preserved transcript references.",
+    "stop_fix": {
+      "passed": 18,
+      "xml": "nexus-stop-delta.xml"
+    },
+    "pre_redirector_handshake": {
+      "passed": 132,
+      "xml": "nexus-final.xml",
+      "limitation": "Fakes did not detect venv redirector identity mismatch."
+    },
+    "handshake_focal": {
+      "passed": 21,
+      "xml": "nexus-handshake-source.xml"
+    },
+    "final_relevant_suite": {
+      "passed": 134,
+      "failed": 2,
+      "xml": "nexus-handshake-final.xml",
+      "failure_kind": "New test fixtures omitted required ServiceLifecycle monotonic/sleep arguments; production behavior was not reached."
+    },
+    "affected_fixture_correction": {
+      "passed": 2,
+      "xml": "nexus-stop-scope-final.xml"
+    },
+    "fixture_import_lint_correction": {
+      "passed": 1,
+      "xml": "nexus-fixture-final.xml"
+    },
+    "final_distinct_relevant_cases": 136
+  },
+  "native_process_checks": {
+    "redirector_probe": "Popen launcher47072 differed from runtime48552; both normal exit0. This invalidated the earlier direct-PID approach.",
+    "handshake_cases": 3,
+    "result": "PASS",
+    "result_file": "benign-handshake-result.json",
+    "normal": "Identity ACK precedes the probe-only bootstrap marker; launcher/runtime both physical exit0.",
+    "stop_during_handshake": "Identity still acknowledged; no marker; launcher/runtime both physical exit0.",
+    "previous_parent_exited": "Recorded previous parent had positive exit proof; child refused SUPERVISOR_CHILD_UNCONFIRMED, no marker, launcher/runtime both physical exit2.",
+    "snapshot_note": "launcher.physical_exit=false in the benign result is the retained pre-wait launch snapshot. Final physical observations are both_physical_exits_confirmed=true and the two actual exit codes. Original bytes are preserved.",
+    "actual_runtime_bootstrap": false,
+    "task_registration": false,
+    "product_services": false,
+    "provider_calls": false,
+    "force_used": false
+  },
+  "lint": {
+    "initial_errors": 5,
+    "first_correction_remaining_fixture_shadow": 1,
+    "final": "PASS",
+    "original_tool_chunks": [
+      "f5cdeb",
+      "776573"
+    ],
+    "corrected_prior_tool_chunk": "ae3f83"
+  },
+  "warnings": [
+    "pytest_asyncio default fixture-loop-scope warning; Core auto-plugin-off config warning. No test acceptance is inferred from warnings."
+  ],
+  "scope": [
+    "One persistent foreground parent waits for launcher and actual runtime; no detach/force.",
+    "Separate parent guard and durable reservation precede spawn; same cycle never resets on READY/connect or lost response.",
+    "Identity handshake uses attempt nonce, launcher retained handle, runtime retained handle and OS parent PID before ACK.",
+    "Unknown spawn/handshake/parent ownership never authorizes retry or releases work claims.",
+    "Supervisor-only stop declares runtime_work_settlement=not_asserted; positive physical cleanup can remove integration while preserving data.",
+    "Old native retry definitions require explicit stop/uninstall/install; action-only upgrade is refused without mutation."
+  ],
+  "acceptance": {
+    "installed_wheel": false,
+    "SVC_T19": false,
+    "SVC_T20": false,
+    "M1": false
+  }
+}

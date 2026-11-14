@@ -1,0 +1,11 @@
+{
+  "session": 20585,
+  "initial_chunk": "e9b51c",
+  "progress_chunk": "f0d746",
+  "interrupt_chunk": "3e73aa",
+  "outcome": "INTERRUPTED_AFTER_ONE_FAILURE_AND_HANG",
+  "cause": "begin_stop preserved launch_requested=True; inactive task remained SUPERVISOR_PENDING; constant-clock legacy test could not finish",
+  "fix": "begin_stop explicitly clears launch_requested while preserving cycle_id",
+  "xml_exists": false,
+  "no_product_services": true
+}

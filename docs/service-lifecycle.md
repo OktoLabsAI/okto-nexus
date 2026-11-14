@@ -106,12 +106,24 @@ the same application lifecycle, then registers an instance-named Task Scheduler
 task for the effective user SID. Install enables the logon trigger; `start`
 requests immediate execution. It uses InteractiveToken and LeastPrivilege, with
 the recorded environment's absolute `pythonw.exe`, isolated Python imports and
-the same foreground Server entry. No second daemon process is launched. This is
+one persistent foreground supervisor that waits for the existing foreground
+Server entry as its owned child. Neither process detaches and exits. This is
 a logon task, not a Windows Service; it does not provide availability before
 login or after logout, or grant access to another user's credentials.
 
-The task definition uses Core's bounded failure recovery (one-minute interval,
-three retries) and disables hard termination. The host compares the OS-exported
+Task Scheduler supplies logon and demand launch, with native `RestartOnFailure`
+absent. On the qualified Windows host, that setting did not restart action
+processes exiting with DWORD 3 or FFFFFFFF under either demand or timer launch.
+The one foreground supervisor uses Core's pure bounded policy: one initial
+attempt and at most three retries, each after a one-minute backoff. The durable
+counter never resets on READY, connect, or a lost start response. An unexpected
+exit zero also consumes the same budget. `SUPERVISOR_BACKOFF` reports waiting;
+`SUPERVISOR_RETRY_EXHAUSTED` reports the proven exhausted cycle, with attempt
+count and last owned-child exit. No runtime work or inference is replayed by
+the supervisor. Actual crash recovery of this new implementation still needs
+its separate installed/native campaign.
+
+The task disables hard termination. The host compares the OS-exported
 definition fingerprint before each mutation. A missing ownership receipt or
 user-edited definition conflicts; there is no forced overwrite or adoption.
 Home and database launch guards serialize our callers, and a database ownership
@@ -143,6 +155,36 @@ also resume the integration. Failure to confirm drain remains unconfirmed even
 if the wrapper exits successfully to suppress retries. Stop during queued startup
 can fence the entry before any Server owner acquires the database. Login behavior
 has isolated contract tests; an actual login campaign is still required.
+
+Stop during backoff prevents another child selection. A new explicit cycle
+requires the prior cycle to be stopped and both process identities reconciled;
+the parent receipt uses a separate lifetime guard and retained PID/birth pairs.
+Unknown spawn or missing-parent evidence never proves child/descendant death or
+releases work claims. Stop completion waits for the parent as well as the runtime
+and native task. External/container foreground `serve` bypasses this Windows
+wrapper entirely, so it does not add a second restart policy to an external
+supervisor.
+
+Windows virtual-environment executables can redirect to a different runtime
+PID. Each attempt has an exclusive nonce-bound identity handshake. The parent
+verifies the retained launcher handle, runtime birth and direct/one-redirector
+OS ancestry, then acknowledges identity; the runtime checks that acknowledgment,
+the stop latch and parent again before bootstrap. Both handles remain retained
+until physical exit. The technical handshake deadline is 60 seconds; timeout
+leaves an unknown attempt and never selects another child. Stop during handshake
+still exchanges identity but admits no runtime bootstrap.
+
+Stopping an exhausted/backoff cycle without a running application can confirm
+only supervisor shutdown. Output then says `supervision_scope=supervisor_only`
+and `runtime_work_settlement=not_asserted`; it does not claim DRAINED work.
+Uninstall may remove that positively stopped integration while preserving all
+runtime data and uncertainty. Restart still requires confirmed canonical drain.
+
+An older installed definition retaining native `RestartOnFailure` cannot be
+silently upgraded into this wrapper. `SERVICE_SUPERVISION_POLICY_CHANGED`
+requires explicit canonical stop, user-service uninstall, and install using the
+new environment; the data directories remain. The action-only upgrade helper
+does not rewrite native retry settings or stack two supervision policies.
 
 Uninstall drains first, requires native inactivity and removes only the selected
 task and its ownership/control receipts. Context, database, projects, credentials

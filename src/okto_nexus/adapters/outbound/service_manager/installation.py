@@ -13,7 +13,7 @@ from pathlib import Path
 import secrets
 
 from nexus_connector_core.user_service_definition import (
-    UserServiceDefinition, windows_logon_task, windows_definition_digest, windows_enablement_matches)
+    DEFINITION_REVISION, UserServiceDefinition, windows_logon_task, windows_definition_digest, windows_enablement_matches)
 
 from .context import CONTEXT_NAME, atomic_json, read_json, validate_context
 from .identity import effective_principal, server_instance_id, windows_logon_session
@@ -193,7 +193,7 @@ class ServerInstallation:
         if executable.name.lower() == 'python.exe':
             executable = executable.with_name('pythonw.exe')
         return UserServiceDefinition('server', self.instance_id, effective_principal(),
-            str(executable), ('-I', '-m', 'okto_nexus.adapters.inbound.cli.supervised_service',
+            str(executable), ('-I', '-m', 'okto_nexus.adapters.inbound.cli.service_supervisor',
             str(self.home), str(self.database), token), context['cwd'])
 
     def install(self, context):
@@ -214,7 +214,7 @@ class ServerInstallation:
         xml = windows_logon_task(definition)
         receipt = {'revision': 1, 'component': 'server', 'instance_id': self.instance_id,
             'principal': definition.principal, 'name': self.name, 'supervisor': SUPERVISOR,
-            'token': token, 'state': 'installing', 'definition_revision': 1,
+            'token': token, 'state': 'installing', 'definition_revision': DEFINITION_REVISION,
             'definition_digest': definition.revision_digest, 'context_digest': context_digest(context)}
         atomic_json(self.home / CONTEXT_NAME, context)
         atomic_json(self.path, receipt)  # precedes the OS effect; retained on error
@@ -254,17 +254,30 @@ class ServerInstallation:
             return True  # response loss/queued start is observed, never resubmitted
         if task.state == 0:
             raise InstallationError('SUPERVISOR_STATE_UNCONFIRMED', 'Inspect this task in Task Scheduler; no second launch was requested.')
+        from .supervision import read_record, previous_finished
+        previous = read_record(self.home, receipt, self.instance_id)
+        if not previous_finished(previous):
+            raise InstallationError('SUPERVISOR_RECOVERY_UNCONFIRMED',
+                'Reconcile the prior supervisor and child before selecting a new cycle.')
+        if previous and control['desired'] != 'draining':
+            raise InstallationError('SUPERVISOR_CYCLE_NOT_STOPPED',
+                'Explicitly stop the prior cycle before requesting another start; the restart budget was preserved.')
         atomic_json(self.home / CONTROL_NAME, {'revision': 1, 'token': receipt['token'],
-            'desired': 'running', 'launch_requested': True})
+            'desired': 'running', 'launch_requested': True, 'cycle_id': secrets.token_hex(16),
+            'logon_session': windows_logon_session()})
         self.tasks.start(self.name, receipt['native_digest'])
         return True
 
-    def begin_stop(self, generation):
+    def begin_stop(self, generation, *, supervisor_only=False):
+        if type(supervisor_only) is not bool:
+            raise ValueError('Supervisor-only stop must be explicit')
         receipt, _ = self.observe()
         if receipt is not None:
             control = self.control(receipt)
-            atomic_json(self.home / CONTROL_NAME, {'revision': 1, 'token': receipt['token'],
+            atomic_json(self.home / CONTROL_NAME, {**control, 'revision': 1, 'token': receipt['token'],
                 'desired': 'draining', 'generation': generation,
+                'launch_requested': False,
+                'supervisor_only_stop': supervisor_only,
                 'logon_session': control.get('logon_session') or windows_logon_session()})
 
     def uninstall(self):

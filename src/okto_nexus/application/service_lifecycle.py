@@ -39,7 +39,8 @@ class ServiceLifecycle:
         while result['state'] in {'starting', 'degraded', 'unknown'}:
             if result.get('reason') not in {'STARTUP_PENDING', 'CONCURRENT_START',
                     'SERVICE_UNREACHABLE', 'INSTANCE_OWNERSHIP_UNCONFIRMED',
-                    'INSTANCE_METADATA_UNAVAILABLE', 'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED'}:
+                    'INSTANCE_METADATA_UNAVAILABLE', 'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED',
+                    'SUPERVISOR_BACKOFF'}:
                 return result
             # A concurrent publisher/Windows file-sharing window can prevent
             # reading owner metadata. Re-inspect within this deadline; never
@@ -64,7 +65,8 @@ class ServiceLifecycle:
                     'next_action': 'Inspect the current generation; no force was requested.'}
         if before['state'] == 'stopped':
             return before
-        pending = before.get('reason') in {'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED'} and not before.get('generation')
+        pending = before.get('reason') in {'SUPERVISOR_PENDING', 'SUPERVISOR_LAST_ATTEMPT_FAILED',
+            'SUPERVISOR_BACKOFF', 'SUPERVISOR_RETRY_EXHAUSTED'} and not before.get('generation')
         if before['state'] not in {'ready', 'stopping'} and not pending:
             return before
         generation = before.get('generation')
@@ -79,7 +81,8 @@ class ServiceLifecycle:
             remaining = deadline - self.monotonic()
             observed = self.adapter.inspect(timeout=min(1, max(.01, remaining)))
             if observed['state'] == 'stopped':
-                drained = report['state'] == 'DRAINED' or self.adapter.shutdown_receipt(generation) == 'DRAINED'
+                drained = (observed.get('runtime_work_settlement') != 'not_asserted'
+                    and (report['state'] == 'DRAINED' or self.adapter.shutdown_receipt(generation) == 'DRAINED'))
                 return {**observed, 'shutdown_outcome': 'drained' if drained else 'unconfirmed',
                     'reason': 'SHUTDOWN_COMPLETE' if drained else 'SHUTDOWN_OUTCOME_UNCONFIRMED',
                     'next_action': None if drained else 'Inspect retained runtime recovery state before resuming work.'}
@@ -114,8 +117,11 @@ class ServiceLifecycle:
         if before.get('reason') in {'SERVICE_DEFINITION_MISSING', 'INSTALLATION_PENDING'}:
             return self.adapter.uninstall_user_service()
         stopped = self.stop(timeout=timeout)
-        if stopped['state'] != 'stopped' or stopped.get('shutdown_outcome') == 'unconfirmed':
+        if (stopped['state'] != 'stopped' or stopped.get('shutdown_outcome') == 'unconfirmed'
+                and stopped.get('supervision_scope') != 'supervisor_only'):
             return stopped
+        # Removing an already stopped integration does not settle runtime work;
+        # the host still checks native absence and preserves all runtime data.
         return self.adapter.uninstall_user_service()
 
     def enable_user_service(self, *, timeout=30.0):

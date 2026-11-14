@@ -15,6 +15,16 @@ class ServerUpgradeHost(UpgradeHost):
     read, write, digest = staticmethod(read_json), staticmethod(atomic_json), staticmethod(document_revision)
     logon_session = staticmethod(windows_logon_session)
 
+    @staticmethod
+    def propose(xml, definition):
+        from .supervision import require_single_supervisor
+        from .installation import InstallationError
+        try:
+            require_single_supervisor(xml)
+        except InstallationError as error:
+            fail(error.code, error.action)
+        return UpgradeHost.propose(xml, definition)
+
     def __init__(self, lifecycle):
         self.lifecycle = lifecycle
         self.home, self.database = lifecycle.home, lifecycle.database
