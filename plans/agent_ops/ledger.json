@@ -13944,6 +13944,18 @@
       ],
       "acceptance_promoted": false,
       "provider_calls": 0
+    },
+    "r3_sonnet_recovery_draft02": {
+      "status": "DRAFT02_CREATED_ONLY_REMOTE_CONFIGURATION_NOT_COMPLETED",
+      "summary": "Original draft attempt refused empty inventory before creation; own caller PATH omitted pinned Claude parent. Explicit additive discovery retry succeeded, then exclusive draft02 created once and validated Sonnet/default/MCPdisabled/per_sender/ask60min3. Setup01 and old transferUNCONFIRMED preserved. No identity/HTTP/provider/service start/credential effects; storage-revocation authorization pending, remote paidheld. No scenario promotion125/5/2.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/draft02-discovery-retry-manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/public/draft02-validated.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/public/recovery02-connector-draft.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/manifest.json"
+      ],
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15728,6 +15740,20 @@
       ],
       "acceptance_promoted": false,
       "provider_calls": 0
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_recovery_draft02",
+      "status": "DRAFT02_CREATED_ONLY_REMOTE_CONFIGURATION_NOT_COMPLETED",
+      "summary": "Original draft attempt refused empty inventory before creation; own caller PATH omitted pinned Claude parent. Explicit additive discovery retry succeeded, then exclusive draft02 created once and validated Sonnet/default/MCPdisabled/per_sender/ask60min3. Setup01 and old transferUNCONFIRMED preserved. No identity/HTTP/provider/service start/credential effects; storage-revocation authorization pending, remote paidheld. No scenario promotion125/5/2.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/draft02-discovery-retry-manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/public/draft02-validated.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/public/recovery02-connector-draft.json",
+        "plans/agent_ops/evidence/r3-sonnet-recovery-draft02/manifest.json"
+      ],
+      "acceptance_promoted": false
     }
   ],
   "r3_native_bounded_supervisor_execution": {

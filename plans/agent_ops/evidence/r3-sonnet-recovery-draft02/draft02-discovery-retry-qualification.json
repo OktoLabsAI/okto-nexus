@@ -1,0 +1,57 @@
+{
+  "status": "OFFLINE_DELTA_PASS_AWAITING_ROOT_REVIEW_BEFORE_DISCOVERY",
+  "manifest": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-discovery-retry-manifest.json",
+    "sha256": "febda897816124661018f723c47797e6aef095995a370231e4e8b5d50999e343",
+    "bytes": 2829
+  },
+  "test": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_draft02_discovery_retry.py",
+    "sha256": "c55d87955325fcf8a366b841f127b1c7f47467531f412d315b24dd640fe7ce77",
+    "bytes": 3180
+  },
+  "tests": {
+    "passed": 3,
+    "failures": 0,
+    "seconds": 0.131,
+    "tool": "5bd10b"
+  },
+  "ruff": {
+    "selection": "F",
+    "result": "PASS",
+    "tool": "9665e5"
+  },
+  "test_only_final_change": "Removed unused io import after passing run; no runtime changed.",
+  "commands": {
+    "discover": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02_discovery_retry.py",
+      "--manifest",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-discovery-retry-manifest.json",
+      "--expected-manifest-sha256",
+      "febda897816124661018f723c47797e6aef095995a370231e4e8b5d50999e343",
+      "discover"
+    ],
+    "draft_after_successful_discover": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02_discovery_retry.py",
+      "--manifest",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-discovery-retry-manifest.json",
+      "--expected-manifest-sha256",
+      "febda897816124661018f723c47797e6aef095995a370231e4e8b5d50999e343",
+      "draft"
+    ]
+  },
+  "originals_preserved": true,
+  "provider_calls": 0,
+  "service_actions": 0,
+  "discovery_executed": false
+}

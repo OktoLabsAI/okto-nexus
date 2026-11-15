@@ -1,0 +1,21 @@
+{
+  "state": "RESERVED_BEFORE_CLI",
+  "provider_calls": 0,
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "--json",
+    "discover",
+    "--harness",
+    "claude_stream"
+  ],
+  "draft_plan_sha256": "cd3777bfd3b70a233929d9f2f2d9a21c233920cc28349457ebbf5459dad35fbe",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

@@ -1,0 +1,67 @@
+{
+  "classification": "OFFLINE_DRAFT02_DELTA_PASS_NOT_EXECUTED",
+  "files": {
+    "recovery_onboarding.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_onboarding.py",
+      "sha256": "80507ce77129f4b47ef218d341914b38c88759aeef980df8c2f9bf24d0cc5a97",
+      "bytes": 8052
+    },
+    "test_recovery_onboarding.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_recovery_onboarding.py",
+      "sha256": "4216639618c3379caa1c72c6411d3a78640822282eb0cfcb9ff84c1d25c6ce5e",
+      "bytes": 4483
+    },
+    "draft02-plan.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-plan.json",
+      "sha256": "cd3777bfd3b70a233929d9f2f2d9a21c233920cc28349457ebbf5459dad35fbe",
+      "bytes": 3582
+    }
+  },
+  "tests": {
+    "passed": 4,
+    "failures": 0,
+    "tool": "641ed0",
+    "seconds": 3.545
+  },
+  "historical_attempt": {
+    "tool": "30bedc",
+    "passed": 3,
+    "errors": 1,
+    "reason": "Test fixture passed module name to parser due incorrect argv slice; executable command unchanged."
+  },
+  "ruff": {
+    "selection": "F",
+    "result": "PASS",
+    "tool": "0705b8"
+  },
+  "compile": {
+    "result": "PASS",
+    "files": 2
+  },
+  "origin": "Actual new installed Connector parser and Core preferences schema; no repository source injection.",
+  "scope": "Only discover/draft local; future existing-agent/workspace review argv is declared, not dispatchable.",
+  "guards": [
+    "Own new package and lifecycle pins",
+    "Distinct setup02/profile recovery02",
+    "Existing setup01 current record compared before/after; no stale whole-state pin",
+    "Exact Sonnet/default/disabled MCP/ask/per-sender/60min3actions",
+    "Future review requires successful rotation/import epoch2; old UNCONFIRMED never promoted"
+  ],
+  "provider_calls": 0,
+  "http_calls": 0,
+  "service_actions": 0,
+  "draft_executed": false,
+  "command_for_root_review_only": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_onboarding.py",
+    "--plan",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-plan.json",
+    "--expected-plan-sha256",
+    "cd3777bfd3b70a233929d9f2f2d9a21c233920cc28349457ebbf5459dad35fbe",
+    "draft"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "draft_sha256": "7f74ac249fca3025bea5fee01eeaebdfe035f01915e1c069b2b1feac4c517ace",
+  "configuration": {
+    "adapter_id": "claude_stream",
+    "alias": "m1-sonnet-remote-recovery02",
+    "authorization": {
+      "actions": 3,
+      "minutes": 60,
+      "no_expiry": false,
+      "unlimited_actions": false
+    },
+    "automatic_reply": true,
+    "format": "okto-nexus-connection",
+    "harness_settings": {
+      "inherit_global_mcps": "disabled",
+      "model": "sonnet",
+      "permission_mode": "default"
+    },
+    "runtime_enabled": true,
+    "session_policy": "per_sender",
+    "tool_access": "ask",
+    "version": 2
+  },
+  "candidate_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa",
+  "setup01_preserved": true,
+  "identity_created": false,
+  "http_selected": false,
+  "provider_calls": 0,
+  "future_review_argv_not_executed": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "connect",
+    "--operator-profile",
+    "m1-sonnet-human",
+    "--remote-draft",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-connector-draft.json",
+    "--profile",
+    "m1-sonnet-remote-recovery02",
+    "--agent",
+    "m1-sonnet-remote",
+    "--workspace-id",
+    "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+    "--plan",
+    "--json",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+  ],
+  "future_review_requires_epoch2_rotation_import": true,
+  "draft_plan_sha256": "cd3777bfd3b70a233929d9f2f2d9a21c233920cc28349457ebbf5459dad35fbe",
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

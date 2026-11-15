@@ -1,0 +1,72 @@
+{
+  "native": {
+    "path": "C:\\Users\\jpamb\\.local\\bin\\claude.exe",
+    "sha256": "5064e6e0572dca86257363ca04d48653eef20ef27f1bd04b504ed7199ed3fd13",
+    "bytes": 367634080,
+    "version": "2.1.323",
+    "version_observation_tool": "8ba30e"
+  },
+  "origin": "http://127.0.0.1:58631",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "operator_profile": "m1-sonnet-human",
+  "agent_id": "m1-sonnet-remote",
+  "model": "sonnet",
+  "permission_mode": "default",
+  "effort": "harness_default_report_unknown_if_absent",
+  "global_mcps": "disabled",
+  "provider_home": "C:/Users/jpamb/.claude",
+  "paths": {
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home",
+    "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project"
+  },
+  "scope": "LOCAL_CANONICAL_SETUP02_DRAFT_ONLY",
+  "selected_actions": [
+    "draft"
+  ],
+  "setup_request_id": "m1-sonnet-remote-setup-02",
+  "profile": "m1-sonnet-remote-recovery02",
+  "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+  "provider_calls": 0,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+  "lifecycle_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+    "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "bytes": 13280
+  },
+  "runtime_pins": {
+    "recovery_onboarding.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_onboarding.py",
+      "sha256": "80507ce77129f4b47ef218d341914b38c88759aeef980df8c2f9bf24d0cc5a97",
+      "bytes": 8052
+    }
+  },
+  "qualified_sources": {
+    "request_context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\request_context.py",
+      "sha256": "c840a43bf0e80c919fdab3fc1cbedc84595411de414522372f013ef7369af809",
+      "bytes": 3642
+    },
+    "remote_onboarding": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\remote_onboarding.py",
+      "sha256": "611eef9e93014e7dabb4256a00edcc9e4df864ce401f294cce30adee92b17921",
+      "bytes": 9544
+    }
+  },
+  "historical_onboarding_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding-plan.json",
+    "sha256": "8de8b5821180dccc8dc43d3b2455d989e072cb8568bd7936c046572be08f9441",
+    "bytes": 3242
+  },
+  "installed_consent_qualification": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-installed-credential-consent-0d8p5fgf\\qualification.json",
+    "sha256": "27d573aeeb98d6fb0320a4ef07ed945ff322fb1202d04680d871e57a8fc1c479",
+    "bytes": 2432
+  },
+  "old_setup_preservation": "Load actual setup01 immediately before draft02 and compare afterwards. No stale whole-state pin.",
+  "future_review": "Declared argv only, not executable in this helper. Requires real ROTATED_ONCE_IMPORTED_ONCE result, same canonical agent/server, epoch2 and exact existing workspace; never --new-agent.",
+  "no_identity_creation": true,
+  "no_credential_read": true,
+  "no_http_selection": true,
+  "authority": "Root selected offline preparation of canonical setup02 draft under standing remote work scope; execution awaits Root review."
+}

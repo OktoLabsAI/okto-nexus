@@ -1,0 +1,131 @@
+{
+  "format": "sonnet-recovery-draft02-public-retention-v1",
+  "files": [
+    {
+      "path": "draft02-plan.json",
+      "sha256": "cd3777bfd3b70a233929d9f2f2d9a21c233920cc28349457ebbf5459dad35fbe",
+      "bytes": 3582,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-plan.json"
+    },
+    {
+      "path": "draft02-qualification.json",
+      "sha256": "218d39829a24b3ea076a58c488017ad90bf88dc0a3e3e91bb604154ee8ff99b3",
+      "bytes": 2633,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-qualification.json"
+    },
+    {
+      "path": "recovery_onboarding.py",
+      "sha256": "80507ce77129f4b47ef218d341914b38c88759aeef980df8c2f9bf24d0cc5a97",
+      "bytes": 8052,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_onboarding.py"
+    },
+    {
+      "path": "test_recovery_onboarding.py",
+      "sha256": "4216639618c3379caa1c72c6411d3a78640822282eb0cfcb9ff84c1d25c6ce5e",
+      "bytes": 4483,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_recovery_onboarding.py"
+    },
+    {
+      "path": "draft02-discovery-retry-manifest.json",
+      "sha256": "febda897816124661018f723c47797e6aef095995a370231e4e8b5d50999e343",
+      "bytes": 2829,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-discovery-retry-manifest.json"
+    },
+    {
+      "path": "draft02-discovery-retry-qualification.json",
+      "sha256": "f64691afed0e91fd5ae2e44d34f2275bac8d96c0395790797d16746ac0365391",
+      "bytes": 2271,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-discovery-retry-qualification.json"
+    },
+    {
+      "path": "draft02_discovery_retry.py",
+      "sha256": "1d5089f0edf92a8629e024be40afb62a52587c8b3cfefd395d47f8d30bb84d1d",
+      "bytes": 4123,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02_discovery_retry.py"
+    },
+    {
+      "path": "test_draft02_discovery_retry.py",
+      "sha256": "c55d87955325fcf8a366b841f127b1c7f47467531f412d315b24dd640fe7ce77",
+      "bytes": 3180,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_draft02_discovery_retry.py"
+    },
+    {
+      "path": "public/draft02-discover-reserved.json",
+      "sha256": "dfa68367c4750ad65b2e4748548596a11fc81a0c800e3bf9fced925534087e2d",
+      "bytes": 683,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-discover-reserved.json"
+    },
+    {
+      "path": "public/draft02-discover-returned.json",
+      "sha256": "9e1c30d9cda178c51fa8e81f9844eed660fd84f80384284fcb5b28dae68820b3",
+      "bytes": 413,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-discover-returned.json"
+    },
+    {
+      "path": "public/draft02-discover-retry1-reserved.json",
+      "sha256": "dfa68367c4750ad65b2e4748548596a11fc81a0c800e3bf9fced925534087e2d",
+      "bytes": 683,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-discover-retry1-reserved.json"
+    },
+    {
+      "path": "public/draft02-discover-retry1-returned.json",
+      "sha256": "670e6055125cc925b5e19c0a4edf1cfa3207edf9bcd7455eeb56b7f34ba10699",
+      "bytes": 413,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-discover-retry1-returned.json"
+    },
+    {
+      "path": "public/draft02-discover-retry1-validated.json",
+      "sha256": "6304de4356d1572cf93d30750dbc761a3adf8df40bf1f852b2905ae29e23a6a4",
+      "bytes": 685,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-discover-retry1-validated.json"
+    },
+    {
+      "path": "public/draft02-inventory-selection.json",
+      "sha256": "b87f5e5ce7adabf95e3f2bf046131dca0c703db1fd39dd19b0472172bb17b838",
+      "bytes": 519,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-inventory-selection.json"
+    },
+    {
+      "path": "public/draft02-draft-reserved.json",
+      "sha256": "d0cedab29fd69121af2471104f599d1bcc40b8f507effcdb8c2bf9163888b81c",
+      "bytes": 1318,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-draft-reserved.json"
+    },
+    {
+      "path": "public/draft02-draft-returned.json",
+      "sha256": "e866fc11c1e9db0a0c977f702282d4aa484e0e817f4baa624256a09cf95c83ff",
+      "bytes": 413,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-draft-returned.json"
+    },
+    {
+      "path": "public/draft02-validated.json",
+      "sha256": "af4a1aec53a37d3dc47685618e410781a5528c24f3beb56b8935c610b1ef4a18",
+      "bytes": 1921,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-validated.json"
+    },
+    {
+      "path": "public/recovery02-connector-draft.json",
+      "sha256": "7f74ac249fca3025bea5fee01eeaebdfe035f01915e1c069b2b1feac4c517ace",
+      "bytes": 1009,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-connector-draft.json"
+    },
+    {
+      "path": "review.json",
+      "sha256": "1092ae1073da61722769e161a687600f89b07a1732278d7753c956906d5549d8",
+      "bytes": 2974,
+      "source": "curation/root reports and public projections"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b97f2f0aeeb1ace2027572e5083177612b4269b2eafb28659f697cca9eaca90d",
+      "bytes": 1490,
+      "source": "curation narrative"
+    }
+  ],
+  "checks": {
+    "qualified_pins": "PASS",
+    "draft_hash_and_boundaries": "PASS",
+    "secret_pattern_scan": "PASS",
+    "private_outputs_copied": 0
+  }
+}

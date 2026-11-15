@@ -1,0 +1,56 @@
+{
+  "scope": "ONE_NATIVE_PARENT_PATH_DISCOVERY_RETRY_ORIGINAL_DRAFT_ONCE",
+  "pins": {
+    "entry": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02_discovery_retry.py",
+      "sha256": "1d5089f0edf92a8629e024be40afb62a52587c8b3cfefd395d47f8d30bb84d1d",
+      "bytes": 4123
+    },
+    "original_helper": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_onboarding.py",
+      "sha256": "80507ce77129f4b47ef218d341914b38c88759aeef980df8c2f9bf24d0cc5a97",
+      "bytes": 8052
+    },
+    "original_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\draft02-plan.json",
+      "sha256": "cd3777bfd3b70a233929d9f2f2d9a21c233920cc28349457ebbf5459dad35fbe",
+      "bytes": 3582
+    },
+    "original_discovery_reserved": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-discover-reserved.json",
+      "sha256": "dfa68367c4750ad65b2e4748548596a11fc81a0c800e3bf9fced925534087e2d",
+      "bytes": 683
+    },
+    "original_discovery_returned": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\draft02-discover-returned.json",
+      "sha256": "9e1c30d9cda178c51fa8e81f9844eed660fd84f80384284fcb5b28dae68820b3",
+      "bytes": 413
+    },
+    "original_discovery_stdout": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\private\\draft02-discover.stdout",
+      "sha256": "d41c80548cebdae556833a3b54f43a9c2d7bdd7d78b181a9395c9453d4263496",
+      "bytes": 2180
+    },
+    "recovery_context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e",
+      "bytes": 4756
+    }
+  },
+  "diagnosis": {
+    "actual_inventory_candidates": [],
+    "inherited_path": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+      "C:/Windows/System32",
+      "C:/Program Files/Git/cmd"
+    ],
+    "missing_selected_native_parent": "C:\\Users\\jpamb\\.local\\bin",
+    "cause": "RecoveryContext inherited Codex PATH; qualified old onboarding supplied Claude parent explicitly.",
+    "tool": "09a838",
+    "original_entry_failure": "UNIQUE_INVENTORIED_CLAUDE_REQUIRED",
+    "draft_not_selected": true
+  },
+  "effect_delta": "Prepend only parent of already-pinned Claude executable to inherited owned PATH. New discover-retry1 reservation/stdout; original draft selection remains exclusive.",
+  "provider_calls": 0,
+  "live_discover_tested": false
+}
