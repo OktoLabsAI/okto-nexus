@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="44" time="219.350" timestamp="2026-11-15T02:56:19.887930-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_native_decisions" name="test_question_listing_and_decision_belong_to_originating_interlocutor[input]" time="12.810" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_question_listing_and_decision_belong_to_originating_interlocutor[agent_input]" time="5.826" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_question_listing_and_decision_belong_to_originating_interlocutor[nonblocking_input]" time="4.743" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_public_cas_records_exactly_one_application_and_replay[approve-accept-CONFIRMED]" time="5.279"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\nexus-source\\plans\\contratos\\http-target.schema.json'">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10938/test_pub...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'wWxxoRVgE-L6YUd2hQwmy1I3M52cddGrYLGxswMb_OA', ...})
+choice = 'approve', native = 'accept', status = 'CONFIRMED'
+
+    @pytest.mark.parametrize("choice,native,status", [("approve", "accept", "CONFIRMED"), ("deny", "decline", "DENIED")])
+    def test_public_cas_records_exactly_one_application_and_replay(decision_state, choice, native, status):
+        deps, app, body = decision_state
+        body["decision"] = choice
+        response = post(decision_state)
+        assert response.status_code == 202, response.text
+        view = response.json()
+        assert response.headers["cache-control"] == "no-store"
+        assert (view["native_decision"], view["canonical_state"], view["native_stage"]) == (native, status, "DISPATCH_PENDING")
+        assert view["possible_effect"] is False
+&gt;       schema = json.loads((Path(__file__).parents[2]/"plans/contratos/http-target.schema.json").read_text())
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+nexus-source\tests\execution_r4\test_native_decisions.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-core-consumer-integration-h_elhexb/nexus-source/plans/contratos/http-target.schema.json')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\nexus-source\\plans\\contratos\\http-target.schema.json'
+
+C:\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</failure></testcase><testcase classname="tests.execution_r4.test_native_decisions" name="test_public_cas_records_exactly_one_application_and_replay[deny-decline-DENIED]" time="5.726"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\nexus-source\\plans\\contratos\\http-target.schema.json'">decision_state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-10938/test_pub...dc5b24b9371acc991c2fb58c1355b265b91d13e4cf2b35778a7', 'cas_token': 'zFutknMY3DWiPG0kj8HPYpnMI2N2_xXKp3I-Nf2ce6A', ...})
+choice = 'deny', native = 'decline', status = 'DENIED'
+
+    @pytest.mark.parametrize("choice,native,status", [("approve", "accept", "CONFIRMED"), ("deny", "decline", "DENIED")])
+    def test_public_cas_records_exactly_one_application_and_replay(decision_state, choice, native, status):
+        deps, app, body = decision_state
+        body["decision"] = choice
+        response = post(decision_state)
+        assert response.status_code == 202, response.text
+        view = response.json()
+        assert response.headers["cache-control"] == "no-store"
+        assert (view["native_decision"], view["canonical_state"], view["native_stage"]) == (native, status, "DISPATCH_PENDING")
+        assert view["possible_effect"] is False
+&gt;       schema = json.loads((Path(__file__).parents[2]/"plans/contratos/http-target.schema.json").read_text())
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+nexus-source\tests\execution_r4\test_native_decisions.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/r3-core-consumer-integration-h_elhexb/nexus-source/plans/contratos/http-target.schema.json')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\nexus-source\\plans\\contratos\\http-target.schema.json'
+
+C:\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</failure></testcase><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[subject]" time="4.760" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[other]" time="5.636" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[hash]" time="4.349" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[revision]" time="4.876" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[cas]" time="4.157" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[scope]" time="4.170" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[generation]" time="4.389" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[expired]" time="4.585" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[terminal]" time="4.353" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[grant]" time="4.757" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_invalid_or_stale_decision_cannot_create_an_operation[profile]" time="5.782" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_two_interfaces_race_for_one_canonical_decision" time="4.909" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_outbox_failure_rolls_back_canonical_approval_and_decision" time="4.999" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_sensitive_input_is_retained_in_memory_and_explicitly_resupplied_after_loss[input]" time="4.264" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[None]" time="4.022" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[operator]" time="4.279" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[decision]" time="4.270" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[payload]" time="4.111" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_dispatch_revalidates_operator_decision_and_uses_control_lane[grant]" time="4.003" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_input_dispatch_reconstructs_exact_wire_without_persisting_response[input]" time="5.012" /><testcase classname="tests.execution_r4.test_native_decisions" name="test_lost_input_is_reported_without_inventing_a_native_receipt[input]" time="5.895" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[None]" time="5.282" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[actor]" time="4.316" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[grant]" time="4.768" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[scope]" time="4.988" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_keyless_loopback_decision_revalidates_before_async_dispatch[legacy]" time="6.377" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_remote_key_uses_original_binding_and_never_local_authority[None]" time="6.136" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_remote_key_uses_original_binding_and_never_local_authority[rotate]" time="6.369" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_remote_key_uses_original_binding_and_never_local_authority[revoke]" time="4.640" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_nonlocal_or_forwarded_caller_cannot_claim_local_modality[203.0.113.8-headers0]" time="4.393" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_nonlocal_or_forwarded_caller_cannot_claim_local_modality[127.0.0.1-headers1]" time="6.439" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_decision_body_cannot_supply_authority_envelope" time="5.884" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_attention_uses_same_provenance_without_public_binding[True]" time="7.676" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_attention_uses_same_provenance_without_public_binding[False]" time="6.671" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_internal_provenance_parser_rejects_ambiguous_modality[delta0]" time="0.002" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_internal_provenance_parser_rejects_ambiguous_modality[delta1]" time="0.002" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_internal_provenance_parser_rejects_ambiguous_modality[delta2]" time="0.002" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_internal_provenance_parser_rejects_ambiguous_modality[delta3]" time="0.002" /><testcase classname="tests.execution_r4.test_native_decision_provenance" name="test_internal_provenance_parser_rejects_ambiguous_modality[delta4]" time="0.002" /></testsuite></testsuites>

@@ -1,0 +1,48 @@
+{
+  "classification": "SOURCE_NATIVE_PERMISSION_COMPATIBILITY_FIX_OFFLINE_PASS",
+  "sources": {
+    "src/nexus_connector_core/native/native_inputs.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-powershell-permission-m3pu3pyr\\source\\src\\nexus_connector_core\\native\\native_inputs.py",
+      "sha256": "4b1bfdb36954442da6a0b623e33fd5f5421b89befa78242ddbde41bbd310cf5f",
+      "bytes": 9894
+    },
+    "src/nexus_connector_core/native/adapters/claude_code_stream.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-powershell-permission-m3pu3pyr\\source\\src\\nexus_connector_core\\native\\adapters\\claude_code_stream.py",
+      "sha256": "c678bdc25b5767f0eb5734cb91d0ca5a39b5ad464171b7ab6bffdcf2c2ae2a02",
+      "bytes": 58825
+    },
+    "tests/test_claude_powershell_permissions.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-powershell-permission-m3pu3pyr\\source\\tests\\test_claude_powershell_permissions.py",
+      "sha256": "a8b3739726851e95a9b26d4ad5bbc4de2ec9490a0e50fdf3f7134929202e8c37",
+      "bytes": 5011
+    }
+  },
+  "tests": {
+    "passed": 48,
+    "new": 22,
+    "regressions": 26,
+    "failed": 0,
+    "seconds": 4.87,
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-powershell-permission-m3pu3pyr\\final.xml",
+      "sha256": "e99b922ccf2ebc5d6ec07cac0fb989961c7635a36ff3c63c57f70009fe6b9474",
+      "bytes": 7431
+    },
+    "tool_result": "60efbc",
+    "terminal_exit0": "81adbc",
+    "post_test_change": "Only test formatting (split statements onto separate lines) for Ruff; no runtime or test logic changes."
+  },
+  "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-powershell-permission-m3pu3pyr\\run_tests.py",
+  "origin": "Core repository src explicitly inserted before installed dependencies. No installed package changes.",
+  "ruff": "PASS e94afb",
+  "diff_check": "PASS 7fb54d",
+  "contract": "Exact PowerShell tool name; nonempty string command and existing16KiB envelope bound. No automatic decision, changed original input, permanent permission update or stale/replayed reply.",
+  "version_qualification": "Historical exact-version campaign allowlist unchanged; offline fixtures do not assert a successful real PowerShell approval.",
+  "provider_invocations": 0,
+  "services_started": 0,
+  "diagnosis": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-powershell-permission-rftt7g4v\\diagnosis.json",
+    "sha256": "1223e73bcd459c8262074f66f4f1ed4b08165bf5eafe743940d9740516d8df30",
+    "bytes": 4822
+  }
+}

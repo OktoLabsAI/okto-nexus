@@ -14134,6 +14134,46 @@
       "codex_charged_admissions": 16,
       "connector_cleanup_pending": true,
       "force_authorized": false
+    },
+    "r3_home_overview_clarification": {
+      "status": "QUALIFIED_SCOPE_ONLY",
+      "summary": "Home user clarification delivered: overview/shortcuts with read-only summaries and separately labelled external Herdr reports.41 unique tests plus build and synthetic actual-App desktop/mobile review; no fixed-plan change or live M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-home-overview-clarification/review.json",
+        "plans/agent_ops/evidence/r3-home-overview-clarification/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2
+    },
+    "r3_core_powershell_permission_source": {
+      "status": "QUALIFIED_SCOPE_ONLY",
+      "summary": "Core497ee source-only native PowerShell permission fix:48 distinct tests (22new+26regression), no automatic approval. Installed campaign Core7810 unchanged; previous Sonnet144004/two admissions and pending Connector cleanup remain historical facts.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-core-powershell-permission-source/review.json",
+        "plans/agent_ops/evidence/r3-core-powershell-permission-source/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2
+    },
+    "r3_core_powershell_consumer_integration": {
+      "status": "INSTALLED_SCOPED_PASS",
+      "summary": "98 distinct installed synthetic cases: Core48/Nexus44/Connector6. Partial reruns overlap original unchanged42/4 passes; all fixture failures retained. No real provider, old campaign installation unchanged. Nexus backend archive predates Home; UI qualified separately.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-core-powershell-consumer-integration/review.json",
+        "plans/agent_ops/evidence/r3-core-powershell-consumer-integration/manifest.json",
+        "plans/agent_ops/evidence/r3-core-powershell-consumer-integration/qualification.json"
+      ],
+      "acceptance_promoted": false,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
     }
   },
   "history": [
@@ -16100,6 +16140,52 @@
       "codex_charged_admissions": 16,
       "connector_cleanup_pending": true,
       "force_authorized": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_home_overview_clarification",
+      "status": "QUALIFIED_SCOPE_ONLY",
+      "summary": "Home user clarification delivered: overview/shortcuts with read-only summaries and separately labelled external Herdr reports.41 unique tests plus build and synthetic actual-App desktop/mobile review; no fixed-plan change or live M1 acceptance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-home-overview-clarification/review.json",
+        "plans/agent_ops/evidence/r3-home-overview-clarification/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_core_powershell_permission_source",
+      "status": "QUALIFIED_SCOPE_ONLY",
+      "summary": "Core497ee source-only native PowerShell permission fix:48 distinct tests (22new+26regression), no automatic approval. Installed campaign Core7810 unchanged; previous Sonnet144004/two admissions and pending Connector cleanup remain historical facts.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-core-powershell-permission-source/review.json",
+        "plans/agent_ops/evidence/r3-core-powershell-permission-source/manifest.json"
+      ],
+      "acceptance_promoted": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_core_powershell_consumer_integration",
+      "status": "INSTALLED_SCOPED_PASS",
+      "summary": "98 distinct installed synthetic cases: Core48/Nexus44/Connector6. Partial reruns overlap original unchanged42/4 passes; all fixture failures retained. No real provider, old campaign installation unchanged. Nexus backend archive predates Home; UI qualified separately.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-core-powershell-consumer-integration/review.json",
+        "plans/agent_ops/evidence/r3-core-powershell-consumer-integration/manifest.json",
+        "plans/agent_ops/evidence/r3-core-powershell-consumer-integration/qualification.json"
+      ],
+      "acceptance_promoted": false,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
     }
   ],
   "r3_native_bounded_supervisor_execution": {

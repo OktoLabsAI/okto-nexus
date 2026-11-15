@@ -1,0 +1,22 @@
+{
+  "status": "INSTALLED_CONSUMER_FIXTURES_PASS_OLD_CAMPAIGN_UNCHANGED",
+  "distinct_cases": 98,
+  "breakdown": {
+    "core": 48,
+    "nexus": 44,
+    "connector": 6
+  },
+  "counting": "Final XML is the targeted rerun only for Nexus2/Connector2. Prior unchanged42/4 passes retained; do not add repeated runs as distinct cases. Core source48 and installed48 test the same cases in different environments, not96 distinct cases.",
+  "antecedents": "Nexus initial42pass/2missing fixture errors; restored exact pinned fixture and reran two. Connector initial4pass/2shape fixture failures, second4pass/2assertion fixture failures, finaltwo pass. All antecedents retained.",
+  "scope": "Installed package payloads/origins and synthetic permission forwarding/authority/close fencing; no real provider or services. Nexus backend archive predates Home; this does not qualify Home installed UI.",
+  "qualification_sha256": "4708713fab7ffbc105f4e52dda9e8d75f1414637f8218fafa4e913fe806f4fb8",
+  "campaign_installation_changed": false,
+  "acceptance_promoted": false,
+  "sonnet_tokens": 144004,
+  "sonnet_admissions": 2,
+  "force_authority_expanded": false,
+  "vendor_commits": {
+    "nexus": "a148e94e7cf1a74f2dfc62ae72a200c8b9488485",
+    "connector": "8c4c8009968838c19fe312694977ddd6d7edb9b8"
+  }
+}

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="6" time="9.973" timestamp="2026-11-15T02:56:19.744992-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_r4_execution" name="test_native_decision_uses_observed_request_and_same_receipt[approval.decide]" time="2.603" /><testcase classname="tests.unit.test_r4_execution" name="test_native_decision_uses_observed_request_and_same_receipt[input.provide]" time="1.305" /><testcase classname="tests.unit.test_r4_execution" name="test_cross_binding_control_cannot_borrow_a_runtime" time="1.353" /><testcase classname="tests.unit.test_r4_execution" name="test_close_fences_native_ingress_before_native_close" time="1.158" /><testcase classname="" name="test_installed_connector_powershell_decision[accept]" time="0.777"><failure message="nexus_connector_core.models.CoreError: CAPABILITY_UNSUPPORTED">execution = (&lt;okto_nexus_connector.services.r4_execution.R4ExecutionOwner object at 0x00000295A866AAD0&gt;, &lt;tests.unit.test_r4_execu...ontract_revision': 'nxl-1-agent-centric-http-only-2026-09-29-r4', 'type': 'operation.submit', 'server_id': 'srv', ...})
+decision = 'accept'
+
+    @pytest.mark.parametrize('decision', ['accept', 'decline'])
+    async def test_installed_connector_powershell_decision(execution, decision):
+        owner, connection, factory, receipts, opening = execution
+        await connection.emit(opening)
+        await observed(receipts, owner)
+        request = dict(schema_version=1, request_id='powershell-1', request_hash='a'*64,
+            method='can_use_tool', params={'subtype':'can_use_tool', 'tool_name':'PowerShell',
+            'input':{'command':'Write-Output fixture'}, 'tool_use_id':'tool-fixture'})
+        await factory.native.events_queue.put(RuntimeEvent(*factory.scope, 0, 'approval',
+            request['method'], {'native_approval':request}))
+        await asyncio.wait_for(factory.native.observed.wait(), 3)
+        payload=dict(canonical_request_id='request',decision_id='decision',decision_revision=1,
+            decision=decision,request=request,response_digest=None)
+        await connection.emit(operation(opening,'approval.decide',payload))
+&gt;       receipt=await observed(receipts,owner)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_connector_powershell.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+connector-source\tests\unit\test_r4_execution.py:153: in observed
+    raise owner.failure
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:301: in _produce_independently
+    await self._produce(item)
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:391: in _produce
+    outcome = await self._execute_with_recorded_outcome(item)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:433: in _execute_with_recorded_outcome
+    return await self._execute_with_capacity_wait(item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:336: in _execute_with_capacity_wait
+    return await self._execute(item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:741: in _execute
+    return await self._execute_owned(item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:898: in _execute_owned
+    operation = r4_native_decision_operation(frame, resolved_response=response)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\nexus_connector_core\decision_bridge_r4.py:48: in r4_native_decision_operation
+    action = native_request_action(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = {'method': 'can_use_tool', 'params': {'input': {'command': 'Write-Output fixture'}, 'subtype': 'can_use_tool', 'tool_n... 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 'powershell-1', ...}
+
+    def native_request_action(request: Mapping[str, Any]) -&gt; str:
+        """Core-owned classification shared with RuntimeCore's native decision API."""
+        from .native.native_inputs import INPUT_METHODS, claude_permission_tool_supported
+    
+        method, params = request.get("method"), request.get("params")
+        if not isinstance(params, dict):
+            raise CoreError("VALIDATION_ERROR", "approval_decide")
+        if method == "extension_ui_request":
+            from .native.native_inputs import validate_request
+            try:
+                validate_request(method, params)
+                if type(request.get("local_generation")) is not int or request["local_generation"] &lt; 1:
+                    raise ValueError()
+            except (ValueError, TypeError):
+                raise CoreError("VALIDATION_ERROR", "approval_decide") from None
+            return "input.provide"
+        if method in INPUT_METHODS or method in {
+            "item/commandExecution/requestApproval", "item/fileChange/requestApproval",
+        }:
+            if type(params.get("turnId")) is not str or not params["turnId"]:
+                raise CoreError("VALIDATION_ERROR", "approval_decide")
+            return "input.provide" if method in INPUT_METHODS else "approval.decide"
+        if method == "control_request:can_use_tool":
+            tool_name = params.get("tool_name")
+            if not claude_permission_tool_supported(tool_name):
+                raise CoreError("CAPABILITY_UNSUPPORTED", "approval_decide")
+            generation = request.get("local_generation")
+            if type(generation) is not int or generation &lt; 0:
+                raise CoreError("VALIDATION_ERROR", "approval_decide")
+            return "input.provide" if tool_name == "AskUserQuestion" else "approval.decide"
+&gt;       raise CoreError("CAPABILITY_UNSUPPORTED", "approval_decide")
+E       nexus_connector_core.models.CoreError: CAPABILITY_UNSUPPORTED
+
+venv\Lib\site-packages\nexus_connector_core\decision_bridge_r4.py:108: CoreError</failure></testcase><testcase classname="" name="test_installed_connector_powershell_decision[decline]" time="0.810"><failure message="nexus_connector_core.models.CoreError: CAPABILITY_UNSUPPORTED">execution = (&lt;okto_nexus_connector.services.r4_execution.R4ExecutionOwner object at 0x00000295A8669D10&gt;, &lt;tests.unit.test_r4_execu...ontract_revision': 'nxl-1-agent-centric-http-only-2026-09-29-r4', 'type': 'operation.submit', 'server_id': 'srv', ...})
+decision = 'decline'
+
+    @pytest.mark.parametrize('decision', ['accept', 'decline'])
+    async def test_installed_connector_powershell_decision(execution, decision):
+        owner, connection, factory, receipts, opening = execution
+        await connection.emit(opening)
+        await observed(receipts, owner)
+        request = dict(schema_version=1, request_id='powershell-1', request_hash='a'*64,
+            method='can_use_tool', params={'subtype':'can_use_tool', 'tool_name':'PowerShell',
+            'input':{'command':'Write-Output fixture'}, 'tool_use_id':'tool-fixture'})
+        await factory.native.events_queue.put(RuntimeEvent(*factory.scope, 0, 'approval',
+            request['method'], {'native_approval':request}))
+        await asyncio.wait_for(factory.native.observed.wait(), 3)
+        payload=dict(canonical_request_id='request',decision_id='decision',decision_revision=1,
+            decision=decision,request=request,response_digest=None)
+        await connection.emit(operation(opening,'approval.decide',payload))
+&gt;       receipt=await observed(receipts,owner)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_connector_powershell.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+connector-source\tests\unit\test_r4_execution.py:153: in observed
+    raise owner.failure
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:301: in _produce_independently
+    await self._produce(item)
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:391: in _produce
+    outcome = await self._execute_with_recorded_outcome(item)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:433: in _execute_with_recorded_outcome
+    return await self._execute_with_capacity_wait(item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:336: in _execute_with_capacity_wait
+    return await self._execute(item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:745: in _execute
+    return await self._execute_owned(item)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:872: in _execute_owned
+    context = self._context(item, runtime)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv\Lib\site-packages\okto_nexus_connector\services\r4_execution.py:371: in _context
+    return runtime.r4_operation_context(self.connection.require_current(item),
+venv\Lib\site-packages\nexus_connector_core\lease_runtime_r4.py:360: in r4_operation_context
+    r4_native_decision_operation(operation)
+venv\Lib\site-packages\nexus_connector_core\decision_bridge_r4.py:48: in r4_native_decision_operation
+    action = native_request_action(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = {'method': 'can_use_tool', 'params': {'input': {'command': 'Write-Output fixture'}, 'subtype': 'can_use_tool', 'tool_n... 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 'powershell-1', ...}
+
+    def native_request_action(request: Mapping[str, Any]) -&gt; str:
+        """Core-owned classification shared with RuntimeCore's native decision API."""
+        from .native.native_inputs import INPUT_METHODS, claude_permission_tool_supported
+    
+        method, params = request.get("method"), request.get("params")
+        if not isinstance(params, dict):
+            raise CoreError("VALIDATION_ERROR", "approval_decide")
+        if method == "extension_ui_request":
+            from .native.native_inputs import validate_request
+            try:
+                validate_request(method, params)
+                if type(request.get("local_generation")) is not int or request["local_generation"] &lt; 1:
+                    raise ValueError()
+            except (ValueError, TypeError):
+                raise CoreError("VALIDATION_ERROR", "approval_decide") from None
+            return "input.provide"
+        if method in INPUT_METHODS or method in {
+            "item/commandExecution/requestApproval", "item/fileChange/requestApproval",
+        }:
+            if type(params.get("turnId")) is not str or not params["turnId"]:
+                raise CoreError("VALIDATION_ERROR", "approval_decide")
+            return "input.provide" if method in INPUT_METHODS else "approval.decide"
+        if method == "control_request:can_use_tool":
+            tool_name = params.get("tool_name")
+            if not claude_permission_tool_supported(tool_name):
+                raise CoreError("CAPABILITY_UNSUPPORTED", "approval_decide")
+            generation = request.get("local_generation")
+            if type(generation) is not int or generation &lt; 0:
+                raise CoreError("VALIDATION_ERROR", "approval_decide")
+            return "input.provide" if tool_name == "AskUserQuestion" else "approval.decide"
+&gt;       raise CoreError("CAPABILITY_UNSUPPORTED", "approval_decide")
+E       nexus_connector_core.models.CoreError: CAPABILITY_UNSUPPORTED
+
+venv\Lib\site-packages\nexus_connector_core\decision_bridge_r4.py:108: CoreError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,15 @@
+{
+  "status": "SOURCE_FIX_OFFLINE_QUALIFIED_NOT_CAMPAIGN_INSTALLED",
+  "source_commit": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+  "tests": {
+    "unique_passed": 48,
+    "new": 22,
+    "regressions": 26
+  },
+  "scope": "Recognize exact native PowerShell permission and preserve existing command validation/size bound and human decision flow. No automatic approval/replay/permanent permission change.",
+  "qualification_sha256": "6e7ab28d08458cc619906708f455f2c1f34c3dbb6b186f45848c05b31cc6a07a",
+  "installed_campaign_core": "7810f3b9 (unchanged)",
+  "diagnosed_attempt": "Useful03 report absent/useful false, Sonnet144004 tokens/two admissions. Source fix does not rewrite this outcome.",
+  "acceptance_promoted": false,
+  "new_provider_calls": 0
+}
