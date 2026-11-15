@@ -4,7 +4,7 @@
   "original_source": "C:\\Users\\jpamb\\Downloads\\PLANO_CODEX_NEXUS_HOME_OPERACIONAL_R1.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
   "created_at": "2026-11-15T20:14:32.568756+00:00",
-  "updated_at": "2026-11-15T21:54:36.969358+00:00",
+  "updated_at": "2026-11-15T23:18:36.005958+00:00",
   "status": "IN_PROGRESS",
   "baseline": {
     "previous_branch": "feature/v0.3.3",
@@ -50,7 +50,9 @@
         "HOME-010"
       ],
       "evidence": [
-        "plans/home_evolution/evidence/pr01/qualification.json"
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
       ]
     },
     "PR-02": {
@@ -63,7 +65,9 @@
         "HOME-015"
       ],
       "evidence": [
-        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
       ]
     },
     "PR-03": {
@@ -76,7 +80,9 @@
         "HOME-020"
       ],
       "evidence": [
-        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
       ]
     },
     "PR-04": {
@@ -88,7 +94,9 @@
         "HOME-024"
       ],
       "evidence": [
-        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json",
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
       ]
     },
     "PR-05": {
@@ -103,11 +111,13 @@
         "HOME-031"
       ],
       "evidence": [
-        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
       ]
     },
     "PR-06": {
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "tasks": [
         "HOME-032",
         "HOME-033",
@@ -115,7 +125,10 @@
         "HOME-035",
         "HOME-036"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
+      ]
     }
   },
   "tasks": {
@@ -199,7 +212,11 @@
       "implementation": "Criar HomeOverviewService e HomeOverviewQueries, ou equivalentes existentes, com contratos tipados; nenhuma dependência direta do frontend em SQL/runtime.",
       "acceptance": "Portas, modelos e testes de import boundary; nomenclatura proposta reconciliada com o repositório.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "src/okto_nexus/application/home.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "src/okto_nexus/adapters/inbound/http/home.py"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -215,7 +232,11 @@
       "implementation": "Consultar trabalho iniciado por operador e por agentes; agregar handoff, entrega e operações com correlação comprovada; preservar tentativas e sessões como detalhes.",
       "acceptance": "Atividades estáveis, sem duplicação por abertura de sessão, steer, retries ou publicação de resultado.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "src/okto_nexus/application/home.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "src/okto_nexus/adapters/inbound/http/home.py"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -231,7 +252,11 @@
       "implementation": "Filtrar antes de contar; separar conectividade global e atuação no workspace; contadores sobre o conjunto autorizado, não sobre a página.",
       "acceptance": "Totais, lista e escopo consistentes no mesmo snapshot; desconhecido não é zero.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "src/okto_nexus/application/home.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "src/okto_nexus/adapters/inbound/http/home.py"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -247,7 +272,11 @@
       "implementation": "Consumir projeções da Attention e referências de decisões nativas; respeitar prioridade, adiamento, destinatário e feature desabilitada.",
       "acceptance": "Home recebe itens concretos e ações previstas sem criar outra fila de aprovações.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "src/okto_nexus/application/home.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "src/okto_nexus/adapters/inbound/http/home.py"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -263,7 +292,11 @@
       "implementation": "Consultar resultados, respostas e metadados de artefatos; classificar conclusão de turno versus entrega de handoff e erro de limpeza.",
       "acceptance": "Resultados básicos disponíveis já no M1; nenhuma necessidade de ler todos os payloads.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "src/okto_nexus/application/home.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "src/okto_nexus/adapters/inbound/http/home.py"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -279,7 +312,11 @@
       "implementation": "Adicionar /api/v1/home/overview e paginação por bloco, ou extensão equivalente; autenticação atual, limites, cache privado/no-store, revisão e respostas parciais explícitas.",
       "acceptance": "Testes HTTP reais, validação de parâmetros, 401/403 tratados e ausência de efeitos de execução nos GETs.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "src/okto_nexus/application/home.py",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "src/okto_nexus/adapters/inbound/http/home.py"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -295,7 +332,10 @@
       "implementation": "Refatorar HomeView/HomeOverview; cabeçalho compacto, resumo, Precisa de você, Em andamento, Resultados e Agentes conectados. Rebaixar atalhos grandes.",
       "acceptance": "A mesma Home, não uma segunda rota concorrente; leitura útil em desktop e mobile.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/OperationalHome.tsx",
+        "frontend/src/components/home/HomeCards.tsx"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -310,7 +350,10 @@
       "implementation": "Cartões/linhas por atividade, agrupamento opcional por agente e expansão de tentativas/sessões; rótulos legíveis, motivo e tempo no estado.",
       "acceptance": "Uma identidade com sessões distintas não recebe um status único enganoso; warm/idle fora de Em andamento.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/OperationalHome.tsx",
+        "frontend/src/components/home/HomeCards.tsx"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -325,7 +368,10 @@
       "implementation": "Extrair componentes de apresentação existentes; mostrar até três ocorrências prioritárias com contexto e abrir a inspeção atual.",
       "acceptance": "Uma decisão pendente abre o registro exato; não é necessário esperar um novo drawer para o M1.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/OperationalHome.tsx",
+        "frontend/src/components/home/HomeCards.tsx"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -340,7 +386,10 @@
       "implementation": "Resumo de resposta, resultado e artefato com referências exatas; visualização usa controles existentes e não marca visto em massa.",
       "acceptance": "É possível localizar e abrir uma entrega pela Home, sem procurar outra vez na tela de destino.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/OperationalHome.tsx",
+        "frontend/src/components/home/HomeCards.tsx"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -355,7 +404,10 @@
       "implementation": "Preservar workspace selecionado; usar nomes existentes; filtros rápidos de atenção/estado/agente e estados zero-agente, sem trabalho, parcial, forbidden e stale.",
       "acceptance": "Zero agentes indica Conectar agente pelo fluxo plug and play; falha de leitura não mostra onboarding falso.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/OperationalHome.tsx",
+        "frontend/src/components/home/HomeCards.tsx"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -370,7 +422,10 @@
       "implementation": "Criar HomeTarget/OperationalTarget para handoff, operação, sessão, mensagem, aprovação, resultado e observação; validar escopo e resolver no servidor.",
       "acceptance": "Links, voltar/avançar e reabertura apontam ao mesmo objeto; URLs não carregam segredo ou conteúdo.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -386,7 +441,10 @@
       "implementation": "Extrair composição de AttentionInspection sem trocar as máquinas de estado internas; desktop lateral e mobile em camada acessível.",
       "acceptance": "Mesmos formulários/serviços de ApprovalInspection, HandoffInspection e runtime; uma única camada ativa.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -401,7 +459,10 @@
       "implementation": "Responder, aprovar/negar, verificar, inspecionar recuperação e interromper somente quando o contrato atual permite; revalidar antes do envio.",
       "acceptance": "Conflitos e resultado incerto permanecem visíveis; não há approve genérico, retry-all ou ação por inferência.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -416,7 +477,10 @@
       "implementation": "Extrair composer existente; distinguir Nova tarefa (handoff) de Conversar (mensagem); continuar somente na sessão explicitamente correlacionada.",
       "acceptance": "Operador nunca personifica agente; encerramento/revogação da sessão exige novo contexto explícito, não fallback silencioso.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -431,7 +495,10 @@
       "implementation": "Não remontar formulários em refresh; confirmar descarte na troca de alvo/workspace quando necessário; manter seleção, scroll e ação em curso.",
       "acceptance": "SSE, filtros, Escape e botão Voltar não apagam uma resposta digitada nem redirecionam uma decisão.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -446,7 +513,10 @@
       "implementation": "Agrupar somente relações explícitas entre resultado, resposta e artefatos; manter autores, revisão, origem e metadados separados.",
       "acceptance": "Uma entrega com três arquivos não parece quatro trabalhos; ausência de correlação não é preenchida com heurística.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -462,7 +532,10 @@
       "implementation": "Para result_unseen, reutilizar a preferência da Attention por ocorrência/revisão. Para fontes sem esse contrato, mostrar Recentes, sem contador novo fictício.",
       "acceptance": "Home não altera watermark temporal global nem ACK de inbox; visualização em uma ocorrência não oculta outra.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -478,7 +551,10 @@
       "implementation": "Carregar conteúdo sob demanda, com componentes existentes, limites, sanitização e autorização de origem.",
       "acceptance": "Resumo não expõe payload confidencial; HTML e outros artefatos não ganham execução privilegiada.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr01/qualification.json",
         "plans/home_evolution/evidence/pr06-boundaries/qualification.json"
@@ -494,7 +570,10 @@
       "implementation": "Depois de resposta/decisão, mostrar registro da decisão separado de aplicação no runtime; depois de entrega, permitir continuar com identidade e escopo corretos.",
       "acceptance": "Ação enviada não equivale a aplicada; interação mantém correlação e recupera a mesma operação após resposta perdida.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/components/home/HomeInspection.tsx",
+        "frontend/src/components/home/continuation.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
       ],
@@ -509,7 +588,10 @@
       "implementation": "Documentar eventos que invalidam cada bloco, mudanças que só ocorrem por passagem do tempo e retenção de eventos.",
       "acceptance": "Matriz fonte→evento→fallback→TTL; nenhuma confiança em SSE para mudanças sem evento comprovado.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/homeController.ts",
+        "frontend/src/hooks/useHomeOverview.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
       ],
@@ -524,7 +606,10 @@
       "implementation": "Reutilizar stream do shell; debounce com teto, uma requisição em voo por escopo, cancelamento/geração de requests, reread após reconnect e fallback limitado.",
       "acceptance": "Sem nova conexão SSE por cartão; fonte antiga não substitui resposta de escopo novo.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/homeController.ts",
+        "frontend/src/hooks/useHomeOverview.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
       ],
@@ -539,7 +624,10 @@
       "implementation": "Cursores opacos por filtro/escopo/ordem e invalidação explícita; timestamps do servidor, atualidade por bloco e refresh no vencimento.",
       "acceptance": "Não há skips/duplicatas silenciosos; transport live não transforma fonte stale em current.",
       "status": "IMPLEMENTED",
-      "files": [],
+      "files": [
+        "frontend/src/homeController.ts",
+        "frontend/src/hooks/useHomeOverview.ts"
+      ],
       "evidence": [
         "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
       ],
@@ -554,9 +642,18 @@
       "implementation": "Selecionar mudanças de negócio em templates determinísticos; agrupar bursts só quando não ocultar distinções, decisões ou falhas.",
       "acceptance": "Feed limitado e correlacionado; sem tokens, heartbeats ou LLM resumindo a operação.",
       "status": "IMPLEMENTED",
-      "files": [],
-      "evidence": [],
-      "tests": [],
+      "files": [
+        "frontend/src/homePresentation.ts",
+        "frontend/src/components/home/OperationalHome.tsx"
+      ],
+      "evidence": [
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "tests": [
+        "test_business_feed_uses_real_events_not_unread_or_private_payload",
+        "business feed templates hide tokens/heartbeat and do not accept native event content"
+      ],
       "limitations": []
     },
     "HOME-029": {
@@ -565,10 +662,22 @@
       "implementation": "Incorporar projeção externa existente no bloco de agentes/atividade e em Attention; separar reportado/inferido, atual/stale e execução gerenciada.",
       "acceptance": "Herdr done nunca completa handoff, libera slot ou soma como sucesso nativo; ausência da feature não bloqueia Home.",
       "status": "IMPLEMENTED",
-      "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "files": [
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "frontend/src/homePresentation.ts"
+      ],
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json"
+      ],
+      "tests": [
+        "test_same_agent_native_and_external_are_distinct_evidence",
+        "test_external_without_canonical_workspace_is_refused_not_inferred",
+        "test_completion_stays_historical_unseen_after_ttl_without_becoming_task_success"
+      ],
+      "limitations": [
+        "External observations are synthetic and do not prove native work."
+      ]
     },
     "HOME-030": {
       "title": "Validar acessibilidade e responsividade",
@@ -576,10 +685,21 @@
       "implementation": "Teclado, leitor de tela, contraste, focus restore, pause visual e largura mobile; textos seguem o idioma/padrão do frontend.",
       "acceptance": "Fluxo completo sem mouse; atualizações não roubam foco; pausa visual não pausa agentes nem remove validação de segurança.",
       "status": "IMPLEMENTED",
-      "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "files": [
+        "frontend/src/components/home/HomeCards.tsx",
+        "frontend/src/components/home/OperationalHome.tsx"
+      ],
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/results.json",
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr06-browser-extra/postfix-results.json"
+      ],
+      "tests": [
+        "Real native Chrome200%/360CSS px, keyboard composer/drawer/focus, full-title wrap, DOM aria-live batches"
+      ],
+      "limitations": [
+        "Actual screen-reader speech and full keyboard traversal remain NOT_RUN."
+      ]
     },
     "HOME-031": {
       "title": "Medir e otimizar custo",
@@ -587,10 +707,19 @@
       "implementation": "EXPLAIN QUERY PLAN, índices aditivos necessários, contagens paginadas, payload e taxas de requests em fixtures pequenas e ampliadas.",
       "acceptance": "Sem N+1 por agente/cartão; metas medidas com ambiente documentado, não alegadas por inspeção.",
       "status": "IN_PROGRESS",
-      "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "files": [
+        "scripts/measure_home_evolution.py"
+      ],
+      "evidence": [
+        "plans/home_evolution/performance.md",
+        "plans/home_evolution/evidence/pr05-performance/measurement-final-workers.json"
+      ],
+      "tests": [
+        "20 measured warm samples/dataset;1/10/100workers;1000activities/100000events;46SQL/GET;0writes"
+      ],
+      "limitations": [
+        "500ms p95 missed in all four datasets; no production SLO claim or direct-native-operation latency measurement."
+      ]
     },
     "HOME-032": {
       "title": "Executar matriz integrada",
@@ -598,10 +727,20 @@
       "implementation": "Unidade, repositório, HTTP, componente e navegador; testar flags, tenant/operador atual, escopos, sessão, revogação e concorrência.",
       "acceptance": "Relatório liga cada cenário às evidências; testes Node/static não são vendidos como e2e de navegador.",
       "status": "IN_PROGRESS",
-      "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "files": [
+        "plans/home_evolution/test-ledger.json"
+      ],
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "plans/home_evolution/evidence/pr06-package-ui-final/qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json"
+      ],
+      "tests": [
+        "Per-scenario executed matrix, installed final package and real synthetic browser checks"
+      ],
+      "limitations": [
+        "56PASS/17NOT_RUN; no promotion from test-suite count alone."
+      ]
     },
     "HOME-033": {
       "title": "Executar campanha real isolada",
@@ -610,9 +749,15 @@
       "acceptance": "Evidência de pedido, atividade, pergunta/decisão e resultado; registrar explicitamente o que ficou NOT_RUN.",
       "status": "TODO",
       "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-campaign-proposal/PROPOSTA.md"
+      ],
+      "tests": [
+        "27 offline driver cases only; real campaign not run"
+      ],
+      "limitations": [
+        "Awaiting final inert candidate rebind and new paid consent; no R3 quota inherited."
+      ]
     },
     "HOME-034": {
       "title": "Implementar rollout e reversão",
@@ -620,84 +765,182 @@
       "implementation": "Controle independente da nova apresentação; retorno à Home anterior sem parar processos, revogar grants ou desfazer migrações.",
       "acceptance": "Desabilitar Home nova mantém daemon, CLI, Attention e controles originais operantes.",
       "status": "IMPLEMENTED",
-      "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "files": [
+        "frontend/src/App.tsx",
+        "docs/operational-home.md"
+      ],
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json"
+      ],
+      "tests": [
+        "Actual classic/operational toggle with0mutationrequests"
+      ],
+      "limitations": [
+        "Continuity of live daemon/Core/Connector during useful work still needs real campaign."
+      ]
     },
     "HOME-035": {
       "title": "Publicar documentação e diagnóstico",
       "pr": "PR-06",
       "implementation": "Guia curto da Home, estados e limites; docs do contrato, capturas sem dados privados, troubleshooting e evidências.",
       "acceptance": "Nenhuma documentação confunde sessão aberta, conexão, entrega, execução, resultado e verificação.",
-      "status": "IMPLEMENTED",
-      "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "status": "VERIFIED",
+      "files": [
+        "docs/operational-home.md",
+        "plans/home_evolution/contracts.md",
+        "plans/home_evolution/adr-result-view-state.md",
+        "plans/home_evolution/performance.md"
+      ],
+      "evidence": [
+        "plans/home_evolution/release-report.md",
+        "plans/home_evolution/evidence/pr06-browser-final/results.json"
+      ],
+      "tests": [
+        "Manual semantic documentation review; sources distinguish claimed/accepted/running/result/verification/cleanup"
+      ],
+      "limitations": [
+        "Historical sections retain their dated earlier qualification state."
+      ]
     },
     "HOME-036": {
       "title": "Revisar contrato e critérios do produto",
       "pr": "PR-06",
       "implementation": "Revisão final de drift, segurança, interação e UX; confirmar primeiro valor e opcionabilidade do dashboard.",
       "acceptance": "Gate M3 decidido com evidências, baseline atualizado e limitações explícitas; sem deploy automático em produção.",
-      "status": "TODO",
-      "files": [],
-      "evidence": [],
-      "tests": [],
-      "limitations": []
+      "status": "IN_PROGRESS",
+      "files": [
+        "plans/home_evolution/release-report.md"
+      ],
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "plans/home_evolution/evidence/pr06-package-ui-final/qualification.json"
+      ],
+      "tests": [
+        "Independent code/contract/evidence review; source drift and final installed package checked"
+      ],
+      "limitations": [
+        "M3 not approved: real campaign/human comprehension/remaining acceptance branches; classic remains default."
+      ]
     }
   },
   "invariants": {
     "HOME-INV-01": {
       "requirement": "Dashboard continua opcional: instalar, conectar, pedir, acompanhar, responder e obter resultado pelo terminal não ganha etapa web obrigatória.",
-      "status": "TODO",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-package/qualification.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-02": {
       "requirement": "Server mantém autoridade de coordenação; Core executa; Connector hospeda execução remota. Esta frente não exige mudança de protocolo desses componentes por padrão.",
-      "status": "TODO",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/baseline.md",
+        "plans/home_evolution/contracts.md"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-03": {
       "requirement": "A Home lê/projeta fatos canônicos. Não mantém outra fila, máquina de estados de execução, scheduler ou agente interpretando eventos.",
-      "status": "TODO",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr01/qualification.json",
+        "plans/home_evolution/evidence/pr05-foundation/final-qualification.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-04": {
       "requirement": "Abrir, recarregar, filtrar ou expandir a Home não inicia inferência, aprova, completa trabalho, reivindica handoff, reconhece inbox ou amplia grant.",
-      "status": "TODO",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json",
+        "plans/home_evolution/evidence/pr01/qualification.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-05": {
       "requirement": "Conectividade, presença, atividade, capacidade, admissão, aceitação nativa, resultado e verificação permanecem conceitos separados.",
-      "status": "TODO",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-06": {
       "requirement": "Permissões de leitura de cada fonte valem para resumos, contadores, prévias, detalhes e links. Uma referência visível não concede capacidade de ação.",
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-07": {
       "requirement": "Ações continuam nas APIs existentes, com revisão, correlação, idempotência e revalidação atuais. Resultado desconhecido não autoriza replay.",
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr06-namespaces/qualification.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-08": {
       "requirement": "Identidade de agente é persistente e pode ter múltiplas sessões. A unidade primária da Home é uma atividade lógica, não o agent_id isolado.",
-      "status": "TODO",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-namespaces/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-09": {
       "requirement": "Observação externa é identificada como reportada/inferida, com validade e origem. Não prova execução gerenciada nem conclusão de tarefa.",
-      "status": "TODO",
-      "evidence": []
+      "status": "VERIFIED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+        "plans/home_evolution/evidence/pr06-semantics/qualification.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     },
     "HOME-INV-10": {
       "requirement": "Desabilitar a nova Home não muda nenhum desses contratos nem interfere nos agentes em execução.",
-      "status": "TODO",
-      "evidence": []
+      "status": "IMPLEMENTED",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-browser-final/final-bundle-seven.json"
+      ],
+      "qualification_scope": "Contract boundaries only: actual SQLite/ASGI, Node and installed terminal tests with synthetic peers where indicated; no real provider/native continuity claim.",
+      "limitations": [
+        "Remaining scenario branches retain their separate NOT_RUN status."
+      ]
     }
   },
   "history": [
@@ -733,6 +976,10 @@
     {
       "at": "2026-11-15T21:54:36.969358+00:00",
       "event": "Integration findings corrected: canonical result titles, reserved human operator excluded from Home worker inventory, existing secret policy on summaries, quiet empty/idle view and successive live-region batches. 37 scoped scenarios PASS/36 NOT_RUN; source/package snapshots remain distinct. Initial installed17 PASS; final corrected artifact pending."
+    },
+    {
+      "at": "2026-11-15T23:18:36.005958+00:00",
+      "event": "Consolidated56PASS/17NOT_RUN, task/invariant references, final200frontend tests/build and qualified installed7e156362 wheel. M3 remains unapproved; paid campaign not executed and human/AT limits retained."
     }
   ]
 }

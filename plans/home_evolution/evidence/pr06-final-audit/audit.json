@@ -1,0 +1,430 @@
+{
+  "schema_version": 1,
+  "scope": "Final read-only audit of the24 scenarios NOT_RUN at task start; recommendations only",
+  "new_runs": {
+    "sql": {
+      "tests": "8",
+      "failures": "0",
+      "seconds": "17.907",
+      "cases": [
+        "test_overview_real_fixture_is_read_only_and_scoped",
+        "test_agent_and_external_pages_have_reachable_continuations",
+        "test_native_delivery_and_handoff_are_one_activity_then_claim_change_separates_history",
+        "test_retries_share_handoff_controls_do_not_become_work",
+        "test_observation_ttl_uses_clock_without_mutating_history",
+        "test_snooze_expiry_is_derived_without_a_read_side_write",
+        "test_expiration_changes_resolution_without_writing_native_lifecycle",
+        "test_expiration_without_write_uses_last_eligible_grant_deadline"
+      ],
+      "tool_ref": "bcf775",
+      "raw_xml_sha256": "696e74bf86eff19f7bdb0f9d2cfb1c5b27c78d5a835c401d6fcb68ad85908514"
+    },
+    "node": {
+      "tests": 12,
+      "failures": 0,
+      "cases": [
+        "scope generation clears protected state and ignores late old reads without overlap",
+        "401 clears visible and paused data and blocks refresh until a new identity",
+        "403 clears visible and paused data and blocks refresh until a new identity",
+        "visual pause keeps published identity and accepts newest snapshot only when applied",
+        "pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor",
+        "fallback and source TTL refresh independently of live stream; hidden events reduce work then wake",
+        "returning from background fences sensitive sections until the fresh GET completes",
+        "a GET begun in background cannot clear the wake revalidation fence",
+        "reconnect/gap invalidate, unrelated events do not, and disposal removes timers",
+        "time spent reading does not extend source TTL by another full interval",
+        "modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope",
+        "external activity is always reported and stale working never becomes native running"
+      ],
+      "tool_ref": "4a6f17",
+      "qualified_delta": "pr06-visibility-revalidation"
+    }
+  },
+  "reference_pins": {
+    "sql": {
+      "path": "tests/home_evolution/test_home_queries.py",
+      "sha256": "48ea97f6f704428886c92dadb0f9edf2a1eab502bb7ab7f13a3596f9aff18349"
+    },
+    "fixture": {
+      "path": "tests/home_evolution/fixtures.py",
+      "sha256": "de3898c335382729a1f0236d60e226c03e469e546853b9c9d54823d0d3364615"
+    },
+    "controller": {
+      "path": "frontend/tests/homeR1Controller.test.mjs",
+      "sha256": "ac4c46a28e150bfbbc4c1a3c72169b5ffbf882b8dd7fd73ce321702177f4be1a"
+    },
+    "presentation": {
+      "path": "frontend/tests/homeR1Presentation.test.mjs",
+      "sha256": "3c9d4585ecb6a937e9b1adc221e6ac99cb5ec34f54392d90b1652b849ba6bf10"
+    },
+    "home_ui": {
+      "path": "frontend/tests/homeUI.test.mjs",
+      "sha256": "162c9cf86f1072dfcfac49c9896073328f448bbd9a1d5066a21f4a26c26b9cd5"
+    },
+    "native": {
+      "path": "plans/home_evolution/evidence/pr06-canonical-reuse/qualification.json",
+      "sha256": "9c76a2890b323b37048ad6d6a1b791ad5da9a75af5d3ed23de6b133da67ee01d"
+    },
+    "boundaries": {
+      "path": "plans/home_evolution/evidence/pr06-boundaries/qualification.json",
+      "sha256": "a450a87588466dec4cc5b0eb9418493e9e837914f016d0ac25d41dd1dbd76f91"
+    },
+    "semantics": {
+      "path": "plans/home_evolution/evidence/pr06-semantics/qualification.json",
+      "sha256": "ae09c47d1bc2ebfb06dfcc532c2bc386684c79252dab4039d798ec271795845b"
+    },
+    "namespace": {
+      "path": "plans/home_evolution/evidence/pr06-namespaces/qualification.json",
+      "sha256": "eb2f6740d35480f12b0f254bf55eb37c9869c896c9ce468b62285fe3cae0c55e"
+    },
+    "browser": {
+      "path": "plans/home_evolution/evidence/pr06-browser/checks.json",
+      "sha256": "3d22cf205229a8fde8b043e21f986b3deb0c9a05c8a3e863fea6c57f6c5a0cc5"
+    },
+    "browser_source": {
+      "path": "tests/home_evolution/browser_fixture.py",
+      "sha256": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d"
+    },
+    "browser_final": {
+      "path": "plans/home_evolution/evidence/pr06-browser-final/results.json",
+      "sha256": "99a1c15773fc0e069f25f76e21e78f001fbc730df280e761c2dfe705520bae13"
+    },
+    "browser_extra": {
+      "path": "plans/home_evolution/evidence/pr06-browser-extra/postfix-results.json",
+      "sha256": "58c659021d6bd561c09e9d9ff1aeaf26366775f29c38bed44c8b69336b3fc5f1"
+    },
+    "browser_navigation": {
+      "path": "plans/home_evolution/evidence/pr06-browser-extra/raw-results.json",
+      "sha256": "ac7392a0fef1e314d558f397174832ee7bd1e619638a8aa80e8470d5153f646a"
+    },
+    "visibility": {
+      "path": "plans/home_evolution/evidence/pr06-visibility-revalidation/qualification.json",
+      "sha256": "335e5a99d170d7cd3891de902db87da45eb42ae9ab647be5114ec22e4733d2d5"
+    },
+    "home_hook": {
+      "path": "frontend/src/hooks/useHomeOverview.ts",
+      "sha256": "8605095c5e7030c7cde9ce0aeb72f0e3dbdc0bdf959e2e0cfa50b045a55c90af"
+    },
+    "home_controller": {
+      "path": "frontend/src/homeController.ts",
+      "sha256": "548a73ab4fe4b17396f540e974ed25475b02e35848222aafe76aae550c227ae1"
+    },
+    "home_component": {
+      "path": "frontend/src/components/home/OperationalHome.tsx",
+      "sha256": "f136752a8368cfc5a84a412cbaea46fc894fdcd13ba6b3122a625c18b5915a5e"
+    },
+    "home_queries": {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "f7a20338a6638c1abd3038138c13dc794c5ea7c404bac3284cff4b300343aa6f"
+    },
+    "home_inspection": {
+      "path": "frontend/src/components/home/HomeInspection.tsx",
+      "sha256": "43c95cff45f59d0016934353e2ac3a30e2e1c44987d90d06917c6cf2556db5d0"
+    },
+    "authority_expiry": {
+      "path": "tests/test_attention_authority.py",
+      "sha256": "1d5e6d533923fc1a3f087b32f2bd0c5e5e749cf675c62c6c1d47b3151bf5908d"
+    },
+    "native_expiry": {
+      "path": "tests/test_attention_native.py",
+      "sha256": "4f0f002b0320bbb379017726b8d19da6796ec888894534230b3d9dbb99a29633"
+    },
+    "attention_expiry": {
+      "path": "tests/test_attention_api.py",
+      "sha256": "3b21f99d943bc2d6519ef6e2cf2b29270b79221fdc9ec6bf56a68bbf09493cae"
+    },
+    "baseline_ttl": {
+      "path": "tests/home_evolution/test_baseline_fixture.py",
+      "sha256": "112799ccf8beeddb2aa740ce2c96906a7a04efa409ec13b5ab41b47632a7206e"
+    }
+  },
+  "scenarios": [
+    {
+      "scenario": "HOME-T-A01",
+      "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "sql",
+        "browser",
+        "boundaries"
+      ],
+      "proved": "Real workspace GET/browser excludes other-workspace activities; the same agent is present in both fixture workspaces. Scoped totals and seen isolation are tested.",
+      "limitation": "No retained assertion compares all A/B attention and summary counters under an adversarial change in B. Do not claim that full counter-isolation assertion from the work-list test alone."
+    },
+    {
+      "scenario": "HOME-T-A02",
+      "requirement": "Todos os projetos é uma união autorizada, sem duplicar agente, handoff ou entrega por join.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "sql",
+        "namespace",
+        "fixture"
+      ],
+      "proved": "Global worker pagination returns the exact five distinct workers despite repeated membership; native delivery/handoff retries are deduplicated and executor namespaces preserve distinct operations.",
+      "limitation": "No existing assertion proves the entire all-projects work/delivery union equals the distinct union of both scoped pages. Dedup tests are narrower."
+    },
+    {
+      "scenario": "HOME-T-A05",
+      "requirement": "Revogação/logout remove payloads protegidos da lista, drawer e caches; o histórico do browser não os restaura.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "browser",
+        "controller",
+        "home_ui",
+        "home_hook"
+      ],
+      "proved": "Actual routed403 clears list/drawer; controller401/403 clears visible and paused caches; logout removes Home continuation content.",
+      "limitation": "Browser back/forward is qualified for valid targets, not after logout/revocation. Do not substitute the former for historical protected-payload nonrestoration."
+    },
+    {
+      "scenario": "HOME-T-A06",
+      "requirement": "Troca A→B com resposta lenta de A não mistura dados, contadores ou formulários.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "controller",
+        "browser",
+        "home_hook"
+      ],
+      "proved": "Generation-bound deferred GET rejects the late previous workspace/identity response and clears protected state; render-time scope key masks old payload before effects.",
+      "limitation": "The deferred-read test does not include a dirty native form during the A-to-B transition. Existing form retention/discard browser proof is a different transition."
+    },
+    {
+      "scenario": "HOME-T-A08",
+      "requirement": "Ocorrências Server-wide são identificadas separadamente e não atribuídas a todos os projetos por conveniência.",
+      "recommendation": "NOT_RUN",
+      "evidence": [
+        "home_queries"
+      ],
+      "proved": "Current Home forwards canonical Attention scope; no genuine server-wide producer was exercised.",
+      "limitation": "No impossible NULL workspace row or unrelated identity error can substitute for this case."
+    },
+    {
+      "scenario": "HOME-T-B02",
+      "requirement": "Instância one-shot aquecida, processo iniciando ou cleanup isolado não contam como novo trabalho produtivo.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "sql",
+        "fixture",
+        "semantics"
+      ],
+      "proved": "Running requires positive current stream evidence; runtime.open/steer/close do not multiply work, and terminal success with cleanup remains separate.",
+      "limitation": "The existing fixtures do not explicitly model all three literal warm one-shot / process-starting / isolated-cleanup states. No provider/process execution is needed merely to make those SQL facts, but none is added by this audit."
+    },
+    {
+      "scenario": "HOME-T-B03",
+      "requirement": "CLAIMED sem evidência nativa mostra Assumido, não Executando.",
+      "recommendation": "PASS_CANDIDATE",
+      "evidence": [
+        "browser_source",
+        "browser_final",
+        "presentation"
+      ],
+      "proved": "Real browser fixture creates a CLAIMED handoff without native operations; retained rendered Work text says Claimed for Validate the response. Presentation labels distinguish claimed/running.",
+      "limitation": "Synthetic migrated facts and actual browser rendering; no native-harness execution claim."
+    },
+    {
+      "scenario": "HOME-T-C01",
+      "requirement": "Pergunta destinada ao operador abre o pedido nativo exato e mantém suas opções/tipos.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "native",
+        "home_inspection"
+      ],
+      "proved": "Canonical request/decision tests preserve question options/types and originating interlocutor; Home resolves exact targets into CanonicalInspection.",
+      "limitation": "The existing Home DOM/browser evidence does not open an actual native question and assert all controls/types. API reuse alone is not that UI assertion."
+    },
+    {
+      "scenario": "HOME-T-C02",
+      "requirement": "Pergunta destinada a outro agente permite acompanhamento, não personificação nem resposta em nome do agente.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "native",
+        "namespace"
+      ],
+      "proved": "Canonical API denies nonrecipient decisions; Home native fixtures distinguish awaiting_agent and awaiting_operator, and attention references are namespaced.",
+      "limitation": "An actual Home other-agent-question inspector has not been exercised here. No impersonation path was executed."
+    },
+    {
+      "scenario": "HOME-T-C10",
+      "requirement": "Interromper usa a sessão/turno selecionados e contrato atual; não encerra todos os processos do agente.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "native",
+        "home_inspection"
+      ],
+      "proved": "Canonical inspector receives an exact target; original runtime controls retain command ownership.",
+      "limitation": "No selected existing test in this audit submits interruption from Home and proves sibling sessions/processes remain unaffected."
+    },
+    {
+      "scenario": "HOME-T-E01",
+      "requirement": "Resultado commitado antes de o cliente assinar SSE aparece no primeiro snapshot.",
+      "recommendation": "PASS_CANDIDATE",
+      "evidence": [
+        "sql",
+        "controller",
+        "home_hook"
+      ],
+      "proved": "The first real Home read returns a result committed by fixture setup. Controller configure starts the overview read without waiting for SSE, and the hook receives stream hints separately.",
+      "limitation": "Compositional SQL/controller proof of initial-snapshot behavior, not a new live SSE campaign."
+    },
+    {
+      "scenario": "HOME-T-E02",
+      "requirement": "Evento entre snapshot e assinatura/reconexão não é perdido; lacuna de retenção provoca ressincronização.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "controller",
+        "home_controller"
+      ],
+      "proved": "Invalidations arriving during an outstanding snapshot cause a serialized follow-up read; reconnect/gap controls cause resnapshot and no historical event payload is reduced into cards.",
+      "limitation": "The actual snapshot-to-SSE-subscription boundary and transport retention gap are not jointly exercised by the retained Home tests. Existing TCP stream tests were not run because this task forbids starting services."
+    },
+    {
+      "scenario": "HOME-T-E03",
+      "requirement": "Eventos duplicados ou fora de ordem não duplicam cartões nem fazem estados regredir.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "controller",
+        "namespace",
+        "home_controller"
+      ],
+      "proved": "Events only invalidate; snapshots are serialized and pages deduplicate immutable IDs. Namespaced SQL cards remain distinct and stale scope responses are rejected.",
+      "limitation": "No existing test delivers a reordered and duplicated sequence with changing states and explicitly asserts nonregression. Structural design is not relabeled as that executed test."
+    },
+    {
+      "scenario": "HOME-T-E05",
+      "requirement": "Stream conectado com fonte externa expirada mantém badge stale da fonte.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "presentation",
+        "baseline_ttl",
+        "controller"
+      ],
+      "proved": "Real observation TTL produces stale/unknown; presentation renders that stale evidence; controller source TTL and fallback are independent of stream-derived freshness.",
+      "limitation": "The test named independent of live stream does not actually configure stream live while expiry occurs. Do not infer that missing explicit combination from its test name."
+    },
+    {
+      "scenario": "HOME-T-E06",
+      "requirement": "Expiração de autorização, TTL de observação e prazo de atenção sem evento explícito são atualizados por relógio/fallback.",
+      "recommendation": "PASS_CANDIDATE",
+      "evidence": [
+        "controller",
+        "authority_expiry",
+        "native_expiry",
+        "attention_expiry",
+        "baseline_ttl"
+      ],
+      "proved": "Rerun real grant expiry without writes, native request expiry without lifecycle mutation, snooze expiry, and observation TTL; deterministic controller refreshes at source deadlines or bounded fallback without an event.",
+      "limitation": "Compositional server-clock and controller-clock proof; authorization mutations are synthetic fixture data, not real credentials."
+    },
+    {
+      "scenario": "HOME-T-E08",
+      "requirement": "Duas abas podem observar; uma decisão concorrente resulta em conflito claro na aba antiga.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "native"
+      ],
+      "proved": "Two actual API interfaces race to exactly one canonical decision, returning202/409 and one durable operation.",
+      "limitation": "This proves CAS, not clear conflict presentation in an older browser tab. No two-tab Home decision was executed."
+    },
+    {
+      "scenario": "HOME-T-E09",
+      "requirement": "Aba em background reduz trabalho; voltar revalida antes de habilitar ações sensíveis.",
+      "recommendation": "PASS_CANDIDATE",
+      "evidence": [
+        "visibility",
+        "controller",
+        "home_component"
+      ],
+      "proved": "New fake-GET barriers prove wake immediately marks sections stale, pending pre-wake GET cannot clear the fence, and only post-wake completion restores readiness; concurrency remains one.",
+      "limitation": "Controller tests plus existing per-section stale consumers; not a repeated browser/background campaign."
+    },
+    {
+      "scenario": "HOME-T-E10",
+      "requirement": "Pausa de atualização visual não pausa agentes, não amplia autoridade e não permite confirmar um estado antigo sem revisão atual.",
+      "recommendation": "PASS_CANDIDATE",
+      "evidence": [
+        "controller",
+        "home_ui",
+        "home_component",
+        "home_controller"
+      ],
+      "proved": "Visual pause retains the displayed snapshot while GETs continue; paused is an explicit stale-control predicate. Existing tests disable stale preference/continuation controls. Controller API surface is read-only and has no producer/lifecycle action.",
+      "limitation": "Presentation/controller/API-boundary proof; no running real agent was paused or used for this qualification."
+    },
+    {
+      "scenario": "HOME-T-F06",
+      "requirement": "Troca de projeto/alvo com rascunho solicita descarte quando necessário; logout limpa dados protegidos.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "browser",
+        "home_ui"
+      ],
+      "proved": "Real browser demonstrates explicit discard/keep editing and stable draft; logout continuation cleanup is tested.",
+      "limitation": "The retained browser discard is Escape/close, not an attempted project/target switch with that dirty form. Do not silently equate these paths."
+    },
+    {
+      "scenario": "HOME-T-H01",
+      "requirement": "Teclado percorre filtros, cards, drawer e ações; foco retorna ao item ou a um destino estável.",
+      "recommendation": "PARTIAL_RETAIN_NOT_RUN",
+      "evidence": [
+        "browser",
+        "browser_navigation",
+        "browser_extra"
+      ],
+      "proved": "Keyboard opens/closes request/drawer and restores trigger focus; mobile keyboard path is retained.",
+      "limitation": "Full traversal of filters, cards, drawer and sensitive actions is not retained as one qualified path. Existing partial keyboard evidence remains useful."
+    },
+    {
+      "scenario": "HOME-T-H02",
+      "requirement": "Leitor de tela recebe avisos úteis agrupados, não todo stream; estado não depende só de cor.",
+      "recommendation": "DOM_SEMANTICS_CANDIDATE",
+      "evidence": [
+        "browser_extra",
+        "browser_final"
+      ],
+      "proved": "Real DOM live-region mutations show exactly two nonempty useful announcements for two bursts and cancellation on scope change. Status is textual as well as visual.",
+      "limitation": "No actual assistive-technology speech run. Root should decide whether the explicit DOM/ARIA semantic level satisfies the fixed minimum; this audit does not invent a mandatory new human test."
+    },
+    {
+      "scenario": "HOME-T-H03",
+      "requirement": "Layout a 360 px, zoom 200% e desktop mantém ações acessíveis e sem overflow horizontal obrigatório.",
+      "recommendation": "PASS_CANDIDATE",
+      "evidence": [
+        "browser_final",
+        "browser"
+      ],
+      "proved": "Actual isolated Chrome native200percent zoom and360CSS viewport keep document/container/drawer widths equal, with desktop and long-title wraps retained.",
+      "limitation": "Synthetic read-only fixture and actual browser; no native work. Initial overflow failure is preserved with corrected final evidence."
+    },
+    {
+      "scenario": "HOME-T-I01",
+      "requirement": "Feature da Home nova OFF restaura a experiência anterior sem parar daemon, Core ou Connector.",
+      "recommendation": "PRESENTATION_ROLLBACK_CANDIDATE",
+      "evidence": [
+        "browser",
+        "home_controller"
+      ],
+      "proved": "Actual browser switches classic/operational Home with zero mutation requests; controller disposal aborts only reads and clears timers. No service/runtime command is part of feature-off.",
+      "limitation": "No live Core/Connector continuity observation during that toggle. Root may select the API/presentation boundary as the minimum proof or keep the planned real campaign separate."
+    },
+    {
+      "scenario": "HOME-T-I02",
+      "requirement": "Migrations aditivas preservam histórico e não exigem remoção de tabelas para reverter apresentação.",
+      "recommendation": "PASS_CANDIDATE",
+      "evidence": [
+        "home_queries",
+        "sql"
+      ],
+      "proved": "git diff --name-only c5ad279e -- src/okto_nexus/migrations is empty (tool51be65); Home adds no migration or persistent schema/cache. Real Home reads are read-only.",
+      "limitation": "No new additive migration needed qualification; existing historical migrations were not rerun as an upgrade campaign. Reverting presentation needs no table removal."
+    }
+  ],
+  "skipped_runtime_tests": "test_attention_stream uses a real uvicorn TCP service; intentionally not run under this no-service task",
+  "effects": {
+    "provider_calls": 0,
+    "live_service_actions": 0,
+    "os_events": 0
+  },
+  "ledger_changes": 0,
+  "acceptance": "Root owns all status decisions; no automatic promotion"
+}

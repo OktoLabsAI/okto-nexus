@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-15T23:09:19.461860+00:00",
+  "updated_at": "2026-11-15T23:18:36.005958+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -131,11 +131,21 @@
     },
     "HOME-T-B03": {
       "requirement": "CLAIMED sem evidência nativa mostra Assumido, não Executando.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "tests/home_evolution/browser_fixture.py",
+        "plans/home_evolution/evidence/pr06-browser-final/results.json",
+        "frontend/tests/homeR1Presentation.test.mjs"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Synthetic migrated facts and actual browser rendering; no native-harness execution claim."
+      ],
+      "tests": [
+        "Real browser fixture creates a CLAIMED handoff without native operations; retained rendered Work text says Claimed for Validate the response. Presentation labels distinguish claimed/running."
+      ]
     },
     "HOME-T-B04": {
       "requirement": "SUBMITTED/native accepted sem RUNNING mostra aceitação, não conclusão nem execução confirmada.",
@@ -538,11 +548,21 @@
     },
     "HOME-T-E01": {
       "requirement": "Resultado commitado antes de o cliente assinar SSE aparece no primeiro snapshot.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "tests/home_evolution/test_home_queries.py",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "frontend/src/hooks/useHomeOverview.ts"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Compositional SQL/controller proof of initial-snapshot behavior, not a new live SSE campaign."
+      ],
+      "tests": [
+        "The first real Home read returns a result committed by fixture setup. Controller configure starts the overview read without waiting for SSE, and the hook receives stream hints separately."
+      ]
     },
     "HOME-T-E02": {
       "requirement": "Evento entre snapshot e assinatura/reconexão não é perdido; lacuna de retenção provoca ressincronização.",
@@ -589,11 +609,23 @@
     },
     "HOME-T-E06": {
       "requirement": "Expiração de autorização, TTL de observação e prazo de atenção sem evento explícito são atualizados por relógio/fallback.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "tests/test_attention_authority.py",
+        "tests/test_attention_native.py",
+        "tests/test_attention_api.py",
+        "tests/home_evolution/test_baseline_fixture.py"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Compositional server-clock and controller-clock proof; authorization mutations are synthetic fixture data, not real credentials."
+      ],
+      "tests": [
+        "Rerun real grant expiry without writes, native request expiry without lifecycle mutation, snooze expiry, and observation TTL; deterministic controller refreshes at source deadlines or bounded fallback without an event."
+      ]
     },
     "HOME-T-E07": {
       "requirement": "Falha de um bloco preserva outros blocos e mostra falha; 401/403 limpam o protegido.",
@@ -625,19 +657,40 @@
     },
     "HOME-T-E09": {
       "requirement": "Aba em background reduz trabalho; voltar revalida antes de habilitar ações sensíveis.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "plans/home_evolution/evidence/pr06-visibility-revalidation/qualification.json",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "frontend/src/components/home/OperationalHome.tsx"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Controller tests plus existing per-section stale consumers; not a repeated browser/background campaign."
+      ],
+      "tests": [
+        "New fake-GET barriers prove wake immediately marks sections stale, pending pre-wake GET cannot clear the fence, and only post-wake completion restores readiness; concurrency remains one."
+      ]
     },
     "HOME-T-E10": {
       "requirement": "Pausa de atualização visual não pausa agentes, não amplia autoridade e não permite confirmar um estado antigo sem revisão atual.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "frontend/tests/homeR1Controller.test.mjs",
+        "frontend/tests/homeUI.test.mjs",
+        "frontend/src/components/home/OperationalHome.tsx",
+        "frontend/src/homeController.ts"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "Presentation/controller/API-boundary proof; no running real agent was paused or used for this qualification."
+      ],
+      "tests": [
+        "Visual pause retains the displayed snapshot while GETs continue; paused is an explicit stale-control predicate. Existing tests disable stale preference/continuation controls. Controller API surface is read-only and has no producer/lifecycle action."
+      ]
     },
     "HOME-T-F01": {
       "requirement": "Sem agentes, a Home oferece o onboarding plug and play existente, não formulários avançados.",
@@ -959,11 +1012,20 @@
     },
     "HOME-T-I02": {
       "requirement": "Migrations aditivas preservam histórico e não exigem remoção de tabelas para reverter apresentação.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json",
+        "src/okto_nexus/adapters/outbound/sqlite/home.py",
+        "tests/home_evolution/test_home_queries.py"
+      ],
+      "commit": "fa2e4215",
+      "environment": "Windows11; actual migrated SQLite/ASGI and deterministic Node controller/presentation plus synthetic built-browser fixture where referenced; exact smallest asserted contract layer",
+      "limitations": [
+        "No new additive migration needed qualification; existing historical migrations were not rerun as an upgrade campaign. Reverting presentation needs no table removal."
+      ],
+      "tests": [
+        "git diff --name-only c5ad279e -- src/okto_nexus/migrations is empty (tool51be65); Home adds no migration or persistent schema/cache. Real Home reads are read-only."
+      ]
     },
     "HOME-T-I03": {
       "requirement": "Todo o ciclo padrão pelo terminal continua funcionando sem qualquer visita à Home.",

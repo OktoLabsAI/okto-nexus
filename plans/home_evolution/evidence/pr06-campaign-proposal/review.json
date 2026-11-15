@@ -1,0 +1,41 @@
+{
+  "status": "PREPARED_FINAL_UI_REBOUND_PENDING_NEW_CONSENT",
+  "ancestor_candidate_sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+  "final_ui_source_commit": "fa2e4215",
+  "final_ui_bundle": "D4dmKnLh",
+  "final_ui_wheel": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-package-ui-final-svjjgq53\\dist\\okto_nexus-0.3.4-py3-none-any.whl",
+    "sha256": "7e1563622f4becb21cc62b6182cb4683c7546861256c355c16bb9aa78efa87ff"
+  },
+  "preserve": [
+    "campaign_id",
+    "campaign_root",
+    "port",
+    "scope_paths",
+    "request_ids",
+    "policy",
+    "codex_root",
+    "codex_executable",
+    "codex_content_fingerprint",
+    "provider_home"
+  ],
+  "actual_effects": {
+    "provider_calls": 0,
+    "service_actions": 0,
+    "campaign_root_created": false,
+    "authorization_created": false
+  },
+  "qualification": "27 unique offline tests; preceding19/22 overlap. Independent read-only peer reviewed exact pins, no rerun.",
+  "curation": "Original allowlist bytes and candidate5a8 remain antecedents. Five separate final-UI files carry exact package rebind, unchanged campaign identity and no-consent refusal. Use workflow-final-ui.json only after actual new consent.",
+  "root_review_pending": true,
+  "final_candidate": {
+    "path": "candidate-final-ui.json",
+    "sha256": "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af",
+    "bytes": 250390
+  },
+  "rebind_qualification": {
+    "path": "rebind-qualification.json",
+    "sha256": "db968387f0675b5cc29143cfd700194582fca1bccd60520c25d60e20a97a4816",
+    "bytes": 1765
+  }
+}

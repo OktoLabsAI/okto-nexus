@@ -95,3 +95,14 @@ de freshness por seção.18 focais Node e build passaram. A contagem atual é
 `plans/home_evolution/evidence/pr06-{canonical-reuse,package-namespaces,browser-final}`.
 Pacote final com o delta estático e campanha local continuam separados;
 nenhum novo consentimento pago ou execução de provedor ocorreu nesta etapa.
+
+## Corte final empacotado
+
+`fa2e4215` enviado,200 testes frontend PASS e build PASS. Sete checks finais
+de browser PASS com backend atualizado. Wheel0.3.4 `7e156362…` e sdist passaram
+Twine;1 focal instalado PASS com699 payloads/7assets e3 origens conferidas,
+2.110 inputs imutáveis. A auditoria por requisito consolida56PASS/17NOT_RUN.
+Tarefas e invariantes receberam fontes, testes e limitações explícitas.
+M3 não foi aprovado: campanha consentida, compreensão humana e ramos restantes
+continuam separados; p95 de500ms não atingido. A apresentação segue OFF por
+padrão. Core/Connector permanecem limpos e sincronizados nas branches existentes.

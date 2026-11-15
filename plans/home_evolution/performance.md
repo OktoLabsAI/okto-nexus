@@ -23,7 +23,7 @@ coldstart ou provedor nessa medida. Não inferir Graph100agentes ou Home500ms.
 Registrar hardware, dataset, cold/warm, amostras, p50/p95, queries, payload e taxa
 de requests. Comparar1/10/100agentes,1000atividades e100000eventos; medir
 EXPLAIN e custo de escrita antes de acrescentar índice. Metas iniciais do plano:
-overview p95≤500ms, visão inicial≤2s e preview≤200KiB. Estado atual: NOT_RUN.
+overview p95≤500ms, visão inicial≤2s e preview≤200KiB. Na baseline inicial: NOT_RUN.
 Nenhum SLO de produção ou telemetria externa foi autorizado/alegado.
 
 ## HOME-031 — medição anterior à distinção de workers

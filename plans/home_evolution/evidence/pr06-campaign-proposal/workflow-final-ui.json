@@ -1,0 +1,25 @@
+{
+  "status": "PREPARED_NOT_AUTHORIZED",
+  "candidate": {
+    "path": "candidate-final-ui.json",
+    "sha256": "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af",
+    "bytes": 250390
+  },
+  "authorize_only_after_actual_consent": "rtk proxy \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe\" -I -B -X utf8 \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/bind_plan.py\" authorize --candidate \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/candidate-final-ui.json\" --candidate-sha256 cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af --user-response-reference <ACTUAL_USER_RESPONSE_REFERENCE> --acknowledges-delayed-usage-overshoot --output \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/actual-authorization.json\"",
+  "driver_prefix_after_authorization": "rtk proxy \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-installed-package-aq98yeg_\\venv313\\Scripts\\python.exe\" -I -B -X utf8 \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/driver.py\" --plan \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/candidate-final-ui.json\" --plan-sha256 cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af --authorization \"C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-driver-6t4xonw6/actual-authorization.json\" --authorization-sha256 <ACTUAL_AUTH_SHA>",
+  "actions": [
+    "prepare",
+    "install",
+    "start",
+    "watch (retained concurrently)",
+    "review",
+    "setup --review-revision <actual>",
+    "useful (observes; real native permission/toggle by Root in parallel)",
+    "verify-report",
+    "close",
+    "Home exact CLOSED continuation rejection (browser)",
+    "cleanup"
+  ],
+  "candidate_unchanged_by_authorization": true,
+  "do_not_recreate_namespace": true
+}

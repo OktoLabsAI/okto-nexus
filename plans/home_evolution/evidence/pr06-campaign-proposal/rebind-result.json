@@ -1,0 +1,17 @@
+{
+  "ancestor_sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+  "authorization_exists": false,
+  "campaign_root_exists": false,
+  "candidate_sha256": "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af",
+  "changed_top_level_keys": [
+    "package",
+    "technical_rebind"
+  ],
+  "immutable_scope_equal": true,
+  "installed_payload_count": 883,
+  "original_runtime_pins_equal": true,
+  "package_snapshot_function": "Same read-only function as qualified bind_plan.py; only fixed FINAL_WHEEL_SHA updated in this separate helper. No original source modified.",
+  "provider_calls": 0,
+  "service_actions": 0,
+  "status": "INERT_FINAL_UI_REBIND_COMPLETE"
+}

@@ -1,0 +1,55 @@
+{
+  "status": "PASS_INERT_FINAL_UI_REBIND_AND_PRECONSENT_REFUSAL",
+  "candidate": {
+    "path": "candidate-final-ui.json",
+    "sha256": "cbb2a45ba9cc99833b5af881abc8415c4c7d355c436d6e05e8cfab4288fdd6af",
+    "bytes": 250390
+  },
+  "ancestor": {
+    "path": "candidate.json",
+    "sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+    "bytes": 249959
+  },
+  "helper": {
+    "path": "rebind_final_ui.py",
+    "sha256": "cfea7853f203d10e909c2925b10b38d5e0c40500f7f71adfd239c5304199a09a",
+    "bytes": 5704
+  },
+  "rebind_result": {
+    "path": "rebind-result.json",
+    "sha256": "2e474526a316b87a349182cddf31f3084462255ed2449e41d8fa03326d487dc2",
+    "bytes": 694
+  },
+  "rebind_tool": "77ecb7",
+  "refusal": {
+    "tool": "ac3214",
+    "exit_code": 1,
+    "json": {
+      "completed": false,
+      "error_type": "ValueError",
+      "code": "NEW_PAID_CONSENT_REQUIRED"
+    },
+    "action": "prepare without authorization",
+    "product_effects": 0
+  },
+  "verification": {
+    "only_package_and_technical_rebind_changed": true,
+    "package_snapshot_function_identical_to_qualified_binder": true,
+    "all_original_runtime_pins_equal": true,
+    "campaign_root_absent": true,
+    "authorization_absent": true,
+    "candidate_scope_unchanged": true
+  },
+  "qualification_inheritance": {
+    "driver_tests": 27,
+    "rerun": false,
+    "peer": "peer-review.json",
+    "new_package_tests": 1,
+    "do_not_sum_as_new_driver_tests": true
+  },
+  "limits": [
+    "No live service, native harness, authentication or provider execution.",
+    "Original c41 candidate and original workflow remain antecedents; final commands must select candidate-final-ui.json.",
+    "No consent or source approval is inferred from root technical selection."
+  ]
+}

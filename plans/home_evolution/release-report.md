@@ -169,3 +169,27 @@ a resposta iniciada antes do retorno, mantendo uma única requisição em voo.
 12 focais passaram; a regressão completa passou200/200 e o build final passou
 com bundle `index-D4dmKnLh.js`. Antecedentes e fontes em
 `evidence/pr06-visibility-revalidation/`. Nenhum efeito de runtime foi alterado.
+
+## Estado consolidado do corte final
+
+Produto enviado em `fa2e4215`; frontend200/200 e build PASS. Os sete checks de
+navegador passaram novamente com o backend atualizado e bundleD4dmKnLh,
+sem mutações ou erros JS. Wheel final0.3.4 SHA256
+`7e1563622f4becb21cc62b6182cb4683c7546861256c355c16bb9aa78efa87ff`
+e sdist passaram Twine; o focal instalado de pacote passou,699 payloads e7
+assets iguais ao checkout,3 origens instaladas conferidas e2.110 inputs
+imutáveis entre build/teste. Ver `evidence/pr06-package-ui-final/`.
+
+O ledger consolidado contém56PASS/17NOT_RUN. A auditoria
+`evidence/pr06-final-audit/audit.json` distingue o que cada prova cobre e quais
+asserções ainda faltam; não soma execuções sobrepostas nem transforma revisão
+de código em execução. Os36 itens e10 invariantes agora têm referências e
+escopo de qualificação. Core/Connector continuam limpos nas branches anteriores,
+sem mudança necessária de protocolo ou versão nesta frente.
+
+M3 permanece em revisão e a Home clássica continua padrão. Faltam a campanha
+real consentida, a avaliação humana de compreensão em aproximadamente10s e
+os ramos de aceite ainda não executados. Fala de leitor de tela não foi medida.
+Os quatro p95 medidos excedem500ms; nenhum SLO de produção ou deploy é declarado.
+A proposta da campanha é inerte, com dados sintéticos e orçamento independente;
+preparação e testes offline não significam execução paga.

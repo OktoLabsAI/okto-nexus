@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "candidate_sha256": "5a8c72d04e9e4adc426173dd14971ef28c6dec599af2bfea42b5deaf61012c40",
+  "campaign_id": "home-r1-local-codex-bc1d3f18e856",
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-local-codex-bc1d3f18e856",
+  "user_authorized_paid_campaign": false,
+  "user_response_reference": null,
+  "policy": {
+    "max_calls": 2,
+    "observed_limit": 200000,
+    "preventive": 150000,
+    "reserve": 50000
+  },
+  "acknowledges_delayed_usage_overshoot": false,
+  "status": "TEMPLATE_NOT_AUTHORIZATION"
+}

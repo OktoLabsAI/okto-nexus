@@ -1,0 +1,19 @@
+{
+  "tool_ref": "6a3186",
+  "tests": 19,
+  "errors": 2,
+  "failures": 0,
+  "status": "FAILED_ANTECEDENT",
+  "findings": [
+    {
+      "classification": "test fixture",
+      "issue": "fake Driver omitted work_args; fixed"
+    },
+    {
+      "classification": "driver resource lifetime",
+      "issue": "sqlite context manager did not close RO connection; closing() now guarantees close, synthetic writer fixture also closes"
+    }
+  ],
+  "raw_tool_output_preserved_in_conversation": true,
+  "not_added_to_unique_pass_count": true
+}
