@@ -1,0 +1,19 @@
+{
+  "plan_sha256": "60a7a9ea213658f78346be3b7773ef94f16240720b635799bb360da1c234fdab",
+  "request_id": "m1-sonnet-remote-continuation-10",
+  "observed_minimum": 109946,
+  "limit": 500000,
+  "preventive": 480000,
+  "reservations": 2,
+  "active": null,
+  "faults": [],
+  "coverage": true,
+  "can_admit": true,
+  "hard_token_cap_guaranteed": false,
+  "campaign_observed_tokens": 290372,
+  "admission_counters": {
+    "server_admissions": 6,
+    "native_forwarded_or_uncertain": 5,
+    "new_attempts": 2
+  }
+}

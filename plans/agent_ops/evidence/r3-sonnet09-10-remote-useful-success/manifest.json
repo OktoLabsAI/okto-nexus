@@ -1,0 +1,454 @@
+{
+  "files": [
+    {
+      "path": "candidate/activecontrol.py",
+      "sha256": "96d8545ea322e5224e426eaa101b015d5f3d50d902fb7b4046a02e508d6c6045",
+      "bytes": 2853,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\activecontrol.py"
+    },
+    {
+      "path": "candidate/context_hooks.py",
+      "sha256": "6062f56600d22f95f4fba57c86efdaf6677c63a81120d29cb1d10c969464c369",
+      "bytes": 2425,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\context_hooks.py"
+    },
+    {
+      "path": "candidate/dashboard_observer.py",
+      "sha256": "1a540111da6b8367084408894ad1724df69ab43543983fc11558135eab8b38a2",
+      "bytes": 2709,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\dashboard_observer.py"
+    },
+    {
+      "path": "candidate/denial_reconciliation.py",
+      "sha256": "e0ee26182d84d08a5b6419452221de5626a568b329750e0534495c27a3f55ce1",
+      "bytes": 9650,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\denial_reconciliation.py"
+    },
+    {
+      "path": "candidate/fast_approval.py",
+      "sha256": "66d33b93e72c0c4b4b4111a39ee14bfc594621f30bf8454230d8b2d71c158395",
+      "bytes": 5332,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\fast_approval.py"
+    },
+    {
+      "path": "candidate/finalize_pending.py",
+      "sha256": "31f76e11a9e88ca416989201b68f123706ee28a829a1d9dfa3260f14cec08773",
+      "bytes": 3731,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\finalize_pending.py"
+    },
+    {
+      "path": "candidate/grant_preflight.py",
+      "sha256": "091798959bd2123d38b1d876802420768af4377051dcf6329421b7c7e00a8628",
+      "bytes": 2037,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\grant_preflight.py"
+    },
+    {
+      "path": "candidate/materialize.py",
+      "sha256": "1ce0bb3674ca42f265a1da3fd4f282cec9589886806b7eb3dbb02de91bfcd7af",
+      "bytes": 6164,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\materialize.py"
+    },
+    {
+      "path": "candidate/observer_entry.py",
+      "sha256": "0f7861dd1493f6c3a037237ff68164a4a21c201cb7afe9daa37a3bd8166096b4",
+      "bytes": 2217,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\observer_entry.py"
+    },
+    {
+      "path": "candidate/observe_active.py",
+      "sha256": "8a21aa70798568a266309569aa86720836927eac5fcf8608da7dba15db24f75a",
+      "bytes": 5362,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\observe_active.py"
+    },
+    {
+      "path": "candidate/remote_work.py",
+      "sha256": "e62fc350ed22c4050241f10d9dcd8bf6889219e18c2fabff6c76df11090adf37",
+      "bytes": 14552,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\remote_work.py"
+    },
+    {
+      "path": "candidate/request_context.py",
+      "sha256": "c840a43bf0e80c919fdab3fc1cbedc84595411de414522372f013ef7369af809",
+      "bytes": 3642,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\request_context.py"
+    },
+    {
+      "path": "candidate/reused_observation.py",
+      "sha256": "9f15dbc9b764c6760936bdaba3d071156b0714e481bec69eca6f246de7db427c",
+      "bytes": 12902,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\reused_observation.py"
+    },
+    {
+      "path": "candidate/sonnet_usage.py",
+      "sha256": "0a6f82588f41d262a6ce9412b79163d156c4bcfa322962216e4f17159ed409cd",
+      "bytes": 17349,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\sonnet_usage.py"
+    },
+    {
+      "path": "candidate/successor_allocation.py",
+      "sha256": "516293c643466f391d3b99bf20ecc7ecc924c877954dc27970146d90e33cab1d",
+      "bytes": 3101,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\successor_allocation.py"
+    },
+    {
+      "path": "candidate/successor_policy.py",
+      "sha256": "d53b5505709fac00febf967527b8d9b514bdcf5e12fcf8a8c92f842250f248e6",
+      "bytes": 3187,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\successor_policy.py"
+    },
+    {
+      "path": "candidate/test_pending_composition.py",
+      "sha256": "bc1156d2c40fcfb33ef030d38c3c40bdd30f40063ab87198cdc3b3c7ce499baf",
+      "bytes": 3115,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\test_pending_composition.py"
+    },
+    {
+      "path": "candidate/work-entry.py",
+      "sha256": "1bc82e2fbc7b3be1c14fa87a5cf0294ca110f2a28b2aff204d07968be204cc46",
+      "bytes": 549,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-entry.py"
+    },
+    {
+      "path": "candidate/work_context.py",
+      "sha256": "c3d1f986f688b0996a20819f95a5129394c807e7f94f7e0f82bbcfd7a2bdd72b",
+      "bytes": 35660,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work_context.py"
+    },
+    {
+      "path": "candidate/candidate.json",
+      "sha256": "1de4a62dced7c867f6de4819a27eeb746a8d79e71b42b63889d99b19d211a47d",
+      "bytes": 2127,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\candidate.json"
+    },
+    {
+      "path": "candidate/task-prompts.json",
+      "sha256": "52fe42c8668b7aa081ca4b49700cb5970b0289d56d35b7494b085d40b2815b75",
+      "bytes": 2156,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\task-prompts.json"
+    },
+    {
+      "path": "candidate/typed-denial05.json",
+      "sha256": "5cd0b049cce78814153fa84bea148310111b44ef9d4658f549cddb105f73ae0d",
+      "bytes": 731,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\typed-denial05.json"
+    },
+    {
+      "path": "candidate/HANDOFF.md",
+      "sha256": "75c7b2e627dfe84bd7127658ea1ad724d00d439172e547073a13589983c2cbc0",
+      "bytes": 4284,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\HANDOFF.md"
+    },
+    {
+      "path": "candidate/future-commands.json",
+      "sha256": "2d143dcae564e2094fe43f4f920e48df936349548ec74575940a146b36034b49",
+      "bytes": 3652,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\future-commands.json"
+    },
+    {
+      "path": "candidate/qualification.json",
+      "sha256": "9c0dfceec8811a50cadd32ee051c73bb7f6b9755ebd6b0a2a7f347f179a6f087",
+      "bytes": 2144,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\qualification.json"
+    },
+    {
+      "path": "candidate/public-allowlist.json",
+      "sha256": "b3d7790283a8f8dbee16ad31c8150b94b1b49a5f2b3804d755773105a9572c5e",
+      "bytes": 4072,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\public-allowlist.json"
+    },
+    {
+      "path": "candidate/authorization-record.json",
+      "sha256": "60c28cd74a36148d5f800f94d5da4643de74adc315c98f3e91f7a950bd6c780a",
+      "bytes": 743,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\authorization-record.json"
+    },
+    {
+      "path": "candidate/canonical-renewal-projection.json",
+      "sha256": "d79006f0da5e47855d5f9fcf5bb9af12b961d7de411be414a19fe62d3417ae7b",
+      "bytes": 937,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\canonical-renewal-projection.json"
+    },
+    {
+      "path": "candidate/commands.json",
+      "sha256": "850c298334db660ebbf8dcc8accbc28fd0cd94a5b11f1449fead4b6dd1ba1983",
+      "bytes": 1789,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\commands.json"
+    },
+    {
+      "path": "candidate/work-plan.json",
+      "sha256": "60a7a9ea213658f78346be3b7773ef94f16240720b635799bb360da1c234fdab",
+      "bytes": 17105,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-plan.json"
+    },
+    {
+      "path": "candidate/work-runtime-freeze.json",
+      "sha256": "76cf1e42757ab2198dcd8e6398b7335c46a075a95a2f5f530b3d24f20990d2ed",
+      "bytes": 4058,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-runtime-freeze.json"
+    },
+    {
+      "path": "candidate/root_readiness.py",
+      "sha256": "aed69adedace6f5a3b68ffa984486ed195aafd4fe6f1962b9c7edf9616901be7",
+      "bytes": 3781,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\root_readiness.py"
+    },
+    {
+      "path": "candidate/reopen_status_proof.py",
+      "sha256": "9ad780715558227a90fc8943b8f927bca972d22a7a0052f77fdeb2a5efae048d",
+      "bytes": 3022,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\reopen_status_proof.py"
+    },
+    {
+      "path": "execution/public/cli-reopen-proof.json",
+      "sha256": "3eb52f2e811556532d6bc3e8b95b117b1f3265fb738ab9cd9c59eaac1d0784a2",
+      "bytes": 2263,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\cli-reopen-proof.json"
+    },
+    {
+      "path": "execution/public/fast-native-question.json",
+      "sha256": "28e13ea4dcfa9acea13c8f06748d0cfb421f2f2d2800c3225032e1f3c8184485",
+      "bytes": 155,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\fast-native-question.json"
+    },
+    {
+      "path": "execution/public/live-accounting.json",
+      "sha256": "638a58fef2b2c2f182b0846f9d56b9e3e8ff61b512b86471c419284e6535f3e7",
+      "bytes": 506,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\live-accounting.json"
+    },
+    {
+      "path": "execution/public/m1-sonnet-remote-continuation-10-result.json",
+      "sha256": "97ef92a397b150fda2b855c94501f7f2a3cbe4a7a4a4d928d69169104c462982",
+      "bytes": 657,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\m1-sonnet-remote-continuation-10-result.json"
+    },
+    {
+      "path": "execution/public/m1-sonnet-remote-useful-09-result.json",
+      "sha256": "a825d58c922c2c16ce237e3b287b2897b7d4ad9ea888cdfd38411a10d0afcd33",
+      "bytes": 650,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\m1-sonnet-remote-useful-09-result.json"
+    },
+    {
+      "path": "execution/public/pending-native-request.json",
+      "sha256": "2ea3a3c1dc1ac786db93ac5dfa441cf49d3bafb5fb4d0ee99af5f19cf9a58929",
+      "bytes": 159,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\pending-native-request.json"
+    },
+    {
+      "path": "execution/public/preparation.json",
+      "sha256": "62dde68ecf9e0d829559ea892bb6843dd993de12e8ee632025531c0b370694c0",
+      "bytes": 613,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\preparation.json"
+    },
+    {
+      "path": "lifecycle/cohort_lifecycle.py",
+      "sha256": "c3a50cf8a69093a2d1c37d957cf4f019d2668da7a4ce1ea3cebbe83f015dc28a",
+      "bytes": 6460,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\cohort_lifecycle.py"
+    },
+    {
+      "path": "lifecycle/commands.json",
+      "sha256": "8f01b98ac289edabe2bbfe4ab65bc4e8e2c3d7ca5780a2d259c279f6a0b8211c",
+      "bytes": 6325,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\commands.json"
+    },
+    {
+      "path": "lifecycle/entry.py",
+      "sha256": "b58fee616199b6eaf104a9fcddaa142155f1442e599a6fd637ce6710600809b1",
+      "bytes": 720,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\entry.py"
+    },
+    {
+      "path": "lifecycle/late_ready_select.py",
+      "sha256": "b5f4705ab486b52437e3a917701d0667efaaa2908db1a08d016a9bf43bddf5ac",
+      "bytes": 4396,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\late_ready_select.py"
+    },
+    {
+      "path": "lifecycle/lifecycle-plan.json",
+      "sha256": "4dc1ccd4673c5ddff8959510198cd1673f52151e0dec278f850e9d5e73a6dbbb",
+      "bytes": 14496,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\lifecycle-plan.json"
+    },
+    {
+      "path": "lifecycle/qualification.json",
+      "sha256": "ba640ea95d2df59779800699fc1f5b6dc6395e1d0f7921be968cc6239b58a193",
+      "bytes": 460,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\qualification.json"
+    },
+    {
+      "path": "lifecycle/recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4",
+      "bytes": 8653,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\recovery_connector.py"
+    },
+    {
+      "path": "lifecycle/recovery_context.py",
+      "sha256": "22dea5bcfbeacfb5f7e8d954e77690a78beb46ddc112ea979063a6eae8ecd1fa",
+      "bytes": 5318,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\recovery_context.py"
+    },
+    {
+      "path": "lifecycle/recovery_nexus.py",
+      "sha256": "1789847ddd2e0a37ae9c0586d39c2e2cb964ca349ac862000e3e9e749e0c3d74",
+      "bytes": 9234,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\recovery_nexus.py"
+    },
+    {
+      "path": "lifecycle/recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+      "bytes": 12903,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\recovery_observation.py"
+    },
+    {
+      "path": "lifecycle/public/preparation.json",
+      "sha256": "d8a38e9ecac798f531a6b2120dd782b96676d2dbc2cb3e1d8362153dd23cf154",
+      "bytes": 192,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\preparation.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-late-ready-proof.json",
+      "sha256": "3d0456540e36595bcd833a577b7532d2b584b5fcf22f1e5ca71395bf6a0c2ae7",
+      "bytes": 1396,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-late-ready-proof.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-cleanup.json",
+      "sha256": "65b988c6e1d26f4d9d34cea7045194a9cdfda63b69214721abe6ea4b9eb6a54e",
+      "bytes": 843,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-cleanup.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-exit-proof.json",
+      "sha256": "5d321a3e7c002baf13e3f3a287a3577dfc0fbc7cfa56735e4a81c5869a5eb45b",
+      "bytes": 988,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-exit-proof.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-exit-watch-started.json",
+      "sha256": "a186c93155d587d16b0d43f79ccf9dd00062c832ac2f1d854273962ccabb03a1",
+      "bytes": 682,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-exit-watch-started.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-owner-selection.json",
+      "sha256": "5521ec0f02099bbe0c9aff6cc35aba0719c427356932ad3c3a47dca69e8e6dea",
+      "bytes": 943,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-owner-selection.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-start-reserved.json",
+      "sha256": "1e60d9c2c7d1c89f895717fbf71fdb1a029e8fe73aec0d0bef7a3bcf5ce08d4c",
+      "bytes": 1010,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-start-reserved.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-start-returned.json",
+      "sha256": "1fd3943163d8d4b99129bda42c13c1ebab7196f30f5291983189ac7729908302",
+      "bytes": 800,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-start-returned.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-stop-reserved.json",
+      "sha256": "87b2514ab5da52ce0eab2bd6aa312712d6fb84cb4c684f044326d7ce7c852007",
+      "bytes": 1009,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-stop-reserved.json"
+    },
+    {
+      "path": "lifecycle/public/nexus-stop-returned.json",
+      "sha256": "9a8b16df352492e16395acdf24c30939efd2745b2ff0eb8ad439160821e53d48",
+      "bytes": 629,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-stop-returned.json"
+    },
+    {
+      "path": "lifecycle/public/connector-cleanup.json",
+      "sha256": "524e976da89b98a3f83bef5f151ed790a7905e236f6891ce93473689e0bf252a",
+      "bytes": 838,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-cleanup.json"
+    },
+    {
+      "path": "lifecycle/public/connector-exit-proof.json",
+      "sha256": "41b34b0a5cb2385c8d7c0e7115cb2ac1f4dbc7a69da89a2d9ad331b1311bf9cc",
+      "bytes": 988,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-exit-proof.json"
+    },
+    {
+      "path": "lifecycle/public/connector-exit-watch-started.json",
+      "sha256": "43bf7536d1472e55d887b236d95389eb608260d57fdcbb4a203158e9d2799b34",
+      "bytes": 681,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-exit-watch-started.json"
+    },
+    {
+      "path": "lifecycle/public/connector-owner-selection.json",
+      "sha256": "cb444175ef236746fa64ca77760d553f2b273e7c39841acb68535cdbb95100c4",
+      "bytes": 950,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-owner-selection.json"
+    },
+    {
+      "path": "lifecycle/public/connector-start-reserved.json",
+      "sha256": "d08fc0f98828a33bdba6ed41fe3b3490bd5f8d913e4d117d460958c56d0d6d44",
+      "bytes": 613,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-start-reserved.json"
+    },
+    {
+      "path": "lifecycle/public/connector-start-returned.json",
+      "sha256": "c1dd5026ccc794dbd8cddc53b9d8aaa34500e7c5cda5cd7512d75ebd6944bd78",
+      "bytes": 624,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-start-returned.json"
+    },
+    {
+      "path": "lifecycle/public/connector-stop-reserved.json",
+      "sha256": "e4d6dda775c94427dcad715c8c60181fcb70f3d8e52f5e930fb8dc1e8101db82",
+      "bytes": 612,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-stop-reserved.json"
+    },
+    {
+      "path": "lifecycle/public/connector-stop-returned.json",
+      "sha256": "7e023c235adcc5fb599413bcd4aeff546bfb7dfd914e6d7523fa1179e39a3393",
+      "bytes": 644,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\connector-stop-returned.json"
+    },
+    {
+      "path": "review.json",
+      "sha256": "3f5b9a73f7c7164b5b0e812495d952a62cf92c1934eb7c59141af8fa6976125d",
+      "bytes": 22714,
+      "source": "curated public projection"
+    },
+    {
+      "path": "README.md",
+      "sha256": "313f6c6b6a1cf073b2bbdd87bdb41942af31e60479bb6a6fdda033dff9f7b890",
+      "bytes": 1792,
+      "source": "curated public projection"
+    },
+    {
+      "path": "independent-proof/extract.py",
+      "sha256": "ddb2329eb2938bafa4b223865c3107d6d8b5e24a829c45ed425e725f96fce275",
+      "bytes": 12895,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet09-10-real-proof-umjb814v\\extract.py"
+    },
+    {
+      "path": "independent-proof/projection.json",
+      "sha256": "c423cf0aa3f21601eab0520d0fc26385708bfde246c9b7af2fe0059811beb424",
+      "bytes": 16416,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet09-10-real-proof-umjb814v\\projection.json"
+    },
+    {
+      "path": "independent-proof/public-allowlist.json",
+      "sha256": "189a4c81bee2add9f53a7a8e1acf5fcc78f1fc8c02e88c8e8d8e83a1e2dcca7c",
+      "bytes": 331,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet09-10-real-proof-umjb814v\\public-allowlist.json"
+    },
+    {
+      "path": "independent-proof/assessment.json",
+      "sha256": "ea73e86e97ef86d1bfd4234993a0f846be3520b6e22abd04002d0b727bff3012",
+      "bytes": 7187,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet09-10-real-proof-umjb814v\\assessment.json"
+    },
+    {
+      "path": "independent-proof/assessment-allowlist.json",
+      "sha256": "8913b632a3aa27041399c77dc46dc78ce607fc7cd325947cfee2043d3dd6c974",
+      "bytes": 179,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet09-10-real-proof-umjb814v\\assessment-allowlist.json"
+    }
+  ]
+}

@@ -1,0 +1,330 @@
+{
+  "status": "ROOT_ACCEPTED_REMOTE_TERMINAL_MILESTONE_SCOPED",
+  "date": "2026-11-15",
+  "authorization": "candidate/authorization-record.json",
+  "plan_sha256": "60a7a9ea213658f78346be3b7773ef94f16240720b635799bb360da1c234fdab",
+  "accounting": {
+    "carry_tokens": 180426,
+    "carry_native": 3,
+    "carry_server": 4,
+    "useful09_tokens": 73180,
+    "continuation10_tokens": 36766,
+    "new_tokens": 109946,
+    "cumulative_tokens": 290372,
+    "native": 5,
+    "server": 6,
+    "limit": 500000,
+    "preventive": 480000,
+    "remaining_new_requests": 0,
+    "old05_server_denial_preserved": true,
+    "old07_native_charge_preserved": true,
+    "no_refund": true,
+    "atomic_provider_token_cap_claimed": false
+  },
+  "result": {
+    "useful09_canonical": "SUCCEEDED",
+    "useful_result_confirmed": true,
+    "continuation10_canonical": "SUCCEEDED",
+    "same_session": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+    "reopened_cli": "execution/public/cli-reopen-proof.json",
+    "continuation_answer": "The reported sum is **10**.",
+    "native_decision_canonical_state": "CONFIRMED",
+    "native_decision_stage_at_reopen": "SUBMITTED",
+    "separate_report_verification": {
+      "projection": "independent-proof/projection.json",
+      "report_sha256": "a6766c5c5a269379e389cab9e761267867c557bcb74c9a5724ea0401ffd63232",
+      "row_count": 4,
+      "sum": 10,
+      "independent_Decimal_matches": true,
+      "canonical_native_aggregated_output_equal": true
+    }
+  },
+  "root_reported_actions": {
+    "command_review": "17bc20",
+    "ready_acknowledgement": "81f24b",
+    "manual_approve": "d190f1",
+    "manual_remaining_seconds": 70,
+    "late_ready_selection": "332a92",
+    "nexus_initial_start_failure": "d25fea",
+    "nexus_observer_exit": "c0f59b",
+    "connector_observer_exit": "ddfa65",
+    "connector_stop": "cf1b48",
+    "nexus_stop": "1a8120",
+    "connector_cleanup": "d2f956",
+    "nexus_cleanup": "6f53bb",
+    "cli_reopen": "9a2cf5",
+    "provenance": "Root execution tool references, not fabricated retroactive CLI receipts"
+  },
+  "lifecycle": {
+    "initial_nexus_returncode": 3,
+    "original_failure_preserved": true,
+    "same_reported_nexus_owner_later_ready": true,
+    "start_not_replayed": true,
+    "all_six_physical_exits": true,
+    "all_six_exit_codes": 0,
+    "normal_stop_both_returncodes": 0,
+    "native_tasks_inactive": true,
+    "tasks_retained": true,
+    "nexus_port_free": true,
+    "force_used": false,
+    "new_os_events": 0,
+    "physical_exit_does_not_alone_prove_work_settlement": true
+  },
+  "limitations": [
+    "Frozen plan authority prose retains predecessor200k wording; explicit authorization-record, operative budget and successor policy are500k/480k Native5/Server6. Bytes are preserved.",
+    "Candidate qualification/HANDOFF describe the earlier pending preparation; actual selection, authorization and execution are additive evidence.",
+    "No universal tool-policy enforcement, deep OS event, new SVC09 or further request is inferred.",
+    "Only the explicit scoped Root selections listed here are promoted; AC01/13/14, PR02 and the global plan remain unqualified pending real Windows events."
+  ],
+  "scenario_counts_before_root_review": {
+    "VERIFIED": 127,
+    "IN_PROGRESS": 3,
+    "NOT_RUN": 2
+  },
+  "scenario_or_AC_promotions": [
+    "DX-T40 VERIFIED",
+    "DX-T43 VERIFIED",
+    "AC-11 VERIFIED",
+    "BASE-06 VERIFIED"
+  ],
+  "curation_effects": {
+    "provider": 0,
+    "service_controls": 0,
+    "os": 0
+  },
+  "independent_proof": "independent-proof/projection.json",
+  "timings": {
+    "useful_server_created_to_succeeded_seconds": 87.318,
+    "continuation_server_created_to_succeeded_seconds": 2.11221,
+    "scope": "Server timestamps include admission, dispatch, native execution, human wait and transport; not pure model latency or cross-process monotonic timing."
+  },
+  "configuration_observed": {
+    "model": "claude-sonnet-5-5",
+    "permissionMode": "default",
+    "cwd_matches_reviewed": true,
+    "native_version": "2.1.323",
+    "PowerShell_advertised_and_actual_native_permission": true,
+    "effective_effort": "UNKNOWN",
+    "personal_instruction_contents_read": false,
+    "catalog_help_is_not_session_effective_state": true
+  },
+  "independent_criterion_recommendation": "independent-proof/assessment.json",
+  "scenario_counts_after_root_review": {
+    "VERIFIED": 129,
+    "NOT_RUN": 2,
+    "IN_PROGRESS": 1
+  },
+  "root_acceptance": {
+    "selection": "Explicit Root selection after projection toola94204, assessment toolfd980b and literal plan245/247/809/901/904/1075",
+    "functional_terminal_M1_qualified": true,
+    "global_plan_qualified": false,
+    "AC01_AC13_AC14_and_PR02_not_promoted": true,
+    "remaining_scenarios": [
+      "SVC-T18",
+      "SVC-T21",
+      "SVC-T29"
+    ],
+    "prior_records": {
+      "scenarios.DX-T40": {
+        "requirement": "A mesma campanha via Connector resolve decisões pelo CLI autenticado do operador, sem credencial administrativa no host remoto e sem aprovação pelo participante.",
+        "status": "IN_PROGRESS",
+        "evidence": [
+          "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/artifact-manifest.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/connector/installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/connector/qualification.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus-schema-focal/installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus-schema-focal/qualification.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/nexus/qualification.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v1/package-proof.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/nexus/installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/nexus/qualification.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/candidate-v3/package-proof.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/reports.json",
+          "plans/agent_ops/evidence/pr03-remote-bootstrap/static/product-format-equivalence.json",
+          "plans/agent_ops/evidence/pr03-remote-operator-final.xml",
+          "plans/agent_ops/evidence/pr03-remote-operator-installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-operator.md",
+          "plans/agent_ops/evidence/pr03-remote-preset-connector-installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-preset-nexus-installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-preset-source.xml",
+          "plans/agent_ops/evidence/pr03-remote-preset-wheels.json",
+          "plans/agent_ops/evidence/pr03-remote-preset.md",
+          "plans/agent_ops/evidence/pr03-remote-renewal.md",
+          "plans/agent_ops/evidence/pr03-remote-renewal/artifact-manifest.json",
+          "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v1/connector/qualification.json",
+          "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/installed.xml",
+          "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/nexus/qualification.json",
+          "plans/agent_ops/evidence/pr03-remote-renewal/candidate-v2/package-proof.json",
+          "plans/agent_ops/evidence/pr03-remote-renewal/reports.json",
+          "plans/agent_ops/evidence/pr03-terminal-binding-final.xml",
+          "plans/agent_ops/evidence/pr03-terminal-binding-installed.xml",
+          "plans/agent_ops/evidence/pr03-terminal-binding-source.xml",
+          "plans/agent_ops/evidence/pr03-terminal-binding-wheels-initial.json",
+          "plans/agent_ops/evidence/pr03-terminal-binding-wheels.json",
+          "plans/agent_ops/evidence/pr03-terminal-binding.md",
+          "plans/agent_ops/evidence/pr03-terminal-work.md",
+          "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+          "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+          "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/manifest.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/m1-sonnet-remote-useful-01-result.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/live-accounting.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/paid-work-exit-proof.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/accounting-reconciliation.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/qualification.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/sonnet_usage.py",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/test_redacted_assistant.py",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/review.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/manifest.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/successor02/qualification.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/successor02/paid-work/public/m1-sonnet-remote-useful-03-result.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/successor02/paid-work/public/live-accounting.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/diagnosis/diagnosis.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/lifecycle/public/nexus-exit-proof.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/lifecycle/public/connector-stop-returned.json",
+          "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json",
+          "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
+        ],
+        "result": "Corrected package later admitted07 and published native permission; all6normal exits confirmed.07 nativeSTALE/approvalpending/rev0/decision0/CANCELLED, total180426 Native3/Server4. Old failures remain historical.",
+        "subscopes": {
+          "remote_identity_workspace_bootstrap": "VERIFIED",
+          "remote_operator_single_review_and_finish": "VERIFIED",
+          "remote_one_shot_key_and_current_epoch": "VERIFIED",
+          "remote_same_root_local_amendment_and_finish_race": "VERIFIED",
+          "remote_noneditable_joint_packages": "VERIFIED",
+          "remote_grant_renewal_http_ipc_wss": "VERIFIED",
+          "remote_rotation_completed_reuse": "VERIFIED",
+          "remote_pending_grant_uncertainty": "VERIFIED",
+          "remote_confirmed_receipt_read_failure": "VERIFIED"
+        },
+        "remaining": "Successful remote useful decision/result/continuation, without replay05/07 or automatically admitting08. ConfigurationDX43 may be qualified within the same authorized cycle.",
+        "remaining_kind": "real_campaign_observation_failed",
+        "qualification_limit": "HTTP/WebSocket/IPC reais e vault temporário não substituem provedor nativo real ou o percurso M1 remoto.",
+        "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+        "verified_contract_subscopes": [
+          "operator_authority_separate_from_participant",
+          "remote_setup_and_renewal_real_protocol_synthetic_peer"
+        ]
+      },
+      "scenarios.DX-T43": {
+        "requirement": "O harness iniciado pelo serviço usa instruções, modelo, ferramentas e limites efetivos revisados; configuração disponível apenas no shell não é presumida nem substituída silenciosamente.",
+        "status": "IN_PROGRESS",
+        "evidence": [
+          "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
+          "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
+          "plans/agent_ops/evidence/pr03-connector-project-review-entry-installed.xml",
+          "plans/agent_ops/evidence/pr03-connector-project-review-nexus-installed.xml",
+          "plans/agent_ops/evidence/pr03-connector-project-review-source.xml",
+          "plans/agent_ops/evidence/pr03-connector-project-review-wheels.json",
+          "plans/agent_ops/evidence/pr03-connector-project-review.md",
+          "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
+          "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
+          "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+          "plans/agent_ops/evidence/r3-codex-thread-configuration/qualification.json",
+          "plans/agent_ops/evidence/r3-dx43-local-real-configuration/review.json",
+          "plans/agent_ops/evidence/r3-dx43-local-real-configuration/actual-thread-configuration.json",
+          "plans/agent_ops/evidence/r3-dx43-local-real-configuration/reviewed-tool-selection.json",
+          "plans/agent_ops/evidence/r3-dx43-local-real-configuration/prior-service-path-diagnosis.json",
+          "plans/agent_ops/evidence/r3-dx43-local-real-configuration/artifact-manifest.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json",
+          "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/review.json"
+        ],
+        "result": "Local real service-owned W17 useful15 is now evidenced: reported thread/start configuration, explicitly reviewed pinned RTK/Python paths after service-PATH unavailability, actual native permission and correlated correct report. Reported instruction references are not contents/adherence or universal enforcement. Remote Connector scope remains pending; global DX-T43 stays IN_PROGRESS. Actual remote Sonnet2.1.323 now reports modelclaude-sonnet-5-5/default and PowerShell/Bash advertised; advertised PowerShell permission was rejected by installed Core before operator publication. Reported metadata alone does not close remote effective tool/policy qualification.",
+        "remaining": "Executar e comparar configuração, ferramentas e políticas revisadas no harness real do host Connector; preservar como desconhecidos campos não observados. Evidência local reportada e resultado útil real retidos, sem inferir conteúdo de instruções, inventário completo ou enforcement universal.",
+        "remaining_kind": "real_remote_configuration_campaign_pending",
+        "qualification_limit": "Metadados reportados pelo harness e permissão/resultado local reais não provam conteúdo pessoal de instruções, inventário completo de ferramentas ou enforcement universal. Recibo native SUBMITTED permanece não final; tentativa remota Sonnet admitida, mas falha de observação não qualifica configuração/enforcement remoto.",
+        "common_qualification_limit": "A curadoria agora inclui execução real local W17 já encerrada; não executou novo provedor, serviço ou teste. Fixtures anteriores continuam limitadas ao próprio escopo.",
+        "verified_contract_subscopes": [
+          "reference_only_host_configuration",
+          "approved_provider_home_and_materialization_guards",
+          "reported_thread_configuration_installed_event_pipeline",
+          "local_real_service_reported_configuration_and_explicit_tool_paths"
+        ]
+      },
+      "completion_criteria.AC-11": {
+        "requirement": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
+        "status": "NOT_VERIFIED",
+        "evidence": [
+          "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
+          "plans/agent_ops/evidence/pr03-remote-renewal.md",
+          "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+          "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+          "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
+          "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+          "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+          "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+          "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+          "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
+        ],
+        "result": "W17 useful15 exact report/native permission/continuation16 satisfies literal local DX39; SVC09 now proves terminal/dashboard ownership. Extra sum10 assertion remains failed but is not the fixed continuation criterion.",
+        "qualification_limit": "Não converter teste de processo, initialize, NEXUS_CONNECTION_OK ou peer sintético em M1.",
+        "remaining": [
+          "DX40 real Connector cycle: actual canonical decision before expiry, useful correlated result, same-session continuation/reopen via terminal. Capture DX43 configuration and BASE06 remote stages within that same authorized cycle. Native07 CANCELLED/decision0/reportabsent does not close it."
+        ]
+      },
+      "tasks.BASE-06": {
+        "title": "lifecycle e primeiro uso reais",
+        "status": "IMPLEMENTED",
+        "milestones": [
+          "PR-00"
+        ],
+        "dependencies": [],
+        "files": [
+          "plans/agent_ops/baseline.md",
+          "plans/agent_ops/evidence/baseline-startup.json"
+        ],
+        "tests": [
+          "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
+          "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+          "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+          "rtk proxy .venv/Scripts/python.exe scripts/measure_agent_ops_baseline.py",
+          "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
+          "plans/agent_ops/evidence/r3-binding02-svc20-preparation-base06-timing/base06/audit.json",
+          "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json"
+        ],
+        "result": "Etapas reais consolidadas: v12 product-wheel install12,9945733s/verification58,1911667s; W17 service registration10,714s/start37,352s/review13,993s/apply13,424s; useful report148,2299977s monotonic and real continuation24,267s wrapper wall. Local first-use measurement established in labelled scope. No homogeneous-package/clean-stopwatch requirement is imposed.",
+        "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
+        "limitations": [
+          "Cláusula própria da linha245, não M1 herdado por associação. Pode integrar a mesma campanha M1 autorizada, sem campanha redundante.",
+          "Current-stage timings need explicit context, not an invented same-package or clean-stopwatch gate; no numerical SLA. Historical missing clocks remain unknown."
+        ],
+        "subscopes": {
+          "inventory": "VERIFIED",
+          "foreground_liveness_measurement": "VERIFIED",
+          "provider_first_use_measurement": "IN_PROGRESS",
+          "local_first_use_stage_measurement": "VERIFIED",
+          "remote_complete_useful_terminal_cycle": "IN_PROGRESS"
+        },
+        "reconciliation": {
+          "current_implementation": "Original lifecycle/platform map plus real Windows Server/Connector campaigns and measured local useful terminal cycle. Distinct historical stage scopes and clocks are consolidated; package-install and service-registration are not conflated.",
+          "remaining": "Literal line247 remote useful result and complete terminal cycle remain unproven (real onboarding/failed attempts retained). Historical W16/R installation clocks are unknown but do not impose a new homogeneous/clean timing requirement or gratuitous reinstall/local provider rerun.",
+          "remaining_kind": "real_provider_campaign",
+          "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+          "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+        },
+        "remaining_evidence": "Retain the already measured stages and their scope; finish the existing authorized remote useful/continuation route when possible, recording actual available timestamps and failures without inventing missing historical clocks.",
+        "contract_reconciliation": {
+          "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+          "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
+          "previous_overbroad_limit": "Não substituir esta medida por quantidade de testes, initialize MCP ou resultado de peer sintético."
+        }
+      }
+    },
+    "BASE06_current_subscopes_updated": [
+      "provider_first_use_measurement",
+      "remote_complete_useful_terminal_cycle"
+    ],
+    "final_repository_review": "APPROVED after Root review of actual runtime proof, fixed literals, report and current bookkeeping. BASE06 child fields now reflect the same proved delivery; no extra acceptance requirement."
+  },
+  "provenance_correction": {
+    "original_assessment_preserved": true,
+    "actual_command_review_tool": "17bc20",
+    "manual_approve_tool": "d190f1",
+    "independent_report_Decimal_tool": "15b025",
+    "note": "Assessment Workspace prose conflates report verification15b025 with command review; this additive clarification records the exact provenance."
+  }
+}

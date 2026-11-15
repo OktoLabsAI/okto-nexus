@@ -1,0 +1,43 @@
+{
+  "cohort": {
+    "cycle_id": "8579ee61a208f86e739afa29faba81be",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 48712,
+      "birth": 134392414696352881
+    },
+    "launcher": {
+      "pid": 34580,
+      "birth": 134392414713266046
+    },
+    "child": {
+      "pid": 45124,
+      "birth": 134392414713540411
+    }
+  },
+  "observed_at": 1794768275.6114957,
+  "force_used": false,
+  "exits": {
+    "parent": {
+      "pid": 48712,
+      "birth": 134392414696352881,
+      "physical_exit": true,
+      "exit_code": 0
+    },
+    "launcher": {
+      "pid": 34580,
+      "birth": 134392414713266046,
+      "physical_exit": true,
+      "exit_code": 0
+    },
+    "child": {
+      "pid": 45124,
+      "birth": 134392414713540411,
+      "physical_exit": true,
+      "exit_code": 0
+    }
+  },
+  "lifecycle_plan_sha256": "4dc1ccd4673c5ddff8959510198cd1673f52151e0dec278f850e9d5e73a6dbbb"
+}

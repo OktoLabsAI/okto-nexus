@@ -1,0 +1,45 @@
+{
+  "commands": {
+    "prepare": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-plan.json",
+      "--expected-plan-sha256",
+      "60a7a9ea213658f78346be3b7773ef94f16240720b635799bb360da1c234fdab",
+      "prepare"
+    ],
+    "useful": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-plan.json",
+      "--expected-plan-sha256",
+      "60a7a9ea213658f78346be3b7773ef94f16240720b635799bb360da1c234fdab",
+      "useful"
+    ],
+    "continuation": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-entry.py",
+      "--plan",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-plan.json",
+      "--expected-plan-sha256",
+      "60a7a9ea213658f78346be3b7773ef94f16240720b635799bb360da1c234fdab",
+      "continuation"
+    ]
+  },
+  "paid_execution_selected": false,
+  "continuation_conditional": true
+}

@@ -1,0 +1,16 @@
+{
+  "returncode": 0,
+  "provider_calls": 0,
+  "stdout_sha256": "0336965a8c7d27e0cdea46ccb5f74878844ef95382b92a8f6c028ccc10aea8c2",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_exit_confirmed": false,
+  "projection": {
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "generation": null,
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "shutdown_outcome": "drained",
+    "ready_for_queries": false
+  },
+  "lifecycle_plan_sha256": "4dc1ccd4673c5ddff8959510198cd1673f52151e0dec278f850e9d5e73a6dbbb"
+}

@@ -647,14 +647,17 @@
     },
     "BASE-06": {
       "title": "lifecycle e primeiro uso reais",
-      "status": "IMPLEMENTED",
+      "status": "VERIFIED",
       "milestones": [
         "PR-00"
       ],
       "dependencies": [],
       "files": [
         "plans/agent_ops/baseline.md",
-        "plans/agent_ops/evidence/baseline-startup.json"
+        "plans/agent_ops/evidence/baseline-startup.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json"
       ],
       "tests": [
         "plans/agent_ops/evidence/r3-remaining-task-contracts/artifact-manifest.json",
@@ -663,9 +666,13 @@
         "rtk proxy .venv/Scripts/python.exe scripts/measure_agent_ops_baseline.py",
         "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
         "plans/agent_ops/evidence/r3-binding02-svc20-preparation-base06-timing/base06/audit.json",
-        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json"
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
       ],
-      "result": "Etapas reais consolidadas: v12 product-wheel install12,9945733s/verification58,1911667s; W17 service registration10,714s/start37,352s/review13,993s/apply13,424s; useful report148,2299977s monotonic and real continuation24,267s wrapper wall. Local first-use measurement established in labelled scope. No homogeneous-package/clean-stopwatch requirement is imposed.",
+      "result": "Etapas reais consolidadas: v12 product-wheel install12,9945733s/verification58,1911667s; W17 service registration10,714s/start37,352s/review13,993s/apply13,424s; useful report148,2299977s monotonic and real continuation24,267s wrapper wall. Local first-use measurement established in labelled scope. No homogeneous-package/clean-stopwatch requirement is imposed. Remote09/10 now complete the useful terminal path: Server-created to SUCCEEDED receipt87.318s useful and2.11221s continuation, reopened CLI2.020597s. These include dispatch, native execution, human wait and transport; they are not pure model latency or a homogeneous clean-install stopwatch.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
         "Cláusula própria da linha245, não M1 herdado por associação. Pode integrar a mesma campanha M1 autorizada, sem campanha redundante.",
@@ -674,23 +681,35 @@
       "subscopes": {
         "inventory": "VERIFIED",
         "foreground_liveness_measurement": "VERIFIED",
-        "provider_first_use_measurement": "IN_PROGRESS",
+        "provider_first_use_measurement": "VERIFIED",
         "local_first_use_stage_measurement": "VERIFIED",
-        "remote_complete_useful_terminal_cycle": "IN_PROGRESS"
+        "remote_complete_useful_terminal_cycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Original lifecycle/platform map plus real Windows Server/Connector campaigns and measured local useful terminal cycle. Distinct historical stage scopes and clocks are consolidated; package-install and service-registration are not conflated.",
-        "remaining": "Literal line247 remote useful result and complete terminal cycle remain unproven (real onboarding/failed attempts retained). Historical W16/R installation clocks are unknown but do not impose a new homogeneous/clean timing requirement or gratuitous reinstall/local provider rerun.",
-        "remaining_kind": "real_provider_campaign",
+        "current_implementation": "Lifecycle/platform inventory plus retained real Windows campaigns, labelled local installation/service/useful clocks and real remote09/10 decision/result/continuation/reopened CLI with measured Server intervals. Historical unavailable clocks remain unknown.",
+        "remaining": "None for the literal scoped BASE-06 delivery; historical unavailable clocks remain unknown and no numerical SLA is asserted.",
+        "remaining_kind": "qualified_scoped_measurement",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
+        "current_evidence": [
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+        ]
       },
-      "remaining_evidence": "Retain the already measured stages and their scope; finish the existing authorized remote useful/continuation route when possible, recording actual available timestamps and failures without inventing missing historical clocks.",
+      "remaining_evidence": "None for this literal delivery. Preserve labelled historical installation/setup measurements and remote09/10 clocks; no uniform-package stopwatch, numerical SLA or extra provider run is required.",
       "contract_reconciliation": {
         "evidence": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
         "product_gap": "Nenhuma nova lacuna concreta de produto demonstrada nesta auditoria finita.",
         "previous_overbroad_limit": "Não substituir esta medida por quantidade de testes, initialize MCP ou resultado de peer sintético."
-      }
+      },
+      "current_campaign_evidence": [
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+      ]
     },
     "SVC-01": {
       "title": "fachada de lifecycle",
@@ -1380,10 +1399,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "T14 and local W17 explicit executable paths, T15 service diagnosis and actual authenticated native execution qualify their finite context cuts.",
+      "result": "Actual context evidence now includes local W17 and remote09/10: explicit reviewed executables, matching remote cwd/model/default permission, real human native decision and report. T14/T15 context and credential diagnosis remain scoped.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "DX43 effective remote configuration/tool/policy comparison; actual login context still unobserved. T15 is terminal-only OR locked vault, not both. No secret-content or universal-enforcement claim."
+        "Actual OS login context remains unobserved. Effective effort UNKNOWN and no personal instruction contents or universal policy enforcement claimed."
       ],
       "subscopes": {
         "local_saved_context": "VERIFIED",
@@ -1404,12 +1423,18 @@
         "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "T14 and local W17 explicit executable paths, T15 service diagnosis and actual authenticated native execution qualify their finite context cuts.",
-        "remaining": "DX43 effective remote configuration/tool/policy comparison; actual login context still unobserved. T15 is terminal-only OR locked vault, not both. No secret-content or universal-enforcement claim.",
+        "current_implementation": "Actual context evidence now includes local W17 and remote09/10: explicit reviewed executables, matching remote cwd/model/default permission, real human native decision and report. T14/T15 context and credential diagnosis remain scoped.",
+        "remaining": "Actual OS login context remains unobserved. Effective effort UNKNOWN and no personal instruction contents or universal policy enforcement claimed.",
         "remaining_kind": "real_service_context_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
-        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json",
+        "current_evidence": [
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+        ]
       },
       "current_campaign_evidence": [
         "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json",
@@ -1805,10 +1830,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "Local useful work exists and SVC09 actual console/dashboard closure preserved same admitted remote op and six handles.",
+      "result": "Local and remote useful terminal cycles are now real; SVC09 independently proves console/dashboard closure preserves the admitted operation and cohort. Canonical normal stops and six physical exits are retained.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Remote useful cycle still pendingDX40; no claim07 useful success. Keep task status unchanged."
+        "Remaining Windows event scopes are tracked under SVC18/21/29; no promotion of this aggregate task is implied."
       ],
       "subscopes": {
         "server_start_stop_restart": "VERIFIED",
@@ -1826,12 +1851,18 @@
         "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Local useful work exists and SVC09 actual console/dashboard closure preserved same admitted remote op and six handles.",
-        "remaining": "Remote useful cycle still pendingDX40; no claim07 useful success. Keep task status unchanged.",
+        "current_implementation": "Local and remote useful terminal cycles are now real; SVC09 independently proves console/dashboard closure preserves the admitted operation and cohort. Canonical normal stops and six physical exits are retained.",
+        "remaining": "Remaining Windows event scopes are tracked under SVC18/21/29; no promotion of this aggregate task is implied.",
         "remaining_kind": "real_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
-        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json",
+        "current_evidence": [
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+        ]
       },
       "current_campaign_evidence": [
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
@@ -1973,10 +2004,10 @@
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
         "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
       ],
-      "result": "Real DONE/epoch2/binding reuse, service-owned Sonnet admissions and canonical operator grant renewal observed. Same live Connector reconnect contract already qualified.",
+      "result": "Real DONE/epoch2/binding reuse, human grant renewal and Connector-owned Sonnet09/10 useful work/decision/continuation/reopen are retained. No administrative credential was added to the Connector host.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Complete remote useful decision/result/continuation and effective configuration; do not add physical remote machine, TLS or personal-vault test unless specifically claimed."
+        "Aggregate task status and historical subscopes remain unchanged; no physical second-host, TLS, personal-vault or universal configuration claim."
       ],
       "subscopes": {
         "local_readiness": "VERIFIED",
@@ -2007,12 +2038,18 @@
         "released_session_drain_installed_contract": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Real DONE/epoch2/binding reuse, service-owned Sonnet admissions and canonical operator grant renewal observed. Same live Connector reconnect contract already qualified.",
-        "remaining": "Complete remote useful decision/result/continuation and effective configuration; do not add physical remote machine, TLS or personal-vault test unless specifically claimed.",
+        "current_implementation": "Real DONE/epoch2/binding reuse, human grant renewal and Connector-owned Sonnet09/10 useful work/decision/continuation/reopen are retained. No administrative credential was added to the Connector host.",
+        "remaining": "Aggregate task status and historical subscopes remain unchanged; no physical second-host, TLS, personal-vault or universal configuration claim.",
         "remaining_kind": "real_remote_provider_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
-        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json",
+        "current_evidence": [
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+        ]
       },
       "current_campaign_evidence": [
         "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json",
@@ -2143,10 +2180,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "Installed package/campaign/native tasks/local cycle/timings have retained evidence; matrix remains Windows-scoped.",
+      "result": "Installed packages/native tasks/upgrades, bounded crash recovery, local and remote useful terminal cycles, and labelled first-use stage measurements have retained evidence. Qualification remains Windows-scoped.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Remote useful cycle/DX43 plus actual login/logout/suspend/reboot evidence and final matrix/report. No new broad regression merely for reconciliation."
+        "Real login/logout/suspend/reboot evidence and final consolidated matrix/report remain; no new broad regression or provider request is implied."
       ],
       "subscopes": {
         "server_wheel_python_payloads": "VERIFIED",
@@ -2169,12 +2206,18 @@
         "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Installed package/campaign/native tasks/local cycle/timings have retained evidence; matrix remains Windows-scoped.",
-        "remaining": "Remote useful cycle/DX43 plus actual login/logout/suspend/reboot evidence and final matrix/report. No new broad regression merely for reconciliation.",
+        "current_implementation": "Installed packages/native tasks/upgrades, bounded crash recovery, local and remote useful terminal cycles, and labelled first-use stage measurements have retained evidence. Qualification remains Windows-scoped.",
+        "remaining": "Real login/logout/suspend/reboot evidence and final consolidated matrix/report remain; no new broad regression or provider request is implied.",
         "remaining_kind": "real_native_provider_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
-        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json",
+        "current_evidence": [
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+          "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+        ]
       },
       "current_campaign_evidence": [
         "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json",
@@ -9053,7 +9096,7 @@
     },
     "DX-T40": {
       "requirement": "A mesma campanha via Connector resolve decisões pelo CLI autenticado do operador, sem credencial administrativa no host remoto e sem aprovação pelo participante.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
         "plans/agent_ops/evidence/pr03-remote-bootstrap/artifact-manifest.json",
@@ -9113,9 +9156,13 @@
         "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/lifecycle/public/nexus-exit-proof.json",
         "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/lifecycle/public/connector-stop-returned.json",
         "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json",
-        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
       ],
-      "result": "Corrected package later admitted07 and published native permission; all6normal exits confirmed.07 nativeSTALE/approvalpending/rev0/decision0/CANCELLED, total180426 Native3/Server4. Old failures remain historical.",
+      "result": "Real installed Windows Connector campaign09/10: authenticated operator accepted the exact native PowerShell question before expiry; canonical decision CONFIRMED, useful report independently matches4rows/sum10/inputSHA, same canonical/native session continuation answers10. New CLI reopened both correlated results. Prior protected agent-only credential transfer and participant-refusal contracts retain their separate scope. All six service cohort processes exited normally. Prior05/07 failures and charges remain historical.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
@@ -9127,10 +9174,10 @@
         "remote_pending_grant_uncertainty": "VERIFIED",
         "remote_confirmed_receipt_read_failure": "VERIFIED"
       },
-      "remaining": "Successful remote useful decision/result/continuation, without replay05/07 or automatically admitting08. ConfigurationDX43 may be qualified within the same authorized cycle.",
-      "remaining_kind": "real_campaign_observation_failed",
-      "qualification_limit": "HTTP/WebSocket/IPC reais e vault temporário não substituem provedor nativo real ou o percurso M1 remoto.",
-      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "remaining": "None for the literal scenario in this qualified Windows topology; no additional request authorized.",
+      "remaining_kind": "qualified_real_campaign",
+      "qualification_limit": "Canonical decision CONFIRMED and observed native decision stage SUBMITTED are recorded separately; successful native execution/report and correlated terminal results provide the effect evidence. No physical second-host/TLS/personal credential claim is added.",
+      "common_qualification_limit": "Retained local W17 and new real Connector09/10 provide the scoped native-provider evidence. Earlier protocol/SQLite/Core fixtures remain limited to their own contract scope; neither proves universal native configuration enforcement.",
       "verified_contract_subscopes": [
         "operator_authority_separate_from_participant",
         "remote_setup_and_renewal_real_protocol_synthetic_peer"
@@ -9283,7 +9330,7 @@
     },
     "DX-T43": {
       "requirement": "O harness iniciado pelo serviço usa instruções, modelo, ferramentas e limites efetivos revisados; configuração disponível apenas no shell não é presumida nem substituída silenciosamente.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-connector-project-review-cli.json",
         "plans/agent_ops/evidence/pr03-connector-project-review-connector-installed.xml",
@@ -9302,13 +9349,17 @@
         "plans/agent_ops/evidence/r3-dx43-local-real-configuration/prior-service-path-diagnosis.json",
         "plans/agent_ops/evidence/r3-dx43-local-real-configuration/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json",
-        "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/review.json"
+        "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
       ],
-      "result": "Local real service-owned W17 useful15 is now evidenced: reported thread/start configuration, explicitly reviewed pinned RTK/Python paths after service-PATH unavailability, actual native permission and correlated correct report. Reported instruction references are not contents/adherence or universal enforcement. Remote Connector scope remains pending; global DX-T43 stays IN_PROGRESS. Actual remote Sonnet2.1.323 now reports modelclaude-sonnet-5-5/default and PowerShell/Bash advertised; advertised PowerShell permission was rejected by installed Core before operator publication. Reported metadata alone does not close remote effective tool/policy qualification.",
-      "remaining": "Executar e comparar configuração, ferramentas e políticas revisadas no harness real do host Connector; preservar como desconhecidos campos não observados. Evidência local reportada e resultado útil real retidos, sem inferir conteúdo de instruções, inventário completo ou enforcement universal.",
+      "result": "Local W17 plus remote09/10 establish the reviewed service-context comparison: selected model/permission/workspace/prompt/tool/limits, actual Claude2.1.323 init with claude-sonnet-5-5/default and matching cwd, real scoped PowerShell human permission and verified useful report/continuation. Effective effort remains UNKNOWN; native instruction reference metadata is distinct from contents and enforcement. Eight expected/actual/limit comparisons are retained in the independent assessment.",
+      "remaining": "None for the literal supported/verifiable configuration criterion in the retained local and Connector scopes.",
       "remaining_kind": "real_remote_configuration_campaign_pending",
-      "qualification_limit": "Metadados reportados pelo harness e permissão/resultado local reais não provam conteúdo pessoal de instruções, inventário completo de ferramentas ou enforcement universal. Recibo native SUBMITTED permanece não final; tentativa remota Sonnet admitida, mas falha de observação não qualifica configuração/enforcement remoto.",
-      "common_qualification_limit": "A curadoria agora inclui execução real local W17 já encerrada; não executou novo provedor, serviço ou teste. Fixtures anteriores continuam limitadas ao próprio escopo.",
+      "qualification_limit": "Reported89tools does not mean every tool was exercised; global MCP inheritance disabled does not mean zero configured MCP (one connected reported). Effective effort UNKNOWN, personal instruction contents unread, no universal instruction adherence or tool-policy enforcement claim.",
+      "common_qualification_limit": "Retained local W17 and new real Connector09/10 provide the scoped native-provider evidence. Earlier protocol/SQLite/Core fixtures remain limited to their own contract scope; neither proves universal native configuration enforcement.",
       "verified_contract_subscopes": [
         "reference_only_host_configuration",
         "approved_provider_home_and_materialization_guards",
@@ -11536,7 +11587,7 @@
       "result": "Implementation/reuse/test catalog exists for59mandatory tasks; measured local first-use stages and DX39 are real. Do not require every historical task substatus VERIFIED.",
       "qualification_limit": "Não se usa task.status como prova nem se exige campanha M1 para testes puramente contratuais.",
       "remaining": [
-        "Complete remote useful terminal cycle and retain its available stage clocks; complete the already named Windows events; map final evidence to mandatory task deliveries and finish implementation-report. No new universal suite."
+        "Complete the already named real Windows login/logout/suspend/reboot evidence, then reconcile mandatory deliveries and the final implementation report. Local and remote useful terminal cycles and labelled BASE-06 stages are now retained; no new universal suite or provider campaign is required."
       ]
     },
     "AC-02": {
@@ -11836,7 +11887,7 @@
     },
     "AC-11": {
       "requirement": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
-      "status": "NOT_VERIFIED",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-remote-bootstrap.md",
         "plans/agent_ops/evidence/pr03-remote-renewal.md",
@@ -11847,13 +11898,15 @@
         "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
         "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
-        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
       ],
-      "result": "W17 useful15 exact report/native permission/continuation16 satisfies literal local DX39; SVC09 now proves terminal/dashboard ownership. Extra sum10 assertion remains failed but is not the fixed continuation criterion.",
+      "result": "Root accepted the finite terminal milestone: local W17/DX39 and real Connector09/10 prove installed daemon/preset, human canonical decision, correlated useful result, same-session continuation and reopened authenticated CLI without a dashboard or dedicated terminal keeping services alive. SVC09 ownership evidence remains separate. Windows login events and global plan acceptance remain pending.",
       "qualification_limit": "Não converter teste de processo, initialize, NEXUS_CONNECTION_OK ou peer sintético em M1.",
-      "remaining": [
-        "DX40 real Connector cycle: actual canonical decision before expiry, useful correlated result, same-session continuation/reopen via terminal. Capture DX43 configuration and BASE06 remote stages within that same authorized cycle. Native07 CANCELLED/decision0/reportabsent does not close it."
-      ]
+      "remaining": []
     },
     "AC-12": {
       "requirement": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
@@ -14488,6 +14541,32 @@
       },
       "remote_campaign": "Independent; additional Native allocation and continuation reservation proposal still awaiting explicit user response.",
       "next_session_end_action": "Wait for a new explicit user-selected window before logout or restart."
+    },
+    "r3_sonnet09_10_remote_useful_success": {
+      "status": "ROOT_ACCEPTED_REMOTE_TERMINAL_MILESTONE_SCOPED",
+      "summary": "Actual remote09/10 useful report, human canonical native decision, same-session continuation and reopened CLI succeeded. Root accepted DX40/DX43/AC11/BASE06 in documented scopes with local W17;129/1/2.290372 cumulative tokens, Native5/Server6 exhausted,500k/480k. Initial start3 preserved; late same-owner READY, both normal stops, six exit0/native inactive. No force or OS event; SVC18/21/29 and AC01/13/14/global plan remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+      ],
+      "counts": {
+        "VERIFIED": 129,
+        "NOT_RUN": 2,
+        "IN_PROGRESS": 1
+      },
+      "native_admissions": 5,
+      "server_admissions": 6,
+      "sonnet_observed_tokens": 290372,
+      "new_requests_remaining": 0,
+      "scenario_or_AC_promotions": [
+        "DX-T40 VERIFIED",
+        "DX-T43 VERIFIED",
+        "AC-11 VERIFIED",
+        "BASE-06 VERIFIED"
+      ],
+      "functional_terminal_M1_qualified": true,
+      "global_plan_qualified": false
     }
   },
   "history": [
@@ -16789,6 +16868,34 @@
       },
       "remote_campaign": "Independent; additional Native allocation and continuation reservation proposal still awaiting explicit user response.",
       "next_session_end_action": "Wait for a new explicit user-selected window before logout or restart."
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet09_10_remote_useful_success",
+      "status": "ROOT_ACCEPTED_REMOTE_TERMINAL_MILESTONE_SCOPED",
+      "summary": "Actual remote09/10 useful report, human canonical native decision, same-session continuation and reopened CLI succeeded. Root accepted DX40/DX43/AC11/BASE06 in documented scopes with local W17;129/1/2.290372 cumulative tokens, Native5/Server6 exhausted,500k/480k. Initial start3 preserved; late same-owner READY, both normal stops, six exit0/native inactive. No force or OS event; SVC18/21/29 and AC01/13/14/global plan remain open.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+      ],
+      "counts": {
+        "VERIFIED": 129,
+        "NOT_RUN": 2,
+        "IN_PROGRESS": 1
+      },
+      "native_admissions": 5,
+      "server_admissions": 6,
+      "sonnet_observed_tokens": 290372,
+      "new_requests_remaining": 0,
+      "scenario_or_AC_promotions": [
+        "DX-T40 VERIFIED",
+        "DX-T43 VERIFIED",
+        "AC-11 VERIFIED",
+        "BASE-06 VERIFIED"
+      ],
+      "functional_terminal_M1_qualified": true,
+      "global_plan_qualified": false
     }
   ],
   "r3_native_bounded_supervisor_execution": {

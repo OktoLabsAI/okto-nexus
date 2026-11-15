@@ -1,0 +1,45 @@
+{
+  "status": "MATERIALIZABLE_ONLY_AUTHORIZATION_PENDING",
+  "proposal": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\proposal.json",
+    "sha256": "c0849f44185291ad6fde737dfaf506d5afbd887a2c23a5bbe47ed1bcaa0d9485",
+    "bytes": 2951
+  },
+  "current_seed": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\reconciled-budget-current-policy.json",
+    "sha256": "9d0c3de98ef78c62d8d510487259bc472f7f09c78d74d9c8620a9b6c56bfeeb5",
+    "bytes": 33634
+  },
+  "current_server_history": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\server-admission-history.json",
+    "sha256": "6aa82ffe2266b26c6529bd970c05a421d8d467e7c30e04584a41bad744edf12d",
+    "bytes": 827
+  },
+  "reconciliation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\reconciliation.json",
+    "sha256": "76af4fffa7c5d9326c15f049a53b74e900c7a27da4410a90c6a939440aea94ac",
+    "bytes": 2272
+  },
+  "previous_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-successor05-transport-280crl3j\\work-plan.json",
+    "sha256": "cac4e15c1f9bd0e6b1aeb49cb5e60dc95dd6c78880faa4c16923540b7bcd7eb7",
+    "bytes": 17418
+  },
+  "lifecycle_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\lifecycle-plan.json",
+    "sha256": "4dc1ccd4673c5ddff8959510198cd1673f52151e0dec278f850e9d5e73a6dbbb",
+    "bytes": 14496
+  },
+  "fast_approval_allowlist": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-fast-native-approval-g3tjgvgz\\public-allowlist.json",
+    "sha256": "6f81869cf12e2ed1b82a99a41adee87d1e0e41ee6daeca7c4ddaaf29e0c399dd",
+    "bytes": 3379
+  },
+  "authorization_record_expected": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\authorization-record.json",
+  "request_ids": {
+    "useful": "m1-sonnet-remote-useful-09",
+    "continuation": "m1-sonnet-remote-continuation-10"
+  },
+  "paid_plan_present": false,
+  "provider_calls": 0
+}

@@ -1,0 +1,39 @@
+{
+  "status": "SAME_REPORTED_OWNER_NOW_CANONICALLY_READY",
+  "start_returned_pin": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\public\\nexus-start-returned.json",
+    "sha256": "1fd3943163d8d4b99129bda42c13c1ebab7196f30f5291983189ac7729908302"
+  },
+  "original_returncode": 3,
+  "original_failure_preserved": true,
+  "start_stdout_sha256": "31e0617b6253a993a1f1685bfdf65c1bc1a6a0c2a4d62f8ed9642d2344768867",
+  "pid": 54052,
+  "generation": "f054384a3bdc356a513741a027b84013",
+  "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "cohort": {
+    "cycle_id": "b59adc7d372329e03ca98f7456b74006",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 48640,
+      "birth": 134392412416846284
+    },
+    "launcher": {
+      "pid": 12036,
+      "birth": 134392412482535854
+    },
+    "child": {
+      "pid": 54052,
+      "birth": 134392412482938656
+    }
+  },
+  "task_digest": "b340b00c0def0503a472333948930ace8877e4379bf51946d2f3c96f95a0e235",
+  "actual_ready_capture": true,
+  "all_three_handles_alive": true,
+  "new_start_count": 0,
+  "service_controls": 0,
+  "provider_calls": 0,
+  "exit_proof_claimed": false,
+  "lifecycle_plan_sha256": "4dc1ccd4673c5ddff8959510198cd1673f52151e0dec278f850e9d5e73a6dbbb"
+}

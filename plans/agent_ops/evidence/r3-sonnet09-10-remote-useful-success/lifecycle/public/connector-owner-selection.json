@@ -1,0 +1,31 @@
+{
+  "pid": 45124,
+  "generation": "013f3b7aa1989f94b5b14b18720f456b",
+  "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+  "task": {
+    "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "state": 4,
+    "digest": "c12aae3497ceb76336f29d3e9f2211733fea86d7ffb8da05568df5f175ae8df3"
+  },
+  "component": "connector",
+  "cohort": {
+    "cycle_id": "8579ee61a208f86e739afa29faba81be",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 48712,
+      "birth": 134392414696352881
+    },
+    "launcher": {
+      "pid": 34580,
+      "birth": 134392414713266046
+    },
+    "child": {
+      "pid": 45124,
+      "birth": 134392414713540411
+    }
+  },
+  "selected_at": 1794767896.7959173,
+  "lifecycle_plan_sha256": "4dc1ccd4673c5ddff8959510198cd1673f52151e0dec278f850e9d5e73a6dbbb"
+}

@@ -1,0 +1,400 @@
+{
+  "status": "ACTUAL09_10_METADATA_AND_SYNTHETIC_RESULT_RECONCILED",
+  "observed_utc": "2026-11-15T18:48:42.752519+00:00",
+  "scope": {
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+    "session_id": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+    "stream_epoch": "stream_bd7b801254266ea65ca4c9542a1c0869",
+    "operation_ids": [
+      "op_772cf5101f12f73b1acc75daefe6b98c",
+      "op_37e2ddb1ba2d183c899606a846396bb3"
+    ]
+  },
+  "method": "Two own SQLite databases mode=ro/query_only; exact scope/IDs; explicit columns/json_extract. Separate reads, no cross-database atomic snapshot claim. No credentials/auth/vault/personal instruction or raw command/payload exported.",
+  "configuration": {
+    "reviewed": {
+      "adapter_id": "claude_stream",
+      "alias": "m1-sonnet-remote-recovery02",
+      "authorization": {
+        "actions": 3,
+        "minutes": 60,
+        "no_expiry": false,
+        "unlimited_actions": false
+      },
+      "automatic_reply": true,
+      "format": "okto-nexus-connection",
+      "harness_settings": {
+        "inherit_global_mcps": "disabled",
+        "model": "sonnet",
+        "permission_mode": "default"
+      },
+      "runtime_enabled": true,
+      "session_policy": "per_sender",
+      "tool_access": "ask",
+      "version": 2
+    },
+    "reviewed_pin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-review.json",
+      "sha256": "3dc685af12ef88e39f90ef649528861ca11f81546df673a585cdc4ae7afd059b",
+      "bytes": 7516
+    },
+    "catalog": [
+      {
+        "sequence": 1,
+        "event_sha256": "780c6e2bd1f131e1740ac54917e751bee07c6d786b9bfa344ff626fd0a64d9ba",
+        "adapter_id": "claude_stream",
+        "version": "2.1.323",
+        "candidate_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa",
+        "schema_revision": "sha256:c370c66220cf1c6478cc5f0fb554d5f37eb62193f169704c56aa35aea89d7e87"
+      }
+    ],
+    "catalog_scope": "Installed Claude configuration_probe obtains --help capability catalog, not session-effective state.",
+    "actual_system_init": [
+      {
+        "sequence": 2,
+        "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+        "event_sha256": "04d0b6e382a50412ba583e39e42a7064253c653c77f12fff6e7917c9690edbfa",
+        "model": "claude-sonnet-5-5",
+        "permissionMode": "default",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project",
+        "claude_code_version": "2.1.323",
+        "session_id": "21c2bb69-7eb0-44c3-96be-f45992b8cf01",
+        "per_turn_effort_active": 1,
+        "advertised_tool_count": 89,
+        "PowerShell_advertised": true,
+        "Bash_advertised": true,
+        "memory_reference_count": 1,
+        "memory_contents_read": false,
+        "memory_reference_metadata": [
+          {
+            "basename_kind": "OTHER_REFERENCE",
+            "within_approved_project": false
+          }
+        ],
+        "mcp_server_count": 1,
+        "mcp_status_counts": {
+          "connected": 1,
+          "failed": 0,
+          "pending": 0,
+          "disabled": 0
+        },
+        "cwd_matches_reviewed": true,
+        "effective_effort": "UNKNOWN"
+      },
+      {
+        "sequence": 116,
+        "operation_id": "op_37e2ddb1ba2d183c899606a846396bb3",
+        "event_sha256": "69c51d9245141f2365bfd1e81a57006a0d0f31ca775dd4814f9427c13e89dfe0",
+        "model": "claude-sonnet-5-5",
+        "permissionMode": "default",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project",
+        "claude_code_version": "2.1.323",
+        "session_id": "21c2bb69-7eb0-44c3-96be-f45992b8cf01",
+        "per_turn_effort_active": 1,
+        "advertised_tool_count": 89,
+        "PowerShell_advertised": true,
+        "Bash_advertised": true,
+        "memory_reference_count": 1,
+        "memory_contents_read": false,
+        "memory_reference_metadata": [
+          {
+            "basename_kind": "OTHER_REFERENCE",
+            "within_approved_project": false
+          }
+        ],
+        "mcp_server_count": 1,
+        "mcp_status_counts": {
+          "connected": 1,
+          "failed": 0,
+          "pending": 0,
+          "disabled": 0
+        },
+        "cwd_matches_reviewed": true,
+        "effective_effort": "UNKNOWN"
+      }
+    ],
+    "instructions_limit": "Only native memory reference count/classification retained; personal contents never opened. Reviewed own task prompt/preset refs do not establish universal instruction adherence.",
+    "missing_fields": "Effective effort not emitted; remains UNKNOWN, reviewed default selected."
+  },
+  "canonical_operations": [
+    {
+      "operation_id": "op_37e2ddb1ba2d183c899606a846396bb3",
+      "session_id": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+      "actor_agent_id": "operator",
+      "subject_agent_id": "m1-sonnet-remote",
+      "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+      "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+      "workspace_binding_id": "wxb_dfbc76c4e4119893d3ed8b95c91b36f4",
+      "action": "turn.submit",
+      "admission_state": "RESOLVED_TERMINAL",
+      "created_at": "2026-11-15T18:42:07.759790+00:00",
+      "parent_operation_id": null
+    },
+    {
+      "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "session_id": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+      "actor_agent_id": "operator",
+      "subject_agent_id": "m1-sonnet-remote",
+      "binding_id": "bind_c0dedeb44285fc52a1badf66cfc260c9",
+      "workspace_id": "ws_1b0930e4c25dddad2ad1d11d903d6a52",
+      "workspace_binding_id": "wxb_dfbc76c4e4119893d3ed8b95c91b36f4",
+      "action": "turn.submit",
+      "admission_state": "RESOLVED_TERMINAL",
+      "created_at": "2026-11-15T18:39:58.397Z",
+      "parent_operation_id": "op_124427935eb731442fa556d915350bc4"
+    }
+  ],
+  "canonical_receipts": [
+    {
+      "operation_id": "op_37e2ddb1ba2d183c899606a846396bb3",
+      "receipt_revision": 1,
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null,
+      "received_at": "2026-11-15T18:42:08.215Z"
+    },
+    {
+      "operation_id": "op_37e2ddb1ba2d183c899606a846396bb3",
+      "receipt_revision": 2,
+      "stage": "SUCCEEDED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null,
+      "received_at": "2026-11-15T18:42:09.872Z"
+    },
+    {
+      "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "receipt_revision": 1,
+      "stage": "SUBMITTED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null,
+      "received_at": "2026-11-15T18:40:16.559Z"
+    },
+    {
+      "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "receipt_revision": 2,
+      "stage": "SUCCEEDED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null,
+      "received_at": "2026-11-15T18:41:25.715Z"
+    }
+  ],
+  "canonical_results": [
+    {
+      "operation_id": "op_37e2ddb1ba2d183c899606a846396bb3",
+      "session_id": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+      "stream_epoch": "stream_bd7b801254266ea65ca4c9542a1c0869",
+      "terminal_sequence": 127,
+      "output_text": "The reported sum is **10**.",
+      "output_truncated": 0,
+      "output_event_count": 5,
+      "delivery_outcome": "success",
+      "captured_at": "2026-11-15T18:42:09.617Z",
+      "native_output_equal": true,
+      "native_output_fragment_sequences": [
+        126,
+        127
+      ]
+    },
+    {
+      "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "session_id": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+      "stream_epoch": "stream_bd7b801254266ea65ca4c9542a1c0869",
+      "terminal_sequence": 114,
+      "output_text": "The script ran, and it printed this JSON and wrote it to `report.json`:\n\n```json\n{\"row_count\": 4, \"sum\": 10, \"input_sha256\": \"876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b\"}\n```\n\nI couldn't look at the CSV's layout before running, so the script treated the first line as a header. It counted every non-empty line after that as a data row. For the sum, it added up every numeric cell in those rows. If the file has more than one column, `sum` may not be what you meant.",
+      "output_truncated": 0,
+      "output_event_count": 6,
+      "delivery_outcome": "success",
+      "captured_at": "2026-11-15T18:41:25.329Z",
+      "native_output_equal": true,
+      "native_output_fragment_sequences": [
+        113,
+        114
+      ]
+    }
+  ],
+  "native_terminals": [
+    {
+      "sequence": 114,
+      "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "event_sha256": "feb99b8245863b063602a6a2a0da0c345c6275dda18e09bb4f225f034d32a710",
+      "native_session_id": "21c2bb69-7eb0-44c3-96be-f45992b8cf01",
+      "outcome": "success",
+      "is_error": 0,
+      "native_reported_duration_ms": 68428,
+      "native_reported_duration_api_ms": 13039,
+      "input_tokens": 4,
+      "cache_read_input_tokens": 53550,
+      "cache_creation_input_tokens": 18192,
+      "output_tokens": 1434,
+      "thinking_tokens_subset_output": 695,
+      "output_text": "an one column, `sum` may not be what you meant.",
+      "total_tokens": 73180
+    },
+    {
+      "sequence": 127,
+      "operation_id": "op_37e2ddb1ba2d183c899606a846396bb3",
+      "event_sha256": "215f4ea0fefa884dc4deb2591899359239a013814fa37a7666001e7294a2eb93",
+      "native_session_id": "21c2bb69-7eb0-44c3-96be-f45992b8cf01",
+      "outcome": "success",
+      "is_error": 0,
+      "native_reported_duration_ms": 1168,
+      "native_reported_duration_api_ms": 14153,
+      "input_tokens": 4,
+      "cache_read_input_tokens": 36531,
+      "cache_creation_input_tokens": 219,
+      "output_tokens": 12,
+      "thinking_tokens_subset_output": 0,
+      "output_text": "The reported sum is **10**.",
+      "total_tokens": 36766
+    }
+  ],
+  "native_permission_requests": [
+    {
+      "canonical_request_id": "r4request_06e3074970a04e94e0f84cd12c3421069632ed3e9c5f25b57c58709872f9c2d1",
+      "source_operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "session_id": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+      "stream_epoch": "stream_bd7b801254266ea65ca4c9542a1c0869",
+      "session_owner_generation": 1,
+      "kind": "native_approval",
+      "request_revision": 1,
+      "state": "DECIDED",
+      "received_at": "2026-11-15T18:40:29.889Z",
+      "expires_at": "2026-11-15T18:42:29.889000+00:00"
+    }
+  ],
+  "native_tool_metadata": [
+    {
+      "sequence": 102,
+      "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "event_sha256": "254ea1a03a310ad049ad76279d495933e4c5acdc1dbff4bc7511c48da3edca0a",
+      "method": "control_request:can_use_tool",
+      "tool_name": "PowerShell",
+      "subtype": "can_use_tool",
+      "request_hash": "e2e252817270e69851c64987fd4e6eac136f68df059c9e3dc6ac21e10d7e7cd6"
+    }
+  ],
+  "canonical_decisions": [
+    {
+      "decision_id": "r4decision_4600565c53a34a82a0919e39191ce34c",
+      "canonical_request_id": "r4request_06e3074970a04e94e0f84cd12c3421069632ed3e9c5f25b57c58709872f9c2d1",
+      "session_id": "ses_8bc0449b68998cfe91ec1a2df9319d23",
+      "session_owner_generation": 1,
+      "kind": "native_approval",
+      "revision": 1,
+      "actor_agent_id": "operator",
+      "decision": "accept",
+      "canonical_state": "CONFIRMED",
+      "native_operation_id": "r4op_0c407130625a5fdf55569b8beeb80aa7",
+      "expires_at": "2026-11-15T18:42:29.889000+00:00"
+    }
+  ],
+  "approvals": [
+    {
+      "approval_id": "r4request_06e3074970a04e94e0f84cd12c3421069632ed3e9c5f25b57c58709872f9c2d1",
+      "status": "approved",
+      "decided_by": "operator",
+      "decision_revision": 1,
+      "created_at": "2026-11-15T18:40:29.913175Z",
+      "decided_at": "2026-11-15T18:41:20.360077Z"
+    }
+  ],
+  "report": {
+    "pin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\deliverables\\remote\\report.json",
+      "sha256": "a6766c5c5a269379e389cab9e761267867c557bcb74c9a5724ea0401ffd63232",
+      "bytes": 111
+    },
+    "json": {
+      "row_count": 4,
+      "sum": 10,
+      "input_sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b"
+    },
+    "input_pin": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project\\numbers.csv",
+      "sha256": "876c1313400238ba1b78cc54fab94411c28b74d2c592c69422eb89800f634d4b",
+      "bytes": 14
+    },
+    "independent_Decimal_validation": {
+      "row_count": 4,
+      "sum": "10",
+      "report_matches": true
+    },
+    "root_independent_validation_tool": "15b025",
+    "same_native_session": true
+  },
+  "timings": [
+    {
+      "operation_id": "op_37e2ddb1ba2d183c899606a846396bb3",
+      "server_created_at": "2026-11-15T18:42:07.759790+00:00",
+      "server_succeeded_receipt_at": "2026-11-15T18:42:09.872Z",
+      "server_observed_wall_seconds": 2.11221,
+      "scope": "Server timestamps include admission/dispatch/native work/operator wait/transport; not pure model latency or cross-process monotonic timing."
+    },
+    {
+      "operation_id": "op_772cf5101f12f73b1acc75daefe6b98c",
+      "server_created_at": "2026-11-15T18:39:58.397Z",
+      "server_succeeded_receipt_at": "2026-11-15T18:41:25.715Z",
+      "server_observed_wall_seconds": 87.318,
+      "scope": "Server timestamps include admission/dispatch/native work/operator wait/transport; not pure model latency or cross-process monotonic timing."
+    }
+  ],
+  "accounting": {
+    "prior_tokens": 180426,
+    "useful09": 73180,
+    "continuation10": 36766,
+    "cumulative": 290372,
+    "native_charged": 5,
+    "server_charged": 6,
+    "native_limit": 5,
+    "server_limit": 6,
+    "selected_admissions_exhausted": true,
+    "token_limit": 500000,
+    "preventive_token_limit": 480000,
+    "token_headroom_is_not_new_admission_authority": true,
+    "thinking_is_output_subset": true,
+    "usage_not_double_counted": true
+  },
+  "source_pins": {
+    "work_plan": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\work-plan.json",
+      "sha256": "60a7a9ea213658f78346be3b7773ef94f16240720b635799bb360da1c234fdab",
+      "bytes": 17105
+    },
+    "task_prompts": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\task-prompts.json",
+      "sha256": "52fe42c8668b7aa081ca4b49700cb5970b0289d56d35b7494b085d40b2815b75",
+      "bytes": 2156
+    },
+    "useful_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\m1-sonnet-remote-useful-09-result.json",
+      "sha256": "a825d58c922c2c16ce237e3b287b2897b7d4ad9ea888cdfd38411a10d0afcd33",
+      "bytes": 650
+    },
+    "continuation_result": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\paid-work\\public\\m1-sonnet-remote-continuation-10-result.json",
+      "sha256": "97ef92a397b150fda2b855c94501f7f2a3cbe4a7a4a4d928d69169104c462982",
+      "bytes": 657
+    }
+  },
+  "effects": {
+    "database_writes": 0,
+    "api_or_control": 0,
+    "provider_calls": 0,
+    "service_calls": 0,
+    "os_events": 0
+  },
+  "extractor_antecedent": {
+    "initial_assertion": "Comparing only result:success fragment to aggregated canonical output failed before publication.",
+    "correction": "Compare ordered result:output plus result:success output_text fragments for the exact operation; no journal or canonical result modified."
+  },
+  "limitations": [
+    "Native-reported duration_api_ms may use a different accumulation scope; not added to duration_ms or interpreted as per-operation wall latency.",
+    "No shutdown/physical-exit proof is inferred here; Root owns normal cleanup separately.",
+    "Synthetic task assistant output retained by explicit authorization; no personal conversation or tool-command content retained."
+  ]
+}

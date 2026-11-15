@@ -1,0 +1,51 @@
+{
+  "status": "OFFLINE_MATERIALIZABLE_CANDIDATE_AUTHORIZATION_PENDING",
+  "candidate": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\candidate.json",
+    "sha256": "1de4a62dced7c867f6de4819a27eeb746a8d79e71b42b63889d99b19d211a47d",
+    "bytes": 2127
+  },
+  "tests": [
+    {
+      "tool": "e41172",
+      "passed": 3,
+      "seconds": 0.09,
+      "scope": "Pending authorization blocks plan/seed; in-memory conversion preserves3history; empty pages refreshpendingcallback"
+    },
+    {
+      "tool": "a7dc8b",
+      "passed": 1,
+      "seconds": 0.023,
+      "scope": "Positive dashboard state only; missing/unknown neverTrue"
+    }
+  ],
+  "test_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-pending-composition-nwafe22s\\test_pending_composition.py",
+    "sha256": "bc1156d2c40fcfb33ef030d38c3c40bdd30f40063ab87198cdc3b3c7ce499baf",
+    "bytes": 3115
+  },
+  "all_python_syntax": "PASS",
+  "scope": "No new installed constructor claim: paidplan intentionally absent. Existing Q/runtime and FAST supplement qualifications retained as provenance.",
+  "fast_supplement": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-fast-native-approval-g3tjgvgz\\public-allowlist.json",
+    "sha256": "6f81869cf12e2ed1b82a99a41adee87d1e0e41ee6daeca7c4ddaaf29e0c399dd",
+    "bytes": 3379
+  },
+  "lifecycle": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-after07-proposal-0ls1sihr\\lifecycle\\lifecycle-plan.json",
+    "sha256": "4dc1ccd4673c5ddff8959510198cd1673f52151e0dec278f850e9d5e73a6dbbb",
+    "bytes": 14496
+  },
+  "actual_authorization_record": false,
+  "paid_plan_created": false,
+  "new_seed5_created": false,
+  "service_effects": 0,
+  "provider_calls": 0,
+  "os_events": 0,
+  "notes": [
+    "Native07 consumed; previousfaultedcheckpoint remains unchanged",
+    "Native5/Server6 and continuation1x are pending explicit new user answer",
+    "No repeat SVC09 hook selected in future plan",
+    "Oldgrant3fbf cannot meet future600swindow; canonicalreview/issue required afterL3READY"
+  ]
+}

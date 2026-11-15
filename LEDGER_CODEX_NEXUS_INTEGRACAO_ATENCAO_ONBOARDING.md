@@ -2440,3 +2440,23 @@ Na leitura canônica posterior do Root (tool59d221), ambos os serviços próprio
 O usuário pediu: “encerrar sessoes do windows vamos postergar.” Os testes de logout e reinício ficam postergados, com as provas de login e eventos correspondentes ainda pendentes. Nenhuma sessão foi encerrada; nenhuma tarefa observadora ou ação do SO foi selecionada. A suspensão continua sem janela selecionada. A preparação e suas evidências ficam preservadas para uma janela futura explicitamente indicada pelo usuário.
 
 A campanha remota é independente; a proposta Sonnet adicional permanece aguardando resposta. **127 VERIFIED / 3 IN_PROGRESS / 2 NOT_RUN**, sem promoção de cenário ou AC e sem nova inferência.
+
+
+## 2026-11-15 — Sonnet09/10: resultado remoto útil, decisão e continuação reais
+
+[Evidências públicas](plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json): a resposta explícita do usuário autorizou os dois pedidos restantes sem encerrar a sessão Windows, teto500k/preventiva480k e reserva textual de continuação. O registro atual e a política efetiva prevalecem sobre a frase herdada200k preservada no plano congelado.
+
+**09 e10 SUCCEEDED**, mesma sessão canônica. O09 confirmou o relatório útil; a revisão independente do Root encontrou4linhas/soma10. A pergunta PowerShell real foi revisada e aprovada manualmente ainda válida; decisão canônica CONFIRMED. Um novo CLI reabriu a sessão e observou ambos os resultados, com a continuação respondendo **10**. Uso novo73180+36766=109946, acumulado **290372tokens / Native5 / Server6**. Cobranças e falhas05/07 preservadas; nenhuma nova chamada restante nesta seleção.
+
+Nexus retornou3 no start inicial; o recibo não foi substituído. Adoção adicional só ocorreu após READY real do mesmo PID/geração. As duas paradas normais retornaram0, os seis processos exatos encerraram com código0 e os cleanups confirmaram tarefas inativas/ausência canônica. Nenhuma força, logout, suspensão ou reboot. Dados/tarefas retidos; saída física não é, isoladamente, prova de settlement de trabalho.
+
+Revisão de DX40/DX43/BASE06 e critérios globais ainda pendente neste corte: **127 VERIFIED / 3 IN_PROGRESS / 2 NOT_RUN**, sem promoção até seleção do Root. Qualificações preparatórias e todas as falhas anteriores permanecem como histórico. Não foram copiados stdout bruto, arquivos privados, seed de orçamento, credenciais ou XML de tarefas.
+
+
+### Seleção de aceite do Root após revisão independente
+
+Root aprovou **DX-T40 e DX-T43 VERIFIED, AC-11 VERIFIED e BASE-06 VERIFIED**, nos escopos literais documentados. W17 local mais09/10 remoto e CLI reaberto qualificam o marco terminal funcional M1 da linha809. Os tempos remotos Server-created→SUCCEEDED são87,318s para o útil e2,11221s para a continuação; incluem admissão, espera humana, execução e transporte, não latência pura do modelo. A medição local anterior permanece com seus próprios relógios e contexto.
+
+A comparação DX43 mantém esforço efetivo UNKNOWN, referências de instruções sem ler conteúdo pessoal, catálogo de ferramentas distinto de exercício universal e um MCP configurado conectado compatível com herança global desabilitada. A decisão canônica CONFIRMED não é renomeada como estágio nativo final: o estágio observado SUBMITTED e o resultado efetivo posterior são evidências distintas. A proveniência correta é revisão do comando17bc20, aprovação manuald190f1 e validação Decimal do relatório15b025; o assessment original fica intacto com esta correção aditiva.
+
+**129 VERIFIED / 1 IN_PROGRESS / 2 NOT_RUN**. Restam apenas os cenários **SVC-T18, SVC-T21 e SVC-T29**. AC-01/13/14, PR-02 e o plano global não foram promovidos. Os dois subescopos correntes de BASE-06 para medição de primeiro uso e ciclo remoto passam a VERIFIED pelas mesmas provas; os demais estados e todos os marcos anteriores permanecem preservados. Nenhuma autorização para novo pedido decorre do saldo de tokens: Native5/Server6 estão esgotados.

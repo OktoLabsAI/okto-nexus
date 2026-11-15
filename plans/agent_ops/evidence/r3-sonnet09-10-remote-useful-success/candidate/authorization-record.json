@@ -1,0 +1,19 @@
+{
+  "explicit_user_approval": true,
+  "user_response": "siga com o que voce consegue fazer sem encerrar a sessao do windows",
+  "response_reference": "Latest user message, direct reply to Root explanation of linked Sonnet proposal: two remaining calls, 500000 ceiling and adjusted continuation reservation.",
+  "policy": {
+    "limit": 500000,
+    "preventive": 480000,
+    "max_requests": 5,
+    "server_max": 6,
+    "new_requests_max": 2,
+    "continuation_input_multiplier": 1
+  },
+  "carry_tokens": 180426,
+  "native_charges": 3,
+  "server_admissions": 4,
+  "proposal_sha256": "c0849f44185291ad6fde737dfaf506d5afbd887a2c23a5bbe47ed1bcaa0d9485",
+  "windows_session_end_authorized": false,
+  "os_events_selected": false
+}

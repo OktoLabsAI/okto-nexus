@@ -2,8 +2,8 @@
 
 ## Estado corrente — 2026-11-15, relatório intermediário
 
-A entrega integral ainda não está concluída. A matriz corrente contém **127
-cenários VERIFIED, 3 IN_PROGRESS e 2 NOT_RUN**. Os cortes datados abaixo são
+A entrega integral ainda não está concluída. A matriz corrente contém **129
+cenários VERIFIED, 1 IN_PROGRESS e 2 NOT_RUN**. Os cortes datados abaixo são
 históricos; suas negativas de execução e autorizações antigas não substituem o
 estado corrente nem ampliam permissões. O plano permanece byte a byte com SHA-256
 `20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996`.
@@ -11,8 +11,11 @@ estado corrente nem ampliam permissões. O plano permanece byte a byte com SHA-2
 O ciclo útil local com Codex, decisão pelo terminal e continuação na mesma sessão
 foi comprovado em [W17](evidence/r3-m1-revision17-recovery-execution/criterion-review.json).
 A [medição BASE-06](evidence/r3-base06-stage-measurement-consolidation/review.json)
-já consolida as etapas locais. Ainda falta o ciclo remoto útil pelo Connector;
-readiness, sessão aberta ou uma operação interrompida não encerram M1/AC-11.
+já consolida as etapas locais. O [ciclo remoto09/10](evidence/r3-sonnet09-10-remote-useful-success/review.json)
+completa a rota pelo Connector: permissão nativa decidida pelo operador,
+relatório útil correto, continuação na mesma sessão e reencontro por um novo
+processo CLI. **AC-11 está verificado** e a rota completa pelo terminal prevista
+em M1 foi demonstrada. Login real e a entrega integral continuam pendentes.
 
 Os incrementos recentes mantêm as versões e branches solicitadas:
 
@@ -31,22 +34,47 @@ boot sem login nem outra plataforma qualificada. Pacotes não foram publicados
 e as branches não foram mescladas na main.
 
 A [campanha Sonnet05/07](evidence/r3-sonnet-denial05-native07-svc09/review.json)
-preserva a recusa05 antes de Core, a falha real07 e os contadores distintos:
-**180.426 tokens, 3 admissões Native e 4 Server**, com teto vigente500.000,
-prevenção480.000 e máximos Native4/Server5. O pedido07 terminou CANCELLED, sem
-relatório útil e sem decisão canônica aceita; a pergunta expirou após120s.
-A reconciliação RO110 não altera o checkpoint original com falha/cursor104.
-As seis saídas físicas normais de cada coorte L1/L2 estão retidas. A continuação08
-não é elegível. A proposta posterior de uma alocação Native adicional e reserva
-menor apenas para continuação textual permanece pendente de resposta explícita.
+preserva a recusa05 antes de Core e a falha real07. O pedido07 terminou CANCELLED,
+sem relatório útil e sem decisão aceita após expirar a pergunta de120s. A
+reconciliação RO110 não altera o checkpoint original com falha/cursor104; a
+continuação08 permanece inelegível e os seus registros não foram reutilizados.
+
+O usuário autorizou prosseguir com a proposta09/10 mantendo a sessão Windows.
+O pedido útil09 consumiu73.180tokens e a continuação10 consumiu36.766; o acumulado
+passou de180.426 para **290.372tokens, Native5/Server6**, sob teto500.000 e
+prevenção480.000. As duas alocações novas foram consumidas: margem de tokens
+não autoriza outra chamada. O plano consumido preserva uma frase antiga200k;
+o recibo explícito atual, a semente e a política executada registram500k/480k.
+Os limites de admissão e a reserva menor apenas da continuação textual foram
+selecionados antes de compor e executar esse plano; não houve refund ou reset.
+
+A decisão PowerShell pelo CLI autenticado ficou CONFIRMED antes da expiração.
+O relatório tem4linhas, soma10 e hash do CSV correto, conferidos separadamente
+com Decimal. A continuação respondeu “The reported sum is **10**.” na mesma
+sessão canônica e nativa. Uma nova chamada `work status --session-id` reencontrou
+ambos os resultados e a decisão, sem nova inferência. Nenhuma visita ao dashboard
+foi necessária. A configuração observada reportou Claude2.1.323,
+`claude-sonnet-5-5`, permissionMode default e cwd revisado. Esforço efetivo
+continua UNKNOWN; referência de memória não revela conteúdo, e catálogo de
+ferramentas não significa que todas foram exercidas. **DX-T40/DX-T43 VERIFIED**
+nesses escopos, sem alegar enforcement universal.
+
+BASE-06 agrega as medições históricas já retidas às etapas remotas observadas:
+87,318s para o pedido útil e2,11221s para a continuação, de criação no Server ao
+recibo SUCCEEDED. Esses intervalos incluem admissão, espera do operador e
+transporte; não são latência pura do modelo nem um benchmark homogêneo entre
+pacotes. O relatório mantém as tentativas anteriores e seus custos.
+
+O start Nexus inicialmente retornou3/UNREACHABLE; a observação posterior provou
+READY do mesmo PID/geração, preservando o timeout e sem repetir start. Ambos os
+serviços temporários terminaram com drain normal, seis saídas físicas0 e tarefas
+inativas. Não foi usada força e nenhuma sessão do Windows foi encerrada.
 
 SVC-T09 foi verificado por fechamento real de terminal e dashboard durante a
 mesma operação admitida, com os seis handles das coortes ainda vivos. Esse
 recorte comprova ownership; não transforma o resultado cancelado em sucesso.
 
-O fechamento ainda exige exatamente as campanhas já nomeadas: **DX-T40 e
-DX-T43**, para resultado remoto, decisão válida, continuação e configuração
-efetiva; **SVC-T18, SVC-T21 e SVC-T29**, para login e eventos distintos de
+O fechamento ainda exige **SVC-T18, SVC-T21 e SVC-T29**, para login e eventos distintos de
 suspensão/retorno, logout e reboot com história conhecida. A preparação da
 automação não comprova esses eventos. Após logout/reboot, o login será manual;
 nenhum desses eventos foi executado neste corte. Não há nova campanha de crash,
@@ -63,7 +91,7 @@ do Windows (logout e reinício) foram postergados. Suas evidências continuam
 pendentes; a preparação fica preservada para uma janela futura indicada pelo
 usuário. A campanha remota permanece sujeita às suas próprias autorizações.
 
-AC-01/11/13/14 continuam não verificados. Ao obter as provas restantes, será
+AC-01/13/14 continuam não verificados. Ao obter as provas restantes, será
 necessário reconciliar a matriz e este relatório requisito por requisito,
 incluindo contexto, decisões, tempos, compatibilidade e riscos observados. Este
 texto é atualização intermediária, não o relatório final de uma entrega aceita.

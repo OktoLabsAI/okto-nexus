@@ -1,0 +1,16 @@
+{
+  "format": "typed-zero-effect-denial-v1",
+  "root_selection_sha256": "ae785a7b114b8b01418ef1e654a0e09505ff19b6f50847ab5b6664ebc4d4c95d",
+  "facts": {
+    "kind": "ZERO_EFFECT_DISPATCH_DENIAL",
+    "request_id": "m1-sonnet-remote-useful-05",
+    "server_admission_consumed": true,
+    "native_forwarded_or_uncertain": false,
+    "new_tokens_observed": 0,
+    "synthetic_stream_or_ledger_created": false,
+    "operation_id": "op_1792f89b9a964b184c4a408712467bb9",
+    "follow_up_operation_id": "op_fac0defdf8f8b4c1b95bd8c9f73a6076",
+    "session_id": "ses_421253fe45b0d98592fede20d45c12b6"
+  },
+  "scope": "ONLY exact useful05 never-dispatched refusal; no automatic exception for07/08 or any uncertain outcome."
+}

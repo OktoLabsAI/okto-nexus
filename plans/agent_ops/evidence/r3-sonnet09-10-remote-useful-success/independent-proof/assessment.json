@@ -1,0 +1,110 @@
+{
+  "status": "READ_ONLY_ACCEPTANCE_RECOMMENDATION_FOR_ROOT_REVIEW",
+  "fixed_plan": {
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+  },
+  "projection": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet09-10-real-proof-umjb814v\\projection.json",
+    "sha256": "c423cf0aa3f21601eab0520d0fc26385708bfde246c9b7af2fe0059811beb424"
+  },
+  "preparatory_map": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-remote09-config-timing-map-lx_mqciv\\map.json",
+    "sha256": "1c1b8b2a89fc23c144d4a0e3f4c4486f0690735054f479abf56b02e6873a644a"
+  },
+  "expected_actual_limits": [
+    {
+      "item": "Harness/model",
+      "reviewed": "claude_stream / alias sonnet",
+      "actual": "Both system:init report claude-sonnet-5-5, Claude2.1.323; adapter catalog claude_stream and candidate/schema refs retained.",
+      "limit": "Alias selection and concrete runtime report are separately recorded; no universal model guarantee."
+    },
+    {
+      "item": "Effort",
+      "reviewed": "Harness default; no effort override",
+      "actual": "per_turn_effort_active=1; effective effort level UNKNOWN.",
+      "limit": "Default is intentional, not a silent shell substitution. Do not label medium/high or derive level from thinking tokens."
+    },
+    {
+      "item": "Permission/tools",
+      "reviewed": "Native default / Nexus ask",
+      "actual": "Both init permissionMode=default, PowerShell/Bash advertised. Exact PowerShell native request DECIDED; one operator accept CONFIRMED revision1; approval approved51s afterrequest and before120s TTL. Useful report independently matches.",
+      "limit": "A real scoped tool decision/result is proved; advertising89tools is not proof every tool was exercised."
+    },
+    {
+      "item": "Global MCP/preset",
+      "reviewed": "inherit_global_mcps=disabled; canonical own configuration",
+      "actual": "Both init report one connected MCP. Installed pinned contract emits --strict-mcp-config when inheritance disabled.",
+      "limit": "Disabled GLOBAL inheritance does not mean zero configured MCP. No MCP URLs/headers/names exported; no universal MCP enforcement claim."
+    },
+    {
+      "item": "Workspace/dependencies",
+      "reviewed": "Remote connector-project plus explicit approved absolute RTK/Python; synthetic CSV/report",
+      "actual": "Both init cwd exactly matches approved workspace. Report row_count4/sum10/inputSHA876c1313... independently recomputed using Decimal. Root actual command review15b025/d190f1 supplies reviewed path content; current proof does not export commands.",
+      "limit": "No shell PATH inheritance presumed; CLI project root is distinct from remote cwd."
+    },
+    {
+      "item": "Instructions",
+      "reviewed": "Own exact task-prompts pin; canonical preset/config references; no personal-content edit",
+      "actual": "Native reports one memory reference; only count/scopemetadata retained, contents never read. Own prompt/result correlation and exact continuation observed.",
+      "limit": "Reference classification OTHER_REFERENCE/outsideapprovedproject is not evidence of contents, priority, or universal compliance. No fabricated Claude instructionSources field."
+    },
+    {
+      "item": "Continuity/authority",
+      "reviewed": "per_sender; human operator separate from agent-only Connector credentials",
+      "actual": "09/10 distinctoperations, identical canonical session/stream and native session21c2bb69-7eb0-44c3-96be-f45992b8cf01. Operator CONFIRMEDdecision, correlated canonical/native output exact. Root authenticated CLI reopen9a2cf5 and existing protected transfer/participant-refusal fixture complement proof.",
+      "limit": "No new credential-extraction or participant liveapproval test required; prior agent-only handoff and installed refusal fixture remain distinctly labeled."
+    },
+    {
+      "item": "Limits/output",
+      "reviewed": "500000 total /480000preventive, explicit allocation Native5/Server6",
+      "actual": "180426+73180+36766=290372; native5/server6 charged. Both operations terminalSUCCEEDED; continuation says The reported sum is **10**.",
+      "limit": "Selected admission counts exhausted. Token headroom or collector can_admit is not authority for another request; no atomic cap or billing-final guarantee."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "DX-T40",
+      "literal_line": 901,
+      "recommendation": "Evidence supports VERIFIED in this installed Windows remote topology, with existing protected agent-only transfer and participant-authority refusal evidence; exact native decision by authenticated operator, useful09, same-session10 and CLIreopen are real.",
+      "not_claimed": "No new scenario/platform or personal-account authority."
+    },
+    {
+      "id": "DX-T43",
+      "literal_line": 904,
+      "recommendation": "Evidence supports the reviewed service-context criterion when combined with already-curated local DX43 scope: explicit model/tool/policy/workspace/prompt/limits selection, actual init and demonstrated scoped work. Retain each unknown and limit above.",
+      "not_claimed": "No personal instruction contents, universal adherence/enforcement, known effort level, or zero-MCP assertion."
+    },
+    {
+      "id": "AC-11",
+      "literal_line": 1075,
+      "recommendation": "Local W17 DX39 evidence plus this remote installed daemon/preset/decision/useful/continuation/reopen completes the named local+Connector terminal cycle. Root cleanup independently supplies all six physical exits.",
+      "not_claimed": "Does not close global plan, AC13 or AC14, or deferred Windows events."
+    },
+    {
+      "id": "BASE-06",
+      "literal_lines": [
+        245,
+        247,
+        313
+      ],
+      "recommendation": "Existing platform/lifecycle/local stage measurements plus real09/10/reopen close the previously missing remote useful terminal cycle. Canonical Server creation-to-SUCCEEDEDreceipt intervals are87.318s useful and2.11221s continuation. Preserve prior installation/setup measurements and labels.",
+      "not_claimed": "No new uniform-package or clean-stopwatch requirement; no numerical SLA; native duration_api_ms has different apparent accumulation scope and is not added to wall measurements."
+    }
+  ],
+  "review_boundaries": {
+    "repository_or_ledger_edits": 0,
+    "provider_service_or_os_calls": 0,
+    "current_services": "Parent independently reports both stopped and six normal physical exits; this SQL proof does not itself observe handles.",
+    "final_report": "Implementation report and deferred Windows/remaining criteria remain separate work, not silently completed."
+  },
+  "timing_detail": {
+    "native_useful_duration_ms": 68428,
+    "native_continuation_duration_ms": 1168,
+    "server_wall_useful_seconds": 87.318,
+    "server_wall_continuation_seconds": 2.11221,
+    "approval_received": "2026-11-15T18:40:29.889Z",
+    "approval_decided": "2026-11-15T18:41:20.360077Z",
+    "approval_expires": "2026-11-15T18:42:29.889000+00:00"
+  }
+}
