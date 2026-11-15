@@ -1,0 +1,689 @@
+{
+  "method": "query_only/mode=ro exactsession; metadata and agentMessage text only",
+  "rows": [
+    {
+      "sequence": 1,
+      "operation_id": null,
+      "native_type": "core/codex_thread_configuration",
+      "category": "lifecycle",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 2,
+      "operation_id": null,
+      "native_type": "core/harness_configuration",
+      "category": "lifecycle",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 3,
+      "operation_id": null,
+      "native_type": "thread/started",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 4,
+      "operation_id": null,
+      "native_type": "mcpServer/startupStatus/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 5,
+      "operation_id": null,
+      "native_type": "mcpServer/startupStatus/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 6,
+      "operation_id": null,
+      "native_type": "mcpServer/startupStatus/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 7,
+      "operation_id": null,
+      "native_type": "mcpServer/startupStatus/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 8,
+      "operation_id": null,
+      "native_type": "mcpServer/startupStatus/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 9,
+      "operation_id": null,
+      "native_type": "thread/status/changed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 10,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "turn/started",
+      "category": "turn_state",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 11,
+      "operation_id": null,
+      "native_type": "mcpServer/startupStatus/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 12,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "userMessage",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 13,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "userMessage",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 14,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 15,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 16,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "agentMessage",
+      "phase": "commentary",
+      "agent_text": ""
+    },
+    {
+      "sequence": 17,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 18,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 19,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 20,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 21,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 22,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "agentMessage",
+      "phase": "commentary",
+      "agent_text": "I\u2019ll use the specified RTK-proxied Python command to compute the CSV statistics and write the single JSON report."
+    },
+    {
+      "sequence": 23,
+      "operation_id": null,
+      "native_type": "hook/started",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 24,
+      "operation_id": null,
+      "native_type": "hook/completed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 25,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "commandExecution",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 26,
+      "operation_id": null,
+      "native_type": "item/commandExecution/outputDelta",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 27,
+      "operation_id": null,
+      "native_type": "item/commandExecution/outputDelta",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 28,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "commandExecution",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 29,
+      "operation_id": null,
+      "native_type": "thread/tokenUsage/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 30,
+      "operation_id": null,
+      "native_type": "account/rateLimits/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 31,
+      "operation_id": null,
+      "native_type": "core.lease_renewed",
+      "category": "lifecycle",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 32,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 33,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 34,
+      "operation_id": null,
+      "native_type": "hook/started",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 35,
+      "operation_id": null,
+      "native_type": "hook/completed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 36,
+      "operation_id": null,
+      "native_type": "thread/status/changed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 37,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "commandExecution",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 38,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/commandExecution/requestApproval",
+      "category": "approval_request",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 39,
+      "operation_id": null,
+      "native_type": "core.lease_renewed",
+      "category": "lifecycle",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 40,
+      "operation_id": null,
+      "native_type": "serverRequest/resolved",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 41,
+      "operation_id": null,
+      "native_type": "thread/status/changed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 42,
+      "operation_id": null,
+      "native_type": "thread/tokenUsage/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 43,
+      "operation_id": null,
+      "native_type": "account/rateLimits/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 44,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 45,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 46,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "commandExecution",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 47,
+      "operation_id": null,
+      "native_type": "thread/tokenUsage/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 48,
+      "operation_id": null,
+      "native_type": "account/rateLimits/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 49,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "agentMessage",
+      "phase": "final_answer",
+      "agent_text": ""
+    },
+    {
+      "sequence": 50,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 51,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 52,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 53,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 54,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 55,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 56,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 57,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "agentMessage",
+      "phase": "final_answer",
+      "agent_text": "Completed. The report was written to `campaign\\deliverables\\local\\report.json`."
+    },
+    {
+      "sequence": 58,
+      "operation_id": null,
+      "native_type": "thread/tokenUsage/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 59,
+      "operation_id": null,
+      "native_type": "account/rateLimits/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 60,
+      "operation_id": null,
+      "native_type": "thread/status/changed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 61,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "native_type": "turn/completed",
+      "category": "turn_state",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 62,
+      "operation_id": null,
+      "native_type": "core.lease_renewed",
+      "category": "lifecycle",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 63,
+      "operation_id": null,
+      "native_type": "thread/status/changed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 64,
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "native_type": "turn/started",
+      "category": "turn_state",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 65,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "userMessage",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 66,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "userMessage",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 67,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 68,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "reasoning",
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 69,
+      "operation_id": null,
+      "native_type": "item/started",
+      "category": "tool_activity",
+      "item_type": "agentMessage",
+      "phase": "final_answer",
+      "agent_text": ""
+    },
+    {
+      "sequence": 70,
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "native_type": "item/agentMessage/delta",
+      "category": "text_delta",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 71,
+      "operation_id": null,
+      "native_type": "item/completed",
+      "category": "tool_activity",
+      "item_type": "agentMessage",
+      "phase": "final_answer",
+      "agent_text": "I don\u2019t have the reported sum available in the command output."
+    },
+    {
+      "sequence": 72,
+      "operation_id": null,
+      "native_type": "thread/tokenUsage/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 73,
+      "operation_id": null,
+      "native_type": "account/rateLimits/updated",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 74,
+      "operation_id": null,
+      "native_type": "thread/status/changed",
+      "category": "tool_activity",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 75,
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "native_type": "turn/completed",
+      "category": "turn_state",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    },
+    {
+      "sequence": 76,
+      "operation_id": null,
+      "native_type": "core.lease_renewed",
+      "category": "lifecycle",
+      "item_type": null,
+      "phase": null,
+      "agent_text": null
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+  "operations": {
+    "useful": "op_c95872f5eee66108a4aa925f224fc0d5",
+    "continuation": "op_31d6b7d97bbbf722ddaedf4eda54a2da"
+  },
+  "sources": {
+    "useful": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\m1v17-local-useful-15-result.json",
+      "sha256": "5ff53a1ded00a783b1a2eaa5ac8f4f12dfce3e08446fca3fa273356f3d92b234"
+    },
+    "continuation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\m1v17-local-continuation-16-result.json",
+      "sha256": "c67aebef09bcaebc227ab6af0391177b6677b315909985994877ee13f0a12302"
+    }
+  },
+  "method": "Exact operation/session mode=ro/query_only; canonical final output and completed native agentMessage text only, bounded8192; no commands/tooloutputs/credentials.",
+  "canonical": [
+    {
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+      "stream_epoch": "stream_2ac178bd5f2c0104921ec1f54584cb63",
+      "terminal_sequence": 75,
+      "output_text": "I don’t have the reported sum available in the command output.",
+      "output_characters": 62,
+      "output_truncated": 0,
+      "output_event_count": 2,
+      "delivery_outcome": "success"
+    },
+    {
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+      "stream_epoch": "stream_2ac178bd5f2c0104921ec1f54584cb63",
+      "terminal_sequence": 61,
+      "output_text": "I’ll use the specified RTK-proxied Python command to compute the CSV statistics and write the single JSON report.Completed. The report was written to `campaign\\deliverables\\local\\report.json`.",
+      "output_characters": 192,
+      "output_truncated": 0,
+      "output_event_count": 13,
+      "delivery_outcome": "success"
+    }
+  ],
+  "native_completed_agent_messages": [],
+  "output_projections": [
+    {
+      "sequence": 17,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "",
+      "output_characters": 0
+    },
+    {
+      "sequence": 18,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "",
+      "output_characters": 0
+    },
+    {
+      "sequence": 19,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "I’ll use the specifie",
+      "output_characters": 21
+    },
+    {
+      "sequence": 20,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "d RTK-proxied Python command to compu",
+      "output_characters": 37
+    },
+    {
+      "sequence": 21,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "te the C",
+      "output_characters": 8
+    },
+    {
+      "sequence": 50,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "SV statis",
+      "output_characters": 9
+    },
+    {
+      "sequence": 51,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "tics ",
+      "output_characters": 5
+    },
+    {
+      "sequence": 52,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "and wri",
+      "output_characters": 7
+    },
+    {
+      "sequence": 53,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "te the single JSO",
+      "output_characters": 17
+    },
+    {
+      "sequence": 54,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "N report",
+      "output_characters": 8
+    },
+    {
+      "sequence": 55,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": ".Completed. The report was writ",
+      "output_characters": 31
+    },
+    {
+      "sequence": 56,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "te",
+      "output_characters": 2
+    },
+    {
+      "sequence": 61,
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "category": "turn_state",
+      "native_type": "turn/completed",
+      "output_text": "n to `campaign\\deliverables\\local\\report.json`.",
+      "output_characters": 47
+    },
+    {
+      "sequence": 70,
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "category": "text_delta",
+      "native_type": "item/agentMessage/delta",
+      "output_text": "I don’t have th",
+      "output_characters": 15
+    },
+    {
+      "sequence": 75,
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "category": "turn_state",
+      "native_type": "turn/completed",
+      "output_text": "e reported sum available in the command output.",
+      "output_characters": 47
+    }
+  ]
+}

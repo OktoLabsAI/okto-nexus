@@ -1,0 +1,63 @@
+{
+  "status": "CLOSED_USEFUL_SUCCESS_CONTINUATION_SEMANTIC_FAILURE",
+  "all_copy_hashes_verified": true,
+  "high_specificity_secret_scan_matches": [],
+  "useful_report_confirmed": true,
+  "continuation_technical_success": true,
+  "continuation_semantic_success": false,
+  "same_session": true,
+  "canonical_native_final_equal": true,
+  "transport_loss_not_inferred": true,
+  "observed_tokens": 579154,
+  "charged_reservations": 16,
+  "shared_stream_count": 1,
+  "new_shared_stream_tokens_once": 118361,
+  "usage_components": {
+    "cacheWriteInputTokens": 0,
+    "cachedInputTokens": 98048,
+    "inputTokens": 117167,
+    "outputTokens": 1194,
+    "reasoningOutputTokens": 575,
+    "totalTokens": 118361
+  },
+  "billing_final": false,
+  "refunds": 0,
+  "reconciliation": {
+    "tool": "722467",
+    "exit_code": 0,
+    "elapsed_seconds": 0.13348130002850667,
+    "method": "mode=ro/query_only; exact two operations/single session and projected token counters; no bodies/transcripts/auth"
+  },
+  "root_execution_refs": {
+    "useful": "22e350 result;14509 ->1b3902exit0",
+    "approval": "4b47b3 ->8252a8 exact24750c request",
+    "continuation": "ec6408/session79516 ->158a45exit0;result9be651",
+    "stop": "7b2e0d/session49239 ->8b17280",
+    "watch": "54195 ->0b8598 threephysicalexit0",
+    "cleanup": "b97d12/session25257 ->145a390",
+    "uninstall": "bdbd56/session21265 ->f990af0",
+    "final_presence": "e71707/session56719 ->1f39b00",
+    "closure": "c548d5"
+  },
+  "root_refs_are_reported_not_synthetic_receipts": true,
+  "originals_untouched": true,
+  "no_live_effects_by_curator": true,
+  "native_decision_receipt_completion_asserted": false,
+  "remote_unlocked": false,
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "status_changes": [
+    {
+      "id": "DX-T39",
+      "from": "IN_PROGRESS",
+      "to": "VERIFIED"
+    }
+  ],
+  "acceptance_promoted": true,
+  "scope": "Root/peer fixed-plan audit verifies only literal DX-T39: installed real authorized work, observation/permission response, correlated useful result and actual same-session terminal continuation. Extra sum-once check remains FAIL; no full local/global M1 PASS, remote unlock, console-close proof or other promotion.",
+  "global_M1_acceptance_promoted": false,
+  "criterion_review": "criterion-review.json"
+}

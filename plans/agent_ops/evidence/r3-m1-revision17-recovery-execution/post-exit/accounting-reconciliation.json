@@ -1,0 +1,227 @@
+{
+  "kind": "POST_EXIT_READONLY_ACCOUNTING_COMPANION_NOT_CONTROLLER",
+  "request_ids": [
+    "m1v17-local-useful-15",
+    "m1v17-local-continuation-16"
+  ],
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\private\\controller.json",
+    "sha256": "9e8f1ff7c8a4dbf10d428af608611ae25093898ca6562815be53a82a89c05749"
+  },
+  "original_closure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\closure.json",
+    "sha256": "0c4d8032ee6fdc262f1be37971ca992466cce4f94a4c00d33b5736ae1fc30fbf"
+  },
+  "originals_untouched": true,
+  "original_faults": [],
+  "original_requests_settled": {
+    "m1v17-local-useful-15": true,
+    "m1v17-local-continuation-16": true
+  },
+  "canonical": {
+    "m1v17-local-useful-15": {
+      "scope": {
+        "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+        "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+        "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+        "agent_id": "m1v12-local",
+        "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+        "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+        "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      },
+      "opening_operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "session_state": {
+        "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+        "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+        "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+        "owner_generation": 1,
+        "open_operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+        "lifecycle_state": "CLOSED",
+        "lease_state": "CLOSED",
+        "stream_epoch": "stream_2ac178bd5f2c0104921ec1f54584cb63"
+      },
+      "operation_receipt": {
+        "stage": "SUCCEEDED",
+        "error_code": null,
+        "possible_effect": 1,
+        "retry_safe": 0,
+        "receipt_revision": 2
+      },
+      "opening_receipt": {
+        "stage": "SUBMITTED",
+        "error_code": null,
+        "possible_effect": 1,
+        "retry_safe": 0,
+        "receipt_revision": 1
+      },
+      "preopen_failed": false,
+      "initial_admission_state": "RESOLVED_TERMINAL",
+      "operation_admitted": true,
+      "source": "OWN_CANONICAL_DB_READ_ONLY",
+      "billed_tokens": null
+    },
+    "m1v17-local-continuation-16": {
+      "scope": {
+        "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+        "executor_id": "exe_429348b4147e50ab63d19caa4cd2255c",
+        "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+        "agent_id": "m1v12-local",
+        "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+        "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+        "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+        "session_owner_generation": 1,
+        "authorization_revision": 2,
+        "configuration_revision": 2,
+        "binding_revision": 1,
+        "credential_epoch": 1
+      },
+      "opening_operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "session_state": {
+        "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+        "workspace_id": "wsr_8c2e749623fa4c330976cc3be7d9d314",
+        "workspace_binding_id": "wxb_00e22d62fe976f7c3814b0da6ca6746c",
+        "owner_generation": 1,
+        "open_operation_id": "op_f2913d83a8a515bf75d23f589f3aa2b2",
+        "lifecycle_state": "CLOSED",
+        "lease_state": "CLOSED",
+        "stream_epoch": "stream_2ac178bd5f2c0104921ec1f54584cb63"
+      },
+      "operation_receipt": {
+        "stage": "SUCCEEDED",
+        "error_code": null,
+        "possible_effect": 1,
+        "retry_safe": 0,
+        "receipt_revision": 2
+      },
+      "opening_receipt": {
+        "stage": "SUCCEEDED",
+        "error_code": null,
+        "possible_effect": 1,
+        "retry_safe": 0,
+        "receipt_revision": 2
+      },
+      "preopen_failed": false,
+      "initial_admission_state": "RESOLVED_TERMINAL",
+      "operation_admitted": true,
+      "source": "OWN_CANONICAL_DB_READ_ONLY",
+      "billed_tokens": null
+    }
+  },
+  "core_operations": [
+    {
+      "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "stage": "SUCCEEDED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    },
+    {
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "stage": "SUCCEEDED",
+      "possible_effect": 1,
+      "retry_safe": 0,
+      "error_code": null
+    }
+  ],
+  "native_requests": [
+    {
+      "canonical_request_id": "r4request_24750c118290ba9d6d76dc0c15aec69536f4565c808fd61d3c8811b235c626d5",
+      "source_operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "source_sequence": 38,
+      "kind": "native_approval",
+      "request_revision": 1,
+      "state": "DECIDED"
+    }
+  ],
+  "native_pending_count": 0,
+  "active_owned_slots": 0,
+  "native_decision_receipt_completion_asserted": false,
+  "native_decision_receipt_scope": "Original recovered GET snapshot retained separately; no final delivery receipt queried or inferred.",
+  "shared_stream_count": 1,
+  "same_canonical_session": true,
+  "stream_observed_once_not_per_request": true,
+  "collector_request_states": {
+    "m1v17-local-useful-15": "settled_observed",
+    "m1v17-local-continuation-16": "settled_observed"
+  },
+  "cursor": 76,
+  "watermark": 76,
+  "pages": [
+    {
+      "after_sequence": 75,
+      "event_count": 1,
+      "next_after_sequence": 76,
+      "committed_contiguous": 76,
+      "has_more": false,
+      "projection_sha256": "05010867f1145038b9a846d90b678641523532314ea65418a6dbd4160735ba23"
+    }
+  ],
+  "collector_summary": {
+    "known_observed_tokens": 118361,
+    "observed_prefix_covered": true,
+    "can_reserve_new_request": true,
+    "reasons": [],
+    "request_preventive_interrupt": false,
+    "at_or_above_operational_tolerance": false,
+    "stop_at": 600000,
+    "operational_tolerance": 700000,
+    "reserved_requests": 2,
+    "max_productive_admissions": 4,
+    "current_request": null,
+    "revision": 35,
+    "final_usage_authoritative": false,
+    "limitation": "usage_seen means any usage observation for a turn, not a guaranteed final update. Observed totals and interrupts are asynchronous, not an atomic hard cap."
+  },
+  "collector_post_exit_sha256": "6257059fdc88d0e380dff7d45b31dfc1cec6486c4c23b445d815f7995fa8dc95",
+  "original_observed_increment": 118361,
+  "carry_in_tokens": 460793,
+  "new_observed_tokens_once": 118361,
+  "cumulative_observed_tokens": 579154,
+  "charged_reservations": 16,
+  "usage_components": {
+    "cacheWriteInputTokens": 0,
+    "cachedInputTokens": 98048,
+    "inputTokens": 117167,
+    "outputTokens": 1194,
+    "reasoningOutputTokens": 575,
+    "totalTokens": 118361
+  },
+  "cached_input_is_subset_of_input": true,
+  "reasoning_output_is_subset_of_output": true,
+  "refunds": 0,
+  "billing_final": false,
+  "new_admissions_during_reconciliation": 0,
+  "remote_selected": false,
+  "acceptance_promoted": false,
+  "physical_exit": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\nexus-exit-proof.json",
+    "sha256": "4ebd0bd5dc029eb80f03c5f1049ce74c59467db7689d0d988da5e0f938f9466f"
+  },
+  "final_presence": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\final-presence.json",
+    "sha256": "cce56a20a6c330bd3c290e465fec20390e86058fce5b57e4401f0108c1f1622e"
+  },
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-recovery-postexit-nocjsu0c\\reconcile.py",
+    "sha256": "f349b5de47f716a5d8fc1ec1ff94109995779b1b0ef2d5d33c4d316ee589e3f4"
+  },
+  "runtime_freeze": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\runtime-freeze.json",
+    "sha256": "138bbab052dae46310b53204a15e1ccc66260b9513587ce14951273198320dce"
+  },
+  "elapsed_seconds": 0.13348130002850667,
+  "method": "mode=ro/query_only; exact two operations/single session and projected token counters; no bodies/transcripts/auth",
+  "bounds_seconds": {
+    "snapshot": 1,
+    "schema_initialization": 2,
+    "post_exit_total": 30
+  },
+  "observed_at": 1794701178.3386655
+}

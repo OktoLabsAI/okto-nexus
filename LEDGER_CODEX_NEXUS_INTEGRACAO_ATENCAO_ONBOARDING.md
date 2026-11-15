@@ -2173,3 +2173,29 @@ foi consultado nem livecontroller lido/alterado. Não se infere resultado, saldo
 estado atual do serviço ou cleanup. **124/132 VERIFIED**,6 IN_PROGRESS e2 NOT_RUN,
 sem promoção de aceite. Falha W17 anterior permanece preservada.
 Evidência: [revisão](plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/review.json).
+
+## 2026-11-15 — Recuperação17: relatório útil correto, continuação sem resposta pedida
+
+Útil15 canônico SUCCEEDED/settled produziu report3b1c3546… correto/correlacionado.
+Continuação16 na mesma sessão e stream terminou SUCCEEDED/settled, porém informou
+não dispor da soma no command output. Texto nativo e canônico idênticos, nenhuma
+menção à soma10. O check operacional extra da soma permanece FAIL. Root/peer
+auditaram o plano fixo: **somente DX-T39 VERIFIED**, pois exige trabalho útil real,
+permissão respondida, resultado correlacionado e continuação pelo terminal —
+todos observados — sem exigir a soma10 nessa continuação. Não há PASS da campanha
+local completa/M1 global, prova de console fechado/reaberto ou desbloqueio remoto.
+
+Stop normal e três handles com saída física0 sem force; tarefas ausentes, porta
+livre e dados mantidos. Sessão/lease CLOSED,slots0/nativepending0,cursor76/76.
+Primeiro recibo da decisão CONFIRMED/SUBMITTED não foi convertido em final por
+inferência. Checkpoint9e8f… e closure0c4d… originais permanecem intactos.
+
+**579.154 tokens/16 reservas**: carry460793 +118361 do stream compartilhado contado
+uma vez, nunca somado uma vez por operação. Input117167 inclui cached98048;
+output1194 inclui reasoning575. Sem refund/billing final;20846 até preventiva600k
+e120846 até tolerância700k, teto18 intacto. Nenhum novo efeito nesta curadoria.
+**125/132 VERIFIED**,5 IN_PROGRESS e2 NOT_RUN; apenas DX-T39 foi promovido,
+sem concluir tarefas pai com critérios restantes.
+Evidência: [critério literal](plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json)
+e [companion](plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/closure-companion.json)
+e [avaliação semântica](plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/diagnosis/semantic-assessment.json).

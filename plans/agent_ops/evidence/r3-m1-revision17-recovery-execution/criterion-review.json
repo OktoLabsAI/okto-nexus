@@ -1,0 +1,35 @@
+{
+  "status": "DX_T39_LITERAL_VERIFIED_OPERATIONAL_SUM_CHECK_FAILED",
+  "criterion_id": "DX-T39",
+  "fixed_requirement": "Pacote instalado, rota local padrão: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissão, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem edição manual de configuração.",
+  "fixed_plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+  "root_decision": "Parent root fixed-plan decision after finish_reader_cache audit and installed CLI metadata review1080fa. Only DX-T39 promoted; no broader M1 acceptance or remote unlock.",
+  "evidence_mapping": {
+    "installed_local_authorized_work": "Useful15 uses installed run_work parser/handlers, authenticated actual service/provider, canonical op_c95872f5eee66108a4aa925f224fc0d5.",
+    "follow_and_answer_permission": "CLI status/answer/events entered installed handlers; exact native request24750c one-time root selection and recovered CONFIRMED/SUBMITTED receipt retained. Successful command/report observed; final receipt completion not inferred.",
+    "correlated_result": "Correct report3b1c3546 at selected deliverable, matches expected CSV stats and is correlated to useful15 operation/session.",
+    "terminal_continuation": "Continuation16 installed send/status/events in same canonical session/stream/thread; real native and canonical final answers equal. No dashboard/manual config edit."
+  },
+  "additional_operational_check": {
+    "prompt": "Using only the existing canonical result, state the reported sum once. Do not run another command or write another file.",
+    "status": "FAIL",
+    "sum_mentions": 0,
+    "reason": "The real continuation answer said the reported sum was unavailable. Fixed DX-T39 requires terminal continuation, not the extra sum10 assertion."
+  },
+  "boundaries": {
+    "full_local_campaign_pass": false,
+    "global_M1_pass": false,
+    "remote_execution_enabled": false,
+    "console_window_close_or_reopen_proven": false,
+    "console_subprocess_proven": false,
+    "original_result_or_pass_conditions_rewritten": false,
+    "native_decision_terminal_receipt_asserted": false,
+    "parent_tasks_completed": false,
+    "all_other_scenario_statuses_unchanged": true
+  },
+  "scenario_counts_after": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "sources": {
+    "canonical": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-final-output-diagnosis-ir3t3jwu\\projection.json",
+      "sha256": "e09c71a9af1a43e582063c60383dd163a2a8bf4f025174407592025f98e63481"
+    },
+    "native": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-native-final-e1f702sc\\projection.json",
+      "sha256": "98efc5666f8171d5b55834687459f6f65b4cccd6c2ba53ed7eca5e99d3886302"
+    }
+  },
+  "operation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+  "canonical_native_output_equal": true,
+  "canonical_output_truncated": 0,
+  "output_characters_reported": 62,
+  "final_text": "I don’t have the reported sum available in the command output.",
+  "requested_sum_mentions": 0,
+  "continuation_prompt_satisfied": false,
+  "transport_loss_inferred": false,
+  "scope": "Successful technical turn/delivery did not answer the selected semantic continuation request. No new inference or replay to repair the answer."
+}

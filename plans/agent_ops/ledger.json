@@ -8972,21 +8972,28 @@
     },
     "DX-T39": {
       "requirement": "Pacote instalado, rota local padrão: solicitar trabalho real autorizado, acompanhar, responder a pergunta/permissão, obter resultado correlacionado e continuar pelo terminal, sem dashboard nem edição manual de configuração.",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "evidence": [
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
-        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json"
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/execution/m1v17-local-useful-15-result-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/execution/m1v17-local-continuation-16-result-projection.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/result/report.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/diagnosis/semantic-assessment.json"
       ],
-      "result": "Real installed local setup completed, then one useful work was cancelled after diagnostic publication failed. Same IDs recovered by GET; session CLOSED, no report, native decision or continuation. Original fault retained; full local M1 remains unqualified.",
-      "remaining": "Campanha M1 local instalada: trabalho real autorizado, acompanhamento, pergunta/permissão representativa, resposta, resultado correlacionado e continuação terminal; sem dashboard/config manual, com provider explicitamente autorizado.",
-      "remaining_kind": "real_campaign_not_run",
-      "qualification_limit": "Não concatenar initialize, fake native e testes de configuração em uma campanha real.",
-      "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
+      "result": "Literal fixed DX-T39 verified by W17 recovery: installed local parser/handlers performed real authorized useful15 work, followed and answered actual native permission, obtained exact correlated report, and continued16 through installed terminal handlers in the same canonical session/stream/thread with a real response. No dashboard or manual configuration edit. Root/peer audit1080fa distinguishes continuation existence from the extra sum-once check.",
+      "remaining": "",
+      "remaining_kind": "none",
+      "qualification_limit": "The additional operational continuation prompt asking for sum10 failed semantically: canonical/native final text said sum unavailable. This is retained as FAIL and is not a fixed DX-T39 condition. No full local-campaign/global M1 PASS, remote unlock, effective-policy enforcement, console-window-close/reopen proof or final native decision receipt completion inferred.",
+      "common_qualification_limit": "Real installed Windows/local campaign evidence scoped to DX-T39; console subprocess closure is not proven by in-process installed parser/handler execution. Other fixed criteria and scenarios remain separately open.",
       "verified_contract_subscopes": [
-        "canonical_terminal_work_contract_with_synthetic_peer"
+        "canonical_terminal_work_contract_with_synthetic_peer",
+        "real_installed_local_authorized_work_permission_result_and_terminal_continuation"
       ]
     },
     "DX-T40": {
@@ -13814,6 +13821,45 @@
       "model_admissions_by_retained_steps": 0,
       "grant_issuances_by_retained_steps": 1,
       "acceptance_promoted": false
+    },
+    "r3_m1_revision17_recovery_useful_success_continuation_semantic_failure": {
+      "status": "CLOSED_USEFUL_SUCCESS_CONTINUATION_SEMANTIC_FAILURE",
+      "summary": "Recovered W17 useful15 SUCCEEDED/settled produced exact report3b1c3546 matching fixture. Same-session continuation16 SUCCEEDED/settled but output says reported sum unavailable; native and canonical final identical, zero mentions of10. Extra sum-once semantic check remains FAIL; root/peer fixed-plan audit1080fa verifies only literal DX-T39 (actual terminal continuation), not full local/global M1 or remote unlock. Normal stop and three retained exits0, tasks absent/port free/data retained; sessionleaseCLOSED/slots0/nativepending0,cursor76. RO accounting observes shared stream once:460793+118361=579154/16. Original cp9e8f/closure0c4d and historical decisionSUBMITTED uncertainty preserved. No refund/billing finality; only DX-T39 promoted,125/132 verified,5IP2NOT_RUN.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/post-exit/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/result/report.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/diagnosis/semantic-assessment.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json"
+      ],
+      "observed_tokens": 579154,
+      "charged_reservations": 16,
+      "new_shared_stream_tokens_once": 118361,
+      "usage_components": {
+        "cacheWriteInputTokens": 0,
+        "cachedInputTokens": 98048,
+        "inputTokens": 117167,
+        "outputTokens": 1194,
+        "reasoningOutputTokens": 575,
+        "totalTokens": 118361
+      },
+      "useful_result_confirmed": true,
+      "continuation_semantic_success": false,
+      "remote_execution_enabled": false,
+      "billing_final": false,
+      "acceptance_promoted": true,
+      "technical_limits": {
+        "maximum_cumulative_requests": 18,
+        "preventive_tokens": 600000,
+        "tolerance_tokens": 700000
+      },
+      "global_M1_acceptance_promoted": false,
+      "verified_scenarios": [
+        "DX-T39"
+      ],
+      "operational_continuation_sum_check": "FAIL"
     }
   },
   "history": [
@@ -15475,6 +15521,21 @@
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/authorization-review-projection.json",
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/selection/authorize-local-reviewed.json",
         "plans/agent_ops/evidence/r3-m1-revision17-recovery-start-grant/authorization-apply-projection.json"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_m1_revision17_recovery_useful_success_continuation_semantic_failure",
+      "status": "CLOSED_USEFUL_SUCCESS_CONTINUATION_SEMANTIC_FAILURE",
+      "summary": "Recovered W17 useful15 SUCCEEDED/settled produced exact report3b1c3546 matching fixture. Same-session continuation16 SUCCEEDED/settled but output says reported sum unavailable; native and canonical final identical, zero mentions of10. Extra sum-once semantic check remains FAIL; root/peer fixed-plan audit1080fa verifies only literal DX-T39 (actual terminal continuation), not full local/global M1 or remote unlock. Normal stop and three retained exits0, tasks absent/port free/data retained; sessionleaseCLOSED/slots0/nativepending0,cursor76. RO accounting observes shared stream once:460793+118361=579154/16. Original cp9e8f/closure0c4d and historical decisionSUBMITTED uncertainty preserved. No refund/billing finality; only DX-T39 promoted,125/132 verified,5IP2NOT_RUN.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/closure-companion.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/execution/closure.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/post-exit/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/result/report.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/diagnosis/semantic-assessment.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json"
       ]
     }
   ],

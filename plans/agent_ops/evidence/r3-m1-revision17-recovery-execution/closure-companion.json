@@ -1,0 +1,81 @@
+{
+  "status": "CLOSED_USEFUL_SUCCESS_CONTINUATION_SEMANTIC_FAILURE",
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\private\\controller.json",
+    "sha256": "9e8f1ff7c8a4dbf10d428af608611ae25093898ca6562815be53a82a89c05749"
+  },
+  "original_closure": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision17-recovery\\public\\closure.json",
+    "sha256": "0c4d8032ee6fdc262f1be37971ca992466cce4f94a4c00d33b5736ae1fc30fbf"
+  },
+  "original_checkpoint_and_closure_untouched": true,
+  "original_faults": [],
+  "requests": {
+    "useful": {
+      "request_id": "m1v17-local-useful-15",
+      "canonical_stage": "SUCCEEDED",
+      "settled": true,
+      "useful_result_confirmed": true,
+      "report_sha256": "3b1c3546f5f8bad08d49c576f1e620519719db73c71c1628fec19f2a63fa0885",
+      "report_matches_expected": true
+    },
+    "continuation": {
+      "request_id": "m1v17-local-continuation-16",
+      "canonical_stage": "SUCCEEDED",
+      "settled": true,
+      "prompt_satisfied": false,
+      "requested_sum_mentions": 0,
+      "canonical_native_output_equal": true
+    }
+  },
+  "same_canonical_session": true,
+  "shared_stream_count": 1,
+  "session_state": "CLOSED",
+  "lease_state": "CLOSED",
+  "native_pending_count": 0,
+  "active_owned_slots": 0,
+  "cursor": 76,
+  "watermark": 76,
+  "native_decision_receipt": {
+    "canonical_snapshot": "CONFIRMED",
+    "native_snapshot": "SUBMITTED",
+    "final_completion_asserted": false
+  },
+  "accounting": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-w17-recovery-postexit-nocjsu0c\\accounting-reconciliation.json",
+    "sha256": "f371ad3dd4f673aa712056453f4388746183c247d7b18a2198652121163cbd38"
+  },
+  "carry_in_tokens": 460793,
+  "new_shared_stream_tokens_once": 118361,
+  "cumulative_observed_tokens": 579154,
+  "charged_reservations": 16,
+  "refunds": 0,
+  "billing_final": false,
+  "normal_cleanup": {
+    "all_three_retained_handles_exited": true,
+    "exit_codes": [
+      0,
+      0,
+      0
+    ],
+    "force_used": false,
+    "tasks_absent": true,
+    "port_free": true,
+    "data_directories_retained": true
+  },
+  "remote_execution": "HELD",
+  "m1_acceptance": false,
+  "DX39_acceptance_promoted": true,
+  "no_new_admission_authorized_by_companion": true,
+  "configuration_fields": "Reported metadata only, no enforcement proof inferred.",
+  "technical_limits_unchanged": {
+    "maximum_cumulative_requests": 18,
+    "preventive_tokens": 600000,
+    "tolerance_tokens": 700000
+  },
+  "remaining_until_preventive": 20846,
+  "remaining_until_tolerance": 120846,
+  "DX39_literal_verified": true,
+  "additional_continuation_sum_check": "FAIL",
+  "criterion_review": "criterion-review.json"
+}
