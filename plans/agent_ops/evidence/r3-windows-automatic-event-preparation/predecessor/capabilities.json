@@ -1,0 +1,66 @@
+{
+  "ac_line_status": 1,
+  "ac_meaning": {
+    "0": "offline",
+    "1": "online",
+    "255": "unknown"
+  },
+  "automatic_wake_guaranteed": false,
+  "manual_wake_fallback_required": true,
+  "observed_available": [
+    "S0_LOW_POWER_IDLE_NETWORK_CONNECTED",
+    "HIBERNATE",
+    "FAST_STARTUP"
+  ],
+  "observed_unavailable": [
+    "S1",
+    "S2",
+    "S3",
+    "HYBRID_SLEEP"
+  ],
+  "observed_utc": "2026-11-15T14:36:14.155093+00:00",
+  "os_events": 0,
+  "own_logon": {
+    "last_boot_up_time_dmtf": "20261111013134.500000-180",
+    "logon_authentication_id": "28439156",
+    "logon_time_utc": "2026-11-11T09:18:48.484000+00:00",
+    "logon_type": 2,
+    "principal_sha256": "b7278ea69c535d30e38b99c48bfcfd7723a1eb1d0a28e109feb9701ac4bacb8b",
+    "session_id": 1
+  },
+  "policy_changes": 0,
+  "powercfg": [
+    {
+      "argv": [
+        "/a"
+      ],
+      "exit_code": 0,
+      "label": "available",
+      "output": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-automation-supplement-9x8m6_1p\\powercfg-available.txt",
+        "sha256": "099b53d9bc2d0feba53030eab838076e602fc79052ed18abe2174a006766074a"
+      }
+    },
+    {
+      "argv": [
+        "/query",
+        "SCHEME_CURRENT",
+        "SUB_SLEEP",
+        "RTCWAKE"
+      ],
+      "exit_code": 0,
+      "label": "wake-policy",
+      "output": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-automation-supplement-9x8m6_1p\\powercfg-wake-policy.txt",
+        "sha256": "b752ee5f0e2abfc4177bfaac965eea2d575283cc94201414dcd77d04063624fa"
+      }
+    }
+  ],
+  "provider_calls": 0,
+  "scheduled_task_publications": 0,
+  "service_controls": 0,
+  "wake_policy": {
+    "AC": 1,
+    "DC": 0
+  }
+}

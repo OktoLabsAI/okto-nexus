@@ -1,0 +1,35 @@
+{
+  "acceptance_promoted": false,
+  "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/r3-status-fixed-campaign-package-ddwnb5vx/venv/Scripts/python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-automation-supplement-9x8m6_1p\\run_tests.py",
+  "fresh_before_exists": false,
+  "late_added_selector_scope": "Syntax/pins reviewed only; no real selection/SID XML materialization or task registration executed",
+  "live_event_qualification": false,
+  "native_marker_or_window_created": false,
+  "os_events_executed": 0,
+  "plan_sha256": "aede97524e633a3462fd711750a8bfeaeb6d6f597423274cf4366a039f46a4fe",
+  "provider_calls": 0,
+  "read_only_capability_exit": 0,
+  "read_only_capability_tool": "3d5237",
+  "runtime_sources": {
+    "automation_contract.py": "98ff23b98e32f679834fb34227a0df7196f776bf95a798baf92d41588bc1791c",
+    "collect.py": "df3eb939fef0383324dfc86588e6b0c725b797865d6d4bcf108222b9b65d0caf",
+    "prepare_artifacts.py": "8f7fb22785d932d85f7bbdea9137b9fbf2f723dab27d528ef990b9b636758f6f",
+    "run_tests.py": "7f2fead19aebd8d3e3fdb484a631fcbb2ade533e2e158d8fa3f1c9d4f45dc7a0",
+    "seal.py": "06cc0d0d2a320f5bf2cf14faf4d78fe493e6729c0c89b77771a1b1bd5b2e82dd",
+    "select_event.py": "e85a6fdcbbe42e77830611217a0570f561d944253383cb003220ec5d254c15b4",
+    "test_collect.py": "7da70afeaad588b78c28ea91ac5291f4cfae884b754ba115afb92074d2e6be89",
+    "test_contract.py": "fe357818f06adb15f9841793a86989c510febb5dbddcb68ec128eb008a199b64"
+  },
+  "service_controls": 0,
+  "status": "OFFLINE_PREPARATION_QUALIFIED_UNSELECTED",
+  "task_registered": false,
+  "test_result": {
+    "errors": 0,
+    "failures": 0,
+    "scope": "Pure command/XML/selection and injected read-only collector fixtures; no OS event/task registration/service/provider",
+    "skipped": 0,
+    "tests": 8
+  },
+  "tests_tool": "435b60",
+  "wmi_release_warning_preserved": true
+}

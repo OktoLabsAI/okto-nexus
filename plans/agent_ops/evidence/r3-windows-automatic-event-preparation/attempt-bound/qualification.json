@@ -1,0 +1,29 @@
+{
+  "effects_executed": 0,
+  "event_selected": false,
+  "native_calls_tested_live": false,
+  "originals_byte_identical": true,
+  "plan_sha256": "2c14d1ceec1c69d7d89dbb39ffdb4b75bcea2a751f7477c7afc5fb896df5036b",
+  "runtime_files": {
+    "attempt_contract.py": "c832c9e09bcf1b3e1683da75be5ebe104b33ee92f837d9799d0c78bebf214b7a",
+    "automation_contract.py": "98ff23b98e32f679834fb34227a0df7196f776bf95a798baf92d41588bc1791c",
+    "collect.py": "6f54df8e8a7b4fce2b99f373a80560f92ef96d6f6756b1333e9e0161dc25660c",
+    "execute_event.py": "c7ce70dcb84f7028bfcacae344af932fc90fba5d7c6f744539c8ead6b457115f",
+    "prepare_successor.py": "b761f838733ce0788a955e0c948d2b03078cfd59de4e66bf07e6c50d89663e71",
+    "run_tests.py": "0f2b9afa54e09b0c68461adfc16e2c9a1c8f09e41bbbb6ffddf3094ffaebf4dd",
+    "seal.py": "d245b6f0213c429bb7b80a46a2e44524611f4c844a4ff901d6b8fe250237277c",
+    "select_event.py": "1267492e10029bc80d00ec9bb5a8c20731f1ca5ac342614c65f69bfd3c5eb2bf",
+    "test_attempt.py": "edc873203f5237756d2be0c04546a644a13cfa3cfebd3c62d86cb29fa28a40a0"
+  },
+  "service_provider_or_login_effects": 0,
+  "status": "OFFLINE_ATTEMPT_BOUND_SUCCESSOR_QUALIFIED_UNSELECTED",
+  "task_published": false,
+  "test_result": {
+    "errors": 0,
+    "failures": 0,
+    "scope": "Injected snapshots/handles/dispatch only; no native OS effect, task publication, service or provider",
+    "skipped": 0,
+    "tests": 6
+  },
+  "test_tool": "a3edc5"
+}

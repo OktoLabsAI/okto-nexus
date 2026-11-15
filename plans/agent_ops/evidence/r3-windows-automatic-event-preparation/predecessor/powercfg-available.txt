@@ -1,0 +1,22 @@
+Os seguintes estados de suspensão estão disponíveis neste sistema:
+    Espera (S0 Ocioso com Baixo Consumo de Energia) Conectado via Rede
+    Hibernar
+    Inicialização Rápida
+
+Os seguintes estados de suspensão não estão disponíveis neste sistema:
+    Modo de espera (S1)
+	O firmware do sistema não oferece suporte a este estado de espera.
+	Este modo de espera é desabilitado quando não há suporte para o estado ocioso de baixo consumo de energia do S0.
+
+    Modo de espera (S2)
+	O firmware do sistema não oferece suporte a este estado de espera.
+	Este modo de espera é desabilitado quando não há suporte para o estado ocioso de baixo consumo de energia do S0.
+
+    Modo de espera (S3)
+	O firmware do sistema não oferece suporte a este estado de espera.
+	Este modo de espera é desabilitado quando não há suporte para o estado ocioso de baixo consumo de energia do S0.
+
+    Suspensão Híbrida
+	O modo de espera (S3) não está disponível.
+	O hipervisor não dá suporte a este modo de espera.
+

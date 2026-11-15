@@ -1,7 +1,71 @@
 # Agent operations R3 — implementation report
 
-Status: preparation and baseline delivered; PR-01, PR-02 and PR-03 in progress.
-BASE-06 provider timing and M1–M4 acceptance remain open.
+## Estado corrente — 2026-11-15, relatório intermediário
+
+A entrega integral ainda não está concluída. A matriz corrente contém **127
+cenários VERIFIED, 3 IN_PROGRESS e 2 NOT_RUN**. Os cortes datados abaixo são
+históricos; suas negativas de execução e autorizações antigas não substituem o
+estado corrente nem ampliam permissões. O plano permanece byte a byte com SHA-256
+`20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996`.
+
+O ciclo útil local com Codex, decisão pelo terminal e continuação na mesma sessão
+foi comprovado em [W17](evidence/r3-m1-revision17-recovery-execution/criterion-review.json).
+A [medição BASE-06](evidence/r3-base06-stage-measurement-consolidation/review.json)
+já consolida as etapas locais. Ainda falta o ciclo remoto útil pelo Connector;
+readiness, sessão aberta ou uma operação interrompida não encerram M1/AC-11.
+
+Os incrementos recentes mantêm as versões e branches solicitadas:
+
+| Repositório | Branch / versão | Mudança e evidência corrente |
+|---|---|---|
+| Nexus | `feature/v0.3.3` / 0.3.3 | Home inicial com resumo dos agentes, harnesses, comunicações e atenção; leitura canônica e bounded, sem comandos de lifecycle pela observação. [Revisão da Home](evidence/r3-home-overview-clarification/review.json). Status passivo também tolera uma raiz absoluta de discovery que deixou de existir; start continua estrito. |
+| Connector | `feature/v0.0.12` / 0.0.12 | Checkpoint tipado para reconciliação accepted quando não existe direct-release outbox; mantém os fences, a identidade da abertura e a distinção entre ACK e encerramento físico. A evolução de schema do journal é 5→6. |
+| Connector Core | `feature/v0.0.14` / 0.0.14 | Reconhecimento da permissão nativa PowerShell com validação do comando; a decisão continua canônica e não vira permissão automática ou persistente. |
+
+As [qualificações e upgrades canônicos](evidence/r3-canonical-environment-upgrades/review.json)
+retêm os artefatos instalados, fontes, hashes, testes e limites. O pacote Q foi
+aplicado aos dois ambientes canônicos. O apply preservou os dados e não iniciou
+serviços; os starts e a atividade posterior são efeitos separados. As tarefas
+continuam no escopo do usuário Windows e da sessão interativa; não se declara
+boot sem login nem outra plataforma qualificada. Pacotes não foram publicados
+e as branches não foram mescladas na main.
+
+A [campanha Sonnet05/07](evidence/r3-sonnet-denial05-native07-svc09/review.json)
+preserva a recusa05 antes de Core, a falha real07 e os contadores distintos:
+**180.426 tokens, 3 admissões Native e 4 Server**, com teto vigente500.000,
+prevenção480.000 e máximos Native4/Server5. O pedido07 terminou CANCELLED, sem
+relatório útil e sem decisão canônica aceita; a pergunta expirou após120s.
+A reconciliação RO110 não altera o checkpoint original com falha/cursor104.
+As seis saídas físicas normais de cada coorte L1/L2 estão retidas. A continuação08
+não é elegível. A proposta posterior de uma alocação Native adicional e reserva
+menor apenas para continuação textual permanece pendente de resposta explícita.
+
+SVC-T09 foi verificado por fechamento real de terminal e dashboard durante a
+mesma operação admitida, com os seis handles das coortes ainda vivos. Esse
+recorte comprova ownership; não transforma o resultado cancelado em sucesso.
+
+O fechamento ainda exige exatamente as campanhas já nomeadas: **DX-T40 e
+DX-T43**, para resultado remoto, decisão válida, continuação e configuração
+efetiva; **SVC-T18, SVC-T21 e SVC-T29**, para login e eventos distintos de
+suspensão/retorno, logout e reboot com história conhecida. A preparação da
+automação não comprova esses eventos. Após logout/reboot, o login será manual;
+nenhum desses eventos foi executado neste corte. Não há nova campanha de crash,
+novo útil local ou teste obrigatório adicional de cofre como condição inventada.
+
+A [preparação automatizada dos eventos](evidence/r3-windows-automatic-event-preparation/review.json)
+retém separadamente os grupos focais8/6/3, a vinculação exclusiva da tentativa ao
+before e a leitura RO de34 registros históricos de energia. Nenhuma janela,
+tarefa observadora ou evento foi selecionado. A coleta independente de transição
+não sobrescreve o after original e não infere suspensão do retorno de uma API.
+
+AC-01/11/13/14 continuam não verificados. Ao obter as provas restantes, será
+necessário reconciliar a matriz e este relatório requisito por requisito,
+incluindo contexto, decisões, tempos, compatibilidade e riscos observados. Este
+texto é atualização intermediária, não o relatório final de uma entrega aceita.
+Os comandos e resultados detalhados permanecem nos manifestos e recibos ligados
+acima. As mudanças de código podem ser revertidas por commit; rollback de
+ambiente/banco exige revisão compatível com o schema corrente, sem downgrade
+destrutivo ou repetição de trabalho incerto.
 
 The immutable scope is the repository-root R3 plan. Progress and limitations are
 recorded in `ledger.json` and the root ledger. No scenario is qualified merely

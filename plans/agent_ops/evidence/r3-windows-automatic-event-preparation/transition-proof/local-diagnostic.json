@@ -1,0 +1,464 @@
+{
+    "schema":  1,
+    "status":  "READ_ONLY_CAPTURED",
+    "started_utc":  "2026-11-15T16:27:59.8291156+00:00",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383150,
+                       "utc":  "2026-11-14T19:32:56.8700489Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383151,
+                       "utc":  "2026-11-14T19:33:15.1201231Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383154,
+                       "utc":  "2026-11-14T19:36:28.9823968Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383155,
+                       "utc":  "2026-11-14T19:36:58.5680588Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383161,
+                       "utc":  "2026-11-14T19:40:11.3894507Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383162,
+                       "utc":  "2026-11-14T19:41:44.7079500Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383165,
+                       "utc":  "2026-11-14T19:44:50.3753766Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383166,
+                       "utc":  "2026-11-14T20:04:06.9884927Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383170,
+                       "utc":  "2026-11-14T20:13:13.9656679Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383171,
+                       "utc":  "2026-11-14T20:13:33.2213438Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383174,
+                       "utc":  "2026-11-14T20:17:53.3009969Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383175,
+                       "utc":  "2026-11-14T20:23:27.2279217Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383178,
+                       "utc":  "2026-11-14T20:58:35.7085510Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383179,
+                       "utc":  "2026-11-14T21:20:22.6999910Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383183,
+                       "utc":  "2026-11-14T22:05:29.7810764Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383184,
+                       "utc":  "2026-11-14T22:15:06.9903162Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383187,
+                       "utc":  "2026-11-14T22:21:39.7551132Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383188,
+                       "utc":  "2026-11-14T22:22:41.8741367Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383191,
+                       "utc":  "2026-11-14T22:26:13.1003427Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383196,
+                       "utc":  "2026-11-14T23:05:42.4794265Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383199,
+                       "utc":  "2026-11-14T23:09:49.5121170Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383201,
+                       "utc":  "2026-11-15T03:35:38.2478086Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383229,
+                       "utc":  "2026-11-15T03:55:27.6012621Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383230,
+                       "utc":  "2026-11-15T04:58:33.1326438Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383233,
+                       "utc":  "2026-11-15T05:03:34.6296781Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383235,
+                       "utc":  "2026-11-15T05:21:27.8325756Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383241,
+                       "utc":  "2026-11-15T05:46:19.6646507Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383314,
+                       "utc":  "2026-11-15T11:44:02.3162338Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383318,
+                       "utc":  "2026-11-15T13:04:29.2324355Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383319,
+                       "utc":  "2026-11-15T13:11:59.2158187Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383322,
+                       "utc":  "2026-11-15T13:34:00.9386358Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383333,
+                       "utc":  "2026-11-15T13:54:20.0565061Z",
+                       "transition":  "CsExitReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  506,
+                       "version":  3,
+                       "record_id":  383340,
+                       "utc":  "2026-11-15T15:09:06.2539753Z",
+                       "transition":  "CsEnterReason"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "event_id":  507,
+                       "version":  12,
+                       "record_id":  383341,
+                       "utc":  "2026-11-15T15:51:11.8926694Z",
+                       "transition":  "CsExitReason"
+                   }
+               ],
+    "manifest":  [
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  42,
+                         "version":  0,
+                         "log":  "System",
+                         "transition":  "PreSleepNotification",
+                         "description":  "O sistema está entrando em suspensão."
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  42,
+                         "version":  2,
+                         "log":  "System",
+                         "transition":  "PreSleepNotification",
+                         "description":  "O sistema está entrando em suspensão.\r\n\r\nMotivo da Suspensão: %3"
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  42,
+                         "version":  3,
+                         "log":  "System",
+                         "transition":  "PreSleepNotification",
+                         "description":  "O sistema está entrando em suspensão.\r\n\r\nMotivo da Suspensão: %3"
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  107,
+                         "version":  1,
+                         "log":  "System",
+                         "transition":  "PostSleepNotification",
+                         "description":  "O sistema saiu do modo de suspensão."
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  506,
+                         "version":  0,
+                         "log":  "System",
+                         "transition":  "CsEnterReason",
+                         "description":  "O sistema está entrando em modo de espera \r\n\r\nmoderno: %1. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  506,
+                         "version":  1,
+                         "log":  "System",
+                         "transition":  "CsEnterReason",
+                         "description":  "O sistema está entrando em modo de espera \r\n\r\nmoderno: %1. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  506,
+                         "version":  2,
+                         "log":  "System",
+                         "transition":  "CsEnterReason",
+                         "description":  "O sistema está entrando em modo de espera \r\n\r\nmoderno: %1. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  506,
+                         "version":  3,
+                         "log":  "System",
+                         "transition":  "CsEnterReason",
+                         "description":  "O sistema está entrando em modo de espera \r\n\r\nmoderno: %1. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  0,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  1,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  2,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  3,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  4,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  5,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  6,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  7,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  8,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  9,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  10,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  11,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     },
+                     {
+                         "provider":  "Microsoft-Windows-Kernel-Power",
+                         "event_id":  507,
+                         "version":  12,
+                         "log":  "System",
+                         "transition":  "CsExitReason",
+                         "description":  "O sistema está saindo do motivo de \r\n\r\nem espera moderna: %10. "
+                     }
+                 ],
+    "anchor":  null,
+    "latest":  {
+                   "provider":  "Microsoft-Windows-Kernel-Power",
+                   "event_id":  507,
+                   "version":  12,
+                   "record_id":  383341,
+                   "utc":  "2026-11-15T15:51:11.8926694Z",
+                   "transition":  "CsExitReason"
+               },
+    "truncated":  false,
+    "event_generated":  false,
+    "query_start_utc":  "2026-11-14T16:28:09.6973734+00:00",
+    "query_end_utc":  "2026-11-15T16:27:59.8291156+00:00",
+    "boot_utc":  "2026-11-11T04:31:34.5000000Z",
+    "finished_utc":  "2026-11-15T16:28:01.3554340+00:00"
+}

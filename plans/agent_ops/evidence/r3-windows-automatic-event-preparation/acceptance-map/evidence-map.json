@@ -1,0 +1,276 @@
+{
+  "status": "READ_ONLY_MAP_ROOT_ACCEPTED_NO_STATUS_PROMOTION",
+  "source_head": "4fe1dfbb8c04b02ceff63b30cb0fae6ba66764db",
+  "fixed_plan": {
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "bytes": 133337
+  },
+  "literal_lines": {
+    "AC01": 1064,
+    "AC11": 1075,
+    "AC13": 1077,
+    "AC14": 1078,
+    "BASE06": [
+      245,
+      247
+    ],
+    "final_report": [
+      1085,
+      1087,
+      1089
+    ]
+  },
+  "rows": [
+    {
+      "fields": [
+        "completion_criteria.AC-01.remaining",
+        "completion_criteria.AC-01.result"
+      ],
+      "stale": "BASE06 first-use measurement NOT_RUN; old local campaign absence.",
+      "evidence": [
+        "local_timings",
+        "local_cycle",
+        "source_traceability",
+        "joint_contracts"
+      ],
+      "current": "Implementation/reuse/test catalog exists for59mandatory tasks; measured local first-use stages and DX39 are real. Do not require every historical task substatus VERIFIED.",
+      "remaining": "Complete remote useful terminal cycle and retain its available stage clocks; complete the already named Windows events; map final evidence to mandatory task deliveries and finish implementation-report. No new universal suite."
+    },
+    {
+      "fields": [
+        "completion_criteria.AC-11.remaining",
+        "completion_criteria.AC-11.result"
+      ],
+      "stale": "Execute DX39 local and measure first useful use as if neither existed.",
+      "evidence": [
+        "local_cycle",
+        "local_timings",
+        "latest_remote_ownership"
+      ],
+      "current": "W17 useful15 exact report/native permission/continuation16 satisfies literal local DX39; SVC09 now proves terminal/dashboard ownership. Extra sum10 assertion remains failed but is not the fixed continuation criterion.",
+      "remaining": "DX40 real Connector cycle: actual canonical decision before expiry, useful correlated result, same-session continuation/reopen via terminal. Capture DX43 configuration and BASE06 remote stages within that same authorized cycle. Native07 CANCELLED/decision0/reportabsent does not close it."
+    },
+    {
+      "fields": [
+        "completion_criteria.AC-13.remaining",
+        "completion_criteria.AC-13.result"
+      ],
+      "stale": "Real crash/backoff/limit, cwd/PATH and credentials broadly unqualified.",
+      "evidence": [
+        "native_context_uninstall",
+        "native_install_preservation",
+        "native_retry",
+        "credential_diagnostic",
+        "local_cycle",
+        "latest_remote_ownership",
+        "configured_reconnect"
+      ],
+      "current": "Both actual Windows hosts installed/stopped/uninstalled;4exit3 crashes/3replacements/backoff60/exhaustion/190s quiet qualified; cwd/PATH and data-preserving foreground reuse qualified; real terminal-only diagnosis plus authenticated Codex/Sonnet and binding credentials observed.",
+      "remaining": "Actual OS login-triggered start for SVC18 with own task/logon/cohort correlation. Keep distinct external logout and suspend/reboot scopes under SVC21/T29/AC14; no new crash, arbitrary NTSTATUS, blocked personal vault or physical second-host requirement."
+    },
+    {
+      "fields": [
+        "completion_criteria.AC-14.remaining",
+        "completion_criteria.AC-14.result"
+      ],
+      "stale": "No need to reopen already qualified restart and transport contracts.",
+      "evidence": [
+        "restart_contracts",
+        "windows_history"
+      ],
+      "current": "Current installed real-process cases preserve live child claim/slot, invalid grants across Server replacement, Connector binding and no implicit replay. Native behavior in these contract cases is synthetic; scope is retained honestly.",
+      "remaining": "Real suspend/resume with current known operation/history and owned cohort. Refresh before/after projections of operations/receipts/leases/grants/watermarks, recording any change without inferring release/renewal/replay from availability. Existing terminal history can suffice; no extra paid inference required. Integrate SVC29, not another campaign."
+    },
+    {
+      "fields": [
+        "tasks.SVC-05.result",
+        "tasks.SVC-05.limitations",
+        "tasks.SVC-05.subscopes.actual_native_task_upgrade"
+      ],
+      "stale": "Repeated enable/external edits and actual native task upgrades remain wholly unqualified.",
+      "evidence": [
+        "native_install_preservation",
+        "upgrades",
+        "native_context_uninstall"
+      ],
+      "current": "T17 actual repeated install/enable and external-definition refusal passed; both canonical task environment upgrades applied once without start or SQL migration; uninstall retained data.",
+      "remaining": "Actual loginSVC18; preserve no live SQL migration or destructive downgrade claim. Do not promote task/subscope status in this textual reconciliation."
+    },
+    {
+      "fields": [
+        "tasks.SVC-06.result",
+        "tasks.SVC-06.limitations"
+      ],
+      "stale": "Actual cwd/PATH/vault/provider context and missing credential behavior all unqualified.",
+      "evidence": [
+        "native_context_uninstall",
+        "credential_diagnostic",
+        "local_configuration",
+        "latest_remote_ownership"
+      ],
+      "current": "T14 and local W17 explicit executable paths, T15 service diagnosis and actual authenticated native execution qualify their finite context cuts.",
+      "remaining": "DX43 effective remote configuration/tool/policy comparison; actual login context still unobserved. T15 is terminal-only OR locked vault, not both. No secret-content or universal-enforcement claim."
+    },
+    {
+      "fields": [
+        "tasks.SVC-10.result",
+        "tasks.SVC-10.limitations"
+      ],
+      "stale": "Real terminal-independent productive operation unqualified generically.",
+      "evidence": [
+        "local_cycle",
+        "latest_remote_ownership"
+      ],
+      "current": "Local useful work exists and SVC09 actual console/dashboard closure preserved same admitted remote op and six handles.",
+      "remaining": "Remote useful cycle still pendingDX40; no claim07 useful success. Keep task status unchanged."
+    },
+    {
+      "fields": [
+        "tasks.SVC-11.result",
+        "tasks.SVC-11.limitations"
+      ],
+      "stale": "All actual service-user credential context unqualified.",
+      "evidence": [
+        "configured_reconnect",
+        "latest_remote_ownership",
+        "restart_contracts"
+      ],
+      "current": "Real DONE/epoch2/binding reuse, service-owned Sonnet admissions and canonical operator grant renewal observed. Same live Connector reconnect contract already qualified.",
+      "remaining": "Complete remote useful decision/result/continuation and effective configuration; do not add physical remote machine, TLS or personal-vault test unless specifically claimed."
+    },
+    {
+      "fields": [
+        "tasks.SVC-12.result",
+        "tasks.SVC-12.limitations"
+      ],
+      "stale": "Native tasks/context, local useful cycle and first-use timing all open.",
+      "evidence": [
+        "native_context_uninstall",
+        "native_retry",
+        "local_cycle",
+        "local_timings",
+        "upgrades"
+      ],
+      "current": "Installed package/campaign/native tasks/local cycle/timings have retained evidence; matrix remains Windows-scoped.",
+      "remaining": "Remote useful cycle/DX43 plus actual login/logout/suspend/reboot evidence and final matrix/report. No new broad regression merely for reconciliation."
+    },
+    {
+      "fields": [
+        "scenarios.DX-T40.remaining",
+        "scenarios.DX-T40.result"
+      ],
+      "stale": "Installed PowerShell incompatibility and Connector stopUNKNOWN from older attempts still described as current blockers; old144004/2 accounting.",
+      "evidence": [
+        "upgrades",
+        "latest_remote_ownership"
+      ],
+      "current": "Corrected package later admitted07 and published native permission; all6normal exits confirmed.07 nativeSTALE/approvalpending/rev0/decision0/CANCELLED, total180426 Native3/Server4. Old failures remain historical.",
+      "remaining": "Successful remote useful decision/result/continuation, without replay05/07 or automatically admitting08. ConfigurationDX43 may be qualified within the same authorized cycle."
+    },
+    {
+      "fields": [
+        "plans/agent_ops/implementation-report.md"
+      ],
+      "stale": "Document exists but its latest retained sections stop at old M1v8 authorization.",
+      "evidence": [
+        "implementation_report"
+      ],
+      "current": "This is not a completed final report; plan1085-1089 requires truthful evidence, limitations, matrix and rollout summary.",
+      "remaining": "Update report after final evidence reconciliation, explicitly naming any remaining unmet requirement. This is documentary work, not a sixth real campaign."
+    }
+  ],
+  "evidence": {
+    "local_cycle": {
+      "path": "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+      "sha256": "e11c8f401580dc2698bfd6af0b01b66d50a39f7a166e7a11396ae77cce81f9ef",
+      "bytes": 2365
+    },
+    "local_timings": {
+      "path": "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+      "sha256": "2f934a47f4b4b8d77bf4a98e7860bee373336c40cbf9c20f6bdc89608dc69d17",
+      "bytes": 3446
+    },
+    "native_context_uninstall": {
+      "path": "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json",
+      "sha256": "9493764e2a71b5dce511962e71ec5fe5827f75283745e16131753ee48c5d2bab",
+      "bytes": 4516
+    },
+    "native_install_preservation": {
+      "path": "plans/agent_ops/evidence/r3-native-t17-preservation/review.json",
+      "sha256": "aad9dbe89cfcaa106c5e3f3352086562f2681e760edd440952301ec67b5d0106",
+      "bytes": 951
+    },
+    "native_retry": {
+      "path": "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
+      "sha256": "301e4d5746c38943daddae475f4c678acc2507cee531b148b90a18aae00854c6",
+      "bytes": 3263
+    },
+    "credential_diagnostic": {
+      "path": "plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json",
+      "sha256": "b14998ae5e338ee34e422c35e67e009660fb642acbb8017c36833ab87c192306",
+      "bytes": 2755
+    },
+    "restart_contracts": {
+      "path": "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
+      "sha256": "ed159a0a19ee93c20d18d085d0a993296552c502dbfe93497131e155e4a7b512",
+      "bytes": 3733
+    },
+    "local_configuration": {
+      "path": "plans/agent_ops/evidence/r3-dx43-local-real-configuration/review.json",
+      "sha256": "b580cacbd36f137a01e52b1cebf9ead81ce68842f27bf470e2b7e22be783b29a",
+      "bytes": 2859
+    },
+    "configured_reconnect": {
+      "path": "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json",
+      "sha256": "341766164c92da2f93a423a8d784bf69a8d13a0f445250793a21724257f0a5f0",
+      "bytes": 4161
+    },
+    "upgrades": {
+      "path": "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json",
+      "sha256": "34128521813aa6c1dcf4304170b79e967f61ad058f4ce3f1cc79da4d665dd1ae",
+      "bytes": 4616
+    },
+    "latest_remote_ownership": {
+      "path": "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+      "sha256": "a4e28e329f2d75ec97e34663a42b5e3a3c4cbf00657e2c9b5ba31ba7cbf1047c",
+      "bytes": 6136
+    },
+    "windows_history": {
+      "path": "plans/agent_ops/evidence/r3-windows-current-history-supplement/review.json",
+      "sha256": "273d82e4c76ac80f0f2c83cb2857bad7d128587955cceb889639695d9649c181",
+      "bytes": 2715
+    },
+    "implementation_report": {
+      "path": "plans/agent_ops/implementation-report.md",
+      "sha256": "6eede841eae58719423279d462ef29233f7438b5d046e7b787e977627d34e521",
+      "bytes": 103109
+    },
+    "source_traceability": {
+      "path": "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+      "sha256": "2d50ba3af35a5d65573744d32910d64795862e5f05a8913de43d48db71d060d9",
+      "bytes": 52361
+    },
+    "joint_contracts": {
+      "path": "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+      "sha256": "a14f5fc02d9384da86f056d6349141e818defa7ea4c05f9d4ba893c41ec4e607",
+      "bytes": 12903
+    }
+  },
+  "remaining_real_scenarios": [
+    "DX-T40",
+    "DX-T43",
+    "SVC-T18",
+    "SVC-T21",
+    "SVC-T29"
+  ],
+  "no_extra_campaign": "Three distinct SVC29 events: suspend/resume,logout,reboot. Shutdown is optional, not fourth required event. Login is required human authentication, not boot-without-login. History-aware suspend observation may share SVC29 and requires no new paid admission.",
+  "status_boundary": "No AC, task or scenario status is promoted by this audit. Root accepted map; finish_reader_cache owns prospective stale-text reconciliation only.",
+  "effects": {
+    "repository_edits": 0,
+    "tests": 0,
+    "runtime": 0,
+    "provider": 0,
+    "os_events": 0
+  }
+}

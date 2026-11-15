@@ -2417,3 +2417,20 @@ Native07 chegou a36.422tokens, total **180.426 /500.000**, Native3/Server4; máx
 **SVC-T09 VERIFIED**, literal plano835: console real visível encerrou normalmente exit3/needs_input; mesmaop/escopo antes/depois e, após fechamento real do dashboard, observação independente confirmou operação aindaSUBMITTED/DISPATCHED e seis handles das mesmas coortes vivos. Recibos parciais svc09_acceptance=false preservados; a avaliação composta acrescenta a prova posterior do dashboard. CancelamentoTTL posterior permanece falha útil, sem contradizer ownership observado. **127VERIFIED/3IN_PROGRESS/2NOT_RUN**; DX40/DX43/AC11 e demaisAC inalterados.
 
 P6(+1máximoNative e reserva de continuação) permanece **PENDING_USER**, não selecionado, neste corte; nenhum novo efeito/OS. [Evidências, contadores e limites](plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json).
+
+
+## 2026-11-15 — Preparação de eventos Windows e reconciliação do estado corrente
+
+[Evidência e limites](plans/agent_ops/evidence/r3-windows-automatic-event-preparation/review.json): preparação anterior, sucessor vinculado à tentativa e coletor de transições, com grupos separados de **8, 6 e 3 testes focais aprovados**. A leitura real coletou **34 eventos históricos** do Windows; não gerou evento novo. Nenhuma seleção, registro de tarefa, controle de serviço ou chamada de provedor nesta preparação. O resultado original UNCONFIRMED permanece; o companion é apenas aditivo. XML/SID reais e mensagens, propriedades ou payloads brutos de eventos não foram publicados.
+
+O [mapa de evidências atuais](plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json) corrige somente os resumos correntes do JSON. As entradas anteriores deste ledger continuam como cortes históricos:
+
+- **AC-01/AC-11:** o ciclo local W17/DX39 e os tempos locais BASE-06 já têm provas. Falta o ciclo remoto útil com decisão canônica e continuação, seus tempos disponíveis e configuração DX43, além da consolidação documental final.
+- **AC-13:** instalação, remoção com dados preservados, contexto/cwd/PATH, credenciais nos escopos exercidos e recuperação de quatro falhas exit3 com três reinícios, backoff60s e silêncio190s já foram qualificados. Falta início por login real. Logout e suspensão/reboot permanecem escopos distintos de SVC21/T29/AC14.
+- **AC-14:** os contratos de restart e reconexão preservam autoridade e ownership nos cortes retidos. Falta suspensão/retorno real com histórico conhecido; disponibilidade posterior não prova liberação, renovação ou replay. Essa observação pode integrar SVC29 sem nova inferência paga.
+- **SVC-05/06/10/11/12:** resumos passam a reconhecer T14/T15/T17/T19/T27, upgrades canônicos, ciclo útil local, credenciais/identidade reutilizadas e fechamento real de console/dashboard. Os estados das tarefas e subescopos históricos não mudam.
+- **DX40:** a antiga incompatibilidade PowerShell e a parada Connector incerta não são os bloqueios correntes. O pedido07 publicou permissão, mas terminou CANCELLED após expiração, sem decisão canônica aceita nem relatório útil. Permanecem **180.426 tokens, Native3/Server4**, sem replay05/07 nem continuação08 automática.
+
+Restam os cinco cenários **DX40, DX43, SVC18, SVC21 e SVC29**. Suspensão/retorno, logout e reboot são três eventos distintos; shutdown é opcional, não um quarto requisito. O relatório de implementação foi atualizado pelo Root como intermediário, não como entrega final. **127 VERIFIED / 3 IN_PROGRESS / 2 NOT_RUN** preservados; nenhum AC ou tarefa promovido.
+
+Na leitura canônica posterior do Root (tool59d221), ambos os serviços próprios estavam stopped/NO_SERVICE_OWNER. Essa observação pontual não afirma vigilância contínua nem cria novo recibo de encerramento.

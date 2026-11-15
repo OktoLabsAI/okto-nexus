@@ -1,0 +1,231 @@
+{
+  "date": "2026-11-15",
+  "status": "OFFLINE_QUALIFIED_UNSELECTED",
+  "source_allowlists": {
+    "predecessor": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-automation-supplement-9x8m6_1p\\public-allowlist.json",
+      "sha256": "ccb8b0bc7114a8836384e77752f97518994a55537ccdb6ffefb953df60b98ac2"
+    },
+    "attempt-bound": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\public-allowlist.json",
+      "sha256": "a1660e25b85c2c8ca50a154260323083e95e2d69c755f165be6f17c487f6410d"
+    },
+    "transition-proof": {
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-power-transition-proof-bla5wdct\\public-allowlist.json",
+      "sha256": "834cb06f84ff040a728fbabb079692629cc11fc4583c4365eaba8d4eba8f35ea"
+    }
+  },
+  "predecessor": {
+    "qualification": "predecessor/qualification.json",
+    "source_tests": 8,
+    "tool": "435b60",
+    "late_selector": "Syntax/pins review only; no actual event selection/task registration",
+    "wmi_release_warning_preserved": true
+  },
+  "attempt_bound_successor": {
+    "qualification": "attempt-bound/qualification.json",
+    "source_tests": 6,
+    "tool": "a3edc5",
+    "plan_sha256": "2c14d1ceec1c69d7d89dbb39ffdb4b75bcea2a751f7477c7afc5fb896df5036b",
+    "old_UNCONFIRMED_preserved": true,
+    "companion_additive_only": true
+  },
+  "transition_proof": {
+    "qualification": "transition-proof/qualification.json",
+    "source_tests": 3,
+    "tool": "8a5014",
+    "actual_readonly_capture_tool": "285f26",
+    "events_captured": 34,
+    "scope": "Existing OS-recorded transitions only; not a selected new campaign event or causation/deep-state residency proof"
+  },
+  "effects": {
+    "new_os_events": 0,
+    "tasks_registered": 0,
+    "service_controls": 0,
+    "provider_calls": 0,
+    "event_selected": false
+  },
+  "acceptance": {
+    "promoted": false,
+    "scenario_counts": {
+      "VERIFIED": 127,
+      "IN_PROGRESS": 3,
+      "NOT_RUN": 2
+    },
+    "AC01_AC11_AC13_AC14_status_unchanged": true
+  },
+  "public_exclusions": [
+    "selected task XML",
+    "actual SID",
+    "event Message/Properties/raw payload",
+    "runtime/private files",
+    "credentials"
+  ],
+  "root_review": "Approved after review of source guards, literal acceptance reconciliation, immutable historical prefix and unchanged statuses; Root107e48/1bfbb9 and diffcheck006c47. No OS/provider/service selection.",
+  "text_reconciliation": {
+    "map": "acceptance-map/evidence-map.json",
+    "changes": [
+      {
+        "record": "completion_criteria.AC-01",
+        "before": {
+          "result": "Os catálogos demonstram implementação/reuso e testes das 59 tarefas; não há novo gap de código identificado. Entretanto o literal é universal sobre tarefas obrigatórias, e entregas de evidência expressamente exigidas ainda faltam; não equivale a exigir que todos os substatus históricos sejam VERIFIED.",
+          "remaining": [
+            "BASE-06, plano245: medir instalação até primeira sessão útil permanece NOT_RUN; 7.811s é liveness foreground e não essa medida.",
+            "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada.",
+            "Other mandatory real campaign evidence remains pending in the individually named task records; DX08 consented handoff smoke is now qualified."
+          ]
+        },
+        "current": "Implementation/reuse/test catalog exists for59mandatory tasks; measured local first-use stages and DX39 are real. Do not require every historical task substatus VERIFIED.",
+        "remaining": "Complete remote useful terminal cycle and retain its available stage clocks; complete the already named Windows events; map final evidence to mandatory task deliveries and finish implementation-report. No new universal suite."
+      },
+      {
+        "record": "completion_criteria.AC-11",
+        "before": {
+          "result": "O percurso terminal, preset, decisões e recuperação estão qualificados com Core/HTTP/SQLite reais e peer nativo sintético. O literal exige harness real em duas topologias.",
+          "remaining": [
+            "Executar DX-T39 local e DX-T40 via Connector com um harness real suportado: tarefa, progresso, pergunta/permissão, decisão canônica, resultado e retorno ao trabalho; serviço persistente sem dashboard ou terminal exclusivo.",
+            "Medir o primeiro uso útil de BASE-06 na campanha; registrar contexto, versões e custos previamente autorizados."
+          ]
+        },
+        "current": "W17 useful15 exact report/native permission/continuation16 satisfies literal local DX39; SVC09 now proves terminal/dashboard ownership. Extra sum10 assertion remains failed but is not the fixed continuation criterion.",
+        "remaining": "DX40 real Connector cycle: actual canonical decision before expiry, useful correlated result, same-session continuation/reopen via terminal. Capture DX43 configuration and BASE06 remote stages within that same authorized cycle. Native07 CANCELLED/decision0/reportabsent does not close it."
+      },
+      {
+        "record": "completion_criteria.AC-13",
+        "before": {
+          "result": "Instalação, início, parada e remoção de tarefas Windows reais já foram executados na campanha de 24 ações; M1 v10 também comprovou setup local com provedor autenticado, drain normal e saída física. Isso não comprova login real, esgotamento de retry, todos os contextos cwd/PATH/credenciais nem os eventos de sessão pendentes.",
+          "remaining": [
+            "Na plataforma Windows declarada: registrar/iniciar no login, parar sem ressurreição, recuperar crash/backoff, remover e comprovar contexto/cwd/PATH e credenciais no serviço real.",
+            "Manter login, logout, reboot, terminal fechado e suspensão como eventos distintos. Não declarar outras plataformas qualificadas."
+          ]
+        },
+        "current": "Both actual Windows hosts installed/stopped/uninstalled;4exit3 crashes/3replacements/backoff60/exhaustion/190s quiet qualified; cwd/PATH and data-preserving foreground reuse qualified; real terminal-only diagnosis plus authenticated Codex/Sonnet and binding credentials observed.",
+        "remaining": "Actual OS login-triggered start for SVC18 with own task/logon/cohort correlation. Keep distinct external logout and suspend/reboot scopes under SVC21/T29/AC14; no new crash, arbitrary NTSTATUS, blocked personal vault or physical second-host requirement."
+      },
+      {
+        "record": "completion_criteria.AC-14",
+        "before": {
+          "result": "Recuperação canônica, perda de resposta, revogação e ownership/incerteza já têm asserts; restart e transporte não autorizam repetir efeito ou renovar grant. O predicado suspensão/retorno ainda não tem campanha retida. Subsequent milestone03b3e801 qualifies real Server crash/return and live owned child restart with four current installed PASS; the audit is retained unchanged at its original point in time.",
+          "remaining": [
+            "Real suspension/resume with known operation/owner and no inferred replay, authority renewal or claim release remains unqualified."
+          ]
+        },
+        "current": "Current installed real-process cases preserve live child claim/slot, invalid grants across Server replacement, Connector binding and no implicit replay. Native behavior in these contract cases is synthetic; scope is retained honestly.",
+        "remaining": "Real suspend/resume with current known operation/history and owned cohort. Refresh before/after projections of operations/receipts/leases/grants/watermarks, recording any change without inferring release/renewal/replay from availability. Existing terminal history can suffice; no extra paid inference required. Integrate SVC29, not another campaign."
+      },
+      {
+        "record": "tasks.SVC-05",
+        "before": {
+          "result": "Scoped lifecycle and definition ownership contracts are implemented. The completed Windows campaign performed 24 unique actions on two real tasks, removed them and retained their homes. This is partial qualification, not full SVC-05 acceptance.",
+          "limitations": [
+            "The real 24-action Windows campaign qualified two empty user tasks and cleanup. Repeated enable, external-definition preservation and actual login remain unqualified; other platforms retain their separate explicit qualification limits."
+          ],
+          "reconciliation": {
+            "current_implementation": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite.",
+            "remaining": "The real 24-action Windows campaign qualified two empty user tasks and cleanup. Repeated enable, external-definition preservation and actual login remain unqualified; other platforms retain their separate explicit qualification limits.",
+            "remaining_kind": "authorized_native_campaign_pending",
+            "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+            "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
+            "current_campaign_evidence": "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
+            "current_campaign_sha256": "25dce3110f39319a5dc53c4aca2ba6585e6c41a118e9b4b34e26946b84471a6a"
+          }
+        },
+        "current": "T17 actual repeated install/enable and external-definition refusal passed; both canonical task environment upgrades applied once without start or SQL migration; uninstall retained data.",
+        "remaining": "Actual loginSVC18; preserve no live SQL migration or destructive downgrade claim. Do not promote task/subscope status in this textual reconciliation."
+      },
+      {
+        "record": "tasks.SVC-06",
+        "before": {
+          "result": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions. Remaining: Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified.",
+          "limitations": [
+            "Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified."
+          ],
+          "reconciliation": {
+            "current_implementation": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions.",
+            "remaining": "Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified.",
+            "remaining_kind": "real_service_context_campaign",
+            "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+            "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+          }
+        },
+        "current": "T14 and local W17 explicit executable paths, T15 service diagnosis and actual authenticated native execution qualify their finite context cuts.",
+        "remaining": "DX43 effective remote configuration/tool/policy comparison; actual login context still unobserved. T15 is terminal-only OR locked vault, not both. No secret-content or universal-enforcement claim."
+      },
+      {
+        "record": "tasks.SVC-10",
+        "before": {
+          "result": "Terminal lifecycle controls and explicit generation-bound force decision are implemented and contract-qualified. Real terminal-independent productive operation remains pending.",
+          "limitations": [
+            "Real terminal-independent productive operation remains unqualified."
+          ],
+          "reconciliation": {
+            "current_implementation": "Terminal-only start/stop/restart/install/uninstall/log/status/doctor and retained foreground commands exist; passive commands do not infer work absence.",
+            "remaining": "Real terminal-independent productive operation remains unqualified.",
+            "remaining_kind": "real_campaign",
+            "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+            "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+          }
+        },
+        "current": "Local useful work exists and SVC09 actual console/dashboard closure preserved same admitted remote op and six handles.",
+        "remaining": "Remote useful cycle still pendingDX40; no claim07 useful success. Keep task status unchanged."
+      },
+      {
+        "record": "tasks.SVC-11",
+        "before": {
+          "result": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback. Remaining: Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate.",
+          "limitations": [
+            "Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate."
+          ],
+          "reconciliation": {
+            "current_implementation": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback.",
+            "remaining": "Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate.",
+            "remaining_kind": "real_remote_provider_campaign",
+            "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+            "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+          }
+        },
+        "current": "Real DONE/epoch2/binding reuse, service-owned Sonnet admissions and canonical operator grant renewal observed. Same live Connector reconnect contract already qualified.",
+        "remaining": "Complete remote useful decision/result/continuation and effective configuration; do not add physical remote machine, TLS or personal-vault test unless specifically claimed."
+      },
+      {
+        "record": "tasks.SVC-12",
+        "before": {
+          "result": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications. Remaining: Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN.",
+          "limitations": [
+            "Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN."
+          ],
+          "reconciliation": {
+            "current_implementation": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications.",
+            "remaining": "Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN.",
+            "remaining_kind": "real_native_provider_campaign",
+            "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+            "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
+          }
+        },
+        "current": "Installed package/campaign/native tasks/local cycle/timings have retained evidence; matrix remains Windows-scoped.",
+        "remaining": "Remote useful cycle/DX43 plus actual login/logout/suspend/reboot evidence and final matrix/report. No new broad regression merely for reconciliation."
+      },
+      {
+        "record": "scenarios.DX-T40",
+        "before": {
+          "result": "Retained synthetic contracts prove operator/participant separation. Actual Sonnet remote useful01 was admitted through Connector but observation failed before terminal/useful/native-decision confirmation (ASSISTANT_WITHOUT_STREAM, ACTIVE_OBSERVATION_UNKNOWN, MONITOR_CONTAINMENT).35031 observed minimum tokens/one charged reservation; normal six-process exit is not work settlement. No continuation selected and literal remote campaign remains unverified. Post-exit RO native stream reconciliation now confirms interrupted/36306 tokens, one reservation, no useful result.8unique offline tests qualify campaign collector redacted-ID fix; original failed run remains unchanged and no new installed product patch or canonical receipt settlement is inferred. Subsequent useful03 reached canonicalSUCCEEDED/terminal with native107698 (campaign144004/two admissions), but no useful report: installed Core rejected advertised native PowerShell permission before human question publication. No continuation; product compatibility and complete remote cycle remain pending.",
+          "remaining": "Qualificar compatibilidade da permissão nativa PowerShell sem bypass de decisão humana e resolver a parada Connector incerta. Completar ciclo remoto útil/continuação/decisão em seleção finita com headroom cumulativo, preservando144.004tokens/duas admissões e resultados anteriores; não continuar automaticamente pedido sem resultado útil."
+        },
+        "current": "Corrected package later admitted07 and published native permission; all6normal exits confirmed.07 nativeSTALE/approvalpending/rev0/decision0/CANCELLED, total180426 Native3/Server4. Old failures remain historical.",
+        "remaining": "Successful remote useful decision/result/continuation, without replay05/07 or automatically admitting08. ConfigurationDX43 may be qualified within the same authorized cycle."
+      }
+    ],
+    "status_and_subscopes_unchanged": true,
+    "historical_entries_unchanged": true,
+    "implementation_report": "Root separately updated interim report; map retains its earlier hash as historical input.",
+    "before_source": "git 4fe1dfbb:plans/agent_ops/ledger.json; independent parsed snapshot, no shared mutable references"
+  },
+  "latest_root_readonly_status": {
+    "tool": "59d221",
+    "nexus": "stopped/NO_SERVICE_OWNER",
+    "connector": "stopped/NO_SERVICE_OWNER",
+    "instance_ids": "Exact own instances confirmed by Root",
+    "continuous_observation_claimed": false,
+    "new_receipt_created": false
+  }
+}

@@ -1231,10 +1231,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "Scoped lifecycle and definition ownership contracts are implemented. The completed Windows campaign performed 24 unique actions on two real tasks, removed them and retained their homes. This is partial qualification, not full SVC-05 acceptance.",
+      "result": "T17 actual repeated install/enable and external-definition refusal passed; both canonical task environment upgrades applied once without start or SQL migration; uninstall retained data.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "The real 24-action Windows campaign qualified two empty user tasks and cleanup. Repeated enable, external-definition preservation and actual login remain unqualified; other platforms retain their separate explicit qualification limits."
+        "Actual loginSVC18; preserve no live SQL migration or destructive downgrade claim. Do not promote task/subscope status in this textual reconciliation."
       ],
       "subscopes": {
         "windows_definition_contract": "VERIFIED",
@@ -1261,14 +1261,20 @@
         "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Scoped install/enable/start/stop/disable/remove and definition fingerprint/revision preservation implemented. Unknown external edits refuse rather than overwrite.",
-        "remaining": "The real 24-action Windows campaign qualified two empty user tasks and cleanup. Repeated enable, external-definition preservation and actual login remain unqualified; other platforms retain their separate explicit qualification limits.",
+        "current_implementation": "T17 actual repeated install/enable and external-definition refusal passed; both canonical task environment upgrades applied once without start or SQL migration; uninstall retained data.",
+        "remaining": "Actual loginSVC18; preserve no live SQL migration or destructive downgrade claim. Do not promote task/subscope status in this textual reconciliation.",
         "remaining_kind": "authorized_native_campaign_pending",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
         "current_campaign_evidence": "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
-        "current_campaign_sha256": "25dce3110f39319a5dc53c4aca2ba6585e6c41a118e9b4b34e26946b84471a6a"
-      }
+        "current_campaign_sha256": "25dce3110f39319a5dc53c4aca2ba6585e6c41a118e9b4b34e26946b84471a6a",
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+      },
+      "current_campaign_evidence": [
+        "plans/agent_ops/evidence/r3-native-t17-preservation/review.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json",
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json"
+      ]
     },
     "SVC-06": {
       "title": "contexto estável de execução",
@@ -1374,10 +1380,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions. Remaining: Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified.",
+      "result": "T14 and local W17 explicit executable paths, T15 service diagnosis and actual authenticated native execution qualify their finite context cuts.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified."
+        "DX43 effective remote configuration/tool/policy comparison; actual login context still unobserved. T15 is terminal-only OR locked vault, not both. No secret-content or universal-enforcement claim."
       ],
       "subscopes": {
         "local_saved_context": "VERIFIED",
@@ -1398,12 +1404,19 @@
         "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Absolute saved interpreter/cwd/config and allowlisted environment/proxy references; no shell aliases or one-shot key values in definitions.",
-        "remaining": "Actual user-task cwd/PATH/vault/provider context and credential missing/locked behavior remain unqualified.",
+        "current_implementation": "T14 and local W17 explicit executable paths, T15 service diagnosis and actual authenticated native execution qualify their finite context cuts.",
+        "remaining": "DX43 effective remote configuration/tool/policy comparison; actual login context still unobserved. T15 is terminal-only OR locked vault, not both. No secret-content or universal-enforcement claim.",
         "remaining_kind": "real_service_context_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
-      }
+        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+      },
+      "current_campaign_evidence": [
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json",
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
+      ]
     },
     "SVC-07": {
       "title": "parada controlada",
@@ -1792,10 +1805,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "Terminal lifecycle controls and explicit generation-bound force decision are implemented and contract-qualified. Real terminal-independent productive operation remains pending.",
+      "result": "Local useful work exists and SVC09 actual console/dashboard closure preserved same admitted remote op and six handles.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Real terminal-independent productive operation remains unqualified."
+        "Remote useful cycle still pendingDX40; no claim07 useful success. Keep task status unchanged."
       ],
       "subscopes": {
         "server_start_stop_restart": "VERIFIED",
@@ -1813,12 +1826,17 @@
         "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Terminal-only start/stop/restart/install/uninstall/log/status/doctor and retained foreground commands exist; passive commands do not infer work absence.",
-        "remaining": "Real terminal-independent productive operation remains unqualified.",
+        "current_implementation": "Local useful work exists and SVC09 actual console/dashboard closure preserved same admitted remote op and six handles.",
+        "remaining": "Remote useful cycle still pendingDX40; no claim07 useful success. Keep task status unchanged.",
         "remaining_kind": "real_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
-      }
+        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+      },
+      "current_campaign_evidence": [
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
+      ]
     },
     "SVC-11": {
       "title": "mesmo lifecycle no Connector",
@@ -1955,10 +1973,10 @@
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
         "plans/agent_ops/evidence/r3-released-session-drain/qualification.json"
       ],
-      "result": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback. Remaining: Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate.",
+      "result": "Real DONE/epoch2/binding reuse, service-owned Sonnet admissions and canonical operator grant renewal observed. Same live Connector reconnect contract already qualified.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate."
+        "Complete remote useful decision/result/continuation and effective configuration; do not add physical remote machine, TLS or personal-vault test unless specifically claimed."
       ],
       "subscopes": {
         "local_readiness": "VERIFIED",
@@ -1989,12 +2007,18 @@
         "released_session_drain_installed_contract": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Connector shares scoped lifecycle and stable identity/binding. Later remote bootstrap/renewal and operator approval replace stale unimplemented-text claims; no local Server fallback.",
-        "remaining": "Authorized productive work through Connector and actual service-user credential context remain pending. Physical-host/TLS scopes require proof only when specifically claimed; neither is a new universal gate.",
+        "current_implementation": "Real DONE/epoch2/binding reuse, service-owned Sonnet admissions and canonical operator grant renewal observed. Same live Connector reconnect contract already qualified.",
+        "remaining": "Complete remote useful decision/result/continuation and effective configuration; do not add physical remote machine, TLS or personal-vault test unless specifically claimed.",
         "remaining_kind": "real_remote_provider_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
-      }
+        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+      },
+      "current_campaign_evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json"
+      ]
     },
     "SVC-12": {
       "title": "empacotamento, campanha e documentação",
@@ -2119,10 +2143,10 @@
         "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json"
       ],
-      "result": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications. Remaining: Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN.",
+      "result": "Installed package/campaign/native tasks/local cycle/timings have retained evidence; matrix remains Windows-scoped.",
       "platform": "Windows; exact retained campaign scopes and historical limits in the linked matrix",
       "limitations": [
-        "Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN."
+        "Remote useful cycle/DX43 plus actual login/logout/suspend/reboot evidence and final matrix/report. No new broad regression merely for reconciliation."
       ],
       "subscopes": {
         "server_wheel_python_payloads": "VERIFIED",
@@ -2145,12 +2169,20 @@
         "finite_empty_windows_user_task_lifecycle": "VERIFIED"
       },
       "reconciliation": {
-        "current_implementation": "Installed package/resources and disposable lifecycle/upgrade/diagnostic subcontracts have retained evidence; historical 200 upgrade cases and current wheels are separate qualifications.",
-        "remaining": "Native service tasks/login/context, real useful-work local+remote cycles and first-use timing remain open. Do not call unavailable native authorization a reason to leave pure cases NOT_RUN.",
+        "current_implementation": "Installed package/campaign/native tasks/local cycle/timings have retained evidence; matrix remains Windows-scoped.",
+        "remaining": "Remote useful cycle/DX43 plus actual login/logout/suspend/reboot evidence and final matrix/report. No new broad regression merely for reconciliation.",
         "remaining_kind": "real_native_provider_campaign",
         "evidence": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
-        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter."
-      }
+        "historical_subscopes": "Older subscope entries are historical; current implementation and limits are recorded here. No native campaign is inferred from an injected adapter.",
+        "current_evidence_map": "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+      },
+      "current_campaign_evidence": [
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json"
+      ]
     },
     "DX-01": {
       "title": "modelo declarativo próprio",
@@ -9079,9 +9111,11 @@
         "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/successor02/paid-work/public/live-accounting.json",
         "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/diagnosis/diagnosis.json",
         "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/lifecycle/public/nexus-exit-proof.json",
-        "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/lifecycle/public/connector-stop-returned.json"
+        "plans/agent_ops/evidence/r3-sonnet-useful03-native-permission-refusal/lifecycle/public/connector-stop-returned.json",
+        "plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
       ],
-      "result": "Retained synthetic contracts prove operator/participant separation. Actual Sonnet remote useful01 was admitted through Connector but observation failed before terminal/useful/native-decision confirmation (ASSISTANT_WITHOUT_STREAM, ACTIVE_OBSERVATION_UNKNOWN, MONITOR_CONTAINMENT).35031 observed minimum tokens/one charged reservation; normal six-process exit is not work settlement. No continuation selected and literal remote campaign remains unverified. Post-exit RO native stream reconciliation now confirms interrupted/36306 tokens, one reservation, no useful result.8unique offline tests qualify campaign collector redacted-ID fix; original failed run remains unchanged and no new installed product patch or canonical receipt settlement is inferred. Subsequent useful03 reached canonicalSUCCEEDED/terminal with native107698 (campaign144004/two admissions), but no useful report: installed Core rejected advertised native PowerShell permission before human question publication. No continuation; product compatibility and complete remote cycle remain pending.",
+      "result": "Corrected package later admitted07 and published native permission; all6normal exits confirmed.07 nativeSTALE/approvalpending/rev0/decision0/CANCELLED, total180426 Native3/Server4. Old failures remain historical.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
@@ -9093,7 +9127,7 @@
         "remote_pending_grant_uncertainty": "VERIFIED",
         "remote_confirmed_receipt_read_failure": "VERIFIED"
       },
-      "remaining": "Qualificar compatibilidade da permissão nativa PowerShell sem bypass de decisão humana e resolver a parada Connector incerta. Completar ciclo remoto útil/continuação/decisão em seleção finita com headroom cumulativo, preservando144.004tokens/duas admissões e resultados anteriores; não continuar automaticamente pedido sem resultado útil.",
+      "remaining": "Successful remote useful decision/result/continuation, without replay05/07 or automatically admitting08. ConfigurationDX43 may be qualified within the same authorized cycle.",
       "remaining_kind": "real_campaign_observation_failed",
       "qualification_limit": "HTTP/WebSocket/IPC reais e vault temporário não substituem provedor nativo real ou o percurso M1 remoto.",
       "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
@@ -11495,14 +11529,14 @@
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
-        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md"
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json"
       ],
-      "result": "Os catálogos demonstram implementação/reuso e testes das 59 tarefas; não há novo gap de código identificado. Entretanto o literal é universal sobre tarefas obrigatórias, e entregas de evidência expressamente exigidas ainda faltam; não equivale a exigir que todos os substatus históricos sejam VERIFIED.",
+      "result": "Implementation/reuse/test catalog exists for59mandatory tasks; measured local first-use stages and DX39 are real. Do not require every historical task substatus VERIFIED.",
       "qualification_limit": "Não se usa task.status como prova nem se exige campanha M1 para testes puramente contratuais.",
       "remaining": [
-        "BASE-06, plano245: medir instalação até primeira sessão útil permanece NOT_RUN; 7.811s é liveness foreground e não essa medida.",
-        "As campanhas obrigatórias ainda abertas devem manter seus próprios gates: SVC-12/AC-13 serviço real, DX-20/AC-11 ciclo produtivo. Um plano de campanha ou teste sintético não é a entrega executada.",
-        "Other mandatory real campaign evidence remains pending in the individually named task records; DX08 consented handoff smoke is now qualified."
+        "Complete remote useful terminal cycle and retain its available stage clocks; complete the already named Windows events; map final evidence to mandatory task deliveries and finish implementation-report. No new universal suite."
       ]
     },
     "AC-02": {
@@ -11810,13 +11844,15 @@
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
-        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json"
       ],
-      "result": "O percurso terminal, preset, decisões e recuperação estão qualificados com Core/HTTP/SQLite reais e peer nativo sintético. O literal exige harness real em duas topologias.",
+      "result": "W17 useful15 exact report/native permission/continuation16 satisfies literal local DX39; SVC09 now proves terminal/dashboard ownership. Extra sum10 assertion remains failed but is not the fixed continuation criterion.",
       "qualification_limit": "Não converter teste de processo, initialize, NEXUS_CONNECTION_OK ou peer sintético em M1.",
       "remaining": [
-        "Executar DX-T39 local e DX-T40 via Connector com um harness real suportado: tarefa, progresso, pergunta/permissão, decisão canônica, resultado e retorno ao trabalho; serviço persistente sem dashboard ou terminal exclusivo.",
-        "Medir o primeiro uso útil de BASE-06 na campanha; registrar contexto, versões e custos previamente autorizados."
+        "DX40 real Connector cycle: actual canonical decision before expiry, useful correlated result, same-session continuation/reopen via terminal. Capture DX43 configuration and BASE06 remote stages within that same authorized cycle. Native07 CANCELLED/decision0/reportabsent does not close it."
       ]
     },
     "AC-12": {
@@ -11845,13 +11881,19 @@
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
         "plans/agent_ops/evidence/r3-native-user-service-execution/campaign/qualification.json",
-        "plans/agent_ops/evidence/r3-m1-v10-execution/summary.json"
+        "plans/agent_ops/evidence/r3-m1-v10-execution/summary.json",
+        "plans/agent_ops/evidence/r3-native-t14-t27-execution/review.json",
+        "plans/agent_ops/evidence/r3-native-t17-preservation/review.json",
+        "plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json",
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json"
       ],
-      "result": "Instalação, início, parada e remoção de tarefas Windows reais já foram executados na campanha de 24 ações; M1 v10 também comprovou setup local com provedor autenticado, drain normal e saída física. Isso não comprova login real, esgotamento de retry, todos os contextos cwd/PATH/credenciais nem os eventos de sessão pendentes.",
+      "result": "Both actual Windows hosts installed/stopped/uninstalled;4exit3 crashes/3replacements/backoff60/exhaustion/190s quiet qualified; cwd/PATH and data-preserving foreground reuse qualified; real terminal-only diagnosis plus authenticated Codex/Sonnet and binding credentials observed.",
       "qualification_limit": "Mocks de Task Scheduler e processo foreground supervisionado não substituem logon real; cofre sintético não comprova credencial pessoal real.",
       "remaining": [
-        "Na plataforma Windows declarada: registrar/iniciar no login, parar sem ressurreição, recuperar crash/backoff, remover e comprovar contexto/cwd/PATH e credenciais no serviço real.",
-        "Manter login, logout, reboot, terminal fechado e suspensão como eventos distintos. Não declarar outras plataformas qualificadas."
+        "Actual OS login-triggered start for SVC18 with own task/logon/cohort correlation. Keep distinct external logout and suspend/reboot scopes under SVC21/T29/AC14; no new crash, arbitrary NTSTATUS, blocked personal vault or physical second-host requirement."
       ]
     },
     "AC-14": {
@@ -11873,16 +11915,17 @@
         "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
         "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
         "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
-        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json"
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/review.json"
       ],
       "subscopes": {
         "pr09_optional_windows_observer_contract": "VERIFIED",
         "remote_renewal_installed_contract": "VERIFIED"
       },
-      "result": "Recuperação canônica, perda de resposta, revogação e ownership/incerteza já têm asserts; restart e transporte não autorizam repetir efeito ou renovar grant. O predicado suspensão/retorno ainda não tem campanha retida. Subsequent milestone03b3e801 qualifies real Server crash/return and live owned child restart with four current installed PASS; the audit is retained unchanged at its original point in time.",
+      "result": "Current installed real-process cases preserve live child claim/slot, invalid grants across Server replacement, Connector binding and no implicit replay. Native behavior in these contract cases is synthetic; scope is retained honestly.",
       "qualification_limit": "Falhas injetadas e recovery após commit comprovam seus cortes exatos; não são suspensão/logout/reboot observados.",
       "remaining": [
-        "Real suspension/resume with known operation/owner and no inferred replay, authority renewal or claim release remains unqualified."
+        "Real suspend/resume with current known operation/history and owned cohort. Refresh before/after projections of operations/receipts/leases/grants/watermarks, recording any change without inferring release/renewal/replay from availability. Existing terminal history can suffice; no extra paid inference required. Integrate SVC29, not another campaign."
       ]
     },
     "AC-15": {
@@ -14395,6 +14438,31 @@
         "NOT_RUN": 2
       },
       "other_scenarios_and_AC_unchanged": true
+    },
+    "r3_windows_automatic_event_preparation": {
+      "status": "OFFLINE_QUALIFIED_UNSELECTED",
+      "summary": "Prepared Windows event automation, attempt-bound additive companion and OS transition proof collector. Separate 8/6/3 focal groups retained; actual read-only capture contains 34 historical events, no selected new event. Current acceptance/task summaries reconciled to later evidence; statuses and historical milestones unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/review.json",
+        "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/manifest.json",
+        "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+      ],
+      "counts": {
+        "VERIFIED": 127,
+        "NOT_RUN": 2,
+        "IN_PROGRESS": 3
+      },
+      "new_os_events": 0,
+      "service_controls": 0,
+      "provider_calls": 0,
+      "acceptance_promoted": false,
+      "remaining_real_scenarios": [
+        "DX-T40",
+        "DX-T43",
+        "SVC-T18",
+        "SVC-T21",
+        "SVC-T29"
+      ]
     }
   },
   "history": [
@@ -16643,6 +16711,33 @@
         "NOT_RUN": 2
       },
       "other_scenarios_and_AC_unchanged": true
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_windows_automatic_event_preparation",
+      "status": "OFFLINE_QUALIFIED_UNSELECTED",
+      "summary": "Prepared Windows event automation, attempt-bound additive companion and OS transition proof collector. Separate 8/6/3 focal groups retained; actual read-only capture contains 34 historical events, no selected new event. Current acceptance/task summaries reconciled to later evidence; statuses and historical milestones unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/review.json",
+        "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/manifest.json",
+        "plans/agent_ops/evidence/r3-windows-automatic-event-preparation/acceptance-map/evidence-map.json"
+      ],
+      "counts": {
+        "VERIFIED": 127,
+        "NOT_RUN": 2,
+        "IN_PROGRESS": 3
+      },
+      "new_os_events": 0,
+      "service_controls": 0,
+      "provider_calls": 0,
+      "acceptance_promoted": false,
+      "remaining_real_scenarios": [
+        "DX-T40",
+        "DX-T43",
+        "SVC-T18",
+        "SVC-T21",
+        "SVC-T29"
+      ]
     }
   ],
   "r3_native_bounded_supervisor_execution": {

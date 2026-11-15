@@ -1,0 +1,40 @@
+{
+  "status": "OFFLINE_QUALIFIED_UNSELECTED",
+  "tests": {
+    "unique_cases": 3,
+    "passed": 3,
+    "failed": 0,
+    "tool_observation": "8a5014",
+    "seconds": 0.229,
+    "raw_test_log_not_retained": true
+  },
+  "read_only_capture": {
+    "tool_observation": "285f26",
+    "status": "READ_ONLY_CAPTURED",
+    "events": 34,
+    "truncated": false,
+    "sha256": "2c7dee7c353def5e760441e43a9db099cbef28033fc57679b03976bb1a3fc2e7",
+    "runtime_projection_allowlist_verified": true
+  },
+  "ancestor_pins": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\plan-template.json",
+      "sha256": "2c14d1ceec1c69d7d89dbb39ffdb4b75bcea2a751f7477c7afc5fb896df5036b"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\attempt_contract.py",
+      "sha256": "c832c9e09bcf1b3e1683da75be5ebe104b33ee92f837d9799d0c78bebf214b7a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\automation_contract.py",
+      "sha256": "98ff23b98e32f679834fb34227a0df7196f776bf95a798baf92d41588bc1791c"
+    }
+  ],
+  "event_generated": false,
+  "task_published": false,
+  "services_controlled": false,
+  "provider_calls": 0,
+  "scenario_acceptance": "NOT_RUN",
+  "old_receipts_unchanged": true,
+  "scope": "OS-recorded transition only; no deep-state residency or API-causation claim"
+}

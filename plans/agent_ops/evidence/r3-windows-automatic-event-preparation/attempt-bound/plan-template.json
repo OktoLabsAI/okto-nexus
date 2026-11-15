@@ -1,0 +1,120 @@
+{
+  "ancestor_automation_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-automation-supplement-9x8m6_1p\\plan-template.json",
+    "sha256": "aede97524e633a3462fd711750a8bfeaeb6d6f597423274cf4366a039f46a4fe"
+  },
+  "ancestor_manual_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\plan.json",
+    "sha256": "b4b1e19ae5d172dd754a6020d1341a3b1271b7e962e694dbe2b801c7f1634b26"
+  },
+  "automatic_next_event": false,
+  "automatic_wake_selected": false,
+  "campaign_root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign",
+  "event_attempt_required_before_after_reservation": true,
+  "event_command_templates_only": false,
+  "event_execution_implemented": true,
+  "events": [
+    "01-suspend-resume",
+    "02-sign-out-logon",
+    "04-restart-logon"
+  ],
+  "execution_selected": false,
+  "grant_mutations": 0,
+  "historical_scope": {
+    "local_journals": "own core-runtime/session-*.db, max32; allowlisted metadata only",
+    "no_auth_vault_payload_or_personal_config_reads": true,
+    "remote_journal": "own executor-journal.db; allowlisted metadata only",
+    "server_agents": [
+      "m1v12-local",
+      "m1-sonnet-remote"
+    ]
+  },
+  "history_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\history.py",
+  "homes": {
+    "connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home"
+  },
+  "instance_ids": {
+    "connector": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "nexus": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11"
+  },
+  "limits": {
+    "after_query_seconds": 180,
+    "cross_database_atomicity_claimed": false,
+    "os_io_preemption_claimed": false,
+    "retained_watch_seconds": 1800,
+    "rows_per_table": 2048,
+    "sqlite_seconds_per_database": 5
+  },
+  "login_requires_user": true,
+  "manual_marker_not_reused": true,
+  "native_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_native.py",
+  "new_productive_requests": 0,
+  "observer_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_observer.py",
+  "observer_sources": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4",
+  "os_actions_implemented": true,
+  "physical_exit_not_inferred_from_absence": true,
+  "port": 58631,
+  "prior_failures_preserved": true,
+  "provider_calls": 0,
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe",
+  "python_images": {
+    "C:\\Python313\\python.exe": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+    "C:\\Python313\\pythonw.exe": "2bea4fc941b7d9436afa1be8cb46551c0694deed23b3fec87b969054238be099",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\pythonw.exe": "5a90ff0fc0d283786928daebf2330c6851d3f5c7a89d1113ca2f7a2c05ff2f07"
+  },
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv",
+  "pythonw": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv\\Scripts\\pythonw.exe",
+  "read_only_dependencies": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_native.py",
+      "sha256": "2e81ec2b62b984ce3337ad7ce13b250a8eaee534376331cb6de97eeacbc28c12"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_observer.py",
+      "sha256": "23b506177335e168c087dffce446d99bf024c49a9742ea0a43807459b96667ab"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-session-current-history-w6d7vl5_\\history.py",
+      "sha256": "e3c6c0b9d8dbc352575083128756e1a39e946f389a49c9d8c825423477afe894"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\installation.json",
+      "sha256": "0055c57c33616c12ddfe78c12d1d940423c62f437a7722959976b7baf601b880"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\automation_contract.py",
+      "sha256": "98ff23b98e32f679834fb34227a0df7196f776bf95a798baf92d41588bc1791c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\collect.py",
+      "sha256": "6f54df8e8a7b4fce2b99f373a80560f92ef96d6f6756b1333e9e0161dc25660c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\select_event.py",
+      "sha256": "1267492e10029bc80d00ec9bb5a8c20731f1ca5ac342614c65f69bfd3c5eb2bf"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\attempt_contract.py",
+      "sha256": "c832c9e09bcf1b3e1683da75be5ebe104b33ee92f837d9799d0c78bebf214b7a"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4\\execute_event.py",
+      "sha256": "c7ce70dcb84f7028bfcacae344af932fc90fba5d7c6f744539c8ead6b457115f"
+    }
+  ],
+  "reviewed_for_execution": false,
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-windows-attempt-bound-cqbln3b4",
+  "selected_event": null,
+  "service_controls_implemented": false,
+  "status": "OFFLINE_ATTEMPT_BOUND_SUCCESSOR_UNSELECTED",
+  "task_digests": {
+    "connector": "c12aae3497ceb76336f29d3e9f2211733fea86d7ffb8da05568df5f175ae8df3",
+    "nexus": "b340b00c0def0503a472333948930ace8877e4379bf51946d2f3c96f95a0e235"
+  },
+  "tasks": {
+    "connector": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "nexus": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11"
+  }
+}
