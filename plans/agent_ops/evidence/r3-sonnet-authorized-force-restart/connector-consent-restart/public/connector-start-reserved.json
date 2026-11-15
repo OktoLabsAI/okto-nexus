@@ -1,0 +1,46 @@
+{
+  "state": "RESERVED_BEFORE_DISPATCH",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "daemon",
+    "start",
+    "--timeout",
+    "45"
+  ],
+  "previous_cohort": {
+    "cycle_id": "16bedd50e8807474af5366e08fe39346",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 41808,
+      "birth": 134391887371126766
+    },
+    "launcher": {
+      "pid": 42508,
+      "birth": 134391887392896802
+    },
+    "child": {
+      "pid": 36068,
+      "birth": 134391887393343984
+    }
+  },
+  "previous_generation": "8b35799e3ae1c6c3feec7cce45ee5162",
+  "previous_exit_proof_sha256": "2fd92eb65c4af4a6fbae9f0524675aaae8a6df71bdf29824f188707c8514e5cb",
+  "original_stop_returncode": 4,
+  "native_inactive": true,
+  "provider_calls": 0,
+  "force_used": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+  "consent_restart_plan_sha256": "7e8f2ade9eb053989dd233f8fde2368571a944177b65f958b58655a6959c4a3a"
+}

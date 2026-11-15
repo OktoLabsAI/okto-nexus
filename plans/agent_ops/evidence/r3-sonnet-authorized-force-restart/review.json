@@ -1,0 +1,98 @@
+{
+  "status": "SPECIFIC_FORCE_CONSUMED_PHYSICAL_EXIT_CONFIRMED_NEW_CONNECTOR_COHORT_OBSERVED",
+  "date": "2026-11-15",
+  "scope": "Completed force/restart/observer artifacts only; no binding/resume2 state collected.",
+  "authorization": {
+    "status": "CONSUMED_ONCE",
+    "target_pid": 36068,
+    "target_generation": "8b35799e3ae1c6c3feec7cce45ee5162",
+    "canonical_force_calls": 1,
+    "future_force_authorized": false,
+    "authority_sha256": "9e38da40c504904249a8a8e95f26f7cdd7ebc0f71ecd0f0f05f1e53baaa7f274"
+  },
+  "force_result": {
+    "canonical_cli_returncode": 0,
+    "fresh_retained_handles": true,
+    "roles": [
+      "parent",
+      "launcher",
+      "child"
+    ],
+    "all_three_physical_exit": true,
+    "all_exit_codes": 0,
+    "observer_terminate_right": false,
+    "wrapper_os_termination_calls": 0,
+    "work_settlement_claimed": false,
+    "returned_receipt_physical_exit_confirmed": false,
+    "physical_proof_published_separately": true
+  },
+  "new_connector": {
+    "start_returncode": 0,
+    "pid": 48048,
+    "generation": "95716251b58cfa1aea136956af5e4845",
+    "cycle_id": "6cb9cea66c9c99453a3588f965028d24",
+    "attempts_started": 1,
+    "watch_session": 39662,
+    "observer_pid": 47360,
+    "observer_birth": 134391928459173618,
+    "watch_session_36713_failed_before_started_receipt": true,
+    "no_second_service_start_for_watch_retry": true
+  },
+  "nexus_observer": {
+    "expired_session": 62571,
+    "new_watch_session": 10891,
+    "same_service_cohort": true,
+    "service_actions": 0,
+    "original_started_and_timeout_preserved": true
+  },
+  "root_observed_antecedents": [
+    {
+      "session": 64647,
+      "tool": "4c0f9f",
+      "outcome": "Original Connector observer expired; no physical exit proof."
+    },
+    {
+      "session": 62571,
+      "tool": "10a2cd",
+      "outcome": "Original Nexus observer expired; no physical exit proof."
+    },
+    {
+      "session": 36713,
+      "tool": "51a39d",
+      "outcome": "CONNECTOR_OWNER_NOT_READY during observer capture; no watch-started receipt. Observation failure, not another service start or service failure."
+    },
+    {
+      "tool": "ea72cf",
+      "outcome": "Root canonical status confirmed READY same new Connector PID/generation/cycle."
+    },
+    {
+      "tool": "d063af",
+      "outcome": "Host resume2 preflight refused missing watch file before private outputs/reservation/CLI. Later in-progress execution excluded."
+    }
+  ],
+  "root_execution_refs": {
+    "force": "8c97a2",
+    "nexus_observer_refresh": "8dc99b",
+    "connector_start": "0b302c",
+    "connector_select": "3b8911",
+    "connector_watch_retry": "7e1c03 -> session39662",
+    "watch_started_read": "4a889a"
+  },
+  "limits": {
+    "services_active_at_milestone": true,
+    "current_cohort_exit_or_cleanup_claimed": false,
+    "sonnet_productive_calls": 0,
+    "codex_tokens": 579154,
+    "codex_charged_admissions": 16,
+    "scenario_counts": {
+      "VERIFIED": 125,
+      "IN_PROGRESS": 5,
+      "NOT_RUN": 2
+    },
+    "acceptance_promoted": false,
+    "global_M1_pass": false,
+    "binding_completion_not_assessed": true,
+    "source_fix_165a01f9_not_installed_by_this_milestone": true
+  },
+  "provenance_note": "Original artifact bytes copied from explicit public/source allowlist. Root-only tool observations are labeled as such, not fabricated original receipts. The reserved receipt remains pre-dispatch; the returned receipt and separate retained-handle proof establish subsequent facts."
+}

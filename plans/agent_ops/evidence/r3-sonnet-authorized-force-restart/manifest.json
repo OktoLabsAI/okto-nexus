@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "scope": "PUBLIC_ALLOWLIST_EXACT_BYTES",
+  "files": [
+    {
+      "path": "connector-consent-restart/force-authorization.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\force-authorization.json",
+      "sha256": "9e38da40c504904249a8a8e95f26f7cdd7ebc0f71ecd0f0f05f1e53baaa7f274",
+      "bytes": 1574
+    },
+    {
+      "path": "connector-consent-restart/force_retained_once.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\force_retained_once.py",
+      "sha256": "1ee8f3873beab39c9719f6abeecad2aeab8acf4aafa9159087a40f78873b8422",
+      "bytes": 8405
+    },
+    {
+      "path": "connector-consent-restart/record_force_authorization.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\record_force_authorization.py",
+      "sha256": "7705a8818462cd78801391e7ad093f8815d9320cbd5af9800b9eae1fecd97b79",
+      "bytes": 1306
+    },
+    {
+      "path": "refresh_nexus_observer.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\refresh_nexus_observer.py",
+      "sha256": "b424857cd37c211f8336c2269a5ee91950b4c5b2888ed80c7cee00ec956d07cc",
+      "bytes": 2721
+    },
+    {
+      "path": "connector-consent-restart/public/canonical-force-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\public\\canonical-force-reserved.json",
+      "sha256": "0a1144e899dd361ff1e0af28a05153523ce5591523a5b7b05fb97ab63598ef8f",
+      "bytes": 2318
+    },
+    {
+      "path": "connector-consent-restart/public/canonical-force-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\public\\canonical-force-returned.json",
+      "sha256": "72ef04bdd098d96099f25f04a4fae70e6561fcdef113bf2fc4643cb6f2f37702",
+      "bytes": 1002
+    },
+    {
+      "path": "connector-consent-restart/public/canonical-force-physical-exit.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\public\\canonical-force-physical-exit.json",
+      "sha256": "b225e2760f32a5fd7757505a4bcaed5ff383b9cf168afc4ace3a12102b097bd3",
+      "bytes": 1519
+    },
+    {
+      "path": "connector-consent-restart/public/connector-start-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\public\\connector-start-reserved.json",
+      "sha256": "469f42ae8e3491b088ab1b99a6d9a0b15609161982b42713afee753673d2de60",
+      "bytes": 1386
+    },
+    {
+      "path": "connector-consent-restart/public/connector-start-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\public\\connector-start-returned.json",
+      "sha256": "bea8e70a8a6f455c934248b115680ae3d9b748e0d5dbba9f36284aab68c1b4b3",
+      "bytes": 633
+    },
+    {
+      "path": "connector-consent-restart/public/connector-owner-selection.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\public\\connector-owner-selection.json",
+      "sha256": "83d4be6e3d9912a8b380b531ccee37161905cb4d407bdfb6bca55b900734c10d",
+      "bytes": 1052
+    },
+    {
+      "path": "connector-consent-restart/public/connector-exit-watch-started.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\public\\connector-exit-watch-started.json",
+      "sha256": "bd97bddc38f3e42c755770bf489407717264bb182423202443e45a823f7c7664",
+      "bytes": 784
+    },
+    {
+      "path": "public/connector-exit-proof.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-exit-proof.json",
+      "sha256": "2fd92eb65c4af4a6fbae9f0524675aaae8a6df71bdf29824f188707c8514e5cb",
+      "bytes": 1509
+    },
+    {
+      "path": "public/connector-exit-watch-timeout.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-exit-watch-timeout.json",
+      "sha256": "f99659a22affb59269ac85ec5762b70c25d7f296da14cb73f9dd7b52bc323197",
+      "bytes": 541
+    },
+    {
+      "path": "public/nexus-observer-refresh-selection.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-observer-refresh-selection.json",
+      "sha256": "aefa36d22a18dce87532054561964f8b34f31b873ee20508e0df6caa35cc61ff",
+      "bytes": 1568
+    },
+    {
+      "path": "public/nexus-exit-watch-started.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-exit-watch-started.json",
+      "sha256": "1e5986deb0026a485857534e34ba601d7a0f51a5c1796dfebcc1d46040cdfcf8",
+      "bytes": 682
+    },
+    {
+      "path": "public/nexus-observer-expired-01/nexus-exit-watch-started.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-observer-expired-01\\nexus-exit-watch-started.json",
+      "sha256": "55761db0d607974a6c20aaf4c39b1a59d99de02ccca48c14e770d98c1f43f811",
+      "bytes": 682
+    },
+    {
+      "path": "public/nexus-observer-expired-01/nexus-exit-watch-timeout.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-observer-expired-01\\nexus-exit-watch-timeout.json",
+      "sha256": "5aa28e6b46b9254ccde96e267f48f4b6a77960d20892e7b8d074df6ede5cea8e",
+      "bytes": 541
+    },
+    {
+      "path": "review.json",
+      "source": "curation",
+      "sha256": "1f7b836739f7bd5a1c0ebd10adb5e41279fae5420fa485fa9984c6d3b23e1073",
+      "bytes": 3481
+    },
+    {
+      "path": "README.md",
+      "source": "curation",
+      "sha256": "d3fb20c9183557d805e60b5b1142219da2c31cdeeb089ca25dbaf6c9a96b5f34",
+      "bytes": 1570
+    }
+  ],
+  "excluded": [
+    "private outputs",
+    "vault/credentials",
+    "provider transcripts",
+    "moving binding/host-resume2 execution"
+  ],
+  "acceptance_promoted": false
+}

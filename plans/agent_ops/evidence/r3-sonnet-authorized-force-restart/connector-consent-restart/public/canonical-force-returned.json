@@ -1,0 +1,28 @@
+{
+  "status": "CANONICAL_FORCE_RETURNED",
+  "proposal_sha256": "c35871e2af447c3532cb51dbc223bdb07a31807242c2abbe7187a88a7bea5a7e",
+  "authorization_sha256": "9e38da40c504904249a8a8e95f26f7cdd7ebc0f71ecd0f0f05f1e53baaa7f274",
+  "returncode": 0,
+  "force_used": true,
+  "canonical_force_calls": 1,
+  "os_termination_calls": 0,
+  "provider_calls": 0,
+  "stdout_sha256": "20913c6835c2d392ec83360dc18b08495e4e42a756fc35fbdd21e913716e9f7c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "observer": {
+    "pid": 25480,
+    "birth": 134391926342891737
+  },
+  "physical_exit_confirmed": false,
+  "work_settlement_claimed": false,
+  "old_observer_timeout_preserved": true,
+  "projection": {
+    "state": "stopped",
+    "reason": "NO_SERVICE_OWNER",
+    "pid": null,
+    "generation": "",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+    "shutdown_outcome": "drained",
+    "stopped": true
+  }
+}

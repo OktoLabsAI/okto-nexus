@@ -2299,3 +2299,11 @@ Transferência antiga UNCONFIRMED preservada; nenhum artefato de binding em anda
 Falha inicial STALE_GENERATION antes do probe preservada. Probe canônico explícito com PATH exato do daemon e candidato retido confirmou2.1.323, sem mudar configuração/checkpoint. Resume CLI0 permaneceu awaiting_inventory/REALIZE; wrapper recusou conclusão, sem DONE fabricado. Diagnóstico sanitizado: vault do daemon conservava consentimento=False desde boot, embora persistido=True. Stop normal retornou4/stopping; nenhuma saída física ou cleanup alegados neste recorte.
 
 Correções Connector de refresh de consentimento e drenagem pré-readiness qualificadas apenas em fonte, commit 165a01f9c2acbc8e40388706f86534434968ed72. Pacote live intocado. Helper de restart exige3 saídas/ausência/task/consentimento/epoch2; proposta de uma força canônica exata aguardava autorização específica neste recorte, sem execução ou recibo inventado. Provider/model0. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN**, sem promoção. [Evidências e limites](plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/review.json).
+
+## 2026-11-15 — Força específica consumida e nova coorte Connector observada
+
+A autorização específica para PID36068/geração8b35799e foi consumida em uma chamada canônica, CLI0. Após a expiração dos observadores originais, handles novos retidos confirmaram saída física dos3 processos. O recibo de retorno e a prova física posterior permanecem separados; não se infere settlement. Nenhuma autorização de força adicional.
+
+Start único retornou READY em PID48048/geração95716251. O observador36713 falhou na captura antes de watch-started; somente a observação foi repetida, sessão39662, mesma coorte. Nexus teve observador rearmado para a mesma coorte com os recibos expirados arquivados. No corte deste marco, serviços ativos, sem cleanup/saída das novas coortes alegados. Falha preflight host-resume2 por watch ausente preservada; binding/execução em movimento excluídos.
+
+Sonnet0 chamadas produtivas; Codex579.154/16 inalterado. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN**, sem promoção. [Evidência pública e limites](plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/review.json).

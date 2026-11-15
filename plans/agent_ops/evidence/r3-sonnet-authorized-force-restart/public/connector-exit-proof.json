@@ -1,0 +1,53 @@
+{
+  "cohort": {
+    "cycle_id": "16bedd50e8807474af5366e08fe39346",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 41808,
+      "birth": 134391887371126766
+    },
+    "launcher": {
+      "pid": 42508,
+      "birth": 134391887392896802
+    },
+    "child": {
+      "pid": 36068,
+      "birth": 134391887393343984
+    }
+  },
+  "observed_at": 1794719055.803953,
+  "force_used": true,
+  "observer": {
+    "pid": 25480,
+    "birth": 134391926342891737
+  },
+  "observer_terminate_right": false,
+  "provenance": "FRESH_RETAINED_HANDLES_AFTER_ORIGINAL_OBSERVER_TIMEOUT",
+  "force_proposal_sha256": "c35871e2af447c3532cb51dbc223bdb07a31807242c2abbe7187a88a7bea5a7e",
+  "force_returned_sha256": "72ef04bdd098d96099f25f04a4fae70e6561fcdef113bf2fc4643cb6f2f37702",
+  "expired_observer_timeout_sha256": "f99659a22affb59269ac85ec5762b70c25d7f296da14cb73f9dd7b52bc323197",
+  "exits": {
+    "parent": {
+      "pid": 41808,
+      "birth": 134391887371126766,
+      "physical_exit": true,
+      "exit_code": 0
+    },
+    "launcher": {
+      "pid": 42508,
+      "birth": 134391887392896802,
+      "physical_exit": true,
+      "exit_code": 0
+    },
+    "child": {
+      "pid": 36068,
+      "birth": 134391887393343984,
+      "physical_exit": true,
+      "exit_code": 0
+    }
+  },
+  "work_settlement_claimed": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

@@ -3,7 +3,7 @@
   "plan": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
   "plan_revision": "R3",
   "plan_sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
-  "updated_at": "2026-11-14",
+  "updated_at": "2026-11-15",
   "status": "IN_PROGRESS",
   "platform": "Windows-11-10.0.26300-SP0",
   "repositories": {
@@ -14022,6 +14022,26 @@
       "acceptance_promoted": false,
       "provider_turns": 0,
       "connector_source_commit": "165a01f9c2acbc8e40388706f86534434968ed72"
+    },
+    "r3_sonnet_authorized_force_restart": {
+      "status": "SPECIFIC_FORCE_CONSUMED_PHYSICAL_EXIT_CONFIRMED_NEW_CONNECTOR_COHORT_OBSERVED",
+      "summary": "Specific force authorization consumed once for Connector36068/generation8b35799e; canonical CLI0 and separate fresh retained-handle proof confirm all3 physical exits. One new canonical start READY48048; observer capture failure36713 preserved, successful observation39662 samecohort. Nexus observer refreshed samecohort after timeout. At this historical milestone cut, services active; no new-cohort cleanup/work settlement or binding completion claimed. Sonnet productive0;125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/force-authorization.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/canonical-force-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/canonical-force-physical-exit.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/connector-owner-selection.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/connector-exit-watch-started.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_turns": 0,
+      "force_authorization_consumed": true,
+      "canonical_force_calls": 1,
+      "future_force_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
     }
   },
   "history": [
@@ -15895,6 +15915,28 @@
       "acceptance_promoted": false,
       "provider_turns": 0,
       "connector_source_commit": "165a01f9c2acbc8e40388706f86534434968ed72"
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_authorized_force_restart",
+      "status": "SPECIFIC_FORCE_CONSUMED_PHYSICAL_EXIT_CONFIRMED_NEW_CONNECTOR_COHORT_OBSERVED",
+      "summary": "Specific force authorization consumed once for Connector36068/generation8b35799e; canonical CLI0 and separate fresh retained-handle proof confirm all3 physical exits. One new canonical start READY48048; observer capture failure36713 preserved, successful observation39662 samecohort. Nexus observer refreshed samecohort after timeout. At this historical milestone cut, services active; no new-cohort cleanup/work settlement or binding completion claimed. Sonnet productive0;125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/force-authorization.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/canonical-force-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/canonical-force-physical-exit.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/connector-owner-selection.json",
+        "plans/agent_ops/evidence/r3-sonnet-authorized-force-restart/connector-consent-restart/public/connector-exit-watch-started.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_turns": 0,
+      "force_authorization_consumed": true,
+      "canonical_force_calls": 1,
+      "future_force_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16
     }
   ],
   "r3_native_bounded_supervisor_execution": {

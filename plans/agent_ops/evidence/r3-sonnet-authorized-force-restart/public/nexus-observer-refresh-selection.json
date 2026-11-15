@@ -1,0 +1,39 @@
+{
+  "status": "SAME_COHORT_OBSERVATION_REFRESH_SELECTED",
+  "expired_session": 62571,
+  "terminal_observation_tool": "10a2cd",
+  "archived": [
+    {
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-exit-watch-started.json",
+      "archive_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-observer-expired-01\\nexus-exit-watch-started.json",
+      "sha256": "55761db0d607974a6c20aaf4c39b1a59d99de02ccca48c14e770d98c1f43f811"
+    },
+    {
+      "original_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-exit-watch-timeout.json",
+      "archive_path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\nexus-observer-expired-01\\nexus-exit-watch-timeout.json",
+      "sha256": "5aa28e6b46b9254ccde96e267f48f4b6a77960d20892e7b8d074df6ede5cea8e"
+    }
+  ],
+  "generation": "a59778be231e827fdbfd95ec947e5103",
+  "cohort": {
+    "cycle_id": "83385b0dffad1b22ee9fdd49842429ca",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 43100,
+      "birth": 134391883995944611
+    },
+    "launcher": {
+      "pid": 54112,
+      "birth": 134391884090702531
+    },
+    "child": {
+      "pid": 14264,
+      "birth": 134391884091386721
+    }
+  },
+  "service_actions": 0,
+  "provider_calls": 0,
+  "recorded_at_utc": "2026-11-15T05:03:08.107997+00:00"
+}
