@@ -1,0 +1,18 @@
+{
+  "status": "OFFLINE_QUALIFIED_NO_OS_OR_SERVICE_EXECUTION",
+  "tests": {
+    "synthetic_passed": 29,
+    "installed_imports": 7,
+    "antecedent_passed": 25
+  },
+  "root_review": "Observer/ACL/atomic publication reviewed; final lifecycle execution review remains pending.",
+  "authority": "OS event coordination/authorization remains pending. Preparation does not select logout, reboot, shutdown, suspend, service install/start or event on real homes.",
+  "scope": "SVC-T18/T21/T29 durable before/after observations; no DRAINED inference from a replacement owner or dead observer. AC14 scope and extra read-only route documented only.",
+  "scenario_promotion": false,
+  "ac14_promotion": false,
+  "provider_calls": 0,
+  "service_actions": 0,
+  "os_events": 0,
+  "freeze_sha256": "56866451ed82c26edf7d4e783e85cb23e88d75cc59e99587bcc78b8b3f41c1f2",
+  "qualification_sha256": "0ae3b7c4c2bdd3d8dae0b8a8463fa9a11cb8c50bbea86f37450ba733d7782d59"
+}

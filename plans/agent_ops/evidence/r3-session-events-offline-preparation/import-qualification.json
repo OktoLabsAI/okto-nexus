@@ -1,0 +1,53 @@
+{
+  "status": "INSTALLED_IMPORT_SIGNATURES_CONFIRMED",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+  "symbols": [
+    {
+      "symbol": "ServerInstallation",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\installation.py",
+      "sha256": "7f336251a20dfbb3989d20eaf4ffd14c3f86f9022030accf19153be829b722f8",
+      "signature": "(home, database, *, tasks=None)"
+    },
+    {
+      "symbol": "inspect_local_server",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\inspection.py",
+      "sha256": "92c4ec6f5d9e28241837dcf64c29ed954b89a38c20f5762875bc7799261048bb",
+      "signature": "(*, home: 'Path', database: 'Path', host: 'str', port: 'int', timeout: 'float' = 2.0) -> 'dict'"
+    },
+    {
+      "symbol": "read_record",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\supervision.py",
+      "sha256": "f8f1608b5daa1b3095252bc967b6fe590012100c3af847b7c3f28d53b012f77c",
+      "signature": "(home, receipt, instance_id)"
+    },
+    {
+      "symbol": "UserService",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\platform\\user_service.py",
+      "sha256": "5e1376c4b28921e3b2edccfe495c5d673c015a47c5a29c750dbafbd202d93c62",
+      "signature": "(root: 'Path', *, tasks=None)"
+    },
+    {
+      "symbol": "read_cycle",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\platform\\service_supervision.py",
+      "sha256": "9c943d7bc34b01a6e08dee9025e8308328b84052e178d1a1e4816c116fd901f7",
+      "signature": "(root, installation)"
+    },
+    {
+      "symbol": "status",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\daemon\\manager.py",
+      "sha256": "65ee837a61af3bbb2c4a3e98f13e2d02cd691c0ca2bf41d4f0c555d6d9a47611",
+      "signature": "(root: 'Path', *, probe: 'bool' = True, timeout: 'float' = 2.0, _launch_owned=False) -> 'DaemonStatus'"
+    },
+    {
+      "symbol": "windows_definition_digest",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\nexus_connector_core\\user_service_definition.py",
+      "sha256": "afe6be7013ffe048ef114d8b6b12271a66b6c2c5c42d6a41afb62036eff1f9ea",
+      "signature": "(xml: 'str') -> 'str'"
+    }
+  ],
+  "native_windows_calls": 0,
+  "services": 0,
+  "provider_calls": 0,
+  "qualification_limit": "Imports/signatures only, not real session-event execution."
+}

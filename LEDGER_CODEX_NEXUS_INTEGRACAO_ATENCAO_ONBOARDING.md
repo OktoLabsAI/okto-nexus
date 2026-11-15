@@ -2269,3 +2269,13 @@ Nenhum install/start novo, armazenamento real de credencial, rotação/importaç
 A primeira tentativa recusou inventário vazio antes de criar o draft (`UNIQUE_INVENTORIED_CLAUDE_REQUIRED`): faltava o diretório do Claude já pinado no PATH restrito do caller. Suplemento aditivo, com nova reserva de descoberta e 3 testes focais PASS, incluiu somente esse diretório. A nova descoberta passou e o draft02 foi criado uma única vez, validado Sonnet/default/MCP desabilitado/per_sender/ask/60min3ações. Setup01 preservado, nenhuma identidade criada.
 
 Sem HTTP/provedor, install/start, consentimento de armazenamento ou rotação/importação. Serviços continuam parados; autorização específica de arquivo plaintext/revogação pendente neste marco. Transferência antiga `UNCONFIRMED` intacta, revisão remota e trabalho pago ainda retidos. **125 VERIFIED / 5 IN_PROGRESS / 2 NOT_RUN**, sem promoção. [Evidência e limites](plans/agent_ops/evidence/r3-sonnet-recovery-draft02/review.json).
+
+## 2026-11-15 — Binding02 e SVC20 preparados; medição parcial de BASE-06
+
+Binding02: 7 casos offline PASS e revisão independente; nenhuma ação real ou DONE fabricado. SVC20 Connector: 5 casos PASS; sequência possível após DONE real e antes da primeira inferência, com zero operações, stop/next-connect configurado/stop normal e prova física. O contexto pago seguinte exige nova coorte/observadores; após trabalho pago continua retido sem prova de settlement. Receipt SUCCEEDED sozinho não autoriza stop. Falhas anteriores preservadas.
+
+BASE-06 primeiro uso passa de NOT_RUN para **IN_PROGRESS**, sem promover a tarefa ou cenário: instalação dos wheels v12 12,9945733s (58,1911667s com verificação) e resultado útil W17 148,2299977s são etapas históricas distintas. Faltam trajetória remota e relógios de instalação W16/R; não representam tempo homogêneo do pacote atual nem liveness7,811s. Sem AC01/AC11/M1 global. **125 VERIFIED / 5 IN_PROGRESS / 2 NOT_RUN**. [Evidência e limites](plans/agent_ops/evidence/r3-binding02-svc20-preparation-base06-timing/review.json).
+
+## 2026-11-15 — Eventos de sessão: preparação offline
+
+Observador durável e helpers de SVC-T18/T21/T29: **29 testes sintéticos PASS / 7 imports instalados**, antecedente25 preservado. Root revisou observador/ACL/publicação atômica; revisão final da execução de lifecycle e coordenação/autorização de eventos disruptivos continuam pendentes. Nenhum login/logout/reboot/shutdown/suspend, install/start ou provedor executado. Owner novo ou observador encerrado não prova DRAINED do trabalho anterior. Escopo/rota adicional de AC14 documentados, sem promoção ou ações silenciosas em homes reais. Cenários **125/5/2** inalterados. [Evidência](plans/agent_ops/evidence/r3-session-events-offline-preparation/review.json).

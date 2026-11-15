@@ -1,0 +1,34 @@
+{
+  "status": "OFFLINE_BINDING_AND_SVC20_QUALIFIED_BASE06_PARTIAL_TIMING_RETAINED",
+  "binding02": {
+    "unique_tests_passed": 7,
+    "peer_review": "PASS_READ_ONLY",
+    "plan_sha256": "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c",
+    "scope": "Six canonical actions through host Finish and operator completion; awaiting_inventory/CLI0 is not DONE. Final complete may POST metadata recovery before GET. No actual action selected or executed by this preparation.",
+    "prerequisites": "Specific storage/revocation authority, real rotation/import epoch2, exact canonical review and host Finish; none manufactured."
+  },
+  "svc20": {
+    "final_tests_passed": 5,
+    "actual_execution": false,
+    "route": "After actual configured DONE and before first paid admission: zero operations -> stop -> configured next-connect -> final stop; fresh subsequent start/cohort/paid guards required.",
+    "post_paid": "Held without independent settlement evidence. SUCCEEDED alone refuses before stop.",
+    "original_failures_retained": true
+  },
+  "base06": {
+    "first_use_measurement": "IN_PROGRESS",
+    "installation_v12_seconds": 12.9945733,
+    "installation_with_verification_seconds": 58.1911667,
+    "w17_useful_seconds": 148.2299977,
+    "not_claimed": "Homogeneous current-package install-to-useful interval, same-boot cross-stage arithmetic, remote trajectory, AC01/AC11 acceptance or liveness7.811s as useful first use.",
+    "remaining": "Retain remote current stages and explicitly missing W16/R installation clocks; no gratuitous rebuild/provider turn."
+  },
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  },
+  "scenario_promotion": false,
+  "service_actions": 0,
+  "provider_calls": 0,
+  "retention": "Explicit helpers, synthetic qualification and sanitized timing audit only. Private files mentioned by pre-existing hash references are not copied."
+}

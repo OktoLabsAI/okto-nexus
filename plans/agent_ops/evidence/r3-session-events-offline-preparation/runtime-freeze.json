@@ -1,0 +1,34 @@
+{
+  "format": "svc-session-events-runtime-freeze-v1",
+  "status": "OFFLINE_QUALIFIED_PENDING_ROOT_REVIEW_AND_USER_COORDINATION",
+  "runtime": {
+    "plan.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\plan.json",
+      "sha256": "87a197bf7cdd9c14a829c7f03aeb29caa6f19b10adac704d436082469d4d4acf",
+      "bytes": 27515
+    },
+    "event_entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_entry.py",
+      "sha256": "0d502ae8fe3a7c98fc95d2847af101bf2053d5a7c95c404aa8e92f4277e29129",
+      "bytes": 4178
+    },
+    "event_native.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_native.py",
+      "sha256": "2e81ec2b62b984ce3337ad7ce13b250a8eaee534376331cb6de97eeacbc28c12",
+      "bytes": 13823
+    },
+    "event_observer.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_observer.py",
+      "sha256": "23b506177335e168c087dffce446d99bf024c49a9742ea0a43807459b96667ab",
+      "bytes": 11282
+    },
+    "event_lifecycle.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\event_lifecycle.py",
+      "sha256": "755221f4e328959421dd0d4fbf20a806d71740d5dd15ff2e43c48a1cd0458995",
+      "bytes": 8179
+    }
+  },
+  "authorization_created": false,
+  "provider_calls": 0,
+  "real_service_or_OS_events": 0
+}

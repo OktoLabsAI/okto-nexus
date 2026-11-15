@@ -1,0 +1,491 @@
+{
+  "format": "svc18-21-29.user-session-events.proposal-v1",
+  "status": "OFFLINE_PROPOSAL_NO_OS_OR_SERVICE_EXECUTION_AUTHORIZED",
+  "root": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "python_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv",
+  "homes": {
+    "nexus": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\nexus",
+    "connector": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\connector"
+  },
+  "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\project",
+  "caller": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller",
+  "port": 59231,
+  "instance_ids": {
+    "nexus": "svc_5f463f273e6178366e9050a7e6c2ef4eedd2b148078d620ee81610c7deb7a8b5",
+    "connector": "svc_20cc2017b0e19b944cba1818131b0ef1276af0d7a30ae1a0629a7c70163d834b"
+  },
+  "tasks": {
+    "nexus": "OktoNexus-server-5f463f273e6178366e9050a7e6c2ef4eedd2b148078d620ee81610c7deb7a8b5",
+    "connector": "OktoNexus-connector-20cc2017b0e19b944cba1818131b0ef1276af0d7a30ae1a0629a7c70163d834b"
+  },
+  "environments": {
+    "A": {
+      "COMSPEC": "C:/WINDOWS/System32/cmd.exe",
+      "PATHEXT": ".COM;.EXE;.BAT;.CMD",
+      "SYSTEMROOT": "C:/WINDOWS",
+      "WINDIR": "C:/WINDOWS",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONUNBUFFERED": "1",
+      "OKTO_NEXUS_NO_BANNER": "1",
+      "OKTO_NEXUS_CONNECTOR_VAULT": "file",
+      "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile",
+      "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\appdata",
+      "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\localappdata",
+      "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\tmp",
+      "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\tmp",
+      "PATH": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\venv\\Scripts;C:/Python313;C:/WINDOWS/System32",
+      "HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile",
+      "CODEX_HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\.codex",
+      "CLAUDE_CONFIG_DIR": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\.claude"
+    },
+    "B": {
+      "COMSPEC": "C:/WINDOWS/System32/cmd.exe",
+      "PATHEXT": ".COM;.EXE;.BAT;.CMD",
+      "SYSTEMROOT": "C:/WINDOWS",
+      "WINDIR": "C:/WINDOWS",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONUNBUFFERED": "1",
+      "OKTO_NEXUS_NO_BANNER": "1",
+      "OKTO_NEXUS_CONNECTOR_VAULT": "file",
+      "USERPROFILE": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile",
+      "APPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\appdata",
+      "LOCALAPPDATA": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\localappdata",
+      "TEMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\tmp",
+      "TMP": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\tmp",
+      "PATH": "C:/WINDOWS/System32",
+      "HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile",
+      "CODEX_HOME": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\.codex",
+      "CLAUDE_CONFIG_DIR": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\profile\\.claude"
+    }
+  },
+  "commands": {
+    "nexus": {
+      "install": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "install",
+          "--user",
+          "--start-at-login",
+          "--json",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\nexus",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "59231",
+          "--project-root",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\project",
+          "--embedding-mode",
+          "off",
+          "--feature-harness-integrations",
+          "false",
+          "--metrics-mode",
+          "disabled"
+        ],
+        "environment": "A",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\project"
+      },
+      "initial_start": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "start",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\nexus",
+          "--timeout",
+          "45",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      },
+      "cleanup_stop": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "stop",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\nexus",
+          "--timeout",
+          "45",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      },
+      "cleanup_uninstall": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "uninstall",
+          "--user",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\nexus",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      },
+      "status": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus.adapters.inbound.cli.main",
+          "service",
+          "status",
+          "--home",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\nexus",
+          "--json"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      }
+    },
+    "connector": {
+      "install": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\connector",
+          "--non-interactive",
+          "--json",
+          "service",
+          "install"
+        ],
+        "environment": "A",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\project"
+      },
+      "initial_start": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\connector",
+          "--non-interactive",
+          "--json",
+          "daemon",
+          "start",
+          "--timeout",
+          "45"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      },
+      "cleanup_stop": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\connector",
+          "--non-interactive",
+          "--json",
+          "daemon",
+          "stop",
+          "--timeout",
+          "45"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      },
+      "cleanup_uninstall": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\connector",
+          "--non-interactive",
+          "--json",
+          "service",
+          "uninstall"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      },
+      "status": {
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+          "-I",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "okto_nexus_connector.cli.main",
+          "--state-dir",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\connector",
+          "--non-interactive",
+          "--json",
+          "daemon",
+          "status"
+        ],
+        "environment": "B",
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\caller"
+      }
+    }
+  },
+  "package": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\installation.json",
+    "sha256": "3f78145bfa366d4b206712e825e5d4c8b35fce9579f721d798d16e7f19b3d155"
+  },
+  "wheels": {
+    "okto_nexus-0.3.3-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "bff18ff133b6180ab2d20810cd54ae4abc8650e7c8093caf374afd97692c62f4"
+    },
+    "okto_nexus_connector-0.0.12-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "f9864f13db4c5e6e5afdfd8f28ca5384512a17a1f8efb1897cb3a4d810d43cf4"
+    },
+    "okto_nexus_connector_core-0.0.14-py3-none-any.whl": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "d881ab35ac619147df51cbe3a10964e534c50acd117e45e2612dcec7fbc1afe9"
+    }
+  },
+  "python_images": {
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe": "cd15f17b5382c676fe857fd9e7effe0b787f95611538f4193c60a65f2637dd79",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\pythonw.exe": "5a90ff0fc0d283786928daebf2330c6851d3f5c7a89d1113ca2f7a2c05ff2f07",
+    "C:\\Python313\\python.exe": "03573716a7fcbd8b7fed8fe0163bbfbd3a852546920d6a666123f307c8dac7d9",
+    "C:\\Python313\\pythonw.exe": "2bea4fc941b7d9436afa1be8cb46551c0694deed23b3fec87b969054238be099"
+  },
+  "source_pins": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\nexus_connector_core\\user_service_definition.py",
+      "sha256": "afe6be7013ffe048ef114d8b6b12271a66b6c2c5c42d6a41afb62036eff1f9ea"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\nexus_connector_core\\user_service_supervision.py",
+      "sha256": "5bb430afc179d5ba9d5ee4639a7b2b9fa2f6b8509c628cca90596aebba27733d"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\identity.py",
+      "sha256": "e4e923973195d6139a3e86b6573e587e5a5c315150bdeb8b2ea94460ac7faf11"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus\\adapters\\outbound\\service_manager\\supervision.py",
+      "sha256": "f8f1608b5daa1b3095252bc967b6fe590012100c3af847b7c3f28d53b012f77c"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\platform\\service_identity.py",
+      "sha256": "8340ba13d3c1473be3ebe808a1407567ef942384717d193aa1e96047e81b35d6"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Lib\\site-packages\\okto_nexus_connector\\platform\\service_supervision.py",
+      "sha256": "9c943d7bc34b01a6e08dee9025e8308328b84052e178d1a1e4816c116fd901f7"
+    }
+  ],
+  "antecedents": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-native-t19-t20-v2-fk9g74yv\\plan.json",
+      "sha256": "defff73901c2039e0ace2fd28373bb35e87b5b47a5a1a672a837bbd028f784b5"
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\svc-session-events-plan-paused.json",
+      "sha256": "af1933f55113545ce8c0a9c420a9d213ba1cb220ee1f0e7541bd511fad936521"
+    }
+  ],
+  "fixed_criteria": {
+    "SVC-T18": "Actual user logon starts both selected services; no boot-without-login claim.",
+    "SVC-T21": "External logout/shutdown preserves honest interruption/uncertainty; existing CLI drain and timeout proof is reused.",
+    "SVC-T29": "Suspend/resume, logout and reboot remain distinct records; availability does not imply productive resumption."
+  },
+  "work_scope": {
+    "provider_calls": 0,
+    "new_sessions": 0,
+    "work_submissions": 0,
+    "nexus_harness_integrations": false,
+    "connector_identity": "none",
+    "state": "Runtime-created database/state and lifecycle receipts, no hand-authored execution records.",
+    "qualification_boundary": "Qualifies observed service/session lifecycle and honest uncertainty only. Does not claim interrupted productive-work reconciliation, provider survival or authenticated remote readiness.",
+    "no_extra_paid_work_gate": "Active model work is not added as a prerequisite to these literal event checks."
+  },
+  "preparation_after_future_authorization": [
+    "Verify immutable package/source pins; resolve both identities again under the same effective principal. Confirm proposed roots and exact task names are absent and port59231 is free; conflict refuses without choosing another target.",
+    "Create only the listed own home/project/caller/environment/evidence directories, with owner-private evidence ACLs. Use the listed sanitized per-child environment; do not change global PATH or account settings.",
+    "Run each install once, then initial_start once. Retain native XML digests and application identities. The one foreground supervisor owns parent/launcher/runtime; native RestartOnFailure remains absent.",
+    "Observe canonical readiness for up to180s with GET/IPC only; no extra start on timeout. Nexus storage must be initialized; Connector local IPC readiness is distinct from authenticated remote readiness.",
+    "Retain exact cohort handles before the first event, using existing query/synchronize-only observation. No terminate rights or fault injection."
+  ],
+  "events": [
+    {
+      "id": "01-suspend-resume",
+      "criteria": [
+        "SVC-T29"
+      ],
+      "before": "Both own services READY, exact native task digests and cohorts recorded; fsync a pre-event record.",
+      "user_action": "Windows Start > Power > Sleep; leave asleep approximately60s, then wake manually and unlock if required.",
+      "machine_effect": "System sleep pauses processes/network and may expire leases; waking is not reboot or logon.",
+      "after": "Observe same/different owner, generation, cycle, actual task and canonical status. If observer survived, retained handles remain usable; otherwise mark that proof unavailable. No new work or replay.",
+      "automatic_lifecycle_commands_between_before_after": 0
+    },
+    {
+      "id": "02-sign-out-logon",
+      "criteria": [
+        "SVC-T18",
+        "SVC-T21",
+        "SVC-T29"
+      ],
+      "before": "Separate durable pre-event record for both READY own services. Leave their selected user LogonTrigger enabled.",
+      "user_action": "Windows account menu > Sign out. Sign in again as the same Windows user; reopen Codex and provide this plan path.",
+      "machine_effect": "Ends interactive apps and this tool session. Both user services/observer may terminate. Other unsaved applications can be affected.",
+      "after": "Before any manual start/connect, record new own logon identity and native LastRunTime/LastTaskResult/digest; correlate triggered supervisor/runtime birth/generation to that login. Independently record old-generation drained/unconfirmed/missing receipts and queries. No boot-before-login inference.",
+      "automatic_lifecycle_commands_between_before_after": 0
+    },
+    {
+      "id": "03-shutdown-power-on-logon",
+      "criteria": [
+        "SVC-T21"
+      ],
+      "before": "New separate durable pre-event record; both own services READY, user-visible apps saved.",
+      "user_action": "Windows Start > Power > Shut down, without forced application termination. Power the machine on manually and sign in as the same user.",
+      "machine_effect": "Ends the session and powers off; this automation cannot continue while off. Record actual shutdown/Fast Startup behavior without changing power policy.",
+      "after": "Read old-generation persistence before drawing conclusions; missing finally/shutdown receipt stays unknown. New logon launch is separate from the old workload outcome; no manual start/connect until observation completes.",
+      "automatic_lifecycle_commands_between_before_after": 0
+    },
+    {
+      "id": "04-restart-logon",
+      "criteria": [
+        "SVC-T29"
+      ],
+      "before": "Separate reboot record with READY own services and current logon/boot markers.",
+      "user_action": "Windows Start > Power > Restart, then sign in as the same user.",
+      "machine_effect": "Restarts Windows and closes interactive applications/tool session.",
+      "after": "Record reboot boundary, new logon and service cycle/generation, retained own data and honest old-generation outcome. Do not transfer this result to separate suspend or logout scenarios.",
+      "automatic_lifecycle_commands_between_before_after": 0
+    }
+  ],
+  "durable_observer": {
+    "implementation": "Root-controlled before/after read-only snapshots using already qualified installed status/cohort helpers; persistent evidence files, no third service/task or automatic resumer.",
+    "record_paths": [
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\01-suspend-resume\\before.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\01-suspend-resume\\after.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\01-suspend-resume\\assessment.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\02-sign-out-logon\\before.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\02-sign-out-logon\\after.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\02-sign-out-logon\\assessment.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\03-shutdown-power-on-logon\\before.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\03-shutdown-power-on-logon\\after.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\03-shutdown-power-on-logon\\assessment.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\04-restart-logon\\before.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\04-restart-logon\\after.json",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-svc-session-events-plan-z5l005u4\\evidence\\04-restart-logon\\assessment.json"
+    ],
+    "write_contract": "Write sanitized JSON once with exclusive create, flush and fsync; retain digest of before record in after record. Never overwrite an earlier event/result.",
+    "before_fields": [
+      "event_id",
+      "UTC and monotonic timestamps",
+      "own effective-user/logon identity",
+      "exact task name/XML digest/state/last_run_time/result",
+      "instance_id",
+      "generation",
+      "parent/launcher/runtime PID and birth/image pin",
+      "cycle and attempt count",
+      "canonical readiness/admission/storage flags",
+      "bounded own lifecycle receipt projections",
+      "known active work count zero or uncertainty",
+      "no productive request selected"
+    ],
+    "after_fields": [
+      "before_record_sha256",
+      "actual user action and timestamps",
+      "new current logon/boot facts",
+      "same selected task and canonical status",
+      "current cohort identities",
+      "old-generation receipt presence/outcome or UNKNOWN",
+      "query/reconciliation state without admission",
+      "unexpected effects/failures retained"
+    ],
+    "retained_handle_boundary": "A process/HANDLE cannot be serialized across logout or reboot. No retained physical-exit claim after observer loss; record identity reconciliation/new owner separately.",
+    "allowed_sources": [
+      "exact owned native tasks only",
+      "GET /api/v1/service on127.0.0.1:59231",
+      "Connector manager.status/own IPC",
+      "selected own supervisor/run/shutdown receipt fields",
+      "Nexus bounded service.jsonl cursor for the selected generations",
+      "own process token logon identity"
+    ],
+    "forbidden": [
+      "global Windows history settings or event log export",
+      "personal tasks/process enumeration",
+      "credential contents, auth bindings, installation token or handshake nonce publication",
+      "provider transcript",
+      "receipt absence converted to DRAINED",
+      "availability converted to productive continuity"
+    ],
+    "query_budget": "At most180s per post-event observation, sampled every2s with per-transport1s. No new start, retry launch or increased deadline to obtain green. OS calls are not claimed preemptible.",
+    "handoff": "If tool session ends, user returns with this proposal path; root reads the last durable event before acting. Observation is never assumed to resume automatically."
+  },
+  "cleanup": {
+    "selection": "After all events or first divergence, root observes exact own cohorts and performs only listed canonical normal stops. No force, native End, kill, account logout or unrelated-task action by cleanup.",
+    "proof": "Confirm application outcome honestly, current parent/launcher/runtime physical exits with retained handles, then native inactivity. Only then uninstall exact own integrations; keep all data/evidence.",
+    "uncertainty": "Stop/uninstall is not repeated blindly; if owner/exit or prior generation remains uncertain, preserve state and report residual task/owner for explicit follow-up."
+  },
+  "future_authorization": {
+    "already_authorized_now": "Offline preparation only; no OS event or service execution selected by this file.",
+    "additional_scope_to_present_later": [
+      "One coordinated window for four distinct real OS events: sleep/wake, sign-out/sign-in, shutdown/power-on/sign-in, restart/sign-in.",
+      "User performs OS actions manually; agent does not execute shutdown.exe, Restart-Computer, logoff, power APIs or force flags.",
+      "Install/start the two exact temporary own user tasks, allow their logon triggers across the selected events, observe their own metadata, normal-stop/uninstall them afterward while preserving data.",
+      "Acknowledge affected unsaved applications and loss of this tool session; agree how to return and resume observation."
+    ],
+    "proposed_question_not_sent": "Você autoriza esta janela de quatro eventos do Windows e as duas tarefas temporárias descritas, executando pessoalmente suspensão, logout, desligamento e reinício quando eu indicar que o registro anterior está salvo? As ações fecham/interrompem aplicativos; nenhum modelo, força ou tarefa pessoal será usado.",
+    "if_user_prefers_fewer_events": "Select only named events; preserve remaining cases NOT_RUN. No need to invent another authorization for already selected own read-only observation."
+  },
+  "execution_effects_so_far": {
+    "services": 0,
+    "tasks": 0,
+    "OS_mutations": 0,
+    "provider": 0,
+    "own_current_process_identity_query_only": true
+  },
+  "qualification": "Plan/source read only. No new tests, builds, service campaigns or OS probes performed. Runtime/event execution remains pending future review and user coordination."
+}

@@ -1,0 +1,102 @@
+{
+  "status": "READ_ONLY_PREDICATE_AUDIT_NO_EXECUTION",
+  "literal_AC14": "Restart, suspensão e queda de conexão preservam contratos de autoridade, ownership e incerteza, sem repetição produtiva implícita.",
+  "literal_requires_paid_inference": false,
+  "literal_requires_active_operation_at_suspend": false,
+  "existing_contract_evidence": [
+    {
+      "case": "SVC-T22 / test_restart_pending_keeps_real_connector_child_claim_and_slot",
+      "asserts": [
+        "restart returns pending, same Server PID/generation and live Core-owned child",
+        "same birth/claim/slot, slot not released while child lives",
+        "operation IDs unchanged; physical work marker exactly one",
+        "explicit canonical close precedes physical exit and release; no implicit replacement"
+      ],
+      "limit": "Real Windows process test with synthetic native peer; no actual suspension."
+    },
+    {
+      "case": "SVC-T23 / test_server_restart_preserves_remote_binding_limits_and_invalid_grant [expired,revoked,valid]",
+      "asserts": [
+        "same persistent identity/bindings/limits",
+        "expired or revoked grant still invalid with possible_effect false",
+        "operations/receipts unchanged and no old native send/open/probe repeated",
+        "valid authority admits only explicitly requested new work, spending one next unit"
+      ],
+      "limit": "Real Server crash/return with injected provider; temporal expiry fixture clearly labeled."
+    },
+    {
+      "case": "SVC-T24 same test",
+      "asserts": [
+        "same live Connector task and executor identity reconnect",
+        "connection generation increases; closed old operation remains historical",
+        "no extra executor, probe or old physical effect"
+      ],
+      "limit": "Closed prior session, not active-session survival or suspension."
+    }
+  ],
+  "planned_empty_service_event_scope": {
+    "proves_if_observed": [
+      "actual manual event and same/replaced exact owners",
+      "same owned task definitions and logon correlation",
+      "honest missing/mismatched shutdown receipt and lost handles",
+      "this runner never dispatches productive work or renews authority"
+    ],
+    "does_not_prove": [
+      "a grant/claim/operation in these empty homes survives suspension",
+      "active_work_count zero (it remains unknown)",
+      "reconciliation of an interrupted productive operation"
+    ],
+    "acceptance_change": false,
+    "AC14_not_automatically_promoted": true
+  },
+  "finite_no_new_paid_call_option": {
+    "selection": "Optional attachment to an already-authorized own Server/Connector session window, before its normal cleanup; not selected or implemented by this proposal.",
+    "same_runtime_database_required": "The observed owner must actually serve B/campaign/nexus-home/nexus.db; do not attach historical rows from another DB to E empty services.",
+    "known_terminal_operation": {
+      "operation_id": "op_c95872f5eee66108a4aa925f224fc0d5",
+      "continuation_id": "op_31d6b7d97bbbf722ddaedf4eda54a2da",
+      "session_id": "ses_ae4b9b97e3e5735bac46a73b89f71814",
+      "binding_id": "bind_2420012e566c1965caa4813e2b6a068a",
+      "agent_id": "m1v12-local",
+      "prior_terminal": "SUCCEEDED; session and lease CLOSED; same stream watermark76 in retained post-exit proof"
+    },
+    "before": [
+      "Fresh canonical GET/qualified mode=ro projection scoped to these exact IDs: operation receipt stage/revision/possible_effect/retry_safe, session/lease/owner generation, binding identity/revision, exact linked grant expiry/used/max and claim/slot status. No content/auth fields.",
+      "Capture scoped operation/action/receipt counts and Core stream watermark/turn count; prove baseline before manual suspension rather than assuming historical values remain current.",
+      "Capture current Server/Connector cohort and fresh owner generation; write durable record before sleep. No setup, send, resume, issue, renew or native call."
+    ],
+    "after": [
+      "On return only same bounded GET/RO projection plus exact owner/task observation; compare terminal operation/lease, no added operation/native turn, no grant extension/reset, no new claim or inferred claim release.",
+      "If a field changes legitimately, retain new fact and uncertainty; do not repair/checkpoint-edit or infer replay-safe. No automatic admission regardless of readiness."
+    ],
+    "effect_budget": {
+      "new_provider_calls": 0,
+      "new_productive_requests": 0,
+      "grant_mutations": 0,
+      "third_service_or_observer": 0
+    },
+    "qualification_limit": "This demonstrates non-replay of known terminal history and authority non-renewal across a real suspension, not survival/release of an active native child. Existing T22 evidence covers that distinct ownership/uncertainty contract. Requires a narrow reviewed context binding/manual-event selection; current E plan is not silently changed."
+  },
+  "source_pins": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+      "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-service-restart-contracts\\source-restart\\final-source\\test_service_restart_contracts.py",
+      "sha256": "76d063e78a2543e3e8234e035297539281e73f431578d29b8593740f19f6952a"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-service-restart-contracts\\source-child\\sources\\test_service_surviving_child.py",
+      "sha256": "2d9df736dd16db77a427b5f5761c5e7902dd6c498519963f78f8fd2d73f782f7"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-service-restart-contracts\\installed\\canonical\\tests.xml",
+      "sha256": "11ba150d558dc2c9c67dda795dd39b844e5dc1913897c9d34a2eab9bf930df09"
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\agent_ops\\evidence\\r3-m1-revision17-recovery-execution\\post-exit\\accounting-reconciliation.json",
+      "sha256": "f371ad3dd4f673aa712056453f4388746183c247d7b18a2198652121163cbd38"
+    }
+  ]
+}

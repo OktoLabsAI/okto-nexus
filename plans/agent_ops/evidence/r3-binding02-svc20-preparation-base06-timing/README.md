@@ -1,0 +1,9 @@
+# Binding completion, conditional Connector next-connect and partial first-use timings
+
+Binding02 has seven targeted offline passing cases and independent source review. Actual rotation/import, exact review, host Finish and final canonical DONE remain prerequisites; the preparation creates no such receipt. Final operator completion may use canonical metadata recovery POST before GET.
+
+The Connector SVC20 helper has five passing cases. Its executable route requires real DONE and zero execution operations, including before every stop. A terminal receipt, even SUCCEEDED, is not settlement and is refused. The viable sequence is before first inference: configured DONE, zero-admission check, normal stop/physical proof, configured next-connect without productive start, capture new cohort, normal stop. Subsequent paid work needs a separate start, fresh cohort watchers and newly guarded Context. The post-paid route remains held. Prior SQLite cleanup and fixture-placement errors and the superseded four-PASS gate are preserved in qualification. No service/HTTP/provider effect occurred.
+
+BASE-06 now retains partial measurements: v12 product-wheel installation 12.9945733s (58.1911667s including verification) and W17 useful-result observation 148.2299977s. These are distinct historical stages, not one current-package installation-to-useful measurement. W16/R installation clocks and remote trajectory are missing. Liveness7.811s, mtime and mixed-package endpoint arithmetic are not substitutes. No numerical SLA or new acceptance criterion is introduced.
+
+Scenario counts stay 125 VERIFIED / 5 IN_PROGRESS / 2 NOT_RUN. Only BASE-06's first-use measurement subscope changes from NOT_RUN to IN_PROGRESS. No AC01, AC11 or global M1 promotion. No private outputs, personal configuration or credentials copied.

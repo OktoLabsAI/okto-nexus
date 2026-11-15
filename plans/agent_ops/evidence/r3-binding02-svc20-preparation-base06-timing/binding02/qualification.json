@@ -1,0 +1,81 @@
+{
+  "classification": "OFFLINE_CANONICAL_BINDING_COMPLETION_DELTA_PASS_NO_EXECUTION",
+  "files": {
+    "recovery_binding.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_binding.py",
+      "sha256": "4dfe7f41b3f627daa8aaf2f6b27eca03d8af92f6d0512af94e59c0b02b8daea0",
+      "bytes": 13380
+    },
+    "test_recovery_binding.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\test_recovery_binding.py",
+      "sha256": "a69ace9ed5823d107c3607c043e27cbb61afa95ba1fb68717d53c700fe3001a2",
+      "bytes": 7795
+    },
+    "binding02-plan.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\binding02-plan.json",
+      "sha256": "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c",
+      "bytes": 4931
+    }
+  },
+  "tests": {
+    "unique_passed": 7,
+    "failures": 0,
+    "runs": [
+      {
+        "count": 5,
+        "tool": "6550fa",
+        "seconds": 1.662
+      },
+      {
+        "count": 2,
+        "tool": "a7f540",
+        "seconds": 0.043
+      }
+    ]
+  },
+  "ruff": {
+    "selection": "F",
+    "result": "PASS",
+    "tool": "b6c270"
+  },
+  "compile": {
+    "files": 2,
+    "result": "PASS"
+  },
+  "actual_installed_coverage": "Connector command parser, new prefix Context, RemoteProjectSetup._complete with synthetic GET binding; no network/process/provider.",
+  "source_contract": "Installed RemoteProjectSetup.apply/observe and Connector configure_local; full sequence also derived from existing test_remote_setup_integration end-to-end fixture (read only, not re-executed).",
+  "important": [
+    "Seven tests are distinct targeted cases (5+2), not a repeated full suite.",
+    "awaiting_inventory with CLI rc0 remains unconfirmed; retained request is not automatically retried.",
+    "Host Finish requires actual persisted done or explicit same-request Connector continuation; daemon liveness alone is never proof.",
+    "Final operator complete can perform canonical metadata recovery POST before binding GET. It is not claimed to be exclusively GET.",
+    "Rotation/storage user exception and actual imported epoch2 remain mandatory prerequisites; this qualification grants neither.",
+    "Paid work remains held until actual canonical DONE receipt and separate composed paid plan review."
+  ],
+  "command_prefix_for_root_review_only": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_binding.py",
+    "--plan",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\binding02-plan.json",
+    "--expected-plan-sha256",
+    "400724cd74381e58f6efa5cd4feb439c2c21d7108eaf2cad178ebc479618e30c"
+  ],
+  "actions_in_order": [
+    "review",
+    "bootstrap",
+    "host-prepare",
+    "operator-decide",
+    "host-finish",
+    "complete"
+  ],
+  "review_selection": "Review action first. All later actions require --expected-review-sha256 equal actual R/public/recovery02-review.json SHA selected by Root after inspection.",
+  "prospective_completed_receipt": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\recovery02-profile-completed.json",
+  "provider_calls": 0,
+  "http_calls": 0,
+  "service_actions": 0,
+  "credential_reads": 0
+}
