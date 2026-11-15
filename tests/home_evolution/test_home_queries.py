@@ -116,7 +116,11 @@ def test_agent_and_external_pages_have_reachable_continuations(service):
     second = service.read(context=OPERATOR, section='agents', limit=2, cursor=first['next_cursor'])
     assert len(first['items']) == len(second['items']) == 2
     assert not ({a['agent_id'] for a in first['items']} & {a['agent_id'] for a in second['items']})
-    assert first['total'] == 6
+    third = service.read(context=OPERATOR, section='agents', limit=2, cursor=second['next_cursor'])
+    workers = first['items'] + second['items'] + third['items']
+    assert first['total'] == second['total'] == third['total'] == 5
+    assert {a['agent_id'] for a in workers} == {'global','A','B','C','revoked'}
+    assert len(workers) == 5 and not third['has_more']
     external = service.read(context=OPERATOR, section='external')
     assert external['total'] == 1
 

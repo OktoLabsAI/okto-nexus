@@ -69,3 +69,18 @@ Qualificação UI:28 casos focais Node/SSR e build PASS; regressão integrada:
 196PASS/0falhas. As tarefas de interface ficam IMPLEMENTED até o aceite integrado.
 Seis checks de browser reais passaram em rodada preliminar; fontes backend
 alteradas posteriormente exigem repetição antes da qualificação final.
+
+## Integração, pacote e revisão dos limites
+
+Backend enviado em `60069bc5`, com formatação do port em `bff71b13`. O pacote
+desse corte passou17 testes instalados e Twine, além da regressão frontend196.
+Sete checks reais adicionais comprovaram escopo, detalhe, draft/foco, paginação
+de15atividades/scroll exato,360px, fallback e limpeza por403.
+
+Na revisão foram corrigidos títulos de resultados, contagem de workers sem o
+operador humano, redação de segredos reconhecidos, estado vazio/ocioso compacto
+e anúncio DOM de lotes sucessivos. Fontes e evidências estão separadas por corte;
+o pacote inicial não contém as correções posteriores. Há37cenários PASS no
+escopo específico das provas e36NOT_RUN. O objetivo completo ainda não foi dado
+como concluído. Campanha real, teste humano e os limites de acessibilidade
+seguem explícitos; a nova apresentação permanece OFF até a decisão M3.

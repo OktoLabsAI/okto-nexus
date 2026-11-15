@@ -23,7 +23,11 @@ Rotas sob o envelope atual `/api/v1`, `Cache-Control: no-store`:
   exata e workspace antes de compor os componentes canônicos de detalhe.
 
 `workspace_id` omitido significa Todos; o frontend não envia o sentinela `all`.
-Filtros são validados e aplicados antes de contar/agrupar/paginar. Workspace e agente valem para todos os blocos; state corresponde ao controle visível Work state e filtra atividades/contadores de trabalho. Não traduzimos CLAIMED ou RUNNING em estado de resultado, presença, Attention ou observação externa. Esses blocos mantêm suas dimensões canônicas e seu próprio estado/freshness. Não aceitar
+Filtros são validados e aplicados antes de contar/agrupar/paginar. Workspace e
+agente valem para todos os blocos; `state` corresponde ao controle visível Work
+state e filtra atividades/contadores de trabalho. Os demais blocos preservam
+suas dimensões canônicas de resultado, presença, Attention ou observação e sua
+própria freshness. Não aceitar
 parâmetros duplicados, cursores de outro escopo ou referências incompatíveis.
 O mesmo operador autorizado pode ler Todos, sem duplicação por join.
 
@@ -82,6 +86,17 @@ ocorrência rastreável/CAS para ação explícita sem buscar uma página oculta
 capacidades informadas como dimensões distintas. Sem evidência de atividade:
 “atividade não informada”, não ready/idle/autorizado. Workspace filtrado inclui
 somente vínculo ou atividade autorizada comprovados, não todo nó global.
+O inventário Home representa workers e exclui a identidade humana reservada
+`operator` antes de total/revisão/cursor. Isso não altera Graph ou o diretório
+global de agentes. Uma instalação só com o operador oferece o onboarding;
+workers sem trabalho oferecem pedido/conversa sem uma grade de zeros, somente
+quando as fontes relevantes comprovam o conjunto vazio.
+
+Títulos, prévias e nomes de artefato aplicam a política pura de redação existente
+também para resultados manuais/históricos. IDs e referências opacas permanecem
+exatos. A política reconhece os padrões de segredos existentes; não se declara
+um detector universal de conteúdo sensível ou PII. Campos privados de prompts,
+argumentos e paths não são selecionados para o overview.
 
 `attention.items` reutiliza `AttentionOccurrence` sem perder IDs, revisões,
 destinatário, allowed_actions, freshness ou seen_state. Incidentes globais do

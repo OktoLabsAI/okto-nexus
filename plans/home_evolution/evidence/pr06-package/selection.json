@@ -1,0 +1,54 @@
+{
+  "status": "EXECUTED_QUALIFIED",
+  "frontend_regression": {
+    "command": "rtk proxy npm test",
+    "cwd": "frontend",
+    "tool_start": "7ed4c0",
+    "tool_final": "31a86d",
+    "exit_code": 0,
+    "tests": 196,
+    "passed": 196,
+    "failed": 0,
+    "skipped": 0,
+    "duration_ms": 8566.9969,
+    "scope": "One integrated Node run; overlaps prior focused tests, do not add totals."
+  },
+  "installed_selection": [
+    "tests/execution_r4/test_terminal_connect.py::test_cli_plan_apply_and_reconnect_use_saved_profile",
+    "tests/execution_r4/test_terminal_work.py::test_interactive_cli_request_question_answer_result_and_return",
+    "tests/execution_r4/test_terminal_work.py::test_send_result_reopen_continue_and_close_share_canonical_session",
+    "tests/execution_r4/test_terminal_work.py::test_cli_submission_resume_watch_and_project_mismatch",
+    "tests/test_terminal_http.py",
+    "tests/execution_r4/test_canonical_receipt_persistence.py",
+    "tests/home_evolution/test_home_package.py",
+    "tests/execution_r4/test_packaged_openapi.py"
+  ],
+  "source_pins": [
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "a1b8dda5e9bf8c46726ac6b8c1278ef932ea14a9cac0bb50d97c035069cec078"
+    },
+    {
+      "path": "tools/ci_installed.py",
+      "sha256": "78b32c0ed8bb8c7592def69cd1c272a96c5d5f7c86bc07436d4ff64cf0e85c6d"
+    },
+    {
+      "path": "tools/build_validation_artifacts.py",
+      "sha256": "c6d162b39be69facab579fa41825ac77feca0cc7ab8228ee279fb34afc429899"
+    },
+    {
+      "path": "tests/home_evolution/test_home_package.py",
+      "sha256": "b91f6a61366e7831c799794c5eb7dbbb01b98f8df0f6d72162d97c7bed79b612"
+    }
+  ],
+  "execution_boundary": "Wait for root-confirmed stable backend commit before building any wheel. Use new isolated prefix; no editable/source application imports. No provider harness or live service installation.",
+  "I03_scope": "Existing canonical CLI connect/reconnect, interactive request-question-answer-result, saved-result reopen, exact continuation/close, lost-response no-replay and receipt persistence against temporary SQLite/real HTTP handlers with synthetic native peers. No Home visit or dashboard step.",
+  "I04_scope": "Actual built wheel installation and resources: root HTML and every referenced JS/CSS served as exact installed package bytes, absent asset404, Home v1 envelope and runtime OpenAPI contracts coexist, no dev server. ci_installed independently compares all wheel payloads to installed application origins.",
+  "limits": [
+    "CONTRIBUTING live_client.py section is historical stdio guidance; current cli_http_only test explicitly rejects stdio. Do not select the obsolete script as current terminal qualification.",
+    "Synthetic peer tests do not qualify a real provider, personal login or OS service lifecycle.",
+    "The isolated install/smoke paths in ci_installed perform package/bootstrap qualification; they do not install scheduled services."
+  ],
+  "preparation_status": "PREPARED_NOT_EXECUTED",
+  "qualification": "qualification.json"
+}

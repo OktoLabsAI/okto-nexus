@@ -4,7 +4,7 @@
   "original_source": "C:\\Users\\jpamb\\Downloads\\PLANO_CODEX_NEXUS_HOME_OPERACIONAL_R1.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
   "created_at": "2026-11-15T20:14:32.568756+00:00",
-  "updated_at": "2026-11-15T21:21:05.500622+00:00",
+  "updated_at": "2026-11-15T21:54:36.969358+00:00",
   "status": "IN_PROGRESS",
   "baseline": {
     "previous_branch": "feature/v0.3.3",
@@ -553,7 +553,7 @@
       "pr": "PR-05",
       "implementation": "Selecionar mudanças de negócio em templates determinísticos; agrupar bursts só quando não ocultar distinções, decisões ou falhas.",
       "acceptance": "Feed limitado e correlacionado; sem tokens, heartbeats ou LLM resumindo a operação.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -564,7 +564,7 @@
       "pr": "PR-05",
       "implementation": "Incorporar projeção externa existente no bloco de agentes/atividade e em Attention; separar reportado/inferido, atual/stale e execução gerenciada.",
       "acceptance": "Herdr done nunca completa handoff, libera slot ou soma como sucesso nativo; ausência da feature não bloqueia Home.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -575,7 +575,7 @@
       "pr": "PR-05",
       "implementation": "Teclado, leitor de tela, contraste, focus restore, pause visual e largura mobile; textos seguem o idioma/padrão do frontend.",
       "acceptance": "Fluxo completo sem mouse; atualizações não roubam foco; pausa visual não pausa agentes nem remove validação de segurança.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -597,7 +597,7 @@
       "pr": "PR-06",
       "implementation": "Unidade, repositório, HTTP, componente e navegador; testar flags, tenant/operador atual, escopos, sessão, revogação e concorrência.",
       "acceptance": "Relatório liga cada cenário às evidências; testes Node/static não são vendidos como e2e de navegador.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -619,7 +619,7 @@
       "pr": "PR-06",
       "implementation": "Controle independente da nova apresentação; retorno à Home anterior sem parar processos, revogar grants ou desfazer migrações.",
       "acceptance": "Desabilitar Home nova mantém daemon, CLI, Attention e controles originais operantes.",
-      "status": "TODO",
+      "status": "IMPLEMENTED",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -630,7 +630,7 @@
       "pr": "PR-06",
       "implementation": "Guia curto da Home, estados e limites; docs do contrato, capturas sem dados privados, troubleshooting e evidências.",
       "acceptance": "Nenhuma documentação confunde sessão aberta, conexão, entrega, execução, resultado e verificação.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
       "evidence": [],
       "tests": [],
@@ -729,6 +729,10 @@
     {
       "at": "2026-11-15T21:21:05.500622+00:00",
       "event": "Backend and boundary milestone: 30+5 unique scoped tests PASS. Actual active-artifact-header failure fixed and retained as antecedent. No migration/provider/runtime effect. UI pushed d46b9e0b; package/browser/real campaign pending."
+    },
+    {
+      "at": "2026-11-15T21:54:36.969358+00:00",
+      "event": "Integration findings corrected: canonical result titles, reserved human operator excluded from Home worker inventory, existing secret policy on summaries, quiet empty/idle view and successive live-region batches. 37 scoped scenarios PASS/36 NOT_RUN; source/package snapshots remain distinct. Initial installed17 PASS; final corrected artifact pending."
     }
   ]
 }

@@ -7,6 +7,7 @@ import time
 from ....domain.attention import canonical, digest, instant
 from ....domain.home import activity, encode_cursor
 from ....errors import ErrorCode, OktoNexusError
+from ..harness.event_journal import redact
 from .attention import _SetDigest
 
 
@@ -122,7 +123,8 @@ WITH links AS MATERIALIZED (
    WHERE rr.canonical_server_id=o.server_id AND rr.canonical_executor_id=o.executor_id
     AND rr.canonical_operation_id=o.operation_id AND a.workspace_id=o.workspace_id) AS artifacts,
   CASE WHEN k.state='REQUESTED' THEN 'pending' END AS cleanup,
-  b.handoff_id,b.claim_epoch, h.claim_epoch AS current_epoch,h.status AS handoff_status
+  b.handoff_id,b.claim_epoch, h.claim_epoch AS current_epoch,h.status AS handoff_status,
+  substr(t.title,1,160) AS title
  FROM execution_operations o JOIN execution_receipts r USING(server_id,executor_id,operation_id)
  LEFT JOIN execution_results x USING(server_id,executor_id,operation_id)
  LEFT JOIN execution_sessions s USING(server_id,executor_id,session_id)
@@ -131,6 +133,7 @@ WITH links AS MATERIALIZED (
  LEFT JOIN links l ON l.server_id=o.server_id AND l.executor_id=o.executor_id AND l.operation_id=o.operation_id
  LEFT JOIN runtime_handoff_bindings b ON b.operation_id=l.domain_operation_id
  LEFT JOIN handoffs h ON h.handoff_id=b.handoff_id
+ LEFT JOIN tasks t ON t.task_id=h.task_id AND t.workspace_id=h.workspace_id
  WHERE o.server_id=:server_id AND o.action='turn.submit' AND r.stage IN ('SUCCEEDED','FAILED','CANCELLED')
   AND r.receipt_revision=(SELECT MAX(rr.receipt_revision) FROM execution_receipts rr
    WHERE rr.server_id=o.server_id AND rr.executor_id=o.executor_id AND rr.operation_id=o.operation_id)
@@ -143,7 +146,7 @@ WITH links AS MATERIALIZED (
   ORDER BY received_at DESC,operation_id DESC) AS position FROM native
 ), facts AS MATERIALIZED (
  SELECT json_object('server_id',server_id,'executor_id',executor_id,'session_id',session_id,'operation_id',operation_id,
-  'workspace_id',workspace_id,'agent_id',subject_agent_id,'stage',stage,'received_at',received_at,
+  'workspace_id',workspace_id,'agent_id',subject_agent_id,'stage',stage,'received_at',received_at,'title',title,
   'revision',receipt_revision,'cleanup',cleanup,'handoff_id',handoff_id,'claim_epoch',claim_epoch,
   'stream_epoch',stream_epoch,'terminal_sequence',terminal_sequence,'preview',preview,
   'truncated',output_truncated,'artifacts',json(artifacts),
@@ -153,8 +156,9 @@ WITH links AS MATERIALIZED (
  SELECT json_object('server_id',:server_id,'workspace_id',h.workspace_id,'agent_id',COALESCE(h.claimed_by,h.from_agent_id),
   'handoff_id',h.handoff_id,'claim_epoch',h.claim_epoch,'stage',h.status,'verification',h.status,
   'received_at',COALESCE(h.updated_at,h.created_at),'revision',h.claim_epoch,
-  'preview',substr(h.result,1,401))
- FROM handoffs h WHERE h.status IN ('COMPLETED','REJECTED')
+  'preview',substr(h.result,1,401),'title',substr(t.title,1,160))
+ FROM handoffs h LEFT JOIN tasks t ON t.task_id=h.task_id AND t.workspace_id=h.workspace_id
+ WHERE h.status IN ('COMPLETED','REJECTED')
   AND (:workspace_id IS NULL OR h.workspace_id=:workspace_id)
   AND (:agent_id IS NULL OR COALESCE(h.claimed_by,h.from_agent_id)=:agent_id)
   AND NOT EXISTS(SELECT 1 FROM native n WHERE n.handoff_id=h.handoff_id AND n.claim_epoch=h.claim_epoch)
@@ -177,17 +181,20 @@ def result_item(raw):
     return canonical(dict(id='result_' + digest([f['server_id'], key]),
         source_ref=dict(type='handoff_result' if handoff else 'execution_result',
             id=handoff or f['operation_id'], revision=digest(f)), workspace_id=f['workspace_id'], agent_id=f['agent_id'],
-        title='Handoff result' if handoff else 'Work result', preview=(f.get('preview') or '')[:400] or None,
+        title=redact(f.get('title') or ('Handoff result' if handoff else 'Work result'))[:160],
+        preview=redact((f.get('preview') or '')[:400])[:400] or None,
         truncated=bool(f.get('truncated') or len(f.get('preview') or '')>400),
         outcome=f['stage'], verification_state=f.get('verification'), cleanup_state=f.get('cleanup'),
         created_at=f['received_at'], detail_target=target,
-        artifacts=[{k:v for k,v in a.items() if v is not None} for a in (f.get('artifacts') or [])],
+        artifacts=[{k:redact(v)[:160] if k=='filename' else v for k,v in a.items() if v is not None}
+            for a in (f.get('artifacts') or [])],
         view_state='not_tracked', attention=None,
         _attention_id='att_' + digest([1, 'result_unseen', 'handoff_result' if handoff else 'execution_result', handoff or f['operation_id'], episode])))
 
 
 def activity_item(raw, server, occurrences):
     item = activity(json.loads(raw), server)
+    item['title'] = redact(item['title'])[:160]
     values = json.loads(occurrences or '[]')
     item['attention_refs'] = sorted(o['attention_id'] for o in values)
     # Snoozing/seeing an occurrence changes presentation, never the actual
@@ -356,7 +363,7 @@ class SqliteHomeQueries:
            MAX(CASE WHEN s.status='active' THEN s.last_heartbeat_at END) AS heartbeat,
            MAX(CASE WHEN s.status='active' THEN 1 ELSE 0 END) AS active_session
           FROM agents a LEFT JOIN sessions s ON s.agent_id=a.agent_id AND (:workspace_id IS NULL OR s.workspace_id=:workspace_id)
-          WHERE (:agent_id IS NULL OR a.agent_id=:agent_id) AND (:workspace_id IS NULL OR EXISTS(
+          WHERE a.agent_id<>'operator' AND (:agent_id IS NULL OR a.agent_id=:agent_id) AND (:workspace_id IS NULL OR EXISTS(
             SELECT 1 FROM membership m WHERE m.agent_id=a.agent_id AND m.workspace_id=:workspace_id))
           GROUP BY a.agent_id
         ) """

@@ -28,7 +28,7 @@ function load(url) {
   return module.exports;
 }
 
-const {HomeCounters, HomeBlock, WorkRow, ResultRow, AttentionRow, downloadCurrentArtifact} = load(new URL('../src/components/home/HomeCards.tsx', import.meta.url));
+const {HomeCounters, HomeBlock, WorkRow, ResultRow, AttentionRow, downloadCurrentArtifact, isQuietHome, HomeWelcome} = load(new URL('../src/components/home/HomeCards.tsx', import.meta.url));
 const {readContinuationContext, revalidateContinuation, clearHomeContinuationRequests} = load(new URL('../src/components/home/continuation.ts', import.meta.url));
 const {RuntimeOperations} = load(new URL('../src/components/RuntimeOperations.tsx', import.meta.url));
 const {MetaHarnessComposer} = load(new URL('../src/components/MetaHarnessComposer.tsx', import.meta.url));
@@ -130,4 +130,30 @@ test('late artifact content is never downloaded after access or mount invalidati
   assert.equal(await pending,false);assert.equal(downloads,0);
   assert.equal(await downloadCurrentArtifact(async()=>new Blob(['current']),()=>true,()=>downloads++),true);
   assert.equal(downloads,1);
+});
+
+
+test('quiet Home requires confirmed empty sources and never hides partial or unknown work', () => {
+  const snapshot={work:section({}),results:section({}),attention:section({}),external_activity:section({status:'disabled'}),agents:section({})};
+  assert.equal(isQuietHome(snapshot),true);
+  assert.equal(isQuietHome({...snapshot,agents:section({total:1,items:[{agent_id:'worker'}]})}),true);
+  for (const key of ['work','results','attention','agents']) {
+    for (const status of ['partial','unavailable','forbidden','disabled'])
+      assert.equal(isQuietHome({...snapshot,[key]:section({status})}),false);
+  }
+  assert.equal(isQuietHome({...snapshot,work:section({total:null})}),false);
+  assert.equal(isQuietHome({...snapshot,work:section({total_is_exact:false})}),false);
+  assert.equal(isQuietHome({...snapshot,external_activity:section({status:'unavailable'})}),false);
+  assert.equal(isQuietHome({...snapshot,work:section({items:[work({})],total:1})}),false);
+  assert.equal(isQuietHome(snapshot,true),false);
+});
+
+test('quiet welcome reuses explicit onboarding or request callback, with disabled observations disclosed', () => {
+  let setup=0,request=0;
+  const props={needsSetup:true,externalDisabled:true,onSetup:()=>setup++,onRequest:()=>request++};
+  const markup=html(HomeWelcome,props);
+  assert.match(markup,/Set up your first agent/);assert.match(markup,/External reports are disabled/);
+  assert.doesNotMatch(markup,/Operational summary/);
+  buttons(HomeWelcome(props))[0].props.onClick();assert.deepEqual([setup,request],[1,0]);
+  buttons(HomeWelcome({...props,needsSetup:false}))[0].props.onClick();assert.deepEqual([setup,request],[1,1]);
 });

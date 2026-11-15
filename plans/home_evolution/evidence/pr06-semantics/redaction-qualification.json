@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "scope": "Existing credential-text redaction on Home bounded presentation fields only",
+  "source_pins": [
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "cacfc8f2914d7a3f09d213e7f0179fe086a37843a897a1689317f05a2e5c2abc"
+    },
+    {
+      "path": "tests/home_evolution/test_home_semantics.py",
+      "sha256": "b64277862dc8919d36f24be610c788f80ebd84b15de2d3270666126661536745"
+    },
+    {
+      "path": "src/okto_nexus/adapters/outbound/harness/event_journal.py",
+      "sha256": "9262ee2742029bf4826d022fc2bd7fec54c2ff5234f193ef3261f1a306cdf274"
+    }
+  ],
+  "before_source_sha256": "ed0f9c882d06aeb05cc868a2f69fd33464f461a9fa25a7d1092effc332607459",
+  "runs": [
+    {
+      "name": "redaction-before",
+      "sha256": "6b1bdbe0ee5d77bd8dca2f3e87c890479b25c231e1a2177feb1f17e2f36dcd6c",
+      "tests": "2",
+      "failures": "2",
+      "errors": "0",
+      "skipped": "0",
+      "time": "17.101"
+    },
+    {
+      "name": "redaction-final",
+      "sha256": "150931bb646092d303f82c93b97746831508331b93cfb4a2649b6941b052974f",
+      "tests": "5",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "31.440"
+    },
+    {
+      "name": "redaction-fixture-final",
+      "sha256": "fe1c3a4ac13c1263d5826a5ea51e2c037d8085b068ae81f8e851b9b79c485007",
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "11.370"
+    },
+    {
+      "name": "redaction-confirmed",
+      "sha256": "eb0d8c060686f7ed49eb21d4d95d7c11574948d654924410d0546655d95c661d",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "29.386"
+    }
+  ],
+  "final_command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_semantics.py tests/home_evolution/test_home_queries.py -q --tb=short -k 'presentation_redacts or filename_redact or result_reuses or result_artifact_reference' --junitxml=plans/home_evolution/evidence/pr06-semantics/redaction-confirmed.xml",
+  "limitations": [
+    "Only existing event_journal.redact patterns in bounded title/preview/filename fields",
+    "No universal secret/PII/private-path detection claim",
+    "IDs and source/target references remain exact",
+    "Before/intermediate fixture errors retained; no product failure inferred from those errors"
+  ],
+  "effects": {
+    "provider_calls": 0,
+    "live_service_actions": 0,
+    "os_events": 0
+  },
+  "acceptance": "Root review pending"
+}

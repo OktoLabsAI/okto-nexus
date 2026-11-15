@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "scope": "Source synthetic semantic boundaries and narrow result title fix",
+  "source_pins": [
+    {
+      "path": "src/okto_nexus/adapters/outbound/sqlite/home.py",
+      "sha256": "6b1c110ca5af49acb0ff71160a90375282f16abcca2fd31fdbef4266797f12ac"
+    },
+    {
+      "path": "tests/home_evolution/test_home_semantics.py",
+      "sha256": "b6872beda98b813e39fe2da8ec1fd56cfd4371446ee5d167e343a13d939c28ef"
+    }
+  ],
+  "before_source_sha256": "63e683325b210f902be82051c06ccae797ee72cd8d5cbeb2553b2b3f64b06301",
+  "runs": [
+    {
+      "name": "before",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_semantics.py -q --tb=short --junitxml=plans/home_evolution/evidence/pr06-semantics/before.xml",
+      "xml": "before.xml",
+      "sha256": "21b99c5ea92d3f0455ad5f4238bee500b32b58d833c4402b39c08dcae95069f0",
+      "tests": "8",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "37.062"
+    },
+    {
+      "name": "final",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_semantics.py -q --tb=short --junitxml=plans/home_evolution/evidence/pr06-semantics/final.xml",
+      "xml": "final.xml",
+      "sha256": "f72cea03d9c7708625db7b717620736e9b82d9d92832cfdddd8178107a7796b1",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "64.745"
+    },
+    {
+      "name": "result-regressions",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/home_evolution/test_home_queries.py -q --tb=short -k 'result or native_delivery or overview_real or shares_one' --junitxml=plans/home_evolution/evidence/pr06-semantics/result-regressions.xml",
+      "xml": "result-regressions.xml",
+      "sha256": "c194476bd48df8e24f8a37ec2a2b3e0cfa565ea5f883239138a7fb80b97503f6",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "35.664"
+    }
+  ],
+  "final_distinct_passed": 14,
+  "static_checks": [
+    {
+      "command": "rtk proxy ruff check src/okto_nexus/adapters/outbound/sqlite/home.py tests/home_evolution/test_home_semantics.py",
+      "result": "PASS",
+      "tool_ref": "3a9ff4"
+    },
+    {
+      "command": "rtk git diff --check -- src/okto_nexus/adapters/outbound/sqlite/home.py tests/home_evolution/test_home_semantics.py plans/home_evolution/evidence/pr06-semantics",
+      "result": "PASS",
+      "tool_ref": "823709"
+    }
+  ],
+  "tooling_antecedent": {
+    "command": "rtk proxy .venv/Scripts/python.exe -m ruff check src/okto_nexus/adapters/outbound/sqlite/home.py tests/home_evolution/test_home_semantics.py",
+    "result": "Environment tool unavailable: No module named ruff",
+    "tool_ref": "b13898",
+    "resolution": "Existing ruff executable used successfully; no installation"
+  },
+  "limitations": [
+    "A08 not run: no canonical global Attention producer used",
+    "G05 is canonical refusal plus absence of inferred project activity",
+    "No installed wheel, performance or live runtime claim"
+  ],
+  "effects": {
+    "provider_calls": 0,
+    "live_service_actions": 0,
+    "os_events": 0
+  },
+  "acceptance": "Root review pending; no ledger promotion by implementer"
+}

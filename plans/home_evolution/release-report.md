@@ -93,3 +93,32 @@ O estado filtrável corresponde a Work state; workspace/agente valem para todos
 os blocos, cujas dimensões nativas não são traduzidas arbitrariamente. A medida
 ampliada ainda excede500ms p95; os relatórios de custo não declaram SLO aprovado.
 Esses testes usam SQLite real e HTTP ASGI em processo, não harness ou browser.
+
+## Qualificação instalada e correções encontradas na integração
+
+O wheel/sdist0.3.4 do corte `bff71b13` passou Twine, instalação isolada e17
+testes de terminal/pacote, sem mudança dos inputs durante a rodada. Foram
+verificados origem site-packages/bytes de três pacotes, bootstrap sem
+Connector/torch e ciclo CLI com peers nativos sintéticos, sem visitar Home.
+`evidence/pr06-package/qualification.json` identifica esse artefato e seus limites;
+ele antecede as correções abaixo e não será apresentado como wheel final.
+
+Testes adicionais encontraram e corrigiram: título genérico de resultado quando
+há tarefa canônica; operador humano contado como worker; texto de segredo
+reconhecível em preview de resultado manual; aviso aria-live que só mudava no
+primeiro lote; e grade de zeros no estado ocioso. As falhas anteriores ficam em
+`evidence/pr06-semantics/` e `evidence/pr06-browser-extra/`. O resumo usa a política
+de redação existente, com IDs exatos; não se promete detector universal de PII.
+
+As correções visuais passaram18 focais Node e build TypeScript/Vite; seis checks
+de Chromium confirmaram estado vazio/ocioso, teclado,360px, guard de fontes
+desconhecidas e dois lotes aria-live com cancelamento ao trocar escopo. A prova
+aria-live é DOM; fala de leitor de tela e teste humano de10segundos permanecem
+distintos. A tentativa de zoom real no browser isolado não alterou escala e
+Settings não estava disponível;200% permanece NOT_RUN, sem substituto CSS.
+
+Há37cenários qualificados no menor nível indicado por suas evidências; os36
+restantes mantêm NOT_RUN, incluindo partes de integração que ainda exigem prova.
+Uma instalação e rodada final devem incorporar as correções posteriores ao
+wheel inicial. Campanha HOME-033 continua sem consentimento/execução paga nesta
+fase; nenhum orçamento R3 foi reaproveitado. O controle de apresentação segue OFF.

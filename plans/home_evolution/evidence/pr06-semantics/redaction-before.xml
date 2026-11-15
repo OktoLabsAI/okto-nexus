@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="17.101" timestamp="2026-11-15T18:43:48.591636-03:00" hostname="Alienware_m15"><testcase classname="tests.home_evolution.test_home_semantics" name="test_manual_handoff_presentation_redacts_existing_policy_tokens" time="4.373"><failure message="AssertionError: assert 'Review nxs_h...y_fixture_777' == 'Review [REDACTED]'&#10;  &#10;  - Review [REDACTED]&#10;  + Review nxs_home_only_fixture_777">tests\home_evolution\test_home_semantics.py:192: in test_manual_handoff_presentation_redacts_existing_policy_tokens
+    assert result['title'] == work['title'] == 'Review [REDACTED]'
+E   AssertionError: assert 'Review nxs_h...y_fixture_777' == 'Review [REDACTED]'
+E     
+E     - Review [REDACTED]
+E     + Review nxs_home_only_fixture_777</failure></testcase><testcase classname="tests.home_evolution.test_home_semantics" name="test_message_subject_and_result_filename_redact_without_rewriting_ids" time="4.499"><failure message="sqlite3.IntegrityError: UNIQUE constraint failed: delivery_outbox.delivery_id">tests\home_evolution\test_home_semantics.py:206: in test_message_subject_and_result_filename_redact_without_rewriting_ids
+    copy_row(c,'delivery_outbox',original,operation_id='message-only-work')
+tests\home_evolution\test_home_semantics.py:20: in copy_row
+    conn.execute('INSERT INTO '+table+'('+','.join(row)+') VALUES('+','.join('?' for _ in row)+')', tuple(row.values()))
+E   sqlite3.IntegrityError: UNIQUE constraint failed: delivery_outbox.delivery_id</failure></testcase></testsuite></testsuites>

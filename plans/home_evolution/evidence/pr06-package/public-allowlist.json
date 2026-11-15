@@ -1,0 +1,56 @@
+{
+  "files": [
+    {
+      "path": "bootstrap-projection.json",
+      "sha256": "ea3709569a0429c85fbf1c44ca05967dc9db6febd78ac4ec1c62ef5fe710cf47",
+      "bytes": 341
+    },
+    {
+      "path": "build-manifest.json",
+      "sha256": "c2388e06534d36127dcae1bb6550fcf58576a13366ae481dd919a3ed984ccd7b",
+      "bytes": 91746
+    },
+    {
+      "path": "environment.json",
+      "sha256": "3d8a0a9cdbecdb8a1f0799c91d4f54128e78619dd4d2857e85347d13c3548bed",
+      "bytes": 617
+    },
+    {
+      "path": "installed-campaign.json",
+      "sha256": "173c52ef2f7d6a26704d3828a6903e201cf6ace669229f6e7ad6b91eee5cef8e",
+      "bytes": 264208
+    },
+    {
+      "path": "installed-origins.json",
+      "sha256": "72f50ef03c6f33404881f30c952722c56980ee311410b81b7989386194c78d64",
+      "bytes": 780
+    },
+    {
+      "path": "installed-tests.xml",
+      "sha256": "a216bccbc70eb025668976c3180ad0b1472c618f111a82861877dcd8b949e56c",
+      "bytes": 2724
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "e2d72c78c33a9549ff011c2b4016b64ddc91a6fd1abf55dd2f5852e99fdafd51",
+      "bytes": 4648
+    },
+    {
+      "path": "README.md",
+      "sha256": "ddcb7ebb654e8bb07e2324793b87d5c41f8e3fdf6bf1b48cf4e31c20f6ba4649",
+      "bytes": 1757
+    },
+    {
+      "path": "selection.json",
+      "sha256": "cecc55890323a5b17d0fa2d3cf71866cddc7c117375afbe53077362827a829fa",
+      "bytes": 3087
+    }
+  ],
+  "excluded": [
+    "wheel/sdist binaries",
+    "venvs",
+    "raw installation logs",
+    "credentials",
+    "provider data"
+  ]
+}

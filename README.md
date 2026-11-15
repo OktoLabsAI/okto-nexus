@@ -949,6 +949,11 @@ invalidation. Its dashboard page and badge are tracked separately in PR-07.
 
 Use `--help` on every command for the full argument grammar.
 
+The optional [Operational Home](docs/operational-home.md) brings logical work,
+canonical decisions and results into one workspace-scoped view. During HOME-R1
+qualification, choose **Use operational Home** above the classic view. Its
+presentation switch preserves terminal/runtime operation and existing data.
+
 ### Tail
 
 ```bash

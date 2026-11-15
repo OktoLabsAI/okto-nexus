@@ -1,0 +1,14 @@
+{
+  "base-with-core": {
+    "base_boot_with_core": true,
+    "connector_installed": false,
+    "torch_installed": false,
+    "provider_qualified": false
+  },
+  "local-without-connector": {
+    "local_boot_without_connector": true,
+    "torch_installed": false,
+    "protocol_status": 200,
+    "provider_qualified": false
+  }
+}

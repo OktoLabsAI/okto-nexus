@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState, type ReactNode} from 'react';
 import {api, ApiError} from '../../api';
 import {ArrowUpRight, Eye} from 'lucide-react';
-import type {HomeActivity, HomeResult, HomeSection, HomeTarget, HomeSummary, HomeAgent} from '../../homeTypes';
+import type {HomeActivity, HomeResult, HomeSection, HomeTarget, HomeSummary, HomeAgent, HomeOverview} from '../../homeTypes';
 import type {AttentionAction, AttentionOccurrence} from '../../attentionTypes';
 import {homeCounterLabel, homeSectionLabel, homeStateLabel, homeResultLabel} from '../../homePresentation';
 import {attentionActionLabels, attentionDescription, primaryAttentionAction} from '../../attentionPresentation';
@@ -9,6 +9,24 @@ import {useWorkspaceName} from '../WorkspaceNames';
 import {formatTime} from '../../timeFormat';
 
 export const homeFocus = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-500';
+export function isQuietHome(snapshot: HomeOverview | null, stale = false): boolean {
+  if (!snapshot || stale) return false;
+  const empty = (section: HomeSection<unknown>) => section.status === 'ready' && section.total_is_exact === true && section.total === 0 && section.items.length === 0;
+  return empty(snapshot.work) && empty(snapshot.results) && empty(snapshot.attention)
+    && (snapshot.external_activity.status === 'disabled' || empty(snapshot.external_activity))
+    && snapshot.agents.status === 'ready' && snapshot.agents.total_is_exact === true && snapshot.agents.total !== null;
+}
+export function HomeWelcome({needsSetup, externalDisabled, onSetup, onRequest}: {
+  needsSetup: boolean; externalDisabled: boolean; onSetup: () => void; onRequest: () => void;
+}) {
+  return <section className="panel p-5 sm:p-6" aria-label="Get started" data-testid="home-welcome">
+    <h2 className="text-lg font-semibold">{needsSetup ? 'Set up your first agent' : 'What would you like to work on?'}</h2>
+    <p className="text-sm text-surface-500 mt-2">{needsSetup ? 'Connect an agent to start work in this scope.' : 'Start a tracked handoff or a conversation. There is no pending work or result in this snapshot.'}</p>
+    <button type="button" className={`btn btn-primary mt-4 ${homeFocus}`} onClick={needsSetup ? onSetup : onRequest}>{needsSetup ? 'Set up an agent' : 'New request'}</button>
+    {externalDisabled && <p className="text-xs text-surface-500 mt-3">External reports are disabled.</p>}
+  </section>;
+}
+
 export function HomeCounters({summary}: {summary: HomeSummary}) {
   return <dl aria-label="Operational summary" className="grid grid-cols-2 xl:grid-cols-4 gap-3">
     {(['running', 'waiting_start', 'needs_you', 'results'] as const).map(key => <div key={key} className="panel p-4 min-w-0">

@@ -1,0 +1,131 @@
+{
+  "initial": {
+    "status": "FINDINGS",
+    "checks": [
+      {
+        "name": "F07 real back and forward preserve exact canonical handoff target",
+        "status": "PASS",
+        "detail": {
+          "target": {
+            "handoff_id": "browser-handoff-0",
+            "kind": "handoff",
+            "server_id": "srv_48065bd95a797e6edd231fb13eff9fee",
+            "workspace_id": "home-alpha"
+          },
+          "backClosed": true,
+          "forwardReopened": true
+        }
+      },
+      {
+        "name": "F07 deep-link reload resolves the exact record through a fresh canonical GET",
+        "status": "FAIL",
+        "error": "locator.waitFor: Timeout 6000ms exceeded."
+      },
+      {
+        "name": "F07 malformed URL reference is rejected without target fetch",
+        "status": "PASS",
+        "detail": {
+          "noDrawer": true,
+          "noTargetFetch": true
+        }
+      },
+      {
+        "name": "F07 foreign workspace target refuses instead of selecting another record",
+        "status": "FAIL",
+        "error": "locator.waitFor: Timeout 6000ms exceeded."
+      },
+      {
+        "name": "F07 missing exact record remains unavailable with canonical404 and no latest fallback",
+        "status": "FAIL",
+        "error": "locator.waitFor: Timeout 6000ms exceeded."
+      },
+      {
+        "name": "F01 empty installation exposes setup action without advanced setup forms",
+        "status": "PASS",
+        "detail": {
+          "fixtureOverride": "GET Home overview/agents/activity only",
+          "setupAction": true,
+          "advancedForm": false,
+          "regionCount": 5
+        }
+      },
+      {
+        "name": "F02 one connected idle agent foregrounds request rather than six empty panels",
+        "status": "PASS",
+        "detail": {
+          "requestAction": true,
+          "regions": 5,
+          "emptyPanels": 4,
+          "uxAssessmentRequired": true,
+          "note": "No numeric acceptance threshold invented; Root should assess whether the empty-panel layout meets literal F02."
+        }
+      },
+      {
+        "name": "H02 live-region batches newly added IDs into one useful DOM announcement",
+        "status": "PASS",
+        "detail": {
+          "domChanges": 1,
+          "text": "Home updated. New work, attention or results are available.",
+          "speechOrHumanAssistiveTechnologyTested": false
+        }
+      },
+      {
+        "name": "Light/dark variants and 360px main keyboard path retain labels and focus",
+        "status": "FAIL",
+        "error": "locator.click: Timeout 6000ms exceeded."
+      }
+    ],
+    "mutationAttempts": [],
+    "pageErrors": [],
+    "environment": "Isolated CLI session home-r1-extra; read-only synthetic HTTP fixture51697; no provider/runtime/server mutation",
+    "limitations": [
+      "F01/F02/announcement are explicit GET response fixtures, not real empty installation or native producers.",
+      "No native question/decision or two-tab approval fake was constructed.",
+      "aria-live checks DOM only, not screen-reader speech.",
+      "No true 200% browser zoom claim."
+    ]
+  },
+  "delta": {
+    "checks": [
+      {
+        "name": "F07 direct URL revalidates exact handoff despite modal hiding background roles",
+        "status": "PASS",
+        "detail": {
+          "freshCanonicalGet": true,
+          "exactHandoff": true
+        }
+      },
+      {
+        "name": "F07 foreign workspace URL displays refusal without fallback or resolver GET",
+        "status": "PASS",
+        "detail": {
+          "scopeRefused": true,
+          "noTargetGet": true
+        }
+      },
+      {
+        "name": "F07 missing exact record shows canonical unavailable without recent-record substitution",
+        "status": "PASS",
+        "detail": {
+          "canonicalError": "Home target is no longer available.",
+          "noFallback": true
+        }
+      },
+      {
+        "name": "Light/dark via actual menu and 360px keyboard request-open-close preserves focus",
+        "status": "PASS",
+        "detail": {
+          "darkStates": [
+            true,
+            false
+          ],
+          "keyboardFocusRestored": true,
+          "viewport": 360,
+          "document": 360
+        }
+      }
+    ],
+    "mutationAttempts": [],
+    "correction": "Earlier harness waited for background accessible Work region while legitimate modal made it inert; now waits only attachment. Theme button is inside header menu, now opened explicitly. No product changes."
+  }
+}

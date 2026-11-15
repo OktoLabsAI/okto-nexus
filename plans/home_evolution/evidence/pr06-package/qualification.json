@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "status": "PASS_SCOPED",
+  "source_head": "bff71b13260e9812c41b6820a98ef9ce4eb0fe5d",
+  "criteria": [
+    "HOME-T-I03",
+    "HOME-T-I04"
+  ],
+  "frontend_regression": {
+    "command": "rtk proxy npm test",
+    "cwd": "frontend",
+    "tool_start": "7ed4c0",
+    "tool_final": "31a86d",
+    "exit_code": 0,
+    "tests": 196,
+    "passed": 196,
+    "failed": 0,
+    "skipped": 0,
+    "duration_ms": 8566.9969,
+    "scope": "One integrated Node run; overlaps prior focused tests, do not add totals."
+  },
+  "build": {
+    "command": "rtk proxy .venv/Scripts/python.exe -I -B -X utf8 tools/build_validation_artifacts.py --output <temporary>/artifacts",
+    "tool_reference": "30f0f8",
+    "exit_code": 0,
+    "manifest": "build-manifest.json",
+    "source_entries": 708,
+    "artifacts": {
+      "okto_nexus-0.3.4-py3-none-any.whl": "5600514aa01f16046785fc00ee46141edae207244fa84b6a88b5283f8e87d981",
+      "okto_nexus-0.3.4.tar.gz": "bc15ebd36346e45638eff60733c9da4dcb5bf396ccf81cafeeb4320156e52e64"
+    },
+    "twine": {
+      "tool_reference": "4db843",
+      "wheel": "PASSED",
+      "sdist": "PASSED"
+    },
+    "warnings": [
+      "Vite bundle above500kB",
+      "Existing setuptools project.license TOML-table deprecation"
+    ]
+  },
+  "installed": {
+    "tool_start": "cf6d23",
+    "tool_final": "4a9fca",
+    "independent_result_read": "aa62bf",
+    "exit_code": 0,
+    "tests": 17,
+    "passed": 17,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "pytest_reported_seconds": 100.3,
+    "junit_seconds": 99.796,
+    "changed_inputs": [],
+    "origins": "installed-origins.json",
+    "campaign": "installed-campaign.json",
+    "xml": "installed-tests.xml",
+    "environment": "environment.json",
+    "application_imports": "Installed site-packages, isolated Python -I, fresh temporary cwd and pytest config with no checkout pythonpath; all3 application package payloads compared byte-for-byte to their wheels.",
+    "warnings": [
+      "Starlette TestClient/httpx deprecation; one warning."
+    ]
+  },
+  "bootstrap": {
+    "install_exit_code": 0,
+    "tool_reference": "e7fa08",
+    "projection": "bootstrap-projection.json",
+    "core_required": true,
+    "connector_test_dependency_only": true,
+    "torch_absent": true
+  },
+  "coverage": {
+    "I03": "Existing canonical CLI connect/reconnect, interactive request-question-answer-result, saved-result reopen, exact continuation/close, lost-response no-replay and receipt persistence against temporary SQLite/real HTTP handlers with synthetic native peers. No Home visit or dashboard step.",
+    "I04": "Actual built wheel installation and resources: root HTML and every referenced JS/CSS served as exact installed package bytes, absent asset404, Home v1 envelope and runtime OpenAPI contracts coexist, no dev server. ci_installed independently compares all wheel payloads to installed application origins.",
+    "terminal_checks": [
+      "CLI review/apply/reconnect persists project profile",
+      "Interactive request/question/answer/result/status with no Home visit",
+      "Canonical saved result reopen, exact same-session continuation, normal close",
+      "Lost submission response recovers same operation; project mismatch refuses",
+      "HTTP uncertainty remains explicit and single-dispatch",
+      "Receipt storage faults recover without native replay"
+    ]
+  },
+  "boundary": {
+    "provider_inference": false,
+    "native_peers": "Synthetic test fixtures; application/HTTP/SQLite and CLI modules real installed package.",
+    "production_or_scheduled_service_actions": false,
+    "presentation_default": "Classic/off at this source cut; operational Home explicitly enabled in separate root browser qualification.",
+    "ambient_concurrency": "Root-controlled browser/performance work allowed in parallel. These durations are test execution evidence, not controlled-load benchmarks.",
+    "environment_note": "An initial empty uv-created Python3.14 prefix was not used for application install; all qualification uses the explicitly selected Python3.13.1 venv313."
+  },
+  "preserved_limits": [
+    "No live provider/account/native workload qualification claimed.",
+    "No browser behavior is inferred from package/Node tests; root browser proof is separate.",
+    "196 frontend tests overlap prior focused frontend runs; do not add the focused totals again.",
+    "Wheel/sdist and temporary environments remain outside the repository; only allowlisted metadata and test evidence are curated."
+  ],
+  "review_status": "READY_FOR_ROOT_REVIEW"
+}

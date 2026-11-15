@@ -11,7 +11,7 @@ import {AgentActionModal} from '../AgentActionModal';
 import {PageContainer} from '../PageContainer';
 import {useWorkspaceName} from '../WorkspaceNames';
 import {HomeNewRequest, HomeInspection, HomeAttentionInspection} from './HomeInspection';
-import {AgentRow, AttentionRow, HomeBlock, HomeCounters, ResultRow, WorkRow, homeFocus} from './HomeCards';
+import {AgentRow, AttentionRow, HomeBlock, HomeCounters, HomeWelcome, isQuietHome, ResultRow, WorkRow, homeFocus} from './HomeCards';
 
 type Panel = {kind: 'request'} | {kind: 'target'; target: HomeTarget; continuation?: boolean}
   | {kind: 'attention'; item: AttentionOccurrence; action: AttentionAction};
@@ -41,13 +41,21 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
   const announced = useRef<{generation: number; ids: Set<string>}>({generation:-1, ids:new Set()});
   const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
+    if (announced.current.generation !== state.generation) {
+      if (announceTimer.current !== null) {clearTimeout(announceTimer.current);announceTimer.current = null;}
+      setAnnouncement('');
+    }
     if (!snapshot) return;
     const ids = new Set([...snapshot.work.items.map(item => item.id), ...snapshot.results.items.map(item => item.id), ...snapshot.attention.items.map(item => item.attention_id)]);
     const previous = announced.current;
     announced.current = {generation:state.generation,ids};
     if (previous.generation !== state.generation) {setAnnouncement('');return;}
-    if ([...ids].some(id => !previous.ids.has(id)) && announceTimer.current === null)
+    if ([...ids].some(id => !previous.ids.has(id)) && announceTimer.current === null) {
+      // A separate mutation makes the next coalesced batch audible even when
+      // its business summary is the same as the preceding batch.
+      setAnnouncement('');
       announceTimer.current = setTimeout(() => {announceTimer.current=null;setAnnouncement('Home updated. New work, attention or results are available.');}, 2000);
+    }
   }, [snapshot, state.generation]);
   useEffect(() => () => {if (announceTimer.current) clearTimeout(announceTimer.current);}, []);
   useEffect(() => {
@@ -116,13 +124,15 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
     finally {locks.current.delete(item.attention_id);if (mounted.current && current.current.generation === before.generation) {setPending([...locks.current]);changed();}}
   };
   const isStale = (section: 'work'|'attention'|'results'|'agents'|'external_activity') => state.status !== 'ready' || state.staleSections.includes(section) || state.paused;
+  const quiet = !agentFilter && !stateFilter && isQuietHome(snapshot, state.status !== 'ready' || state.staleSections.some(section => ['work','results','attention','agents','external_activity'].includes(section)));
+  const agentsBlock = snapshot && <HomeBlock title="Agents" section={snapshot.agents} stale={isStale('agents')} onMore={() => loadMore('agents')} loadingMore={state.loadingMore === 'agents'} empty="No visible agents in this scope."><ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.agents.items.map(item => <AgentRow key={item.agent_id} item={item}/>)}</ul></HomeBlock>;
   return <PageContainer testId="operational-home" className="space-y-5">
     <header className="flex flex-wrap justify-between items-start gap-3">
       <div><p className="text-xs uppercase tracking-wider text-accent-600 dark:text-accent-300">Operational overview</p>
         <h1 ref={heading} tabIndex={-1} className="text-2xl font-semibold mt-1">Home</h1>
         <p className="text-sm text-surface-500 mt-1">{workspace === 'all' ? 'All workspaces' : workspaceName} · Work, decisions and results</p></div>
       <div className="flex flex-wrap gap-2">
-        <button className={`btn btn-primary ${homeFocus}`} onClick={() => open({kind:'request'})} disabled={!snapshot || state.status === 'forbidden'}><Plus size={15}/> New request</button>
+        {!quiet && <button className={`btn btn-primary ${homeFocus}`} onClick={() => open({kind:'request'})} disabled={!snapshot || state.status === 'forbidden'}><Plus size={15}/> New request</button>}
         <button className={`btn btn-secondary ${homeFocus}`} onClick={refresh} disabled={state.loading}><RefreshCw size={15}/> Refresh</button>
         <button className={`btn btn-secondary ${homeFocus}`} aria-pressed={manualPause} onClick={() => setManualPause(value => !value)}>{manualPause ? <Play size={15}/> : <Pause size={15}/>} {manualPause ? 'Resume display' : 'Pause display'}</button>
       </div>
@@ -141,6 +151,10 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
       </div>
     {!snapshot && <p role="status" className="panel p-5">{state.status === 'forbidden' ? 'Operator access is required. Protected Home data has been cleared.' : state.status === 'disabled' ? 'Operational Home is disabled.' : state.status === 'error' ? 'Home information is unavailable. Refresh to try again.' : 'Loading operational overview…'}</p>}
     {snapshot && <>
+      {quiet ? <>
+        <HomeWelcome needsSetup={snapshot.agents.total === 0} externalDisabled={snapshot.external_activity.status === 'disabled'} onSetup={onSetupAgent} onRequest={() => open({kind:'request'})}/>
+        {snapshot.agents.total !== 0 && agentsBlock}
+      </> : <>
       <HomeCounters summary={snapshot.summary}/>
 
       <div className="grid xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-5 items-start">
@@ -156,7 +170,7 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
           <HomeBlock title="Results" section={snapshot.results} stale={isStale('results')} empty="No matching results in this snapshot." onMore={() => loadMore('results')} loadingMore={state.loadingMore === 'results'}>
             <ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.results.items.map(item => <ResultRow key={item.id} item={item} stale={isStale('results') || !!item.attention && pending.includes(item.attention.attention_id)} onOpen={target => open({kind:'target',target})} onSeen={(item,seen) => void preference(item,seen)} onContinue={target => open({kind:'target',target,continuation:true})}/>)}</ul>
           </HomeBlock>
-          <HomeBlock title="Agents" section={snapshot.agents} stale={isStale('agents')} onMore={() => loadMore('agents')} loadingMore={state.loadingMore === 'agents'} empty="No visible agents in this scope."><ul className="divide-y divide-surface-200 dark:divide-surface-700">{snapshot.agents.items.map(item => <AgentRow key={item.agent_id} item={item}/>)}</ul></HomeBlock>
+          {agentsBlock}
         </div>
       </div>
       <HomeBlock title="External reports" section={snapshot.external_activity} stale={isStale('external_activity')} onMore={() => loadMore('external')} loadingMore={state.loadingMore === 'external'} empty="No external activity reported. Native work above is independent of external telemetry.">
@@ -166,13 +180,14 @@ export function OperationalHome({workspace, workspaces, identityKey, refreshTick
           <button className="btn btn-secondary mt-2" onClick={() => open({kind:'target',target:{kind:'external_observation',server_id:snapshot.server_id,workspace_id:item.workspace_id,source_id:item.source_id,observed_instance_id:item.observed_instance_id,generation:item.generation}})}>Inspect source</button>
         </li>)}</ul>
       </HomeBlock>
-      {state.activity ? <HomeBlock title="Recent activity" section={state.activity} stale={state.staleSections.includes('activity')} empty="No recent business events in this scope." onMore={() => loadMore('activity')} loadingMore={state.loadingMore === 'activity'}>
+      </>}
+      {(!quiet || state.activity && (state.activity.items.length > 0 || state.activity.status !== 'ready')) && (state.activity ? <HomeBlock title="Recent activity" section={state.activity} stale={state.staleSections.includes('activity')} empty="No recent business events in this scope." onMore={() => loadMore('activity')} loadingMore={state.loadingMore === 'activity'}>
         <ul className="divide-y divide-surface-200 dark:divide-surface-700">{state.activity.items.map(event => {
           const label = homeFeedLabel(event.kind);if (!label) return null;
           return <li key={event.id} className="py-2 text-sm flex flex-wrap justify-between gap-2"><span>{label}{event.agent_id ? ` · ${event.agent_id}` : ''}</span>
             {event.detail_target && <button type="button" className={`text-xs underline ${homeFocus}`} onClick={() => open({kind:'target',target:event.detail_target!})}>Inspect event source</button>}</li>;
         })}</ul>
-      </HomeBlock> : <section className="panel p-4"><h2 className="font-semibold">Recent activity</h2><button className="btn btn-secondary mt-3" disabled={!!state.loadingMore || state.loading} onClick={() => loadMore('activity')}>Load recent activity</button></section>}
+      </HomeBlock> : <section className="panel p-4"><h2 className="font-semibold">Recent activity</h2><button className="btn btn-secondary mt-3" disabled={!!state.loadingMore || state.loading} onClick={() => loadMore('activity')}>Load recent activity</button></section>)}
     </>}
     {panel && snapshot && <AgentActionModal title={panel.kind === 'request' ? 'New request' : panel.kind === 'attention' ? 'Canonical attention record' : panel.continuation ? 'Continue this exact session' : 'Activity detail'} onClose={close} presentation="drawer" wide testId="home-detail">
       {panel.kind === 'request' ? <HomeNewRequest workspace={workspace} workspaces={workspaces} onChanged={changed}/>

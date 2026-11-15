@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="23.728" timestamp="2026-11-15T18:39:22.570788-03:00" hostname="Alienware_m15"><testcase classname="tests.home_evolution.test_home_semantics" name="test_empty_installation_has_no_home_workers_until_worker_registered" time="11.437"><failure message="assert (1 == 0)">tests\home_evolution\test_home_semantics.py:165: in test_empty_installation_has_no_home_workers_until_worker_registered
+    assert empty['total'] == 0 and empty['items'] == []
+E   assert (1 == 0)</failure></testcase></testsuite></testsuites>

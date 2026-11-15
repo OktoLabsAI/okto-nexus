@@ -1,0 +1,136 @@
+{
+  "status": "8_CHECKS_PASS_ONE_DOM_ACCESSIBILITY_FINDING_ONE_UX_OBSERVATION",
+  "selected_checks": [
+    {
+      "name": "F07 real back and forward preserve exact canonical handoff target",
+      "status": "PASS",
+      "detail": {
+        "target": {
+          "handoff_id": "browser-handoff-0",
+          "kind": "handoff",
+          "server_id": "srv_48065bd95a797e6edd231fb13eff9fee",
+          "workspace_id": "home-alpha"
+        },
+        "backClosed": true,
+        "forwardReopened": true
+      }
+    },
+    {
+      "name": "F07 malformed URL reference is rejected without target fetch",
+      "status": "PASS",
+      "detail": {
+        "noDrawer": true,
+        "noTargetFetch": true
+      }
+    },
+    {
+      "name": "F01 empty installation exposes setup action without advanced setup forms",
+      "status": "PASS",
+      "detail": {
+        "fixtureOverride": "GET Home overview/agents/activity only",
+        "setupAction": true,
+        "advancedForm": false,
+        "regionCount": 5
+      }
+    },
+    {
+      "name": "H02 live-region batches newly added IDs into one useful DOM announcement",
+      "status": "PASS",
+      "detail": {
+        "domChanges": 1,
+        "text": "Home updated. New work, attention or results are available.",
+        "speechOrHumanAssistiveTechnologyTested": false
+      }
+    },
+    {
+      "name": "F07 direct URL revalidates exact handoff despite modal hiding background roles",
+      "status": "PASS",
+      "detail": {
+        "freshCanonicalGet": true,
+        "exactHandoff": true
+      }
+    },
+    {
+      "name": "F07 foreign workspace URL displays refusal without fallback or resolver GET",
+      "status": "PASS",
+      "detail": {
+        "scopeRefused": true,
+        "noTargetGet": true
+      }
+    },
+    {
+      "name": "F07 missing exact record shows canonical unavailable without recent-record substitution",
+      "status": "PASS",
+      "detail": {
+        "canonicalError": "Home target is no longer available.",
+        "noFallback": true
+      }
+    },
+    {
+      "name": "Light/dark via actual menu and 360px keyboard request-open-close preserves focus",
+      "status": "PASS",
+      "detail": {
+        "darkStates": [
+          true,
+          false
+        ],
+        "keyboardFocusRestored": true,
+        "viewport": 360,
+        "document": 360
+      }
+    }
+  ],
+  "idle_state_observation": {
+    "name": "F02 one connected idle agent foregrounds request rather than six empty panels",
+    "status": "OBSERVED_UX_REVIEW_REQUIRED",
+    "detail": {
+      "requestAction": true,
+      "regions": 5,
+      "emptyPanels": 4,
+      "uxAssessmentRequired": true,
+      "note": "No numeric acceptance threshold invented; Root should assess whether the empty-panel layout meets literal F02."
+    }
+  },
+  "repeat_announcement": {
+    "domAnnouncements": [
+      "Home updated. New work, attention or results are available."
+    ],
+    "liveText": "Home updated. New work, attention or results are available.",
+    "secondWorkVisible": true,
+    "status": "REPEATED_UPDATE_NOT_ANNOUNCED"
+  },
+  "mutation_attempts": [],
+  "page_errors": [],
+  "harness_antecedent": "First deep-link checks waited for accessible Work behind an aria-modal drawer, correctly inert; theme test omitted opening header menu. Corrected test-only in delta-checks.js. Original result retained.",
+  "tool_refs": {
+    "initial_retained": "e112fb",
+    "final_delta": "d0aad3",
+    "repeat_finding": "eace05",
+    "extracted": "57ef4d"
+  },
+  "isolation": {
+    "browser_session": "home-r1-extra",
+    "browser_pid_at_open": 24556,
+    "own_context_only": true,
+    "fixture": "http://127.0.0.1:51697",
+    "server_runtime_off": true,
+    "server_mutations_refused": true,
+    "profile_not_mcp": true,
+    "existing_tabs_0_1_untouched": true
+  },
+  "limits": [
+    "GET response overrides for empty/idle/new-item cases are explicit fixtures, not actual producers.",
+    "No provider/native question/decision/unknown-decision/two-tab approval result manufactured.",
+    "aria-live evidence is DOM MutationObserver, not human speech or screen-reader test.",
+    "360px and light/dark actual menu checked; true browser200% zoom not tested.",
+    "F02 layout remains for literal UX review; no numeric new acceptance threshold imposed."
+  ],
+  "served_script": "http://127.0.0.1:51697/assets/index-ClXPhQ4N.js",
+  "source_pins": {
+    "frontend/src/components/home/OperationalHome.tsx": "24335a1e2380491886705540a9ba8902767be401ba86f671605a64078053381a",
+    "frontend/src/components/home/HomeInspection.tsx": "43c95cff45f59d0016934353e2ac3a30e2e1c44987d90d06917c6cf2556db5d0",
+    "frontend/src/homeNavigation.ts": "f8f49082d09eb83bc53f931d96811fe62eeec127e51d175014f95d1292c6ebe5",
+    "src/okto_nexus/adapters/inbound/http/static/assets/index-ClXPhQ4N.js": "2a90a89e36830e65def8c0b30df196891a218060388235379b6df267de2c075f",
+    "tests/home_evolution/browser_fixture.py": "8a86251b05cb88a546a292ae93671b91d88359d2ef12a582aeb3a2611c97f97d"
+  }
+}
