@@ -13919,6 +13919,17 @@
       "provider_turns_selected": 0,
       "services_still_live": false,
       "acceptance_promoted": false
+    },
+    "r3_credential_stdin_consent_fix": {
+      "status": "SOURCE_QUALIFIED_NO_INSTALLED_OR_LIVE_ACCEPTANCE",
+      "connector_commit": "28e8093997849ba47a018e5d4728f8b3535be4b1",
+      "summary": "Protected credential stdin now refuses unapproved file fallback before prompt/vault/read; explicit consent/backend/reuse preserved. Source16PASS and independent peerPASS. No installed/live replay, no recovered material, no scenario promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/review.json",
+        "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/qualification.json",
+        "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/manifest.json"
+      ],
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15673,6 +15684,19 @@
       ],
       "provider_turns_selected": 0,
       "services_still_live": false,
+      "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_credential_stdin_consent_fix",
+      "status": "SOURCE_QUALIFIED_NO_INSTALLED_OR_LIVE_ACCEPTANCE",
+      "connector_commit": "28e8093997849ba47a018e5d4728f8b3535be4b1",
+      "summary": "Protected credential stdin now refuses unapproved file fallback before prompt/vault/read; explicit consent/backend/reuse preserved. Source16PASS and independent peerPASS. No installed/live replay, no recovered material, no scenario promotion.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/review.json",
+        "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/qualification.json",
+        "plans/agent_ops/evidence/r3-credential-stdin-consent-fix/manifest.json"
+      ],
       "acceptance_promoted": false
     }
   ],

@@ -1,0 +1,60 @@
+{
+  "classification": "SOURCE_QUALIFIED_NO_INSTALLED_PACKAGE_OR_LIVE_REPLAY",
+  "files": {
+    "src/okto_nexus_connector/cli/commands/connect.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\connect.py",
+      "sha256": "2fddde6d5a99b3ad85901160f63a1e1183e58146d3c6c360c4f96f3fdddbb9ac",
+      "bytes": 16071
+    },
+    "src/okto_nexus_connector/cli/commands/connect_setup.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\connect_setup.py",
+      "sha256": "f2c75d833eda799ccd701c1de91bb694391737dd6cc3508b1510c60472b85479",
+      "bytes": 12655
+    },
+    "src/okto_nexus_connector/cli/commands/identity.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\cli\\commands\\identity.py",
+      "sha256": "17b9669c49645ae0fc18daccf53ece8bdbc3e5584d691312d4839bdadc47fa9a",
+      "bytes": 6830
+    },
+    "tests/unit/test_credential_stdin_consent.py": {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_credential_stdin_consent.py",
+      "sha256": "e5553cfd141066788ba4c86e051905d96da24d70a9b1b49970df1a197e62e830",
+      "bytes": 5355
+    }
+  },
+  "tests": {
+    "focused": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "regressions": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "unique_passed": 16,
+  "runner_python": "C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/successor14/work-revision16/package/venv/Scripts/python.exe",
+  "imports": "Connector repository source explicitly prepended; installed environment used for dependencies only.",
+  "test_tools": {
+    "focused": "29d318",
+    "regressions": "7a87d0"
+  },
+  "ruff": {
+    "result": "PASS",
+    "tool": "1eea03"
+  },
+  "diff_check": {
+    "result": "PASS",
+    "tool": "654b37"
+  },
+  "contract": "Without prior restricted-file consent, credential-stdin refuses APPROVAL_REQUIRED before prompt, vault access or credential read. Available OS backend and preapproved storage retain credential import. Interactive consent remains explicit and defaults to refusal.",
+  "runtime_changes": "None. Existing failed transfer remains unchanged; the source fix cannot recover consumed one-time material.",
+  "provider_calls": 0,
+  "service_actions": 0,
+  "personal_credential_reads": 0,
+  "commit_push": false
+}

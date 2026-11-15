@@ -1,0 +1,41 @@
+{
+  "format": "credential-stdin-fix-public-retention-v1",
+  "connector_commit": "28e8093997849ba47a018e5d4728f8b3535be4b1",
+  "files": [
+    {
+      "path": "qualification.json",
+      "sha256": "aaeccc833171733e845ed5a0ad021cc20921963c12a34d7e1f944b74453e6690",
+      "bytes": 2520
+    },
+    {
+      "path": "focused.xml",
+      "sha256": "a83aba55c9a10a1ae48c205cfb92fcae58d546d35f854c9437430ec935d0be15",
+      "bytes": 1629
+    },
+    {
+      "path": "regressions.xml",
+      "sha256": "4cc561e8a11ec908b256d80c2657aed524c21e8c6055a265dc6c13649740118c",
+      "bytes": 1257
+    },
+    {
+      "path": "run_credential_stdin_consent.py",
+      "sha256": "d5e91b06094f7646d6eb79406e6178f64b19c8296e981de55aafd2f7da45e589",
+      "bytes": 622
+    },
+    {
+      "path": "run_credential_stdin_regressions.py",
+      "sha256": "753d72fd9a5637fbe67de48057c1b4d2ebad6e26d1e860ce45875da4ac1e44b9",
+      "bytes": 739
+    },
+    {
+      "path": "review.json",
+      "sha256": "cf89fa82aefe3a08f9e4559aaa3ccfb1c3b2f1d9e33d8215ad212d6908bd1ebd",
+      "bytes": 1238
+    },
+    {
+      "path": "README.md",
+      "sha256": "422619af81e8d68a706d194f068e5018177dfa6bcc2a783b29a53ff6c2b8eded",
+      "bytes": 1024
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "status": "SOURCE_QUALIFIED_NO_INSTALLED_OR_LIVE_ACCEPTANCE",
+  "connector_commit": "28e8093997849ba47a018e5d4728f8b3535be4b1",
+  "source_tests_passed": 16,
+  "peer_review": "PASS: three production sources and nine new cases read independently; no tests repeated by peer.",
+  "scope": "Credential stdin refuses APPROVAL_REQUIRED before consent prompt, vault access or credential read when restricted-file fallback lacks prior approval. Available backend and persisted consent retain import. Negative interactive consent now stops remote resume before vault access. Existing identity reuse remains unchanged.",
+  "evidence_limit": "Source imports with installed dependencies only. No new installed wheel qualification or actual transfer replay. Original qualification commit_push=false describes its precommit moment; the later pushed commit is recorded here.",
+  "historical_transfer": "Previous UNCONFIRMED transfer and consumed one-time material remain unchanged; this fix does not recover or authorize replay of that material.",
+  "provider_calls": 0,
+  "service_actions": 0,
+  "personal_credential_reads": 0,
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  }
+}
