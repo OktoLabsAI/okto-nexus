@@ -1,0 +1,12 @@
+{
+  "actual_cli_result": "7e09ff: exit0/stopped/SHUTDOWN_COMPLETE, exact svc0450942 identity, unchanged context, stderr0",
+  "helper_initial_assertion": "Expected only NO_SERVICE_OWNER and failed after persisting actual result; no CLI or product error.",
+  "source_explanation": "LocalServerLifecycle.inspect local.py128-132 overlays stopped process observation with SHUTDOWN_COMPLETE when saved desired=draining and matching DRAINED receipt; canonical base inspector reason remains NO_SERVICE_OWNER before overlay.",
+  "source_read_tools": [
+    "e1701b",
+    "a5f380"
+  ],
+  "correction": "Verifier accepts stopped canonical NO_SERVICE_OWNER or SHUTDOWN_COMPLETE. Actual projection bytes retained; no CLI repeat.",
+  "original_projection_sha256": "22153282d1e710024db38ed84a79dfae278be1884be1d95e678bdfedaedf816d",
+  "scope": "Metadata/verifier correction only; no source/product/runtime mutation."
+}

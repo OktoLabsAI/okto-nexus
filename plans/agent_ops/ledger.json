@@ -14302,6 +14302,30 @@
       "codex_tokens": 579154,
       "codex_charged_admissions": 16,
       "acceptance_promoted": false
+    },
+    "r3_nexus_passive_status_stale_discovery": {
+      "status": "SOURCE_AND_INSTALLED_QUALIFIED_REAL_PASSIVE_STATUS_CONFIRMED",
+      "summary": "Saved absolute discovery directory disappeared; source2c59abf1 removes physical-path existence validation only for passive status, retaining lexical validation and strict nonstatus defaults. Twelve source cases (11 new+1 regression) and the same twelve installed cases PASS, not24 unique. Isolated composition988payload/1002RECORD/694source verified. Actual read-only CLI status0/stopped/SHUTDOWN_COMPLETE, exact instance and context bytes unchanged; initial verifier NO_SERVICE_OWNER-only assertion retained/corrected without CLI repeat. No PID collected in that projection; prior canonical absence/physical exits remain separate. No context rewrite, replacement directory, campaign activation or new stop.",
+      "source_commit": "2c59abf1a06804dadfc32a789b7cdd5add79d4ba",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/review.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/diagnosis/conclusion.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/source-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/installed-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/installed-qualification/real-status-projection.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/installed-qualification/status-classification-note.json"
+      ],
+      "authorization_interpretation": "The user authorization for necessary Nexus-system stops in this task persists. Prior one-call reservation does not expire that authority; revalidate exact owned target/generation and necessity before future effects, without repeat confirmation solely for PID change. Supersedes narrow future_force_authorized:false interpretation in6ba, not original receipts.",
+      "new_control_calls": 0,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed500k_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "acceptance_promoted": false,
+      "unique_test_cases": 12,
+      "source_and_installed_cases_overlap": true
     }
   },
   "history": [
@@ -16452,6 +16476,32 @@
       "codex_tokens": 579154,
       "codex_charged_admissions": 16,
       "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_nexus_passive_status_stale_discovery",
+      "status": "SOURCE_AND_INSTALLED_QUALIFIED_REAL_PASSIVE_STATUS_CONFIRMED",
+      "summary": "Saved absolute discovery directory disappeared; source2c59abf1 removes physical-path existence validation only for passive status, retaining lexical validation and strict nonstatus defaults. Twelve source cases (11 new+1 regression) and the same twelve installed cases PASS, not24 unique. Isolated composition988payload/1002RECORD/694source verified. Actual read-only CLI status0/stopped/SHUTDOWN_COMPLETE, exact instance and context bytes unchanged; initial verifier NO_SERVICE_OWNER-only assertion retained/corrected without CLI repeat. No PID collected in that projection; prior canonical absence/physical exits remain separate. No context rewrite, replacement directory, campaign activation or new stop.",
+      "source_commit": "2c59abf1a06804dadfc32a789b7cdd5add79d4ba",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/review.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/diagnosis/conclusion.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/source-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/installed-qualification/qualification.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/installed-qualification/real-status-projection.json",
+        "plans/agent_ops/evidence/r3-nexus-passive-status-stale-discovery/installed-qualification/status-classification-note.json"
+      ],
+      "authorization_interpretation": "The user authorization for necessary Nexus-system stops in this task persists. Prior one-call reservation does not expire that authority; revalidate exact owned target/generation and necessity before future effects, without repeat confirmation solely for PID change. Supersedes narrow future_force_authorized:false interpretation in6ba, not original receipts.",
+      "new_control_calls": 0,
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed500k_authorized": false,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "acceptance_promoted": false,
+      "unique_test_cases": 12,
+      "source_and_installed_cases_overlap": true
     }
   ],
   "r3_native_bounded_supervisor_execution": {

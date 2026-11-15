@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "path": "run_tests.py",
+      "sha256": "c2de19039221902fccafa88a6dee7281b466ac32b8d2cadb67042cb42eb933f3",
+      "bytes": 495
+    },
+    {
+      "path": "final.xml",
+      "sha256": "ccfc8ad0aed04a85fa0430aaa02233b1c87c35810b13d429ed5b2373f2707528",
+      "bytes": 1992
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "c614b750311c6165c4dafeec9be58e4f41744a6edd1381763153ac552aeeafa3",
+      "bytes": 1264
+    },
+    {
+      "path": "local_discovery.py",
+      "sha256": "3919c50a16d4c6028828e204ca66c9b3714b248770cff8502e0a543def84db99",
+      "bytes": 2567
+    },
+    {
+      "path": "service.py",
+      "sha256": "2d4d7069e1153449e99e5ac6202f115048359abb0ca8a6db28f2bde5438618ab",
+      "bytes": 12553
+    },
+    {
+      "path": "test_service_status_missing_discovery.py",
+      "sha256": "610682ab78e4e68c0d1a27c1a98492f89a8f021f15e53ec87bd0e4c3b1ba2ef2",
+      "bytes": 3575
+    }
+  ]
+}

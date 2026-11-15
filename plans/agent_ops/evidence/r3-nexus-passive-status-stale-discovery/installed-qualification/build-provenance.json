@@ -1,0 +1,48 @@
+{
+  "format": 1,
+  "nexus_commit": "2c59abf1a06804dadfc32a789b7cdd5add79d4ba",
+  "connector_commit": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+  "core_commit": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+  "archive": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\nexus-source.tar",
+    "sha256": "3407246262d899b02c10da940221f62e529c091486e7621221114f1db5c42a8b",
+    "bytes": 12052480
+  },
+  "wheels": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "2c0c2b90177f88be6e52e8e33170ae539d732e6bd1f214f3c6dadb4fe0864514",
+      "bytes": 3946191
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+      "bytes": 402747
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "bytes": 556849
+    }
+  ],
+  "reused_wheels": {
+    "vendor/wheels/okto_nexus_connector_core-0.0.14-py3-none-any.whl": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "vendor/ci/okto_nexus_connector-0.0.12-py3-none-any.whl": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d"
+  },
+  "build_python": "C:\\Python313\\python.exe",
+  "build_versions": {
+    "build": "1.5.0",
+    "setuptools": "84.0.0",
+    "wheel": "0.45.1"
+  },
+  "source_date_epoch": "1767225600",
+  "dependency_copy_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-connector-reconciliation-wheel-6pb8bst4\\venv",
+  "new_prefix": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\venv",
+  "home_build_reused_commit": "d3713c435ab2b853a2bb54feb77dc2161f28270b",
+  "home_review": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-fixed-campaign-package-ddwnb5vx\\home-review.json",
+    "sha256": "61e0f245c9400ca9e538fc1ca26fe796b9126aa6e82c5447bb1bd60f577e74ee",
+    "bytes": 2545
+  },
+  "scope": "Offline package composition only; no service, provider, campaign, credentials or plan activation."
+}

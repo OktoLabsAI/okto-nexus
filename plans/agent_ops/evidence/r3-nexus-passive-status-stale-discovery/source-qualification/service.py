@@ -1,0 +1,196 @@
+"""Explicit service diagnostics. Status never starts or cancels anything."""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+from pathlib import Path
+import time
+
+from ....application.service_lifecycle import ServiceLifecycle
+from ....bootstrap.local_discovery import split_discovery_args
+from ....config import load_config
+from ....errors import OktoNexusError
+from ...outbound.service_manager.context import CONTEXT_NAME, execution_context, read_json, validate_context
+from ...outbound.service_manager.local import LocalServerLifecycle
+from .serve import _split_serve_args
+
+
+def run_service(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(prog='okto-nexus service',
+        description='Inspect or explicitly start the configured local Server.')
+    parser.add_argument('action', choices=['status', 'logs', 'start', 'stop', 'restart', 'recover-start', 'install', 'uninstall', 'enable', 'disable', 'upgrade-plan', 'upgrade-apply'])
+    parser.add_argument('--python', help='absolute target installed Python for upgrade-plan')
+    parser.add_argument('--plan-file', type=Path, help='reviewed upgrade plan JSON for upgrade-apply')
+    parser.add_argument('--output', type=Path, help='save upgrade-plan as a new UTF-8 JSON file')
+    parser.add_argument('--expected-revision', help='pending launch receipt revision reviewed with status --json')
+    parser.add_argument('--force', action='store_true', help='explicit containment after the selected drain deadline')
+    parser.add_argument('--expected-generation', help='current service generation reviewed before deciding to force')
+    parser.add_argument('--follow', action='store_true', help='follow local service logs until Ctrl+C')
+    parser.add_argument('--tail', type=int, default=None, help='recent log records, 1..10000 (default 50)')
+    parser.add_argument('--user', action='store_true', help='select the effective user service scope')
+    parser.add_argument('--start-at-login', action='store_true', help='explicitly opt into user logon startup')
+    parser.add_argument('--json', action='store_true')
+    parser.add_argument('--timeout', type=float, default=None,
+                        help='observation timeout in seconds; timeout never kills the service')
+    args, remaining = parser.parse_known_args(argv)
+    if args.force and (args.action != 'stop' or not args.expected_generation):
+        parser.error('stop --force requires --expected-generation')
+    if args.expected_generation and not args.force:
+        parser.error('--expected-generation applies only to stop --force')
+    if (args.action in {'recover-start', 'upgrade-apply'}) != bool(args.expected_revision):
+        parser.error('recover-start and upgrade-apply require --expected-revision; other actions do not use it')
+    if (args.action == 'upgrade-plan') != bool(args.python):
+        parser.error('upgrade-plan requires --python; other actions do not use it')
+    if (args.action == 'upgrade-apply') != bool(args.plan_file):
+        parser.error('upgrade-apply requires --plan-file; other actions do not use it')
+    if args.output and args.action != 'upgrade-plan':
+        parser.error('--output applies only to upgrade-plan')
+    if args.action != 'logs' and (args.follow or args.tail is not None):
+        parser.error('--follow and --tail apply only to logs')
+    if args.tail is not None and not 1 <= args.tail <= 10000:
+        parser.error('--tail must be between 1 and 10000')
+    if args.action == 'install' and not (args.user and args.start_at_login):
+        parser.error('install requires --user --start-at-login')
+    if args.action in {'uninstall', 'enable', 'disable'} and not args.user:
+        parser.error(f'{args.action} requires --user')
+    if args.start_at_login and args.action != 'install':
+        parser.error('--start-at-login applies only to install')
+    timeout = args.timeout if args.timeout is not None else (2.0 if args.action == 'status' else 30.0)
+    if not 0 < timeout <= 300:
+        parser.error('--timeout must be greater than 0 and at most 300 seconds')
+    try:
+        port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
+        discovery, rest = split_discovery_args(rest, require_paths=args.action != 'status')
+        config = load_config(os.environ, rest)
+        if args.action == 'logs':
+            # Diagnostic access remains possible with an unavailable old Python
+            # environment, native supervisor or transport. Do not inspect/start.
+            adapter = LocalServerLifecycle(home=config.home_dir, database=config.db_path,
+                                           host=host, port=port)
+            service = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep)
+            return _show_logs(service, args)
+        service = resolve_local_service(remaining, action=args.action)
+        method = {'status': 'inspect', 'install': 'install_user_service',
+                  'enable': 'enable_user_service', 'disable': 'disable_user_service',
+                  'uninstall': 'uninstall_user_service'}.get(args.action, args.action)
+        if args.action == 'upgrade-plan':
+            result = service.upgrade_plan(executable=args.python)
+            if args.output:
+                from ....service_upgrade import save_plan
+                save_plan(args.output, result)
+        elif args.action == 'upgrade-apply':
+            result = service.upgrade_apply(document=read_json(args.plan_file), expected_revision=args.expected_revision)
+        elif args.action == 'recover-start':
+            result = service.recover_start(expected_revision=args.expected_revision)
+        elif args.action == 'stop' and args.force:
+            result = service.stop(timeout=timeout, force=True, expected_generation=args.expected_generation)
+        else:
+            action = getattr(service, method)
+            result = action(timeout=timeout)
+    except (OktoNexusError, OSError, ValueError, KeyError, TypeError) as error:
+        result = {'state': 'failed', 'reason': getattr(error, 'code', 'CONFIG_ERROR'),
+                  'next_action': getattr(error, 'action', None) or 'Review the selected local instance configuration.'}
+        if args.json:
+            print(json.dumps(result))
+        else:
+            print(f"Service inspection failed: {result['reason']}. {result['next_action']}")
+        return 2
+    if args.json:
+        print(json.dumps(result))
+    elif args.action in {'upgrade-plan', 'upgrade-apply'}:
+        print(json.dumps(result, indent=2))
+    else:
+        print(f"Server: {result['state']} ({result['instance_id']})")
+        print(f"Installed: {result['installed_version']}; active: {result['active_version'] or 'unconfirmed'}")
+        if result.get('reason'):
+            print(result['reason'])
+        if result.get('next_action'):
+            print(result['next_action'])
+        if result.get('enablement_confirmed'):
+            print('User service enabled.' if result['enabled'] else 'User service disabled.')
+        if result.get('launch_recovery', {}).get('receipt_revision'):
+            print(f"Launch receipt revision: {result['launch_recovery']['receipt_revision']}")
+    success = (bool(result.get('plan_revision')) if args.action == 'upgrade-plan' else
+               result.get('applied') is True if args.action == 'upgrade-apply' else
+               result.get('installation_state') == 'installed' if args.action == 'install' else
+               result.get('recovered') is True if args.action == 'recover-start' else
+               result.get('enablement_confirmed') is True if args.action in {'enable', 'disable'} else
+               result.get('installation_state') == 'absent' if args.action == 'uninstall' else
+               result['state'] == 'ready' if args.action in {'start', 'restart'} else
+               result['state'] in {'ready', 'stopped'} if args.action == 'status' else
+               result['state'] == 'stopped' and result.get('shutdown_outcome') != 'unconfirmed')
+    return 0 if success else 3
+
+
+def _show_logs(service, args):
+    previous = object()
+    try:
+        for result in service.logs(tail=args.tail or 50, follow=args.follow):
+            if previous != result['reason'] or result['events'] or result['rotated'] or result['truncated']:
+                if args.json:
+                    print(json.dumps(result), flush=True)
+                else:
+                    for event in result['events']:
+                        print(f"{event['timestamp']} {event['code']} state={event['state']} "
+                              f"generation={event['generation']} supervisor={event['supervisor']}"
+                              + (f" error={event['error_code']}" if event['error_code'] else ''), flush=True)
+                    if result['reason']:
+                        print(f"{result['reason']}: log availability does not establish service or work state.", flush=True)
+                    if result['truncated']:
+                        print('Older records omitted by the bounded log view.', flush=True)
+                    if result['rotated']:
+                        print('Log rotated; observation resumed from the active file.', flush=True)
+                previous = result['reason']
+            if result['state'] == 'unavailable':
+                return 3
+    except KeyboardInterrupt:
+        return 130  # end observation only; no stop/cancel operation
+    return 0
+
+
+def resolve_local_service(remaining, *, action="connect"):
+    """Resolve the same saved context for service controls and onboarding."""
+    port, host, project_root, log_level, rest = _split_serve_args(remaining, os.environ)
+    discovery, rest = split_discovery_args(rest, require_paths=action != 'status')
+    config = load_config(os.environ, rest)
+    explicit_fields = load_config({}, rest)._explicit_fields
+    saved = config.home_dir.resolve() / CONTEXT_NAME
+    environment = os.environ
+    previous = None
+    if saved.exists():
+        previous = read_json(saved)
+        if previous.get('upgrade_pending'):
+            from ....service_upgrade import UpgradeError
+            if action not in {'upgrade-apply', 'status'}:
+                raise UpgradeError('SERVICE_UPGRADE_PENDING',
+                    'Resume upgrade-apply with plan revision ' + str(previous['upgrade_pending']))
+            previous = previous['upgrade_plan']['source_context']
+        previous = validate_context(previous, require_paths=action not in {'status', 'disable', 'recover-start', 'upgrade-plan', 'upgrade-apply'})
+        environment = previous['environment']
+        port, host, project_root, log_level, rest = _split_serve_args(
+            previous['arguments'] + remaining, environment)
+        # Status observes the owner even when a saved discovery installation
+        # disappeared. Starting or changing it still requires existing paths.
+        discovery, rest = split_discovery_args(rest, require_paths=action != 'status')
+        config = load_config(environment, rest)
+        if 'settings_pinned_fields' in previous:
+            config._explicit_fields = frozenset(previous['settings_pinned_fields']) | explicit_fields
+        else:
+            config._explicit_fields = explicit_fields
+        config._legacy_settings_provenance = previous.get('settings_provenance_legacy',
+                                                          'settings_pinned_fields' not in previous)
+    context = execution_context(config, host=host, port=port, project_root=project_root,
+                                log_level=log_level, discovery=discovery, env=environment)
+    if previous is not None:
+        # A caller from another environment must not silently rebind the
+        # persisted service executable. Upgrade is an explicit operation.
+        context.update(executable=previous['executable'], environment_prefix=previous['environment_prefix'],
+                       revision=previous['revision'])
+        for key in ('package_version', 'core_version', 'environment_fingerprint'):
+            if key in previous:
+                context[key] = previous[key]
+    adapter = LocalServerLifecycle(home=config.home_dir, database=config.db_path,
+                                   host=host, port=port, context=context)
+    service = ServiceLifecycle(adapter, monotonic=time.monotonic, sleep=time.sleep)
+    return service

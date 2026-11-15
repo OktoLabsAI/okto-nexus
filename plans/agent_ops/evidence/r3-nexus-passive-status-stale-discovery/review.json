@@ -1,0 +1,92 @@
+{
+  "status": "SOURCE_AND_INSTALLED_QUALIFIED_REAL_PASSIVE_STATUS_CONFIRMED",
+  "diagnosis": "Saved absolute --harness-root and its parent disappeared. Context validate(require_paths=False) passes, but status resolver applied startup discovery existence validation and returned CONFIG_ERROR before canonical inspection. Root argument error is excluded by the retained resolver-only diagnostic.",
+  "source_fix": "Only action=status disables physical discovery-path existence requirement. Absolute path/option shape stay checked; start/install and other nonstatus paths retain strict defaults. No saved context edit, replacement directory, implicit discovery-root substitution or campaign activation.",
+  "qualification": {
+    "source_unique_tests": 12,
+    "new": 11,
+    "regression": 1,
+    "seconds": 4.09,
+    "source_qualification_sha256": "c614b750311c6165c4dafeec9be58e4f41744a6edd1381763153ac552aeeafa3",
+    "installed": "PASS",
+    "installed_tests": 12,
+    "installed_seconds": 2.51,
+    "unique_tests_across_source_and_installed": 12,
+    "installed_qualification_sha256": "e3707ab935681552d8603a83f48d45064914c0d0babd7107854b9fe8a879f7fa",
+    "installation_sha256": "0055c57c33616c12ddfe78c12d1d940423c62f437a7722959976b7baf601b880",
+    "composition_payloads": 988,
+    "record_hashes": 1002,
+    "source_payloads": 694
+  },
+  "operational_boundary": "Both own services were confirmed stopped separately in the prior authorized-stop milestone. This diagnosis/fix neither stops/starts a service nor proves current work settlement. Old campaign installation remains unchanged.",
+  "authorization_interpretation_correction": {
+    "literal_user_response": "pode fazer a parada que voce precisar do nexus",
+    "prior_milestone": "6ba388c98b13e268adadae2304c8a837786d074f",
+    "preserve_original_receipts_and_history": true,
+    "superseded_interpretation": "The historical future_force_authorized:false statement was overly narrow if read as expiry of the user authorization after the one selected command.",
+    "correct_scope": "One force call was technically selected and executed for that reservation. The user authorization for necessary Nexus-system stops within this task persists; future effects must revalidate exact owned target/generation and necessity. A changed PID alone does not require repeating user confirmation.",
+    "not_authorized_by_this_statement": [
+      "Unrelated processes or accounts",
+      "OS logout/shutdown/reboot",
+      "Token limit increase to500000",
+      "New provider admission beyond current policy/headroom"
+    ],
+    "new_stop_selected_or_executed": false
+  },
+  "accounting": {
+    "sonnet_authorized_limit": 200000,
+    "sonnet_observed_tokens": 144004,
+    "sonnet_charged_admissions": 2,
+    "proposed500k_authorized": false,
+    "codex_tokens": 579154,
+    "codex_admissions": 16
+  },
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 126,
+    "IN_PROGRESS": 4,
+    "NOT_RUN": 2
+  },
+  "goal_state_changed_or_inferred": false,
+  "final_root_review_pending": false,
+  "source_commit": "2c59abf1a06804dadfc32a789b7cdd5add79d4ba",
+  "source_root_reviews": [
+    "01ffd7",
+    "ccc648",
+    "23fc8a"
+  ],
+  "source_peer_reviews": [
+    "e49840",
+    "5b80ed",
+    "359261",
+    "5d082d",
+    "671831"
+  ],
+  "real_passive_status": {
+    "projection_sha256": "22153282d1e710024db38ed84a79dfae278be1884be1d95e678bdfedaedf816d",
+    "tool": "7e09ff",
+    "exit_code": 0,
+    "state": "stopped",
+    "reason": "SHUTDOWN_COMPLETE",
+    "exact_instance_id": true,
+    "context_unchanged": true,
+    "pid_collected": false,
+    "initial_verifier_assertion": "Expected only NO_SERVICE_OWNER; actual CLI succeeded. Retained initial verifier and classification note explain the legitimate matching shutdown-receipt overlay. No CLI repeat.",
+    "absence_and_physical_exit_evidence": "Independent prior milestone API71026d and three retained exit handles; not inferred from a PID absent from this projection.",
+    "new_control_calls": 0
+  },
+  "composition_root_reviews": [
+    "aa757c",
+    "428c30",
+    "33e6c8",
+    "fe41b7"
+  ],
+  "curation_root_reviews": [
+    "ab4343",
+    "aa757c",
+    "428c30",
+    "33e6c8",
+    "fe41b7"
+  ],
+  "publication_authorized": true
+}

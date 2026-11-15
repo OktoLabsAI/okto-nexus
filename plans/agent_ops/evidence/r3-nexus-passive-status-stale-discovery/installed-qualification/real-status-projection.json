@@ -1,0 +1,14 @@
+{
+  "exit_code": 0,
+  "state": "stopped",
+  "reason": "SHUTDOWN_COMPLETE",
+  "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "expected_instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+  "context_before_sha256": "b4eaee8c2106f8130fe66d2818e563df709861acb459461310247f1fcab46d43",
+  "context_after_sha256": "b4eaee8c2106f8130fe66d2818e563df709861acb459461310247f1fcab46d43",
+  "context_unchanged": true,
+  "stderr_bytes": 0,
+  "action": "service status --home <owned-home> --json",
+  "read_only": true,
+  "original_installed_campaign_modified": false
+}

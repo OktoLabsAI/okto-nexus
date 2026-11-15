@@ -1,0 +1,19 @@
+{
+  "status": "SOURCE_FOCAL_PASS",
+  "tests": 12,
+  "new": 11,
+  "regression": 1,
+  "elapsed_seconds": 4.09,
+  "source_pins": {
+    "src/okto_nexus/bootstrap/local_discovery.py": "3919c50a16d4c6028828e204ca66c9b3714b248770cff8502e0a543def84db99",
+    "src/okto_nexus/adapters/inbound/cli/service.py": "2d4d7069e1153449e99e5ac6202f115048359abb0ca8a6db28f2bde5438618ab",
+    "tests/test_service_status_missing_discovery.py": "610682ab78e4e68c0d1a27c1a98492f89a8f021f15e53ec87bd0e4c3b1ba2ef2"
+  },
+  "source_test_result": "ac659a",
+  "ruff_F": "f8dd16 PASS",
+  "diff_check": "c9bdcd PASS",
+  "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/r3-corrected-campaign-package-pk6p0hz9/venv/Scripts/python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-status-expired-discovery-fix-83dw215p\\run_tests.py",
+  "diagnosis_conclusion_sha256": "b6e83548bfee7947ad577f08ef6bed867ee97e166d97724cbdde9b7d6d81d72d",
+  "scope": "Source imports from checkout, own isolated dependency environment; synthetic context and canonical no-owner inspection. No live service/provider/campaign changes.",
+  "change": "Only service status skips discovery path physical existence. Absolute path, option shape, and all nonstatus defaults remain strict."
+}

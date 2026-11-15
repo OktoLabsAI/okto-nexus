@@ -1,0 +1,36 @@
+{
+  "status": "CAUSE_CONFIRMED_READONLY",
+  "cause": "Saved absolute harness discovery directory and its parent no longer exist; status resolver applies startup discovery existence validation.",
+  "root_argument_error": false,
+  "saved_context_structurally_valid": true,
+  "reason_code": "CONFIG_ERROR",
+  "source_frames": [
+    "service.py:173 resolve_local_service",
+    "local_discovery.py:46 split_discovery_args"
+  ],
+  "sources": {
+    "adapters/inbound/cli/service.py": {
+      "installed_sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63",
+      "checkout_sha256": "06e9c7bd25e64c088377c49cf6b9c34f22b06cf0b36008c1d1ac74d9c63d5d63",
+      "text_equal": true
+    },
+    "bootstrap/local_discovery.py": {
+      "installed_sha256": "c1e7753480e83aafc98c65aa85265cf3076074d2e4ed8779e2b1b77e6255360b",
+      "checkout_sha256": "c1e7753480e83aafc98c65aa85265cf3076074d2e4ed8779e2b1b77e6255360b",
+      "text_equal": true
+    },
+    "adapters/outbound/service_manager/context.py": {
+      "installed_sha256": "e4c2f484afa28e0d824354fa18843fe4e92cf2736f1b7c99b29d5694c9813eb8",
+      "checkout_sha256": "8f54e12b9c6d657a44ae3ed178e2efbc60782b4479e1b0f5f516d4bbee397e06",
+      "text_equal": true
+    }
+  },
+  "current_facts": "Canonical API absence remains separately observed by root. No status/stop/start/provider was invoked by this diagnostic; only context resolution.",
+  "minimal_product_correction_proposal": "Allow lexical absolute-path parsing of retained discovery paths for passive status resolution, while retaining strict existing-directory validation for start/install/provider discovery. Add regression missing saved harness root -> status reaches canonical inspection; start still refuses. No patch applied.",
+  "not_a_remedy": [
+    "Do not fabricate an empty replacement trusted directory.",
+    "Do not silently replace approved discovery roots or edit persisted service context.",
+    "Additional harness-root arguments accumulate, so a new valid root does not remove the stale one."
+  ],
+  "future_binding": "Explicitly review a fresh service context discovery selection for next campaign; current CLI resolver also blocks its lifecycle upgrade path on stale root, so resolve passive-status product defect before assuming upgrade CLI can run."
+}

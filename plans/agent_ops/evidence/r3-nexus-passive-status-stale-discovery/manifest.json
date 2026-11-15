@@ -1,0 +1,145 @@
+{
+  "files": [
+    {
+      "path": "diagnosis/conclusion.json",
+      "sha256": "b6e83548bfee7947ad577f08ef6bed867ee97e166d97724cbdde9b7d6d81d72d",
+      "bytes": 2328
+    },
+    {
+      "path": "diagnosis/diagnose.py",
+      "sha256": "9234839a06839a108702e70032f9b8734213625406d8aa1a9326db70146cafc1",
+      "bytes": 1640
+    },
+    {
+      "path": "diagnosis/diagnosis.json",
+      "sha256": "0a1efaa5809a4977a1e95a48a596ee7b01fdeec4c5064f781bc8589dcd90cf73",
+      "bytes": 3440
+    },
+    {
+      "path": "diagnosis/discovery-path-projection.json",
+      "sha256": "1c6e3441ac4976ab632dd025bb6dbe818de392c9da9277d6ab38ab078989528a",
+      "bytes": 382
+    },
+    {
+      "path": "diagnosis/public-allowlist.json",
+      "sha256": "9be24dc8b966cea779b916b6466bc2055405ceead820462d7a2c0b1c0784bb1c",
+      "bytes": 653
+    },
+    {
+      "path": "installed-qualification/build-provenance.json",
+      "sha256": "c410bd3c7ef23bc04c1280f009bd1d8318291f6eb7f06b620070ba751017a45d",
+      "bytes": 2452
+    },
+    {
+      "path": "installed-qualification/build.py",
+      "sha256": "40f675f9f0bb8099c0f644fa05eabc7615857084a32ba85831c9eff89ec0e7a7",
+      "bytes": 3301
+    },
+    {
+      "path": "installed-qualification/home-manifest.json",
+      "sha256": "9ccc42383b2eb38f50fe9aff9ace728510b4b99d81e212da10f67427f942e312",
+      "bytes": 809
+    },
+    {
+      "path": "installed-qualification/home-review.json",
+      "sha256": "61e0f245c9400ca9e538fc1ca26fe796b9126aa6e82c5447bb1bd60f577e74ee",
+      "bytes": 2545
+    },
+    {
+      "path": "installed-qualification/installation.json",
+      "sha256": "0055c57c33616c12ddfe78c12d1d940423c62f437a7722959976b7baf601b880",
+      "bytes": 1883
+    },
+    {
+      "path": "installed-qualification/installed.xml",
+      "sha256": "cf4a7a8c073f298d532bed1a347535b1fd2ac2b3382043573b919ed1e9328eee",
+      "bytes": 1992
+    },
+    {
+      "path": "installed-qualification/public-allowlist.json",
+      "sha256": "890f89df8ce4592ae02e24e4f14194ad820e0cd6f4ad2c1b417880b1660563e0",
+      "bytes": 2079
+    },
+    {
+      "path": "installed-qualification/qualification.json",
+      "sha256": "e3707ab935681552d8603a83f48d45064914c0d0babd7107854b9fe8a879f7fa",
+      "bytes": 3551
+    },
+    {
+      "path": "installed-qualification/qualify.py",
+      "sha256": "45477d520e5105f825d77536c7faa0e6c62ab3a566453ada29a9290b53edbac4",
+      "bytes": 7747
+    },
+    {
+      "path": "installed-qualification/real-status-projection.json",
+      "sha256": "22153282d1e710024db38ed84a79dfae278be1884be1d95e678bdfedaedf816d",
+      "bytes": 643
+    },
+    {
+      "path": "installed-qualification/run_installed.py",
+      "sha256": "14a645006c3f1b95af5a53d77a8c11762e701451470ad57fda189de2a104cc02",
+      "bytes": 545
+    },
+    {
+      "path": "installed-qualification/status-classification-note.json",
+      "sha256": "ff1e13f7edb8e491f9f5cca693e1e9278e46ac4bcd9bd4bad39a0fb187a06c42",
+      "bytes": 915
+    },
+    {
+      "path": "installed-qualification/status_readonly-initial.py",
+      "sha256": "0a88fe81dea1a5cbcd3167c253f146d7f8350318cfb6af6c9a7370d8c4fdb46f",
+      "bytes": 1590
+    },
+    {
+      "path": "installed-qualification/status_readonly.py",
+      "sha256": "a23dfa460c8640055c176020330cbb15877827afca5d96a3900f8ace7e5eb1c1",
+      "bytes": 1637
+    },
+    {
+      "path": "README.md",
+      "sha256": "4f9b0a03b5b9e10a6550eece4ce746e920d7aab1bc774c9e80a1cd701f2be84f",
+      "bytes": 2432
+    },
+    {
+      "path": "review.json",
+      "sha256": "41f3c4d2a24dc1bf9f68021eca64d12b3d2448c2221f1e482e90beff999e0da1",
+      "bytes": 4337
+    },
+    {
+      "path": "source-qualification/final.xml",
+      "sha256": "ccfc8ad0aed04a85fa0430aaa02233b1c87c35810b13d429ed5b2373f2707528",
+      "bytes": 1992
+    },
+    {
+      "path": "source-qualification/local_discovery.py",
+      "sha256": "3919c50a16d4c6028828e204ca66c9b3714b248770cff8502e0a543def84db99",
+      "bytes": 2567
+    },
+    {
+      "path": "source-qualification/public-allowlist.json",
+      "sha256": "ed2d610028b4d411cef2a5d13fbdd6499ddaad8c253d9557382708b91a4c5e67",
+      "bytes": 971
+    },
+    {
+      "path": "source-qualification/qualification.json",
+      "sha256": "c614b750311c6165c4dafeec9be58e4f41744a6edd1381763153ac552aeeafa3",
+      "bytes": 1264
+    },
+    {
+      "path": "source-qualification/run_tests.py",
+      "sha256": "c2de19039221902fccafa88a6dee7281b466ac32b8d2cadb67042cb42eb933f3",
+      "bytes": 495
+    },
+    {
+      "path": "source-qualification/service.py",
+      "sha256": "2d4d7069e1153449e99e5ac6202f115048359abb0ca8a6db28f2bde5438618ab",
+      "bytes": 12553
+    },
+    {
+      "path": "source-qualification/test_service_status_missing_discovery.py",
+      "sha256": "610682ab78e4e68c0d1a27c1a98492f89a8f021f15e53ec87bd0e4c3b1ba2ef2",
+      "bytes": 3575
+    }
+  ],
+  "scope": "Explicit public diagnosis/source/installed allowlists plus review; no wheels, credentials, raw context, database, or campaign activation."
+}
