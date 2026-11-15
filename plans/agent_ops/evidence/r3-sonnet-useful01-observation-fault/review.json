@@ -1,0 +1,118 @@
+{
+  "status": "OBSERVATION_FAULT_PRESERVED_CLOSED_STREAM_ACCOUNTING_RECONCILED_INTERRUPTED",
+  "date": "2026-11-15",
+  "selected_plan_sha256": "c48f5fac4f25d1de979e16d88e6652a29a14cab03f6a40e34633e360928291f8",
+  "request_id": "m1-sonnet-remote-useful-01",
+  "operation_id": "op_b9a7bc74da0788081adbe51fa62c6598",
+  "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+  "observation": {
+    "state": "OBSERVATION_FAULT",
+    "faults": [
+      "ASSISTANT_WITHOUT_STREAM",
+      "ACTIVE_OBSERVATION_UNKNOWN",
+      "MONITOR_CONTAINMENT"
+    ],
+    "terminal_observed": false,
+    "canonical_executor_stage": null,
+    "canonical_success_confirmed": false,
+    "useful_result_confirmed": false,
+    "coverage": false,
+    "can_admit": false,
+    "continuation_selected": false,
+    "continuation_allowed_from_this_result": false
+  },
+  "accounting": {
+    "provider": "Claude Sonnet",
+    "observed_minimum_tokens": 35031,
+    "charged_reservations": 1,
+    "preventive": 150000,
+    "observed_limit": 200000,
+    "complete_or_final_billing_claimed": false,
+    "atomic_provider_token_cap_claimed": false,
+    "codex_tokens_unchanged": 579154,
+    "codex_admissions_unchanged": 16,
+    "refund": false,
+    "replay_authorized": false,
+    "reconciled_native_session_tokens": 36306,
+    "additional_observed_after_exit": 1275,
+    "components": {
+      "input": 2,
+      "cache_read_input": 18339,
+      "cache_creation_input": 16682,
+      "output": 1283,
+      "thinking_subset_of_output": 754
+    },
+    "closed_native_stream_coverage": true,
+    "provider_billing_final_claimed": false,
+    "historical_original_minimum_unchanged": 35031
+  },
+  "containment": {
+    "connector_normal_stop_returncode": 0,
+    "nexus_normal_stop_returncode": 0,
+    "all_six_retained_processes_physical_exit": true,
+    "all_exit_codes": 0,
+    "force_used": false,
+    "work_settlement_claimed": false,
+    "task_uninstall_claimed": false,
+    "data_preservation_verification_claimed": false
+  },
+  "root_execution_report": {
+    "session": 6742,
+    "terminal_tool": "aeb3a0",
+    "wrapper_exit_code": 0,
+    "interpretation": "Wrapper completed observation/containment; exit0 does not establish useful work, terminal settlement or campaign success."
+  },
+  "svc09": {
+    "late_dashboard_close_proves_ownership_during_admitted_work": false,
+    "terminal_closure_during_active_work_confirmed": false,
+    "acceptance_promoted": false,
+    "source": "Root report: browser closure was late; no qualifying closure/continued-execution observation inferred."
+  },
+  "pending": [
+    "No useful result confirmed; interrupted request cannot authorize continuation.",
+    "Any fresh admission must use a separately reviewed finite selection with charged reservation/36306 native session usage preserved and qualified collector fix explicitly composed.",
+    "Canonical receipt/session recovery and fresh owner gates remain distinct from native stream accounting and physical exit.",
+    "DX-T40, remote DX-T43 and SVC-T09 remain unverified; no global M1 acceptance."
+  ],
+  "limits": {
+    "scenario_counts": {
+      "VERIFIED": 126,
+      "IN_PROGRESS": 4,
+      "NOT_RUN": 2
+    },
+    "acceptance_promoted": false,
+    "originals_unchanged": true,
+    "private_data_copied": false,
+    "curation_queries_or_provider_calls": 0,
+    "preparation_provider_calls_zero_is_pre_admission_only": true
+  },
+  "post_exit_reconciliation": {
+    "status": "CLOSED_STREAM_ACCOUNTING_RECONCILED_INTERRUPTED_NOT_ACCEPTED",
+    "accounting_sha256": "c94704923503f738937952693d610c65ba00bbdd1c712677a8fbb6a1bece6ab7",
+    "sequences": [
+      1,
+      98
+    ],
+    "native_outcome": "interrupted",
+    "native_terminal_result_sequence": 97,
+    "native_process_exit_sequence": 98,
+    "turn_and_cumulative_usage_crosscheck": true,
+    "new_calls": 0,
+    "original_checkpoint_unchanged": true,
+    "canonical_terminal_receipt_claimed": false,
+    "global_work_settlement_inferred_from_physical_exit": false,
+    "future_hypothetical180k_option_selected": false
+  },
+  "collector_fix": {
+    "diagnosis": "Core redacted assistant snapshot message ID/model; original collector treated the redacted ID as if it must equal the preserved stream ID. Stream existed, so the original ASSISTANT_WITHOUT_STREAM was a collector correlation failure, not proof of missing native stream.",
+    "scope": "Campaign collector only; separate offline candidate, original runner and installed products untouched.",
+    "source_sha256": "9fae04d3f7baef6c4e3fbbc2cb2cf77972de584f8cb8be0a2488577ed1af5da8",
+    "tests_unique_passed": 8,
+    "initial_and_final_runs_overlap": true,
+    "installed_redactor_exercised": true,
+    "qualification_sha256": "e5b420ca5ad7b2e463ace6d6d915d9beb7f590f982a1de665f7c8c66a75df0c6",
+    "root_review_tool": "8ca9aa",
+    "installed_connector_commit": "28e8093997849ba47a018e5d4728f8b3535be4b1",
+    "connector_core_patch_claimed": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "plan_sha256": "c48f5fac4f25d1de979e16d88e6652a29a14cab03f6a40e34633e360928291f8",
+  "cohort": {
+    "cycle_id": "83385b0dffad1b22ee9fdd49842429ca",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 43100,
+      "birth": 134391883995944611
+    },
+    "launcher": {
+      "pid": 54112,
+      "birth": 134391884090702531
+    },
+    "child": {
+      "pid": 14264,
+      "birth": 134391884091386721
+    }
+  },
+  "force_used": false
+}

@@ -1,0 +1,109 @@
+{
+  "physical_exit_confirmed": true,
+  "force_used": false,
+  "work_settlement_claimed": false,
+  "cohorts": {
+    "nexus": {
+      "pid": 14264,
+      "generation": "a59778be231e827fdbfd95ec947e5103",
+      "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "task": {
+        "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+        "state": 4,
+        "digest": "d8afbd23b644f0128b02a8dc8ab7aa6db36982af7fbabc0b25f8c5ac812a3011"
+      },
+      "component": "nexus",
+      "cohort": {
+        "cycle_id": "83385b0dffad1b22ee9fdd49842429ca",
+        "phase": "running",
+        "attempts_started": 1,
+        "child_acknowledged": true,
+        "parent": {
+          "pid": 43100,
+          "birth": 134391883995944611
+        },
+        "launcher": {
+          "pid": 54112,
+          "birth": 134391884090702531
+        },
+        "child": {
+          "pid": 14264,
+          "birth": 134391884091386721
+        }
+      },
+      "selected_at": 1794719816.1334445
+    },
+    "connector": {
+      "pid": 43540,
+      "generation": "9678d8b4da935fc9f571db880985d3cc",
+      "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "task": {
+        "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+        "state": 4,
+        "digest": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa"
+      },
+      "component": "connector",
+      "cohort": {
+        "cycle_id": "a87f9f221a8bc5ed19d57ddd660c62b7",
+        "phase": "running",
+        "attempts_started": 1,
+        "child_acknowledged": true,
+        "parent": {
+          "pid": 38208,
+          "birth": 134391931552077372
+        },
+        "launcher": {
+          "pid": 43652,
+          "birth": 134391931581913879
+        },
+        "child": {
+          "pid": 43540,
+          "birth": 134391931582372596
+        }
+      },
+      "selected_at": 1794719816.3187332
+    }
+  },
+  "exits": {
+    "nexus": {
+      "parent": {
+        "pid": 43100,
+        "birth": 134391883995944611,
+        "physical_exit": true,
+        "exit_code": 0
+      },
+      "launcher": {
+        "pid": 54112,
+        "birth": 134391884090702531,
+        "physical_exit": true,
+        "exit_code": 0
+      },
+      "child": {
+        "pid": 14264,
+        "birth": 134391884091386721,
+        "physical_exit": true,
+        "exit_code": 0
+      }
+    },
+    "connector": {
+      "parent": {
+        "pid": 38208,
+        "birth": 134391931552077372,
+        "physical_exit": true,
+        "exit_code": 0
+      },
+      "launcher": {
+        "pid": 43652,
+        "birth": 134391931581913879,
+        "physical_exit": true,
+        "exit_code": 0
+      },
+      "child": {
+        "pid": 43540,
+        "birth": 134391931582372596,
+        "physical_exit": true,
+        "exit_code": 0
+      }
+    }
+  }
+}

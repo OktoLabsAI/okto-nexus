@@ -1,0 +1,144 @@
+{
+  "status": "CLOSED_STREAM_ACCOUNTING_RECONCILED_INTERRUPTED_NOT_ACCEPTED",
+  "original_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\private\\sonnet-budget.json",
+    "sha256": "604ab30ba18da02b66e7baed35696eafc882102808326cd245ea670608440c71",
+    "bytes": 3086
+  },
+  "original_summary": {
+    "known": 35031,
+    "cursor": 19,
+    "faults": [
+      "ASSISTANT_WITHOUT_STREAM",
+      "ACTIVE_OBSERVATION_UNKNOWN",
+      "MONITOR_CONTAINMENT"
+    ],
+    "active": "op_b9a7bc74da0788081adbe51fa62c6598",
+    "reserved": [
+      "op_b9a7bc74da0788081adbe51fa62c6598"
+    ],
+    "terminal_coverage": false
+  },
+  "original_result": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\m1-sonnet-remote-useful-01-result.json",
+    "sha256": "7c939b652e7db214ad53224069aeb22b234b99345f62200cfbb119e04cd96de2",
+    "bytes": 783
+  },
+  "original_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-plan.json",
+    "sha256": "c48f5fac4f25d1de979e16d88e6652a29a14cab03f6a40e34633e360928291f8",
+    "bytes": 11215
+  },
+  "physical_exit_proof": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\paid-work-exit-proof.json",
+    "sha256": "443c072890c1811c6b47c569cb44a990bca90167d4f0742ee03f7d5bafaef8ef",
+    "bytes": 2926
+  },
+  "scope": {
+    "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "executor_id": "exe_ac3fd8f5f8a35aaf344bb8aebd13be4e",
+    "session_id": "ses_e13d6e02f5ea6270004c5bf15e298e73",
+    "stream_epoch": "stream_dbd162d29f87f5656c4f170e045c9846"
+  },
+  "projection": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\events-projected.json",
+    "sha256": "e08b64f0b1356d9249d0e36b72098b748088a6d6c85ff3513987a4d1dd7c33f7",
+    "bytes": 60879
+  },
+  "event_source_pins": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\event-source-pins.json",
+    "sha256": "b0b557aab6ba1e67fa1c5e137d64ed1ec99d971f5e99f3cd66b5c584a4b6c58a",
+    "bytes": 12405
+  },
+  "collector_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\sonnet_usage.py",
+    "sha256": "9fae04d3f7baef6c4e3fbbc2cb2cf77972de584f8cb8be0a2488577ed1af5da8",
+    "bytes": 16502
+  },
+  "reconciliation_source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\reconcile_closed.py",
+    "sha256": "948c3d8bd81f2469682cb86baeb2757428dc8ab7d009af6010bc7e37041f7308",
+    "bytes": 5351
+  },
+  "derived_checkpoint": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\reconciled-budget.json",
+    "sha256": "bd23de47f3ebc96086ca8662abfa0fb24d3ff60677eb5856b51f2e580517cec2",
+    "bytes": 10180
+  },
+  "coverage": {
+    "contiguous_sequences": [
+      1,
+      98
+    ],
+    "stream_message_start": 4,
+    "redacted_assistant_sequences": [
+      19,
+      87
+    ],
+    "message_delta": 89,
+    "message_stop": 90,
+    "native_permission_request": 92,
+    "native_permission_cancel": 93,
+    "correlated_terminal_result": 97,
+    "native_process_exit_event": 98,
+    "turn_usage_equals_stream": true,
+    "cumulative_model_usage_equals_baseline_plus_turn": true
+  },
+  "usage": {
+    "input_tokens": 2,
+    "cache_read_input_tokens": 18339,
+    "cache_creation_input_tokens": 16682,
+    "output_tokens": 1283,
+    "total": 36306,
+    "thinking_tokens_in_output": 754,
+    "thinking_is_additional": false,
+    "previous_minimum": 35031,
+    "additional_observed": 1275
+  },
+  "accounting_scope": "All retained usage for this one native Sonnet session; not provider billing or unrelated account usage.",
+  "outcome": "interrupted",
+  "reservations": 1,
+  "refund": false,
+  "useful_result_confirmed": false,
+  "new_provider_or_control_calls": 0,
+  "original_checkpoint_unchanged": true,
+  "next_admission_not_selected": true,
+  "current_policy_next_estimate": {
+    "observed_tokens": 36306,
+    "reserved_next": 102046,
+    "preventive": 150000,
+    "limit": 200000
+  },
+  "continuation_headroom_not_guaranteed": true,
+  "hypothetical_180k_option": {
+    "observed": 36306,
+    "next_reserve": 102046,
+    "first_admission_sum": 138352,
+    "if_next_input_repeats_35023": {
+      "minimum_total_after": 71329,
+      "plus_next_reserve": 173375
+    },
+    "not_selected_or_applied": true,
+    "must_recheck_actual_complete_usage": true,
+    "user_limit": 200000,
+    "no_atomic_cap": true
+  },
+  "diagnosis": "Core redacts all raw strings for output_delta assistant snapshots. The old campaign collector compared redacted raw.message.id against the preserved stream message ID. New collector recognizes only the exact redacted ID+model pair, correlated active operation, prior stream and numeric counter shape; snapshot values never add tokens. Unredacted mismatch remains refused.",
+  "source_contracts": {
+    "old_collector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\sonnet_usage.py",
+      "sha256": "f7f579fac722e4c22049e14d637cc5fa5275d8e2481aac6d6878a151815a5a13",
+      "bytes": 15715
+    },
+    "installed_redaction": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\redaction.py",
+      "sha256": "f2913754ee329b79f45162df35656429b60798779f978d4a7089e0ad25b613a1",
+      "bytes": 6795
+    },
+    "installed_adapter": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Lib\\site-packages\\nexus_connector_core\\native\\adapters\\claude_code_stream.py",
+      "sha256": "53c6c58a6c2dadd9ddf501ab86af4f21b8ac4394e181bed9b347e92ecc046d1e",
+      "bytes": 58640
+    }
+  }
+}

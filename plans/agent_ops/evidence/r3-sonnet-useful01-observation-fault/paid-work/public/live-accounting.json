@@ -1,0 +1,18 @@
+{
+  "plan_sha256": "c48f5fac4f25d1de979e16d88e6652a29a14cab03f6a40e34633e360928291f8",
+  "request_id": "m1-sonnet-remote-useful-01",
+  "observed_minimum": 35031,
+  "limit": 200000,
+  "preventive": 150000,
+  "reservations": 1,
+  "active": "op_b9a7bc74da0788081adbe51fa62c6598",
+  "faults": [
+    "ASSISTANT_WITHOUT_STREAM",
+    "ACTIVE_OBSERVATION_UNKNOWN",
+    "MONITOR_CONTAINMENT"
+  ],
+  "coverage": false,
+  "can_admit": false,
+  "hard_token_cap_guaranteed": false,
+  "campaign_observed_tokens": 35031
+}

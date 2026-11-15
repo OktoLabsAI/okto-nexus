@@ -7030,11 +7030,12 @@
       "evidence": [
         "plans/agent_ops/evidence/pr01-detached-process.xml",
         "plans/agent_ops/evidence/pr02-connector-user-service.xml",
-        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json"
       ],
       "remaining": "Literal terminal/dashboard closure with admitted work and maintained native ownership remains real campaign.",
       "remaining_kind": "real_terminal_work_campaign",
-      "result": "Parent launcher exit survival proven for both actual detached processes. Scope/remaining: Literal terminal/dashboard closure with admitted work and maintained native ownership remains real campaign."
+      "result": "Parent launcher exit survival proven for both actual detached processes. Scope/remaining: Literal terminal/dashboard closure with admitted work and maintained native ownership remains real campaign. Actual Sonnet attempt ended with observation fault and normal physical exits; late dashboard closure is not evidence of maintained execution during closure. No promotion."
     },
     "SVC-T10": {
       "requirement": "Consulta status/logs/doctor em instância parada não a inicia e não executa inferência.",
@@ -9054,9 +9055,18 @@
         "plans/agent_ops/evidence/pr03-terminal-work.md",
         "plans/agent_ops/evidence/r3-dx-final-contracts/artifact-manifest.json",
         "plans/agent_ops/evidence/r3-dx-final-contracts/audit/matrix.json",
-        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json"
+        "plans/agent_ops/evidence/r3-dx-final-contracts/evidence-location-map.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/m1-sonnet-remote-useful-01-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/live-accounting.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/paid-work-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/sonnet_usage.py",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/test_redacted_assistant.py"
       ],
-      "result": "Operador autenticado separado do host, aprovação/renovação e trabalho remoto canônico têm provas sintéticas; a mesma campanha real de T39 via Connector não foi executada.",
+      "result": "Retained synthetic contracts prove operator/participant separation. Actual Sonnet remote useful01 was admitted through Connector but observation failed before terminal/useful/native-decision confirmation (ASSISTANT_WITHOUT_STREAM, ACTIVE_OBSERVATION_UNKNOWN, MONITOR_CONTAINMENT).35031 observed minimum tokens/one charged reservation; normal six-process exit is not work settlement. No continuation selected and literal remote campaign remains unverified. Post-exit RO native stream reconciliation now confirms interrupted/36306 tokens, one reservation, no useful result.8unique offline tests qualify campaign collector redacted-ID fix; original failed run remains unchanged and no new installed product patch or canonical receipt settlement is inferred.",
       "subscopes": {
         "remote_identity_workspace_bootstrap": "VERIFIED",
         "remote_operator_single_review_and_finish": "VERIFIED",
@@ -9068,8 +9078,8 @@
         "remote_pending_grant_uncertainty": "VERIFIED",
         "remote_confirmed_receipt_read_failure": "VERIFIED"
       },
-      "remaining": "Executar M1 instalado via Connector com trabalho/provedor reais e pergunta/permissão resolvida pelo CLI autenticado do operador, provando ausência de credencial administrativa no host remoto e recusa de decisão pelo participante.",
-      "remaining_kind": "real_campaign_not_run",
+      "remaining": "Compor explicitamente a correção qualificada do coletor e recuperação canônica em nova seleção finita, preservando tentativa interrompida e36.306tokens/uma reserva. Completar campanha remota útil/continuação/decisão pelo operador, sem continuação automática do resultado útil não confirmado.",
+      "remaining_kind": "real_campaign_observation_failed",
       "qualification_limit": "HTTP/WebSocket/IPC reais e vault temporário não substituem provedor nativo real ou o percurso M1 remoto.",
       "common_qualification_limit": "Windows/local, fontes e XML instalados já retidos; testes de protocolo/SQLite/Core e peers sintéticos não são inferência nem qualificação de provedor real. Nenhuma nova execução nesta auditoria.",
       "verified_contract_subscopes": [
@@ -9241,12 +9251,13 @@
         "plans/agent_ops/evidence/r3-dx43-local-real-configuration/actual-thread-configuration.json",
         "plans/agent_ops/evidence/r3-dx43-local-real-configuration/reviewed-tool-selection.json",
         "plans/agent_ops/evidence/r3-dx43-local-real-configuration/prior-service-path-diagnosis.json",
-        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/artifact-manifest.json"
+        "plans/agent_ops/evidence/r3-dx43-local-real-configuration/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json"
       ],
       "result": "Local real service-owned W17 useful15 is now evidenced: reported thread/start configuration, explicitly reviewed pinned RTK/Python paths after service-PATH unavailability, actual native permission and correlated correct report. Reported instruction references are not contents/adherence or universal enforcement. Remote Connector scope remains pending; global DX-T43 stays IN_PROGRESS.",
       "remaining": "Executar e comparar configuração, ferramentas e políticas revisadas no harness real do host Connector; preservar como desconhecidos campos não observados. Evidência local reportada e resultado útil real retidos, sem inferir conteúdo de instruções, inventário completo ou enforcement universal.",
       "remaining_kind": "real_remote_configuration_campaign_pending",
-      "qualification_limit": "Metadados reportados pelo harness e permissão/resultado local reais não provam conteúdo pessoal de instruções, inventário completo de ferramentas ou enforcement universal. Recibo native SUBMITTED permanece não final; remoto não executado.",
+      "qualification_limit": "Metadados reportados pelo harness e permissão/resultado local reais não provam conteúdo pessoal de instruções, inventário completo de ferramentas ou enforcement universal. Recibo native SUBMITTED permanece não final; tentativa remota Sonnet admitida, mas falha de observação não qualifica configuração/enforcement remoto.",
       "common_qualification_limit": "A curadoria agora inclui execução real local W17 já encerrada; não executou novo provedor, serviço ou teste. Fixtures anteriores continuam limitadas ao próprio escopo.",
       "verified_contract_subscopes": [
         "reference_only_host_configuration",
@@ -14068,6 +14079,30 @@
       "provider_turns": 0,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
+    },
+    "r3_sonnet_useful01_observation_fault": {
+      "status": "OBSERVATION_FAULT_PRESERVED_CLOSED_STREAM_ACCOUNTING_RECONCILED_INTERRUPTED",
+      "summary": "Actual Connector Sonnet useful01 admitted one operation; original35031 minimum/coveragefalse/faults preserved. Read-only98event projection reconciles native interrupted outcome and36306 total, one charged reservation; no useful result or continuation. Collector redacted-ID correlation fix8unique offlinePASS, installed products unchanged. Normal stops0/all6physicalexit0/noforce; no canonical settlement inferred. Late dashboard close not SVC09.126/4/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/m1-sonnet-remote-useful-01-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/live-accounting.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/paid-work-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/sonnet_usage.py",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/test_redacted_assistant.py"
+      ],
+      "acceptance_promoted": false,
+      "sonnet_observed_minimum_tokens": 35031,
+      "sonnet_charged_reservations": 1,
+      "sonnet_accounting_complete": true,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "sonnet_reconciled_native_session_tokens": 36306,
+      "sonnet_accounting_scope": "Exact closed native stream only; not provider billing/canonical receipt settlement.",
+      "collector_offline_tests": 8
     }
   },
   "history": [
@@ -15984,6 +16019,32 @@
       "provider_turns": 0,
       "codex_tokens": 579154,
       "codex_charged_admissions": 16
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_useful01_observation_fault",
+      "status": "OBSERVATION_FAULT_PRESERVED_CLOSED_STREAM_ACCOUNTING_RECONCILED_INTERRUPTED",
+      "summary": "Actual Connector Sonnet useful01 admitted one operation; original35031 minimum/coveragefalse/faults preserved. Read-only98event projection reconciles native interrupted outcome and36306 total, one charged reservation; no useful result or continuation. Collector redacted-ID correlation fix8unique offlinePASS, installed products unchanged. Normal stops0/all6physicalexit0/noforce; no canonical settlement inferred. Late dashboard close not SVC09.126/4/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/m1-sonnet-remote-useful-01-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/live-accounting.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/paid-work/public/paid-work-exit-proof.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/accounting-reconciliation.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/qualification.json",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/sonnet_usage.py",
+        "plans/agent_ops/evidence/r3-sonnet-useful01-observation-fault/reconciliation/test_redacted_assistant.py"
+      ],
+      "acceptance_promoted": false,
+      "sonnet_observed_minimum_tokens": 35031,
+      "sonnet_charged_reservations": 1,
+      "sonnet_accounting_complete": true,
+      "codex_tokens": 579154,
+      "codex_charged_admissions": 16,
+      "sonnet_reconciled_native_session_tokens": 36306,
+      "sonnet_accounting_scope": "Exact closed native stream only; not provider billing/canonical receipt settlement.",
+      "collector_offline_tests": 8
     }
   ],
   "r3_native_bounded_supervisor_execution": {

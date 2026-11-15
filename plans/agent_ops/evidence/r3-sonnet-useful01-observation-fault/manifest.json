@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "scope": "EXPLICIT_PLAN_AND_PUBLIC_RESULTS_ONLY",
+  "files": [
+    {
+      "path": "work-plan.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\work-plan.json",
+      "sha256": "c48f5fac4f25d1de979e16d88e6652a29a14cab03f6a40e34633e360928291f8",
+      "bytes": 11215
+    },
+    {
+      "path": "paid-work/public/connector-normal-stop-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\connector-normal-stop-reserved.json",
+      "sha256": "d27ba51af9805c9bf7c70f89b987de527543c1bf911c13f50776472519d73588",
+      "bytes": 518
+    },
+    {
+      "path": "paid-work/public/connector-normal-stop-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\connector-normal-stop-returned.json",
+      "sha256": "ad9a68f5debf78ac201f3ecca019937b1d60e9f47066302076f8f2d689d4cf0c",
+      "bytes": 137
+    },
+    {
+      "path": "paid-work/public/live-accounting.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\live-accounting.json",
+      "sha256": "67f88ce16c53c9c4e7ca87c98fdbde8b5dfcbc8efe0596b5c331794751d99c66",
+      "bytes": 507
+    },
+    {
+      "path": "paid-work/public/m1-sonnet-remote-useful-01-result.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\m1-sonnet-remote-useful-01-result.json",
+      "sha256": "7c939b652e7db214ad53224069aeb22b234b99345f62200cfbb119e04cd96de2",
+      "bytes": 783
+    },
+    {
+      "path": "paid-work/public/nexus-normal-stop-reserved.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\nexus-normal-stop-reserved.json",
+      "sha256": "38469a92f5696f39873595813a6d12ec1d73186ff8e7bfd76e8ec59eca82a65d",
+      "bytes": 518
+    },
+    {
+      "path": "paid-work/public/nexus-normal-stop-returned.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\nexus-normal-stop-returned.json",
+      "sha256": "9e383b424777f4d5253b3d0dc2d93868bf5b5dfbc5a4385ac2dfab4cb3becc59",
+      "bytes": 137
+    },
+    {
+      "path": "paid-work/public/paid-work-exit-proof.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\paid-work-exit-proof.json",
+      "sha256": "443c072890c1811c6b47c569cb44a990bca90167d4f0742ee03f7d5bafaef8ef",
+      "bytes": 2926
+    },
+    {
+      "path": "paid-work/public/pending-native-request.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\pending-native-request.json",
+      "sha256": "a5060c64496f77c811b7c004070d0a026b2f7eb84865240619751b894a135bb4",
+      "bytes": 159
+    },
+    {
+      "path": "paid-work/public/preparation.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\paid-work\\public\\preparation.json",
+      "sha256": "14051d4cb3dd847b208ffe4ce5a09a8835bd8b564671f2a3b48013744aa99f8e",
+      "bytes": 139
+    },
+    {
+      "path": "review.json",
+      "source": "curation",
+      "sha256": "3eccc2c77b22ff64a2a5d213eb556c0406340d58893885198009e2ad22c0d63d",
+      "bytes": 4922
+    },
+    {
+      "path": "README.md",
+      "source": "curation",
+      "sha256": "61541a7d6628fb949c86845852d16561a7b79c4521f8fdf8fdfb67ac44ba6fec",
+      "bytes": 3242
+    },
+    {
+      "path": "reconciliation/sonnet_usage.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\sonnet_usage.py",
+      "sha256": "9fae04d3f7baef6c4e3fbbc2cb2cf77972de584f8cb8be0a2488577ed1af5da8",
+      "bytes": 16502
+    },
+    {
+      "path": "reconciliation/project_closed_events.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\project_closed_events.py",
+      "sha256": "dd921fa139c4876d3ac4e663d004024f0d22f389a8e4ec33e30976b43b55b5b6",
+      "bytes": 1717
+    },
+    {
+      "path": "reconciliation/events-projected.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\events-projected.json",
+      "sha256": "e08b64f0b1356d9249d0e36b72098b748088a6d6c85ff3513987a4d1dd7c33f7",
+      "bytes": 60879
+    },
+    {
+      "path": "reconciliation/event-source-pins.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\event-source-pins.json",
+      "sha256": "b0b557aab6ba1e67fa1c5e137d64ed1ec99d971f5e99f3cd66b5c584a4b6c58a",
+      "bytes": 12405
+    },
+    {
+      "path": "reconciliation/test_redacted_assistant.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\test_redacted_assistant.py",
+      "sha256": "c872df8a7017c8b62a0a424889c8d152b3a56212e668998e24a2de75e9e14b9b",
+      "bytes": 4462
+    },
+    {
+      "path": "reconciliation/run_tests.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\run_tests.py",
+      "sha256": "97bfd395ac7c6ba61c1d8c64af3384a2cbb7c43f9abfeb900e0c8b0ece7fea18",
+      "bytes": 321
+    },
+    {
+      "path": "reconciliation/initial-8pass.xml",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\initial-8pass.xml",
+      "sha256": "845c4fba4038c09bfad80641e980787ff04eb7113334b29255a0d8bdf0e0aab0",
+      "bytes": 1132
+    },
+    {
+      "path": "reconciliation/final.xml",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\final.xml",
+      "sha256": "bec6c80539100bcf04df9060d26aa706cb0748a29e6c4c27c9ae2e6af6d4bf30",
+      "bytes": 1131
+    },
+    {
+      "path": "reconciliation/reconcile_closed.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\reconcile_closed.py",
+      "sha256": "948c3d8bd81f2469682cb86baeb2757428dc8ab7d009af6010bc7e37041f7308",
+      "bytes": 5351
+    },
+    {
+      "path": "reconciliation/reconciled-budget.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\reconciled-budget.json",
+      "sha256": "bd23de47f3ebc96086ca8662abfa0fb24d3ff60677eb5856b51f2e580517cec2",
+      "bytes": 10180
+    },
+    {
+      "path": "reconciliation/accounting-reconciliation.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\accounting-reconciliation.json",
+      "sha256": "c94704923503f738937952693d610c65ba00bbdd1c712677a8fbb6a1bece6ab7",
+      "bytes": 6099
+    },
+    {
+      "path": "reconciliation/qualification.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\qualification.json",
+      "sha256": "e5b420ca5ad7b2e463ace6d6d915d9beb7f590f982a1de665f7c8c66a75df0c6",
+      "bytes": 1589
+    },
+    {
+      "path": "reconciliation/public-allowlist.json",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\public-allowlist.json",
+      "sha256": "53278f62c75f04906456753be75314189fbeee0332f797ea210dc89ac7381927",
+      "bytes": 2890
+    },
+    {
+      "path": "reconciliation/original-sonnet_usage.py",
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\sonnet_usage.py",
+      "sha256": "f7f579fac722e4c22049e14d637cc5fa5275d8e2481aac6d6878a151815a5a13",
+      "bytes": 15715
+    }
+  ],
+  "excluded": [
+    "private outputs",
+    "credentials/vault",
+    "provider transcripts",
+    "raw database",
+    "personal configuration"
+  ],
+  "acceptance_promoted": false
+}
