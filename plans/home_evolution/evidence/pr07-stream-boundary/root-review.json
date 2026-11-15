@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "system_ruff": {"command": "rtk proxy ruff check tests/home_evolution/test_home_stream_boundary.py", "exit_code": 0, "tool_ref": "60bf57"},
+  "review": "Inspected actual TCP/SSE reset frames, Last-Event-ID/reconnect and real SQLite pruning, production HomeController/fetch, resulting 1/2/3 activity assertions and physical child exits. This proves E02 at its transport/controller boundary; does not assert React/browser lifecycle."
+}

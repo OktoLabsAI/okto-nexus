@@ -211,3 +211,10 @@ retries, sessões READY/OPENING/cleanup sem turno produtivo. Ruff/diff-check PAS
 Uma falha anterior era falta de autoridade canônica na fixture, corrigida em
 verify_by, sem mudança do produto. A08 permanece NOT_RUN sem produtor global
 canônico disponível, sem fabricar NULL inválido. Contagem atual:61PASS/12NOT_RUN.
+
+A fronteira E02 passou agora com TCP/SSE reais: commit entre overview e
+assinatura, commit desconectado/reconnect e pruning com retention_gap real.
+O HomeController de produção fez fetch HTTP real e observou1→2→3 atividades,
+com pico de1GET concorrente. Cliente Node e fixture Uvicorn encerraram fisicamente
+com código0. Ruff do sistema PASS; sem React/browser EventSource ou provedor
+declarados. Ver `evidence/pr07-stream-boundary/`. Ledger:62PASS/11NOT_RUN.

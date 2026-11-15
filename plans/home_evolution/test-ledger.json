@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-15T23:28:28.270337+00:00",
+  "updated_at": "2026-11-15T23:30:26.520436+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
@@ -587,11 +587,19 @@
     },
     "HOME-T-E02": {
       "requirement": "Evento entre snapshot e assinatura/reconexão não é perdido; lacuna de retenção provoca ressincronização.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream-boundary/qualification.json",
+        "plans/home_evolution/evidence/pr07-stream/qualification.json"
+      ],
+      "commit": "74066b1b + real stream boundary test",
+      "environment": "Real loopback Uvicorn/SSE, migrated SQLite, Node production HomeController and actual fetch HTTP; own fixture processes exit0",
+      "limitations": [
+        "No React/browser EventSource lifecycle or native/provider execution claimed."
+      ],
+      "tests": [
+        "test_commit_subscription_reconnect_and_retention_gap_refresh_real_home [commit-before-subscribe, disconnect/reconnect, real retention-gap]"
+      ]
     },
     "HOME-T-E03": {
       "requirement": "Eventos duplicados ou fora de ordem não duplicam cartões nem fazem estados regredir.",
