@@ -1,0 +1,17 @@
+{
+  "status": "SAME_OWNER_READY_OBSERVED",
+  "original_start_returncode": 3,
+  "original_failure_preserved": true,
+  "owner": {
+    "pid": 24972,
+    "generation": "f8d19439521b499275eee719e97c8e12",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11"
+  },
+  "cycle_id": "3603e0f640de3ecef0220ed9422eb816",
+  "selection_sha256": "56abaa53ff27b26bcc2e1140753bb1fac4a573bd54bde9ae5fdf366658a6e8a3",
+  "service_actions": 0,
+  "provider_calls": 0,
+  "start_replay": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+  "collector_recovery_plan_sha256": "101ca1a6aad80e849911e2612083ec7575120577f57b41ced7cc16497756a646"
+}

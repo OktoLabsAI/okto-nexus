@@ -1,0 +1,28 @@
+{
+  "source": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\reconciled-budget.json",
+    "sha256": "bd23de47f3ebc96086ca8662abfa0fb24d3ff60677eb5856b51f2e580517cec2",
+    "bytes": 10180
+  },
+  "reconciliation": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-sonnet-redacted-assistant-qmtaz0sg\\accounting-reconciliation.json",
+    "sha256": "c94704923503f738937952693d610c65ba00bbdd1c712677a8fbb6a1bece6ab7",
+    "bytes": 6099
+  },
+  "derived": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\successor02\\budget-seed-180k.json",
+    "sha256": "d351c2b0283f4211fd8299a8b76dbbda4fd40bb1c1cccd6294fdd3fb263d7688",
+    "bytes": 10180
+  },
+  "change": "Verify legacy integer-sequence seal, normalize seen keys to JSON strings; then preventive150000 to180000 for global and ledger policies.",
+  "known_tokens": 36306,
+  "charged_reservations": 1,
+  "historical_outcome": "interrupted",
+  "user_limit_unchanged": 200000,
+  "global_max_requests_unchanged": 3,
+  "no_refund": true,
+  "root_selected_policy": true,
+  "usage_fields_unchanged": true,
+  "legacy_roundtrip_failure_preserved": "a6a41d: 5 setup errors CHECKPOINT_CHANGED before any test body/effect",
+  "legacy_seal_verified_before_normalization": true
+}

@@ -1,0 +1,120 @@
+{
+  "status": "CANONICAL_SUCCEEDED_NO_USEFUL_RESULT_CONNECTOR_NORMAL_STOP_PENDING",
+  "date": "2026-11-15",
+  "request_id": "m1-sonnet-remote-useful-03",
+  "operation_id": "op_423345383752a6d0b8095d73159d1257",
+  "session_id": "ses_b8b6cbd6ec8f9cb75d667276f5422c44",
+  "work": {
+    "canonical_executor_stage": "SUCCEEDED",
+    "terminal_observed": true,
+    "native_result": "success",
+    "useful_result_confirmed": false,
+    "report_absent": true,
+    "continuation_selected": false,
+    "continuation_allowed": false,
+    "gates": "Useful-result gate failed; global headroom must independently pass. Session summary can_admit=true is not permission to bypass either."
+  },
+  "accounting": {
+    "native_session_tokens": 107698,
+    "history_tokens": 36306,
+    "campaign_tokens": 144004,
+    "global_charged_admissions": 2,
+    "current_session_reservations": 1,
+    "coverage": true,
+    "components": {
+      "input_tokens": 6,
+      "cache_read_input_tokens": 92082,
+      "cache_creation_input_tokens": 14335,
+      "output_tokens": 1275,
+      "total": 107698,
+      "prior_carried": 36306,
+      "campaign_total": 144004
+    },
+    "preventive": 180000,
+    "user_limit": 200000,
+    "provider_billing_final_claimed": false,
+    "atomic_token_cap_claimed": false,
+    "codex_tokens_unchanged": 579154,
+    "codex_admissions_unchanged": 16,
+    "refund": false,
+    "new_call_selected_by_curation": false
+  },
+  "diagnosis": {
+    "classification": "NATIVE_PERMISSION_TOOL_UNSUPPORTED_PRODUCT_COMPATIBILITY",
+    "sha256": "1223e73bcd459c8262074f66f4f1ed4b08165bf5eafe743940d9740516d8df30",
+    "native_tool": "PowerShell",
+    "advertised_by_native": true,
+    "rejected_by_installed_core_whitelist": true,
+    "native_permission_requests_published": 0,
+    "operator_approval_in_this_attempt": false,
+    "native_tool_command_executed": false,
+    "report_not_written": true,
+    "source_fix_not_installed_or_qualified_by_this_milestone": true
+  },
+  "checkpoint_fix": {
+    "campaign_tool_only": true,
+    "legacy_integer_key_seal_verified_before_normalization": true,
+    "canonical_string_seen_keys_before_future_seal": true,
+    "digest_bypass": false,
+    "original_36306_reconciliation_valid_and_preserved": true,
+    "initial_five_setup_errors_preserved": true,
+    "final_unique_tests": 7,
+    "subset_six_overlaps_final_seven": true,
+    "final_test_tool": "f0a04d",
+    "qualification_sha256": "7a4b16d390ecba19f47edb33e906289454cb7ae5ac21b2cdc9135617eba2b1b5",
+    "installed_product_mutation": false,
+    "installed_connector_commit": "28e8093997849ba47a018e5d4728f8b3535be4b1"
+  },
+  "lifecycle": {
+    "nexus_initial_start_cli": 3,
+    "later_same_owner_ready": true,
+    "late_ready_service_actions": 0,
+    "nexus_start_failure_preserved": true,
+    "nexus_pid": 24972,
+    "nexus_generation": "f8d19439521b499275eee719e97c8e12",
+    "nexus_normal_stop_cli": 0,
+    "nexus_shutdown_outcome": "drained",
+    "nexus_all_three_physical_exit0": true,
+    "connector_pid": 39640,
+    "connector_generation": "fbc0042be355e83da5bb695a64de4910",
+    "connector_normal_stop_cli": 4,
+    "connector_state": "stopping",
+    "connector_physical_exit_confirmed": false,
+    "connector_watcher_root_owned_pending_at_cut": true,
+    "force_selected": false,
+    "force_authorized_for_this_generation": false,
+    "uninstall_or_complete_cleanup_claimed": false
+  },
+  "root_execution_refs": {
+    "useful_session": 73334,
+    "useful_exit_code": 0,
+    "nexus_stop": "session69434 -> aadecf0",
+    "nexus_watch": "session22695 ->2e0ace all3exit0",
+    "connector_stop": "session6409 ->8ed096 CLI4",
+    "connector_status": "9a2b94 DRAINING_PENDING/UNKNOWN force_available=true force_requested=false",
+    "connector_watch_session": 22718
+  },
+  "root_observations_are_not_fabricated_original_receipts": true,
+  "svc09": {
+    "late_browser_close_not_qualifying": true,
+    "acceptance_promoted": false
+  },
+  "limits": {
+    "scenario_counts": {
+      "VERIFIED": 126,
+      "IN_PROGRESS": 4,
+      "NOT_RUN": 2
+    },
+    "acceptance_promoted": false,
+    "global_M1_pass": false,
+    "original_artifacts_unchanged": true,
+    "private_data_copied": false,
+    "services_provider_or_sql_calls_by_curator": 0
+  },
+  "pending": [
+    "Resolve exact Connector normal-stop uncertainty while retaining current owner/cohort; no force authorization inherited from prior generation.",
+    "Qualify product compatibility for the actual native PowerShell permission request without bypassing human authority.",
+    "Do not continue from a missing useful report; any future paid selection needs explicit finite plan and current cumulative headroom.",
+    "DX40, remote DX43, SVC09 and global M1 remain pending."
+  ]
+}

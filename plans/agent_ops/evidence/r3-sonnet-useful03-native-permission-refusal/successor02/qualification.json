@@ -1,0 +1,97 @@
+{
+  "status": "OFFLINE_SUCCESSOR_QUALIFIED_ROOT_REVIEW_READY",
+  "plan_sha256": "03513d2fe91153a55b2aade1cf290bcafdd133a60306e68145344be18ff3ffe6",
+  "tests": {
+    "unique_passed": 7,
+    "seconds": 0.73,
+    "tool": "f0a04d",
+    "earlier_subset": {
+      "passed": 6,
+      "tool": "0f8441"
+    },
+    "initial": {
+      "tool": "a6a41d",
+      "errors": 5,
+      "stage": "setUp before each body",
+      "cause": "Legacy checkpoint seal sorted integer seen keys before JSON conversion; restore sorted string keys differently."
+    }
+  },
+  "migration": {
+    "legacy_file_sha256": "bd23de47f3ebc96086ca8662abfa0fb24d3ff60677eb5856b51f2e580517cec2",
+    "stored_integer_key_seal": "796c094c88bb2c5cf91a8106626d9801f03e778c842b7cafdc2503ddc6f962b6",
+    "loaded_string_key_digest": "6f8dcd9ca06051765c3cb0036ec698bb821ebbabd7235bea38f51075c107a9e5",
+    "causal_proof_tools": [
+      "ebc381",
+      "4cc575"
+    ],
+    "old_seal_verified_before_normalization": true,
+    "no_digest_bypass": true,
+    "future_checkpoint_seen_keys": "canonical strings before seal"
+  },
+  "read_only_composition": {
+    "tool": "e20393",
+    "installed_context_constructed": true,
+    "mandatory_seed_validated": true,
+    "known": 36306,
+    "charged_history": 1,
+    "preventive": 180000,
+    "user_limit": 200000,
+    "global_max_requests": 3,
+    "next_reserve": 102046,
+    "prepare_called": false
+  },
+  "scope": {
+    "new_ids": [
+      "m1-sonnet-remote-useful-03",
+      "m1-sonnet-remote-continuation-04"
+    ],
+    "old01_interrupted_retained": true,
+    "old02_unused_not_reused": true,
+    "no_refund": true,
+    "new_session": "Real installed TerminalWork tested with existing admitted checkpoint and new client intent; no manual erase",
+    "profile_vs_work_checkpoint": "Setup profile hash remains original DONE; work state lives separately under terminal/work",
+    "paid_namespace_created": false,
+    "services_or_provider_effects": 0,
+    "original_sources_changed": false
+  },
+  "files": {
+    "work_context.py": {
+      "sha256": "c2ca65a1db22e64f24c6e23500541dbcf023015ef638505277ac47f5de4ac90b",
+      "bytes": 33124
+    },
+    "remote_work.py": {
+      "sha256": "2169257de78c29413ffb298310264ba6650623d4e4b03c4fad0568d9f816cea9",
+      "bytes": 14137
+    },
+    "sonnet_usage.py": {
+      "sha256": "1242e24688d1edd3d2476425e0d16d291cd171740ed47e08074b3aa13976eccd",
+      "bytes": 16568
+    },
+    "build_work_plan.py": {
+      "sha256": "484828ab8da97825ba2723c275374645634ec92138b16a0d52d295a206570a74",
+      "bytes": 7275
+    },
+    "test_successor.py": {
+      "sha256": "893244ec6d018d4415bf17aa702177f122d8a3488a5ea7dd2fd3a7a2c608ad94",
+      "bytes": 5656
+    },
+    "budget-seed-180k.json": {
+      "sha256": "d351c2b0283f4211fd8299a8b76dbbda4fd40bb1c1cccd6294fdd3fb263d7688",
+      "bytes": 10180
+    },
+    "budget-policy-change.json": {
+      "sha256": "f017a3a00f1be58cb151caa2deea760882d49ef556b6bfdbab7f58fc7f7e09fb",
+      "bytes": 1338
+    },
+    "work-runtime-freeze.json": {
+      "sha256": "2d01de22aa33f042c882dc4e19fde9d38df87dd8c9d17242fc62290508527a3a",
+      "bytes": 2744
+    }
+  },
+  "independent_peer": {
+    "agent": "v11_preparation",
+    "result": "PASS",
+    "direct_pins_matched": 26,
+    "scope": "RO builder migration, canonical checkpoint, policy, namespace/newsession and seven focal tests; no duplicate test or provider execution"
+  }
+}

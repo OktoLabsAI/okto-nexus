@@ -1,0 +1,11 @@
+# Sonnet useful03: terminal técnico sem resultado útil
+
+O novo pedido useful03 terminou canonicamente SUCCEEDED e com cobertura de uso completa, mas sem relatório e sem resultado útil. O modelo reportou a recusa do pedido nativo PowerShell: a ferramenta estava anunciada pelo Claude2.1.323, porém a whitelist do Core instalado a rejeitou antes de publicar pergunta humana. Nenhuma aprovação do operador ocorreu nesta tentativa; não se atribui a falha à decisão do usuário. O comando solicitado não executou e o relatório não foi escrito.
+
+Uso nativo107.698 +histórico36.306 = **144.004 tokens**, duas admissões globais cobradas. Esta sessão tem uma reserva; não confundir com o total global. Preventiva180k selecionada, limite usuário200k inalterado. can_admit=true no snapshot local não ultrapassa o gate de resultado útil nem garante headroom global. Nenhuma continuação selecionada. Codex579.154/16 permanece separado.
+
+A correção offline do checkpoint valida o selo legado com chaves inteiras antes de normalizar para strings canônicas. Preserva5 erros iniciais de setup, subset6 e **7testes finais distintos PASS**; não soma rodadas sobrepostas. A reconciliação36.306 anterior permanece válida, sem reset/refund ou bypass de digest. Código/testes/seed derivados completos retidos. Nenhum produto instalado foi alterado: Connector continua28e8093.
+
+Nexus startCLI3 permanece falho; observação posterior da mesma instância comprovou READY, sem repetir start. Na parada, Nexus retornou0/SHUTDOWN_COMPLETE/drained e três handles confirmaram saída física0. **Connector permanece stopping/DRAINING_PENDING/UNKNOWN**, PID39640/geraçãofbc0042be355e83da5bb695a64de4910; stopCLI4 e observador22718 pendente no corte. Não há prova física, uninstall ou cleanup completo do Connector. force_available não significa autorização; nenhuma força foi selecionada ou autorizada para essa geração.
+
+O fechamento tardio do browser não qualifica SVC09. **126 VERIFIED /4 IN_PROGRESS /2 NOT_RUN**, sem promoção de DX40/DX43/SVC09/M1. Esta é curadoria de um marco parcialmente encerrado, não recibo de campanha bem-sucedida. Somente fontes/projeções públicas e diagnóstico restrito; nenhum vault, dado privado, comando nativo completo ou transcript bruto incluído.

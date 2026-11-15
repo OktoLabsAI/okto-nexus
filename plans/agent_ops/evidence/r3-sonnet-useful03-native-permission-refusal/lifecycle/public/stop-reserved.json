@@ -1,0 +1,69 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-I",
+    "-B",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "service",
+    "stop",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\nexus-home",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "58631",
+    "--project-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\local-project",
+    "--embedding-mode",
+    "off",
+    "--feature-harness-integrations",
+    "true",
+    "--metrics-mode",
+    "disabled",
+    "--harness-root",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-native-discovery-iyoo0rs3\\codex-0.157.0",
+    "--timeout",
+    "45",
+    "--json"
+  ],
+  "basis": {
+    "pid": 24972,
+    "generation": "f8d19439521b499275eee719e97c8e12",
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+    "task": {
+      "name": "OktoNexus-server-0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11",
+      "state": 4,
+      "digest": "d8afbd23b644f0128b02a8dc8ab7aa6db36982af7fbabc0b25f8c5ac812a3011"
+    },
+    "component": "nexus",
+    "cohort": {
+      "cycle_id": "3603e0f640de3ecef0220ed9422eb816",
+      "phase": "running",
+      "attempts_started": 1,
+      "child_acknowledged": true,
+      "parent": {
+        "pid": 43904,
+        "birth": 134391941995499268
+      },
+      "launcher": {
+        "pid": 51724,
+        "birth": 134391942013866893
+      },
+      "child": {
+        "pid": 24972,
+        "birth": 134391942014223747
+      }
+    },
+    "selected_at": 1794720761.531435,
+    "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+    "collector_recovery_plan_sha256": "101ca1a6aad80e849911e2612083ec7575120577f57b41ced7cc16497756a646"
+  },
+  "provider_calls_selected": 0,
+  "reinstall_selected": false,
+  "force_used": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+  "collector_recovery_plan_sha256": "101ca1a6aad80e849911e2612083ec7575120577f57b41ced7cc16497756a646"
+}

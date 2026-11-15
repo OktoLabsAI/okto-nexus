@@ -1,0 +1,16 @@
+{
+  "returncode": 3,
+  "stdout_sha256": "3289bef5abb1d17787482d27b61f7773bb5ad65d2fd9f78238ad1af7b91c40d6",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_exit_confirmed": false,
+  "provider_calls_selected": 0,
+  "force_used": false,
+  "projection": {
+    "state": "degraded",
+    "reason": "SERVICE_UNREACHABLE",
+    "generation": null,
+    "instance_id": "svc_0450942fe9a6c7193b066e766742217a829264e7520801f7baa7e89469468c11"
+  },
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+  "collector_recovery_plan_sha256": "101ca1a6aad80e849911e2612083ec7575120577f57b41ced7cc16497756a646"
+}

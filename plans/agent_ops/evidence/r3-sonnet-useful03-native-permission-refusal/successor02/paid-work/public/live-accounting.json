@@ -1,0 +1,14 @@
+{
+  "plan_sha256": "03513d2fe91153a55b2aade1cf290bcafdd133a60306e68145344be18ff3ffe6",
+  "request_id": "m1-sonnet-remote-useful-03",
+  "observed_minimum": 107698,
+  "limit": 200000,
+  "preventive": 180000,
+  "reservations": 1,
+  "active": null,
+  "faults": [],
+  "coverage": true,
+  "can_admit": true,
+  "hard_token_cap_guaranteed": false,
+  "campaign_observed_tokens": 144004
+}

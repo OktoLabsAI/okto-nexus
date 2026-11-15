@@ -1,0 +1,17 @@
+{
+  "returncode": 0,
+  "stdout_sha256": "4a23d6ecc2400958823e5bc898f5ab052df88ca75ca49e7687e129be8ca1803d",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_exit_confirmed": false,
+  "provider_calls_selected": 0,
+  "force_used": false,
+  "projection": {
+    "state": "ready",
+    "reason": null,
+    "pid": 39640,
+    "generation": "fbc0042be355e83da5bb695a64de4910",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62"
+  },
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+  "collector_recovery_plan_sha256": "101ca1a6aad80e849911e2612083ec7575120577f57b41ced7cc16497756a646"
+}

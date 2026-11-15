@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "daemon",
+    "start",
+    "--timeout",
+    "45"
+  ],
+  "basis": {
+    "same_installed_task": true,
+    "canonical_absence": true,
+    "previous_six_exit_proof_sha256": "443c072890c1811c6b47c569cb44a990bca90167d4f0742ee03f7d5bafaef8ef",
+    "work_settlement_claimed": false
+  },
+  "provider_calls_selected": 0,
+  "reinstall_selected": false,
+  "force_used": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+  "collector_recovery_plan_sha256": "101ca1a6aad80e849911e2612083ec7575120577f57b41ced7cc16497756a646"
+}
