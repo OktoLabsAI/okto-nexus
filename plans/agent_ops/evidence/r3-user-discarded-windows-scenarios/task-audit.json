@@ -1,0 +1,408 @@
+{
+  "status": "INDEPENDENT_RETAINED_TASK_SCOPE_REVIEW_COMPLETE",
+  "base_commit": "a39ff044c525aa5f706a498844763cbb80e66b31",
+  "reviewer": "finish_reader_cache / AUDIT-R3-59-FINAL",
+  "method": "Read fixed literals, current source/assertion catalogs and subsequent real campaign evidence. Reference existence and historical statuses were not substituted for behavior proof. No runtime/provider/OS action or new test was performed.",
+  "task_count": 59,
+  "front_counts": {
+    "BASE": 6,
+    "SVC": 12,
+    "DX": 21,
+    "ATN": 8,
+    "OBS": 12
+  },
+  "tasks": [
+    {
+      "id": "BASE-01",
+      "title": "registrar baseline",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "BASE-02",
+      "title": "rastrear caminhos",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "BASE-03",
+      "title": "separar documentação vigente e legado",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "BASE-04",
+      "title": "criar ADR curto",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "BASE-05",
+      "title": "ledger de evidências",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "BASE-06",
+      "title": "lifecycle e primeiro uso reais",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "SVC-01",
+      "title": "fachada de lifecycle",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-02",
+      "title": "propriedade e exclusão mútua",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "SVC-03",
+      "title": "iniciar ou reutilizar",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-04",
+      "title": "prova de prontidão",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-05",
+      "title": "integração com o gerenciador do SO",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-06",
+      "title": "contexto estável de execução",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-07",
+      "title": "parada controlada",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IMPLEMENTED"
+    },
+    {
+      "id": "SVC-08",
+      "title": "reconciliação sem repetição de efeitos",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-09",
+      "title": "versão ativa e upgrade controlado",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-10",
+      "title": "controles simples",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-11",
+      "title": "mesmo lifecycle no Connector",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "SVC-12",
+      "title": "empacotamento, campanha e documentação",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IN_PROGRESS"
+    },
+    {
+      "id": "DX-01",
+      "title": "modelo declarativo próprio",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-02",
+      "title": "matriz de formatos",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-03",
+      "title": "plan/apply",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-04",
+      "title": "credenciais",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IMPLEMENTED"
+    },
+    {
+      "id": "DX-15",
+      "title": "connect como entrada principal",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-16",
+      "title": "descoberta e revisão mínima",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-17",
+      "title": "progresso, retomada e primeira sessão",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IMPLEMENTED"
+    },
+    {
+      "id": "DX-05",
+      "title": "init",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-06",
+      "title": "sem transação distribuída fictícia",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-07",
+      "title": "doctor estruturado",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-08",
+      "title": "smoke de cooperação",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-09",
+      "title": "cliente fino, não orquestrador",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-10",
+      "title": "verificar e complementar deduplicação",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-11",
+      "title": "espera correlacionada",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-12",
+      "title": "UI orientada à intenção",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-13",
+      "title": "caminho gerenciado",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-14",
+      "title": "Connector",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-18",
+      "title": "preset generalista de projeto",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IMPLEMENTED"
+    },
+    {
+      "id": "DX-19",
+      "title": "uma revisão significativa para aplicar o preset",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "DX-20",
+      "title": "ciclo cotidiano completo no terminal",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "IMPLEMENTED"
+    },
+    {
+      "id": "DX-21",
+      "title": "preservar configuração e permitir evolução opcional",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-01",
+      "title": "serviço de projeção",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-02",
+      "title": "armazenamento auxiliar",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-03",
+      "title": "transações e leitura",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-04",
+      "title": "API",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-05",
+      "title": "SSE e reconciliação da visão",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-06",
+      "title": "UI integrada",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-07",
+      "title": "interação segura",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "ATN-08",
+      "title": "acessibilidade",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-01",
+      "title": "vínculo explícito",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-02",
+      "title": "capacidade restrita",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-03",
+      "title": "ordenação e replay",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-04",
+      "title": "freshness",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-05",
+      "title": "empacotamento opcional",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-06",
+      "title": "contrato real instalado",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-07",
+      "title": "identidade do ocupante",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-08",
+      "title": "leitura sem controle",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-09",
+      "title": "semântica de término",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-10",
+      "title": "exemplo mínimo",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-11",
+      "title": "projeção",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    },
+    {
+      "id": "OBS-12",
+      "title": "fontes concorrentes",
+      "assessment": "NO_ADDITIONAL_MANDATORY_GAP_IN_RETAINED_SCOPE",
+      "original_status": "VERIFIED"
+    }
+  ],
+  "catalogs": [
+    {
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+      "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+      "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+      "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-remaining-task-contracts/audit/matrix.json",
+      "sha256": "e672f765ef70fb16548798f83d9b45b9bbbf758cb552b3f6c8cabd0de31ff5d2"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+      "sha256": "2f934a47f4b4b8d77bf4a98e7860bee373336c40cbf9c20f6bdc89608dc69d17"
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+      "sha256": "3f5b9a73f7c7164b5b0e812495d952a62cf92c1934eb7c59141af8fa6976125d"
+    },
+    {
+      "path": "plans/agent_ops/evidence/pr04-participant-launch-native.json",
+      "sha256": "c8cedc4394f1b62a0afc625ecda33233b82080ae24d3c1bebec50d238dcd63f9"
+    }
+  ],
+  "literal_resolutions": {
+    "DX-04": "Real Claude2.1.317/Codex0.166.0 initialize with protected environment reference and fail without it. Separate real vault/isolation/redirect tests cover their contracts. A single vault-to-ParticipantLaunch-to-native-to-cooperation campaign is stronger than literal411 and remains honestly not executed.",
+    "SVC-09": "Migration safety tests plus actual canonical task upgrades cover the fixed delivery; no mandatory arbitrary historical migration campaign added.",
+    "SVC-08": "Both real hosts already have bounded crash/backoff/exhaustion and stop evidence.",
+    "DX-17_DX-18_DX-20": "W17 local and09/10 Connector prove the complete retained terminal cycle.",
+    "M2": "Inspector/FastMCP real distributed TCP clients and consented canonical coordination; synthetic credentials/results declared, no paid-model requirement invented."
+  },
+  "remaining_nonwaived_work": "Final documentation, disposition and final artifact/Git checks only."
+}

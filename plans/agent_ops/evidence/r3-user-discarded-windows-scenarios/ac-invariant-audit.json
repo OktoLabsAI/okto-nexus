@@ -1,0 +1,744 @@
+{
+  "status": "INDEPENDENT_READ_ONLY_FINAL_AUDIT",
+  "base_commit": "a39ff044c525aa5f706a498844763cbb80e66b31",
+  "fixed_plan": {
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996"
+  },
+  "waiver": {
+    "literal_user_statement": "vamos descartar esses",
+    "referent": [
+      "SVC-T18",
+      "SVC-T21",
+      "SVC-T29"
+    ],
+    "source": "Root relay of current explicit user reply; own decision artifact maintained byRoot.",
+    "effect": "Only remaining realOS evidence obligations excluded from acceptance. SVC21drain/timeout contract already proved and still required. No original plan mutation or fabricated execution."
+  },
+  "criteria": [
+    {
+      "id": "AC-01",
+      "literal": "Cada tarefa obrigatória tem implementação ou reaproveitamento explicitamente demonstrado, com testes correspondentes.",
+      "literal_line": 1064,
+      "assessment": "FINAL_DOCUMENTARY_RECONCILIATION_REMAINS",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-task-reconciliation\\svc\\audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json"
+      ],
+      "existing_evidence_finding": "Implementation/reuse/test catalog exists for59mandatory tasks; measured local first-use stages and DX39 are real. Do not require every historical task substatus VERIFIED.",
+      "independent_scope_limit": "59-task source/assertion inventory plus subsequent local/remote BASE06 and specific campaigns; final documentary reconciliation remains. Historical task substatus is not an additional campaign requirement."
+    },
+    {
+      "id": "AC-02",
+      "literal": "As frentes SVC, DX, ATN e OBS respeitam suas dependências e funcionam de modo combinado; Herdr continua opcional.",
+      "literal_line": 1065,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-joint-contracts\\integration.json",
+        "sha256": "a14f5fc02d9384da86f056d6349141e818defa7ea4c05f9d4ba893c41ec4e607"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json"
+      ],
+      "existing_evidence_finding": "Composição contratual demonstrada: SVC→DX no start/reuse e trabalho possuído; DX→ATN nas decisões/publicações canônicas; ATN→OBS na projeção externa; OBS→execução/coordenação sem interferência. Herdr é opt-in e os caminhos canônicos funcionam com OBS desabilitado. Dependências de contrato estão implementadas sem declarar encerrados os marcos de campanha.",
+      "independent_scope_limit": "Contract composition with synthetic native peers plus later real terminal cycles; Herdr remains optional."
+    },
+    {
+      "id": "AC-03",
+      "literal": "Dois clientes MCP testados participam sem adaptador nativo novo e sem identidade duplicada.",
+      "literal_line": 1066,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-two-existing-mcp-clients\\installed\\canonical\\tests.xml",
+        "sha256": "f2bea0439ba3d68538d2c5b33ec8ebc2d4d1367f5b80c3e340555b98b7efb042"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-two-existing-mcp-clients/qualification.json",
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/installed/canonical/tests.xml",
+        "plans/agent_ops/evidence/r3-two-mcp-cooperation/qualification.json"
+      ],
+      "existing_evidence_finding": "MCP Inspector0.21.2 programmatic distributed client (TypeScript SDK1.29.0) and FastMCP2.14.7 (Python SDK1.30.0) each establish useful sessions over real TCP, exchange and acknowledge a correlated directed request/reply, then reconnect without new identities or sessions. Actual installed Server exits canonically. No native adapter or model is involved.",
+      "independent_scope_limit": "Actual Inspector0.21.2/FastMCP2.14.7 TCP clients; synthetic credentials/results, no new nativeadapter or paidtwo-model requirement."
+    },
+    {
+      "id": "AC-04",
+      "literal": "A central oferece ações reais e autorizadas, sem virar fonte paralela de lifecycle.",
+      "literal_line": 1067,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\pr07-attention-ui\\root-results.json",
+        "sha256": "8999a1db3633fed14719004b2981e2bc2c6b6683aca198f83abaaa69634c21c2"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/pr07-attention-ui/root-results.json",
+        "plans/agent_ops/evidence/pr10-correlation.md",
+        "plans/agent_ops/evidence/pr10-external.md",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ],
+      "existing_evidence_finding": "Real canonical operator decisions and verification are reached through shared controls; attention preferences and reads create no parallel productive lifecycle. Native transport qualification uses synthetic peers.",
+      "independent_scope_limit": "Canonical controls/authentication real; synthetic native peers in UI qualification labeled separately."
+    },
+    {
+      "id": "AC-05",
+      "literal": "Repetição/timeout/restart preservam IDs e não duplicam mensagens, aprovações ou handoffs dentro do contrato de idempotência.",
+      "literal_line": 1068,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-contract-closure\\matrix.json",
+        "sha256": "de55c23ab296e60b622a14b2c3856f8d344bdbcda2c008ed0b978816401e9b93"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-contract-closure/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-contract-closure/matrix.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json"
+      ],
+      "existing_evidence_finding": "Explicit path inventory maps message/handoff creation, approvals, participant cooperation, work/native decisions, local/remote setup and grant issuance recovery to exact retained PASS nodes. Current39 recovery cases and historical actual process-death/atomic receipt proofs preserve IDs within documented retention windows; no universal exactly-once or real provider restart claim.",
+      "independent_scope_limit": "Within retained receipt/idempotency windows; no universal exactly-once guarantee."
+    },
+    {
+      "id": "AC-06",
+      "literal": "Atividade externa nunca se transforma em autorização, capacidade reservada ou conclusão de trabalho.",
+      "literal_line": 1069,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-joint-contracts\\idle\\report.json",
+        "sha256": "b06ee61dfd45b83d6c5731136d27eacbe5c1abf3478f8a61127aea5801a01189"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/idle/report.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/integration.json",
+        "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json"
+      ],
+      "existing_evidence_finding": "Canonical snapshots and observation-only authority, idle/blocked/completion/seen queue isolation and current RG03 reservation/TTL/fairness checks prove external activity does not grant authority, capacity or completion. No provider campaign is required for this prohibition.",
+      "independent_scope_limit": "External idle/publication/seen does not grant authority/reservation/completion; no additional provider required."
+    },
+    {
+      "id": "AC-07",
+      "literal": "Core e Connector preservam suas fronteiras e o conjunto de dependências é reproduzível.",
+      "literal_line": 1070,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-compatibility-boundaries\\core\\report.json",
+        "sha256": "a56c893c9f4c5fbafdd7c49abe4baf19fc5ab8f1ac1839cf542ffada9432d4f6"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-joint-contracts/core/observation.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/ci/installed.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/ci/reports.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/milestone.md"
+      ],
+      "existing_evidence_finding": "Current installed Windows dependencies resolve with MCP1.30 and pip check; exact coordinated pins/payloads and Core/Nexus/Connector import boundaries are qualified. Historical browser environment is not used as dependency-solve evidence.",
+      "independent_scope_limit": "Pinned Windows installed/import/dependency scope; not universal transitive dependency lock for all client products."
+    },
+    {
+      "id": "AC-08",
+      "literal": "Documentação, schemas e ajuda da CLI descrevem o comportamento realmente entregue.",
+      "literal_line": 1071,
+      "assessment": "COMPLETE_AFTER_FINAL_DOCUMENTARY_UPDATE",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-contract-closure\\docs\\audit.json",
+        "sha256": "abbcd359d9fb0d7b0f3fe3b6a6c078c2cfee69ef5444f34f302dd328f0143c5a"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/pr09-herdr/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-contract-closure/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-contract-closure/docs/audit.json"
+      ],
+      "existing_evidence_finding": "Eight current documents corrected against installed help, current parsers and delivered APIs. Ten Nexus help calls,75 Connector parsers and29 published Core JSON resources were compared; schemas and product bytes unchanged. Historical evidence remains historical, and real qualifications remain explicitly open.",
+      "independent_scope_limit": "Stale lifecycle guide93–95/123–124 found and now corrected byRoot. Final implementationreport still needs current waiver/disposition; no new product/test defect."
+    },
+    {
+      "id": "AC-09",
+      "literal": "Testes não executados estão nomeados; nenhuma fixture é apresentada como campanha de provedor ou plataforma real.",
+      "literal_line": 1072,
+      "assessment": "COMPLETE_AFTER_FINAL_DOCUMENTARY_UPDATE",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-sonnet09-10-remote-useful-success\\review.json",
+        "sha256": "3f5b9a73f7c7164b5b0e812495d952a62cf92c1934eb7c59141af8fa6976125d"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/milestone.md",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json",
+        "plans/agent_ops/evidence/r3-task-reconciliation/pending-qualification.json"
+      ],
+      "existing_evidence_finding": "The reconciled task/scenario inventory explicitly names unqualified scopes, current safe qualification gaps and mandatory real campaigns. Existing reports preserve failed attempts and distinguish synthetic peers, actual HTTP/browser/Herdr and unexecuted provider/native-service contexts. No pending test is labeled passed.",
+      "independent_scope_limit": "Three discarded scenarios remain explicitly unexecuted/partially qualified, not passed. Preserve prior failures and synthetic-versus-real distinctions."
+    },
+    {
+      "id": "AC-10",
+      "literal": "Não há segredo em artefatos, logs, exemplos, URLs ou configurações exportadas.",
+      "literal_line": 1073,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-public-artifact-review\\verification.json",
+        "sha256": "70c26ac0e3d25299f971367a912d54f9984aa0222a4ffa23e5b8365aa0c5a392"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-public-artifact-review/milestone.md",
+        "plans/agent_ops/evidence/r3-public-artifact-review/scan-after.json",
+        "plans/agent_ops/evidence/r3-public-artifact-review/verification.json",
+        "plans/agent_ops/evidence/r3-task-reconciliation/milestone.md"
+      ],
+      "existing_evidence_finding": "Delivered public snapshot reviewed: 1822 allowlisted files, two historical credential values redacted with provenance, 35 invalid synthetic parameters classified, retained protection tests and browser/trace reviews. Current appended audit artifacts are allowlisted and scanned before inclusion. Historical Git objects/UAT credential validity remain recorded risks; rewriting history or revoking a prior UAT key is not an extra acceptance condition invented for the delivered-artifact criterion.",
+      "independent_scope_limit": "Delivered snapshot/allowlists and sanitization provenance; historical Git/UAT-key risks remain recorded, not secretly revoked. Final changed publicdocs need scoped review."
+    },
+    {
+      "id": "AC-11",
+      "literal": "O primeiro marco comprova daemon + preset + ciclo completo de trabalho pelo terminal com um harness real, no Server local e via Connector, incluindo decisão e resultado, sem dashboard obrigatório nem terminal exclusivo para manter o serviço.",
+      "literal_line": 1075,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-sonnet09-10-remote-useful-success\\independent-proof\\projection.json",
+        "sha256": "c423cf0aa3f21601eab0520d0fc26385708bfde246c9b7af2fe0059811beb424"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/projection.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/independent-proof/assessment.json",
+        "plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/execution/public/cli-reopen-proof.json"
+      ],
+      "existing_evidence_finding": "Root accepted the finite terminal milestone: local W17/DX39 and real Connector09/10 prove installed daemon/preset, human canonical decision, correlated useful result, same-session continuation and reopened authenticated CLI without a dashboard or dedicated terminal keeping services alive. SVC09 ownership evidence remains separate. Windows login events and global plan acceptance remain pending.",
+      "independent_scope_limit": "LocalW17 plus remote09/10 real useful result, operatorCONFIRMED decision, same-session continuation and newCLIreopen; no dashboard needed. NoOS qualification implied."
+    },
+    {
+      "id": "AC-12",
+      "literal": "Inicialização concorrente reutiliza a instância correta; perfil remoto não cria Server local e não há supervisores concorrentes.",
+      "literal_line": 1076,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-contract-closure\\controls\\tests.xml",
+        "sha256": "0658327f279543e2b281e1f6299f03d062ea71771ff624c308b51af141187c94"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "existing_evidence_finding": "Concorrência real converge para um owner/PID/generation em cada host; locks impedem segundo owner. Perfil remoto é resolvido antes do lifecycle local. O roteamento de supervisor instalado recusa fallback/definition drift e o foreground tem um único owner.",
+      "independent_scope_limit": "Real concurrent launches converge to oneowner; remote topology has no localfallback; native single-supervisor cohorts corroborate."
+    },
+    {
+      "id": "AC-13",
+      "literal": "Serviço do usuário foi instalado, iniciado no login, parado, recuperado de falha e removido nas plataformas declaradas qualificadas, com contexto/credenciais reais de execução validados.",
+      "literal_line": 1077,
+      "assessment": "PARTIALLY_WAIVED_RETAINED_SCOPE_COMPLETE",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-native-bounded-supervisor-execution\\public\\qualification.json",
+        "sha256": "c690fb7abcbf73773f42664864514aecf9c5bb1ccd52180fef0737dbcda6fc57"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-svc-t15-package2-real/review.json",
+        "plans/agent_ops/evidence/r3-m1-revision17-recovery-execution/criterion-review.json",
+        "plans/agent_ops/evidence/r3-sonnet-denial05-native07-svc09/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-done-configured-connector-next-connect/review.json"
+      ],
+      "existing_evidence_finding": "Both actual Windows hosts installed/stopped/uninstalled;4exit3 crashes/3replacements/backoff60/exhaustion/190s quiet qualified; cwd/PATH and data-preserving foreground reuse qualified; real terminal-only diagnosis plus authenticated Codex/Sonnet and binding credentials observed.",
+      "independent_scope_limit": "All retained install/start/stop/crash/retry/backoff/exhaustion/uninstall/context obligations proved; actual login-triggered startup alone waived viaSVC18. Preserve literalNOT_VERIFIED plus separate accepted-exception disposition."
+    },
+    {
+      "id": "AC-14",
+      "literal": "Restart, suspensão e queda de conexão preservam contratos de autoridade, ownership e incerteza, sem repetição produtiva implícita.",
+      "literal_line": 1078,
+      "assessment": "PARTIALLY_WAIVED_RETAINED_SCOPE_COMPLETE",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-service-restart-contracts\\qualification.json",
+        "sha256": "ed159a0a19ee93c20d18d085d0a993296552c502dbfe93497131e155e4a7b512"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json",
+        "plans/agent_ops/evidence/r3-joint-contracts/recovery/reports.json",
+        "plans/agent_ops/evidence/r3-service-restart-contracts/qualification.json",
+        "plans/agent_ops/evidence/r3-windows-current-history-supplement/review.json"
+      ],
+      "existing_evidence_finding": "Current installed real-process cases preserve live child claim/slot, invalid grants across Server replacement, Connector binding and no implicit replay. Native behavior in these contract cases is synthetic; scope is retained honestly.",
+      "independent_scope_limit": "Restart/reconnection/authority/ownedchild/claim/slot/grants/no-replay contracts proved; real suspend/resume/logout/reboot waived viaSVC29 and SVC21external remainder. Preserve literalNOT_VERIFIED plus separate disposition."
+    },
+    {
+      "id": "AC-15",
+      "literal": "Controle por status/logs/start/stop/restart e foreground funciona, sem que diagnóstico inicie daemon ou inferência.",
+      "literal_line": 1079,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-contract-closure\\controls\\tests.xml",
+        "sha256": "0658327f279543e2b281e1f6299f03d062ea71771ff624c308b51af141187c94"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-contract-closure/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-contract-closure/controls/tests.xml",
+        "plans/agent_ops/evidence/r3-contract-closure/matrix.json",
+        "plans/agent_ops/evidence/r3-qualification-readiness/native-proposal/native-service-campaign-proposal.json"
+      ],
+      "existing_evidence_finding": "Current installed Nexus and Connector real detached concurrent start/reuse/restart/drain cases pass under isolated profiles; exact foreground and passive status/log/doctor assertions are mapped. No registered native task or provider acceptance is inferred.",
+      "independent_scope_limit": "Actual detachedstart/reuse/restart/drain and foreground/passive status/log/doctor mapped; no diagnostics start/inference or automaticforce inferred."
+    },
+    {
+      "id": "AC-16",
+      "literal": "O agente padrão tem identidade persistente, perfil generalista útil e coordenação no escopo aprovado; preserva limites efetivos do harness e não recebe administração global ou poder de aprovar seus próprios pedidos.",
+      "literal_line": 1080,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\pr03-terminal-policy-installed.xml",
+        "sha256": "0f08ca2c9192357070c0e2eff4d840142bdb36fecd9b3d0e273425c3612ca13b"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ],
+      "existing_evidence_finding": "Identidade persistente e preset generalista são objetos canônicos revisados; coordenação é limitada ao workspace/permissões concedidos. harness_settings vazio conserva modelo/instruções/sandbox, tool_access=ask conserva decisões, grants são limitados. Merge preserva customizações; agente não inicializa política nem aprova seus pedidos.",
+      "independent_scope_limit": "Persistent scoped identity/preset and agent-only Connector versus humanoperator. EffortUNKNOWN intentionaldefault; instructionreference not personalcontent/enforcement; noadmin/selfapproval."
+    },
+    {
+      "id": "AC-17",
+      "literal": "Reconnect, atualização e abertura posterior da interface preservam a configuração e a identidade; personalização é opcional e o uso padrão continua completo pelo terminal.",
+      "literal_line": 1081,
+      "assessment": "COMPLETE_SCOPED",
+      "primary": {
+        "path": "plans\\agent_ops\\evidence\\r3-canonical-environment-upgrades\\review.json",
+        "sha256": "34128521813aa6c1dcf4304170b79e967f61ad058f4ce3f1cc79da4d665dd1ae"
+      },
+      "additional_evidence_refs": [
+        "plans/agent_ops/evidence/r3-acceptance-contracts/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/matrix.json",
+        "plans/agent_ops/evidence/r3-acceptance-contracts/audit/proofs.json",
+        "plans/agent_ops/evidence/r3-compatibility-boundaries/traceability/traceability.json"
+      ],
+      "existing_evidence_finding": "Reconnect mantém identidade e customizações; merge/upgrade preservam seleção, arquivos e dados; dashboard instalado personaliza os mesmos objetos. Caminho terminal completo e retorno ao trabalho têm decisões/resultados correlacionados sem painel obrigatório.",
+      "independent_scope_limit": "Actual upgrades/reconnect preserve config/identity/data; configurednextconnect samebinding/grants and reopenedCLI realresults. Explicit rotations/renewals remain separate newauthorizedchanges."
+    }
+  ],
+  "invariants": [
+    {
+      "id": "INV-01",
+      "literal": "A identidade canônica continua sendo `agent_id`. Harness, transporte, pane, host, sessão e observador não criam automaticamente outro agente.",
+      "assertion_reviewed": "Identidade selecionada e autenticada permanece agent_id; sessões/instâncias e fontes têm seus próprios IDs auxiliares.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+        "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+        "bytes": 938,
+        "passed_cases": [
+          "tests.execution_r4.test_r3_mixed_coordination::test_rg01_two_mcp_participants_and_one_runtime_cooperate_without_new_identities"
+        ]
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-02",
+      "literal": "MCP do Nexus permanece HTTP direto no Server. Não adicionar servidor/proxy/fachada MCP no Connector ou no observador. Não reintroduzir MCP stdio do Nexus.",
+      "assertion_reviewed": "Participante conecta diretamente ao MCP HTTP do Server; exportação/guia e observador não criam servidor MCP intermediário. O Connector mantém o canal R4 de execução.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-01]",
+        "assertion": "Contrato puro ParticipantClientConfig separado de HarnessHTTPTemplate, com cliente/build/formato/revisão, origem/endpoint, entrada, referência de ambiente e escopo. Exportação contém referências; contrato gerenciado mantém suas próprias guardas."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-03",
+      "literal": "Core continua independente das aplicações; não recebe banco de identidades, inbox, HTTP de produto, UI ou autorização canônica.",
+      "assertion_reviewed": "Boundaries retidos excluem dependências entre aplicações. Core recebe contratos/ports de execução, e o drain novo apenas metadata de runtime/journal.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-compatibility-boundaries/core/report.json",
+        "sha256": "a56c893c9f4c5fbafdd7c49abe4baf19fc5ab8f1ac1839cf542ffada9432d4f6",
+        "bytes": 5167
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-04",
+      "literal": "Connector continua host/cliente remoto de execução. Não passa a decidir handoffs nem a possuir inbox própria.",
+      "assertion_reviewed": "Claim, entrega e decisões permanecem serviços canônicos Server; Connector realiza a execução do binding autorizado via R4, sem inbox/handoff próprios.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/rg11-shared-fixture-final/tests.xml",
+        "sha256": "7f5bf911cbc48c6f7f38080d6a323d309dd8ec8aa7a07c4a48fa2614c7cb5289",
+        "bytes": 418,
+        "passed_cases": [
+          "tests.execution_r4.test_remote_connection::test_remote_domain_delivery_keeps_exclusive_claim_from_mcp[connector-configured]"
+        ]
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-05",
+      "literal": "Presença, atividade, capacidade, autorização, término do turno e conclusão do handoff são fatos diferentes.",
+      "assertion_reviewed": "Projeção distingue estados e proveniência; publicação externa não toca coordenação/presença/capacidade e recibo recebido não vira liveness/idle.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+        "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd",
+        "bytes": 342617,
+        "locator": "proof_bundles.canonical_isolation",
+        "assertion": "Publication/seen cannot create authority, reservations, work or task success; only correlated canonical terminal event can settle the current turn and admit execution of queued work."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-06",
+      "literal": "`idle`, `done`, timeout, silêncio ou desconexão não autorizam execução, conclusão, liberação de capacidade ou replay.",
+      "assertion_reviewed": "Idle/done externos não liberam turno/reserva nem alteram prioridade/fairness; timeout de observação não cancela. Novo drain requer prova de quiescência ou força explícita e retém UNKNOWN.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+        "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd",
+        "bytes": 342617,
+        "locator": "proof_bundles.canonical_isolation",
+        "assertion": "Publication/seen cannot create authority, reservations, work or task success; only correlated canonical terminal event can settle the current turn and admit execution of queued work."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-07",
+      "literal": "Observar/ler/abrir a central não aprova, responde, interrompe, reivindica ou reexecuta trabalho.",
+      "assertion_reviewed": "GET/inspeção e preferências são passivos sobre tabelas canônicas; decisões exigem controles existentes, autoridade e CAS.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+        "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd",
+        "bytes": 342617,
+        "locator": "proof_bundles.passive",
+        "assertion": "GET/snapshot and preferences preserve canonical rows; source commits and rollback create auxiliary metadata atomically while existing authentication remains separate."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-08",
+      "literal": "Um observador externo não produz recibos nativos, prova de ownership do Core, heartbeat de sessão MCP ou reserva de capacidade.",
+      "assertion_reviewed": "OBS publica somente estado auxiliar. Correlação é operador-only, prova nativa/OS não vem do cliente e não transfere autoridade ao sinal externo.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+        "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd",
+        "bytes": 342617,
+        "locator": "proof_bundles.canonical_isolation",
+        "assertion": "Publication/seen cannot create authority, reservations, work or task success; only correlated canonical terminal event can settle the current turn and admit execution of queued work."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-09",
+      "literal": "Handoffs preservam claim canônico único. MCP-only continua elegível conforme o contrato existente, sem obrigação de reportar capacidade externa.",
+      "assertion_reviewed": "Corridas MCP/runtime resultam em um único claim e efeito; inelegibilidade não muda com idle externo e MCP-only participa sem relatório externo.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-joint-contracts/mixed/reports/final/tests.xml",
+        "sha256": "c352741049b517c77c238e97ca0712728126c785a35aae74b2fe55fe679bf944",
+        "bytes": 938,
+        "passed_cases": [
+          "tests.execution_r4.test_r3_mixed_coordination::test_rg02_broadcast_mcp_and_managed_runtime_have_one_claim_and_effect[mcp_first]"
+        ]
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-10",
+      "literal": "Uma requisição repetida para recuperação mantém a identidade original. Nova tentativa produtiva exige intenção explícita e as regras canônicas.",
+      "assertion_reviewed": "Recovery preserva request/operation/decisão originais; ausência/uncertainty não cria substituto e novo trabalho exige intenção explícita.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-10]",
+        "assertion": "CoordinationRequestKey/hash semântico e recibo na UoW de criação; chave inclui instalação/ator/workspace/operação/request. CLI salva ID/hash antes da transmissão e só reinspeciona a mesma identidade dentro da janela. Pending approval/tombstone e autenticação corrente preservados."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-11",
+      "literal": "Não colocar chaves em URLs, argumentos de processo, logs, screenshots, exemplos executáveis, exportações ou estado do browser.",
+      "assertion_reviewed": "Credenciais entram por mecanismos protegidos e referências; checkpoints/exportações omitem valores. Correção dos artefatos públicos foi revisada e itens sintéticos classificados.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-04]",
+        "assertion": "Importação protegida da chave existente; cofre escopado por perfil/setup; launcher fornece a referência só ao processo filho; Bearer para origem fixada sem redirects. Entrada pública do dashboard não inclui chave em comando/URL e não substitui entrega one-shot autorizada."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-12",
+      "literal": "Não fabricar qualificação de harness. Suporte ao formato de configuração MCP é distinto de suporte à execução nativa.",
+      "assertion_reviewed": "Contrato ParticipantClientConfig é distinto de capacidade/qualificação managed; cliente/build não observado fica UNKNOWN e generic/Pi não recebem adapter HTTP inventado.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-01]",
+        "assertion": "Contrato puro ParticipantClientConfig separado de HarnessHTTPTemplate, com cliente/build/formato/revisão, origem/endpoint, entrada, referência de ambiente e escopo. Exportação contém referências; contrato gerenciado mantém suas próprias guardas."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-13",
+      "literal": "A fonte de verdade de mensagens, handoffs, aprovações e execução permanece nos subsistemas atuais. Novas tabelas são auxiliares, não novas filas de trabalho.",
+      "assertion_reviewed": "A central compõe fatos canônicos e guarda só preferências/anchors; observações/correlações são auxiliares e reads preservam tabelas canônicas.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+        "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd",
+        "bytes": 342617,
+        "locator": "proof_bundles.projection",
+        "assertion": "Closed metadata-only canonical predicates combine native requests, verification, unknown/recovery, authority, aged handoffs, results and cleanup in one bounded relation; no payload hydration or per-item graph query."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-14",
+      "literal": "Não interpretar texto livre de prompt/log como comando Nexus, aprovação, identidade ou conclusão.",
+      "assertion_reviewed": "Schema fechado recusa campos de identidade/comando; texto de terminal é dado escapado e somente evento canônico pode concluir trabalho.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/atn-obs/matrix.json",
+        "sha256": "409a225546e3d086f10a2d2be2be593bfd3ed33c3e5efcdb28222d0ecb04f1bd",
+        "bytes": 342617,
+        "locator": "proof_bundles.untrusted",
+        "assertion": "Closed schema and bounded text reject identity/secret/command fields; source values are escaped literal UI data without active links/HTML; errors do not echo input."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-15",
+      "literal": "Não aumentar a superfície MCP indiscriminadamente. Priorizar ferramentas existentes e APIs específicas; qualquer parâmetro novo deve ter schema, testes e revisão de superfície.",
+      "assertion_reviewed": "CLI reutiliza ferramentas canônicas; schemas e descoberta validam parâmetros antes do efeito. Mudanças MCP têm medições de superfície retidas e teste de orçamento.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-09]",
+        "assertion": "CLI coordination/work delega a fachadas de aplicação e clientes HTTP/MCP; ator vem da credencial, destino não substitui principal; sessão/contexto aprovados ficam vinculados ao request. A CLI remota não grava domínio SQLite nem implementa servidor/proxy MCP."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-16",
+      "literal": "O daemon é um modo de operação do Server/Connector existente; não cria outro domínio de execução, fila, scheduler ou identidade de agente.",
+      "assertion_reviewed": "Lifecycle compõe o mesmo Server/DaemonApp e os mesmos contratos Core, sem segundo scheduler, fila produtiva ou identidade de agente.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E01",
+        "assertion": "Three actual launcher processes converge to one PID/generation, ready; launcher exit does not stop it. Reuse keeps generation; explicit restart changes it; stale stop rejected; DRAINED receipt/run marker agree; DB retained.",
+        "limit": "Actual disposable detached service, no provider. Launcher exit is narrower than terminal/dashboard closure with admitted work."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-17",
+      "literal": "Identidade da instância do serviço é distinta de agent_id, workspace e sessão. Perfis que usam a mesma instância não iniciam processos concorrentes sobre seus dados.",
+      "assertion_reviewed": "Instância é derivada de home/DB/usuário e protegida por exclusão OS/generation antes de bootstrap. Alias/perfis não permitem dois owners dos mesmos dados.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E03",
+        "assertion": "Alias paths and shared DB exclude; independent DB/home acquires; two real processes yield one owner and OS lock releases after actual death; loser never bootstraps/migrates.",
+        "limit": ""
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-18",
+      "literal": "Resolver destino local/remoto antes de iniciar processos. Falha do Server remoto nunca cria um Server local substituto.",
+      "assertion_reviewed": "Topology é resolvida antes de lifecycle local; RemoteTarget apenas verifica Server remoto e não oferece fallback de início local.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E06",
+        "assertion": "Status is passive on absent storage; logs only coded bounded records with corrupt/secret lines withheld; Ctrl+C follow ends observation; default doctor does not vault/network/start; remote failure has no local fallback.",
+        "limit": ""
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-19",
+      "literal": "Só existe um supervisor ativo por instância. Serviço instalado é acionado pelo gerenciador correspondente, sem daemon avulso concorrente.",
+      "assertion_reviewed": "Start instalado usa o gerenciador nativo e não lança daemon avulso. Intent/lock existentes impedem concorrência e submissão repetida enquanto pendente.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E07",
+        "assertion": "Pending launch is durable and not repeated; explicit recover-start fences late child without bootstrap; changed receipt or live owner refuses; lost reply recovers same intent.",
+        "limit": ""
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-20",
+      "literal": "Iniciar/reiniciar serviço não concede autoridade nova, não renova grants e não repete operações de resultado incerto. Trabalho previamente autorizado segue admissão/reconciliação canônicas.",
+      "assertion_reviewed": "Reuso/recovery não emite novos grants nem repete resultado incerto; leases antigas não migram na renovação explícita. Novo stop/restart mantém latch antes dos efeitos.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E07",
+        "assertion": "Pending launch is durable and not repeated; explicit recover-start fences late child without bootstrap; changed receipt or live owner refuses; lost reply recovers same intent.",
+        "limit": ""
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-21",
+      "literal": "Fechar CLI/dashboard não significa parar serviço ou cancelar trabalho. Parada explícita não é tratada como crash para ressuscitar a instância.",
+      "assertion_reviewed": "Saída do launcher/CLI mantém owner e trabalho; parada explícita fixa desired=draining antes da contenção. Direct IPC também precisa latch de supervisor.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E01",
+        "assertion": "Three actual launcher processes converge to one PID/generation, ready; launcher exit does not stop it. Reuse keeps generation; explicit restart changes it; stale stop rejected; DRAINED receipt/run marker agree; DB retained.",
+        "limit": "Actual disposable detached service, no provider. Launcher exit is narrower than terminal/dashboard closure with admitted work."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-22",
+      "literal": "Estado do processo, prontidão do serviço, conexão do harness e sucesso de uma tarefa são provas diferentes.",
+      "assertion_reviewed": "Readiness correlaciona owner/versão mas não afirma login/provedor/participação/trabalho. Doctor mantém checks/proof levels independentes.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E05",
+        "assertion": "Readiness correlates held OS ownership, generation, PID, instance and exact active/installed version; wrong endpoint does not become ready; race in owner metadata is rechecked.",
+        "limit": "Wrong endpoint tests use a controlled response. This is not the full occupied-socket startup campaign."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-23",
+      "literal": "Consultas de status, logs e doctor padrão não iniciam o serviço nem inferência. A inicialização automática pertence a comandos de ação documentados.",
+      "assertion_reviewed": "Status/log/doctor padrão são observações sem start/cofre/rede/inferência; connect de ação usa ensure_running somente após revisão/ação documentada.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E06",
+        "assertion": "Status is passive on absent storage; logs only coded bounded records with corrupt/secret lines withheld; Ctrl+C follow ends observation; default doctor does not vault/network/start; remote failure has no local fallback.",
+        "limit": ""
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-24",
+      "literal": "Sobreviver ao terminal, reiniciar após falha, iniciar no login e operar sem login exigem evidências separadas; não prometer sobrevivência do processo a reboot.",
+      "assertion_reviewed": "Relatórios distinguem saída de launcher, reinício sintético, login, logout/reboot e operação sem login; a campanha nativa preparada permanece não executada.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "sha256": "cb7894347680647223323464904cc4513886783a5b72c149866fa3857193fb75",
+        "bytes": 136618,
+        "locator": "evidence.E01",
+        "assertion": "Three actual launcher processes converge to one PID/generation, ready; launcher exit does not stop it. Reuse keeps generation; explicit restart changes it; stale stop rejected; DRAINED receipt/run marker agree; DB retained.",
+        "limit": "Actual disposable detached service, no provider. Launcher exit is narrower than terminal/dashboard closure with admitted work."
+      },
+      "waiver_effect": "None. INV24 expressly requires distinguishing actualterminal/crash from unexecutedlogin/logout/suspend/reboot."
+    },
+    {
+      "id": "INV-25",
+      "literal": "O caminho padrão de conexão e uso cotidiano é completo pelo terminal, incluindo decisões com autoridade válida. Política organizacional explicitamente preexistente continua obrigatória; a configuração padrão nova não introduz dependência do dashboard.",
+      "assertion_reviewed": "Connect/init/work/decisões usam CLI e autoridade canônica vigente; fluxo padrão não exige dashboard e políticas preexistentes seguem obrigatórias.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-05]",
+        "assertion": "init participant e connect participant usam TerminalParticipant; selecionam identidade/workspace existentes por Bearer, revisam contexto e arquivo, aplicam por aprovação exata e mantêm checkpoints. Ausência/autoridade incompatível recusa, sem criação implícita ou elevação."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-26",
+      "literal": "O preset preenche a configuração comum do produto. Generalista é um perfil reutilizável, não uma identidade global compartilhada; reconnect não recria agente nem reaplica defaults sobre escolhas do usuário.",
+      "assertion_reviewed": "Preset é configuração versionada reutilizável, não identidade global. Finish/reconnect recuperam mesmo agente; merge só avança defaults não personalizados.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-18]",
+        "assertion": "Preset project-generalist revision 1 resolve identidade/permissões/configuração para contratos comuns; defaults preservam modelo/instruções existentes, decisões nativas e limites de autorização. Novo agente/workspace só na revisão/Finish autorizados, sem associação por nome/pasta."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-27",
+      "literal": "O preset preserva instruções, modelo, ferramentas e limites efetivos do harness quando suportados e verificáveis. Integração com Nexus não remove sandbox, não desabilita perguntas nativas nem concede administração global.",
+      "assertion_reviewed": "Preset usa harness_settings vazio, tool_access=ask e grants limitados; modelo/instruções/sandbox não são sobrescritos. Merge preserva customizações e política nativa existente.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-01]",
+        "assertion": "Contrato puro ParticipantClientConfig separado de HarnessHTTPTemplate, com cliente/build/formato/revisão, origem/endpoint, entrada, referência de ambiente e escopo. Exportação contém referências; contrato gerenciado mantém suas próprias guardas."
+      },
+      "waiver_effect": "None; obligation remains."
+    },
+    {
+      "id": "INV-28",
+      "literal": "Serviço ativo ou sessão pronta não encerram M1: solicitar trabalho, decidir pedidos autorizados e recuperar resultados pelo terminal precisam estar demonstrados no caminho escolhido.",
+      "assertion_reviewed": "Relatórios mantêm M1 incompleto quando há só serviço/sessão pronta; doctor não confunde initialize/readiness com tarefa, e trabalho terminal sintético é rotulado como tal.",
+      "primary_evidence": {
+        "repository": "nexus",
+        "path": "plans/agent_ops/evidence/r3-task-reconciliation/dx/matrix.json",
+        "sha256": "446c71315dafb37bd148f812c8279309f2b03702d11cc5cb190171c67b0578a7",
+        "bytes": 286943,
+        "locator": "tasks[id=DX-07]",
+        "assertion": "ProjectDiagnostics/ParticipantDiagnostics mantêm checagens independentes; modos ativos explícitos e default passivo. Adaptador comum v1 controla status/código/reason/next_action, preservando legado e separando metadata de prova."
+      },
+      "waiver_effect": "None; obligation remains."
+    }
+  ],
+  "method": "Read fixed17criteria, currentledger/report, source-backed historical task/invariant assertions, exact retained XML nodes (27invariants selected XML, all requested nodes PASS; INV03 guardedCoreimportreport), named MCP/controls XML, realT19/SVC15/reconnect/upgrades and independently extracted09/10. No tests or runtime executed. New artifact-generator typos failed before publication and are not product/test failures.",
+  "residual_actions": [
+    "Finish report per1085/1087/1089: objective/decisions/repos/migrations/contracts/tests/commands/results/evidence/notexecuted/risks/compatibility/rollback/nextdependency, actualM1 versus OSexceptions. Existing per-milestone details can be linked; no new campaign needed.",
+    "Finalize ledger/disposition preserving scenario NOT_RUN/IN_PROGRESS execution facts and AC13/14literalNOT_VERIFIED while accepting specifically waived remainder. AC01 may close retainedscope after final delivery reconciliation.",
+    "Root guide factual correction and final publicartifact review/commit/push; no additional product/runtime/provider/OS requirement identified."
+  ],
+  "conclusion": "Retained scope can conclude after those documentary actions WITH EXPLICIT THREE WINDOWS QUALIFICATION EXCEPTIONS. Never132/132executedPASS. All28invariants remain mandatory; user did not waive safety/authority/idempotency or completed nonOSobligations.",
+  "effects": {
+    "repo_edits": 0,
+    "new_tests": 0,
+    "runtime": 0,
+    "provider": 0,
+    "os": 0
+  }
+}

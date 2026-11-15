@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-15",
+  "status": "COMPLETE_WITH_EXPLICIT_USER_EXCEPTIONS",
+  "fixed_plan": {
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "unchanged": true
+  },
+  "user_scope_decision": "plans/agent_ops/evidence/r3-user-discarded-windows-scenarios/decision.json",
+  "discarded_scenarios": [
+    "SVC-T18",
+    "SVC-T21",
+    "SVC-T29"
+  ],
+  "execution_counts": {
+    "VERIFIED": 129,
+    "NOT_RUN": 2,
+    "IN_PROGRESS": 1
+  },
+  "delivery_counts": {
+    "verified": 129,
+    "discarded_by_user": 3,
+    "required_pending": 0
+  },
+  "criteria": {
+    "verified_in_retained_scope": 15,
+    "original_unverified_accepted_with_specific_exceptions": [
+      "AC-13",
+      "AC-14"
+    ]
+  },
+  "audits": [
+    {
+      "path": "plans/agent_ops/evidence/r3-user-discarded-windows-scenarios/ac-invariant-audit.json",
+      "sha256": "1ab39f020bbdbe489b2ea8344728848e247d1b504e46629728348e4c6268753b",
+      "bytes": 54485
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-user-discarded-windows-scenarios/task-audit.json",
+      "sha256": "f9389c9e8355a8a7a64571aa10648aca2a696320e62bb7966e2357c31f06445f",
+      "bytes": 14059
+    },
+    {
+      "path": "plans/agent_ops/evidence/r3-user-discarded-windows-scenarios/artifact-audit.json",
+      "sha256": "bbfc5bd1a74178fa30b1fa18ee85e882fe0f9bf94b436e929730c6e125ccebe9",
+      "bytes": 1999
+    }
+  ],
+  "final_report": {
+    "path": "plans/agent_ops/implementation-report.md",
+    "sha256": "476b0937c45429fc94fa01e2ac52fd4b5074f5b1b4f95e3c212c408af347797e",
+    "bytes": 114384
+  },
+  "guide": {
+    "path": "docs/service-lifecycle.md",
+    "sha256": "ea723c39bef9516f8601ad40a5285176c9ce7339e0acf3de39605588c846b111",
+    "bytes": 23620
+  },
+  "documentary_actions_closed": [
+    "Final report covers objective, decisions, repositories, contracts/migrations, validation, commands, results and evidence.",
+    "Report declares actual Windows scope, real/synthetic boundaries, known limits, compatibility, rollback and no remaining dependency.",
+    "Only the three explicitly discarded real Windows scenarios are removed from delivery acceptance; original facts and requirements remain.",
+    "Current lifecycle guide reconciles real crash recovery and native upgrades; no extra runtime action selected."
+  ],
+  "literal_statuses_before": {
+    "AC-01": "NOT_VERIFIED",
+    "AC-13": "NOT_VERIFIED",
+    "AC-14": "NOT_VERIFIED"
+  },
+  "unexecuted_scenario_statuses_preserved": {
+    "SVC-T18": "NOT_RUN",
+    "SVC-T21": "IN_PROGRESS",
+    "SVC-T29": "NOT_RUN"
+  },
+  "operational_state": {
+    "nexus": "stopped",
+    "connector": "stopped",
+    "all_six_campaign_processes": "normal exit0",
+    "force_used": false,
+    "data_and_integrations": "retained",
+    "new_windows_events": 0
+  },
+  "provider_accounting": {
+    "sonnet_tokens": 290372,
+    "token_limit": 500000,
+    "native_admissions": 5,
+    "server_admissions": 6,
+    "selected_admissions_remaining": 0,
+    "new_provider_calls_in_closure": 0
+  },
+  "scope_limits": [
+    "Not132executedPASS; real OS login/logout/suspension/reboot remain unqualified.",
+    "Only declared native versions and Windows contexts qualified; no before-login/POSIX/universal tool guarantee.",
+    "Historical Git/UAT-key risks remain as disclosed; delivered current artifact review does not rewrite history.",
+    "Original qualification statuses and historical milestone snapshots are preserved alongside current delivery acceptance."
+  ],
+  "final_checks": "Structural/pin/link/waiver/historical-prefix/Git checks are performed before final commit and push; they are not runtime proof."
+}

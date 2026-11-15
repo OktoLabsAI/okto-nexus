@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "path": "decision.json",
+      "sha256": "4d0b546803d676423c5cd4d658b945360254737926aabeca159e2316bd8c63d0",
+      "bytes": 4566
+    },
+    {
+      "path": "ac-invariant-audit.json",
+      "sha256": "1ab39f020bbdbe489b2ea8344728848e247d1b504e46629728348e4c6268753b",
+      "bytes": 54485
+    },
+    {
+      "path": "task-audit.json",
+      "sha256": "f9389c9e8355a8a7a64571aa10648aca2a696320e62bb7966e2357c31f06445f",
+      "bytes": 14059
+    },
+    {
+      "path": "artifact-audit.json",
+      "sha256": "bbfc5bd1a74178fa30b1fa18ee85e882fe0f9bf94b436e929730c6e125ccebe9",
+      "bytes": 1999
+    },
+    {
+      "path": "closure.json",
+      "sha256": "8735b5f0673d5461353ca48395ac6a738c0829c0859ce2841e11d8a4b75991fa",
+      "bytes": 3798
+    },
+    {
+      "path": "README.md",
+      "sha256": "f92cf07a15750cbd1eac08f7529771ab6d2865db1b22d4ffa0bb623286fb2eae",
+      "bytes": 1108
+    }
+  ],
+  "policy": "Explicit final public artifact allowlist; no credentials, raw runtime data or fabricated Windows event proof.",
+  "qualification": "Hashes validate integrity; runtime acceptance comes from retained scoped primary evidence and explicit user exceptions."
+}

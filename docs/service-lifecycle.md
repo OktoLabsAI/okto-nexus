@@ -90,9 +90,12 @@ installation record already present prevents an unauthorized detached fallback.
 
 ## Windows user logon integration
 
-The Windows adapter is implemented, with isolated host tests. Actual task
-registration, login/logout, crash recovery and installed-wheel campaigns remain
-unqualified; see the R3 ledger before treating this as a qualified deployment.
+The Windows adapter has isolated host tests and retained real installed-wheel
+campaigns for task registration, start/stop, data-preserving removal, definition
+ownership, execution context and bounded crash recovery. See the
+[R3 ledger](../LEDGER_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md) for each
+campaign's scope. Actual logon-triggered startup, logout, suspension/resume and
+reboot remain unqualified; they must not be inferred from those campaigns.
 
 ```powershell
 okto-nexus service install --user --start-at-login --home C:\absolute\nexus-home
@@ -120,8 +123,11 @@ counter never resets on READY, connect, or a lost start response. An unexpected
 exit zero also consumes the same budget. `SUPERVISOR_BACKOFF` reports waiting;
 `SUPERVISOR_RETRY_EXHAUSTED` reports the proven exhausted cycle, with attempt
 count and last owned-child exit. No runtime work or inference is replayed by
-the supervisor. Actual crash recovery of this new implementation still needs
-its separate installed/native campaign.
+the supervisor. The [installed/native campaign](../plans/agent_ops/evidence/r3-native-bounded-supervisor-execution/review.json)
+observed four injected child exits with code 3, three replacements, the
+one-minute backoff, exhaustion and 190 seconds without another attempt on both
+Server and Connector. That evidence does not claim arbitrary exit-code coverage
+or productive inference during the crash test.
 
 The task disables hard termination. The host compares the OS-exported
 definition fingerprint before each mutation. A missing ownership receipt or
@@ -370,7 +376,9 @@ retaining the old environment is not proof that rollback is safe after migration
 
 Qualification: detached replacement is exercised with installed wheels in two
 disposable Windows environments. Native update response-loss/recovery tests use
-injected Task Scheduler effects; actual native task update, logout/reboot,
-productive workloads, mixed historical release migration and POSIX campaigns
-remain separately unqualified. An old independently invoked foreground binary
+injected Task Scheduler effects. The later [canonical native task upgrades](../plans/agent_ops/evidence/r3-canonical-environment-upgrades/review.json)
+qualified the normal update path for both campaign tasks with data preserved;
+the subsequent [real work cycle](../plans/agent_ops/evidence/r3-sonnet09-10-remote-useful-success/review.json)
+qualified useful work on the target environment. These observations do not
+qualify logout/reboot, arbitrary historical release migration or POSIX. An old independently invoked foreground binary
 that predates these guards cannot be made cooperative by a new CLI.

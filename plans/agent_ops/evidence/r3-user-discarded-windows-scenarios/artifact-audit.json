@@ -1,0 +1,48 @@
+{
+  "status": "INDEPENDENT_DELIVERED_ARTIFACT_REVIEW_COMPLETE",
+  "reviewer": "v11_preparation",
+  "read_only_tool_reference": "36576e",
+  "core": {
+    "version": "0.0.14",
+    "source_commit": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+    "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "consumers": [
+      "Nexus vendor/wheels",
+      "Connector vendor/wheels"
+    ],
+    "payload_files_equal_to_source": 168,
+    "RECORD_rows_valid": 173,
+    "source_differences": 0,
+    "source_files_missing": 0
+  },
+  "connector": {
+    "version": "0.0.12",
+    "source_commit": "a8bd48bdc6d6e835c55eb601a7e7fa316453aa7b",
+    "wheel_sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+    "consumer": "Nexus vendor/ci",
+    "payload_files_equal_to_source": 126,
+    "RECORD_rows_valid": 132,
+    "source_differences": 0,
+    "source_files_missing": 0
+  },
+  "dependency_references_checked": [
+    "Nexus uv.lock registry vendor/wheels Core0.0.14",
+    "CI manifest wheel pins",
+    "Connector pyproject Core==0.0.14",
+    "Connector README --find-links vendor/wheels"
+  ],
+  "product_coverage": [
+    "Home source/static pins match d3713c and qualified desktop/mobile fixtures",
+    "Installed Q Home assets and canonical upgrades retain package/source equality",
+    "Real local and Connector work cycles with decisions/continuation/reopen",
+    "Two existing MCP clients and consented canonical cooperation",
+    "Canonical attention controls and optional read-only Herdr observations",
+    "Schema6 downgrade refusal and no destructive database rollback claim"
+  ],
+  "limits": [
+    "Home visual fixtures are separate from live backend proofs.",
+    "OS login/logout/suspend/reboot not performed.",
+    "Only the declared Windows scopes qualified; no POSIX or before-login guarantee.",
+    "No new model/provider call, install, sync, build or service control in this final audit."
+  ]
+}

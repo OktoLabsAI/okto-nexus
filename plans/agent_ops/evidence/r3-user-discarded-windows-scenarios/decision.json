@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-15",
+  "status": "EXPLICIT_USER_SCOPE_DECISION",
+  "user_instruction": "vamos descartar esses",
+  "context": "Direct reply to the final report identifying the three remaining real Windows scenarios after129/132 verified: SVC-T18, SVC-T21, SVC-T29.",
+  "subsequent_instruction": "Ao final faca commit e push de tudo",
+  "decision": "Remove these three remaining qualification scenarios from the requested delivery; retain their unverified execution facts and implemented feature contracts.",
+  "discarded_scenario_ids": [
+    "SVC-T18",
+    "SVC-T21",
+    "SVC-T29"
+  ],
+  "scope_boundaries": [
+    "No scenario is relabeled as executed or passed.",
+    "Only the remaining OS-event proof predicates shared by these three scenarios are excepted; other AC13/AC14 predicates and implemented lifecycle behavior remain required.",
+    "No logout, restart, suspension or other Windows event is selected or executed.",
+    "No deletion of implementation, evidence, data, user tasks or original plan."
+  ],
+  "fixed_plan": {
+    "path": "PLANO_CODEX_NEXUS_INTEGRACAO_ATENCAO_ONBOARDING.md",
+    "sha256": "20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996",
+    "unchanged": true
+  },
+  "before": {
+    "SVC-T18": {
+      "requirement": "Início no login é comprovado em SO real; resultado não é apresentado como prova de boot sem login.",
+      "status": "NOT_RUN",
+      "evidence": [
+        "plans/agent_ops/evidence/pr02-enablement-installed.xml",
+        "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+      ],
+      "remaining": "Actual OS logon startup must be observed; no boot-without-login claim.",
+      "remaining_kind": "real_login_campaign",
+      "result": "Only logon task definition and injected login facts proven. Scope/remaining: Actual OS logon startup must be observed; no boot-without-login claim."
+    },
+    "SVC-T21": {
+      "requirement": "Stop pelo CLI conclui drain antes de acionar supervisor; timeout de espera não força término. Logout/shutdown externo registra interrupção/incerteza honestamente.",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "plans/agent_ops/evidence/pr01-foreground-shutdown.xml",
+        "plans/agent_ops/evidence/pr01-start-stop.xml",
+        "plans/agent_ops/evidence/pr02-nexus-user-service-final.xml",
+        "plans/agent_ops/evidence/r3-cooperative-drain/artifact-manifest.json",
+        "plans/agent_ops/evidence/r3-cooperative-drain/milestone.md",
+        "plans/agent_ops/evidence/r3-cooperative-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json",
+        "plans/agent_ops/evidence/r3-m1-partial-execution/campaign/summary.json",
+        "plans/agent_ops/evidence/r3-released-session-drain/qualification.json",
+        "plans/agent_ops/evidence/r3-cli-drain-controls/qualification.json"
+      ],
+      "remaining": "Actual external logout/shutdown bounded persistence remains unqualified.",
+      "remaining_kind": "real_external_shutdown",
+      "result": "Installed CLI/HTTP/Core drain preserves admitted work and does not force on timeout. Explicit force is generation-bound and requires an existing expired drain. Supervisor stop intent precedes containment; actual external logout/shutdown remains pending.",
+      "subscopes": {
+        "actual_m1_wait_timeout_does_not_force": "VERIFIED"
+      }
+    },
+    "SVC-T29": {
+      "requirement": "Suspensão/retorno, logout e reboot são campanhas distintas; não há retomada produtiva por inferência de disponibilidade.",
+      "status": "NOT_RUN",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-task-reconciliation/svc/audit.json"
+      ],
+      "remaining": "Separate actual-context campaigns, neither prepared finite install lifecycle nor synthetic runtime proves them.",
+      "remaining_kind": "real_platform_campaign",
+      "result": "No suspension/resume/logout/reboot productive survival inferred from availability. Scope/remaining: Separate actual-context campaigns, neither prepared finite install lifecycle nor synthetic runtime proves them."
+    }
+  },
+  "scenario_counts": {
+    "verified": 129,
+    "discarded_by_user": 3,
+    "remaining_required": 0
+  },
+  "effects": {
+    "os_events": 0,
+    "service_controls": 0,
+    "provider_calls": 0
+  },
+  "final_retained_scope_audit": "PENDING; exception does not itself prove other deliverables complete."
+}

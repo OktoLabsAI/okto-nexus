@@ -1,104 +1,148 @@
-# Agent operations R3 — implementation report
+# Agent operations R3 — relatório final
 
-## Estado corrente — 2026-11-15, relatório intermediário
+## Encerramento em 2026-11-15
 
-A entrega integral ainda não está concluída. A matriz corrente contém **129
-cenários VERIFIED, 1 IN_PROGRESS e 2 NOT_RUN**. Os cortes datados abaixo são
-históricos; suas negativas de execução e autorizações antigas não substituem o
-estado corrente nem ampliam permissões. O plano permanece byte a byte com SHA-256
+**Entrega concluída no escopo ajustado explicitamente pelo usuário: 129 cenários
+verificados e 3 descartados, sem obrigação remanescente nesse escopo.** Não são
+132 testes aprovados. Após receber a lista dos três cenários restantes, o usuário
+determinou “vamos descartar esses” e pediu commit e push de tudo ao final.
+
+A [decisão de escopo](evidence/r3-user-discarded-windows-scenarios/decision.json)
+dispensa SVC-T18, SVC-T21 e SVC-T29 e apenas as provas de eventos Windows ainda
+faltantes que eles compartilham com AC-13/14. Os fatos originais são preservados:
+SVC-T18/29 não executados, SVC-T21 parcialmente qualificado e AC-13/14 sem prova
+literal integral desses eventos. Implementação, drain, recuperação, autoridade,
+segurança e as 28 invariantes continuam exigidos. Não ocorreu login de teste,
+logout, suspensão ou reboot e nenhum deles foi convertido em PASS.
+
+O plano original mantém o SHA-256
 `20d0fafdedc793b97a277f5d41355d7d597ff724a77687394215eea3113ba996`.
+A [auditoria das tarefas](evidence/r3-user-discarded-windows-scenarios/task-audit.json)
+cobre as 59 entregas; a [auditoria de aceite](evidence/r3-user-discarded-windows-scenarios/ac-invariant-audit.json)
+relaciona os 17 critérios e as 28 invariantes a fontes, assertions, XMLs e
+campanhas reais. A [reconciliação final](evidence/r3-user-discarded-windows-scenarios/closure.json)
+fecha os atos documentais que ainda estavam abertos nesses cortes de auditoria.
+Os registros antigos abaixo permanecem como histórico, com seus custos, falhas e
+limites originais; não definem novas pendências da entrega atual.
 
-O ciclo útil local com Codex, decisão pelo terminal e continuação na mesma sessão
-foi comprovado em [W17](evidence/r3-m1-revision17-recovery-execution/criterion-review.json).
-A [medição BASE-06](evidence/r3-base06-stage-measurement-consolidation/review.json)
-já consolida as etapas locais. O [ciclo remoto09/10](evidence/r3-sonnet09-10-remote-useful-success/review.json)
-completa a rota pelo Connector: permissão nativa decidida pelo operador,
-relatório útil correto, continuação na mesma sessão e reencontro por um novo
-processo CLI. **AC-11 está verificado** e a rota completa pelo terminal prevista
-em M1 foi demonstrada. Login real e a entrega integral continuam pendentes.
+## Objetivo, decisões e mudanças por repositório
 
-Os incrementos recentes mantêm as versões e branches solicitadas:
+O caminho padrão entrega daemon, preset generalista e trabalho completo pelo
+terminal. MCP HTTP direto, autoridade do Server, execução pelo Core e papel
+remoto do Connector foram preservados. Não foi criado outro adaptador nativo,
+proxy MCP do Nexus ou coordenador distribuído. Dashboard e Herdr são opcionais.
 
-| Repositório | Branch / versão | Mudança e evidência corrente |
+| Repositório | Branch / versão | Resultado entregue |
 |---|---|---|
-| Nexus | `feature/v0.3.3` / 0.3.3 | Home inicial com resumo dos agentes, harnesses, comunicações e atenção; leitura canônica e bounded, sem comandos de lifecycle pela observação. [Revisão da Home](evidence/r3-home-overview-clarification/review.json). Status passivo também tolera uma raiz absoluta de discovery que deixou de existir; start continua estrito. |
-| Connector | `feature/v0.0.12` / 0.0.12 | Checkpoint tipado para reconciliação accepted quando não existe direct-release outbox; mantém os fences, a identidade da abertura e a distinção entre ACK e encerramento físico. A evolução de schema do journal é 5→6. |
-| Connector Core | `feature/v0.0.14` / 0.0.14 | Reconhecimento da permissão nativa PowerShell com validação do comando; a decisão continua canônica e não vira permissão automática ou persistente. |
+| Nexus | `feature/v0.3.3` / 0.3.3 | Lifecycle e serviço do usuário; setup/Finish e identidade persistente; configuração de participantes; decisões e resultados no CLI; coordenação canônica; central de atenção; observação externa; Home com resumo de agentes, harnesses, comunicações e atenção. |
+| Connector | `feature/v0.0.12` / 0.0.12 | Lifecycle remoto, contexto salvo, bindings/grants/credenciais no escopo correto, reconexão e fences de ownership; reconciliação de encerramento e checkpoint tipado. |
+| Connector Core | `feature/v0.0.14` / 0.0.14 | Contratos de supervisão limitada, compatibilidade de configuração e interação nativa; permissão PowerShell reconhecida e validada, mantendo decisão humana canônica. |
 
-As [qualificações e upgrades canônicos](evidence/r3-canonical-environment-upgrades/review.json)
-retêm os artefatos instalados, fontes, hashes, testes e limites. O pacote Q foi
-aplicado aos dois ambientes canônicos. O apply preservou os dados e não iniciou
-serviços; os starts e a atividade posterior são efeitos separados. As tarefas
-continuam no escopo do usuário Windows e da sessão interativa; não se declara
-boot sem login nem outra plataforma qualificada. Pacotes não foram publicados
-e as branches não foram mescladas na main.
+As branches partiram das mains recuperadas e receberam os bumps antes da
+implementação. Commits e pushes dos marcos estão no ledger. Não houve publicação
+de pacote nem merge na main.
 
-A [campanha Sonnet05/07](evidence/r3-sonnet-denial05-native07-svc09/review.json)
-preserva a recusa05 antes de Core e a falha real07. O pedido07 terminou CANCELLED,
-sem relatório útil e sem decisão aceita após expirar a pergunta de120s. A
-reconciliação RO110 não altera o checkpoint original com falha/cursor104; a
-continuação08 permanece inelegível e os seus registros não foram reutilizados.
+## Entregas e validação por frente
 
-O usuário autorizou prosseguir com a proposta09/10 mantendo a sessão Windows.
-O pedido útil09 consumiu73.180tokens e a continuação10 consumiu36.766; o acumulado
-passou de180.426 para **290.372tokens, Native5/Server6**, sob teto500.000 e
-prevenção480.000. As duas alocações novas foram consumidas: margem de tokens
-não autoriza outra chamada. O plano consumido preserva uma frase antiga200k;
-o recibo explícito atual, a semente e a política executada registram500k/480k.
-Os limites de admissão e a reserva menor apenas da continuação textual foram
-selecionados antes de compor e executar esse plano; não houve refund ou reset.
+| Frente / marcos | Implementação e resultado | Evidência consolidada |
+|---|---|---|
+| BASE / PR-00 | Inventário, fronteiras, ADR, matriz e etapas reais de primeiro uso. | [Mapa e auditoria](evidence/r3-task-reconciliation/svc/audit.json), [tempos locais](evidence/r3-base06-stage-measurement-consolidation/review.json). |
+| SVC / PR-01–02 | Instância única, prontidão, start/reuse, foreground, tarefas Windows, contexto, drain, recuperação limitada e upgrades. | [Contratos](evidence/r3-task-reconciliation/svc/audit.json), [recuperação real](evidence/r3-native-bounded-supervisor-execution/review.json), [upgrades](evidence/r3-canonical-environment-upgrades/review.json). |
+| Primeiro uso / PR-03 | Preset e ciclo completo local/Connector: pedido, permissão, decisão, resultado, continuação e reencontro pelo CLI. | [Local W17](evidence/r3-m1-revision17-recovery-execution/criterion-review.json), [remoto 09/10](evidence/r3-sonnet09-10-remote-useful-success/review.json). |
+| Participantes / PR-04 | Dois formatos MCP, credencial protegida, seleção explícita de origem, CAS e gravação segura; dois clientes distribuídos existentes. | [Matriz DX](evidence/r3-task-reconciliation/dx/matrix.json), [clientes reais](evidence/r3-two-existing-mcp-clients/qualification.json). |
+| Coordenação / PR-05 | Mensagens/handoffs, claims, deduplicação, waits e recuperação de resposta sem repetir efeito ou elevar autoridade. | [Cooperação MCP](evidence/r3-two-mcp-cooperation/qualification.json), [contratos conjuntos](evidence/r3-joint-contracts/integration.json). |
+| Atenção / PR-06–07 | Read-model, episódios e preferências pessoais; ações autorizadas usam os controles canônicos. | [Matriz ATN/OBS](evidence/r3-task-reconciliation/atn-obs/matrix.json). |
+| Observação / PR-08–09 | Coleta e correlação externas, retenção e UI; Herdr opt-in e somente leitura, sem autoridade produtiva. | [Matriz ATN/OBS](evidence/r3-task-reconciliation/atn-obs/matrix.json), [limites de compatibilidade](evidence/r3-compatibility-boundaries/traceability/traceability.json). |
+| Qualificação / PR-10 | Pacotes instalados, composição dos contratos, testes de carga/idle, rollout e revisão de artefatos. | [Integração](evidence/r3-joint-contracts/integration.json), [artefatos atuais](evidence/r3-user-discarded-windows-scenarios/artifact-audit.json). |
 
-A decisão PowerShell pelo CLI autenticado ficou CONFIRMED antes da expiração.
-O relatório tem4linhas, soma10 e hash do CSV correto, conferidos separadamente
-com Decimal. A continuação respondeu “The reported sum is **10**.” na mesma
-sessão canônica e nativa. Uma nova chamada `work status --session-id` reencontrou
-ambos os resultados e a decisão, sem nova inferência. Nenhuma visita ao dashboard
-foi necessária. A configuração observada reportou Claude2.1.323,
-`claude-sonnet-5-5`, permissionMode default e cwd revisado. Esforço efetivo
-continua UNKNOWN; referência de memória não revela conteúdo, e catálogo de
-ferramentas não significa que todas foram exercidas. **DX-T40/DX-T43 VERIFIED**
-nesses escopos, sem alegar enforcement universal.
+A [Home inicial](evidence/r3-home-overview-clarification/review.json) diferencia
+sessões gerenciadas de observações externas. Seus testes de desktop/mobile usam
+fixtures declaradas; isso não é apresentado como execução real de todos os
+fluxos de harness. Os controles da central não se tornam fonte paralela de
+lifecycle e observação não concede autorização.
 
-BASE-06 agrega as medições históricas já retidas às etapas remotas observadas:
-87,318s para o pedido útil e2,11221s para a continuação, de criação no Server ao
-recibo SUCCEEDED. Esses intervalos incluem admissão, espera do operador e
-transporte; não são latência pura do modelo nem um benchmark homogêneo entre
-pacotes. O relatório mantém as tentativas anteriores e seus custos.
+## Campanhas reais, contexto e comandos
 
-O start Nexus inicialmente retornou3/UNREACHABLE; a observação posterior provou
-READY do mesmo PID/geração, preservando o timeout e sem repetir start. Ambos os
-serviços temporários terminaram com drain normal, seis saídas físicas0 e tarefas
-inativas. Não foi usada força e nenhuma sessão do Windows foi encerrada.
+O ciclo local W17 e o remoto 09/10 comprovam AC-11 e a rota terminal de M1. Na
+campanha remota, o serviço iniciou Claude Code 2.1.323, modelo
+`claude-sonnet-5-5`, permissionMode default e cwd revisado. O esforço efetivo
+continua UNKNOWN. Referências de instruções não revelam seu conteúdo; catálogo
+de ferramentas não prova exercício universal. A permissão PowerShell real foi
+decidida pelo operador autenticado e ficou CONFIRMED antes de expirar.
 
-SVC-T09 foi verificado por fechamento real de terminal e dashboard durante a
-mesma operação admitida, com os seis handles das coortes ainda vivos. Esse
-recorte comprova ownership; não transforma o resultado cancelado em sucesso.
+O relatório remoto tem 4 linhas, soma 10 e SHA-256 do CSV correto. Uma conferência
+independente com Decimal confirmou o resultado. A continuação respondeu
+“The reported sum is **10**.” na mesma sessão nativa e canônica. Um novo processo
+`work status --session-id` reencontrou os dois resultados e a decisão. Nenhuma
+visita ao dashboard foi necessária. O fechamento real de terminal/dashboard que
+preserva a operação possui sua [prova separada SVC-T09](evidence/r3-sonnet-denial05-native07-svc09/review.json).
 
-O fechamento ainda exige **SVC-T18, SVC-T21 e SVC-T29**, para login e eventos distintos de
-suspensão/retorno, logout e reboot com história conhecida. A preparação da
-automação não comprova esses eventos. Após logout/reboot, o login será manual;
-nenhum desses eventos foi executado neste corte. Não há nova campanha de crash,
-novo útil local ou teste obrigatório adicional de cofre como condição inventada.
+O total Sonnet foi **290.372 de 500.000 tokens**, com prevenção em 480.000.
+09 consumiu 73.180 e 10 consumiu 36.766; os 180.426 anteriores, inclusive falhas,
+permanecem contabilizados. As cinco alocações Native e seis admissões Server
+estão consumidas; o saldo de tokens não autoriza outro pedido. Não é alegado
+um limite atômico de cobrança do provedor. Codex e suas autorizações anteriores
+continuam registrados separadamente no histórico.
 
-A [preparação automatizada dos eventos](evidence/r3-windows-automatic-event-preparation/review.json)
-retém separadamente os grupos focais8/6/3, a vinculação exclusiva da tentativa ao
-before e a leitura RO de34 registros históricos de energia. Nenhuma janela,
-tarefa observadora ou evento foi selecionado. A coleta independente de transição
-não sobrescreve o after original e não infere suspensão do retorno de uma API.
+BASE-06 conserva os relógios de cada etapa: instalação de produto v12
+12,9945733s; útil local W17 148,2299977s monotônicos; remoto 09 87,318s e
+continuação 10 2,11221s, de criação no Server ao recibo SUCCEEDED. Estes últimos
+incluem admissão, transporte e espera do operador, não apenas latência do modelo.
+Não foram somados relógios incompatíveis nem inventadas durações históricas.
 
-Por instrução posterior do usuário em2026-11-15, os testes que encerram a sessão
-do Windows (logout e reinício) foram postergados. Suas evidências continuam
-pendentes; a preparação fica preservada para uma janela futura indicada pelo
-usuário. A campanha remota permanece sujeita às suas próprias autorizações.
+Os manifests retêm comandos e resultados de testes fonte/instalados, pytest,
+frontend, build de wheels e qualificação do pacote. Os comandos de qualificação
+registrados usam `rtk`. Execuções instaladas que repetem casos fonte não são somadas como
+novos testes independentes. Inspector 0.21.2 e FastMCP 2.14.7 usaram TCP real e
+credenciais/resultados sintéticos declarados. As campanhas de provedor W17 e
+09/10 são distintas desses contratos. Os checks finais de ledger e links
+validam estrutura e rastreabilidade; não substituem provas de comportamento.
 
-AC-01/13/14 continuam não verificados. Ao obter as provas restantes, será
-necessário reconciliar a matriz e este relatório requisito por requisito,
-incluindo contexto, decisões, tempos, compatibilidade e riscos observados. Este
-texto é atualização intermediária, não o relatório final de uma entrega aceita.
-Os comandos e resultados detalhados permanecem nos manifestos e recibos ligados
-acima. As mudanças de código podem ser revertidas por commit; rollback de
-ambiente/banco exige revisão compatível com o schema corrente, sem downgrade
-destrutivo ou repetição de trabalho incerto.
+## Plataforma, contratos, migrações e rollout
+
+A plataforma real declarada é Windows, no escopo do próprio usuário. A integração
+usa Task Scheduler com InteractiveToken/LeastPrivilege e supervisor foreground;
+não é Windows Service nem promete disponibilidade antes do login ou após logout.
+Registro, start/stop, proteção da definição, contexto/cwd/PATH, diagnóstico de
+credencial, crash/backoff/limite, remoção e preservação de dados têm campanhas
+próprias. As provas de eventos Windows descartadas continuam não qualificadas.
+POSIX e outras versões de harness mantêm os limites explícitos das suas provas.
+
+O journal Connector evoluiu de schema 5 para 6 com reconciliação tipada; leitores
+antigos são recusados. As revisões históricas NXL e a autoridade canônica foram
+preservadas. Os upgrades canônicos atualizaram os ambientes sem iniciar serviço
+ou migrar banco no apply, preservando identidade, tarefas e os conjuntos de 6 e 30
+arquivos de dados observados. Inicialização posterior usa migração/reconciliação
+canônicas; isso não é confundido com efeito do apply. Os wheels vendorizados de
+Core e Connector correspondem aos HEADs de código e têm RECORD verificado.
+
+O último start Nexus retornou timeout (código 3); o mesmo PID/geração ficou READY depois e
+foi observado sem repetir start. As paradas normais concluíram drain e os seis
+processos exatos encerraram com código 0, sem força. Ambos os serviços estão
+parados; dados e integrações da campanha foram preservados. Não houve evento de
+sistema operacional no fechamento.
+
+## Limites, rollback e próxima dependência
+
+Os três cenários descartados e seus predicados compartilhados são exceções
+explícitas, não prova de comportamento do Windows. Campos nativos ausentes
+permanecem desconhecidos; não há afirmação de conteúdo pessoal de instruções,
+enforcement universal ou cobertura de todo código de saída/cliente/plataforma.
+A revisão de segredos cobre o snapshot entregue e os artefatos allowlisted;
+retenção histórica de Git e validade desconhecida de antiga chave UAT permanecem
+os riscos já registrados, sem reescrita de histórico ou revogação não solicitada.
+
+Reverter código é uma operação de Git. Rollback operacional exige ambiente e
+schema compatíveis, preservando dados e reconciliando qualquer trabalho incerto;
+reter o ambiente antigo não autoriza downgrade destrutivo do banco. Nenhum
+rollback foi executado como parte do encerramento.
+
+Não resta dependência obrigatória no escopo mantido. Reabrir as campanhas de
+login/logout/suspensão/reboot será trabalho futuro explicitamente selecionado.
+O ledger humano na raiz, o JSON e as auditorias preservam a diferença entre
+implementação, qualificação original e aceite da entrega com as três dispensas.
+
+## Histórico de implementação e campanhas
 
 The immutable scope is the repository-root R3 plan. Progress and limitations are
 recorded in `ledger.json` and the root ledger. No scenario is qualified merely
