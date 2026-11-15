@@ -1,0 +1,65 @@
+{
+  "status": "PREPARED_ROOT_REVIEW_PENDING",
+  "scope": "ONE_NORMAL_CONNECTOR_START_AFTER_CONSENT_AND_OLD_COHORT_EXIT",
+  "pins": {
+    "connector-consent-restart/entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\entry.py",
+      "sha256": "a58a54ae0386da75c03ba4152363fb2fd226502e1913b8a5583b478e3dbb9322"
+    },
+    "recovery_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e"
+    },
+    "recovery_connector.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4"
+    },
+    "recovery_observation.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c"
+    },
+    "lifecycle-plan.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+      "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+    },
+    "package/installation.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+      "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c"
+    },
+    "public/connector-owner-selection.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-owner-selection.json",
+      "sha256": "51a0bf2690a04d2c8b494de109f277b738649f0ff7ff4ffe234401d048272906"
+    },
+    "public/connector-stop-returned.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-stop-returned.json",
+      "sha256": "9f528343b5b493cbdd6c7f5707b75326b25e4c9c9c4aaeef35b138357d0f3558"
+    },
+    "public/rotation-import-result.json": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\rotation-import-result.json",
+      "sha256": "6c2aac0f5f96837dca5dd8ece02883cba7c6a56a3625f5780f1c648879b264f5"
+    }
+  },
+  "old_stop_returncode_preserved": 4,
+  "start_requires": [
+    "old_three_physical_exits",
+    "native_inactive",
+    "canonical_absence",
+    "same_task_digest",
+    "persisted_consent_true",
+    "identity_epoch2",
+    "same_nexus_ready"
+  ],
+  "new_connector_namespace": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart",
+  "nexus_namespace": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t",
+  "effects_not_executed": true,
+  "force_authorized": false,
+  "provider_calls_selected": 0,
+  "cli_product_start_timeout_seconds": 45,
+  "wrapper_wait": "retained_no_force_no_replay",
+  "qualification": {
+    "tests": 2,
+    "passed": 2,
+    "tool": "65a21c",
+    "seconds": 0.002
+  }
+}

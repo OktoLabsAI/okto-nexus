@@ -1,0 +1,48 @@
+{
+  "classification": "SOURCE_FIX_OFFLINE_QUALIFIED_NO_LIVE_APPLICATION",
+  "problem": "Pre-readiness control waits for readiness during drain while shutdown alone signals its stop event.",
+  "change": "Fence and join one owned startup stop task; wait for partial execution quiescence; retain UNKNOWN for recovery, cleanup, exceptions or remaining owners.",
+  "sources": {
+    "src/okto_nexus_connector/daemon/r4_control.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-r4-startup-drain-qualification\\source\\src\\okto_nexus_connector\\daemon\\r4_control.py",
+      "sha256": "1f8b3d886e4fe098974bed62dc3dc893fbd6366f836725331f4cfcd435179686"
+    },
+    "tests/unit/test_r4_startup_drain.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-r4-startup-drain-qualification\\source\\tests\\unit\\test_r4_startup_drain.py",
+      "sha256": "e748a362486ff99a9eca6d1c78077de98f2d5f55309ef0c00a99ee9131f9c379"
+    }
+  },
+  "tests": {
+    "passed": 49,
+    "failures": 0,
+    "new_cases": 8,
+    "elapsed_seconds": 13.6,
+    "tool_result": "32f04a",
+    "session": 48235,
+    "xml_sha256": "f9635f100cc6d66d4902995a869f9cb2cfa9bfdd0af30acaf3ea2da79078b923",
+    "runtime_unchanged_after_test": true,
+    "test_only_after_run": "Equivalent imported fixture alias assignment avoids Ruff F811; no test logic changed; root accepted 49 cases without redundant rerun."
+  },
+  "command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe -I -B -X utf8 C:/Users/jpamb/AppData/Local/Temp/run_r4_startup_drain_qualification.py",
+  "module_origin": "Connector repository src inserted explicitly; existing isolated installed package supplies Core/test dependencies; not installed-fix qualification.",
+  "checks": {
+    "ruff_F": "PASS 91c2c8",
+    "diff_check": "PASS aabae9",
+    "ruff_general": "Existing E731 at r4_control.py original line78 unchanged; new F811 fixture alias fixed."
+  },
+  "reviews": {
+    "root": [
+      "a8036a",
+      "f34141"
+    ],
+    "peer": [
+      "e910f2",
+      "930b14"
+    ]
+  },
+  "effects": {
+    "services_started": false,
+    "providers_invoked": false,
+    "installed_package_modified": false
+  }
+}

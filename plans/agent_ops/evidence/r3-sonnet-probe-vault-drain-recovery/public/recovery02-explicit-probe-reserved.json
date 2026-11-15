@@ -1,0 +1,38 @@
+{
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "executor",
+    "probe",
+    "--server-id",
+    "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+    "--harness",
+    "claude_stream",
+    "--candidate-ref",
+    "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa",
+    "--inventory-revision",
+    "sha256:cdec338add96ccc02cba8f33ec2e5a52fdbaacc2a04f58e3318859ed8b03b2de"
+  ],
+  "source_sha256": "7c63ec42bee41d3507fb54e227f2a961abbfcf08bb0db566fa95eeea48aeada7",
+  "full_inventory_revision": "sha256:cdec338add96ccc02cba8f33ec2e5a52fdbaacc2a04f58e3318859ed8b03b2de",
+  "candidate_source_exact": true,
+  "native_sha256": "5064e6e0572dca86257363ca04d48653eef20ef27f1bd04b504ed7199ed3fd13",
+  "path_source_context_sha256": "d53a6f24b771efb418597b8fb91143c2b28efacad1df4f51e389741254f7bb21",
+  "checkpoint_mutation_selected": false,
+  "discovery_configuration_mutation_selected": false,
+  "native_checks_selected": [
+    "version",
+    "protocol"
+  ],
+  "provider_model_calls_selected": 0,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

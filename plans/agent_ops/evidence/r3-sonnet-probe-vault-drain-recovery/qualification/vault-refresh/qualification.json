@@ -1,0 +1,77 @@
+{
+  "status": "SOURCE_QUALIFIED_NO_REAL_VAULT_OR_SERVICE_EXECUTION",
+  "problem": "A daemon created before CLI fallback consent retained RestrictedFileVault approval=False across state.reload.",
+  "change": "Refresh only the shared restricted-file gate from the persisted preference is True, before starting/reusing transports. Same vault/backend and clients, no reopening or secret read during refresh. Missing/false/nonboolean revoke future local file access; already delivered material and canonical grant authority are not revoked by this local update.",
+  "source_pins": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\daemon\\app.py",
+      "sha256": "3da571f076ee19627ee43fc3c194d7598a8499e84ea26b9d9a6ce3d5feb80397",
+      "bytes": 80270
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\src\\okto_nexus_connector\\identity\\vault.py",
+      "sha256": "75bfbc9e3f282f13b2abfad28fdbfcbf97701174fe204eb3116898eee91e89ce",
+      "bytes": 12128
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_daemon_vault_reload.py",
+      "sha256": "9a2baf5260f6d3e013b5cb5601959beec8733af79b624a1a7d58bec481d4940b",
+      "bytes": 5061
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit\\test_vault.py",
+      "sha256": "d258f0ae4d07594f5397610055fbc0f65c8d38ec7fe76e1b06e7fc016596a99f",
+      "bytes": 2940
+    }
+  ],
+  "tests": {
+    "passed": 16,
+    "failed": 0,
+    "new_cases": 9,
+    "existing_vault_regressions": 7,
+    "seconds": 2.26,
+    "tool": "1acf40",
+    "xml": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-daemon-vault-reload-eb1ae6o5\\final.xml",
+      "sha256": "882579369fae91d7c7ad613298f176f898028e4b7cfaebcd1a9bb57c14946dd3",
+      "bytes": 2161
+    }
+  },
+  "command": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-daemon-vault-reload-eb1ae6o5\\run_tests.py"
+  ],
+  "runner": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-daemon-vault-reload-eb1ae6o5\\run_tests.py",
+    "sha256": "ce45d327d08dfb7f6315ea5a9e55b943fb1fe2375773745685fd5a98e7d6ed0d",
+    "bytes": 453
+  },
+  "import_mode": "Runner prepends Connector src and repository root to sys.path; dependencies use immutable own R package. This is source testing, not installed qualification.",
+  "checks": {
+    "ruff": "c9c33c PASS --select F for two source files and new test",
+    "git_diff_check": "be5dd0 PASS",
+    "root_review": [
+      "136ae9",
+      "5c8bed"
+    ]
+  },
+  "preparation_antecedent": {
+    "tool": "7d3e67",
+    "status": "Python -c runner-write quoting SyntaxError before creating script or running any test",
+    "resolved": "d2b2d0 here-string created actual runner; first test execution was1acf40"
+  },
+  "effects": {
+    "service": 0,
+    "provider": 0,
+    "personal_vault": 0,
+    "real_credentials": 0,
+    "package_install_or_rebuild": 0
+  },
+  "qualification_boundary": "Only temporary synthetic sentinel and state file, existing real vault implementation and daemon composition; R4 control not started and keyring fixture never queried."
+}

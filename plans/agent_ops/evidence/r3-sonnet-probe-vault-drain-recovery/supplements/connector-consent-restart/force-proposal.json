@@ -1,0 +1,120 @@
+{
+  "status": "PREPARED_USER_AUTHORIZATION_REQUIRED_NOT_EXECUTED",
+  "target": {
+    "owner": {
+      "pid": 36068,
+      "generation": "8b35799e3ae1c6c3feec7cce45ee5162",
+      "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62"
+    },
+    "cohort": {
+      "cycle_id": "16bedd50e8807474af5366e08fe39346",
+      "phase": "running",
+      "attempts_started": 1,
+      "child_acknowledged": true,
+      "parent": {
+        "pid": 41808,
+        "birth": 134391887371126766
+      },
+      "launcher": {
+        "pid": 42508,
+        "birth": 134391887392896802
+      },
+      "child": {
+        "pid": 36068,
+        "birth": 134391887393343984
+      }
+    },
+    "task": {
+      "name": "OktoNexus-connector-1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62",
+      "state": 4,
+      "digest": "ea5d4ee2340054460fb04f0f0c83bf1f5a8dced3380f5b32409a504f9ec465aa"
+    }
+  },
+  "pins": {
+    "source": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\force_once.py",
+      "sha256": "179da35eddf2bf32f3871e907828a05615a6ac64775975723875d8667e556950"
+    },
+    "context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e"
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4"
+    },
+    "observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c"
+    },
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+      "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+    },
+    "installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+      "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c"
+    },
+    "selection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-owner-selection.json",
+      "sha256": "51a0bf2690a04d2c8b494de109f277b738649f0ff7ff4ffe234401d048272906"
+    },
+    "watcher": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-exit-watch-started.json",
+      "sha256": "f7a181d0a72b11f515f4406ad4dcf5e5e8040077f496f84774258781770697ba"
+    },
+    "normal_stop": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\public\\connector-stop-returned.json",
+      "sha256": "9f528343b5b493cbdd6c7f5707b75326b25e4c9c9c4aaeef35b138357d0f3558"
+    }
+  },
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "daemon",
+    "stop",
+    "--timeout",
+    "45",
+    "--force",
+    "--expected-generation",
+    "8b35799e3ae1c6c3feec7cce45ee5162"
+  ],
+  "force_authorized": false,
+  "max_canonical_force_calls": 1,
+  "user_authorization_receipt": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\connector-consent-restart\\force-authorization.json",
+  "receipt_status_required": "SPECIFIC_CONNECTOR_FORCE_AUTHORIZED",
+  "provider_calls_selected": 0,
+  "os_termination_calls_selected": 0,
+  "uninstall_selected": false,
+  "restart_selected": false,
+  "key_operations_selected": false,
+  "normal_stop_preserved": {
+    "returncode": 4,
+    "state": "stopping"
+  },
+  "root_observer_session": 64647,
+  "before_effect": [
+    "matching live parent launcher child and observer retained handles",
+    "same generation cycle task digest",
+    "canonical DRAINING_PENDING force_available true force_requested false",
+    "explicit user receipt pinned to this proposal"
+  ],
+  "after_effect": "preserve canonical return and original watcher physical proofs; no retry; restart remains gated on all three physical exits and native/canonical absence",
+  "observer_force_false": "observer made no termination calls; does not mean campaign never used force",
+  "wrapper_wait": "root-retained command; product timeout45; no wrapper kill/replay",
+  "qualification": {
+    "tests": 2,
+    "passed": 2,
+    "tool": "67899f",
+    "scope": "synthetic authorization and status guards only"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "read_only": true,
+  "native_launch_forbidden": true,
+  "state_sha_before": "7c5e577e13a5e62c5db5069356da119126f0c9f57424a94aa67cc538e1d8923c",
+  "saved_inventory_revision": "sha256:77fa079717648de88b047b4558a4967b2763810cb4519a00d3dcc14069989797",
+  "results": [
+    {
+      "variant": "actual_host_env",
+      "elapsed_seconds": 3.3661510999663733,
+      "candidate_count": 1,
+      "inventory_revision": "sha256:0269745bb3fc1b0e930995334d117ff75e049ea101cd83558f38a109cf5bf525",
+      "equals_saved_inventory": false,
+      "selected_count": 0,
+      "exact_selected_candidate_matches_original": false,
+      "selected_metadata": []
+    },
+    {
+      "variant": "same_draft_path",
+      "elapsed_seconds": 4.534437900001649,
+      "candidate_count": 2,
+      "inventory_revision": "sha256:77fa079717648de88b047b4558a4967b2763810cb4519a00d3dcc14069989797",
+      "equals_saved_inventory": true,
+      "selected_count": 1,
+      "exact_selected_candidate_matches_original": true,
+      "selected_metadata": [
+        {
+          "adapter_id": "claude_stream",
+          "source": "path",
+          "trust": "untrusted",
+          "version": null,
+          "fingerprint": "sha256:5064e6e0572dca86257363ca04d48653eef20ef27f1bd04b504ed7199ed3fd13",
+          "installation_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa"
+        }
+      ]
+    },
+    {
+      "variant": "hypothetical_trusted_root",
+      "elapsed_seconds": 3.790607300004922,
+      "candidate_count": 1,
+      "inventory_revision": "sha256:0269745bb3fc1b0e930995334d117ff75e049ea101cd83558f38a109cf5bf525",
+      "equals_saved_inventory": false,
+      "selected_count": 0,
+      "exact_selected_candidate_matches_original": false,
+      "selected_metadata": []
+    }
+  ]
+}

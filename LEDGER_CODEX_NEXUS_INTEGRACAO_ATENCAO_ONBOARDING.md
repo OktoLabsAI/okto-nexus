@@ -2293,3 +2293,9 @@ Autorização específica do usuário registrada: revogação da chave perdida e
 Start Nexus original retornou3/SERVICE_UNREACHABLE e permanece falho; observação posterior qualificou READY na mesma geração/ciclo, sem repetir start. Causa do transporte não determinada. Primeira tentativa de armazenamento falhou antes de Context/reserva por atributo argparse incorreto; compatibilidade aditiva com2 testes PASS preservou fontes congeladas e efeitos originais. Ambos serviços/observadores permanecem vivos neste marco, sem cleanup/saída física alegados.
 
 Transferência antiga UNCONFIRMED preservada; nenhum artefato de binding em andamento ou turno de provedor incluído. Janela SO ainda não agendada e force não autorizado. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN**, sem promoção. [Evidência pública](plans/agent_ops/evidence/r3-sonnet-authorized-rotation-execution/review.json).
+
+## 2026-11-15 — Probe confirmado, consentimento em cache e drenagem pendente
+
+Falha inicial STALE_GENERATION antes do probe preservada. Probe canônico explícito com PATH exato do daemon e candidato retido confirmou2.1.323, sem mudar configuração/checkpoint. Resume CLI0 permaneceu awaiting_inventory/REALIZE; wrapper recusou conclusão, sem DONE fabricado. Diagnóstico sanitizado: vault do daemon conservava consentimento=False desde boot, embora persistido=True. Stop normal retornou4/stopping; nenhuma saída física ou cleanup alegados neste recorte.
+
+Correções Connector de refresh de consentimento e drenagem pré-readiness qualificadas apenas em fonte, commit 165a01f9c2acbc8e40388706f86534434968ed72. Pacote live intocado. Helper de restart exige3 saídas/ausência/task/consentimento/epoch2; proposta de uma força canônica exata aguardava autorização específica neste recorte, sem execução ou recibo inventado. Provider/model0. **125 VERIFIED /5 IN_PROGRESS /2 NOT_RUN**, sem promoção. [Evidências e limites](plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/review.json).

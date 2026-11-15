@@ -1,0 +1,14 @@
+{
+  "returncode": 4,
+  "projection": {
+    "state": "stopping",
+    "reason": null,
+    "pid": 36068,
+    "generation": "8b35799e3ae1c6c3feec7cce45ee5162",
+    "instance_id": "svc_1b10604c6d028c48ae8bac4af7c9a542fd2c82d6c2b9b8dd1e9aceec35e77b62"
+  },
+  "stdout_sha256": "60c956e5f16654dd28f4864979780962d57b93177d7a99ceae5ad84e037652d8",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_exit_confirmed": false,
+  "lifecycle_plan_sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27"
+}

@@ -14007,6 +14007,21 @@
       "acceptance_promoted": false,
       "provider_turns": 0,
       "services_still_live": true
+    },
+    "r3_sonnet_probe_vault_drain_recovery": {
+      "status": "PROBE_CONFIRMED_BINDING_AWAITING_INVENTORY_NORMAL_STOP_PENDING_FORCE_PROPOSED",
+      "summary": "One explicit probe confirmed2.1.323; resumeCLI0 remains awaiting_inventory, noDONE. Cached file-vault consent and pre-readiness drain causes retained; normalstop4/stopping, noexit/cleanup. Restart helper and singleforce proposal prepared, authorization pending at historical cut. Connector source fixes qualified separately; no livepackage mutation/model.125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/diagnostics/vault-realize-diagnosis.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/public/recovery02-explicit-probe-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/public/connector-stop-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/supplements/connector-consent-restart/force-proposal.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_turns": 0,
+      "connector_source_commit": "165a01f9c2acbc8e40388706f86534434968ed72"
     }
   },
   "history": [
@@ -15863,6 +15878,23 @@
       "acceptance_promoted": false,
       "provider_turns": 0,
       "services_still_live": true
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_probe_vault_drain_recovery",
+      "status": "PROBE_CONFIRMED_BINDING_AWAITING_INVENTORY_NORMAL_STOP_PENDING_FORCE_PROPOSED",
+      "summary": "One explicit probe confirmed2.1.323; resumeCLI0 remains awaiting_inventory, noDONE. Cached file-vault consent and pre-readiness drain causes retained; normalstop4/stopping, noexit/cleanup. Restart helper and singleforce proposal prepared, authorization pending at historical cut. Connector source fixes qualified separately; no livepackage mutation/model.125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/manifest.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/diagnostics/vault-realize-diagnosis.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/public/recovery02-explicit-probe-result.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/public/connector-stop-returned.json",
+        "plans/agent_ops/evidence/r3-sonnet-probe-vault-drain-recovery/supplements/connector-consent-restart/force-proposal.json"
+      ],
+      "acceptance_promoted": false,
+      "provider_turns": 0,
+      "connector_source_commit": "165a01f9c2acbc8e40388706f86534434968ed72"
     }
   ],
   "r3_native_bounded_supervisor_execution": {

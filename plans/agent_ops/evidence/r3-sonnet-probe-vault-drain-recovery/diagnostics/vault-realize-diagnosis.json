@@ -1,0 +1,35 @@
+{
+  "status": "READ_ONLY_CAUSE_CONFIRMED_NO_EFFECT",
+  "actual_host_cli_returncode": 0,
+  "actual_setup_stage": "realize",
+  "actual_probe_operation": "confirmed",
+  "observed_native_version": "2.1.323",
+  "saved_inventory_revision": "sha256:ac6657a31d627f2ea28b9ee6dd7c5492d6d3046ed4f3e394d038e12cb3a2646a",
+  "canonical_executor_state": "DISCONNECTED",
+  "canonical_inventory_snapshots": 0,
+  "daemon_log_projection": {
+    "phase": "REGISTERING",
+    "code": "CONTROL_DISCONNECTED",
+    "stage": "vault",
+    "location": "bootstrap > _exchange > resolve:179 > _require_approval:90",
+    "underlying_static_error": "APPROVAL_REQUIRED"
+  },
+  "persisted_file_fallback_approval": true,
+  "source_cause": "DaemonApp captures open_vault(approved_fallback=...) once at startup; RestrictedFileVault stores _approved. state.reload does not refresh that object. Observed stack reaches denial-only branch despite current persisted True.",
+  "canonical_recovery_proposal": "Exact Connector normal stop, retained physical exit of parent/launcher/runtime, fresh start of same installed task/home/package; reobserve control connection/inventory, then explicitly resume same stage realize. No new rotation/probe/setup reset or force.",
+  "root_effects_by_this_audit": false,
+  "source_pins": {
+    "daemon/app.py": "2b901aee2284606c3ad20caf670a848b950e8d44d2785fd0cf3daebfbf3d6db5",
+    "identity/vault.py": "960ef779f289c112b162e89b5c60b51c27cb6326783c440729982d84975dea4c",
+    "daemon/r4_control.py": "fc490e38a73d6cad94f7eb20a403300b9e1917204ea61a1bd6fae91e0b9ce75a",
+    "cli/commands/configure_local.py": "eff8932363be322af0107bbaea1ead053c18a3b8203583315829e966ff53f166"
+  },
+  "evidence_tools": [
+    "75ab54",
+    "cb2388",
+    "cfcde3",
+    "75dadb",
+    "a9bb15"
+  ],
+  "returned_receipt_sha256": "810626d28d704c2921e2f038c9461b2b58e81ef456f17df713cab1f35df60f91"
+}

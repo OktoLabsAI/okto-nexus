@@ -1,0 +1,111 @@
+{
+  "status": "PROBE_CONFIRMED_BINDING_AWAITING_INVENTORY_NORMAL_STOP_PENDING_FORCE_PROPOSED",
+  "historical_cut": "After normal stop rc4 and before any specific force authorization/execution; subsequent facts require separate evidence.",
+  "host_prepare": {
+    "initial_root_tool": "5fe69d",
+    "reason": "STALE_GENERATION",
+    "stage": "inventory_selection",
+    "checkpoint": "probe/pending before probe_version",
+    "cause": "CLI PATH omitted selected Claude directory; original daemon PATH already included it.",
+    "repair": "Explicit canonical executor probe with exact persisted service PATH, fresh full revision and exact retained selected candidate; no discovery/trust/config mutation.",
+    "probe_root_tools": [
+      "3d4a11",
+      "1cc282",
+      "cd4cc5"
+    ],
+    "probe_returncode": 0,
+    "observed_version": "2.1.323",
+    "probe_checkpoint_and_config_preserved": true,
+    "resume_root_tool": "621642",
+    "resume_cli_returncode": 0,
+    "resume_wrapper_outcome": "HOST_PREPARATION_UNCONFIRMED",
+    "projection_tool": "2bbc59",
+    "resume_state": "awaiting_inventory",
+    "checkpoint_after_resume": "realize",
+    "binding_DONE": false,
+    "host_prepare_result_not_published": true,
+    "original_failure_preserved": true
+  },
+  "vault_diagnosis": {
+    "persisted_approval": true,
+    "daemon_captured_approval_at_boot": false,
+    "stack": "bootstrap > _exchange > resolve179 > _require_approval90",
+    "visible_code": "CONTROL_DISCONNECTED",
+    "underlying_error": "APPROVAL_REQUIRED",
+    "canonical_inventory_snapshots": 0,
+    "executor_state": "DISCONNECTED",
+    "scope": "Sanitized own-state/source evidence; no raw secret or personal credential read/export."
+  },
+  "normal_stop": {
+    "root_tool": "4a766a",
+    "terminal_tool": "72a74c",
+    "returncode": 4,
+    "state": "stopping",
+    "deadline_does_not_prove_exit": true,
+    "physical_exit_claimed": false,
+    "cleanup_claimed": false,
+    "reason": "Pre-readiness control drain remains BUSY while retry loop waits for stop; source fix separately qualified."
+  },
+  "observers": {
+    "main_nexus_session": 62571,
+    "main_connector_session": 64647,
+    "root_live_checks": [
+      "7305a2",
+      "48d1ff"
+    ],
+    "extra_startup_diagnostic_session": 59024,
+    "extra_timeout_tool": "e8a5b8",
+    "extra_timeout_seconds": 1800,
+    "extra_timeout_is_not_exit_proof": true,
+    "main_nexus_observer_unaffected": true
+  },
+  "prepared_restart": {
+    "plan_sha256": "7e8f2ade9eb053989dd233f8fde2368571a944177b65f958b58655a6959c4a3a",
+    "tests_passed": 2,
+    "test_tool": "65a21c",
+    "executed": false,
+    "gate": "Three original physical exits + native/canonical absence + same task + consent true/epoch2; new Connector namespace, Nexus base preserved."
+  },
+  "force_proposal": {
+    "proposal_sha256": "c35871e2af447c3532cb51dbc223bdb07a31807242c2abbe7187a88a7bea5a7e",
+    "root_review": "494da9 PASS",
+    "authorization_at_this_cut": "PENDING_ASYNC_USER_ANSWER",
+    "executed_at_this_cut": false,
+    "authorization_receipt_fabricated": false,
+    "tests_passed": 2,
+    "test_tool": "7c1f36",
+    "earlier_test_tool": "67899f",
+    "scope": "One canonical force call on exact PID/generation/cycle/task, no direct OS termination, no uninstall/provider/key operation.",
+    "observer_interpretation": "Original force_used=false describes observer behavior only; future force action needs its own truthful receipt."
+  },
+  "source_fixes": {
+    "connector_commit": "165a01f9c2acbc8e40388706f86534434968ed72",
+    "installed_package_replaced": false,
+    "live_patch": false,
+    "startup_drain_tests_passed": 49,
+    "startup_drain_breakdown": "8 new + 41 regression",
+    "startup_drain_peer_tools": [
+      "e910f2",
+      "930b14"
+    ],
+    "startup_drain_root_tools": [
+      "a8036a",
+      "f34141"
+    ],
+    "vault_refresh_tests_passed": 16,
+    "vault_refresh_breakdown": "9 new + 7 regression",
+    "vault_refresh_qualification": "qualification/vault-refresh/qualification.json",
+    "native_acceptance_promoted": false
+  },
+  "limits": {
+    "provider_model_calls": 0,
+    "scenario_counts": {
+      "VERIFIED": 125,
+      "IN_PROGRESS": 5,
+      "NOT_RUN": 2
+    },
+    "no_global_acceptance_promotion": true,
+    "services": "Nexus live; old Connector draining at this historical cut.",
+    "no_private_vault_credentials_copied": true
+  }
+}
