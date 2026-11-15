@@ -1,0 +1,43 @@
+{
+  "format": 1,
+  "status": "INSTALLED_SCOPED_PASS",
+  "results": {
+    "core": {
+      "tests": 48,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "nexus": {
+      "tests": 2,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "connector": {
+      "tests": 2,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "connector_unique_cases": 6,
+  "connector_unchanged_passes": 4,
+  "nexus_unique_cases": 44,
+  "nexus_unchanged_passes": 42,
+  "nexus_history": "Initial 42 pass/2 failures: omitted plans/contratos/http-target.schema.json fixture in source archive. Restored exact bytes from same pinned commit; reran only two affected cases. No wheel/source change.",
+  "connector_history": "Initial 4 pass/2 fixture failures used raw can_use_tool method instead of canonical control_request:can_use_tool. Second 4 pass/2 fixture assertion failures expected schema_version retained by bridge. Final two changed cases pass; initial XML and fixture bytes retained. No product changes.",
+  "build_provenance_sha256": "c6046f04533f1686cb2364b991864310621fda2d636ddbd560050725dd63f988",
+  "scope": "Core native permissions and decision bridge; Nexus native authority/provenance; Connector observed-request forwarding, cross-binding refusal and close fencing. Synthetic peers only, no provider/service/credential access.",
+  "installed_origins": "All three imported packages under own venv; every wheel payload compared byte-for-byte before each run.",
+  "commands": [
+    "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\run_installed.py core",
+    "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\run_installed.py nexus",
+    "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\run_installed.py nexus --only-changed",
+    "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\run_installed.py connector",
+    "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\run_installed.py connector --only-changed"
+  ],
+  "old_campaign_installations_unchanged": true,
+  "release_published": false,
+  "pointer_note": "Nexus uv.lock registry vendor/wheels stores version/path without hash; unchanged filename/version. Connector pyproject exact Core version unchanged, no uv.lock. Nexus CI manifest owns wheel SHA; Connector provenance and README bind identical Core bytes."
+}

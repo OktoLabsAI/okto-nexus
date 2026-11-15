@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="6" time="7.076" timestamp="2026-11-15T02:57:10.675980-03:00" hostname="Alienware_m15"><testcase classname="tests.unit.test_r4_execution" name="test_native_decision_uses_observed_request_and_same_receipt[approval.decide]" time="1.729" /><testcase classname="tests.unit.test_r4_execution" name="test_native_decision_uses_observed_request_and_same_receipt[input.provide]" time="0.940" /><testcase classname="tests.unit.test_r4_execution" name="test_cross_binding_control_cannot_borrow_a_runtime" time="0.640" /><testcase classname="tests.unit.test_r4_execution" name="test_close_fences_native_ingress_before_native_close" time="0.790" /><testcase classname="" name="test_installed_connector_powershell_decision[accept]" time="0.799"><failure message="AssertionError: assert [({'local_gen...ccept', None)] == [({'schema_ve...ccept', None)]&#10;  &#10;[+3 more lines; full report in element text]">execution = (&lt;okto_nexus_connector.services.r4_execution.R4ExecutionOwner object at 0x000002A952C27C50&gt;, &lt;tests.unit.test_r4_execu...ontract_revision': 'nxl-1-agent-centric-http-only-2026-09-29-r4', 'type': 'operation.submit', 'server_id': 'srv', ...})
+decision = 'accept'
+
+    @pytest.mark.parametrize('decision', ['accept', 'decline'])
+    async def test_installed_connector_powershell_decision(execution, decision):
+        owner, connection, factory, receipts, opening = execution
+        await connection.emit(opening)
+        await observed(receipts, owner)
+        request = dict(schema_version=1, request_id='powershell-1', request_hash='a'*64, local_generation=0,
+            method='control_request:can_use_tool', params={'subtype':'can_use_tool', 'tool_name':'PowerShell',
+            'input':{'command':'Write-Output fixture'}, 'tool_use_id':'tool-fixture'})
+        await factory.native.events_queue.put(RuntimeEvent(*factory.scope, 0, 'approval',
+            request['method'], {'native_approval':request}))
+        await asyncio.wait_for(factory.native.observed.wait(), 3)
+        payload=dict(canonical_request_id='request',decision_id='decision',decision_revision=1,
+            decision=decision,request=request,response_digest=None)
+        await connection.emit(operation(opening,'approval.decide',payload))
+        receipt=await observed(receipts,owner)
+        assert receipt['stage']=='SUBMITTED'
+&gt;       assert factory.native.decisions==[(request,decision,None)]
+E       AssertionError: assert [({'local_gen...ccept', None)] == [({'schema_ve...ccept', None)]
+E         
+E         At index 0 diff: ({'local_generation': 0, 'method': 'control_request:can_use_tool', 'params': {'input': {'command': 'Write-Output fixture'}, 'subtype': 'can_use_tool', 'tool_name': 'PowerShell', 'tool_use_id': 'tool-fixture'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 'powershell-1'}, 'accept', None) != ({'schema_version': 1, 'request_id': 'powershell-1', 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'local_generation': 0, 'method': 'control_request:can_use_tool', 'params': {'s...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+test_connector_powershell.py:23: AssertionError</failure></testcase><testcase classname="" name="test_installed_connector_powershell_decision[decline]" time="0.791"><failure message="AssertionError: assert [({'local_gen...cline', None)] == [({'schema_ve...cline', None)]&#10;  &#10;[+3 more lines; full report in element text]">execution = (&lt;okto_nexus_connector.services.r4_execution.R4ExecutionOwner object at 0x000002A952C274D0&gt;, &lt;tests.unit.test_r4_execu...ontract_revision': 'nxl-1-agent-centric-http-only-2026-09-29-r4', 'type': 'operation.submit', 'server_id': 'srv', ...})
+decision = 'decline'
+
+    @pytest.mark.parametrize('decision', ['accept', 'decline'])
+    async def test_installed_connector_powershell_decision(execution, decision):
+        owner, connection, factory, receipts, opening = execution
+        await connection.emit(opening)
+        await observed(receipts, owner)
+        request = dict(schema_version=1, request_id='powershell-1', request_hash='a'*64, local_generation=0,
+            method='control_request:can_use_tool', params={'subtype':'can_use_tool', 'tool_name':'PowerShell',
+            'input':{'command':'Write-Output fixture'}, 'tool_use_id':'tool-fixture'})
+        await factory.native.events_queue.put(RuntimeEvent(*factory.scope, 0, 'approval',
+            request['method'], {'native_approval':request}))
+        await asyncio.wait_for(factory.native.observed.wait(), 3)
+        payload=dict(canonical_request_id='request',decision_id='decision',decision_revision=1,
+            decision=decision,request=request,response_digest=None)
+        await connection.emit(operation(opening,'approval.decide',payload))
+        receipt=await observed(receipts,owner)
+        assert receipt['stage']=='SUBMITTED'
+&gt;       assert factory.native.decisions==[(request,decision,None)]
+E       AssertionError: assert [({'local_gen...cline', None)] == [({'schema_ve...cline', None)]
+E         
+E         At index 0 diff: ({'local_generation': 0, 'method': 'control_request:can_use_tool', 'params': {'input': {'command': 'Write-Output fixture'}, 'subtype': 'can_use_tool', 'tool_name': 'PowerShell', 'tool_use_id': 'tool-fixture'}, 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'request_id': 'powershell-1'}, 'decline', None) != ({'schema_version': 1, 'request_id': 'powershell-1', 'request_hash': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'local_generation': 0, 'method': 'control_request:can_use_tool', 'params': {'...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+test_connector_powershell.py:23: AssertionError</failure></testcase></testsuite></testsuites>

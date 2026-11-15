@@ -1,0 +1,94 @@
+{
+  "files": [
+    {
+      "path": "build.py",
+      "sha256": "09fad7d59c2e546993ef41cb1594b1c16c4f15cf0a729fe93408f486ab60a725",
+      "bytes": 3065
+    },
+    {
+      "path": "finalize_build_provenance.py",
+      "sha256": "af46b6bc9cb020c5479e828912bff6b7f61106e267a22281bbb411231f071231",
+      "bytes": 1725
+    },
+    {
+      "path": "build-provenance.json",
+      "sha256": "c6046f04533f1686cb2364b991864310621fda2d636ddbd560050725dd63f988",
+      "bytes": 2757
+    },
+    {
+      "path": "run_installed.py",
+      "sha256": "dcd5af048aa2551c61a973430dfade12ce0561bcef5b6d28a143b4f79fe0213b",
+      "bytes": 2136
+    },
+    {
+      "path": "test_connector_powershell.py",
+      "sha256": "df646c4aa1887a11e5974753670a8633c519013276236d99622caabb8b743fdb",
+      "bytes": 1461
+    },
+    {
+      "path": "test_connector_powershell_initial.py",
+      "sha256": "bc9f27eb1019208d2882ef76893372ef306a4f99ffb40de3d3d1737c7f82f420",
+      "bytes": 1355
+    },
+    {
+      "path": "test_connector_powershell_second.py",
+      "sha256": "17aa49070b034b18732e7576544854824aca360d5ca3be0f4384d20283c404ab",
+      "bytes": 1391
+    },
+    {
+      "path": "connector-initial-4pass-2fixturefail.xml",
+      "sha256": "aa078b61db133b560e2741dac78155ab994f12f1fdbfdaecdd834e5b1d914df8",
+      "bytes": 12251
+    },
+    {
+      "path": "connector-second-4pass-2fixturefail.xml",
+      "sha256": "00d706219d810570e79b5b1b1a0e18db46e1a3f4dd95d7f901bbfaba4b27aded",
+      "bytes": 6029
+    },
+    {
+      "path": "nexus-initial-42pass-2missingfixture.xml",
+      "sha256": "72c4a00a18ae1c48a77bda1b98be17299f8b4fed9d07a6da98ac60b122154056",
+      "bytes": 13416
+    },
+    {
+      "path": "fixture-completion.json",
+      "sha256": "3d7a00501b64756ea79b3023284b791fc2cf9fa06aa8ffdb72756a4c2174e8fc",
+      "bytes": 244
+    },
+    {
+      "path": "qualification.json",
+      "sha256": "4708713fab7ffbc105f4e52dda9e8d75f1414637f8218fafa4e913fe806f4fb8",
+      "bytes": 3143
+    },
+    {
+      "path": "core-installed.xml",
+      "sha256": "ae9e29f5482cb18d6f2885af4d73e6c916bfca976691b267da106768701ed396",
+      "bytes": 7431
+    },
+    {
+      "path": "core-origins.json",
+      "sha256": "ca6b5d808e0c522f9ee25063d30ffd1616955cf392a35d9d8d1427be9af9a933",
+      "bytes": 651
+    },
+    {
+      "path": "connector-installed.xml",
+      "sha256": "a49a6a13c488d43b5e7091f092bda32d4383da4e1d1b042f394a99a5a3e4639e",
+      "bytes": 496
+    },
+    {
+      "path": "connector-origins.json",
+      "sha256": "ca6b5d808e0c522f9ee25063d30ffd1616955cf392a35d9d8d1427be9af9a933",
+      "bytes": 651
+    },
+    {
+      "path": "nexus-installed.xml",
+      "sha256": "372e47b6cce970bf3b2b520ff734f8682a1b236caba293af48c3c89040ce00d8",
+      "bytes": 585
+    },
+    {
+      "path": "nexus-origins.json",
+      "sha256": "ca6b5d808e0c522f9ee25063d30ffd1616955cf392a35d9d8d1427be9af9a933",
+      "bytes": 651
+    }
+  ]
+}

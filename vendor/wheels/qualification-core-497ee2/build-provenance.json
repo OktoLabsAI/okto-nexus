@@ -1,0 +1,60 @@
+{
+  "format": 1,
+  "sources": {
+    "core": {
+      "commit": "497ee2b7a14b99c50cba97eac74f3b00d4863f26",
+      "archive": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\core-source.tar",
+        "sha256": "edfb436465ca8135aa70cf03ba44f046ec9c43b7b88d28cf3851ee0aca8c790f",
+        "bytes": 5120000
+      }
+    },
+    "connector": {
+      "commit": "165a01f9c2acbc8e40388706f86534434968ed72",
+      "archive": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\connector-source.tar",
+        "sha256": "fb5c8e966e90fa27c7358fccffb1f89e4686fc48a844a97bf316fccae8e04ff0",
+        "bytes": 3061760
+      }
+    },
+    "nexus": {
+      "commit": "9a3675dde09b3c6d939af5b480ed807eb538902d",
+      "archive": {
+        "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\nexus-source.tar",
+        "sha256": "b124f57b1fda6215ec1db167f2499eed8334aa387d396a5b73d3c8c56f42e76d",
+        "bytes": 20746240
+      }
+    }
+  },
+  "build_python": "C:/Python313/python.exe",
+  "build_versions": {
+    "build": "1.5.0",
+    "setuptools": "84.0.0",
+    "wheel": "0.45.1"
+  },
+  "build_isolation": false,
+  "source_date_epoch": "1767225600",
+  "core_normalization": "archived tools/build_artifacts.py _normalize_wheel",
+  "wheels": [
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\wheels\\okto_nexus-0.3.3-py3-none-any.whl",
+      "sha256": "0f3e87555885926a9334ba9e9a63b3a369ddcc6914b0a1cd41c3da7d71831ab5",
+      "bytes": 3943111
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\wheels\\okto_nexus_connector-0.0.12-py3-none-any.whl",
+      "sha256": "75f28674d175bec1a8797299a8e255834d5216510e0917aa33e8680171ca7b0b",
+      "bytes": 400557
+    },
+    {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-core-consumer-integration-h_elhexb\\wheels\\okto_nexus_connector_core-0.0.14-py3-none-any.whl",
+      "sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+      "bytes": 556849
+    }
+  ],
+  "dependency_origin": "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv",
+  "dependency_copy_only": true,
+  "campaign_environment_modified": false,
+  "initial_metadata_failure": "After successful build/install, isolated build script could not discover user-site build distribution metadata. Finalizer queried same nonisolated Python invocation used by the build children; no rebuild or test rerun.",
+  "nexus_ui": "Committed assets from archive only; concurrent UI changes not included or qualified"
+}

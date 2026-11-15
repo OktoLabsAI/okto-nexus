@@ -1,5 +1,21 @@
 # Current development dependency
 
+Core 0.0.14 is built from commit `497ee2b7a14b99c50cba97eac74f3b00d4863f26`.
+Both consumers use identical unpublished wheel bytes, SHA-256 `ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5`.
+This includes explicit, bounded PowerShell native permission approval/denial;
+it does not bypass operator decisions or persist permission suggestions.
+
+Installed qualification: 48 Core, 44 Nexus and 6 unique Connector cases passed.
+The Connector CI wheel is built from `165a01f9c2acbc8e40388706f86534434968ed72`
+(including vault consent reload and pre-readiness drain fixes), SHA-256 `75f28674d175bec1a8797299a8e255834d5216510e0917aa33e8680171ca7b0b`.
+Nexus backend qualification uses archived commit `9a3675dde09b3c6d939af5b480ed807eb538902d`;
+the subsequent Home UI milestone is independent. See `qualification-core-497ee2/`
+for build versions, exact source/wheel hashes, installed origins, XML and retained
+fixture failures. Existing campaign environments were not changed. No provider
+was invoked, no release was published, and this is not a new M1 acceptance claim.
+
+## Previous dependency record
+
 Core 0.0.14 is pinned by Nexus 0.3.3 and Connector 0.0.12. Both consumers use
 the same unpublished validation wheel with SHA-256
 `609e0fbbb20855c6b788d2523b0aeb6cdfbf4b3f5c9792c9e4a080284729c9dd`.
