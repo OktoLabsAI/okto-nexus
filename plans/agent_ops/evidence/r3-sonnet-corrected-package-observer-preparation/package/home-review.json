@@ -1,0 +1,64 @@
+{
+  "status": "HOME_USER_CLARIFICATION_DELIVERED_SOURCE_AND_SYNTHETIC_UI_QUALIFIED",
+  "source_commit": "d3713c435ab2b853a2bb54feb77dc2161f28270b",
+  "source_pins": {
+    "frontend/src/App.tsx": {
+      "sha256": "fcec46d7d960bb85242641799c2b04a22b6352badac2e30470e5f20de8ff425c",
+      "bytes": 44657
+    },
+    "frontend/src/api.ts": {
+      "sha256": "e5f85595f952222536b97cc62f06478aa2b1b931220cdf36f0b2d40d224c48f6",
+      "bytes": 76128
+    },
+    "frontend/src/views/HomeView.tsx": {
+      "sha256": "68b6e1d7fb6c0241f68ffc57dfe4dfdbf942de9ea6a308afe0671059784c0c63",
+      "bytes": 12683
+    },
+    "frontend/tests/homeOverview.test.mjs": {
+      "sha256": "8d19795ab009056f22d8ece3a4b2fc0a0210ea32f10ac96ee8d9e3f8e27b1bed",
+      "bytes": 6266
+    },
+    "src/okto_nexus/adapters/inbound/http/static/index.html": {
+      "sha256": "8fd8ce9a7b34215ee3c396e415658a66f446fd85636fcbf3de002f92aa68b444",
+      "bytes": 472
+    }
+  },
+  "scope": "Home gives an overview of agents/activity, managed harness sessions, messages, attention and separately labelled Herdr/external reports, with shortcuts. Read-only summaries do not grant or execute operations. This records the user clarification, not a revision of the fixed R3 plan.",
+  "tests": {
+    "unique_passed": 41,
+    "home": 6,
+    "regressions": 35,
+    "provenance": "Implementer/root execution report; no tests rerun by curator.",
+    "build_tool": "9bca03",
+    "tool_results": {
+      "initial_41_unique": "25bef8",
+      "post_delta_6_home_rerun_overlaps": "be3d9e",
+      "final_build": "9bca03"
+    }
+  },
+  "visual": {
+    "provenance": "Root operated actual App with synthetic API route fixtures; no live-backend acceptance. Curator inspected final screenshots.",
+    "desktop": [
+      1440,
+      1000
+    ],
+    "mobile": [
+      390,
+      844
+    ],
+    "mobile_content_width": 343,
+    "horizontal_overflow": false,
+    "escape_overlay_aria_expanded": "true -> false",
+    "desktop_preference_preserved": true,
+    "antecedent": "Initial mobile content width119px failed and was corrected. Earlier incomplete console fixture is not final evidence.",
+    "screenshots": [
+      "screenshots/nexus-home-desktop-final.png",
+      "screenshots/nexus-home-mobile-final.png"
+    ]
+  },
+  "limitations": [
+    "Synthetic RECONNECTING indicator is not service readiness evidence.",
+    "No new real provider execution, M1 acceptance or budget change.",
+    "Fixed plan and all scenario statuses unchanged."
+  ]
+}

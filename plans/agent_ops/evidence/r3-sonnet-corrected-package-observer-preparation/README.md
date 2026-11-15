@@ -1,0 +1,7 @@
+# Corrected package and replacement-observer preparation
+
+Offline package composition includes Nexus with committed Home assets, Connector2b8ce688 and Coreea179. Verification passed988 product payloads,1002 RECORD hashes,694 Nexus source payloads,687 backend payloads equal to the prior qualified wheel and7 Home static payloads equal to d3713c43. Four resources return200 and an absent resource404 through in-process StaticFiles, not a running service. Prior qualification is reused: historical98=Core48/Nexus44/Connector6, current Connector46source/24installed overlap, and Home41. No new suite or inflated total is claimed. Tooling antecedents and the inherited-count metadata correction are retained.
+
+The observer addendum passed2 pure tests and root review. It prepares fresh QUERY/SYNCHRONIZE handles for exact Connector39640/fbc0042/c596 after watcher22718 expired. It has no terminate right, has not captured handles or started observation, and does not execute the separately listed canonical force command. Original proposal/timeout receipts remain unchanged. An observer exit proof never attributes an unexecuted force action.
+
+Root observation73fb7b followed by12:18:18UTC still reported the same owner UNKNOWN. No exit, cleanup, campaign package upgrade, service/setup/provider call or new plan/authorization is claimed. Specific force and proposed Sonnet500k remain pending; current200k/carry144004/two admissions apply. Counts126/4/2 and fixed plan/AC are unchanged.

@@ -1,0 +1,46 @@
+{
+  "status": "NOT_EXECUTED",
+  "watch_readonly": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-observation-refresh\\observe.py",
+    "--expected-addendum-sha256",
+    "f9e17f6827d28204f3764c3f3456c435b66ec21616c998c1b4bfd4827fd05555"
+  ],
+  "canonical_force_once_only_after_actual_authorization_and_fresh_handshake": [
+    "rtk",
+    "proxy",
+    "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/campaign/connector-state",
+    "daemon",
+    "stop",
+    "--timeout",
+    "45",
+    "--force",
+    "--expected-generation",
+    "fbc0042be355e83da5bb695a64de4910"
+  ],
+  "sequence": [
+    "Root confirms actual specific user authorization before force; the observer itself does not authorize or dispatch it.",
+    "Start this foreground watcher only when needed, retain its tool session, wait for watch-started.json/EXACT_THREE_HANDLES_RETAINED.",
+    "Confirm new observer identity remains live and has no timeout/failure/exit record; recheck exact canonical generation/cycle/task before dispatch.",
+    "Use one root-owned exclusive force reservation and the unchanged canonical argv. Never resend an unknown/pending result.",
+    "Record actual canonical result and force-effect provenance separately; wait for this observer exit-proof.json for all three roles.",
+    "Timeout/failure is not physical exit; no restart/uninstall follows without actual proof and canonical cleanup."
+  ],
+  "old_observer22718_current": false
+}

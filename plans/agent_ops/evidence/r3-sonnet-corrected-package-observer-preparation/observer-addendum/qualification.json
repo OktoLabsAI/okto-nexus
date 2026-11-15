@@ -1,0 +1,49 @@
+{
+  "status": "OFFLINE_OBSERVER_PREPARATION_ONLY",
+  "tests": {
+    "unique_passed": 2,
+    "seconds": 0.035,
+    "tool": "2d8ef8",
+    "argv": [
+      "rtk",
+      "proxy",
+      "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+      "-I",
+      "-B",
+      "-X",
+      "utf8",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-observation-refresh\\test_observe.py"
+    ],
+    "scope": "Synthetic handles only; birth mismatch, timeout not exit, exact three exits, no force attribution."
+  },
+  "original_proposal": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-proposal-current.json",
+    "sha256": "50b90cfbdb6ead9008b47af3f9f70cd225a4eac163534e29adc294110927f7b6",
+    "bytes": 1446
+  },
+  "expired_observer": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\public\\connector-exit-watch-timeout.json",
+    "sha256": "658ef2f8581e90082c5aa7b34bb6d2667c2bf153fa1ebdb5f95e020c1f572499",
+    "bytes": 645
+  },
+  "addendum": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-observation-refresh\\addendum.json",
+    "sha256": "f9e17f6827d28204f3764c3f3456c435b66ec21616c998c1b4bfd4827fd05555",
+    "bytes": 4644
+  },
+  "observer": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-observation-refresh\\observe.py",
+    "sha256": "a96e365f4407bf7286967bcbe76c5758e519e20dfac49e7351b1923fca5822cc",
+    "bytes": 6926
+  },
+  "test": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-observation-refresh\\test_observe.py",
+    "sha256": "091bac1910cae7d3cf16db9cabd3b2d702fc88c535428cd15c68bc1e285cb798",
+    "bytes": 1584
+  },
+  "live_observation_started": false,
+  "services_mutated": false,
+  "force_authorized_by_this_addendum": false,
+  "provider_calls": 0,
+  "original_receipts_preserved": true
+}

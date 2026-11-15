@@ -1,0 +1,59 @@
+{
+  "format": 1,
+  "status": "OFFLINE_COMPOSITION_QUALIFIED",
+  "origins": {
+    "okto_nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-corrected-campaign-package-pk6p0hz9\\venv\\Lib\\site-packages\\okto_nexus",
+      "version": "0.3.3",
+      "wheel_sha256": "3ad3a9e18208489701de0c968b8722d6081760ce1847a0c4b4ffa9a77d40cd5b"
+    },
+    "okto_nexus_connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-corrected-campaign-package-pk6p0hz9\\venv\\Lib\\site-packages\\okto_nexus_connector",
+      "version": "0.0.12",
+      "wheel_sha256": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d"
+    },
+    "nexus_connector_core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-corrected-campaign-package-pk6p0hz9\\venv\\Lib\\site-packages\\nexus_connector_core",
+      "version": "0.0.14",
+      "wheel_sha256": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5"
+    }
+  },
+  "payloads_equal": 988,
+  "record_hashes_equal": 1002,
+  "nexus_source_payloads_equal": 694,
+  "backend_payloads_equal_to_prior_qualified_wheel": 687,
+  "prior_nexus_wheel_sha256": "0f3e87555885926a9334ba9e9a63b3a369ddcc6914b0a1cd41c3da7d71831ab5",
+  "home_static_payloads": 7,
+  "home_static_equals_qualified_commit": "d3713c435ab2b853a2bb54feb77dc2161f28270b",
+  "static_resources": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "media_type": "text/html",
+      "sha256": "8fd8ce9a7b34215ee3c396e415658a66f446fd85636fcbf3de002f92aa68b444"
+    },
+    {
+      "path": "logos/nexus-icon.svg",
+      "status": 200,
+      "media_type": "image/svg+xml",
+      "sha256": "a9072ef70eabcb370a5f6f148ba26b2f0371509ddcbce9a99c4f1d755103f24c"
+    },
+    {
+      "path": "assets/index-CohyZLCK.js",
+      "status": 200,
+      "media_type": "text/javascript",
+      "sha256": "8b990f5922e3aedf251c22d662fdfcd27aeac3b9ae2b905349f2fcfdafacfbb3"
+    },
+    {
+      "path": "assets/index-CxUgXKl7.css",
+      "status": 200,
+      "media_type": "text/css",
+      "sha256": "eb2b5d4f877d259cd89a74814073bec1cecea5123cc61e29aac772598e67ca57"
+    }
+  ],
+  "missing_static_resource_status": 404,
+  "build_provenance_sha256": "6b0ca5761bca2517c1bbc75290be6506c4b1e828be663e629588f1494e9f5dce",
+  "scope": "Byte/resource/origin composition verification only. StaticFiles in process; no application bootstrap, network, services, provider, credentials, campaign writes or activated successor plan.",
+  "inherited_qualification": "Prior installed qualification: 98 unique cases = 48 Core + 44 Nexus + 6 Connector. Current Connector qualification: 46 unique source cases and 24 installed cases (a subset), with overlap with historical cases; these counts are not additive. Home: 41 source and synthetic UI cases. No regression suite rerun or new acceptance claimed.",
+  "command": "rtk proxy C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-corrected-campaign-package-pk6p0hz9\\venv\\Scripts\\python.exe -I -B -X utf8 C:\\Users\\jpamb\\AppData\\Local\\Temp\\r3-corrected-campaign-package-pk6p0hz9\\qualify.py"
+}

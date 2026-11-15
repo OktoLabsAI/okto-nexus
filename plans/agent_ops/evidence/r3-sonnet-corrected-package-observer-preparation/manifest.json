@@ -1,0 +1,115 @@
+{
+  "files": [
+    {
+      "path": "observer-addendum/addendum.json",
+      "sha256": "f9e17f6827d28204f3764c3f3456c435b66ec21616c998c1b4bfd4827fd05555",
+      "bytes": 4644
+    },
+    {
+      "path": "observer-addendum/commands.json",
+      "sha256": "34835a7d93bf7b89e26307e0b720fc950ec554d12df7c70178005257f2ac72e8",
+      "bytes": 2010
+    },
+    {
+      "path": "observer-addendum/observe.py",
+      "sha256": "a96e365f4407bf7286967bcbe76c5758e519e20dfac49e7351b1923fca5822cc",
+      "bytes": 6926
+    },
+    {
+      "path": "observer-addendum/prepare_addendum.py",
+      "sha256": "632f629e5484d0776e006b549638b5233234d24cdfbcdfc109e10694f75a7fe0",
+      "bytes": 4139
+    },
+    {
+      "path": "observer-addendum/public-allowlist.json",
+      "sha256": "3e3ad3cf7a0a084a2961283558a7bf201d82b56ea0c69cca0f1f645662615588",
+      "bytes": 1265
+    },
+    {
+      "path": "observer-addendum/qualification.json",
+      "sha256": "40367cfaca340ad229e19213603c3638cadb013aebf3946053802b7a38dae862",
+      "bytes": 2330
+    },
+    {
+      "path": "observer-addendum/README.md",
+      "sha256": "97876347bc9b014a344e048f0e5af9a44612e72dba84df19257b248c02ec6994",
+      "bytes": 2260
+    },
+    {
+      "path": "observer-addendum/test_observe.py",
+      "sha256": "091bac1910cae7d3cf16db9cabd3b2d702fc88c535428cd15c68bc1e285cb798",
+      "bytes": 1584
+    },
+    {
+      "path": "package/build-initial.py",
+      "sha256": "edaa679456b8826fba2c360c2231d6bccd5dfde280d2c4dcc435553f3aa551b5",
+      "bytes": 3036
+    },
+    {
+      "path": "package/build-provenance.json",
+      "sha256": "6b0ca5761bca2517c1bbc75290be6506c4b1e828be663e629588f1494e9f5dce",
+      "bytes": 2434
+    },
+    {
+      "path": "package/build.py",
+      "sha256": "9d49837b153ce7e1eaeee8e5050ee324fa1dda27b0e7d39dace14818b8f0b202",
+      "bytes": 3212
+    },
+    {
+      "path": "package/finalize_metadata.py",
+      "sha256": "418b6ddf388ddf59713ee98e02bdf5430d87c9bb81fc7df64fa55f446c75ca42",
+      "bytes": 2028
+    },
+    {
+      "path": "package/home-manifest.json",
+      "sha256": "9ccc42383b2eb38f50fe9aff9ace728510b4b99d81e212da10f67427f942e312",
+      "bytes": 809
+    },
+    {
+      "path": "package/home-review.json",
+      "sha256": "61e0f245c9400ca9e538fc1ca26fe796b9126aa6e82c5447bb1bd60f577e74ee",
+      "bytes": 2545
+    },
+    {
+      "path": "package/installation.json",
+      "sha256": "a751d12998ec1dd4e0a13e721b8101232540e5d350b910756621e8158a8fbd68",
+      "bytes": 1868
+    },
+    {
+      "path": "package/metadata-correction.json",
+      "sha256": "ad7934ed24f24f319bae23823224e37d84288875b92ee9b39dc61bf9950c9734",
+      "bytes": 1064
+    },
+    {
+      "path": "package/public-allowlist.json",
+      "sha256": "6831537585c7b904d28606101a16f28a953ea46bcc6f677f5bb852217639b308",
+      "bytes": 1754
+    },
+    {
+      "path": "package/qualification.json",
+      "sha256": "bc6d955816e66a02984a79e22fc998c47c345a189451f6562ce4fa16a987a05c",
+      "bytes": 3107
+    },
+    {
+      "path": "package/qualify.py",
+      "sha256": "35d590b63f4f51ed5b05fefa7c1af44fe0b151de39910a6a6097036df03b0783",
+      "bytes": 6709
+    },
+    {
+      "path": "package/tooling-antecedents.json",
+      "sha256": "bc9f3b285fe1e53d7a147cebee14dce791928fab57dd27d860d8fea0ba68cce4",
+      "bytes": 658
+    },
+    {
+      "path": "README.md",
+      "sha256": "6a330ff3e00d0505bd89431417c9031d45eec043ca44b8c8b254268936f84d4c",
+      "bytes": 1490
+    },
+    {
+      "path": "review.json",
+      "sha256": "a837ae93919665f0da7460da0d0435bdcea77e19f4712b42c63d7d47a1403f25",
+      "bytes": 3132
+    }
+  ],
+  "curation": "Only18 explicitly allowlisted preparation files, two allowlists and curator review/README. No environments/wheels/private data or live effects."
+}

@@ -1,0 +1,104 @@
+{
+  "status": "PREPARED_READONLY_OBSERVER_NOT_STARTED_FORCE_PENDING_AUTHORIZATION",
+  "purpose": "Replace expired observer22718 evidence with new exact query/synchronize handles; original proposal/timeout preserved.",
+  "pins": {
+    "original_proposal": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-proposal-current.json",
+      "sha256": "50b90cfbdb6ead9008b47af3f9f70cd225a4eac163534e29adc294110927f7b6",
+      "bytes": 1446
+    },
+    "selection": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\public\\connector-owner-selection.json",
+      "sha256": "c8dacf24bcf71421de1bfffecbbf864053c3c6c4a55e8ead7dbc1b0ff120b308",
+      "bytes": 1054
+    },
+    "expired_observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\public\\connector-exit-watch-timeout.json",
+      "sha256": "658ef2f8581e90082c5aa7b34bb6d2667c2bf153fa1ebdb5f95e020c1f572499",
+      "bytes": 645
+    },
+    "original_observer_started": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\public\\connector-exit-watch-started.json",
+      "sha256": "40a6213370686317904d2286bf40b6c4f9bdb7e3485493865fc0906ed403eb05",
+      "bytes": 786
+    },
+    "lifecycle": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\lifecycle-plan.json",
+      "sha256": "8980570ab636b7836ffa34a5976652c0cc19825af015c50d50a9c5b08bcf6a27",
+      "bytes": 13280
+    },
+    "context": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_context.py",
+      "sha256": "554eb9e9adc36156df84bc4f833a94ebbea69787e18e8cc1e3875ffaad18d43e",
+      "bytes": 4756
+    },
+    "observation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_observation.py",
+      "sha256": "da569ef87112296b845122e99d1f7fe140f89d8e9b9999cd5287ec5dcd50b04c",
+      "bytes": 12903
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\recovery_connector.py",
+      "sha256": "5ba8c95a727b76ee434e07c086da819e582634416cd931e8e15e42cbda8456b4",
+      "bytes": 8653
+    },
+    "installation": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\package\\installation.json",
+      "sha256": "a9f03ee93bfff21c5ea3fa530c4c2259180770027a0674c82fbe0fb774fa221c",
+      "bytes": 348124
+    },
+    "observer": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-observation-refresh\\observe.py",
+      "sha256": "a96e365f4407bf7286967bcbe76c5758e519e20dfac49e7351b1923fca5822cc",
+      "bytes": 6926
+    }
+  },
+  "cohort": {
+    "cycle_id": "c5964050ef52fa22d53730a8f20872f7",
+    "phase": "running",
+    "attempts_started": 1,
+    "child_acknowledged": true,
+    "parent": {
+      "pid": 55008,
+      "birth": 134391943908467825
+    },
+    "launcher": {
+      "pid": 6424,
+      "birth": 134391943927241880
+    },
+    "child": {
+      "pid": 39640,
+      "birth": 134391943927520347
+    }
+  },
+  "canonical_force_argv": [
+    "C:/Users/jpamb/AppData/Local/Temp/sonnet-canonical-recovery-proposal-7oq808_t/package/venv/Scripts/python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus_connector.cli.main",
+    "--non-interactive",
+    "--json",
+    "--state-dir",
+    "C:/Users/jpamb/AppData/Local/Temp/m1-v12-bundle-bldo9qy7/campaign/connector-state",
+    "daemon",
+    "stop",
+    "--timeout",
+    "45",
+    "--force",
+    "--expected-generation",
+    "fbc0042be355e83da5bb695a64de4910"
+  ],
+  "max_canonical_force_calls_unchanged": 1,
+  "observation_seconds": 3600,
+  "observer_control_calls": 0,
+  "observer_provider_calls": 0,
+  "observer_has_terminate_right": false,
+  "authorization_created": false,
+  "force_executed": false,
+  "force_effect_record": "Separate root receipt of actual one-off canonical command; never inferred from observer exit proof.",
+  "result_namespace": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\sonnet-canonical-recovery-proposal-7oq808_t\\post-sonnet-collector-recovery\\force-observation-refresh\\public",
+  "original_files_changed": false
+}

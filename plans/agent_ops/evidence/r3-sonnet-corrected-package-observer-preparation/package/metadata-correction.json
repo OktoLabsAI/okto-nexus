@@ -1,0 +1,28 @@
+{
+  "kind": "metadata_only_correction",
+  "prior_files": {
+    "qualify.py": {
+      "sha256": "35be41cef37f517ee5b7a6478aa2d7c314dc791c87b43d2ca06a2563dcff4fcf",
+      "bytes": 6531
+    },
+    "qualification.json": {
+      "sha256": "a6accfde7df2f77dcb30abbc9aa05df176b3a69eee31679f96f129d6876b21a3",
+      "bytes": 2929
+    },
+    "installation.json": {
+      "sha256": "8147b73a462cb3703d8739469edfb50f6a517a75bb8c55258069632e129e6369",
+      "bytes": 1868
+    },
+    "public-allowlist.json": {
+      "sha256": "724737b082dccd37333dc9ca07b22afa5ccaeec7775559072f879a61a6edbf6d",
+      "bytes": 1590
+    }
+  },
+  "change": "Disambiguate historical98 =48Core+44Nexus+6Connector; current46source/24installed overlap and are not additive.",
+  "checks_repeated": false,
+  "build_repeated": false,
+  "packages_recopied": false,
+  "prior_success_tool": "fb32d4",
+  "root_review": "4c2e65/36c4f0",
+  "root_initial_wrong_path": "bf6425 was a nonexistent verify.py review path; correct source qualify.py reviewed36c4f0; not product failure"
+}

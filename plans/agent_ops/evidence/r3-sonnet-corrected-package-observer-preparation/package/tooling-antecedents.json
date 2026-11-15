@@ -1,0 +1,10 @@
+{
+  "initial_build_session": 76779,
+  "initial_build_result": "92d5eb",
+  "failure": "Metadata writer under isolated parent could not discover build distribution; actual wheel build and isolated installation had completed successfully using nonisolated child tooling.",
+  "initial_verifier": "b31683",
+  "verifier_failure": "Missing build-provenance.json after payload, RECORD, source/backend and resource checks passed.",
+  "correction": "Capture versions using same executable and nonisolated context as actual build subprocess; finalize metadata only. No rebuild or reinstall.",
+  "metadata_finalized": "0ec271",
+  "not_product_failure": true
+}

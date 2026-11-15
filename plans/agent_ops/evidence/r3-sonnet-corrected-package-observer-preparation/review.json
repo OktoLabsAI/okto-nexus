@@ -1,0 +1,75 @@
+{
+  "status": "OFFLINE_CORRECTED_PACKAGE_AND_OBSERVER_ADDENDUM_PREPARED_NOT_ACTIVATED",
+  "package": {
+    "qualification_sha256": "bc6d955816e66a02984a79e22fc998c47c345a189451f6562ce4fa16a987a05c",
+    "installation_sha256": "a751d12998ec1dd4e0a13e721b8101232540e5d350b910756621e8158a8fbd68",
+    "nexus_wheel": "3ad3a9e18208489701de0c968b8722d6081760ce1847a0c4b4ffa9a77d40cd5b",
+    "connector_wheel": "2b8ce688541a5ae6e9806467569be0743fef6ff607c763f2b93accf0f93e017d",
+    "core_wheel": "ea1797805279667a5b39fdb6e9e6185ed8dcb958a1c7f98e91651e841754dca5",
+    "payloads_equal": 988,
+    "record_hashes_equal": 1002,
+    "nexus_source_payloads_equal": 694,
+    "backend_payloads_equal_to_prior_qualified": 687,
+    "home_static_payloads_equal": 7,
+    "home_commit": "d3713c435ab2b853a2bb54feb77dc2161f28270b",
+    "static_resource_200": 4,
+    "missing_resource_404": true,
+    "root_review_tools": [
+      "4c2e65",
+      "36c4f0"
+    ],
+    "scope": "Isolated byte/origin/resource composition only; StaticFiles in-process. No live application bootstrap/network/service/credential/provider or campaign installation.",
+    "prior_qualifications_reused_not_rerun": "Historical98=Core48/Nexus44/Connector6; current Connector46source/24installed overlapping prior cases, Home41source/syntheticUI. Do not add overlapping qualifications.",
+    "metadata_correction": "Root-requested inherited-count wording correction retained; no rebuild/rerun/recopy of package."
+  },
+  "observer_addendum": {
+    "qualification_sha256": "40367cfaca340ad229e19213603c3638cadb013aebf3946053802b7a38dae862",
+    "pure_tests_passed": 2,
+    "root_review_tools": [
+      "d6a2a5",
+      "8394e8",
+      "a95273"
+    ],
+    "target_pid": 39640,
+    "target_generation": "fbc0042be355e83da5bb695a64de4910",
+    "target_cycle": "c5964050ef52fa22d53730a8f20872f7",
+    "replaces_expired_observation_session": 22718,
+    "fresh_query_sync_handles_prepared_not_captured": true,
+    "terminate_right": false,
+    "observer_started": false,
+    "force_executed": false,
+    "force_effect_requires_separate_actual_receipt": true,
+    "specific_authorization_still_pending": true,
+    "original_proposal_timeout_and_receipts_preserved": true
+  },
+  "latest_root_observation": {
+    "tool": "73fb7b",
+    "following_clock_utc": "2026-11-15 12:18:18 UTC",
+    "state": "DRAINING_PENDING_UNKNOWN",
+    "physical_exit_inferred": false,
+    "provenance": "Root report; no new curator live query."
+  },
+  "authority": {
+    "sonnet_limit": 200000,
+    "observed_tokens": 144004,
+    "charged_admissions": 2,
+    "proposed500k_authorized": false,
+    "codex_tokens": 579154,
+    "codex_admissions": 16,
+    "new_setup_or_execution_plan_created": false,
+    "new_authorization_created": false
+  },
+  "acceptance_promoted": false,
+  "fixed_plan_changed": false,
+  "counts": {
+    "VERIFIED": 126,
+    "IN_PROGRESS": 4,
+    "NOT_RUN": 2
+  },
+  "final_documentation_review_pending": false,
+  "final_root_review": {
+    "tool": "0fe357",
+    "status": "PASS",
+    "commit_push_authorized": true
+  }
+}
