@@ -1,0 +1,21 @@
+{
+  "status": "PROPOSED_NOT_AUTHORIZED_NOT_EXECUTED",
+  "provider": "Claude CLI, currently authenticated account",
+  "model": "Sonnet",
+  "scope": "Complete the already requested real remote useful-work and same-session continuation acceptance after installing the qualified PowerShell permission fix in the disposable campaign",
+  "existing_limit_tokens": 200000,
+  "already_observed_tokens": 144004,
+  "existing_remaining_tokens": 55996,
+  "new_cumulative_limit_tokens": 500000,
+  "additional_authorized_allowance_requested": 300000,
+  "preventive_stop_tokens": 480000,
+  "new_productive_requests_maximum": 2,
+  "historical_productive_requests_charged": 2,
+  "historical_usage_refund_or_reset": false,
+  "requests": ["One distinct useful request: read the own campaign CSV and write its row_count, sum and SHA256 report through a reviewed native PowerShell tool approval", "One continuation in that same session, only after useful success and actual budget recheck; no new command or file"],
+  "admission_reserve": "Preserve conservative max(50000, 2*prior observed turn input including cache +32000), currently244846; 144004+244846=388850 exceeds the current200000 allowance",
+  "no_atomic_provider_token_cap_claim": true,
+  "constraints": ["No replay of previous request IDs", "No bypass or persistent expansion of native permissions", "No automatic permission approval: inspect the exact command and scope before the existing operator decision", "No additional provider/account or Codex allowance charged", "Stop further admission on unknown usage, policy fault, missing useful result or insufficient headroom", "Preserve campaign data and all prior failures"],
+  "qualified_sources": {"core":"497ee2b7a14b99c50cba97eac74f3b00d4863f26","nexus_consumer":"a148e94e7cf1a74f2dfc62ae72a200c8b9488485","connector_consumer":"8c4c8009968838c19fe312694977ddd6d7edb9b8"},
+  "prerequisites": ["Resolve current Connector pending drain through an authorized canonical path and verify physical exit", "Prepare and qualify the campaign installation with the new dependency before provider admission", "Select fresh service identities and retained observations", "Preserve the cumulative144004 token accounting and both historical charges"]
+}

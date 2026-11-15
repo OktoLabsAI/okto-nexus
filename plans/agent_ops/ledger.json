@@ -14187,6 +14187,24 @@
         "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/timing-projection.json"
       ],
       "acceptance_promoted": false
+    },
+    "r3_sonnet_observer_timeout_current_scope": {
+      "status": "OBSERVER_EXPIRED_OWNER_LIVE_BUDGET_PROPOSED_NOT_AUTHORIZED",
+      "summary": "Root11:46UTC2026-11-15 canonical observation finds Connector39640/fbc0042 still DRAINING_PENDING/UNKNOWN with parent/launcher/runtime alive. Watcher22718 terminalTIMEOUT, not physical exit; no retained observer active/continuous coverage claimed. Specific force pending. Sonnet500k proposal unapproved: current200k, observed144004/two admissions, remaining55996; conservative reserve244846 blocks further admission under current allowance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-observer-timeout-current-scope/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-observer-timeout-current-scope/resume-observation.json",
+        "plans/agent_ops/evidence/r3-sonnet-observer-timeout-current-scope/remaining-sonnet-budget-proposal.json"
+      ],
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed_sonnet_limit": 500000,
+      "proposed_sonnet_limit_authorized": false,
+      "force_authorized": false,
+      "retained_observer_active": false,
+      "physical_exit_confirmed": false,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -16209,6 +16227,26 @@
         "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/review.json",
         "plans/agent_ops/evidence/r3-base06-stage-measurement-consolidation/timing-projection.json"
       ],
+      "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_observer_timeout_current_scope",
+      "status": "OBSERVER_EXPIRED_OWNER_LIVE_BUDGET_PROPOSED_NOT_AUTHORIZED",
+      "summary": "Root11:46UTC2026-11-15 canonical observation finds Connector39640/fbc0042 still DRAINING_PENDING/UNKNOWN with parent/launcher/runtime alive. Watcher22718 terminalTIMEOUT, not physical exit; no retained observer active/continuous coverage claimed. Specific force pending. Sonnet500k proposal unapproved: current200k, observed144004/two admissions, remaining55996; conservative reserve244846 blocks further admission under current allowance.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-observer-timeout-current-scope/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-observer-timeout-current-scope/resume-observation.json",
+        "plans/agent_ops/evidence/r3-sonnet-observer-timeout-current-scope/remaining-sonnet-budget-proposal.json"
+      ],
+      "sonnet_authorized_limit": 200000,
+      "sonnet_observed_tokens": 144004,
+      "sonnet_charged_admissions": 2,
+      "proposed_sonnet_limit": 500000,
+      "proposed_sonnet_limit_authorized": false,
+      "force_authorized": false,
+      "retained_observer_active": false,
+      "physical_exit_confirmed": false,
       "acceptance_promoted": false
     }
   ],
