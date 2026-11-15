@@ -60,3 +60,12 @@ encontradas na auditoria: feed que sumia após refresh e páginas descartadas ao
 fechar drawer sem alteração de revisão. Evidência em
 `plans/home_evolution/evidence/pr05-foundation/final-qualification.json`.
 Este marco não qualifica DOM, backend, pacote, provedor ou os 73 cenários.
+
+## Marco da interface operacional
+
+Foundation enviada em `c5294a30`. Layout, listas, atenção compacta, resultados,
+drawers e composer compartilhados implementados com flag de apresentação OFF.
+Qualificação UI:28 casos focais Node/SSR e build PASS; regressão integrada:
+196PASS/0falhas. As tarefas de interface ficam IMPLEMENTED até o aceite integrado.
+Seis checks de browser reais passaram em rodada preliminar; fontes backend
+alteradas posteriormente exigem repetição antes da qualificação final.

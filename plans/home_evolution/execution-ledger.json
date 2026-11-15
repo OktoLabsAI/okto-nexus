@@ -4,7 +4,7 @@
   "original_source": "C:\\Users\\jpamb\\Downloads\\PLANO_CODEX_NEXUS_HOME_OPERACIONAL_R1.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
   "created_at": "2026-11-15T20:14:32.568756+00:00",
-  "updated_at": "2026-11-15T21:10:57.842392+00:00",
+  "updated_at": "2026-11-15T21:16:13.464397+00:00",
   "status": "IN_PROGRESS",
   "baseline": {
     "previous_branch": "feature/v0.3.3",
@@ -60,7 +60,9 @@
         "HOME-014",
         "HOME-015"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ]
     },
     "PR-03": {
       "status": "IN_PROGRESS",
@@ -71,7 +73,9 @@
         "HOME-019",
         "HOME-020"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ]
     },
     "PR-04": {
       "status": "IN_PROGRESS",
@@ -81,7 +85,9 @@
         "HOME-023",
         "HOME-024"
       ],
-      "evidence": []
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ]
     },
     "PR-05": {
       "status": "IN_PROGRESS",
@@ -256,10 +262,14 @@
       "pr": "PR-02",
       "implementation": "Refatorar HomeView/HomeOverview; cabeçalho compacto, resumo, Precisa de você, Em andamento, Resultados e Agentes conectados. Rebaixar atalhos grandes.",
       "acceptance": "A mesma Home, não uma segunda rota concorrente; leitura útil em desktop e mobile.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-012": {
@@ -267,10 +277,14 @@
       "pr": "PR-02",
       "implementation": "Cartões/linhas por atividade, agrupamento opcional por agente e expansão de tentativas/sessões; rótulos legíveis, motivo e tempo no estado.",
       "acceptance": "Uma identidade com sessões distintas não recebe um status único enganoso; warm/idle fora de Em andamento.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-013": {
@@ -278,10 +292,14 @@
       "pr": "PR-02",
       "implementation": "Extrair componentes de apresentação existentes; mostrar até três ocorrências prioritárias com contexto e abrir a inspeção atual.",
       "acceptance": "Uma decisão pendente abre o registro exato; não é necessário esperar um novo drawer para o M1.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-014": {
@@ -289,10 +307,14 @@
       "pr": "PR-02",
       "implementation": "Resumo de resposta, resultado e artefato com referências exatas; visualização usa controles existentes e não marca visto em massa.",
       "acceptance": "É possível localizar e abrir uma entrega pela Home, sem procurar outra vez na tela de destino.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-015": {
@@ -300,10 +322,14 @@
       "pr": "PR-02",
       "implementation": "Preservar workspace selecionado; usar nomes existentes; filtros rápidos de atenção/estado/agente e estados zero-agente, sem trabalho, parcial, forbidden e stale.",
       "acceptance": "Zero agentes indica Conectar agente pelo fluxo plug and play; falha de leitura não mostra onboarding falso.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-016": {
@@ -322,10 +348,14 @@
       "pr": "PR-03",
       "implementation": "Extrair composição de AttentionInspection sem trocar as máquinas de estado internas; desktop lateral e mobile em camada acessível.",
       "acceptance": "Mesmos formulários/serviços de ApprovalInspection, HandoffInspection e runtime; uma única camada ativa.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-018": {
@@ -333,10 +363,14 @@
       "pr": "PR-03",
       "implementation": "Responder, aprovar/negar, verificar, inspecionar recuperação e interromper somente quando o contrato atual permite; revalidar antes do envio.",
       "acceptance": "Conflitos e resultado incerto permanecem visíveis; não há approve genérico, retry-all ou ação por inferência.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-019": {
@@ -344,10 +378,14 @@
       "pr": "PR-03",
       "implementation": "Extrair composer existente; distinguir Nova tarefa (handoff) de Conversar (mensagem); continuar somente na sessão explicitamente correlacionada.",
       "acceptance": "Operador nunca personifica agente; encerramento/revogação da sessão exige novo contexto explícito, não fallback silencioso.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-020": {
@@ -355,10 +393,14 @@
       "pr": "PR-03",
       "implementation": "Não remontar formulários em refresh; confirmar descarte na troca de alvo/workspace quando necessário; manter seleção, scroll e ação em curso.",
       "acceptance": "SSE, filtros, Escape e botão Voltar não apagam uma resposta digitada nem redirecionam uma decisão.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-021": {
@@ -399,10 +441,14 @@
       "pr": "PR-04",
       "implementation": "Depois de resposta/decisão, mostrar registro da decisão separado de aplicação no runtime; depois de entrega, permitir continuar com identidade e escopo corretos.",
       "acceptance": "Ação enviada não equivale a aplicada; interação mantém correlação e recupera a mesma operação após resposta perdida.",
-      "status": "IN_PROGRESS",
+      "status": "IMPLEMENTED",
       "files": [],
-      "evidence": [],
-      "tests": [],
+      "evidence": [
+        "plans/home_evolution/evidence/pr02-04-ui/qualification.json"
+      ],
+      "tests": [
+        "28 scoped frontend tests and TypeScript/Vite build PASS; integrated npm test 196 PASS; final DOM acceptance pending."
+      ],
       "limitations": []
     },
     "HOME-025": {
@@ -623,6 +669,10 @@
     {
       "at": "2026-11-15T21:10:57.842392+00:00",
       "event": "Frontend foundation milestone: 26 unique focal tests PASS and integrated TypeScript PASS. Feed refresh and unchanged-revision paging corrected. HOME-025/026/027 IMPLEMENTED pending integrated acceptance; no full scenario promoted."
+    },
+    {
+      "at": "2026-11-15T21:16:13.464397+00:00",
+      "event": "UI PR02/03/04 submitted as one coherent shared-composer/inspection implementation. 28 focal and 196 integrated frontend tests PASS; build PASS. Browser preliminary six checks PASS, final pinned backend rerun pending. Foundation pushed c5294a30."
     }
   ]
 }

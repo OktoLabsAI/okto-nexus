@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "scope": "HOME R1 PR02/03/04 frontend presentation and canonical-control reuse",
+  "status": "PASS_SCOPED",
+  "sources": [
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "b813ed0eff4e71c69ca7127f95f23ddcf18e6d26742e3d569258d2f7f3f00408",
+      "bytes": 47151
+    },
+    {
+      "path": "frontend/src/components/AgentActionModal.tsx",
+      "sha256": "19bbb6e74aa394689db0703778132b8ba3e3840ea6e196720f02a4360c232b94",
+      "bytes": 4712
+    },
+    {
+      "path": "frontend/src/components/AgentActionModal.css",
+      "sha256": "93ed4f363294f9cdb2d284256119fdd9efe59ec9aa6722a573a44a4a239d0cd5",
+      "bytes": 4771
+    },
+    {
+      "path": "frontend/src/components/AttentionInspection.tsx",
+      "sha256": "796abd7999c4a1ffb5203e4558ac58e30103c9fc03e80c22ac20df9607a963c6",
+      "bytes": 6644
+    },
+    {
+      "path": "frontend/src/components/MetaHarnessComposer.tsx",
+      "sha256": "6cf9155e9a767750ac5ee9e01744370694aea4c87df7b7036c6a0ca342fc6107",
+      "bytes": 21636
+    },
+    {
+      "path": "frontend/src/components/RuntimeOperations.tsx",
+      "sha256": "a1b7b50eb681c9675884d5c8425bb23a9a6dea97e79159dcbdb43dcad7e8705a",
+      "bytes": 24860
+    },
+    {
+      "path": "frontend/src/views/MetaHarnessView.tsx",
+      "sha256": "7af4ae0b5531aba6ecfaa9da1b0a05df83f32a327b1edc07e675437c17240a63",
+      "bytes": 47193
+    },
+    {
+      "path": "frontend/src/views/HomeView.tsx",
+      "sha256": "68b6e1d7fb6c0241f68ffc57dfe4dfdbf942de9ea6a308afe0671059784c0c63",
+      "bytes": 12683
+    },
+    {
+      "path": "frontend/src/components/home/continuation.ts",
+      "sha256": "f58e35651022db3efc0bd704638008802d1163f65780e3f06e83a3dd2981650f",
+      "bytes": 3219
+    },
+    {
+      "path": "frontend/src/components/home/HomeCards.tsx",
+      "sha256": "bcc96c59c7bf80f49f484843915c8dc9679774553d555ed3f77b4e90dc242648",
+      "bytes": 10900
+    },
+    {
+      "path": "frontend/src/components/home/HomeInspection.tsx",
+      "sha256": "43c95cff45f59d0016934353e2ac3a30e2e1c44987d90d06917c6cf2556db5d0",
+      "bytes": 4025
+    },
+    {
+      "path": "frontend/src/components/home/OperationalHome.tsx",
+      "sha256": "24335a1e2380491886705540a9ba8902767be401ba86f671605a64078053381a",
+      "bytes": 18502
+    },
+    {
+      "path": "frontend/tests/homeUI.test.mjs",
+      "sha256": "a60350156deccc0df81f818f387371fd5a1cb57f5a2105524a855833ea5e01a0",
+      "bytes": 11035
+    },
+    {
+      "path": "frontend/tests/homeOverview.test.mjs",
+      "sha256": "8d19795ab009056f22d8ece3a4b2fc0a0210ea32f10ac96ee8d9e3f8e27b1bed",
+      "bytes": 6266
+    },
+    {
+      "path": "frontend/tests/modalChanges.test.mjs",
+      "sha256": "fea94c6681d7f629cfe313ff79314bd1acad9f9c49550f4adbb5588e6f2b4653",
+      "bytes": 3114
+    }
+  ],
+  "node": {
+    "command": "rtk proxy node --test tests/homeUI.test.mjs tests/homeOverview.test.mjs tests/modalChanges.test.mjs",
+    "cwd": "frontend",
+    "tool_reference": "824489",
+    "tests": 28,
+    "passed": 28,
+    "failed": 0,
+    "duration_ms": 4878.0592,
+    "unique_breakdown": {
+      "home_ui": 16,
+      "legacy_home": 6,
+      "modal_change_regressions": 6
+    },
+    "method": "Actual TS/TSX modules transpiled and rendered with React SSR; canonical fake clients and deferred promises for exact-session/access guards. No DOM/browser lifecycle claim."
+  },
+  "typecheck": {
+    "command": "rtk proxy npx tsc --noEmit",
+    "tool_reference": "cc2d17",
+    "status": "PASS_ANTECEDENT",
+    "final_typecheck": "Included in final npm run build (tsc -b)"
+  },
+  "build": {
+    "status": "PASS",
+    "command": "rtk proxy npm run build",
+    "cwd": "frontend",
+    "tool_reference": "81cb70",
+    "exit_code": 0,
+    "tsc_build": "PASS",
+    "vite_seconds": 21.81,
+    "modules": 2169,
+    "warning": "Bundle exceeds 500 kB; no code-splitting claim.",
+    "outputs": [
+      {
+        "path": "src/okto_nexus/adapters/inbound/http/static/index.html",
+        "sha256": "5a81b6ae47979cc9dc3dd8c4a6dbf055a4f4a59f4739dd9698f91eebef6a9cbf",
+        "bytes": 472
+      },
+      {
+        "path": "src/okto_nexus/adapters/inbound/http/static/assets/index-DLLWG07d.css",
+        "sha256": "9927743dbdf57181c1b0f62454cf0ca6b5c2132ed7f51f3e4dcff58eec044d2f",
+        "bytes": 109714
+      },
+      {
+        "path": "src/okto_nexus/adapters/inbound/http/static/assets/index-ClXPhQ4N.js",
+        "sha256": "2a90a89e36830e65def8c0b30df196891a218060388235379b6df267de2c075f",
+        "bytes": 1398348
+      }
+    ]
+  },
+  "presentation": {
+    "client_flag": "okto-nexus-home-operational",
+    "enabled_value": "enabled",
+    "default_at_this_qualification": "legacy/off",
+    "off_behavior": "Original HomeView and HomeOverview read model retained, no Home effect dispatch."
+  },
+  "implementation_boundaries": [
+    "Same shell SSE invalidates the GET-only Home controller; no additional stream.",
+    "Shared MetaHarnessComposer preserves explicit handoff/message choice and canonical receipt status.",
+    "Home continuation uses exact RuntimeOperations session/executor/binding and fresh canonical reads, never latest-session metaHarnessSend.",
+    "Shared native dialog and CanonicalInspection retain existing control policies.",
+    "Logout/unmount invalidates late artifact content, post-upload dispatch and continuation revalidation/persistence. Browser lifecycle confirmation remains separate."
+  ],
+  "limitations": [
+    "Node SSR is not browser focus, keyboard, responsive, native dialog or network-revocation proof. Root owns browser_checks.js and its actual browser evidence.",
+    "The bundle-size warning is retained; this milestone does not claim route code splitting.",
+    "No provider, service lifecycle, native inference, OS event or user-account configuration was executed."
+  ],
+  "source_pin_representation": "Working-tree file bytes at qualification; Git may normalize line endings."
+}

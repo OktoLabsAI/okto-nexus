@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import {revalidateContinuation, clearHomeContinuationRequests} from "./home/continuation";
 import { RuntimeHistory } from "./RuntimeHistory";
+import {useAgentModalGuard} from "./AgentActionModal";
 import { ApiError } from "../api";
 import { runtimeApi, type BindingView, type RuntimeIntent, type RuntimeOperation,
   type RuntimeRequest, type RuntimeResolution, type RuntimeScope, type RuntimeSession } from "../runtimeApi";
@@ -9,19 +11,20 @@ const labels: Record<RuntimeIntent, string> = {"runtime.start": "Start or reuse 
   "turn.submit": "Send a turn", "turn.steer": "Steer a turn", "turn.interrupt": "Interrupt a turn", "runtime.close": "Close the runtime"};
 const fieldClass = "block w-full rounded border p-2 dark:bg-surface-800";
 
-export function RuntimeOperations({agentId, binding, canStart, connectionTest = false, testConfigurationKey = '', onTestStateChange}: {
-  agentId: string; binding: BindingView; canStart: boolean; connectionTest?: boolean; testConfigurationKey?: string; onTestStateChange?: (state: string) => void;
+export function RuntimeOperations({agentId, binding, canStart, connectionTest = false, testConfigurationKey = '', onTestStateChange, continuationScope}: {
+  agentId: string; binding: BindingView; canStart: boolean; connectionTest?: boolean; testConfigurationKey?: string; onTestStateChange?: (state: string) => void; continuationScope?: RuntimeScope;
 }) {
   const mounted = useRef(true);
   const lock = useRef(false);
   const currentRecord = useRef<Saved | null>(null);
+  const continuationActive = useRef(true);
   const [storageKey, setStorageKey] = useState("");
   const [saved, setSaved] = useState<Saved | null>(null);
   const [operation, setOperation] = useState<RuntimeOperation | null>(null);
   const [followUps, setFollowUps] = useState<RuntimeOperation[]>([]);
   const [session, setSession] = useState<RuntimeSession | null>(null);
-  const [intent, setIntent] = useState<RuntimeIntent>("runtime.start");
-  const [sessionId, setSessionId] = useState("");
+  const [intent, setIntent] = useState<RuntimeIntent>(continuationScope ? "turn.submit" : "runtime.start");
+  const [sessionId, setSessionId] = useState(continuationScope?.session_id || "");
   const [selection, setSelection] = useState(connectionTest ? "new" : "automatic");
   const testPrompt = "Reply with exactly NEXUS_CONNECTION_OK to confirm this connection.";
   const [text, setText] = useState(connectionTest ? testPrompt : "");
@@ -31,10 +34,30 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
   const [error, setError] = useState("");
   const [now, setNow] = useState(Date.now());
 
+  useEffect(() => {
+    if (!continuationScope) return;
+    continuationActive.current = true;
+    const clear = () => {
+      continuationActive.current = false;
+      clearHomeContinuationRequests(sessionStorage);currentRecord.current = null;
+      setSaved(null);setOperation(null);setFollowUps([]);setSession(null);setText('');setError('Operator authorization changed. This context must be reopened.');setStorageKey('');
+    };
+    window.addEventListener('nexus-auth-expired', clear);window.addEventListener('nexus-operator-logout', clear);
+    return () => {continuationActive.current = false;window.removeEventListener('nexus-auth-expired', clear);window.removeEventListener('nexus-operator-logout', clear);};
+  }, [!!continuationScope]);
   const matches = (scope: RuntimeScope) => scope.agent_id === agentId && scope.binding_id === binding.binding_id &&
     scope.executor_id === binding.executor_id && scope.workspace_id === binding.workspace_id &&
-    scope.workspace_binding_id === binding.workspace_binding_id;
+    scope.workspace_binding_id === binding.workspace_binding_id && (!continuationScope ||
+      scope.server_id === continuationScope.server_id && scope.session_id === continuationScope.session_id);
+  useAgentModalGuard(!!continuationScope && (!!text.trim() || !!saved), busy);
+  const validateContinuation = async () => {
+    if (!continuationScope) return;
+    if (!mounted.current || !continuationActive.current) throw new Error("Reopen this session after operator authorization changed.");
+    await revalidateContinuation(runtimeApi, continuationScope);
+    if (!mounted.current || !continuationActive.current) throw new Error("Reopen this session after operator authorization changed.");
+  };
   const persist = (value: Saved) => {
+    if (continuationScope && (!mounted.current || !continuationActive.current)) throw new Error("The Home continuation context is no longer authorized.");
     sessionStorage.setItem(storageKey, JSON.stringify(value));
     currentRecord.current = value;
     if (mounted.current) setSaved(value);
@@ -79,7 +102,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
       try {
         const me = await runtimeApi.me(controller.signal);
         if (controller.signal.aborted) return;
-        const identity = [me.server_id, me.agent_id, agentId, binding.binding_id, ...(connectionTest ? ["connection-test", binding.binding_revision, testConfigurationKey] : [])];
+        const identity = [me.server_id, me.agent_id, agentId, binding.binding_id, ...(continuationScope ? ['home-continuation', continuationScope.session_id] : []), ...(connectionTest ? ["connection-test", binding.binding_revision, testConfigurationKey] : [])];
         const key = `okto-nexus:r4-runtime:${JSON.stringify([...identity, binding.workspace_binding_id])}`;
         let raw = sessionStorage.getItem(key);
         if (!raw) {
@@ -90,7 +113,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
           const record = JSON.parse(raw) as Saved;
           if (!record.request || record.request.agent_id !== agentId || record.request.binding_id !== binding.binding_id ||
               record.request.workspace_binding_id !== binding.workspace_binding_id || !record.request.client_intent_id ||
-              typeof record.submissionAttempted !== "boolean") throw new Error("The saved runtime request is invalid. Keep it for recovery; no request was sent.");
+              typeof record.submissionAttempted !== "boolean" || continuationScope && (record.request.intent !== "turn.submit" || record.request.session_id !== continuationScope.session_id)) throw new Error("The saved runtime request is invalid. Keep it for recovery; no request was sent.");
           currentRecord.current = record; setSaved(record);
           if (record.reviewError) setError(record.reviewError);
           setIntent(record.request.intent);
@@ -123,6 +146,7 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
   }, [storageKey, saved?.request.client_intent_id, saved?.reviewError]);
 
   const review = async () => {
+    await validateContinuation();
     let record = saved;
     if (!record) {
       const id = Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, "0")).join("");
@@ -214,16 +238,17 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
     {connectionTest && !canStart && !saved && <p role="alert">Execution is not authorized or the installation is unavailable. Return to Authorization and refresh readiness.</p>}
     {!connectionTest && <p>Review an action, then submit it for this agent and connection. Execution requires the agent's current grant.</p>}
     {!connectionTest && !saved && <fieldset disabled={busy || !storageKey} className="space-y-2">
-      <label className="block">Action <select aria-label="Runtime action" className={fieldClass} value={intent}
+      {!continuationScope && <label className="block">Action <select aria-label="Runtime action" className={fieldClass} value={intent}
         onChange={event => setIntent(event.target.value as RuntimeIntent)}>
         {Object.entries(labels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-      </select></label>
+      </select></label>}
+      {continuationScope && <p className="text-sm break-all">Continue as operator in session {continuationScope.session_id}. Workspace and recipient are fixed.</p>}
       {intent === "runtime.start" && <label className="block">Session selection <select aria-label="Session selection" className={fieldClass}
         value={selection} onChange={event => setSelection(event.target.value)}>
         <option value="automatic">Reuse if unambiguous; otherwise start</option><option value="new">Create a new session</option>
         <option value="existing">Reuse a specific session</option>
       </select></label>}
-      {needsSession && <label className="block">Session ID <input aria-label="Runtime session ID" className={fieldClass} value={sessionId}
+      {needsSession && !continuationScope && <label className="block">Session ID <input aria-label="Runtime session ID" className={fieldClass} value={sessionId}
         maxLength={160} onChange={event => setSessionId(event.target.value)} /></label>}
       {(intent === "runtime.start" || needsText) && <label className="block">{intent === "runtime.start" ? "Initial message (optional)" : "Message"}
         <textarea aria-label="Runtime message" className={fieldClass} rows={3} value={text} maxLength={65536}
@@ -248,16 +273,17 @@ export function RuntimeOperations({agentId, binding, canStart, connectionTest = 
         <p>{resolution.reuse ? "Reuse existing session" : "Session"}: <span data-testid="runtime-operation-session">{resolution.session_id}</span></p>
         {!resolution.can_submit && <p role="alert">Cannot submit: {resolution.blockers.join(", ")}</p>}
         {expired && !saved.submissionAttempted && <p role="status">This review expired. Review a new request before submitting.</p>}
-        {!operation && <button className="btn btn-primary" disabled={busy || !resolution.can_submit || (expired && !saved.submissionAttempted)}
+        {!operation && <button className="btn btn-primary" disabled={busy || !resolution.can_submit || (expired && !saved.submissionAttempted) || !!continuationScope && saved.submissionAttempted}
           onClick={() => void run(async () => {
+            await validateContinuation();
             const record = {...saved, submissionAttempted: true};
             persist(record);
             const result = await runtimeApi.submit(resolution);
             if (!matches(result.scope) || result.operation_id !== resolution.operation_id) throw new Error("The admitted operation does not match this selection.");
-            if (mounted.current) { setOperation(result); setSessionId(resolution.session_id); }
+            if (mounted.current && (!continuationScope || continuationActive.current)) { setOperation(result); setSessionId(resolution.session_id); }
           })}>{uncertain ? "Retry the same submission" : "Submit reviewed action"}</button>}
       </>}
-      {uncertain && <p role="status">Submission is not confirmed. Check its result or retry the same request. Do not create a replacement action.</p>}
+      {uncertain && <p role="status">Submission is not confirmed. Check its result. Do not create a replacement action.</p>}
       <button className="btn btn-secondary" disabled={busy} onClick={() => void run(() => check(saved))}>Check action result</button>
       {operation && <div role="status" data-testid="runtime-operation-status">
         <p>Admission: {operation.admission_state}. Execution: {operation.executor_stage || "Awaiting executor"}.</p>

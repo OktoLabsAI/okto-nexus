@@ -69,6 +69,8 @@ import {
 import { useTheme } from "./hooks/useTheme";
 import { GraphView } from "./views/GraphView";
 import { HomeView } from "./views/HomeView";
+import {clearHomeContinuationRequests} from "./components/home/continuation";
+import {OperationalHome} from "./components/home/OperationalHome";
 import { AgentsView } from "./views/AgentsView";
 import { MessagesView } from "./views/MessagesView";
 import { HandoffsView } from "./views/HandoffsView";
@@ -138,14 +140,16 @@ export default function App() {
   useEffect(() => {
     sessionStorage.removeItem("okto_nexus_operator_key");
     void refreshAuth();
-    const expired = () => { void refreshAuth(); };
+    const expired = () => {clearHomeContinuationRequests(sessionStorage);void refreshAuth();};
     window.addEventListener("nexus-auth-expired", expired);
     return () => window.removeEventListener("nexus-auth-expired", expired);
   }, [refreshAuth]);
   if (error) return <div role="alert" className="p-6">{error}<button className="btn btn-secondary ml-3" onClick={() => void refreshAuth()}>Retry</button></div>;
   if (!status) return <div className="p-6">Connecting…</div>;
   if (!status.authenticated) return <OperatorGate configured={status.configured} onUnlock={() => void refreshAuth()} />;
-  return <Dashboard localOpen={status.local} onLock={() => {
+  return <Dashboard key={status.username || "local-operator"} identityKey={JSON.stringify([status.local, status.username])} localOpen={status.local} onLock={() => {
+    clearHomeContinuationRequests(sessionStorage);
+    window.dispatchEvent(new Event('nexus-operator-logout'));
     void api.operatorLogout().then(refreshAuth).catch(exc => setError((exc as Error).message));
   }} />;
 }
@@ -198,9 +202,11 @@ function OperatorGate({configured, onUnlock}: {configured: boolean; onUnlock: ()
 function Dashboard({
   onLock,
   localOpen,
+  identityKey,
 }: {
   onLock: () => void;
   localOpen: boolean;
+  identityKey: string;
 }) {
   const { theme, toggle } = useTheme();
   const [view, setViewState] = useState<View>("Home");
@@ -214,9 +220,19 @@ function Dashboard({
     window.addEventListener('keydown', escape);
     return () => { media.removeEventListener('change', resize); window.removeEventListener('keydown', escape); };
   }, []);
+  const homeLeaveGuard = useRef<(() => boolean) | null>(null);
+  const registerHomeLeaveGuard = useCallback((guard: (() => boolean) | null) => {homeLeaveGuard.current = guard;}, []);
+  const mayLeavePanel = useCallback(() => {
+    if (homeLeaveGuard.current && !homeLeaveGuard.current()) return false;
+    const attentionDialog = document.querySelector<HTMLDialogElement>('[data-testid="attention-inspection"]');
+    if (attentionDialog) {attentionDialog.dispatchEvent(new Event('cancel', {cancelable:true}));return false;}
+    return true;
+  }, []);
+  const [homeOperational, setHomeOperational] = useState(() => localStorage.getItem('okto-nexus-home-operational') === 'enabled');
+  const [latestHomeEvent, setLatestHomeEvent] = useState<NexusEvent | null>(null);
   const settingsPending = useRef(false);
   const onSettingsPending = useCallback((pending: boolean) => {settingsPending.current = pending;}, []);
-  const mayLeaveSettings = () => !settingsPending.current || window.confirm('Discard unsaved settings and leave this page?');
+  const mayLeaveSettings = () => mayLeavePanel() && (!settingsPending.current || window.confirm('Discard unsaved settings and leave this page?'));
   const viewRef = useRef<View>(view);
   viewRef.current = view;
   // Operator notifications (#78). visitBaseline is the "seen" marker from
@@ -224,6 +240,7 @@ function Dashboard({
   // for the "new since your last visit" divider.
   const [visitBaseline, setVisitBaseline] = useState<string | null>(null);
   const setView = useCallback((next: View) => {
+    if (!mayLeavePanel()) return;
     if (!settingsPending.current || window.confirm('Discard unsaved settings and leave this page?')) {
       settingsPending.current = false;
       if (OPERATOR_VIEWS.includes(next) && !OPERATOR_VIEWS.includes(viewRef.current)) {
@@ -290,6 +307,7 @@ function Dashboard({
   }, [workspace, view]);
   const attentionSummary = ['forbidden', 'disabled'].includes(attention.state.status) ? null : attention.state.summary;
   const pickWorkspace = (id: string) => {
+    if (!mayLeavePanel()) return;
     localStorage.setItem("okto-nexus-workspace", id);
     setWorkspace(id);
   };
@@ -439,6 +457,7 @@ function Dashboard({
     useCallback(
       (event: NexusEvent) => {
         setEventLog((log) => [...log.slice(-499), event]);
+        setLatestHomeEvent(event);
         setLiveTick((t) => t + 1);
         // approval.requested/granted/denied move the pending queue — bump
         // the dedicated tick (badge + Approvals screen refetch on it).
@@ -883,8 +902,22 @@ function Dashboard({
       </aside>
 
       <main className="flex-1 min-w-0 overflow-hidden">
-          {view === 'Home' && <HomeView key={workspace} workspace={workspace}
-            refreshTick={refreshTick} attention={attention.state} onRefreshAttention={attention.refresh} onNavigate={setView} />}
+          {view === 'Home' && <div className="h-full flex flex-col min-h-0">
+            <div className="shrink-0 px-4 pt-2 flex justify-end">
+              <button type="button" className="text-xs text-surface-500 underline" aria-pressed={homeOperational}
+                onClick={() => {if (!mayLeavePanel()) return;const next = !homeOperational;localStorage.setItem('okto-nexus-home-operational', next ? 'enabled' : 'disabled');setHomeOperational(next);}}>
+                {homeOperational ? 'Use classic Home' : 'Use operational Home'}
+              </button>
+            </div>
+            <div className="min-h-0 flex-1">
+              {homeOperational && info?.features?.feature_home !== false
+                ? <OperationalHome key={workspace} workspace={workspace} workspaces={workspaces} identityKey={identityKey}
+                    refreshTick={refreshTick} latestEvent={latestHomeEvent} streamStatus={sseStatus} onNavigate={setView}
+                    onAttentionChanged={attention.refresh} onSetupAgent={() => setOnboardingOpen(true)} registerLeaveGuard={registerHomeLeaveGuard}/>
+                : <HomeView key={workspace} workspace={workspace} refreshTick={refreshTick} attention={attention.state}
+                    onRefreshAttention={attention.refresh} onNavigate={setView}/>}
+            </div>
+          </div>}
           {view === 'Attention' && <AttentionView
             state={{...attention.state, notice: attention.state.notice ?? attentionNavigationNotice}}
             filters={attention.filters} onFiltersChange={attention.setFilters}

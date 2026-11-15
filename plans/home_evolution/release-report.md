@@ -44,3 +44,30 @@ Rollback é reversão dos arquivos de baseline/versão; dados não foram migrado
 Próximo incremento: PR-01, read model batch autorizado e APIs de leitura; depois
 PR-02 consome esse contrato na Home. O fallback clássico será preservado no
 controle de apresentação, sem efeitos no runtime.
+
+## Foundation e apresentação — implementação incremental
+
+Foundation commit/push `c5294a30`: DTOs, adapter GET compartilhado, navegação
+tipada, apresentação, controller serial e hook. Qualificação final tem 26 testes
+focais únicos e TypeScript PASS. Resultados originais e testes de deltas são
+aditivos; não somar rodadas sobrepostas. Não há novo EventSource.
+
+Interface PR-02/03/04 reutiliza composer Meta-harness, inspeção canônica e modal
+nativo no modo drawer. Continuação fixa a sessão exata e revalida antes de agir.
+Respostas tardias após logout/unmount não publicam artefato, envio ou checkpoint.
+Qualificação Node/SSR: 28 casos únicos (16 novos e 12 regressões), sem alegação
+DOM. Build TypeScript/Vite PASS; outputs pinados em
+`evidence/pr02-04-ui/qualification.json`. O warning de bundle acima de500kB
+permanece explícito. A regressão frontend integrada executou196 testes PASS,
+sem falha/skip, tool31a86d,8,57s.
+
+Os três cortes visuais compartilham a extração do composer/inspeção e são
+submetidos juntos como marco coerente; a numeração das tarefas/aceites permanece
+individual no ledger. O controle local começa OFF até a qualificação M3. Ainda
+não há promoção dos73cenários, release, deploy ou campanha real nesta etapa.
+
+Seis checks reais de navegador em fixture loopback descartável passaram,
+incluindo escopo, alvo exato, rascunho/foco/seleção,360px, fallback e403. São uma
+rodada preliminar contra o servidor iniciado antes das últimas mudanças backend;
+repetição com fontes finais pinadas é necessária. Ver
+`evidence/pr06-browser/preliminary.json`; não substituir por testes SSR.
