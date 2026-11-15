@@ -2,23 +2,37 @@
   "schema_version": 1,
   "plan": "plans/home_evolution/source-plan.md",
   "plan_sha256": "af6aa910d2ebd6f420b3b5905838a6d50b301cf66d3b9c0f09fbbb26e8f9bf14",
-  "updated_at": "2026-11-15T23:18:36.005958+00:00",
+  "updated_at": "2026-11-15T23:28:28.270337+00:00",
   "scenarios": {
     "HOME-T-A01": {
       "requirement": "Projeto A não inclui atividades, pendências ou contadores de B, embora um mesmo agente exista nos dois.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "commit": "af3ad382 + test-only scoped qualification",
+      "environment": "Migrated disposable SQLite and real ASGI Home routes, operator context, no provider/native/runtime service",
+      "limitations": [
+        "Synthetic canonical rows; no native harness execution."
+      ],
+      "tests": [
+        "test_project_a_unchanged_when_same_agent_adds_b_work_attention_and_results"
+      ]
     },
     "HOME-T-A02": {
       "requirement": "Todos os projetos é uma união autorizada, sem duplicar agente, handoff ou entrega por join.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "commit": "af3ad382 + test-only scoped qualification",
+      "environment": "Migrated disposable SQLite and real ASGI Home routes, operator context, no provider/native/runtime service",
+      "limitations": [
+        "Synthetic canonical rows; no native harness execution."
+      ],
+      "tests": [
+        "test_all_projects_is_exact_paged_union_despite_repeated_memberships_and_links"
+      ]
     },
     "HOME-T-A03": {
       "requirement": "Um agente global sem vínculo ou atividade autorizada em A não aparece como atuante em A.",
@@ -123,11 +137,18 @@
     },
     "HOME-T-B02": {
       "requirement": "Instância one-shot aquecida, processo iniciando ou cleanup isolado não contam como novo trabalho produtivo.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-scope/qualification.json"
+      ],
+      "commit": "af3ad382 + test-only scoped qualification",
+      "environment": "Migrated disposable SQLite and real ASGI Home routes, operator context, no provider/native/runtime service",
+      "limitations": [
+        "Synthetic canonical rows; no native harness execution."
+      ],
+      "tests": [
+        "test_technical_open_or_cleanup_without_turn_is_not_productive_work [READY, OPENING, cleanup]"
+      ]
     },
     "HOME-T-B03": {
       "requirement": "CLAIMED sem evidência nativa mostra Assumido, não Executando.",

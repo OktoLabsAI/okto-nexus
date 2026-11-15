@@ -203,3 +203,11 @@ E03/E05 passam no menor nível controller/presentation, complementado pela
 expiração SQLite já executada. E02 continua NOT_RUN: falta a fronteira de
 assinatura/transporte real, que esses testes não substituem. Ledger atual:
 58PASS/15NOT_RUN. Ver `evidence/pr07-stream/qualification.json`.
+
+Cinco novos testes SQLite/HTTP em `evidence/pr07-scope/` passaram e qualificam
+A01/A02/B02: isolamento com mesmo agente em dois projetos e alterações adversariais
+de trabalho/pendência/resultado em B, união paginada com vínculos repetidos e
+retries, sessões READY/OPENING/cleanup sem turno produtivo. Ruff/diff-check PASS.
+Uma falha anterior era falta de autoridade canônica na fixture, corrigida em
+verify_by, sem mudança do produto. A08 permanece NOT_RUN sem produtor global
+canônico disponível, sem fabricar NULL inválido. Contagem atual:61PASS/12NOT_RUN.

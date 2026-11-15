@@ -106,3 +106,13 @@ Tarefas e invariantes receberam fontes, testes e limitações explícitas.
 M3 não foi aprovado: campanha consentida, compreensão humana e ramos restantes
 continuam separados; p95 de500ms não atingido. A apresentação segue OFF por
 padrão. Core/Connector permanecem limpos e sincronizados nas branches existentes.
+
+## Qualificação adversarial adicional
+
+Quatro testes novos do controlador passaram para eventos durante leituras,
+hints duplicados/fora de ordem e TTL externo com stream live. Outros5 testes
+SQLite/HTTP provaram isolamento adversarial A/B, união paginada sem duplicações
+e estados técnicos READY/OPENING/cleanup sem turno produtivo. Produto e wheel
+permanecem iguais; são deltas de testes. Ledger atual:61PASS/12NOT_RUN.
+A08 permanece sem produtor global canônico exercitado; não foi criada uma
+linha inválida para simular esse aceite. Evidências `pr07-stream` e `pr07-scope`.

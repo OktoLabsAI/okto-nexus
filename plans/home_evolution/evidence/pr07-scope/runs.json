@@ -1,0 +1,68 @@
+{
+  "first": {
+    "source_sha256": "ef8e9e7b3875af96a930050e196979f8f4426156cd6f23feade2b6be6fa0cdd2",
+    "cases": [
+      {
+        "name": "test_project_a_unchanged_when_same_agent_adds_b_work_attention_and_results",
+        "outcome": "FAIL"
+      },
+      {
+        "name": "test_all_projects_is_exact_paged_union_despite_repeated_memberships_and_links",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_technical_open_or_cleanup_without_turn_is_not_productive_work[READY-False]",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_technical_open_or_cleanup_without_turn_is_not_productive_work[OPENING-False]",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_technical_open_or_cleanup_without_turn_is_not_productive_work[READY-True]",
+        "outcome": "PASS"
+      }
+    ],
+    "passed": 4,
+    "failed": 1
+  },
+  "first_failure": {
+    "kind": "fixture_authority_error",
+    "assertion": "needs_you increased in B",
+    "actual": "0 > 0 false",
+    "explanation": "VERIFYING handoff lacked an eligible operator verifier. A isolation assertions already passed. Fixed synthetic verify_by to explicit operator; no production change."
+  },
+  "final": {
+    "source_sha256": "7202e563794d1de2e07f098133116177e1146ca7703a047a9c36ac59d70ff116",
+    "cases": [
+      {
+        "name": "test_project_a_unchanged_when_same_agent_adds_b_work_attention_and_results",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_all_projects_is_exact_paged_union_despite_repeated_memberships_and_links",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_technical_open_or_cleanup_without_turn_is_not_productive_work[READY-False]",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_technical_open_or_cleanup_without_turn_is_not_productive_work[OPENING-False]",
+        "outcome": "PASS"
+      },
+      {
+        "name": "test_technical_open_or_cleanup_without_turn_is_not_productive_work[READY-True]",
+        "outcome": "PASS"
+      }
+    ],
+    "passed": 5,
+    "failed": 0
+  },
+  "tool_refs": {
+    "initial": "f7613e",
+    "final": "272433",
+    "ruff": "8eb46c",
+    "diffcheck": "de3df6"
+  }
+}
