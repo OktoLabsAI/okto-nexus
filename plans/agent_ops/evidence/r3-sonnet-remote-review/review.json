@@ -1,0 +1,37 @@
+{
+  "status": "CANONICAL_REMOTE_DRAFT_AND_REVIEW_OBSERVED_NO_TRANSFER",
+  "canonical_review_revision": "37d5ac60c41c875a7ca1f604ab0cd5aea55d108226a23c2eacdcd75c32d01aa3",
+  "model_admissions": 0,
+  "work_admissions": 0,
+  "credential_transfers": 0,
+  "apply_selected_here": false,
+  "root_technical_selection": "Exact review effects selected prospectively; durable transfer selection still awaits final transfer-context hash. This milestone is not apply/transfer execution.",
+  "root_reported_tools": {
+    "draft_start": "77f95b",
+    "draft_session": 75951,
+    "draft_exit0": "3ad45f",
+    "plan_exit0": "6073d9",
+    "nine_pin_check": "599c41",
+    "source_review": "e6fd6f",
+    "live_phase1_watch_session": 32142,
+    "last_reported_live_watch": "285aeb"
+  },
+  "retained_scope": "Fresh discovered Claude candidate; installed interactive Connector draft/customize and installed operator plan. No raw stdout, credentials, private files or nonce.",
+  "configuration": {
+    "model": "sonnet",
+    "permission_mode": "default",
+    "inherit_global_mcps": "disabled",
+    "session_policy": "per_sender",
+    "tool_access": "ask",
+    "authorization_minutes": 60,
+    "authorization_actions": 3
+  },
+  "service_state": "Phase1 Server/cohort observer still live at root handoff; no cleanup claimed.",
+  "dashboard_state": "Own tab opened only; no work or closure acceptance claimed.",
+  "acceptance_promoted": false,
+  "scenario_counts": {
+    "VERIFIED": 125,
+    "IN_PROGRESS": 5,
+    "NOT_RUN": 2
+  }
+}

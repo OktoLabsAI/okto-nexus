@@ -1,0 +1,143 @@
+{
+  "format": "sonnet-remote-review-public-retention-v1",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "ef66c089f67af05cbcd181c32bcf31afd9d3ec8a4b2a62618d5d5bd1992534d1",
+      "bytes": 1512,
+      "source": "curation narrative"
+    },
+    {
+      "path": "onboarding-freeze.json",
+      "sha256": "88bc620ff927836a937981e7b8a30bbcb0f117dea65ee3482d5de14d99b7cdf0",
+      "bytes": 2447,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding-freeze.json"
+    },
+    {
+      "path": "onboarding-plan.json",
+      "sha256": "8de8b5821180dccc8dc43d3b2455d989e072cb8568bd7936c046572be08f9441",
+      "bytes": 3242,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding-plan.json"
+    },
+    {
+      "path": "onboarding-qualification.json",
+      "sha256": "d41b715d0d468589c2f97c99db53bde0bad8cc8f0b9550eb5c7c4bdeee61bde1",
+      "bytes": 835,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding-qualification.json"
+    },
+    {
+      "path": "onboarding-tests.xml",
+      "sha256": "90210f1f5bd24e86c6cdb8d6d8493ad1b2bf731022e49d069340c71aae55a250",
+      "bytes": 770,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding-tests.xml"
+    },
+    {
+      "path": "onboarding-workflow.json",
+      "sha256": "db4fbed65942c8c64fe0e024a86ad4cb4743117c17588ffb8d46d4fd11aa6ed5",
+      "bytes": 1534,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding-workflow.json"
+    },
+    {
+      "path": "onboarding_context.py",
+      "sha256": "1b36091291414ed370beb41716d616ecedc10fb14c7b75d74dc8ea5b871aa64f",
+      "bytes": 3544,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding_context.py"
+    },
+    {
+      "path": "onboarding_entry.py",
+      "sha256": "5d466cc73a497764ac8852e7995c76538d5ae7f568b228c084a7232772f8b568",
+      "bytes": 468,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding_entry.py"
+    },
+    {
+      "path": "public/sonnet-connector-draft.json",
+      "sha256": "88a6ea8e90e508c7a656455aeb8ae004ff108c76b35dfbc809d52f80665e27b8",
+      "bytes": 984,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-connector-draft.json"
+    },
+    {
+      "path": "public/sonnet-discover-reserved.json",
+      "sha256": "ed341b392a67e14b6bcf060a3d0630502533231a6bf5649617536f12c037286b",
+      "bytes": 602,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-discover-reserved.json"
+    },
+    {
+      "path": "public/sonnet-discover-returned.json",
+      "sha256": "9a7be3a0d95b73163314ebb19a3ac4026447577bf495cbab7fddc437ab7fa33b",
+      "bytes": 318,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-discover-returned.json"
+    },
+    {
+      "path": "public/sonnet-draft-reserved.json",
+      "sha256": "df18ccbc4addabc0dab0c0444f1e36a1c1e4afa32a47bd275d9506c4cfe136e6",
+      "bytes": 1173,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-draft-reserved.json"
+    },
+    {
+      "path": "public/sonnet-draft-returned.json",
+      "sha256": "6fa90a367528c49a8ba372ce2041d6c2b1b164f9196db1d81140659cbb85286e",
+      "bytes": 318,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-draft-returned.json"
+    },
+    {
+      "path": "public/sonnet-draft-validated.json",
+      "sha256": "279d5ce60160569c659b7502517345aff5ee63dbda08ae5ef2a2e1dca33f5775",
+      "bytes": 969,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-draft-validated.json"
+    },
+    {
+      "path": "public/sonnet-inventory-selection.json",
+      "sha256": "bd4dd6790f1631873fb5771d49e50428412ae638b48da2b28266836dd96de227",
+      "bytes": 422,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-inventory-selection.json"
+    },
+    {
+      "path": "public/sonnet-plan-reserved.json",
+      "sha256": "0efa4adf44fa9b5bc884d27ebe71dd9ad766b2c940db6096db3877a9c1f6ec54",
+      "bytes": 859,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-plan-reserved.json"
+    },
+    {
+      "path": "public/sonnet-plan-returned.json",
+      "sha256": "359aa6be0389a8850f51d0d1a8c3855e735258b9e8df77525af82b17de846f4f",
+      "bytes": 318,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-plan-returned.json"
+    },
+    {
+      "path": "public/sonnet-review.json",
+      "sha256": "24bddfd0a565027e44d8c555901fa5fa0d23a501d513e845cc7d7df0ca8fca32",
+      "bytes": 7266,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-review.json"
+    },
+    {
+      "path": "remote_onboarding.py",
+      "sha256": "611eef9e93014e7dabb4256a00edcc9e4df864ce401f294cce30adee92b17921",
+      "bytes": 9544,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\remote_onboarding.py"
+    },
+    {
+      "path": "review.json",
+      "sha256": "9a3df70d149fa454c544520a2881554a69a8aa035954ad0baa812e3174ff5b14",
+      "bytes": 1506,
+      "source": "curation/root-report"
+    },
+    {
+      "path": "run_onboarding_tests.py",
+      "sha256": "235a7babb5c0f90feed1bc1952a1b1a18b52509951bed2ab36b90b5dec8d9d98",
+      "bytes": 313,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\run_onboarding_tests.py"
+    },
+    {
+      "path": "test_onboarding.py",
+      "sha256": "e686c14e5f83c53962d31aaa9f63de960088cdd8d50eb2a7a7769d1af312af5a",
+      "bytes": 3489,
+      "source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\test_onboarding.py"
+    }
+  ],
+  "validation": {
+    "freeze_hashes": "PASS",
+    "explicit_allowlist": true,
+    "secret_patterns_and_json": "PASS",
+    "private_files_copied": 0
+  }
+}

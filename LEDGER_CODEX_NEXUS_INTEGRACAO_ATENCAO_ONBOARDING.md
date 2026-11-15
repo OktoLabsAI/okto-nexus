@@ -2239,3 +2239,10 @@ e [escopo](plans/agent_ops/evidence/r3-svc20-configured-nexus-next-connect/READM
 - A preparação direta com import isolado falhou antes de efeitos; o launcher corrigido e pinado concluiu a preparação. Falha preservada como relato atribuído ao root, sem recibo retroativo.
 - Serviço e observador de coorte (sessão root 32142) continuam ativos neste marco. **Nenhuma limpeza ou saída física é alegada.** Connector remoto, trabalho útil/continuação e fechamento de console/dashboard não são comprovados por esta fase.
 - [Evidência pública e limites](plans/agent_ops/evidence/r3-sonnet-phase1-operator/review.json). Nenhum cenário promovido: **125 VERIFIED, 5 IN_PROGRESS e 2 NOT_RUN**, inalterados.
+
+## 2026-11-15 — Sonnet remoto: draft e revisão canônica, sem transferência
+
+- Descoberta atual do Connector, draft customizado e plano do operador concluíram com código 0. Revisão `37d5ac60…` propõe Sonnet/default, MCPs globais desativados, per_sender/ask e autorização finita de 60 minutos/3 ações.
+- Efeitos exatos selecionados prospectivamente pelo root; seleção de transferência ainda aguardava o hash final do contexto. **Nenhuma aplicação, transferência de chave, admissão de trabalho ou chamada de modelo é alegada.**
+- Serviço Nexus e observador de coorte da fase1 permanecem ativos; nenhum cleanup ou fechamento de dashboard/console é comprovado por este marco.
+- [Evidência pública e limites](plans/agent_ops/evidence/r3-sonnet-remote-review/review.json). Status inalterados: **125 VERIFIED, 5 IN_PROGRESS e 2 NOT_RUN**.

@@ -13889,6 +13889,19 @@
       "login_cli_calls": 1,
       "service_cleanup_claimed": false,
       "acceptance_promoted": false
+    },
+    "r3_sonnet_remote_review": {
+      "status": "CANONICAL_REMOTE_DRAFT_AND_REVIEW_OBSERVED_NO_TRANSFER",
+      "summary": "Actual installed Connector fresh discovery/customized draft and operator canonical remote review returned0. Sonnet/default, globalMCPdisabled, per_sender/ask,60min3actions. Exactreview37d5ac60 selected prospectively; transferselection awaits final context hash. No apply/keytransfer/model/work. Phase1service/watch32142 remainlive; no cleanup or scenario promotion,125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/public/sonnet-review.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/public/sonnet-draft-validated.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/manifest.json"
+      ],
+      "model_admissions": 0,
+      "credential_transfers": 0,
+      "acceptance_promoted": false
     }
   },
   "history": [
@@ -15609,6 +15622,21 @@
       "account_posts": 1,
       "login_cli_calls": 1,
       "service_cleanup_claimed": false,
+      "acceptance_promoted": false
+    },
+    {
+      "date": "2026-11-15",
+      "milestone": "r3_sonnet_remote_review",
+      "status": "CANONICAL_REMOTE_DRAFT_AND_REVIEW_OBSERVED_NO_TRANSFER",
+      "summary": "Actual installed Connector fresh discovery/customized draft and operator canonical remote review returned0. Sonnet/default, globalMCPdisabled, per_sender/ask,60min3actions. Exactreview37d5ac60 selected prospectively; transferselection awaits final context hash. No apply/keytransfer/model/work. Phase1service/watch32142 remainlive; no cleanup or scenario promotion,125/5/2 unchanged.",
+      "evidence": [
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/review.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/public/sonnet-review.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/public/sonnet-draft-validated.json",
+        "plans/agent_ops/evidence/r3-sonnet-remote-review/manifest.json"
+      ],
+      "model_admissions": 0,
+      "credential_transfers": 0,
       "acceptance_promoted": false
     }
   ],

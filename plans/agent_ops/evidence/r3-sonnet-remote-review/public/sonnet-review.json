@@ -1,0 +1,235 @@
+{
+  "review_revision": "37d5ac60c41c875a7ca1f604ab0cd5aea55d108226a23c2eacdcd75c32d01aa3",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "profile": "m1-sonnet-remote",
+  "profile_sha256": "1e472cea0837ba38604dac8185b5b28179f39ef325a95d777c443dd1757c84ac",
+  "review": {
+    "child_requests": {
+      "apply": "m1-sonnet-remote-setup-01_apply",
+      "prepare": "m1-sonnet-remote-setup-01_prepare",
+      "realize": "m1-sonnet-remote-setup-01_realize",
+      "register": "m1-sonnet-remote-setup-01_register"
+    },
+    "draft": {
+      "agent_hint": null,
+      "configuration": {
+        "adapter_id": "claude_stream",
+        "alias": "m1-sonnet-remote",
+        "authorization": {
+          "actions": 3,
+          "minutes": 60,
+          "no_expiry": false,
+          "unlimited_actions": false
+        },
+        "automatic_reply": true,
+        "format": "okto-nexus-connection",
+        "harness_settings": {
+          "inherit_global_mcps": "disabled",
+          "model": "sonnet",
+          "permission_mode": "default"
+        },
+        "runtime_enabled": true,
+        "session_policy": "per_sender",
+        "tool_access": "ask",
+        "version": 2
+      },
+      "connector_id": "conn_887669253d934032a0187ce5",
+      "format": "okto.remote-setup-draft",
+      "installation": {
+        "adapter_id": "claude_stream",
+        "candidate_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa",
+        "inventory_revision": null
+      },
+      "local_consent": {
+        "configuration_digest": null,
+        "local_consent_id": "m1-sonnet-remote-setup-01_consent",
+        "local_root_proof_digest": null
+      },
+      "project_label": "connector-project",
+      "server_origin": "http://127.0.0.1:58631",
+      "setup_run_id": "m1-sonnet-remote-setup-01",
+      "start_at_login": false,
+      "version": 1,
+      "workspace_hint": null
+    },
+    "draft_revision": "2381f69c6b8da11799d103e40c651b6dee6df520db55af355df2bab5ee4e0364",
+    "effects": {
+      "coordination_permissions": {
+        "artifacts": {
+          "put": true
+        },
+        "channels": {
+          "create": false
+        },
+        "events": {
+          "read": true
+        },
+        "experimental": {
+          "memory_read": false,
+          "memory_search": false,
+          "memory_write": false
+        },
+        "handoffs": {
+          "cancel": true,
+          "create": true,
+          "work": true
+        },
+        "health": {
+          "read": true
+        },
+        "identity": {
+          "update_capabilities": false,
+          "update_profile": true
+        },
+        "limits": {
+          "max_recipients": 10,
+          "messages_per_minute": 60
+        },
+        "messages": {
+          "send_broadcast": false,
+          "send_channel": true,
+          "send_direct": true
+        },
+        "observations": {
+          "manage_self": false,
+          "publish": false
+        },
+        "shared_md": {
+          "render": true
+        },
+        "workspaces": {
+          "include_paths": false,
+          "list": true
+        }
+      },
+      "credential": "issue_once",
+      "credential_scope": "canonical_agent_identity",
+      "global_administration": "never_granted_by_this_review",
+      "host_checks": "after_confirmation",
+      "identity": "create",
+      "native_decision_policy": {
+        "expected_revision": "cb9cda288f90ebd985c304c1f17081c2692b51bfc7dbd7a87537f7a493dd8fd3",
+        "initialize": false
+      },
+      "previous_machines": [],
+      "productive_turn": false,
+      "remote_configuration": {
+        "adapter_id": "claude_stream",
+        "alias": "m1-sonnet-remote",
+        "authorization": {
+          "actions": 3,
+          "minutes": 60,
+          "no_expiry": false,
+          "unlimited_actions": false
+        },
+        "automatic_reply": true,
+        "format": "okto-nexus-connection",
+        "harness_settings": {
+          "inherit_global_mcps": "disabled",
+          "model": "sonnet",
+          "permission_mode": "default"
+        },
+        "runtime_enabled": true,
+        "session_policy": "per_sender",
+        "tool_access": "ask",
+        "version": 2
+      },
+      "remote_machine_policy": "manual",
+      "revoke_previous_machine_authority": false,
+      "start_at_login": false,
+      "workspace": "create"
+    },
+    "format": "okto.remote-setup-review",
+    "review_revision": "37d5ac60c41c875a7ca1f604ab0cd5aea55d108226a23c2eacdcd75c32d01aa3",
+    "selection": {
+      "baseline": {
+        "binding_revision": null,
+        "defaults_revision": 1,
+        "endpoint_revision": null,
+        "execution_revision": 0,
+        "runtime_revision": 0
+      },
+      "credential": {
+        "expected_epoch": 0,
+        "mode": "issue_once"
+      },
+      "identity": {
+        "agent_id": "m1-sonnet-remote",
+        "display_name": "m1-sonnet-remote",
+        "mode": "create"
+      },
+      "identity_snapshot": {
+        "defaults_hash": "sha256:6324ab87d77e9be205e191bec96469118655aff30133a27f6948d3d513c77663",
+        "permissions": {
+          "artifacts": {
+            "put": true
+          },
+          "channels": {
+            "create": false
+          },
+          "events": {
+            "read": true
+          },
+          "experimental": {
+            "memory_read": false,
+            "memory_search": false,
+            "memory_write": false
+          },
+          "handoffs": {
+            "cancel": true,
+            "create": true,
+            "work": true
+          },
+          "health": {
+            "read": true
+          },
+          "identity": {
+            "update_capabilities": false,
+            "update_profile": true
+          },
+          "limits": {
+            "max_recipients": 10,
+            "messages_per_minute": 60
+          },
+          "messages": {
+            "send_broadcast": false,
+            "send_channel": true,
+            "send_direct": true
+          },
+          "observations": {
+            "manage_self": false,
+            "publish": false
+          },
+          "shared_md": {
+            "render": true
+          },
+          "workspaces": {
+            "include_paths": false,
+            "list": true
+          }
+        },
+        "role": "Project assistant"
+      },
+      "native_decision_policy": {
+        "expected_revision": "cb9cda288f90ebd985c304c1f17081c2692b51bfc7dbd7a87537f7a493dd8fd3",
+        "initialize": false
+      },
+      "previous_machines": [],
+      "project_preset": {
+        "id": "project-generalist",
+        "revision": 1
+      },
+      "remote_machine_policy": "manual",
+      "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+      "workspace": {
+        "display_name": "connector-project",
+        "mode": "create",
+        "workspace_id": null
+      }
+    },
+    "version": 1
+  },
+  "model_admissions": 0,
+  "selection_required": "Root exact technical review of this canonical document before one transfer.",
+  "amendment_sha256": "8de8b5821180dccc8dc43d3b2455d989e072cb8568bd7936c046572be08f9441"
+}

@@ -1,0 +1,69 @@
+{
+  "scope": "SONNET_CANONICAL_DRAFT_AND_OPERATOR_REVIEW_ONLY",
+  "selected_actions": [
+    "draft",
+    "plan"
+  ],
+  "provider_calls": 0,
+  "phase1_plan": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\phase1-plan.json",
+    "sha256": "9c134a2dd806cf3a173b8c4a0e55f97a00dc6713f94746cf804be914733d658b",
+    "bytes": 10281
+  },
+  "native": {
+    "path": "C:\\Users\\jpamb\\.local\\bin\\claude.exe",
+    "sha256": "5064e6e0572dca86257363ca04d48653eef20ef27f1bd04b504ed7199ed3fd13",
+    "bytes": 367634080,
+    "version": "2.1.323",
+    "version_observation_tool": "8ba30e"
+  },
+  "origin": "http://127.0.0.1:58631",
+  "server_id": "srv_a3f134b449dbffa20c126dae6f9a8aa9",
+  "operator_profile": "m1-sonnet-human",
+  "profile": "m1-sonnet-remote",
+  "agent_id": "m1-sonnet-remote",
+  "setup_request_id": "m1-sonnet-remote-setup-01",
+  "model": "sonnet",
+  "permission_mode": "default",
+  "effort": "harness_default_report_unknown_if_absent",
+  "global_mcps": "disabled",
+  "provider_home": "C:/Users/jpamb/.claude",
+  "provider_home_observation": "Installed discover_provider_home reference only tool210377; no content/auth/native read.",
+  "paths": {
+    "connector_state": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-state",
+    "operator_home": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home",
+    "project": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\connector-project"
+  },
+  "connector_parent_path": [
+    "C:\\Users\\jpamb\\.local\\bin",
+    "C:/Windows/System32",
+    "C:/Program Files/Git/cmd"
+  ],
+  "runtime_pins": {
+    "onboarding_context.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding_context.py",
+      "sha256": "1b36091291414ed370beb41716d616ecedc10fb14c7b75d74dc8ea5b871aa64f",
+      "bytes": 3544
+    },
+    "onboarding_entry.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding_entry.py",
+      "sha256": "5d466cc73a497764ac8852e7995c76538d5ae7f568b228c084a7232772f8b568",
+      "bytes": 468
+    },
+    "remote_onboarding.py": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\remote_onboarding.py",
+      "sha256": "611eef9e93014e7dabb4256a00edcc9e4df864ce401f294cce30adee92b17921",
+      "bytes": 9544
+    }
+  },
+  "authority": "Root selected independent remote Sonnet under existing user200k authority. Literal DX39 verified is basis; W17 semantic failure, Codex579154/16 and oldremoteheld guards remain unchanged. This stage selects only local draft and canonical operator review, no transfer or paid work.",
+  "future_budget_not_enabled_here": {
+    "provider": "Claude Sonnet",
+    "preventive": 150000,
+    "hard": 200000,
+    "minimum_admission_reserve": 50000,
+    "work_calls_max": 2,
+    "setup_call_max_if_canonically_necessary": 1
+  },
+  "future_transfer": "Held: separate exact canonical review selection, protected receiver compatibility and Connector lifecycle/cohort qualification required. No key emitted here."
+}

@@ -1,0 +1,29 @@
+{
+  "draft_sha256": "88a6ea8e90e508c7a656455aeb8ae004ff108c76b35dfbc809d52f80665e27b8",
+  "candidate_ref": "nexus-install-v1:cf87799010465f0cc6012cf0dec649059684bb5d87e716aa18c0326f7e79e2fa",
+  "configuration": {
+    "adapter_id": "claude_stream",
+    "alias": "m1-sonnet-remote",
+    "authorization": {
+      "actions": 3,
+      "minutes": 60,
+      "no_expiry": false,
+      "unlimited_actions": false
+    },
+    "automatic_reply": true,
+    "format": "okto-nexus-connection",
+    "harness_settings": {
+      "inherit_global_mcps": "disabled",
+      "model": "sonnet",
+      "permission_mode": "default"
+    },
+    "runtime_enabled": true,
+    "session_policy": "per_sender",
+    "tool_access": "ask",
+    "version": 2
+  },
+  "local_paths_supplied_explicitly": true,
+  "provider_home_reference": "C:/Users/jpamb/.claude",
+  "model_admissions": 0,
+  "amendment_sha256": "8de8b5821180dccc8dc43d3b2455d989e072cb8568bd7936c046572be08f9441"
+}

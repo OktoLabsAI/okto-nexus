@@ -1,0 +1,18 @@
+{
+  "status": "OFFLINE_NO_MODEL_SUBSTEP_PASS",
+  "tests": 6,
+  "seconds": 5.26,
+  "tool": "9026f7",
+  "xml": {
+    "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\onboarding-tests.xml",
+    "sha256": "90210f1f5bd24e86c6cdb8d6d8493ad1b2bf731022e49d069340c71aae55a250",
+    "bytes": 770
+  },
+  "actual_installed_wizard": true,
+  "isolated_entry_argv_help_and_reject": true,
+  "actual_context_gate": "PASS finalJSON, ownW16prefix, phase1/native/runtimepins; no lifecycle query or provider",
+  "runtime_effects": 0,
+  "source_imports": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+  "provider_calls": 0
+}

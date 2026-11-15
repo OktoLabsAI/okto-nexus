@@ -1,0 +1,27 @@
+{
+  "state": "RESERVED_BEFORE_DISPATCH",
+  "amendment_sha256": "8de8b5821180dccc8dc43d3b2455d989e072cb8568bd7936c046572be08f9441",
+  "argv": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\successor14\\work-revision16\\package\\venv\\Scripts\\python.exe",
+    "-I",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "okto_nexus.adapters.inbound.cli.main",
+    "connect",
+    "--operator-profile",
+    "m1-sonnet-human",
+    "--remote-draft",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-sonnet-remote-candidate-2c_4af0t\\public\\sonnet-connector-draft.json",
+    "--profile",
+    "m1-sonnet-remote",
+    "--new-agent",
+    "m1-sonnet-remote",
+    "--plan",
+    "--json",
+    "--home",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\m1-v12-bundle-bldo9qy7\\campaign\\operator-home"
+  ],
+  "model_admissions": 0
+}
