@@ -2434,3 +2434,9 @@ O [mapa de evidências atuais](plans/agent_ops/evidence/r3-windows-automatic-eve
 Restam os cinco cenários **DX40, DX43, SVC18, SVC21 e SVC29**. Suspensão/retorno, logout e reboot são três eventos distintos; shutdown é opcional, não um quarto requisito. O relatório de implementação foi atualizado pelo Root como intermediário, não como entrega final. **127 VERIFIED / 3 IN_PROGRESS / 2 NOT_RUN** preservados; nenhum AC ou tarefa promovido.
 
 Na leitura canônica posterior do Root (tool59d221), ambos os serviços próprios estavam stopped/NO_SERVICE_OWNER. Essa observação pontual não afirma vigilância contínua nem cria novo recibo de encerramento.
+
+## 2026-11-15 — Logout e reinício postergados pelo usuário
+
+O usuário pediu: “encerrar sessoes do windows vamos postergar.” Os testes de logout e reinício ficam postergados, com as provas de login e eventos correspondentes ainda pendentes. Nenhuma sessão foi encerrada; nenhuma tarefa observadora ou ação do SO foi selecionada. A suspensão continua sem janela selecionada. A preparação e suas evidências ficam preservadas para uma janela futura explicitamente indicada pelo usuário.
+
+A campanha remota é independente; a proposta Sonnet adicional permanece aguardando resposta. **127 VERIFIED / 3 IN_PROGRESS / 2 NOT_RUN**, sem promoção de cenário ou AC e sem nova inferência.

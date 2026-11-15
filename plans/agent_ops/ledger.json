@@ -14463,6 +14463,31 @@
         "SVC-T21",
         "SVC-T29"
       ]
+    },
+    "r3_windows_session_end_deferred_by_user": {
+      "date": "2026-11-15",
+      "status": "DEFERRED_BY_USER",
+      "user_instruction": "encerrar sessoes do windows vamos postergar.",
+      "source": "User message in this turn; not an execution authorization.",
+      "deferred_actions": [
+        "Windows sign-out",
+        "Windows restart"
+      ],
+      "suspension": "No selected window or event authorization; unchanged.",
+      "prepared_artifacts": "Retained at plans/agent_ops/evidence/r3-windows-automatic-event-preparation; no task or OS event selected.",
+      "effects": {
+        "os_events": 0,
+        "services_controlled": 0,
+        "provider_calls": 0
+      },
+      "acceptance_promoted": false,
+      "scenario_counts": {
+        "VERIFIED": 127,
+        "IN_PROGRESS": 3,
+        "NOT_RUN": 2
+      },
+      "remote_campaign": "Independent; additional Native allocation and continuation reservation proposal still awaiting explicit user response.",
+      "next_session_end_action": "Wait for a new explicit user-selected window before logout or restart."
     }
   },
   "history": [
@@ -16738,6 +16763,32 @@
         "SVC-T21",
         "SVC-T29"
       ]
+    },
+    {
+      "milestone": "r3_windows_session_end_deferred_by_user",
+      "date": "2026-11-15",
+      "status": "DEFERRED_BY_USER",
+      "user_instruction": "encerrar sessoes do windows vamos postergar.",
+      "source": "User message in this turn; not an execution authorization.",
+      "deferred_actions": [
+        "Windows sign-out",
+        "Windows restart"
+      ],
+      "suspension": "No selected window or event authorization; unchanged.",
+      "prepared_artifacts": "Retained at plans/agent_ops/evidence/r3-windows-automatic-event-preparation; no task or OS event selected.",
+      "effects": {
+        "os_events": 0,
+        "services_controlled": 0,
+        "provider_calls": 0
+      },
+      "acceptance_promoted": false,
+      "scenario_counts": {
+        "VERIFIED": 127,
+        "IN_PROGRESS": 3,
+        "NOT_RUN": 2
+      },
+      "remote_campaign": "Independent; additional Native allocation and continuation reservation proposal still awaiting explicit user response.",
+      "next_session_end_action": "Wait for a new explicit user-selected window before logout or restart."
     }
   ],
   "r3_native_bounded_supervisor_execution": {

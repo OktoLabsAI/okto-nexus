@@ -58,6 +58,11 @@ before e a leitura RO de34 registros históricos de energia. Nenhuma janela,
 tarefa observadora ou evento foi selecionado. A coleta independente de transição
 não sobrescreve o after original e não infere suspensão do retorno de uma API.
 
+Por instrução posterior do usuário em2026-11-15, os testes que encerram a sessão
+do Windows (logout e reinício) foram postergados. Suas evidências continuam
+pendentes; a preparação fica preservada para uma janela futura indicada pelo
+usuário. A campanha remota permanece sujeita às suas próprias autorizações.
+
 AC-01/11/13/14 continuam não verificados. Ao obter as provas restantes, será
 necessário reconciliar a matriz e este relatório requisito por requisito,
 incluindo contexto, decisões, tempos, compatibilidade e riscos observados. Este
