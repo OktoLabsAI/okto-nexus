@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="scope generation clears protected state and ignores late old reads without overlap" time="0.004689" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="401 clears visible and paused data and blocks refresh until a new identity" time="0.000928" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="403 clears visible and paused data and blocks refresh until a new identity" time="0.000742" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="visual pause keeps published identity and accepts newest snapshot only when applied" time="0.000505" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="pagination deduplicates immutable IDs; conflict resets via coherent overview instead of replaying cursor" time="0.002189" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="fallback and source TTL refresh independently of live stream; hidden events reduce work then wake" time="0.001366" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="returning from background fences sensitive sections until the fresh GET completes" time="0.002260" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="a GET begun in background cannot clear the wake revalidation fence" time="0.000707" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="reconnect/gap invalidate, unrelated events do not, and disposal removes timers" time="0.001304" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="time spent reading does not extend source TTL by another full interval" time="0.000678" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="modal pause retains expanded pages only for same revision, resets changed revisions, and never crosses scope" time="0.001285" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Controller.test.mjs"/>
+	<testcase name="external activity is always reported and stale working never becomes native running" time="0.001330" classname="test" file="D:\Projetos\Techridy\okto_labs_okto_nexus\frontend\tests\homeR1Presentation.test.mjs"/>
+	<!-- tests 12 -->
+	<!-- suites 0 -->
+	<!-- pass 12 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 616.2219 -->
+</testsuites>

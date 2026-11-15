@@ -159,3 +159,13 @@ ações bloqueadas.18 focais Node e build passaram; evidência em
 `evidence/pr06-browser-final/`. A fala de leitor de tela e a compreensão humana
 em10segundos continuam sem prova. O último wheel ainda será recomposto com
 esse delta estático antes de preparar a campanha paga para consentimento.
+
+## Retorno de aba em segundo plano
+
+Duas barreiras determinísticas reproduziram a habilitação precoce de controles
+ao retornar à aba, inclusive quando um GET anterior ainda estava pendente.
+O controller agora marca as seções desatualizadas antes do refresh e invalida
+a resposta iniciada antes do retorno, mantendo uma única requisição em voo.
+12 focais passaram; a regressão completa passou200/200 e o build final passou
+com bundle `index-D4dmKnLh.js`. Antecedentes e fontes em
+`evidence/pr06-visibility-revalidation/`. Nenhum efeito de runtime foi alterado.

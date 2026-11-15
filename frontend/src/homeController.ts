@@ -105,7 +105,14 @@ export class HomeController {
       this.blocked = false;
       this.emit({ ...initialHomeState(), status: this.allowed() ? 'loading' : 'disabled' });
       if (this.allowed()) this.refresh();
-    } else if (becameVisible) this.refresh();
+    } else if (becameVisible && this.allowed()) {
+      if (this.active) {
+        this.generation++;
+        this.active.abort.abort(); // Retain ownership until finally, then read after wake.
+      }
+      this.emit({ status: this.state.snapshot ? 'stale' : 'loading', staleSections: [...sections, 'activity'] });
+      this.refresh();
+    }
     else this.schedulePoll();
   }
   clear(): void {

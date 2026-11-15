@@ -81,6 +81,45 @@ test('fallback and source TTL refresh independently of live stream; hidden event
   await h.clock.advance(15000); assert.equal(h.calls.length, 4);
   h.configure({ visible: true }); await h.clock.advance(); assert.equal(h.calls.length, 5); h.controller.dispose();
 });
+
+test('returning from background fences sensitive sections until the fresh GET completes', async () => {
+  const h = harness(); h.configure(); await h.clock.advance();
+  const original = h.controller.getState().snapshot;
+  h.configure({ visible: false });
+  const pending = deferred(); h.behavior.overview = () => pending.promise;
+  h.configure({ visible: true });
+  assert.equal(h.controller.getState().status, 'stale');
+  assert.ok(h.controller.getState().staleSections.includes('attention'));
+  assert.ok(h.controller.getState().staleSections.includes('results'));
+  await h.clock.advance(1000);
+  assert.equal(h.controller.getState().snapshot, original);
+  assert.equal(h.controller.getState().loading, true);
+  assert.ok(h.controller.getState().staleSections.includes('results'));
+  pending.resolve(overview({ snapshot_id: 'after-background' })); await flush();
+  assert.equal(h.controller.getState().status, 'ready');
+  assert.equal(h.controller.getState().snapshot.snapshot_id, 'after-background');
+  assert.deepEqual(h.controller.getState().staleSections, []);
+  h.controller.dispose();
+});
+
+test('a GET begun in background cannot clear the wake revalidation fence', async () => {
+  const h = harness(); h.configure(); await h.clock.advance();
+  h.configure({ visible: false });
+  const background = deferred(), fresh = deferred();
+  h.behavior.overview = () => background.promise;
+  await h.clock.advance(60000); assert.equal(h.calls.length, 2);
+  h.behavior.overview = () => fresh.promise;
+  h.configure({ visible: true });
+  background.resolve(overview({ snapshot_id: 'before-wake' })); await flush();
+  assert.equal(h.controller.getState().status, 'stale');
+  assert.ok(h.controller.getState().staleSections.includes('results'));
+  await h.clock.advance(1000); assert.equal(h.calls.length, 3);
+  assert.equal(h.peak(), 1);
+  fresh.resolve(overview({ snapshot_id: 'after-wake' })); await flush();
+  assert.equal(h.controller.getState().status, 'ready');
+  assert.equal(h.controller.getState().snapshot.snapshot_id, 'after-wake');
+  h.controller.dispose();
+});
 test('reconnect/gap invalidate, unrelated events do not, and disposal removes timers', async () => {
   const h = harness(); h.configure(); await h.clock.advance();
   h.controller.invalidate({ type: 'unrelated.diagnostic', event_id: 1 }); await h.clock.advance(1000); assert.equal(h.calls.length, 1);
