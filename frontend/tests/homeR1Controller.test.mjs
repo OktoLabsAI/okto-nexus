@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { moduleURL, Clock, deferred, flush, overview, section, page } from './homeR1Support.mjs';
 const { HomeController, homeInvalidatedSections, homeContextKey } = await import(await moduleURL('homeController.ts'));
+const { homeExternalLabel } = await import(await moduleURL('homePresentation.ts'));
 const error = status => Object.assign(new Error('fixture'), { status, code: `HTTP_${status}` });
 function harness() {
   const clock = new Clock(), calls = [], changes = [];
@@ -206,5 +207,108 @@ test('modal pause retains expanded pages only for same revision, resets changed 
   assert.match(h.controller.getState().error, /pagination/);
   h.configure({ identityKey: 'other' }); assert.equal(h.controller.getState().snapshot, null);
   await h.clock.advance(1000); assert.deepEqual(h.controller.getState().snapshot.work.items.map(x => x.id), ['changed']);
+  h.controller.dispose();
+});
+
+test('E02 event during initial snapshot survives its older cursor and queues a fresh canonical read', async () => {
+  const h = harness(), first = deferred(), second = deferred();
+  h.behavior.overview = () => first.promise;
+  h.configure(); await h.clock.advance();
+  // Same public entry points invoked by useHomeOverview's stream/event effects.
+  h.controller.onStreamStatus('live');
+  h.controller.invalidate({ type: 'handoff.completed', event_id: 6 });
+  await h.clock.advance(1000); assert.equal(h.calls.length, 1);
+  h.behavior.overview = () => second.promise;
+  first.resolve(overview({ event_cursor: 5, work: section([{ id: 'work1', display_state: 'running' }]) }));
+  await flush(); await h.clock.advance();
+  assert.equal(h.calls.length, 2); assert.equal(h.peak(), 1);
+  second.resolve(overview({ snapshot_id: 'after-commit', event_cursor: 6,
+    work: section([], { revision: 'r2' }), results: section([{ id: 'result1', outcome: 'SUCCEEDED' }], { revision: 'r2' }) }));
+  await flush();
+  assert.equal(h.controller.getState().snapshot.event_cursor, 6);
+  assert.deepEqual(h.controller.getState().snapshot.work.items, []);
+  assert.deepEqual(h.controller.getState().snapshot.results.items.map(x => x.id), ['result1']);
+  await h.clock.advance(999); assert.equal(h.calls.length, 2);
+  h.controller.dispose();
+});
+
+test('E02 reconnect and retention gap during a read resnapshot without replaying an obsolete page cursor', async () => {
+  const h = harness(), reconnect = deferred();
+  h.behavior.overview = () => overview({ work: section([{ id: 'old' }], { next_cursor: 'old-page', has_more: true }) });
+  h.configure(); await h.clock.advance();
+  h.behavior.overview = () => reconnect.promise;
+  h.controller.onStreamStatus('reconnecting'); await h.clock.advance(1000);
+  h.controller.onStreamStatus('live');
+  h.controller.invalidate({ type: 'gap', event_id: 50 });
+  h.controller.loadMore('work');
+  h.behavior.overview = () => overview({ event_cursor: 60, event_low_watermark: 50,
+    work: section([{ id: 'current', display_state: 'running' }], { revision: 'after-gap' }) });
+  reconnect.resolve(overview({ event_cursor: 8,
+    work: section([{ id: 'old' }], { next_cursor: 'old-page', has_more: true }) }));
+  await flush(); await h.clock.advance(1000);
+  assert.deepEqual(h.calls.map(x => x.kind), ['overview', 'overview', 'overview']);
+  assert.ok(h.calls.every(x => x.query.cursor === undefined));
+  assert.equal(h.peak(), 1);
+  assert.equal(h.controller.getState().snapshot.event_low_watermark, 50);
+  assert.deepEqual(h.controller.getState().snapshot.work.items.map(x => x.id), ['current']);
+  assert.equal(h.controller.getState().snapshot.work.next_cursor, null);
+  h.controller.dispose();
+});
+
+test('E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots', async () => {
+  const h = harness();
+  h.behavior.overview = () => overview({ event_cursor: 10,
+    work: section([{ id: 'work1', display_state: 'native_accepted' }]) });
+  h.configure(); await h.clock.advance();
+  h.behavior.overview = () => overview({ event_cursor: 12,
+    work: section([{ id: 'work1', display_state: 'running' }], { revision: 'running' }) });
+  h.controller.invalidate({ type: 'execution.started', event_id: 12 });
+  h.controller.invalidate({ type: 'execution.started', event_id: 12 });
+  h.controller.invalidate({ type: 'execution.accepted', event_id: 11 });
+  await h.clock.advance(1000);
+  assert.equal(h.calls.length, 2);
+  assert.deepEqual(h.controller.getState().snapshot.work.items, [{ id: 'work1', display_state: 'running' }]);
+  h.behavior.overview = () => overview({ event_cursor: 13,
+    work: section([{ id: 'work1', display_state: 'turn_completed' }], { revision: 'terminal' }),
+    results: section([{ id: 'result1', outcome: 'SUCCEEDED' }], { revision: 'terminal' }) });
+  h.controller.invalidate({ type: 'execution.completed', event_id: 13 });
+  await h.clock.advance(1000);
+  const terminalIndex = h.changes.length;
+  // Old IDs may cause a bounded reread, but event names are never a state reducer.
+  for (const [event_id, type] of [[11, 'execution.accepted'], [12, 'execution.started'], [12, 'execution.started'], [10, 'runtime.opened']])
+    h.controller.invalidate({ event_id, type });
+  await h.clock.advance(1000);
+  assert.equal(h.calls.length, 4); assert.equal(h.peak(), 1);
+  assert.ok(h.changes.slice(terminalIndex).every(s => s.snapshot.work.items.length === 1 &&
+    s.snapshot.work.items[0].display_state === 'turn_completed' && s.snapshot.results.items.length === 1));
+  h.controller.dispose();
+});
+
+test('E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity', async () => {
+  const h = harness(), epoch = Date.parse('2030-01-01T00:00:00Z');
+  const iso = ms => new Date(epoch + ms).toISOString();
+  const nativeWork = [{ id: 'native', display_state: 'running' }];
+  const nativeResult = [{ id: 'native-result', outcome: 'SUCCEEDED' }];
+  h.behavior.overview = () => {
+    const expired = h.clock.now >= 2000;
+    return overview({ generated_at: iso(h.clock.now), work: section(nativeWork), results: section(nativeResult),
+      external_activity: section([{ source_id: 'herdr', observed_instance_id: 'reported', generation: 1,
+        freshness: expired ? 'stale' : 'current', activity_state: 'working', observational_only: true,
+        last_report: { evidence: 'reported', valid_until: iso(2000) } }],
+      { as_of: iso(h.clock.now), next_refresh_at: expired ? null : iso(2000), revision: expired ? 'expired' : 'current' }) });
+  };
+  h.configure(); h.controller.onStreamStatus('live'); await h.clock.advance();
+  assert.equal(h.calls.length, 1);
+  assert.match(homeExternalLabel(h.controller.getState().snapshot.external_activity.items[0]), /working.*current/);
+  await h.clock.advance(1999); assert.equal(h.calls.length, 1);
+  h.controller.onStreamStatus('live'); // Same live status cannot extend the deadline.
+  await h.clock.advance(1);
+  assert.deepEqual(h.calls.map(x => x.at), [0, 2000]);
+  const result = h.controller.getState().snapshot;
+  assert.equal(result.external_activity.items[0].freshness, 'stale');
+  assert.equal(homeExternalLabel(result.external_activity.items[0]), 'External report · state unknown · stale · reported');
+  assert.deepEqual(result.work.items, nativeWork); assert.deepEqual(result.results.items, nativeResult);
+  h.controller.onStreamStatus('live'); await h.clock.advance(1000);
+  assert.equal(h.calls.length, 2); assert.equal(h.peak(), 1);
   h.controller.dispose();
 });

@@ -193,3 +193,13 @@ os ramos de aceite ainda não executados. Fala de leitor de tela não foi medida
 Os quatro p95 medidos excedem500ms; nenhum SLO de produção ou deploy é declarado.
 A proposta da campanha é inerte, com dados sintéticos e orçamento independente;
 preparação e testes offline não significam execução paga.
+
+## Qualificação adicional de eventos
+
+Quatro novos testes determinísticos exercitaram eventos durante snapshot,
+reconnect/gap, hints duplicados/fora de ordem e TTL externo com stream live.
+Todos passaram, sem alteração do produto ou do candidato de campanha.
+E03/E05 passam no menor nível controller/presentation, complementado pela
+expiração SQLite já executada. E02 continua NOT_RUN: falta a fronteira de
+assinatura/transporte real, que esses testes não substituem. Ledger atual:
+58PASS/15NOT_RUN. Ver `evidence/pr07-stream/qualification.json`.

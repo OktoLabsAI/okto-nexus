@@ -1,0 +1,85 @@
+{
+  "status": "PASS_FOCAL_CONTROLLER_STREAM_HINTS",
+  "product_source_head": "fa2e4215e47db25ed884c7fe001bfedb0cd9fcb3",
+  "changed_file": "frontend/tests/homeR1Controller.test.mjs",
+  "product_or_hook_changed": false,
+  "command": [
+    "rtk",
+    "proxy",
+    "node",
+    "--test",
+    "--test-name-pattern=E02 |E03 |E05 ",
+    "--test-reporter=junit",
+    "--test-reporter-destination=C:\\Users\\jpamb\\AppData\\Local\\Temp\\home-r1-pr07-stream-lcmk1atx\\stream.xml",
+    "tests/homeR1Controller.test.mjs"
+  ],
+  "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\frontend",
+  "node_version": "v24.15.0",
+  "tool_result": "7d91cf",
+  "exit_code": 0,
+  "tests": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "cases": [
+      "E02 event during initial snapshot survives its older cursor and queues a fresh canonical read",
+      "E02 reconnect and retention gap during a read resnapshot without replaying an obsolete page cursor",
+      "E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots",
+      "E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity"
+    ]
+  },
+  "mapping": {
+    "HOME-T-E02": {
+      "cases": [
+        "E02 event during initial snapshot survives its older cursor and queues a fresh canonical read",
+        "E02 reconnect and retention gap during a read resnapshot without replaying an obsolete page cursor"
+      ],
+      "proved": "A hint arriving during initial GET survives the older response; reconnect/live/gap during an active GET queues one serial snapshot read and does not reuse an old page cursor.",
+      "limit": "Public controller entry points called by the hook are exercised; actual React effect scheduling, SSE subscription/retention transport and browser reconnect are not executed. Convergence is proved, not a stronger action-freshness fence during the intermediate old response."
+    },
+    "HOME-T-E03": {
+      "cases": [
+        "E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots"
+      ],
+      "proved": "Duplicate and out-of-order hints coalesce; accepted/running/terminal snapshots replace one stable activity and one result without hint-driven regression. Reads remain serial.",
+      "limit": "Canonical GET responses advance or retain committed state in the fixture. This does not certify server replica monotonicity or arbitrary regressing response bodies."
+    },
+    "HOME-T-E05": {
+      "cases": [
+        "E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity"
+      ],
+      "proved": "A coherent two-second external deadline triggers GET despite continuously live stream; the returned stale external observation retains unknown-state/report provenance and does not change native work/results.",
+      "limit": "Clock and API response are deterministic fixtures. The real backend expiration and visual badge rendering are separate existing evidence, not executed here."
+    }
+  },
+  "sources": [
+    {
+      "path": "frontend/tests/homeR1Controller.test.mjs",
+      "sha256": "c7c7cdb0e60675b89d84751516de142751851c85b77dc454a95fc09c0f7f92d5"
+    },
+    {
+      "path": "frontend/tests/homeR1Support.mjs",
+      "sha256": "cdc1b9bffa9311709af0401cf70f3bb97d2b8f011528c96d163f90b12567ecb5"
+    },
+    {
+      "path": "frontend/src/homeController.ts",
+      "sha256": "548a73ab4fe4b17396f540e974ed25475b02e35848222aafe76aae550c227ae1"
+    },
+    {
+      "path": "frontend/src/homePresentation.ts",
+      "sha256": "3611a807a7892e47d1604d85fb2893208788063f30feec62f6267a9e25c9e2e1"
+    },
+    {
+      "path": "frontend/src/hooks/useHomeOverview.ts",
+      "sha256": "8605095c5e7030c7cde9ce0aeb72f0e3dbdc0bdf959e2e0cfa50b045a55c90af"
+    }
+  ],
+  "effects": {
+    "provider": 0,
+    "service": 0,
+    "authentication": 0,
+    "browser": 0,
+    "network": 0
+  },
+  "acceptance": "Root owns ledger status. Four tests do not automatically qualify whole scenarios or all73 cases. Frozen package/candidate remain unchanged."
+}

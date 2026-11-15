@@ -574,11 +574,19 @@
     },
     "HOME-T-E03": {
       "requirement": "Eventos duplicados ou fora de ordem não duplicam cartões nem fazem estados regredir.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream/qualification.json",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
+      ],
+      "commit": "ce49cd4e + test-only stream qualification",
+      "environment": "Deterministic Node controller/presentation with fake-clock barriers; complementary real SQLite TTL evidence referenced by final audit",
+      "limitations": [
+        "No actual SSE transport or React lifecycle is claimed."
+      ],
+      "tests": [
+        "E03 duplicate and out-of-order hints cannot replay activity states over newer canonical snapshots"
+      ]
     },
     "HOME-T-E04": {
       "requirement": "Burst de eventos gera atualização agrupada com teto, não uma consulta por token.",
@@ -601,11 +609,19 @@
     },
     "HOME-T-E05": {
       "requirement": "Stream conectado com fonte externa expirada mantém badge stale da fonte.",
-      "status": "NOT_RUN",
-      "evidence": [],
-      "commit": null,
-      "environment": null,
-      "limitations": []
+      "status": "PASS",
+      "evidence": [
+        "plans/home_evolution/evidence/pr07-stream/qualification.json",
+        "plans/home_evolution/evidence/pr06-final-audit/audit.json"
+      ],
+      "commit": "ce49cd4e + test-only stream qualification",
+      "environment": "Deterministic Node controller/presentation with fake-clock barriers; complementary real SQLite TTL evidence referenced by final audit",
+      "limitations": [
+        "No actual SSE transport or React lifecycle is claimed."
+      ],
+      "tests": [
+        "E05 a continuously live stream does not renew external TTL or replace stale reported work with native activity"
+      ]
     },
     "HOME-T-E06": {
       "requirement": "Expiração de autorização, TTL de observação e prazo de atenção sem evento explícito são atualizados por relógio/fallback.",
